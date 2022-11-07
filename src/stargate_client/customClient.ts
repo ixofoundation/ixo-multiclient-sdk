@@ -416,7 +416,7 @@ export class SigningStargateClient extends StargateClient {
   }
 }
 
-export const createClient = async (
+export const createSigningClient = async (
   rpcEndpoint: string,
   offlineWallet: OfflineSigner,
   ignoreGetSequence?: boolean

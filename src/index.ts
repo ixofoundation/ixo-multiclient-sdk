@@ -6,9 +6,7 @@ export * from "./stargate_client"; //export createClient customized for ed key h
 import { cosmos } from "./codegen";
 import { ixo } from "./codegen_ixo_helpers";
 
-export const createQueryClient = async (
-  rpcEndpoint: string = "https://devnet.ixo.earth/rpc/"
-) => {
+export const createQueryClient = async (rpcEndpoint: string) => {
   const queryCosmos = await cosmos.ClientFactory.createRPCQueryClient({
     rpcEndpoint,
   });
