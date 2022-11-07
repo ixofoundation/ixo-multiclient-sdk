@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18.10.0
-      - run: yarn ci
+      - run: yarn install --frozen-lockfile
       - run: yarn test
 
   publish-npm:
@@ -28,7 +28,8 @@ jobs:
         with:
           node-version: 18.10.0
           registry-url: https://registry.npmjs.org/
-      - run: yarn ci
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
       - run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
