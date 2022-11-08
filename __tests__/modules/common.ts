@@ -7,14 +7,7 @@ import base58 from "bs58";
 import { keyType, KeyTypes, RPC_URL, WalletUsers } from "./constants";
 import { getEdClient } from "./edClient";
 import { getSecpClient } from "./secpClient";
-// import { createClient as createClientMain, impact } from "../index";
-import {
-  utils,
-  createClient as createClientMain,
-  ixo,
-  cosmos,
-  helpers,
-} from "../../src";
+import { utils, createSigningClient, ixo, cosmos, helpers } from "../../src";
 
 export { ixo, cosmos, utils, helpers };
 
@@ -126,7 +119,7 @@ export const createClient = async (
   offlineWallet: ReturnType<typeof getEdClient> = getUser(),
   ignoreGetSequence?: boolean
 ) => {
-  return createClientMain(
+  return createSigningClient(
     RPC_URL,
     offlineWallet as OfflineSigner,
     ignoreGetSequence
