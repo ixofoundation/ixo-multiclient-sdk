@@ -1,5 +1,5 @@
 {
-  "name": "ixo-multiclient-sdk",
+  "name": "@ixo/ixo-multiclient-sdk",
   "version": "0.0.2",
   "description": "One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them",
   "author": "Ixo <ixo>",
