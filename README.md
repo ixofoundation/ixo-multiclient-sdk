@@ -1,4 +1,4 @@
-# ixo-MultiClient-SDK
+# @ixo/impactxclient-sdk
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/545047/188804067-28e67e5e-0214-4449-ab04-2e0c564a6885.svg" width="80"><br />
@@ -8,14 +8,14 @@
 ## install
 
 ```sh
-npm install ixo-multiclient-sdk
+npm install @ixo/impactxclient-sdk
 
-yarn add  ixo-multiclient-sdk
+yarn add  @ixo/impactxclient-sdk
 ```
 
 ## Table of contents
 
-- [ixo-MultiClient-SDK](#ixo-multiclient-sdk)
+- [@ixo/impactxclient-sdk](#ixoimpactxclient-sdk)
   - [install](#install)
   - [Table of contents](#table-of-contents)
   - [Usage](#usage)
@@ -39,7 +39,7 @@ yarn add  ixo-multiclient-sdk
 ### RPC Clients
 
 ```js
-import { ixo } from "ixo-multiclient-sdk";
+import { ixo } from "@ixo/impactxclient-sdk";
 
 const { createRPCQueryClient } = ixo.ClientFactory;
 const client = await createRPCQueryClient({ rpcEndpoint: RPC_ENDPOINT });
@@ -58,7 +58,7 @@ const balances = await client.ixo.exchange.v1beta1.exchangeBalances();
 Import the `ixo` object from `ixo`.
 
 ```js
-import { ixo } from "ixo-multiclient-sdk";
+import { ixo } from "@ixo/impactxclient-sdk";
 
 const { createSpotLimitOrder, createSpotMarketOrder, deposit } =
   ixo.exchange.v1beta1.MessageComposer.withTypeUrl;
@@ -68,7 +68,7 @@ Because of the current structure of ixo's blockchain, we had to modify the teles
 please define message using the types from the namespace itself and not from the MessageComposer, eg:
 
 ```js
-import { ixo } from "ixo-multiclient-sdk";
+import { ixo } from "@ixo/impactxclient-sdk";
 
 const message = {
   typeUrl: "/iid.MsgCreateIidDocument",
@@ -96,7 +96,7 @@ Please have a look at the tests folder to see examples of all the messages and h
 #### IBC Messages
 
 ```js
-import { ibc } from "ixo-multiclient-sdk";
+import { ibc } from "@ixo/impactxclient-sdk";
 
 const { transfer } = ibc.applications.transfer.v1.MessageComposer.withTypeUrl;
 ```
@@ -104,7 +104,7 @@ const { transfer } = ibc.applications.transfer.v1.MessageComposer.withTypeUrl;
 #### Cosmos Messages
 
 ````js
-import { cosmos } from "ixo-multiclient-sdk";
+import { cosmos } from "@ixo/impactxclient-sdk";
 
 const { multiSend, send } = cosmos.bank.v1beta1.MessageComposer.fromPartial;
 
@@ -120,7 +120,7 @@ Here are the docs on [creating signers](https://github.com/cosmology-tech/cosmos
 Use `getSigningixoClient` to get your `SigningStargateClient`, with the proto/amino messages full-loaded. No need to manually add amino types, just require and initialize the client:
 
 ```js
-import { getSigningixoClient } from "ixo-multiclient-sdk";
+import { getSigningixoClient } from "@ixo/impactxclient-sdk";
 
 const stargateClient = await getSigningixoClient({
   rpcEndpoint,
