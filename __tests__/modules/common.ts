@@ -7,9 +7,9 @@ import base58 from "bs58";
 import { keyType, KeyTypes, RPC_URL, WalletUsers } from "./constants";
 import { getEdClient } from "./edClient";
 import { getSecpClient } from "./secpClient";
-import { utils, createSigningClient, ixo, cosmos, helpers } from "../../src";
+import { utils, createSigningClient, ixo, cosmos } from "../../src";
 
-export { ixo, cosmos, utils, helpers };
+export { ixo, cosmos, utils };
 
 export const generateId = (length: number = 12) => {
   var result = "";
@@ -55,7 +55,7 @@ export let wallets: { [key in WalletUsers]: wallet };
 export const generateWallets = async () => {
   let generatedWallets = {};
   for (const user of Object.values(WalletUsers)) {
-    const mnemonics = utils.generateMnemonic(24);
+    const mnemonics = utils.mnemonic.generateMnemonic(24);
     generatedWallets[user] = {
       ed: getEdClient(mnemonics),
       secp: await getSecpClient(mnemonics),
@@ -85,7 +85,7 @@ export const generateWallets = async () => {
 };
 
 export const generateNewWallet = async (user: WalletUsers) => {
-  const mnemonics = utils.generateMnemonic(24);
+  const mnemonics = utils.mnemonic.generateMnemonic(24);
   const wallet = {
     ed: getEdClient(mnemonics),
     secp: await getSecpClient(mnemonics),

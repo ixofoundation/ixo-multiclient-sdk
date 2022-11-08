@@ -33,8 +33,6 @@ import * as _25 from "../codegen_ixo/project/tx";
 
 import * as _26 from "./rpc.query";
 
-export * as helpers from "./helpers";
-
 export namespace ixo {
   export const bonds = {
     ..._0,

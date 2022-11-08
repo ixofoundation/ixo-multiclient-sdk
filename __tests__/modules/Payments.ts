@@ -1,4 +1,5 @@
-import { createClient, getUser, ixo, helpers } from "./common";
+import Long from "long";
+import { createClient, getUser, ixo } from "./common";
 import { constants, fee, WalletUsers } from "./constants";
 
 export const CreatePaymentTemplate = async () => {
@@ -126,8 +127,8 @@ export const CreateSubscription = async () => {
         typeUrl: "/payments.BlockPeriod",
         value: ixo.payments.BlockPeriod.encode(
           ixo.payments.BlockPeriod.fromPartial({
-            periodLength: helpers.Long.fromNumber(3),
-            periodStartBlock: helpers.Long.fromNumber(5),
+            periodLength: Long.fromNumber(3),
+            periodStartBlock: Long.fromNumber(5),
           })
         ).finish(),
       },

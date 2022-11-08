@@ -6,12 +6,12 @@ import {
   testMsg,
 } from "./modules/common";
 import { generateConstants, WalletUsers } from "./modules/constants";
-// import * as Bond from './Bond';
-// import * as Cosmos from './Cosmos';
-// import * as Entity from './Entity';
+import * as Bond from "./modules/Bond";
+import * as Cosmos from "./modules/Cosmos";
+import * as Entity from "./modules/Entity";
 import * as Iid from "./modules/Iid";
-// import * as Payments from './Payments';
-// import * as Projects from './Projects';
+import * as Payments from "./modules/Payments";
+import * as Projects from "./modules/Projects";
 
 beforeAll(() => {
   generateConstants();
@@ -75,10 +75,18 @@ describe("Testing the entity module", () => {
 });
 
 describe("Testing the Payments module", () => {
-  // testMsg('/payments.MsgCreatePaymentTemplate', () => Payments.CreatePaymentTemplate());
-  // testMsg('/payments.MsgCreatePaymentContract', () => Payments.CreatePaymentContract());
-  // testMsg('/payments.MsgSetPaymentContractAuthorisation', () => Payments.SetPaymentContractAuthorization());
-  // testMsg('/payments.MsgCreateSubscription', () => Payments.CreateSubscription());
+  // testMsg("/payments.MsgCreatePaymentTemplate", () =>
+  //   Payments.CreatePaymentTemplate()
+  // );
+  // testMsg("/payments.MsgCreatePaymentContract", () =>
+  //   Payments.CreatePaymentContract()
+  // );
+  // testMsg("/payments.MsgSetPaymentContractAuthorisation", () =>
+  //   Payments.SetPaymentContractAuthorization()
+  // );
+  // testMsg("/payments.MsgCreateSubscription", () =>
+  //   Payments.CreateSubscription()
+  // );
   // testMsg('/payments.MsgGrantDiscount', () => Payments.GrantDiscount());
   // testMsg('/payments.MsgRevokeDiscount', () => Payments.RevokeDiscount());
   // testMsg('/payments.MsgEffectPayment', () => Payments.EffectPayment());
