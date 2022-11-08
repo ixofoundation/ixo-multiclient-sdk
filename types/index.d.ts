@@ -2,7 +2,7 @@ export * from "./codegen";
 export * from "./codegen_ixo_helpers";
 export * as utils from "./utils";
 export * from "./stargate_client";
-export declare const createQueryClient: (rpcEndpoint?: string) => Promise<{
+export declare const createQueryClient: (rpcEndpoint: string) => Promise<{
     ixo: {
         bonds: {
             bonds(request?: import("./codegen_ixo/bonds/query").QueryBondsRequest): Promise<import("./codegen_ixo/bonds/query").QueryBondsResponse>;

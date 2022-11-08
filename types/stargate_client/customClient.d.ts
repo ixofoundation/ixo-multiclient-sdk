@@ -44,5 +44,5 @@ export declare class SigningStargateClient extends StargateClient {
     private signAmino;
     private signDirect;
 }
-export declare const createClient: (rpcEndpoint: string, offlineWallet: OfflineSigner, ignoreGetSequence?: boolean) => Promise<SigningStargateClient>;
+export declare const createSigningClient: (rpcEndpoint: string, offlineWallet: OfflineSigner, ignoreGetSequence?: boolean) => Promise<SigningStargateClient>;
 export declare const createRegistry: () => Registry;
