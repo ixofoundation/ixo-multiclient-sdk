@@ -9,6 +9,8 @@
 
 ```sh
 npm install ixo-multiclient-sdk
+
+yarn add  ixo-multiclient-sdk
 ```
 
 ## Table of contents
