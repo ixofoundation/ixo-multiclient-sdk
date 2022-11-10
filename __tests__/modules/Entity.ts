@@ -1,4 +1,4 @@
-import { createClient, getUser, ixo } from "./common";
+import { createClient, getUser, ixo, queryClient } from "./common";
 import { fee, WalletUsers } from "./constants";
 
 export const CreateEntityAsset = async () => {
@@ -196,6 +196,11 @@ export const CreateEntityAssetSupamotoInstance = async (
   inheritEntityDid: string
 ) => {
   const client = await createClient();
+
+  // const entity = await queryClient.custom.entity.getEntityContext({
+  //   entityDid: inheritEntityDid,
+  // });
+  // console.log({ entity });
 
   const tester = getUser();
   const account = (await tester.getAccounts())[0];

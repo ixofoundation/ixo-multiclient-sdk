@@ -1,9 +1,12 @@
 import {
+  createQueryClient,
   generateNewWallet,
   generateWallets,
   getDidFromEvents,
+  queryClient,
   sendFromFaucet,
   testMsg,
+  testQry,
 } from "./modules/common";
 import { generateConstants, WalletUsers } from "./modules/constants";
 import * as Bond from "./modules/Bond";
@@ -15,12 +18,15 @@ import * as Projects from "./modules/Projects";
 
 beforeAll(() => {
   generateConstants();
-  return generateWallets();
+  return Promise.all([createQueryClient(), generateWallets()]);
 });
 
 describe("Testing the iid module", () => {
   sendFromFaucet(WalletUsers.tester);
-  testMsg("/iid.MsgCreateIidDocument", () => Iid.CreateIidDoc());
+  // testMsg("/iid.MsgCreateIidDocument", () => Iid.CreateIidDoc());
+  // testQry("test query", () => queryClient.ixo.bonds.bonds(), {
+  //   bonds: [],
+  // });
   // sendFromFaucet(WalletUsers.alice);
   // testMsg('/iid.MsgCreateIidDocument', () => Iid.CreateIidDoc(WalletUsers.alice));
   // sendFromFaucet(WalletUsers.bob);
@@ -49,25 +55,28 @@ describe("Testing the iid module", () => {
 
 describe("Testing the entity module", () => {
   // let assetDid: string;
-  // testMsg('/entity.MsgCreateEntity asset', async () => {
-  // 	const res = await Entity.CreateEntityAsset();
-  // 	assetDid = getDidFromEvents(res);
-  // 	console.log({ assetDid });
-  // 	return res;
+  // testMsg("/entity.MsgCreateEntity asset", async () => {
+  //   const res = await Entity.CreateEntityAsset();
+  //   console.log({ res });
+  //   assetDid = getDidFromEvents(res);
+  //   console.log({ assetDid });
+  //   return res;
   // });
   // let assetSupamotoDid: string;
-  // testMsg('/entity.MsgCreateEntity asset class supamoto', async () => {
-  // 	const res = await Entity.CreateEntityAssetSupamoto(assetDid);
-  // 	assetSupamotoDid = getDidFromEvents(res);
-  // 	console.log({ assetSupamotoDid });
-  // 	return res;
+  // testMsg("/entity.MsgCreateEntity asset class supamoto", async () => {
+  //   const res = await Entity.CreateEntityAssetSupamoto(assetDid);
+  //   assetSupamotoDid = getDidFromEvents(res);
+  //   console.log({ assetSupamotoDid });
+  //   return res;
   // });
   // let assetSupamotoInstanceDid: string;
-  // testMsg('/entity.MsgCreateEntity asset class supamoto instance', async () => {
-  // 	const res = await Entity.CreateEntityAssetSupamotoInstance(assetSupamotoDid);
-  // 	assetSupamotoInstanceDid = getDidFromEvents(res);
-  // 	console.log({ assetSupamotoInstanceDid });
-  // 	return res;
+  // testMsg("/entity.MsgCreateEntity asset class supamoto instance", async () => {
+  //   const res = await Entity.CreateEntityAssetSupamotoInstance(
+  //     assetSupamotoDid
+  //   );
+  //   assetSupamotoInstanceDid = getDidFromEvents(res);
+  //   console.log({ assetSupamotoInstanceDid });
+  //   return res;
   // });
   // testMsg('/entity.MsgTransferEntity', () => Entity.TransferEntity(assetSupamotoInstanceDid));
   // 	testMsg('/entity.MsgUpdateEntity', () => Entity.UpdateEntity());
