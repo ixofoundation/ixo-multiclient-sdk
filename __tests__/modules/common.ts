@@ -41,7 +41,7 @@ export const getVerificationMethod = (
   controller: string,
   type: KeyTypes = keyType
 ) => {
-  return ixo.iid.VerificationMethod.fromPartial({
+  return ixo.iid.v1beta1.VerificationMethod.fromPartial({
     id: did,
     type:
       type === "ed"

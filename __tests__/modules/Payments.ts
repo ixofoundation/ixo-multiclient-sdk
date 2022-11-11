@@ -1,5 +1,5 @@
 import Long from "long";
-import { createClient, getUser, ixo } from "./common";
+import { createClient, getUser, ixo, cosmos } from "./common";
 import { constants, fee, WalletUsers } from "./constants";
 
 export const CreatePaymentTemplate = async () => {
@@ -11,32 +11,32 @@ export const CreatePaymentTemplate = async () => {
   const did = tester.did;
 
   const message = {
-    typeUrl: "/payments.MsgCreatePaymentTemplate",
-    value: ixo.payments.MsgCreatePaymentTemplate.fromPartial({
+    typeUrl: "/ixo.payments.v1.MsgCreatePaymentTemplate",
+    value: ixo.payments.v1.MsgCreatePaymentTemplate.fromPartial({
       creatorDid: did,
       creatorAddress: myAddress,
-      paymentTemplate: ixo.payments.PaymentTemplate.fromPartial({
+      paymentTemplate: ixo.payments.v1.PaymentTemplate.fromPartial({
         id: constants.paymentTemplateId,
         paymentAmount: [
-          ixo.cosmos.Coin.fromPartial({
+          cosmos.base.v1beta1.Coin.fromPartial({
             denom: "uixo",
             amount: "500000",
           }),
         ],
         paymentMinimum: [
-          ixo.cosmos.Coin.fromPartial({
+          cosmos.base.v1beta1.Coin.fromPartial({
             denom: "uixo",
             amount: "100000",
           }),
         ],
         paymentMaximum: [
-          ixo.cosmos.Coin.fromPartial({
+          cosmos.base.v1beta1.Coin.fromPartial({
             denom: "uixo",
             amount: "500000000",
           }),
         ],
         discounts: [
-          ixo.payments.Discount.fromPartial({
+          ixo.payments.v1.Discount.fromPartial({
             id: constants.paymentDiscountId,
             percent: "5000000000000000000",
           }),
@@ -64,14 +64,14 @@ export const CreatePaymentContract = async () => {
   const aliceAccount = (await alice.getAccounts())[0];
 
   const message = {
-    typeUrl: "/payments.MsgCreatePaymentContract",
-    value: ixo.payments.MsgCreatePaymentContract.fromPartial({
+    typeUrl: "/ixo.payments.v1.MsgCreatePaymentContract",
+    value: ixo.payments.v1.MsgCreatePaymentContract.fromPartial({
       creatorDid: did,
       paymentTemplateId: constants.paymentTemplateId,
       paymentContractId: constants.paymentContractId,
       payer: myAddress,
       recipients: [
-        ixo.payments.DistributionShare.fromPartial({
+        ixo.payments.v1.DistributionShare.fromPartial({
           address: aliceAccount.address,
           percentage: "100000000000000000000",
         }),
@@ -95,8 +95,8 @@ export const SetPaymentContractAuthorization = async () => {
   const did = tester.did;
 
   const message = {
-    typeUrl: "/payments.MsgSetPaymentContractAuthorisation",
-    value: ixo.payments.MsgSetPaymentContractAuthorisation.fromPartial({
+    typeUrl: "/ixo.payments.v1.MsgSetPaymentContractAuthorisation",
+    value: ixo.payments.v1.MsgSetPaymentContractAuthorisation.fromPartial({
       paymentContractId: constants.paymentContractId,
       payerDid: did,
       authorised: true,
@@ -117,16 +117,16 @@ export const CreateSubscription = async () => {
   const did = tester.did;
 
   const message = {
-    typeUrl: "/payments.MsgCreateSubscription",
-    value: ixo.payments.MsgCreateSubscription.fromPartial({
+    typeUrl: "/ixo.payments.v1.MsgCreateSubscription",
+    value: ixo.payments.v1.MsgCreateSubscription.fromPartial({
       creatorDid: did,
       subscriptionId: constants.paymentSubscripionId,
       paymentContractId: constants.paymentContractId,
       maxPeriods: "3",
       period: {
-        typeUrl: "/payments.BlockPeriod",
-        value: ixo.payments.BlockPeriod.encode(
-          ixo.payments.BlockPeriod.fromPartial({
+        typeUrl: "/ixo.payments.v1.BlockPeriod",
+        value: ixo.payments.v1.BlockPeriod.encode(
+          ixo.payments.v1.BlockPeriod.fromPartial({
             periodLength: Long.fromNumber(3),
             periodStartBlock: Long.fromNumber(5),
           })
@@ -149,8 +149,8 @@ export const GrantDiscount = async () => {
   const did = tester.did;
 
   const message = {
-    typeUrl: "/payments.MsgGrantDiscount",
-    value: ixo.payments.MsgGrantDiscount.fromPartial({
+    typeUrl: "/ixo.payments.v1.MsgGrantDiscount",
+    value: ixo.payments.v1.MsgGrantDiscount.fromPartial({
       senderDid: did,
       paymentContractId: constants.paymentContractId,
       discountId: constants.paymentDiscountId,
@@ -172,8 +172,8 @@ export const RevokeDiscount = async () => {
   const did = tester.did;
 
   const message = {
-    typeUrl: "/payments.MsgRevokeDiscount",
-    value: ixo.payments.MsgRevokeDiscount.fromPartial({
+    typeUrl: "/ixo.payments.v1.MsgRevokeDiscount",
+    value: ixo.payments.v1.MsgRevokeDiscount.fromPartial({
       senderDid: did,
       paymentContractId: constants.paymentContractId,
       holder: myAddress,
@@ -194,8 +194,8 @@ export const EffectPayment = async () => {
   const did = tester.did;
 
   const message = {
-    typeUrl: "/payments.MsgEffectPayment",
-    value: ixo.payments.MsgEffectPayment.fromPartial({
+    typeUrl: "/ixo.payments.v1.MsgEffectPayment",
+    value: ixo.payments.v1.MsgEffectPayment.fromPartial({
       senderDid: did,
       paymentContractId: constants.paymentContractId,
       senderAddress: myAddress,

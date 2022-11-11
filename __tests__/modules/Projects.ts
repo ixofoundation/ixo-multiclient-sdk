@@ -35,14 +35,14 @@ export const CreateProject = async () => {
   const projectAccount = (await project.getAccounts())[0];
 
   const message = {
-    typeUrl: "/project.MsgCreateProject",
-    value: ixo.project.MsgCreateProject.fromPartial({
+    typeUrl: "/ixo.project.v1.MsgCreateProject",
+    value: ixo.project.v1.MsgCreateProject.fromPartial({
       senderDid: did,
       projectDid: projectDid,
       pubKey: base58.encode(projectAccount.pubkey),
       txHash: "",
       projectAddress: projectAccount.address,
-      data: utils.JsonToArray(JSON.stringify(projectData)),
+      data: utils.conversions.JsonToArray(JSON.stringify(projectData)),
     }),
   };
 
@@ -83,12 +83,12 @@ export const UpdateProjectStatus = async (
   const projectAccount = (await project.getAccounts())[0];
 
   const message = {
-    typeUrl: "/project.MsgUpdateProjectStatus",
-    value: ixo.project.MsgUpdateProjectStatus.fromPartial({
+    typeUrl: "/ixo.project.v1.MsgUpdateProjectStatus",
+    value: ixo.project.v1.MsgUpdateProjectStatus.fromPartial({
       txHash: "",
       senderDid: did,
       projectDid: projectDid,
-      data: ixo.project.UpdateProjectStatusDoc.fromPartial({ status }),
+      data: ixo.project.v1.UpdateProjectStatusDoc.fromPartial({ status }),
       projectAddress: projectAccount.address,
     }),
   };
@@ -120,12 +120,12 @@ export const CreateAgent = async (role: string = "SA") => {
   const projectAccount = (await project.getAccounts())[0];
 
   const message = {
-    typeUrl: "/project.MsgCreateAgent",
-    value: ixo.project.MsgCreateAgent.fromPartial({
+    typeUrl: "/ixo.project.v1.MsgCreateAgent",
+    value: ixo.project.v1.MsgCreateAgent.fromPartial({
       txHash: "",
       senderDid: did,
       projectDid: projectDid,
-      data: ixo.project.CreateAgentDoc.fromPartial({ agentDid: did, role }),
+      data: ixo.project.v1.CreateAgentDoc.fromPartial({ agentDid: did, role }),
       projectAddress: projectAccount.address,
     }),
   };
@@ -157,12 +157,12 @@ export const UpdateAgent = async () => {
   const projectAccount = (await project.getAccounts())[0];
 
   const message = {
-    typeUrl: "/project.MsgUpdateAgent",
-    value: ixo.project.MsgUpdateAgent.fromPartial({
+    typeUrl: "/ixo.project.v1.MsgUpdateAgent",
+    value: ixo.project.v1.MsgUpdateAgent.fromPartial({
       txHash: "",
       senderDid: did,
       projectDid: projectDid,
-      data: ixo.project.UpdateAgentDoc.fromPartial({
+      data: ixo.project.v1.UpdateAgentDoc.fromPartial({
         did: did,
         status: "AWESOME",
       }),
@@ -194,12 +194,12 @@ export const CreateClaim = async () => {
   const projectAccount = (await project.getAccounts())[0];
 
   const message = {
-    typeUrl: "/project.MsgCreateClaim",
-    value: ixo.project.MsgCreateClaim.fromPartial({
+    typeUrl: "/ixo.project.v1.MsgCreateClaim",
+    value: ixo.project.v1.MsgCreateClaim.fromPartial({
       txHash: "",
       senderDid: did,
       projectDid: projectDid,
-      data: ixo.project.CreateClaimDoc.fromPartial({
+      data: ixo.project.v1.CreateClaimDoc.fromPartial({
         claimId: constants.projectClaimId,
         claimTemplateId: constants.projectTemplateId,
       }),
@@ -231,12 +231,12 @@ export const CreateEvaluation = async () => {
   const projectAccount = (await project.getAccounts())[0];
 
   const message = {
-    typeUrl: "/project.MsgCreateEvaluation",
-    value: ixo.project.MsgCreateEvaluation.fromPartial({
+    typeUrl: "/ixo.project.v1.MsgCreateEvaluation",
+    value: ixo.project.v1.MsgCreateEvaluation.fromPartial({
       txHash: "",
       senderDid: did,
       projectDid: projectDid,
-      data: ixo.project.CreateEvaluationDoc.fromPartial({
+      data: ixo.project.v1.CreateEvaluationDoc.fromPartial({
         claimId: constants.projectClaimId,
         status: "1",
       }),
@@ -267,10 +267,10 @@ export const WithdrawFunds = async () => {
   const projectDid = project.did;
 
   const message = {
-    typeUrl: "/project.MsgWithdrawFunds",
-    value: ixo.project.MsgWithdrawFunds.fromPartial({
+    typeUrl: "/ixo.project.v1.MsgWithdrawFunds",
+    value: ixo.project.v1.MsgWithdrawFunds.fromPartial({
       senderDid: did,
-      data: ixo.project.WithdrawFundsDoc.fromPartial({
+      data: ixo.project.v1.WithdrawFundsDoc.fromPartial({
         projectDid: projectDid,
         recipientDid: did,
         amount: "100000",
@@ -314,12 +314,12 @@ export const UpdateProjectDoc = async () => {
   };
 
   const message = {
-    typeUrl: "/project.MsgUpdateProjectDoc",
-    value: ixo.project.MsgUpdateProjectDoc.fromPartial({
+    typeUrl: "/ixo.project.v1.MsgUpdateProjectDoc",
+    value: ixo.project.v1.MsgUpdateProjectDoc.fromPartial({
       txHash: "",
       senderDid: did,
       projectDid: projectDid,
-      data: utils.JsonToArray(JSON.stringify(data)),
+      data: utils.conversions.JsonToArray(JSON.stringify(data)),
       projectAddress: projectAccount.address,
     }),
   };

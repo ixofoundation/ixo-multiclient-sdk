@@ -25,6 +25,7 @@ yarn add  @ixo/impactxclient-sdk
       - [Cosmos Messages](#cosmos-messages)
   - [Connecting with Wallets and Signing Messages](#connecting-with-wallets-and-signing-messages)
     - [Initializing the Stargate Client](#initializing-the-stargate-client)
+    - [Amino Signer](#amino-signer)
     - [Proto Signer](#proto-signer)
     - [Broadcasting Messages](#broadcasting-messages)
   - [Advanced Usage](#advanced-usage)
@@ -39,7 +40,7 @@ yarn add  @ixo/impactxclient-sdk
 ### RPC Clients
 
 ```js
-import { ixo } from "@ixo/impactxclient-sdk";
+import { ixo, createQueryClient } from "@ixo/impactxclient-sdk";
 
 const { createRPCQueryClient } = ixo.ClientFactory;
 const client = await createRPCQueryClient({ rpcEndpoint: RPC_ENDPOINT });
@@ -51,6 +52,17 @@ const balance = await client.cosmos.bank.v1beta1.allBalances({
 
 // you can also query the ixo modules
 const balances = await client.ixo.exchange.v1beta1.exchangeBalances();
+
+We added a custom queryCleint that includes the cosmos modules and ixo modules as well as custom queries
+
+const queryClient = await createQueryClient(RPC_ENDPOINT);
+
+// now you can query any module
+const balance = await client.cosmos.bank.v1beta1.allBalances({
+  address: "ixo1addresshere",
+});
+
+
 ```
 
 ### Composing Messages
@@ -71,13 +83,13 @@ please define message using the types from the namespace itself and not from the
 import { ixo } from "@ixo/impactxclient-sdk";
 
 const message = {
-  typeUrl: "/iid.MsgCreateIidDocument",
-  value: ixo.iid.MsgCreateIidDocument.fromPartial({
+  typeUrl: "/ixo.iid.v1beta1.MsgCreateIidDocument",
+  value: ixo.iid.v1beta1.MsgCreateIidDocument.fromPartial({
     id: did,
     verifications: [
-      ixo.iid.Verification.fromPartial({
+      ixo.iid.v1beta1.Verification.fromPartial({
         relationships: ["authentication"],
-        method: ixo.iid.VerificationMethod.fromPartial({
+        method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
           id: did,
           type: "EcdsaSecp256k1VerificationKey2019",
           publicKeyMultibase: "F" + toHex(pubkey),
@@ -136,6 +148,12 @@ To broadcast messages, you can create signers with a variety of options:
 - [keplr](https://docs.keplr.app/api/cosmjs.html)
 - [cosmjs](https://gist.github.com/webmaster128/8444d42a7eceeda2544c8a59fbd7e1d9)
 
+We added a custom Stargate Signing Client that can be exported and creatable under createSigningClient, please note it only support Direct Proto signing through the rpc endpoint! It already has all the proto defininitions in the registry for ixo modules.
+
+```js
+import { createSigningClient } from "@ixo/impactxclient-sdk";
+```
+
 ### Amino Signer
 
 Likely you'll want to use the Amino, so unless you need proto, you should use this one:
@@ -143,8 +161,6 @@ Likely you'll want to use the Amino, so unless you need proto, you should use th
 ```js
 import { getOfflineSignerAmino as getOfflineSigner } from "cosmjs-utils";
 ```
-
-Please note that the custom signing client exported and creatable under createClient only support Direct Proto signing through the rpc endpoint!!
 
 ### Proto Signer
 

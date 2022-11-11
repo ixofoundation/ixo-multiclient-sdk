@@ -23,39 +23,57 @@ beforeAll(() => {
 
 describe("Testing the iid module", () => {
   sendFromFaucet(WalletUsers.tester);
-  // testMsg("/iid.MsgCreateIidDocument", () => Iid.CreateIidDoc());
-  // testQry("test query", () => queryClient.ixo.bonds.bonds(), {
-  //   bonds: [],
-  // });
+  testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () => Iid.CreateIidDoc());
+  // testQry(
+  //   "test query",
+  //   () => queryClient.ixo.bonds.v1beta1.bond({ bondDid: "adsf" }),
+  //   {
+  //     bonds: [],
+  //   }
+  // );
   // sendFromFaucet(WalletUsers.alice);
-  // testMsg('/iid.MsgCreateIidDocument', () => Iid.CreateIidDoc(WalletUsers.alice));
+  // testMsg('/ixo.iid.v1beta1.MsgCreateIidDocument', () => Iid.CreateIidDoc(WalletUsers.alice));
   // sendFromFaucet(WalletUsers.bob);
-  // testMsg('/iid.MsgCreateIidDocument', () => Iid.CreateIidDoc(WalletUsers.bob));
+  // testMsg('/ixo.iid.v1beta1.MsgCreateIidDocument', () => Iid.CreateIidDoc(WalletUsers.bob));
 
-  // testMsg('/iid.MsgUpdateIidDocument', () => Iid.UpdateIidDoc());
-  // testMsg('/iid.MsgUpdateIidMeta', () => Iid.UpdateIidMeta());
-  // testMsg('/iid.MsgAddIidContext', () => Iid.AddIidContext());
-  // testMsg('/iid.MsgDeleteIidContext', () => Iid.DeleteIidContext());
-  // testMsg('/iid.MsgAddVerification', () => Iid.AddVerification());
-  // testMsg('/iid.MsgSetVerificationRelationships', () => Iid.SetVerificationRelationships());
-  // testMsg('/iid.MsgRevokeVerification', () => Iid.RevokeVerification());
+  // testMsg("/ixo.iid.v1beta1.MsgUpdateIidDocument", () => Iid.UpdateIidDoc());
+  // testMsg("/ixo.iid.v1beta1.MsgUpdateIidMeta", () => Iid.UpdateIidMeta());
+  // testMsg("/ixo.iid.v1beta1.MsgAddIidContext", () => Iid.AddIidContext());
+  // testMsg("/ixo.iid.v1beta1.MsgDeleteIidContext", () => Iid.DeleteIidContext());
+  // testMsg("/ixo.iid.v1beta1.MsgAddVerification", () => Iid.AddVerification());
+  // testMsg("/ixo.iid.v1beta1.MsgSetVerificationRelationships", () =>
+  //   Iid.SetVerificationRelationships()
+  // );
+  // testMsg("/ixo.iid.v1beta1.MsgRevokeVerification", () =>
+  //   Iid.RevokeVerification()
+  // );
   // sendFromFaucet(WalletUsers.accordedRight);
-  // testMsg('/iid.MsgCreateIidDocument', () => Iid.CreateIidDoc(WalletUsers.accordedRight, WalletUsers.tester));
-  // testMsg('/iid.MsgAddAccordedRight', () => Iid.AddAccordedRight());
-  // testMsg('/iid.MsgDeleteAccordedRight', () => Iid.DeleteAccordedRight());
-  // testMsg('/iid.MsgAddController', () => Iid.AddController());
-  // testMsg('/iid.MsgDeleteController', () => Iid.DeleteController());
-  // testMsg('/iid.MsgAddLinkedEntity', () => Iid.AddLinkedEntity());
-  // testMsg('/iid.MsgDeleteLinkedEntity', () => Iid.DeleteLinkedEntity());
-  // testMsg('/iid.MsgAddLinkedResource', () => Iid.AddLinkedResource());
-  // testMsg('/iid.MsgDeleteLinkedResource', () => Iid.DeleteLinkedResource());
-  // testMsg('/iid.MsgAddService', () => Iid.AddService());
-  // testMsg('/iid.MsgDeleteService', () => Iid.DeleteService());
+  // testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () =>
+  //   Iid.CreateIidDoc(WalletUsers.accordedRight, WalletUsers.tester)
+  // );
+  // testMsg("/ixo.iid.v1beta1.MsgAddAccordedRight", () => Iid.AddAccordedRight());
+  // testMsg("/ixo.iid.v1beta1.MsgDeleteAccordedRight", () =>
+  //   Iid.DeleteAccordedRight()
+  // );
+  // testMsg("/ixo.iid.v1beta1.MsgAddController", () => Iid.AddController());
+  // testMsg("/ixo.iid.v1beta1.MsgDeleteController", () => Iid.DeleteController());
+  // testMsg("/ixo.iid.v1beta1.MsgAddLinkedEntity", () => Iid.AddLinkedEntity());
+  // testMsg("/ixo.iid.v1beta1.MsgDeleteLinkedEntity", () =>
+  //   Iid.DeleteLinkedEntity()
+  // );
+  // testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", () =>
+  //   Iid.AddLinkedResource()
+  // );
+  // testMsg("/ixo.iid.v1beta1.MsgDeleteLinkedResource", () =>
+  //   Iid.DeleteLinkedResource()
+  // );
+  // testMsg("/ixo.iid.v1beta1.MsgAddService", () => Iid.AddService());
+  // testMsg("/ixo.iid.v1beta1.MsgDeleteService", () => Iid.DeleteService());
 });
 
 describe("Testing the entity module", () => {
   // let assetDid: string;
-  // testMsg("/entity.MsgCreateEntity asset", async () => {
+  // testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset", async () => {
   //   const res = await Entity.CreateEntityAsset();
   //   console.log({ res });
   //   assetDid = getDidFromEvents(res);
@@ -63,124 +81,139 @@ describe("Testing the entity module", () => {
   //   return res;
   // });
   // let assetSupamotoDid: string;
-  // testMsg("/entity.MsgCreateEntity asset class supamoto", async () => {
-  //   const res = await Entity.CreateEntityAssetSupamoto(assetDid);
-  //   assetSupamotoDid = getDidFromEvents(res);
-  //   console.log({ assetSupamotoDid });
-  //   return res;
-  // });
+  // testMsg(
+  //   "/ixo.entity.v1beta1.MsgCreateEntity asset class supamoto",
+  //   async () => {
+  //     const res = await Entity.CreateEntityAssetSupamoto(assetDid);
+  //     assetSupamotoDid = getDidFromEvents(res);
+  //     console.log({ assetSupamotoDid });
+  //     return res;
+  //   }
+  // );
   // let assetSupamotoInstanceDid: string;
-  // testMsg("/entity.MsgCreateEntity asset class supamoto instance", async () => {
-  //   const res = await Entity.CreateEntityAssetSupamotoInstance(
-  //     assetSupamotoDid
-  //   );
-  //   assetSupamotoInstanceDid = getDidFromEvents(res);
-  //   console.log({ assetSupamotoInstanceDid });
-  //   return res;
-  // });
-  // testMsg('/entity.MsgTransferEntity', () => Entity.TransferEntity(assetSupamotoInstanceDid));
-  // 	testMsg('/entity.MsgUpdateEntity', () => Entity.UpdateEntity());
-  // 	testMsg('/entity.MsgUpdateEntityConfig', () => Entity.UpdateConfigEntity());
+  // testMsg(
+  //   "/ixo.entity.v1beta1.MsgCreateEntity asset class supamoto instance",
+  //   async () => {
+  //     const res = await Entity.CreateEntityAssetSupamotoInstance(
+  //       assetSupamotoDid
+  //     );
+  //     assetSupamotoInstanceDid = getDidFromEvents(res);
+  //     console.log({ assetSupamotoInstanceDid });
+  //     return res;
+  //   }
+  // );
+  // testMsg("/ixo.entity.v1beta1.MsgTransferEntity", () =>
+  //   Entity.TransferEntity(assetSupamotoInstanceDid)
+  // );
+  // testMsg("/ixo.entity.v1beta1.MsgUpdateEntity", () => Entity.UpdateEntity());
 });
 
 describe("Testing the Payments module", () => {
-  // testMsg("/payments.MsgCreatePaymentTemplate", () =>
+  // testMsg("/ixo.payments.v1.MsgCreatePaymentTemplate", () =>
   //   Payments.CreatePaymentTemplate()
   // );
-  // testMsg("/payments.MsgCreatePaymentContract", () =>
+  // testMsg("/ixo.payments.v1.MsgCreatePaymentContract", () =>
   //   Payments.CreatePaymentContract()
   // );
-  // testMsg("/payments.MsgSetPaymentContractAuthorisation", () =>
+  // testMsg("/ixo.payments.v1.MsgSetPaymentContractAuthorisation", () =>
   //   Payments.SetPaymentContractAuthorization()
   // );
-  // testMsg("/payments.MsgCreateSubscription", () =>
+  // testMsg("/ixo.payments.v1.MsgCreateSubscription", () =>
   //   Payments.CreateSubscription()
   // );
-  // testMsg('/payments.MsgGrantDiscount', () => Payments.GrantDiscount());
-  // testMsg('/payments.MsgRevokeDiscount', () => Payments.RevokeDiscount());
-  // testMsg('/payments.MsgEffectPayment', () => Payments.EffectPayment());
+  // testMsg("/ixo.payments.v1.MsgGrantDiscount", () => Payments.GrantDiscount());
+  // testMsg("/ixo.payments.v1.MsgRevokeDiscount", () =>
+  //   Payments.RevokeDiscount()
+  // );
+  // testMsg("/ixo.payments.v1.MsgEffectPayment", () => Payments.EffectPayment());
 });
 
 describe("Testing the Projects module", () => {
-  // testMsg('/project.MsgCreateProject', () => Projects.CreateProject());
-  // testMsg('/project.MsgUpdateProjectStatus', () => Projects.UpdateProjectStatus('CREATED'));
-  // testMsg('/project.MsgUpdateProjectStatus', () => Projects.UpdateProjectStatus('PENDING'));
-  // testMsg('/project.MsgUpdateProjectDoc', () => Projects.UpdateProjectDoc());
+  // testMsg("/ixo.project.v1.MsgCreateProject", () => Projects.CreateProject());
+  // testMsg("/ixo.project.v1.MsgUpdateProjectStatus", () =>
+  //   Projects.UpdateProjectStatus("CREATED")
+  // );
+  // testMsg("/ixo.project.v1.MsgUpdateProjectStatus", () =>
+  //   Projects.UpdateProjectStatus("PENDING")
+  // );
+  // testMsg("/ixo.project.v1.MsgUpdateProjectDoc", () =>
+  //   Projects.UpdateProjectDoc()
+  // );
   // sendFromFaucet(WalletUsers.project); // Need to fecth other addresses for project to fund
-  // testMsg('/project.MsgCreateAgent', () => Projects.CreateAgent());
-  // testMsg('/project.MsgUpdateAgent', () => Projects.UpdateAgent());
-  // testMsg('/project.MsgUpdateProjectStatus', () => Projects.UpdateProjectStatus('FUNDED'));
-  // testMsg('/project.MsgUpdateProjectStatus', () => Projects.UpdateProjectStatus('STARTED'));
-  // testMsg('/project.MsgCreateClaim', () => Projects.CreateClaim());
-  // testMsg('/project.MsgCreateEvaluation', () => Projects.CreateEvaluation());
-  // testMsg('/project.MsgWithdrawFunds', () => Projects.WithdrawFunds());
+  // testMsg('/ixo.project.v1.MsgCreateAgent', () => Projects.CreateAgent());
+  // testMsg('/ixo.project.v1.MsgUpdateAgent', () => Projects.UpdateAgent());
+  // testMsg('/ixo.project.v1.MsgUpdateProjectStatus', () => Projects.UpdateProjectStatus('FUNDED'));
+  // testMsg('/ixo.project.v1.MsgUpdateProjectStatus', () => Projects.UpdateProjectStatus('STARTED'));
+  // testMsg('/ixo.project.v1.MsgCreateClaim', () => Projects.CreateClaim());
+  // testMsg('/ixo.project.v1.MsgCreateEvaluation', () => Projects.CreateEvaluation());
+  // testMsg('/ixo.project.v1.MsgWithdrawFunds', () => Projects.WithdrawFunds());
 });
 
 describe("Testing the Bonds module", () => {
-  // testMsg('/bonds.MsgCreateBond', () => Bond.CreateBond());
-  // testMsg('/bonds.MsgEditBond', () => Bond.EditBond());
-  // testMsg('/bonds.MsgBuy', () => Bond.Buy(WalletUsers.tester, 1)); // Buy one token first to hatch bond
-  // testMsg('/bonds.MsgBuy', () => Bond.Buy(20000));
-  // testMsg('/bonds.MsgSetNextAlpha', () => Bond.SetNextAlpha('520000000000000000'));
-  // testMsg('/bonds.MsgMakeOutcomePayment', () => Bond.MakeOutcomePayment(1000));
-  // testMsg('/bonds.MsgUpdateBondState', () => Bond.UpdateBondState('SETTLE'));
-  // testMsg('/bonds.MsgWithdrawShare', () => Bond.WithdrawShare());
-  // testMsg('/bonds.MsgWithdrawReserve', () => Bond.WithdrawReserve(10)); // Not tested
-  // testMsg('/bonds.MsgSell', () => Bond.Sell(10)); // Not tested
-  // testMsg('/bonds.MsgSwap', () => Bond.Swap()); // Not tested
+  testMsg("/ixo.bonds.v1beta1.MsgCreateBond", () => Bond.CreateBond(false));
+  // testMsg("/ixo.bonds.v1beta1.MsgEditBond", () => Bond.EditBond());
+  // testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.tester, 1)); // Buy one token first to hatch bond
+  // testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(20000));
+  // testMsg('/ixo.bonds.v1beta1.MsgSetNextAlpha', () => Bond.SetNextAlpha('520000000000000000'));
+  // testMsg('/ixo.bonds.v1beta1.MsgMakeOutcomePayment', () => Bond.MakeOutcomePayment(1000));
+  // testMsg('/ixo.bonds.v1beta1.MsgUpdateBondState', () => Bond.UpdateBondState('SETTLE'));
+  // testMsg('/ixo.bonds.v1beta1.MsgWithdrawShare', () => Bond.WithdrawShare());
+  // testMsg('/ixo.bonds.v1beta1.MsgWithdrawReserve', () => Bond.WithdrawReserve(10)); // Not tested
+  // testMsg('/ixo.bonds.v1beta1.MsgSell', () => Bond.Sell(10)); // Not tested
+  // testMsg('/ixo.bonds.v1beta1.MsgSwap', () => Bond.Swap()); // Not tested
 });
 
 /*
 describe('Testing the Bonds module sells disabled', () => {
 	beforeAll(() => generateNewWallet(WalletUsers.bond));
-	testMsg('/bonds.MsgCreateBond', () => Bond.CreateBond(false));
-	testMsg('/bonds.MsgEditBond', () => Bond.EditBond());
-	testMsg('/bonds.MsgBuy', () => Bond.Buy(WalletUsers.tester, 400000));
+	testMsg('/ixo.bonds.v1beta1.MsgCreateBond', () => Bond.CreateBond(false));
+	testMsg('/ixo.bonds.v1beta1.MsgEditBond', () => Bond.EditBond());
+	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.tester, 400000));
 	// Withdrawing of reserve during HATCH state not possible...
-	testMsg('/bonds.MsgWithdrawReserve', () => Bond.WithdrawReserve(WalletUsers.alice, 10), false);
-	testMsg('/bonds.MsgBuy', () => Bond.Buy(WalletUsers.alice, 400000));
+	testMsg('/ixo.bonds.v1beta1.MsgWithdrawReserve', () => Bond.WithdrawReserve(WalletUsers.alice, 10), false);
+	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.alice, 400000));
 	// Cannot buy 200001 as d0 is 1mil and must buy exact amount to hatch bond
-	testMsg('/bonds.MsgBuy', () => Bond.Buy(WalletUsers.bob, 200001), false);
-	testMsg('/bonds.MsgBuy', () => Bond.Buy(WalletUsers.bob, 200000));
-	testMsg('/bonds.MsgWithdrawReserve', () => Bond.WithdrawReserve(WalletUsers.tester, 400000));
-	testMsg('/bonds.MsgSetNextAlpha', () => Bond.SetNextAlpha('510000000000000000'));
-	testMsg('/bonds.MsgWithdrawReserve', () => Bond.WithdrawReserve(WalletUsers.tester, 5000));
+	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.bob, 200001), false);
+	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.bob, 200000));
+	testMsg('/ixo.bonds.v1beta1.MsgWithdrawReserve', () => Bond.WithdrawReserve(WalletUsers.tester, 400000));
+	testMsg('/ixo.bonds.v1beta1.MsgSetNextAlpha', () => Bond.SetNextAlpha('510000000000000000'));
+	testMsg('/ixo.bonds.v1beta1.MsgWithdrawReserve', () => Bond.WithdrawReserve(WalletUsers.tester, 5000));
 	// Cannot withdraw 595001res due to insufficient funds...
-	testMsg('/bonds.MsgWithdrawReserve', () => Bond.WithdrawReserve(WalletUsers.tester, 595001), false);
-	testMsg('/bonds.MsgSetNextAlpha', () => Bond.SetNextAlpha('400000000000000000'));
+	testMsg('/ixo.bonds.v1beta1.MsgWithdrawReserve', () => Bond.WithdrawReserve(WalletUsers.tester, 595001), false);
+	testMsg('/ixo.bonds.v1beta1.MsgSetNextAlpha', () => Bond.SetNextAlpha('400000000000000000'));
 	// Cannot change public alpha 0.4->0.6...
-	testMsg('/bonds.MsgSetNextAlpha', () => Bond.SetNextAlpha('600000000000000000'), false);
+	testMsg('/ixo.bonds.v1beta1.MsgSetNextAlpha', () => Bond.SetNextAlpha('600000000000000000'), false);
 	// Cannot sell because sells are disabled...
-	testMsg('/bonds.MsgSell', () => Bond.Sell(WalletUsers.alice, 10), false);
-	testMsg('/bonds.MsgMakeOutcomePayment', () => Bond.MakeOutcomePayment(8000000));
-	testMsg('/bonds.MsgUpdateBondState', () => Bond.UpdateBondState('SETTLE'));
-	testMsg('/bonds.MsgWithdrawShare', () => Bond.WithdrawShare(WalletUsers.alice));
-	testMsg('/bonds.MsgWithdrawShare', () => Bond.WithdrawShare(WalletUsers.bob));
+	testMsg('/ixo.bonds.v1beta1.MsgSell', () => Bond.Sell(WalletUsers.alice, 10), false);
+	testMsg('/ixo.bonds.v1beta1.MsgMakeOutcomePayment', () => Bond.MakeOutcomePayment(8000000));
+	testMsg('/ixo.bonds.v1beta1.MsgUpdateBondState', () => Bond.UpdateBondState('SETTLE'));
+	testMsg('/ixo.bonds.v1beta1.MsgWithdrawShare', () => Bond.WithdrawShare(WalletUsers.alice));
+	testMsg('/ixo.bonds.v1beta1.MsgWithdrawShare', () => Bond.WithdrawShare(WalletUsers.bob));
 });
 */
 
 /*
 describe('Testing the Bonds module sells enabled', () => {
 	beforeAll(() => generateNewWallet(WalletUsers.bond));
-	testMsg('/bonds.MsgCreateBond', () => Bond.CreateBond(true));
-	testMsg('/bonds.MsgEditBond', () => Bond.EditBond());
-	testMsg('/bonds.MsgBuy', () => Bond.Buy(WalletUsers.tester, 400000));
-	testMsg('/bonds.MsgBuy', () => Bond.Buy(WalletUsers.alice, 400000));
+	testMsg('/ixo.bonds.v1beta1.MsgCreateBond', () => Bond.CreateBond(true));
+	testMsg('/ixo.bonds.v1beta1.MsgEditBond', () => Bond.EditBond());
+	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.tester, 400000));
+	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.alice, 400000));
 	// Cannot buy 200001 as d0 is 1mil and must buy exact amount to hatch bond
-	testMsg('/bonds.MsgBuy', () => Bond.Buy(WalletUsers.bob, 200001), false);
-	testMsg('/bonds.MsgBuy', () => Bond.Buy(WalletUsers.bob, 200000));
+	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.bob, 200001), false);
+	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.bob, 200000));
 	// Cannot withdraw reserve as disabled
-	testMsg('/bonds.MsgWithdrawReserve', () => Bond.WithdrawReserve(WalletUsers.tester, 400000), false);
-	testMsg('/bonds.MsgSetNextAlpha', () => Bond.SetNextAlpha('510000000000000000'));
-	testMsg('/bonds.MsgSetNextAlpha', () => Bond.SetNextAlpha('400000000000000000'));
+	testMsg('/ixo.bonds.v1beta1.MsgWithdrawReserve', () => Bond.WithdrawReserve(WalletUsers.tester, 400000), false);
+	testMsg('/ixo.bonds.v1beta1.MsgSetNextAlpha', () => Bond.SetNextAlpha('510000000000000000'));
+	testMsg('/ixo.bonds.v1beta1.MsgSetNextAlpha', () => Bond.SetNextAlpha('400000000000000000'));
 	// Cannot change public alpha 0.4->0.6...
-	testMsg('/bonds.MsgSetNextAlpha', () => Bond.SetNextAlpha('600000000000000000'), false);
-	testMsg('/bonds.MsgSell', () => Bond.Sell(WalletUsers.alice, 400000));
-	testMsg('/bonds.MsgMakeOutcomePayment', () => Bond.MakeOutcomePayment(8000000));
-	testMsg('/bonds.MsgUpdateBondState', () => Bond.UpdateBondState('SETTLE'));
+	testMsg('/ixo.bonds.v1beta1.MsgSetNextAlpha', () => Bond.SetNextAlpha('600000000000000000'), false);
+	testMsg('/ixo.bonds.v1beta1.MsgSell', () => Bond.Sell(WalletUsers.alice, 400000));
+	testMsg('/ixo.bonds.v1beta1.MsgMakeOutcomePayment', () => Bond.MakeOutcomePayment(8000000));
+	testMsg('/ixo.bonds.v1beta1.MsgUpdateBondState', () => Bond.UpdateBondState('SETTLE'));
 	// Cannot withdraw sahre as sold all tokens
-	testMsg('/bonds.MsgWithdrawShare', () => Bond.WithdrawShare(WalletUsers.alice), false);
-	testMsg('/bonds.MsgWithdrawShare', () => Bond.WithdrawShare(WalletUsers.bob));
+	testMsg('/ixo.bonds.v1beta1.MsgWithdrawShare', () => Bond.WithdrawShare(WalletUsers.alice), false);
+	testMsg('/ixo.bonds.v1beta1.MsgWithdrawShare', () => Bond.WithdrawShare(WalletUsers.bob));
 });
 */
 

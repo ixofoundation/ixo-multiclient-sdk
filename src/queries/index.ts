@@ -14,8 +14,9 @@ export const createQueryClient = async (rpcEndpoint: string) => {
   ).createRpcQueryExtension(rpcEndpoint);
 
   return {
-    ...queryCosmos,
+    // add queryIxo first as it hase base cosmos module and cosmos namespace needs to be overridden by queryCosmos
     ...queryIxo,
+    ...queryCosmos,
     custom: {
       ...queryCustom,
     },

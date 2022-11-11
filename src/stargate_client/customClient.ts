@@ -425,6 +425,7 @@ export const createSigningClient = async (
     rpcEndpoint,
     offlineWallet,
     {
+      // registry: new Registry([...defaultRegistryTypes, ...ixoProtoRegistry]),
       registry: createRegistry(),
       accountParser: accountFromAny,
     },
@@ -436,132 +437,191 @@ export const createRegistry = (): Registry => {
   const myRegistry = new Registry(defaultRegistryTypes);
   // Iid module
   myRegistry.register(
-    "/iid.MsgCreateIidDocument",
-    ixo.iid.MsgCreateIidDocument
+    "/ixo.iid.v1beta1.MsgCreateIidDocument",
+    ixo.iid.v1beta1.MsgCreateIidDocument
   );
   myRegistry.register(
-    "/iid.MsgUpdateIidDocument",
-    ixo.iid.MsgUpdateIidDocument
-  );
-  myRegistry.register("/iid.MsgUpdateIidMeta", ixo.iid.MsgUpdateIidMeta);
-  myRegistry.register("/iid.MsgAddIidContext", ixo.iid.MsgAddIidContext);
-  myRegistry.register("/iid.MsgDeleteIidContext", ixo.iid.MsgDeleteIidContext);
-  myRegistry.register("/iid.MsgAddVerification", ixo.iid.MsgAddVerification);
-  myRegistry.register(
-    "/iid.MsgSetVerificationRelationships",
-    ixo.iid.MsgSetVerificationRelationships
+    "/ixo.iid.v1beta1.MsgUpdateIidDocument",
+    ixo.iid.v1beta1.MsgUpdateIidDocument
   );
   myRegistry.register(
-    "/iid.MsgRevokeVerification",
-    ixo.iid.MsgRevokeVerification
-  );
-  myRegistry.register("/iid.MsgAddAccordedRight", ixo.iid.MsgAddAccordedRight);
-  myRegistry.register(
-    "/iid.MsgDeleteAccordedRight",
-    ixo.iid.MsgDeleteAccordedRight
-  );
-  myRegistry.register("/iid.MsgAddController", ixo.iid.MsgAddController);
-  myRegistry.register("/iid.MsgDeleteController", ixo.iid.MsgDeleteController);
-  myRegistry.register("/iid.MsgAddLinkedEntity", ixo.iid.MsgAddLinkedEntity);
-  myRegistry.register(
-    "/iid.MsgDeleteLinkedEntity",
-    ixo.iid.MsgDeleteLinkedEntity
+    "/ixo.iid.v1beta1.MsgUpdateIidMeta",
+    ixo.iid.v1beta1.MsgUpdateIidMeta
   );
   myRegistry.register(
-    "/iid.MsgAddLinkedResource",
-    ixo.iid.MsgAddLinkedResource
+    "/ixo.iid.v1beta1.MsgAddIidContext",
+    ixo.iid.v1beta1.MsgAddIidContext
   );
   myRegistry.register(
-    "/iid.MsgDeleteLinkedResource",
-    ixo.iid.MsgDeleteLinkedResource
+    "/ixo.iid.v1beta1.MsgDeleteIidContext",
+    ixo.iid.v1beta1.MsgDeleteIidContext
   );
-  myRegistry.register("/iid.MsgAddService", ixo.iid.MsgAddService);
-  myRegistry.register("/iid.MsgDeleteService", ixo.iid.MsgDeleteService);
+  myRegistry.register(
+    "/ixo.iid.v1beta1.MsgAddVerification",
+    ixo.iid.v1beta1.MsgAddVerification
+  );
+  myRegistry.register(
+    "/ixo.iid.v1beta1.MsgSetVerificationRelationships",
+    ixo.iid.v1beta1.MsgSetVerificationRelationships
+  );
+  myRegistry.register(
+    "/ixo.iid.v1beta1.MsgRevokeVerification",
+    ixo.iid.v1beta1.MsgRevokeVerification
+  );
+  myRegistry.register(
+    "/ixo.iid.v1beta1.MsgAddAccordedRight",
+    ixo.iid.v1beta1.MsgAddAccordedRight
+  );
+  myRegistry.register(
+    "/ixo.iid.v1beta1.MsgDeleteAccordedRight",
+    ixo.iid.v1beta1.MsgDeleteAccordedRight
+  );
+  myRegistry.register(
+    "/ixo.iid.v1beta1.MsgAddController",
+    ixo.iid.v1beta1.MsgAddController
+  );
+  myRegistry.register(
+    "/ixo.iid.v1beta1.MsgDeleteController",
+    ixo.iid.v1beta1.MsgDeleteController
+  );
+  myRegistry.register(
+    "/ixo.iid.v1beta1.MsgAddLinkedEntity",
+    ixo.iid.v1beta1.MsgAddLinkedEntity
+  );
+  myRegistry.register(
+    "/ixo.iid.v1beta1.MsgDeleteLinkedEntity",
+    ixo.iid.v1beta1.MsgDeleteLinkedEntity
+  );
+  myRegistry.register(
+    "/ixo.iid.v1beta1.MsgAddLinkedResource",
+    ixo.iid.v1beta1.MsgAddLinkedResource
+  );
+  myRegistry.register(
+    "/ixo.iid.v1beta1.MsgDeleteLinkedResource",
+    ixo.iid.v1beta1.MsgDeleteLinkedResource
+  );
+  myRegistry.register(
+    "/ixo.iid.v1beta1.MsgAddService",
+    ixo.iid.v1beta1.MsgAddService
+  );
+  myRegistry.register(
+    "/ixo.iid.v1beta1.MsgDeleteService",
+    ixo.iid.v1beta1.MsgDeleteService
+  );
   // Entity module
-  myRegistry.register("/entity.MsgCreateEntity", ixo.entity.MsgCreateEntity);
-  myRegistry.register("/entity.MsgCreateEntity", ixo.entity.MsgCreateEntity);
-  myRegistry.register("/entity.MsgCreateEntity", ixo.entity.MsgCreateEntity);
   myRegistry.register(
-    "/entity.MsgTransferEntity",
-    ixo.entity.MsgTransferEntity
+    "/ixo.entity.v1beta1.MsgCreateEntity",
+    ixo.entity.v1beta1.MsgCreateEntity
   );
-  myRegistry.register("/entity.MsgUpdateEntity", ixo.entity.MsgUpdateEntity);
   myRegistry.register(
-    "/entity.MsgUpdateEntityConfig",
-    ixo.entity.MsgUpdateEntityConfig
+    "/ixo.entity.v1beta1.MsgCreateEntity",
+    ixo.entity.v1beta1.MsgCreateEntity
+  );
+  myRegistry.register(
+    "/ixo.entity.v1beta1.MsgCreateEntity",
+    ixo.entity.v1beta1.MsgCreateEntity
+  );
+  myRegistry.register(
+    "/ixo.entity.v1beta1.MsgTransferEntity",
+    ixo.entity.v1beta1.MsgTransferEntity
+  );
+  myRegistry.register(
+    "/ixo.entity.v1beta1.MsgUpdateEntity",
+    ixo.entity.v1beta1.MsgUpdateEntity
   );
   // Payments module
   myRegistry.register(
-    "/payments.MsgCreatePaymentTemplate",
-    ixo.payments.MsgCreatePaymentTemplate
+    "/ixo.payments.v1.MsgCreatePaymentTemplate",
+    ixo.payments.v1.MsgCreatePaymentTemplate
   );
   myRegistry.register(
-    "/payments.MsgCreatePaymentContract",
-    ixo.payments.MsgCreatePaymentContract
+    "/ixo.payments.v1.MsgCreatePaymentContract",
+    ixo.payments.v1.MsgCreatePaymentContract
   );
   myRegistry.register(
-    "/payments.MsgSetPaymentContractAuthorisation",
-    ixo.payments.MsgSetPaymentContractAuthorisation
+    "/ixo.payments.v1.MsgSetPaymentContractAuthorisation",
+    ixo.payments.v1.MsgSetPaymentContractAuthorisation
   );
   myRegistry.register(
-    "/payments.MsgCreateSubscription",
-    ixo.payments.MsgCreateSubscription
+    "/ixo.payments.v1.MsgCreateSubscription",
+    ixo.payments.v1.MsgCreateSubscription
   );
   myRegistry.register(
-    "/payments.MsgGrantDiscount",
-    ixo.payments.MsgGrantDiscount
+    "/ixo.payments.v1.MsgGrantDiscount",
+    ixo.payments.v1.MsgGrantDiscount
   );
   myRegistry.register(
-    "/payments.MsgRevokeDiscount",
-    ixo.payments.MsgRevokeDiscount
+    "/ixo.payments.v1.MsgRevokeDiscount",
+    ixo.payments.v1.MsgRevokeDiscount
   );
   myRegistry.register(
-    "/payments.MsgEffectPayment",
-    ixo.payments.MsgEffectPayment
+    "/ixo.payments.v1.MsgEffectPayment",
+    ixo.payments.v1.MsgEffectPayment
   );
   // Project module
   myRegistry.register(
-    "/project.MsgCreateProject",
-    ixo.project.MsgCreateProject
+    "/ixo.project.v1.MsgCreateProject",
+    ixo.project.v1.MsgCreateProject
   );
   myRegistry.register(
-    "/project.MsgUpdateProjectStatus",
-    ixo.project.MsgUpdateProjectStatus
-  );
-  myRegistry.register("/project.MsgCreateAgent", ixo.project.MsgCreateAgent);
-  myRegistry.register("/project.MsgUpdateAgent", ixo.project.MsgUpdateAgent);
-  myRegistry.register("/project.MsgCreateClaim", ixo.project.MsgCreateClaim);
-  myRegistry.register(
-    "/project.MsgCreateEvaluation",
-    ixo.project.MsgCreateEvaluation
+    "/ixo.project.v1.MsgUpdateProjectStatus",
+    ixo.project.v1.MsgUpdateProjectStatus
   );
   myRegistry.register(
-    "/project.MsgWithdrawFunds",
-    ixo.project.MsgWithdrawFunds
+    "/ixo.project.v1.MsgCreateAgent",
+    ixo.project.v1.MsgCreateAgent
   );
   myRegistry.register(
-    "/project.MsgUpdateProjectDoc",
-    ixo.project.MsgUpdateProjectDoc
+    "/ixo.project.v1.MsgUpdateAgent",
+    ixo.project.v1.MsgUpdateAgent
+  );
+  myRegistry.register(
+    "/ixo.project.v1.MsgCreateClaim",
+    ixo.project.v1.MsgCreateClaim
+  );
+  myRegistry.register(
+    "/ixo.project.v1.MsgCreateEvaluation",
+    ixo.project.v1.MsgCreateEvaluation
+  );
+  myRegistry.register(
+    "/ixo.project.v1.MsgWithdrawFunds",
+    ixo.project.v1.MsgWithdrawFunds
+  );
+  myRegistry.register(
+    "/ixo.project.v1.MsgUpdateProjectDoc",
+    ixo.project.v1.MsgUpdateProjectDoc
   );
   // Bond module
-  myRegistry.register("/bonds.MsgCreateBond", ixo.bonds.MsgCreateBond);
-  myRegistry.register("/bonds.MsgEditBond", ixo.bonds.MsgEditBond);
-  myRegistry.register("/bonds.MsgSetNextAlpha", ixo.bonds.MsgSetNextAlpha);
   myRegistry.register(
-    "/bonds.MsgUpdateBondState",
-    ixo.bonds.MsgUpdateBondState
+    "/ixo.bonds.v1beta1.MsgCreateBond",
+    ixo.bonds.v1beta1.MsgCreateBond
   );
-  myRegistry.register("/bonds.MsgBuy", ixo.bonds.MsgBuy);
-  myRegistry.register("/bonds.MsgSell", ixo.bonds.MsgSell);
-  myRegistry.register("/bonds.MsgSwap", ixo.bonds.MsgSwap);
   myRegistry.register(
-    "/bonds.MsgMakeOutcomePayment",
-    ixo.bonds.MsgMakeOutcomePayment
+    "/ixo.bonds.v1beta1.MsgEditBond",
+    ixo.bonds.v1beta1.MsgEditBond
   );
-  myRegistry.register("/bonds.MsgWithdrawShare", ixo.bonds.MsgWithdrawShare);
   myRegistry.register(
-    "/bonds.MsgWithdrawReserve",
-    ixo.bonds.MsgWithdrawReserve
+    "/ixo.bonds.v1beta1.MsgSetNextAlpha",
+    ixo.bonds.v1beta1.MsgSetNextAlpha
+  );
+  myRegistry.register(
+    "/ixo.bonds.v1beta1.MsgUpdateBondState",
+    ixo.bonds.v1beta1.MsgUpdateBondState
+  );
+  myRegistry.register("/ixo.bonds.v1beta1.MsgBuy", ixo.bonds.v1beta1.MsgBuy);
+  myRegistry.register("/ixo.bonds.v1beta1.MsgSell", ixo.bonds.v1beta1.MsgSell);
+  myRegistry.register("/ixo.bonds.v1beta1.MsgSwap", ixo.bonds.v1beta1.MsgSwap);
+  myRegistry.register(
+    "/ixo.bonds.v1beta1.MsgMakeOutcomePayment",
+    ixo.bonds.v1beta1.MsgMakeOutcomePayment
+  );
+  myRegistry.register(
+    "/ixo.bonds.v1beta1.MsgWithdrawShare",
+    ixo.bonds.v1beta1.MsgWithdrawShare
+  );
+  myRegistry.register(
+    "/ixo.bonds.v1beta1.MsgWithdrawReserve",
+    ixo.bonds.v1beta1.MsgWithdrawReserve
   );
 
   return myRegistry;

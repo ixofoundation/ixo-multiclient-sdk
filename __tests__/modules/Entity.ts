@@ -10,12 +10,12 @@ export const CreateEntityAsset = async () => {
   const did = tester.did;
 
   const message = {
-    typeUrl: "/entity.MsgCreateEntity",
-    value: ixo.entity.MsgCreateEntity.fromPartial({
+    typeUrl: "/ixo.entity.v1beta1.MsgCreateEntity",
+    value: ixo.entity.v1beta1.MsgCreateEntity.fromPartial({
       entityType: "asset",
       entityStatus: 0,
       context: [
-        ixo.iid.Context.fromPartial({
+        ixo.iid.v1beta1.Context.fromPartial({
           key: "ixo",
           // @ts-ignore
           value: "https://w3id.org/ixo/v1",
@@ -39,39 +39,42 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
   const did = tester.did;
 
   const message = {
-    typeUrl: "/entity.MsgCreateEntity",
-    value: ixo.entity.MsgCreateEntity.fromPartial({
+    typeUrl: "/ixo.entity.v1beta1.MsgCreateEntity",
+    value: ixo.entity.v1beta1.MsgCreateEntity.fromPartial({
       entityType: "protocol",
       entityStatus: 0,
       context: [
-        // @ts-ignore
-        ixo.iid.Context.fromPartial({ key: "ixo", value: inheritEntityDid }),
+        ixo.iid.v1beta1.Context.fromPartial({
+          key: "ixo",
+          // @ts-ignore
+          value: inheritEntityDid,
+        }),
       ],
       service: [
-        ixo.iid.Service.fromPartial({
+        ixo.iid.v1beta1.Service.fromPartial({
           id: "did:ixo:entity:abc123#cellnode-pandora",
           type: "cellnode",
           serviceEndpoint: "https://cellnode-pandora.ixo.earth",
         }),
-        ixo.iid.Service.fromPartial({
+        ixo.iid.v1beta1.Service.fromPartial({
           id: "did:ixo:entity:abc123#ixo",
           type: "chainService",
           serviceEndpoint:
             "https://proxies.sifchain.finance/api/impacthub-3/rpc",
         }),
-        ixo.iid.Service.fromPartial({
+        ixo.iid.v1beta1.Service.fromPartial({
           id: "did:ixo:entity:abc123#supamoto",
           type: "linkedDomains",
           serviceEndpoint: "https://legal.supamoto.se/",
         }),
-        ixo.iid.Service.fromPartial({
+        ixo.iid.v1beta1.Service.fromPartial({
           id: "did:ixo:entity:abc123#dashboard",
           type: "linkedDomains",
           serviceEndpoint: "https://supamoto.jambo.earth/?id={stoveId}",
         }),
       ],
       linkedResource: [
-        ixo.iid.LinkedResource.fromPartial({
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "did:ixo:entity:abc123#m5tf6df728jl2hsi8fwa",
           type: "tokenMetadata",
           description: "SumaMoto Token Collection Template",
@@ -81,7 +84,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
           encrypted: "false",
           right: "#mintNft",
         }),
-        ixo.iid.LinkedResource.fromPartial({
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "did:ixo:entity:abc123#{tokenid.json}",
           type: "tokenMetadata",
           description: "SumaMoto Token Template",
@@ -91,7 +94,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
           encrypted: "false",
           right: "#mintCarbonToken",
         }),
-        ixo.iid.LinkedResource.fromPartial({
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "did:ixo:entity:abc123#m5tf6df728jl2hsi8fwb",
           type: "page",
           description: "",
@@ -101,7 +104,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
           encrypted: "false",
           right: "",
         }),
-        ixo.iid.LinkedResource.fromPartial({
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "did:ixo:entity:abc123#m5tf6df728jl2hsi8fwc",
           type: "settings",
           description: "",
@@ -111,7 +114,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
           encrypted: "false",
           right: "",
         }),
-        ixo.iid.LinkedResource.fromPartial({
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "did:ixo:entity:abc123#m5tf6df728jl2hsi8fwd",
           type: "claims",
           description: "",
@@ -121,7 +124,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
           encrypted: "false",
           right: "",
         }),
-        ixo.iid.LinkedResource.fromPartial({
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "did:ixo:entity:abc123#m5tf6df728jl2hsi8fwe",
           type: "filters",
           description: "",
@@ -131,7 +134,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
           encrypted: "false",
           right: "",
         }),
-        ixo.iid.LinkedResource.fromPartial({
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "did:ixo:entity:abc123#certification*",
           type: "verifiableCredential",
           description: "Project Certification",
@@ -141,7 +144,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
           encrypted: "false",
           right: "",
         }),
-        ixo.iid.LinkedResource.fromPartial({
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "did:ixo:entity:abc123#dashboard*",
           type: "service",
           description: "Dashboard",
@@ -153,28 +156,28 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
         }),
       ],
       accordedRight: [
-        ixo.iid.AccordedRight.fromPartial({
+        ixo.iid.v1beta1.AccordedRight.fromPartial({
           id: "did:ixo:entity:abc123#mintNFT",
           type: "mint",
           mechanism: "cw721",
           message: "msgMintNFT",
           service: "#ixo",
         }),
-        ixo.iid.AccordedRight.fromPartial({
+        ixo.iid.v1beta1.AccordedRight.fromPartial({
           id: "did:ixo:entity:abc123#mintCarbonToken",
           type: "mint",
           mechanism: "cw1155",
           message: "msgMint/carbon",
           service: "#ixo",
         }),
-        ixo.iid.AccordedRight.fromPartial({
+        ixo.iid.v1beta1.AccordedRight.fromPartial({
           id: "did:ixo:entity:abc123#carbonCreditClaim",
           type: "claim/carbonCredit",
           mechanism: "claimApproval",
           message: "msgSubmitClaim",
           service: "#ixo",
         }),
-        ixo.iid.AccordedRight.fromPartial({
+        ixo.iid.v1beta1.AccordedRight.fromPartial({
           id: "https://legal.supamoto.se/supamoto/termsAndConditions.pdf",
           type: "legal",
           mechanism: "enforceable",
@@ -197,7 +200,7 @@ export const CreateEntityAssetSupamotoInstance = async (
 ) => {
   const client = await createClient();
 
-  // const entity = await queryClient.custom.entity.getEntityContext({
+  // const entity = await queryClient.custom.entity.v1beta1.getEntityContext({
   //   entityDid: inheritEntityDid,
   // });
   // console.log({ entity });
@@ -208,17 +211,20 @@ export const CreateEntityAssetSupamotoInstance = async (
   const did = tester.did;
 
   const message = {
-    typeUrl: "/entity.MsgCreateEntity",
-    value: ixo.entity.MsgCreateEntity.fromPartial({
+    typeUrl: "/ixo.entity.v1beta1.MsgCreateEntity",
+    value: ixo.entity.v1beta1.MsgCreateEntity.fromPartial({
       entityType: "asset",
       entityStatus: 0,
       context: [
-        // @ts-ignore
-        ixo.iid.Context.fromPartial({ key: "ixo", value: inheritEntityDid }),
+        ixo.iid.v1beta1.Context.fromPartial({
+          key: "ixo",
+          // @ts-ignore
+          value: inheritEntityDid,
+        }),
       ],
       service: [],
       linkedResource: [
-        ixo.iid.LinkedResource.fromPartial({
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "did:ixo:entity:abc123#m5tf6df728jl2hsi8fwa",
           type: "page",
           description: "",
@@ -228,7 +234,7 @@ export const CreateEntityAssetSupamotoInstance = async (
           encrypted: "false",
           right: "",
         }),
-        ixo.iid.LinkedResource.fromPartial({
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "did:ixo:entity:abc123#m5tf6df728jl2hsi8fwb",
           type: "settings",
           description: "",
@@ -238,7 +244,7 @@ export const CreateEntityAssetSupamotoInstance = async (
           encrypted: "false",
           right: "",
         }),
-        ixo.iid.LinkedResource.fromPartial({
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "did:ixo:entity:abc123#m5tf6df728jl2hsi8fwc",
           type: "class:claims",
           description: "",
@@ -248,7 +254,7 @@ export const CreateEntityAssetSupamotoInstance = async (
           encrypted: "false",
           right: "",
         }),
-        ixo.iid.LinkedResource.fromPartial({
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "did:ixo:entity:abc123#m5tf6df728jl2hsi8fwd",
           type: "class:filters",
           description: "",
@@ -258,7 +264,7 @@ export const CreateEntityAssetSupamotoInstance = async (
           encrypted: "false",
           right: "",
         }),
-        ixo.iid.LinkedResource.fromPartial({
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "did:ixo:entity:abc123#dashboard*",
           type: "service",
           description: "Dashboard",
@@ -291,11 +297,11 @@ export const TransferEntity = async (entityDid: string) => {
   const alice = getUser(WalletUsers.alice);
 
   const message = {
-    typeUrl: "/entity.MsgTransferEntity",
-    value: ixo.entity.MsgTransferEntity.fromPartial({
+    typeUrl: "/ixo.entity.v1beta1.MsgTransferEntity",
+    value: ixo.entity.v1beta1.MsgTransferEntity.fromPartial({
       entityDid: entityDid,
-      controllerDid: did,
-      controllerAddress: myAddress,
+      ownerDid: did,
+      ownerAddress: myAddress,
       recipientDid: alice.did,
     }),
   };
@@ -313,30 +319,11 @@ export const UpdateEntity = async () => {
   const did = tester.did;
 
   const message = {
-    typeUrl: "/entity.MsgUpdateEntity",
-    value: ixo.entity.MsgUpdateEntity.fromPartial({
+    typeUrl: "/ixo.entity.v1beta1.MsgUpdateEntity",
+    value: ixo.entity.v1beta1.MsgUpdateEntity.fromPartial({
       status: 1,
       controllerDid: did,
       controllerAddress: myAddress,
-    }),
-  };
-
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
-  return response;
-};
-
-export const UpdateConfigEntity = async () => {
-  const client = await createClient();
-
-  const tester = getUser();
-  const account = (await tester.getAccounts())[0];
-  const myAddress = account.address;
-
-  const message = {
-    typeUrl: "/entity.MsgUpdateEntityConfig",
-    value: ixo.entity.MsgUpdateEntityConfig.fromPartial({
-      nftContractAddress: "",
-      signer: myAddress,
     }),
   };
 

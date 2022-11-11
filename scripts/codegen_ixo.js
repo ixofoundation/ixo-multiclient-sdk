@@ -9,7 +9,7 @@ rimraf(outPath);
 telescope({
   protoDirs,
   outPath,
-  experimentalGlobalProtoNamespace: true,
+  // experimentalGlobalProtoNamespace: true,
   options: {
     tsDisable: {
       files: [
