@@ -1,4 +1,4 @@
-import { createClient, getUser, ixo } from "./common";
+import { createClient, getUser, ixo, cosmos } from "./common";
 import { constants, fee, WalletUsers } from "./constants";
 
 export const CreateBond = async (allowSells: boolean) => {
@@ -14,8 +14,8 @@ export const CreateBond = async (allowSells: boolean) => {
   const feeReserveAddress = myAddress;
 
   const message = {
-    typeUrl: "/bonds.MsgCreateBond",
-    value: ixo.bonds.MsgCreateBond.fromPartial({
+    typeUrl: "/ixo.bonds.v1beta1.MsgCreateBond",
+    value: ixo.bonds.v1beta1.MsgCreateBond.fromPartial({
       bondDid: bondDid,
       token: constants.bondToken,
       name: "A B C",
@@ -24,19 +24,19 @@ export const CreateBond = async (allowSells: boolean) => {
       controllerDid: did,
       functionType: "augmented_function",
       functionParameters: [
-        ixo.bonds.FunctionParam.fromPartial({
+        ixo.bonds.v1beta1.FunctionParam.fromPartial({
           param: "p0",
           value: "1000000000000000000", //1
         }),
-        ixo.bonds.FunctionParam.fromPartial({
+        ixo.bonds.v1beta1.FunctionParam.fromPartial({
           param: "theta",
           value: "0",
         }),
-        ixo.bonds.FunctionParam.fromPartial({
+        ixo.bonds.v1beta1.FunctionParam.fromPartial({
           param: "kappa",
           value: "3000000000000000000", //3
         }),
-        ixo.bonds.FunctionParam.fromPartial({
+        ixo.bonds.v1beta1.FunctionParam.fromPartial({
           param: "d0",
           value: "1000000000000000000000000", // 1mil
         }),
@@ -46,7 +46,7 @@ export const CreateBond = async (allowSells: boolean) => {
       exitFeePercentage: "0",
       feeAddress: feeReserveAddress,
       reserveWithdrawalAddress: feeReserveAddress,
-      maxSupply: ixo.cosmos.Coin.fromPartial({
+      maxSupply: cosmos.base.v1beta1.Coin.fromPartial({
         denom: constants.bondToken,
         amount: "1000000000000",
       }),
@@ -78,8 +78,8 @@ export const EditBond = async () => {
   const bondDid = bond.did;
 
   const message = {
-    typeUrl: "/bonds.MsgEditBond",
-    value: ixo.bonds.MsgEditBond.fromPartial({
+    typeUrl: "/ixo.bonds.v1beta1.MsgEditBond",
+    value: ixo.bonds.v1beta1.MsgEditBond.fromPartial({
       bondDid: bondDid,
       name: "New A B C",
       description: "Description about A B C",
@@ -109,8 +109,8 @@ export const SetNextAlpha = async (alpha: string = "520000000000000000") => {
   const bondDid = bond.did;
 
   const message = {
-    typeUrl: "/bonds.MsgSetNextAlpha",
-    value: ixo.bonds.MsgSetNextAlpha.fromPartial({
+    typeUrl: "/ixo.bonds.v1beta1.MsgSetNextAlpha",
+    value: ixo.bonds.v1beta1.MsgSetNextAlpha.fromPartial({
       bondDid: bondDid,
       alpha,
       editorDid: did,
@@ -139,8 +139,8 @@ export const UpdateBondState = async (
   const bondDid = bond.did;
 
   const message = {
-    typeUrl: "/bonds.MsgUpdateBondState",
-    value: ixo.bonds.MsgUpdateBondState.fromPartial({
+    typeUrl: "/ixo.bonds.v1beta1.MsgUpdateBondState",
+    value: ixo.bonds.v1beta1.MsgUpdateBondState.fromPartial({
       bondDid: bondDid,
       state: state,
       editorDid: did,
@@ -167,16 +167,16 @@ export const Buy = async (
   const bondDid = bond.did;
 
   const message = {
-    typeUrl: "/bonds.MsgBuy",
-    value: ixo.bonds.MsgBuy.fromPartial({
+    typeUrl: "/ixo.bonds.v1beta1.MsgBuy",
+    value: ixo.bonds.v1beta1.MsgBuy.fromPartial({
       buyerDid: did,
       buyerAddress: myAddress,
-      amount: ixo.cosmos.Coin.fromPartial({
+      amount: cosmos.base.v1beta1.Coin.fromPartial({
         denom: constants.bondToken,
         amount: amount.toString(),
       }),
       maxPrices: [
-        ixo.cosmos.Coin.fromPartial({
+        cosmos.base.v1beta1.Coin.fromPartial({
           denom: constants.bondReserveToken,
           amount: "1000000",
         }),
@@ -204,11 +204,11 @@ export const Sell = async (
   const bondDid = bond.did;
 
   const message = {
-    typeUrl: "/bonds.MsgSell",
-    value: ixo.bonds.MsgSell.fromPartial({
+    typeUrl: "/ixo.bonds.v1beta1.MsgSell",
+    value: ixo.bonds.v1beta1.MsgSell.fromPartial({
       sellerDid: did,
       sellerAddress: myAddress,
-      amount: ixo.cosmos.Coin.fromPartial({
+      amount: cosmos.base.v1beta1.Coin.fromPartial({
         denom: constants.bondToken,
         amount: amount.toString(),
       }),
@@ -233,12 +233,12 @@ export const Swap = async () => {
   const bondDid = bond.did;
 
   const message = {
-    typeUrl: "/bonds.MsgSwap",
-    value: ixo.bonds.MsgSwap.fromPartial({
+    typeUrl: "/ixo.bonds.v1beta1.MsgSwap",
+    value: ixo.bonds.v1beta1.MsgSwap.fromPartial({
       swapperDid: did,
       swapperAddress: myAddress,
       bondDid: bondDid,
-      from: ixo.cosmos.Coin.fromPartial({
+      from: cosmos.base.v1beta1.Coin.fromPartial({
         denom: "",
         amount: "",
       }),
@@ -262,8 +262,8 @@ export const MakeOutcomePayment = async (amount: number) => {
   const bondDid = bond.did;
 
   const message = {
-    typeUrl: "/bonds.MsgMakeOutcomePayment",
-    value: ixo.bonds.MsgMakeOutcomePayment.fromPartial({
+    typeUrl: "/ixo.bonds.v1beta1.MsgMakeOutcomePayment",
+    value: ixo.bonds.v1beta1.MsgMakeOutcomePayment.fromPartial({
       senderDid: did,
       senderAddress: myAddress,
       amount: amount.toString(),
@@ -289,8 +289,8 @@ export const WithdrawShare = async (
   const bondDid = bond.did;
 
   const message = {
-    typeUrl: "/bonds.MsgWithdrawShare",
-    value: ixo.bonds.MsgWithdrawShare.fromPartial({
+    typeUrl: "/ixo.bonds.v1beta1.MsgWithdrawShare",
+    value: ixo.bonds.v1beta1.MsgWithdrawShare.fromPartial({
       recipientDid: did,
       bondDid: bondDid,
       recipientAddress: myAddress,
@@ -316,12 +316,12 @@ export const WithdrawReserve = async (
   const bondDid = bond.did;
 
   const message = {
-    typeUrl: "/bonds.MsgWithdrawReserve",
-    value: ixo.bonds.MsgWithdrawReserve.fromPartial({
+    typeUrl: "/ixo.bonds.v1beta1.MsgWithdrawReserve",
+    value: ixo.bonds.v1beta1.MsgWithdrawReserve.fromPartial({
       withdrawerDid: did,
       withdrawerAddress: myAddress,
       amount: [
-        ixo.cosmos.Coin.fromPartial({
+        cosmos.base.v1beta1.Coin.fromPartial({
           denom: constants.bondReserveToken,
           amount: amount.toString(),
         }),

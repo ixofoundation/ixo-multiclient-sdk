@@ -32,7 +32,7 @@ telescope({
     },
     aminoEncoding: {
       enabled: false,
-      exceptions: AMINO_MAP
+      // exceptions: AMINO_MAP
     },
     lcdClients: {
       enabled: false

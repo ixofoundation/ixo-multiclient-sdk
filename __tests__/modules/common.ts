@@ -7,7 +7,14 @@ import base58 from "bs58";
 import { keyType, KeyTypes, RPC_URL, WalletUsers } from "./constants";
 import { getEdClient } from "./edClient";
 import { getSecpClient } from "./secpClient";
-import { utils, createSigningClient, ixo, cosmos } from "../../src";
+import {
+  utils,
+  createSigningClient,
+  ixo,
+  cosmos,
+  createQueryClient as createQueryClientImport,
+} from "../../src";
+import { IObjectKeys } from "./types";
 
 export { ixo, cosmos, utils };
 
@@ -34,7 +41,7 @@ export const getVerificationMethod = (
   controller: string,
   type: KeyTypes = keyType
 ) => {
-  return ixo.iid.VerificationMethod.fromPartial({
+  return ixo.iid.v1beta1.VerificationMethod.fromPartial({
     id: did,
     type:
       type === "ed"
@@ -126,7 +133,14 @@ export const createClient = async (
   );
 };
 
-export const checkSuccess = (res: DeliverTxResponse, succeed: boolean) => {
+export let queryClient: Awaited<ReturnType<typeof createQueryClientImport>>;
+
+export const createQueryClient = async () => {
+  console.log("ran createQueryClient");
+  queryClient = await createQueryClientImport(RPC_URL);
+};
+
+export const checkSuccessMsg = (res: DeliverTxResponse, succeed: boolean) => {
   let isSuccess = true;
   try {
     assertIsDeliverTxSuccess(res);
@@ -138,14 +152,46 @@ export const checkSuccess = (res: DeliverTxResponse, succeed: boolean) => {
   succeed ? expect(isSuccess).toBeTruthy() : expect(isSuccess).toBeFalsy();
 };
 
+export const checkSuccessQry = (res: any, equal: IObjectKeys) => {
+  let isSuccess = true;
+  console.log({ res });
+  console.log({ equal });
+  try {
+    Object.entries(equal).forEach(([key, value]) => {
+      console.log({ key, value });
+      const val = findVal(res, key);
+      if (val === undefined) throw new Error(`${key} not found in response`);
+      if (JSON.stringify(val) === JSON.stringify(value)) return;
+      throw new Error(
+        `${JSON.stringify(val)} is not equal to ${JSON.stringify(value)}`
+      );
+    });
+  } catch (error) {
+    console.log({ error });
+    isSuccess = false;
+  }
+  expect(isSuccess).toBeTruthy();
+};
+
 export const testMsg = (
   message: string,
   action: () => Promise<DeliverTxResponse>,
   succeed: boolean = true
 ) => {
   return test(message, async () => {
-    console.log("Testing " + message);
-    checkSuccess(await action(), succeed);
+    console.log("Testing message " + message);
+    checkSuccessMsg(await action(), succeed);
+  });
+};
+
+export const testQry = (
+  message: string,
+  query: () => Promise<any>,
+  equal: IObjectKeys
+) => {
+  return test(message, async () => {
+    console.log("Testing query " + message);
+    checkSuccessQry(await query(), equal);
   });
 };
 
@@ -166,3 +212,18 @@ export const getDidFromEvents = (res: DeliverTxResponse) => {
     ["attributes"].find((e: any) => e.key === "did")
     ["value"].replaceAll('"', "");
 };
+
+function findVal(object: IObjectKeys, key: string) {
+  var value: any;
+  Object.keys(object).some((k) => {
+    if (k === key) {
+      value = object[k];
+      return true;
+    }
+    if (object[k] && typeof object[k] === "object") {
+      value = findVal(object[k] as IObjectKeys, key);
+      return value !== undefined;
+    }
+  });
+  return value;
+}
