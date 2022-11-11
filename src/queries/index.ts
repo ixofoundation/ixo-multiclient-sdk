@@ -5,7 +5,7 @@ export const createQueryClient = async (rpcEndpoint: string) => {
     rpcEndpoint,
   });
   const queryIxo = await (
-    await import("../codegen_ixo_helpers")
+    await import("../codegen")
   ).ixo.ClientFactory.createRPCQueryClient({
     rpcEndpoint,
   });

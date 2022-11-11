@@ -150,10 +150,10 @@ describe("Testing the Projects module", () => {
 });
 
 describe("Testing the Bonds module", () => {
-  testMsg("/ixo.bonds.v1beta1.MsgCreateBond", () => Bond.CreateBond(false));
+  // testMsg("/ixo.bonds.v1beta1.MsgCreateBond", () => Bond.CreateBond(false));
   // testMsg("/ixo.bonds.v1beta1.MsgEditBond", () => Bond.EditBond());
-  // testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.tester, 1)); // Buy one token first to hatch bond
-  // testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(20000));
+  // testMsg("/ixo.bonds.v1beta1.MsgBuy", () => Bond.Buy(WalletUsers.tester, 1)); // Buy one token first to hatch bond
+  // testMsg("/ixo.bonds.v1beta1.MsgBuy", () => Bond.Buy(undefined, 20000));
   // testMsg('/ixo.bonds.v1beta1.MsgSetNextAlpha', () => Bond.SetNextAlpha('520000000000000000'));
   // testMsg('/ixo.bonds.v1beta1.MsgMakeOutcomePayment', () => Bond.MakeOutcomePayment(1000));
   // testMsg('/ixo.bonds.v1beta1.MsgUpdateBondState', () => Bond.UpdateBondState('SETTLE'));

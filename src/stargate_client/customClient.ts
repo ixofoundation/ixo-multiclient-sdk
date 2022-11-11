@@ -53,7 +53,7 @@ import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 
 import { encodePubkey } from "./customPubkey";
 import { accountFromAny } from "./EdAccountHandler";
-import { ixo } from "../codegen_ixo_helpers";
+import { ixo } from "../codegen";
 
 function createDefaultRegistry(): Registry {
   return new Registry(defaultRegistryTypes);

@@ -1,6 +1,6 @@
 export const createRpcQueryExtension = async (rpcEndpoint: string) => {
   const ixoQuery = await (
-    await import("../codegen_ixo_helpers")
+    await import("../codegen")
   ).ixo.ClientFactory.createRPCQueryClient({ rpcEndpoint });
 
   const getEntityContext = async ({ entityDid }: { entityDid: string }) => {
