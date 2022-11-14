@@ -19,7 +19,25 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn test
 
+  # versioning:
+  #   needs: build
+  #   permissions:
+  #     contents: write
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: "Automated Version Bump"
+  #       uses: "phips28/gh-action-bump-version@master"
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GHTOKEN }}
+  #       with:
+  #         minor-wording: "MINOR"
+  #         major-wording: "MAJOR"
+  #         patch-wording: "patch,fix" # Providing patch-wording will override commits defaulting to a patch bump.
+  #         rc-wording: "RELEASE,alpha"
+
   publish-npm:
+    # needs: [build, versioning]
     needs: build
     runs-on: ubuntu-latest
     steps:
