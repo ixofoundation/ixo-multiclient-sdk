@@ -1,103 +1,103 @@
-import * as _101 from "./bonds/v1beta1/bonds";
-import * as _102 from "./bonds/v1beta1/genesis";
-import * as _103 from "./bonds/v1beta1/query";
-import * as _104 from "./bonds/v1beta1/tx";
-import * as _105 from "./entity/v1beta1/entity";
-import * as _106 from "./entity/v1beta1/genesis";
-import * as _107 from "./entity/v1beta1/proposal";
-import * as _108 from "./entity/v1beta1/query";
-import * as _109 from "./entity/v1beta1/tx";
-import * as _110 from "./iid/v1beta1/event";
-import * as _111 from "./iid/v1beta1/genesis";
-import * as _112 from "./iid/v1beta1/iid";
-import * as _113 from "./iid/v1beta1/query";
-import * as _114 from "./iid/v1beta1/tx";
-import * as _115 from "./payments/v1/genesis";
-import * as _116 from "./payments/v1/payments";
-import * as _117 from "./payments/v1/query";
-import * as _118 from "./payments/v1/tx";
-import * as _119 from "./project/v1/genesis";
-import * as _120 from "./project/v1/project";
-import * as _121 from "./project/v1/query";
-import * as _122 from "./project/v1/tx";
-import * as _123 from "./token/v1beta1/genesis";
-import * as _124 from "./token/v1beta1/proposal";
-import * as _125 from "./token/v1beta1/query";
-import * as _126 from "./token/v1beta1/token";
-import * as _127 from "./token/v1beta1/tx";
-import * as _173 from "./bonds/v1beta1/query.rpc.Query";
-import * as _174 from "./entity/v1beta1/query.rpc.Query";
-import * as _175 from "./iid/v1beta1/query.rpc.Query";
-import * as _176 from "./payments/v1/query.rpc.Query";
-import * as _177 from "./project/v1/query.rpc.Query";
-import * as _178 from "./token/v1beta1/query.rpc.Query";
-import * as _179 from "./bonds/v1beta1/tx.rpc.msg";
-import * as _180 from "./entity/v1beta1/tx.rpc.msg";
-import * as _181 from "./iid/v1beta1/tx.rpc.msg";
-import * as _182 from "./payments/v1/tx.rpc.msg";
-import * as _183 from "./project/v1/tx.rpc.msg";
-import * as _184 from "./token/v1beta1/tx.rpc.msg";
-import * as _187 from "./rpc.query";
-import * as _188 from "./rpc.tx";
+import * as _126 from "./bonds/v1beta1/bonds";
+import * as _127 from "./bonds/v1beta1/genesis";
+import * as _128 from "./bonds/v1beta1/query";
+import * as _129 from "./bonds/v1beta1/tx";
+import * as _130 from "./entity/v1beta1/entity";
+import * as _131 from "./entity/v1beta1/genesis";
+import * as _132 from "./entity/v1beta1/proposal";
+import * as _133 from "./entity/v1beta1/query";
+import * as _134 from "./entity/v1beta1/tx";
+import * as _135 from "./iid/v1beta1/event";
+import * as _136 from "./iid/v1beta1/genesis";
+import * as _137 from "./iid/v1beta1/iid";
+import * as _138 from "./iid/v1beta1/query";
+import * as _139 from "./iid/v1beta1/tx";
+import * as _140 from "./payments/v1/genesis";
+import * as _141 from "./payments/v1/payments";
+import * as _142 from "./payments/v1/query";
+import * as _143 from "./payments/v1/tx";
+import * as _144 from "./project/v1/genesis";
+import * as _145 from "./project/v1/project";
+import * as _146 from "./project/v1/query";
+import * as _147 from "./project/v1/tx";
+import * as _148 from "./token/v1beta1/genesis";
+import * as _149 from "./token/v1beta1/proposal";
+import * as _150 from "./token/v1beta1/query";
+import * as _151 from "./token/v1beta1/token";
+import * as _152 from "./token/v1beta1/tx";
+import * as _207 from "./bonds/v1beta1/query.rpc.Query";
+import * as _208 from "./entity/v1beta1/query.rpc.Query";
+import * as _209 from "./iid/v1beta1/query.rpc.Query";
+import * as _210 from "./payments/v1/query.rpc.Query";
+import * as _211 from "./project/v1/query.rpc.Query";
+import * as _212 from "./token/v1beta1/query.rpc.Query";
+import * as _213 from "./bonds/v1beta1/tx.rpc.msg";
+import * as _214 from "./entity/v1beta1/tx.rpc.msg";
+import * as _215 from "./iid/v1beta1/tx.rpc.msg";
+import * as _216 from "./payments/v1/tx.rpc.msg";
+import * as _217 from "./project/v1/tx.rpc.msg";
+import * as _218 from "./token/v1beta1/tx.rpc.msg";
+import * as _223 from "./rpc.query";
+import * as _224 from "./rpc.tx";
 export namespace ixo {
   export namespace bonds {
-    export const v1beta1 = { ..._101,
-      ..._102,
-      ..._103,
-      ..._104,
-      ..._173,
-      ..._179
+    export const v1beta1 = { ..._126,
+      ..._127,
+      ..._128,
+      ..._129,
+      ..._207,
+      ..._213
     };
   }
   export namespace entity {
-    export const v1beta1 = { ..._105,
-      ..._106,
-      ..._107,
-      ..._108,
-      ..._109,
-      ..._174,
-      ..._180
+    export const v1beta1 = { ..._130,
+      ..._131,
+      ..._132,
+      ..._133,
+      ..._134,
+      ..._208,
+      ..._214
     };
   }
   export namespace iid {
-    export const v1beta1 = { ..._110,
-      ..._111,
-      ..._112,
-      ..._113,
-      ..._114,
-      ..._175,
-      ..._181
+    export const v1beta1 = { ..._135,
+      ..._136,
+      ..._137,
+      ..._138,
+      ..._139,
+      ..._209,
+      ..._215
     };
   }
   export namespace payments {
-    export const v1 = { ..._115,
-      ..._116,
-      ..._117,
-      ..._118,
-      ..._176,
-      ..._182
+    export const v1 = { ..._140,
+      ..._141,
+      ..._142,
+      ..._143,
+      ..._210,
+      ..._216
     };
   }
   export namespace project {
-    export const v1 = { ..._119,
-      ..._120,
-      ..._121,
-      ..._122,
-      ..._177,
-      ..._183
+    export const v1 = { ..._144,
+      ..._145,
+      ..._146,
+      ..._147,
+      ..._211,
+      ..._217
     };
   }
   export namespace token {
-    export const v1beta1 = { ..._123,
-      ..._124,
-      ..._125,
-      ..._126,
-      ..._127,
-      ..._178,
-      ..._184
+    export const v1beta1 = { ..._148,
+      ..._149,
+      ..._150,
+      ..._151,
+      ..._152,
+      ..._212,
+      ..._218
     };
   }
-  export const ClientFactory = { ..._187,
-    ..._188
+  export const ClientFactory = { ..._223,
+    ..._224
   };
 }

@@ -86,6 +86,7 @@
     "@cosmjs/tendermint-rpc": "^0.26.4",
     "bip39": "^3.0.4",
     "bs58": "^5.0.0",
+    "dotenv": "^16.0.3",
     "protobufjs": "^6.11.2",
     "typedoc": "^0.23.20"
   }

@@ -188,6 +188,62 @@ export declare const createQueryClient: (rpcEndpoint: string) => Promise<{
             };
         };
     };
+    ibc: {
+        applications: {
+            transfer: {
+                v1: {
+                    denomTrace(request: import("../codegen/ibc/applications/transfer/v1/query").QueryDenomTraceRequest): Promise<import("../codegen/ibc/applications/transfer/v1/query").QueryDenomTraceResponse>;
+                    denomTraces(request?: import("../codegen/ibc/applications/transfer/v1/query").QueryDenomTracesRequest): Promise<import("../codegen/ibc/applications/transfer/v1/query").QueryDenomTracesResponse>;
+                    params(request?: import("../codegen/ibc/applications/transfer/v1/query").QueryParamsRequest): Promise<import("../codegen/ibc/applications/transfer/v1/query").QueryParamsResponse>;
+                };
+            };
+        };
+        core: {
+            channel: {
+                v1: {
+                    channel(request: import("../codegen/ibc/core/channel/v1/query").QueryChannelRequest): Promise<import("../codegen/ibc/core/channel/v1/query").QueryChannelResponse>;
+                    channels(request?: import("../codegen/ibc/core/channel/v1/query").QueryChannelsRequest): Promise<import("../codegen/ibc/core/channel/v1/query").QueryChannelsResponse>;
+                    connectionChannels(request: import("../codegen/ibc/core/channel/v1/query").QueryConnectionChannelsRequest): Promise<import("../codegen/ibc/core/channel/v1/query").QueryConnectionChannelsResponse>;
+                    channelClientState(request: import("../codegen/ibc/core/channel/v1/query").QueryChannelClientStateRequest): Promise<import("../codegen/ibc/core/channel/v1/query").QueryChannelClientStateResponse>;
+                    channelConsensusState(request: import("../codegen/ibc/core/channel/v1/query").QueryChannelConsensusStateRequest): Promise<import("../codegen/ibc/core/channel/v1/query").QueryChannelConsensusStateResponse>;
+                    packetCommitment(request: import("../codegen/ibc/core/channel/v1/query").QueryPacketCommitmentRequest): Promise<import("../codegen/ibc/core/channel/v1/query").QueryPacketCommitmentResponse>;
+                    packetCommitments(request: import("../codegen/ibc/core/channel/v1/query").QueryPacketCommitmentsRequest): Promise<import("../codegen/ibc/core/channel/v1/query").QueryPacketCommitmentsResponse>;
+                    packetReceipt(request: import("../codegen/ibc/core/channel/v1/query").QueryPacketReceiptRequest): Promise<import("../codegen/ibc/core/channel/v1/query").QueryPacketReceiptResponse>;
+                    packetAcknowledgement(request: import("../codegen/ibc/core/channel/v1/query").QueryPacketAcknowledgementRequest): Promise<import("../codegen/ibc/core/channel/v1/query").QueryPacketAcknowledgementResponse>;
+                    packetAcknowledgements(request: import("../codegen/ibc/core/channel/v1/query").QueryPacketAcknowledgementsRequest): Promise<import("../codegen/ibc/core/channel/v1/query").QueryPacketAcknowledgementsResponse>;
+                    unreceivedPackets(request: import("../codegen/ibc/core/channel/v1/query").QueryUnreceivedPacketsRequest): Promise<import("../codegen/ibc/core/channel/v1/query").QueryUnreceivedPacketsResponse>;
+                    unreceivedAcks(request: import("../codegen/ibc/core/channel/v1/query").QueryUnreceivedAcksRequest): Promise<import("../codegen/ibc/core/channel/v1/query").QueryUnreceivedAcksResponse>;
+                    nextSequenceReceive(request: import("../codegen/ibc/core/channel/v1/query").QueryNextSequenceReceiveRequest): Promise<import("../codegen/ibc/core/channel/v1/query").QueryNextSequenceReceiveResponse>;
+                };
+            };
+            client: {
+                v1: {
+                    clientState(request: import("../codegen/ibc/core/client/v1/query").QueryClientStateRequest): Promise<import("../codegen/ibc/core/client/v1/query").QueryClientStateResponse>;
+                    clientStates(request?: import("../codegen/ibc/core/client/v1/query").QueryClientStatesRequest): Promise<import("../codegen/ibc/core/client/v1/query").QueryClientStatesResponse>;
+                    consensusState(request: import("../codegen/ibc/core/client/v1/query").QueryConsensusStateRequest): Promise<import("../codegen/ibc/core/client/v1/query").QueryConsensusStateResponse>;
+                    consensusStates(request: import("../codegen/ibc/core/client/v1/query").QueryConsensusStatesRequest): Promise<import("../codegen/ibc/core/client/v1/query").QueryConsensusStatesResponse>;
+                    clientStatus(request: import("../codegen/ibc/core/client/v1/query").QueryClientStatusRequest): Promise<import("../codegen/ibc/core/client/v1/query").QueryClientStatusResponse>;
+                    clientParams(request?: import("../codegen/ibc/core/client/v1/query").QueryClientParamsRequest): Promise<import("../codegen/ibc/core/client/v1/query").QueryClientParamsResponse>;
+                    upgradedClientState(request?: import("../codegen/ibc/core/client/v1/query").QueryUpgradedClientStateRequest): Promise<import("../codegen/ibc/core/client/v1/query").QueryUpgradedClientStateResponse>;
+                    upgradedConsensusState(request?: import("../codegen/ibc/core/client/v1/query").QueryUpgradedConsensusStateRequest): Promise<import("../codegen/ibc/core/client/v1/query").QueryUpgradedConsensusStateResponse>;
+                };
+            };
+            connection: {
+                v1: {
+                    connection(request: import("../codegen/ibc/core/connection/v1/query").QueryConnectionRequest): Promise<import("../codegen/ibc/core/connection/v1/query").QueryConnectionResponse>;
+                    connections(request?: import("../codegen/ibc/core/connection/v1/query").QueryConnectionsRequest): Promise<import("../codegen/ibc/core/connection/v1/query").QueryConnectionsResponse>;
+                    clientConnections(request: import("../codegen/ibc/core/connection/v1/query").QueryClientConnectionsRequest): Promise<import("../codegen/ibc/core/connection/v1/query").QueryClientConnectionsResponse>;
+                    connectionClientState(request: import("../codegen/ibc/core/connection/v1/query").QueryConnectionClientStateRequest): Promise<import("../codegen/ibc/core/connection/v1/query").QueryConnectionClientStateResponse>;
+                    connectionConsensusState(request: import("../codegen/ibc/core/connection/v1/query").QueryConnectionConsensusStateRequest): Promise<import("../codegen/ibc/core/connection/v1/query").QueryConnectionConsensusStateResponse>;
+                };
+            };
+            port: {
+                v1: {
+                    appVersion(request: import("../codegen/ibc/core/port/v1/query").QueryAppVersionRequest): Promise<import("../codegen/ibc/core/port/v1/query").QueryAppVersionResponse>;
+                };
+            };
+        };
+    };
     ixo: {
         bonds: {
             v1beta1: {

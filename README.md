@@ -25,7 +25,6 @@ yarn add  @ixo/impactxclient-sdk
       - [Cosmos Messages](#cosmos-messages)
   - [Connecting with Wallets and Signing Messages](#connecting-with-wallets-and-signing-messages)
     - [Initializing the Stargate Client](#initializing-the-stargate-client)
-    - [Amino Signer](#amino-signer)
     - [Proto Signer](#proto-signer)
     - [Broadcasting Messages](#broadcasting-messages)
   - [Advanced Usage](#advanced-usage)
@@ -107,6 +106,8 @@ Please have a look at the tests folder to see examples of all the messages and h
 
 #### IBC Messages
 
+Same note from [Composing Messages](#composing-messages) above apply about msg creation
+
 ```js
 import { ibc } from "@ixo/impactxclient-sdk";
 
@@ -115,13 +116,20 @@ const { transfer } = ibc.applications.transfer.v1.MessageComposer.withTypeUrl;
 
 #### Cosmos Messages
 
+Same note from [Composing Messages](#composing-messages) above apply about msg creation
+
 ````js
 import { cosmos } from "@ixo/impactxclient-sdk";
 
 const { multiSend, send } = cosmos.bank.v1beta1.MessageComposer.fromPartial;
 
-
 ## Connecting with Wallets and Signing Messages
+
+We added a custom Stargate Signing Client that can be exported and creatable under createSigningClient, please note it only support Direct Proto signing through the rpc endpoint! It already has all the proto defininitions in the registry for ixo modules.
+
+```js
+import { createSigningClient } from "@ixo/impactxclient-sdk";
+```
 
 ⚡️ For web interfaces, we recommend using [cosmos-kit](https://github.com/cosmology-tech/cosmos-kit). Continue below to see how to manually construct signers and clients.
 
@@ -147,12 +155,6 @@ To broadcast messages, you can create signers with a variety of options:
 - [cosmos-kit](https://github.com/cosmology-tech/cosmos-kit/tree/main/packages/react#signing-clients) (recommended)
 - [keplr](https://docs.keplr.app/api/cosmjs.html)
 - [cosmjs](https://gist.github.com/webmaster128/8444d42a7eceeda2544c8a59fbd7e1d9)
-
-We added a custom Stargate Signing Client that can be exported and creatable under createSigningClient, please note it only support Direct Proto signing through the rpc endpoint! It already has all the proto defininitions in the registry for ixo modules.
-
-```js
-import { createSigningClient } from "@ixo/impactxclient-sdk";
-```
 
 ### Amino Signer
 

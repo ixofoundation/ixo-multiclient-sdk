@@ -11,12 +11,13 @@ import {
   utils,
   createSigningClient,
   ixo,
+  ibc,
   cosmos,
   createQueryClient as createQueryClientImport,
 } from "../../src";
 import { IObjectKeys } from "./types";
 
-export { ixo, cosmos, utils };
+export { ixo, cosmos, utils, ibc };
 
 export const generateId = (length: number = 12) => {
   var result = "";
@@ -91,8 +92,11 @@ export const generateWallets = async () => {
   console.log(walletLog);
 };
 
-export const generateNewWallet = async (user: WalletUsers) => {
-  const mnemonics = utils.mnemonic.generateMnemonic(24);
+export const generateNewWallet = async (
+  user: WalletUsers,
+  mnemonic?: string
+) => {
+  const mnemonics = mnemonic || utils.mnemonic.generateMnemonic(24);
   const wallet = {
     ed: getEdClient(mnemonics),
     secp: await getSecpClient(mnemonics),
@@ -135,9 +139,13 @@ export const createClient = async (
 
 export let queryClient: Awaited<ReturnType<typeof createQueryClientImport>>;
 
-export const createQueryClient = async () => {
-  console.log("ran createQueryClient");
-  queryClient = await createQueryClientImport(RPC_URL);
+export const createQueryClient = async (
+  setNewGlobal = true,
+  rpcEndpoint?: string
+) => {
+  const newQueryClient = await createQueryClientImport(rpcEndpoint || RPC_URL);
+  if (setNewGlobal) queryClient = newQueryClient;
+  return newQueryClient;
 };
 
 export const checkSuccessMsg = (res: DeliverTxResponse, succeed: boolean) => {

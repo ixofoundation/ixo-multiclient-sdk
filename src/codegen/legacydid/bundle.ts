@@ -1,5 +1,5 @@
-import * as _128 from "../ixo/legacy/did/did";
-import * as _129 from "../ixo/legacy/did/diddoc";
-export const legacydid = { ..._128,
-  ..._129
+import * as _153 from "../ixo/legacy/did/did";
+import * as _154 from "../ixo/legacy/did/diddoc";
+export const legacydid = { ..._153,
+  ..._154
 };

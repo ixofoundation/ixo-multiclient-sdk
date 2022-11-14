@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 import {
   createQueryClient,
   generateNewWallet,
@@ -11,10 +13,12 @@ import {
 import { generateConstants, WalletUsers } from "./modules/constants";
 import * as Bond from "./modules/Bond";
 import * as Cosmos from "./modules/Cosmos";
+import * as Ibc from "./modules/Ibc";
 import * as Entity from "./modules/Entity";
 import * as Iid from "./modules/Iid";
 import * as Payments from "./modules/Payments";
 import * as Projects from "./modules/Projects";
+import * as Token from "./modules/Token";
 
 beforeAll(() => {
   generateConstants();
@@ -35,7 +39,6 @@ describe("Testing the iid module", () => {
   // testMsg('/ixo.iid.v1beta1.MsgCreateIidDocument', () => Iid.CreateIidDoc(WalletUsers.alice));
   // sendFromFaucet(WalletUsers.bob);
   // testMsg('/ixo.iid.v1beta1.MsgCreateIidDocument', () => Iid.CreateIidDoc(WalletUsers.bob));
-
   // testMsg("/ixo.iid.v1beta1.MsgUpdateIidDocument", () => Iid.UpdateIidDoc());
   // testMsg("/ixo.iid.v1beta1.MsgUpdateIidMeta", () => Iid.UpdateIidMeta());
   // testMsg("/ixo.iid.v1beta1.MsgAddIidContext", () => Iid.AddIidContext());
@@ -69,6 +72,11 @@ describe("Testing the iid module", () => {
   // );
   // testMsg("/ixo.iid.v1beta1.MsgAddService", () => Iid.AddService());
   // testMsg("/ixo.iid.v1beta1.MsgDeleteService", () => Iid.DeleteService());
+});
+
+describe("Testing the Token module", () => {
+  // testMsg("/ixo.token.v1beta1.MsgCreateToken", () => Token.CreateToken());
+  // testMsg("/ixo.token.v1beta1.MsgTransferToken", () => Token.TransferToken());
 });
 
 describe("Testing the entity module", () => {
@@ -218,5 +226,15 @@ describe('Testing the Bonds module sells enabled', () => {
 */
 
 describe("Testing the cosmos bank module", () => {
-  // testMsg('/cosmos.bank.v1beta1.MsgSend', () => Cosmos.BankSendTrx());
+  // testMsg("/cosmos.bank.v1beta1.MsgSend", () => Cosmos.BankSendTrx());
+});
+
+describe("Testing the ibc transfer module", () => {
+  // ibc trasnfer can only be tested on main net, thus need a main net user mnemonic with funds to test the ibc transfer
+  // beforeAll(() =>
+  //   generateNewWallet(WalletUsers.tester, process.env.IBC_FROM_MNEMONIC)
+  // );
+  // testMsg("/ibc.applications.transfer.v1.MsgTransfer", () =>
+  //   Ibc.IbcTransferTrx(process.env.IBC_TO_ADDRESS!)
+  // );
 });
