@@ -20,6 +20,7 @@ jobs:
       - run: yarn test
 
   versioning:
+    needs: build
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -36,7 +37,7 @@ jobs:
           rc-wording: "RELEASE,alpha"
 
   publish-npm:
-    needs: build
+    needs: [build, versioning]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
