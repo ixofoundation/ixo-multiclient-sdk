@@ -1,5 +1,4 @@
 import {
-  encodeSecp256k1Pubkey,
   makeSignDoc as makeSignDocAmino,
   pubkeyType,
   StdFee,
@@ -25,6 +24,7 @@ import {
   defaultRegistryTypes,
   GasPrice,
   calculateFee,
+  QueryClient,
 } from "@cosmjs/stargate";
 import {
   createAuthzAminoConverters,
@@ -54,6 +54,7 @@ import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { encodePubkey } from "./customPubkey";
 import { accountFromAny } from "./EdAccountHandler";
 import { ixo } from "../codegen";
+import { setupTxExtension } from "./customTxQueries";
 
 function createDefaultRegistry(): Registry {
   return new Registry(defaultRegistryTypes);
@@ -81,6 +82,8 @@ export class SigningStargateClient extends StargateClient {
   private readonly aminoTypes: AminoTypes;
   private readonly gasPrice: GasPrice | undefined;
   private readonly ignoreGetSequence: boolean;
+
+  private tendermintClient: Tendermint34Client;
 
   public static async connectWithSigner(
     endpoint: string | HttpEndpoint,
@@ -132,6 +135,7 @@ export class SigningStargateClient extends StargateClient {
       registry = createDefaultRegistry(),
       aminoTypes = new AminoTypes(createDefaultTypes(prefix)),
     } = options;
+    this.tendermintClient = tmClient;
     this.registry = registry;
     this.aminoTypes = aminoTypes;
     this.signer = signer;
@@ -153,16 +157,30 @@ export class SigningStargateClient extends StargateClient {
     if (!accountFromSigner) {
       throw new Error("Failed to retrieve account from signer");
     }
-    const pubkey = encodeSecp256k1Pubkey(accountFromSigner.pubkey);
+    const pubkey = {
+      type:
+        accountFromSigner.algo === "secp256k1"
+          ? pubkeyType.secp256k1
+          : pubkeyType.ed25519,
+      value: toBase64(accountFromSigner.pubkey),
+    };
+
     const { sequence } = this.ignoreGetSequence
       ? { sequence: 0 }
       : await this.getSequence(signerAddress);
-    const { gasInfo } = await this.forceGetQueryClient().tx.simulate(
+
+    const queryCleint = QueryClient.withExtensions(
+      this.tendermintClient,
+      setupTxExtension
+    );
+
+    const { gasInfo } = await queryCleint.tx.simulate(
       anyMsgs,
       memo,
-      pubkey,
+      pubkey as any,
       sequence
     );
+
     assertDefined(gasInfo);
     return Uint53.fromString(gasInfo.gasUsed.toString()).toNumber();
   }
