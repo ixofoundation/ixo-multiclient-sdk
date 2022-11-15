@@ -216,7 +216,9 @@ export const sendFromFaucet = (user: WalletUsers) => {
 export const getDidFromEvents = (res: DeliverTxResponse) => {
   // console.log(res);
   return JSON.parse(res.rawLog!)[0]
-    ["events"].find((e: any) => e.type === "iid.IidDocumentCreatedEvent")
+    ["events"].find(
+      (e: any) => e.type === "ixo.iid.v1beta1.IidDocumentCreatedEvent"
+    )
     ["attributes"].find((e: any) => e.key === "did")
     ["value"].replaceAll('"', "");
 };
