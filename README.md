@@ -52,7 +52,7 @@ const balance = await client.cosmos.bank.v1beta1.allBalances({
 // you can also query the ixo modules
 const balances = await client.ixo.exchange.v1beta1.exchangeBalances();
 
-We added a custom queryCleint that includes the cosmos modules and ixo modules as well as custom queries
+We added a custom queryClient that includes the cosmos modules and ixo modules as well as custom queries
 
 const queryClient = await createQueryClient(RPC_ENDPOINT);
 
