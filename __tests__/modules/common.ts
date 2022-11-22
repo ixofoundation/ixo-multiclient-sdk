@@ -30,7 +30,10 @@ export const generateId = (length: number = 12) => {
 };
 
 export const sendFaucet = async (address: string) => {
-  return await axios.post("https://devnet-faucet.ixo.earth/credit", {
+  const faucetUrl = RPC_URL.includes("devnet")
+    ? "https://devnet-faucet.ixo.earth/credit"
+    : "https://testnet-faucet.ixo.earth/credit";
+  return await axios.post(faucetUrl, {
     denom: "uixo",
     address: address,
   });
