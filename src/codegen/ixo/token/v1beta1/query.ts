@@ -1,28 +1,33 @@
+import { TokenMinter, TokenMinterSDKType } from "./token";
 import * as _m0 from "protobufjs/minimal";
 import { isSet, isObject } from "../../../helpers";
 export interface QueryTokenListRequest {
-  tokenType: string;
-  tokenStatus: string;
+  minterDid: string;
 }
 export interface QueryTokenListRequestSDKType {
-  token_type: string;
-  token_status: string;
+  minter_did: string;
 }
 /** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
 
-export interface QueryTokenListResponse {}
+export interface QueryTokenListResponse {
+  contracts: TokenMinter[];
+}
 /** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
 
-export interface QueryTokenListResponseSDKType {}
+export interface QueryTokenListResponseSDKType {
+  contracts: TokenMinterSDKType[];
+}
 /** QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC method. */
 
 export interface QueryTokenDocRequest {
-  tokenDid: string;
+  minterDid: string;
+  contractAddress: string;
 }
 /** QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC method. */
 
 export interface QueryTokenDocRequestSDKType {
-  token_did: string;
+  minter_did: string;
+  contract_address: string;
 }
 /** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
 
@@ -57,19 +62,14 @@ export interface QueryTokenConfigResponseSDKType {
 
 function createBaseQueryTokenListRequest(): QueryTokenListRequest {
   return {
-    tokenType: "",
-    tokenStatus: ""
+    minterDid: ""
   };
 }
 
 export const QueryTokenListRequest = {
   encode(message: QueryTokenListRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.tokenType !== "") {
-      writer.uint32(10).string(message.tokenType);
-    }
-
-    if (message.tokenStatus !== "") {
-      writer.uint32(18).string(message.tokenStatus);
+    if (message.minterDid !== "") {
+      writer.uint32(10).string(message.minterDid);
     }
 
     return writer;
@@ -85,11 +85,7 @@ export const QueryTokenListRequest = {
 
       switch (tag >>> 3) {
         case 1:
-          message.tokenType = reader.string();
-          break;
-
-        case 2:
-          message.tokenStatus = reader.string();
+          message.minterDid = reader.string();
           break;
 
         default:
@@ -103,33 +99,36 @@ export const QueryTokenListRequest = {
 
   fromJSON(object: any): QueryTokenListRequest {
     return {
-      tokenType: isSet(object.tokenType) ? String(object.tokenType) : "",
-      tokenStatus: isSet(object.tokenStatus) ? String(object.tokenStatus) : ""
+      minterDid: isSet(object.minterDid) ? String(object.minterDid) : ""
     };
   },
 
   toJSON(message: QueryTokenListRequest): unknown {
     const obj: any = {};
-    message.tokenType !== undefined && (obj.tokenType = message.tokenType);
-    message.tokenStatus !== undefined && (obj.tokenStatus = message.tokenStatus);
+    message.minterDid !== undefined && (obj.minterDid = message.minterDid);
     return obj;
   },
 
   fromPartial(object: Partial<QueryTokenListRequest>): QueryTokenListRequest {
     const message = createBaseQueryTokenListRequest();
-    message.tokenType = object.tokenType ?? "";
-    message.tokenStatus = object.tokenStatus ?? "";
+    message.minterDid = object.minterDid ?? "";
     return message;
   }
 
 };
 
 function createBaseQueryTokenListResponse(): QueryTokenListResponse {
-  return {};
+  return {
+    contracts: []
+  };
 }
 
 export const QueryTokenListResponse = {
-  encode(_: QueryTokenListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryTokenListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.contracts) {
+      TokenMinter.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+
     return writer;
   },
 
@@ -142,6 +141,10 @@ export const QueryTokenListResponse = {
       const tag = reader.uint32();
 
       switch (tag >>> 3) {
+        case 1:
+          message.contracts.push(TokenMinter.decode(reader, reader.uint32()));
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -151,17 +154,27 @@ export const QueryTokenListResponse = {
     return message;
   },
 
-  fromJSON(_: any): QueryTokenListResponse {
-    return {};
+  fromJSON(object: any): QueryTokenListResponse {
+    return {
+      contracts: Array.isArray(object?.contracts) ? object.contracts.map((e: any) => TokenMinter.fromJSON(e)) : []
+    };
   },
 
-  toJSON(_: QueryTokenListResponse): unknown {
+  toJSON(message: QueryTokenListResponse): unknown {
     const obj: any = {};
+
+    if (message.contracts) {
+      obj.contracts = message.contracts.map(e => e ? TokenMinter.toJSON(e) : undefined);
+    } else {
+      obj.contracts = [];
+    }
+
     return obj;
   },
 
-  fromPartial(_: Partial<QueryTokenListResponse>): QueryTokenListResponse {
+  fromPartial(object: Partial<QueryTokenListResponse>): QueryTokenListResponse {
     const message = createBaseQueryTokenListResponse();
+    message.contracts = object.contracts?.map(e => TokenMinter.fromPartial(e)) || [];
     return message;
   }
 
@@ -169,14 +182,19 @@ export const QueryTokenListResponse = {
 
 function createBaseQueryTokenDocRequest(): QueryTokenDocRequest {
   return {
-    tokenDid: ""
+    minterDid: "",
+    contractAddress: ""
   };
 }
 
 export const QueryTokenDocRequest = {
   encode(message: QueryTokenDocRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.tokenDid !== "") {
-      writer.uint32(10).string(message.tokenDid);
+    if (message.minterDid !== "") {
+      writer.uint32(10).string(message.minterDid);
+    }
+
+    if (message.contractAddress !== "") {
+      writer.uint32(18).string(message.contractAddress);
     }
 
     return writer;
@@ -192,7 +210,11 @@ export const QueryTokenDocRequest = {
 
       switch (tag >>> 3) {
         case 1:
-          message.tokenDid = reader.string();
+          message.minterDid = reader.string();
+          break;
+
+        case 2:
+          message.contractAddress = reader.string();
           break;
 
         default:
@@ -206,19 +228,22 @@ export const QueryTokenDocRequest = {
 
   fromJSON(object: any): QueryTokenDocRequest {
     return {
-      tokenDid: isSet(object.tokenDid) ? String(object.tokenDid) : ""
+      minterDid: isSet(object.minterDid) ? String(object.minterDid) : "",
+      contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : ""
     };
   },
 
   toJSON(message: QueryTokenDocRequest): unknown {
     const obj: any = {};
-    message.tokenDid !== undefined && (obj.tokenDid = message.tokenDid);
+    message.minterDid !== undefined && (obj.minterDid = message.minterDid);
+    message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
     return obj;
   },
 
   fromPartial(object: Partial<QueryTokenDocRequest>): QueryTokenDocRequest {
     const message = createBaseQueryTokenDocRequest();
-    message.tokenDid = object.tokenDid ?? "";
+    message.minterDid = object.minterDid ?? "";
+    message.contractAddress = object.contractAddress ?? "";
     return message;
   }
 

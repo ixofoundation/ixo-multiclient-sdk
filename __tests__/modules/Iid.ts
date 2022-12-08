@@ -1,5 +1,9 @@
-import { getUser, getVerificationMethod, createClient, ixo } from "./common";
-import { constants, fee, WalletUsers } from "./constants";
+import {
+  createAgentIidContext,
+  createIidVerificationMethods,
+} from "../../src/messages/iid";
+import { getUser, customMessages, createClient, ixo } from "../helpers/common";
+import { constants, fee, WalletUsers } from "../helpers/constants";
 
 export const CreateIidDoc = async (
   signer: WalletUsers = WalletUsers.tester,
@@ -13,16 +17,12 @@ export const CreateIidDoc = async (
   const myPubKey = account.pubkey;
   const did = user.did;
 
-  let verifications = [
-    ixo.iid.v1beta1.Verification.fromPartial({
-      relationships: ["authentication"],
-      method: getVerificationMethod(did, myPubKey, did),
-    }),
-    ixo.iid.v1beta1.Verification.fromPartial({
-      relationships: ["authentication"],
-      method: getVerificationMethod(`${did}#${myAddress}`, myPubKey, did),
-    }),
-  ];
+  let verifications = createIidVerificationMethods({
+    did,
+    pubkey: myPubKey,
+    address: myAddress,
+    controller: did,
+  });
 
   if (userToAddToVerifications) {
     const eUser = getUser(userToAddToVerifications);
@@ -32,50 +32,19 @@ export const CreateIidDoc = async (
     const eUserdid = eUser.did;
 
     verifications.push(
-      ixo.iid.v1beta1.Verification.fromPartial({
-        relationships: ["authentication"],
-        method: getVerificationMethod(eUserdid, eUserPubKey, eUserdid),
-      })
-    );
-    verifications.push(
-      ixo.iid.v1beta1.Verification.fromPartial({
-        relationships: ["authentication"],
-        method: getVerificationMethod(
-          `${eUserdid}#${eUserAddress}`,
-          eUserPubKey,
-          eUserdid
-        ),
+      ...createIidVerificationMethods({
+        did: eUserdid,
+        pubkey: eUserPubKey,
+        address: eUserAddress,
+        controller: eUserdid,
       })
     );
   }
 
-  // const { createIidDocument } = ixo.iid.v1beta1.MessageComposer.withTypeUrl;
-  // const message1 = createIidDocument({
-  //   id: did,
-  //   verifications: [
-  //     {
-  //       context: [],
-  //       relationships: ["authentication"],
-  //       method: getVerificationMethod(did, myPubKey, did),
-  //     },
-  //     {
-  //       context: [],
-  //       relationships: ["authentication"],
-  //       method: getVerificationMethod(`${did}#${myAddress}`, myPubKey, did),
-  //     },
-  //   ],
-  //   signer: myAddress,
-  //   controllers: [did],
-  //   context: [],
-  //   services: [],
-  //   linkedEntity: [],
-  //   linkedResource: [],
-  //   accordedRight: [],
-  // });
-
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgCreateIidDocument",
     value: ixo.iid.v1beta1.MsgCreateIidDocument.fromPartial({
+      context: createAgentIidContext(),
       id: did,
       verifications,
       signer: myAddress,
@@ -200,7 +169,7 @@ export const AddVerification = async (
       id: did,
       verification: ixo.iid.v1beta1.Verification.fromPartial({
         relationships: relationships,
-        method: getVerificationMethod(
+        method: customMessages.iid.createVerificationMethod(
           alice.did,
           aliceAccount.pubkey,
           alice.did

@@ -11,6 +11,7 @@ export interface MsgCreateBond {
     functionParameters: FunctionParam[];
     creatorDid: string;
     controllerDid: string;
+    oracleDid: string;
     reserveTokens: string[];
     txFeePercentage: string;
     exitFeePercentage: string;
@@ -37,6 +38,7 @@ export interface MsgCreateBondSDKType {
     function_parameters: FunctionParamSDKType[];
     creator_did: string;
     controller_did: string;
+    oracle_did: string;
     reserve_tokens: string[];
     tx_fee_percentage: string;
     exit_fee_percentage: string;
@@ -91,15 +93,17 @@ export interface MsgEditBondResponseSDKType {
 export interface MsgSetNextAlpha {
     bondDid: string;
     alpha: string;
-    editorDid: string;
-    editorAddress: string;
+    delta: string;
+    oracleDid: string;
+    oracleAddress: string;
 }
 /** MsgSetNextAlpha defines a message for editing a bond's alpha parameter. */
 export interface MsgSetNextAlphaSDKType {
     bond_did: string;
     alpha: string;
-    editor_did: string;
-    editor_address: string;
+    delta: string;
+    oracle_did: string;
+    oracle_address: string;
 }
 export interface MsgSetNextAlphaResponse {
 }

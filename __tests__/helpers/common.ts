@@ -1,4 +1,3 @@
-import { toHex } from "@cosmjs/encoding";
 import { OfflineSigner } from "@cosmjs/proto-signing";
 import { assertIsDeliverTxSuccess, DeliverTxResponse } from "@cosmjs/stargate";
 import axios from "axios";
@@ -14,20 +13,11 @@ import {
   ibc,
   cosmos,
   createQueryClient as createQueryClientImport,
+  customMessages,
 } from "../../src";
 import { IObjectKeys } from "./types";
 
-export { ixo, cosmos, utils, ibc };
-
-export const generateId = (length: number = 12) => {
-  var result = "";
-  var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  var charactersLength = characters.length;
-  for (var i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-};
+export { ixo, cosmos, utils, ibc, customMessages };
 
 export const sendFaucet = async (address: string) => {
   const faucetUrl = RPC_URL.includes("devnet")
@@ -36,23 +26,6 @@ export const sendFaucet = async (address: string) => {
   return await axios.post(faucetUrl, {
     denom: "uixo",
     address: address,
-  });
-};
-
-export const getVerificationMethod = (
-  did: string,
-  pubkey: Uint8Array,
-  controller: string,
-  type: KeyTypes = keyType
-) => {
-  return ixo.iid.v1beta1.VerificationMethod.fromPartial({
-    id: did,
-    type:
-      type === "ed"
-        ? "Ed25519VerificationKey2018"
-        : "EcdsaSecp256k1VerificationKey2019",
-    publicKeyMultibase: "F" + toHex(pubkey),
-    controller: controller,
   });
 };
 
@@ -165,8 +138,8 @@ export const checkSuccessMsg = (res: DeliverTxResponse, succeed: boolean) => {
 
 export const checkSuccessQry = (res: any, equal: IObjectKeys) => {
   let isSuccess = true;
-  console.log({ res });
-  console.log({ equal });
+  // console.log({ res });
+  // console.log({ equal });
   try {
     Object.entries(equal).forEach(([key, value]) => {
       console.log({ key, value });
@@ -214,16 +187,6 @@ export const sendFromFaucet = (user: WalletUsers) => {
     const res = await sendFaucet(account.address);
     expect(res.data).toBe("ok");
   });
-};
-
-export const getDidFromEvents = (res: DeliverTxResponse) => {
-  // console.log(res);
-  return JSON.parse(res.rawLog!)[0]
-    ["events"].find(
-      (e: any) => e.type === "ixo.iid.v1beta1.IidDocumentCreatedEvent"
-    )
-    ["attributes"].find((e: any) => e.key === "did")
-    ["value"].replaceAll('"', "");
 };
 
 function findVal(object: IObjectKeys, key: string) {

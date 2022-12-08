@@ -1,18 +1,43 @@
 import * as _m0 from "protobufjs/minimal";
+export interface Contract {
+    id: string;
+    address: string;
+}
+export interface ContractSDKType {
+    id: string;
+    address: string;
+}
 export interface Params {
-    NftContractAddress: string;
-    NftContractMinter: string;
+    cw20ContractCode: string;
+    cw721ContractCode: string;
+    ixo1155ContractCode: string;
 }
 export interface ParamsSDKType {
-    NftContractAddress: string;
-    NftContractMinter: string;
+    cw20ContractCode: string;
+    cw721ContractCode: string;
+    ixo1155ContractCode: string;
 }
-/** ProjectDoc defines a project (or token) type with all of its parameters. */
-export interface TokenDoc {
+export interface TokenMinter {
+    minterDid: string;
+    minterAddress: string;
+    contractAddress: string;
+    name: string;
+    description: string;
 }
-/** ProjectDoc defines a project (or token) type with all of its parameters. */
-export interface TokenDocSDKType {
+export interface TokenMinterSDKType {
+    minterDid: string;
+    minterAddress: string;
+    contractAddress: string;
+    name: string;
+    description: string;
 }
+export declare const Contract: {
+    encode(message: Contract, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): Contract;
+    fromJSON(object: any): Contract;
+    toJSON(message: Contract): unknown;
+    fromPartial(object: Partial<Contract>): Contract;
+};
 export declare const Params: {
     encode(message: Params, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): Params;
@@ -20,10 +45,10 @@ export declare const Params: {
     toJSON(message: Params): unknown;
     fromPartial(object: Partial<Params>): Params;
 };
-export declare const TokenDoc: {
-    encode(_: TokenDoc, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): TokenDoc;
-    fromJSON(_: any): TokenDoc;
-    toJSON(_: TokenDoc): unknown;
-    fromPartial(_: Partial<TokenDoc>): TokenDoc;
+export declare const TokenMinter: {
+    encode(message: TokenMinter, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): TokenMinter;
+    fromJSON(object: any): TokenMinter;
+    toJSON(message: TokenMinter): unknown;
+    fromPartial(object: Partial<TokenMinter>): TokenMinter;
 };

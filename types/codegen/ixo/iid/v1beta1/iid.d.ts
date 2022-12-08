@@ -175,6 +175,7 @@ export interface VerificationMethod {
     blockchainAccountID?: string;
     publicKeyHex?: string;
     publicKeyMultibase?: string;
+    publicKeyBase58?: string;
 }
 export interface VerificationMethodSDKType {
     id: string;
@@ -183,6 +184,7 @@ export interface VerificationMethodSDKType {
     blockchainAccountID?: string;
     publicKeyHex?: string;
     publicKeyMultibase?: string;
+    publicKeyBase58?: string;
 }
 /** Service defines how to find data associated with a identifer */
 export interface Service {

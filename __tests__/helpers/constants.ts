@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-import { generateId } from "./common";
+import { utils } from "./common";
 
 export const RPC_URL = process.env.RPC_URL || "https://devnet.ixo.earth/rpc/";
 
@@ -14,6 +14,7 @@ export enum WalletUsers {
   bob = "bob",
   project = "project",
   bond = "bond",
+  oracle = "oracle",
   accordedRight = "accordedRight",
 }
 
@@ -22,9 +23,9 @@ export let constants: ReturnType<typeof generateConstants>;
 export const generateConstants = () => {
   const newConstants = {
     // payments
-    paymentTemplateId: `payment:template:${generateId(10)}`,
-    paymentContractId: `payment:contract:${generateId(10)}`,
-    paymentSubscripionId: `payment:subscription:${generateId(10)}`,
+    paymentTemplateId: `payment:template:${utils.common.generateId(10)}`,
+    paymentContractId: `payment:contract:${utils.common.generateId(10)}`,
+    paymentSubscripionId: `payment:subscription:${utils.common.generateId(10)}`,
     paymentContractRecipient: {
       address: "ixo107pmtx9wyndup8f9lgj6d7dnfq5kuf3sapg0vx",
       percentage: "100",
@@ -32,20 +33,20 @@ export const generateConstants = () => {
     paymentDiscountId: "1",
 
     // projects
-    projectClaimId: generateId(),
-    projectTemplateId: generateId(),
+    projectClaimId: utils.common.generateId(),
+    projectTemplateId: utils.common.generateId(),
     projectWalletType: "ed",
 
     // bonds
-    bondToken: generateId(3),
+    bondToken: utils.common.generateId(3),
     bondReserveToken: "uixo",
 
     // iid
-    contextKey: generateId(10),
-    accordedRightId: generateId(10),
-    linkedEntityId: generateId(10),
-    linkedResourceId: generateId(10),
-    serviceId: generateId(10),
+    contextKey: utils.common.generateId(10),
+    accordedRightId: utils.common.generateId(10),
+    linkedEntityId: utils.common.generateId(10),
+    linkedResourceId: utils.common.generateId(10),
+    serviceId: utils.common.generateId(10),
   };
   constants = newConstants;
   // Logs constants for tester to see details for constants

@@ -1,5 +1,5 @@
-import { fee, WalletUsers } from "./constants";
-import { createClient, getUser, cosmos } from "./common";
+import { fee, WalletUsers } from "../helpers/constants";
+import { createClient, getUser, cosmos } from "../helpers/common";
 
 export const BankSendTrx = async () => {
   const client = await createClient();

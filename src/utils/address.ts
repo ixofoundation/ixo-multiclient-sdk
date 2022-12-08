@@ -1,13 +1,16 @@
 import { pubkeyToRawAddress } from "@cosmjs/tendermint-rpc";
-import { fromHex, toBech32 } from "@cosmjs/encoding";
+import { toBech32 } from "@cosmjs/encoding";
+import base58 from "bs58";
 
 /**
- * @param pubKey Uint8Array or Hex string
+ * @param pubKey Uint8Array or base58 encoded string
  */
 export const pubKeyToAddress = (
   type: "ed25519" | "secp256k1",
-  pubKey: Uint8Array | string
+  pubKey: Uint8Array | string,
+  prefix = "ixo"
 ) => {
-  const parsedPubKey = typeof pubKey === "string" ? fromHex(pubKey) : pubKey;
-  return toBech32("ixo", pubkeyToRawAddress(type, parsedPubKey));
+  const parsedPubKey =
+    typeof pubKey === "string" ? base58.decode(pubKey) : pubKey;
+  return toBech32(prefix, pubkeyToRawAddress(type, parsedPubKey));
 };

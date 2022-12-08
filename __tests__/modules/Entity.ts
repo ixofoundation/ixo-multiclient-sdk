@@ -1,10 +1,12 @@
-import { createClient, getUser, ixo, queryClient } from "./common";
-import { fee, WalletUsers } from "./constants";
+import { createClient, getUser, ixo, queryClient } from "../helpers/common";
+import { fee, WalletUsers } from "../helpers/constants";
 
-export const CreateEntityAsset = async () => {
-  const client = await createClient();
+export const CreateEntityAsset = async (
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
 
-  const tester = getUser();
+  const tester = getUser(signer);
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
   const did = tester.did;

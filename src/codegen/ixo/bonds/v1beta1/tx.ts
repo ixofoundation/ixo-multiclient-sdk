@@ -13,6 +13,7 @@ export interface MsgCreateBond {
   functionParameters: FunctionParam[];
   creatorDid: string;
   controllerDid: string;
+  oracleDid: string;
   reserveTokens: string[];
   txFeePercentage: string;
   exitFeePercentage: string;
@@ -40,6 +41,7 @@ export interface MsgCreateBondSDKType {
   function_parameters: FunctionParamSDKType[];
   creator_did: string;
   controller_did: string;
+  oracle_did: string;
   reserve_tokens: string[];
   tx_fee_percentage: string;
   exit_fee_percentage: string;
@@ -97,16 +99,18 @@ export interface MsgEditBondResponseSDKType {}
 export interface MsgSetNextAlpha {
   bondDid: string;
   alpha: string;
-  editorDid: string;
-  editorAddress: string;
+  delta: string;
+  oracleDid: string;
+  oracleAddress: string;
 }
 /** MsgSetNextAlpha defines a message for editing a bond's alpha parameter. */
 
 export interface MsgSetNextAlphaSDKType {
   bond_did: string;
   alpha: string;
-  editor_did: string;
-  editor_address: string;
+  delta: string;
+  oracle_did: string;
+  oracle_address: string;
 }
 export interface MsgSetNextAlphaResponse {}
 export interface MsgSetNextAlphaResponseSDKType {}
@@ -277,6 +281,7 @@ function createBaseMsgCreateBond(): MsgCreateBond {
     functionParameters: [],
     creatorDid: "",
     controllerDid: "",
+    oracleDid: "",
     reserveTokens: [],
     txFeePercentage: "",
     exitFeePercentage: "",
@@ -329,64 +334,68 @@ export const MsgCreateBond = {
       writer.uint32(66).string(message.controllerDid);
     }
 
+    if (message.oracleDid !== "") {
+      writer.uint32(74).string(message.oracleDid);
+    }
+
     for (const v of message.reserveTokens) {
-      writer.uint32(74).string(v!);
+      writer.uint32(82).string(v!);
     }
 
     if (message.txFeePercentage !== "") {
-      writer.uint32(82).string(message.txFeePercentage);
+      writer.uint32(90).string(message.txFeePercentage);
     }
 
     if (message.exitFeePercentage !== "") {
-      writer.uint32(90).string(message.exitFeePercentage);
+      writer.uint32(98).string(message.exitFeePercentage);
     }
 
     if (message.feeAddress !== "") {
-      writer.uint32(98).string(message.feeAddress);
+      writer.uint32(106).string(message.feeAddress);
     }
 
     if (message.reserveWithdrawalAddress !== "") {
-      writer.uint32(106).string(message.reserveWithdrawalAddress);
+      writer.uint32(114).string(message.reserveWithdrawalAddress);
     }
 
     if (message.maxSupply !== undefined) {
-      Coin.encode(message.maxSupply, writer.uint32(114).fork()).ldelim();
+      Coin.encode(message.maxSupply, writer.uint32(122).fork()).ldelim();
     }
 
     for (const v of message.orderQuantityLimits) {
-      Coin.encode(v!, writer.uint32(122).fork()).ldelim();
+      Coin.encode(v!, writer.uint32(130).fork()).ldelim();
     }
 
     if (message.sanityRate !== "") {
-      writer.uint32(130).string(message.sanityRate);
+      writer.uint32(138).string(message.sanityRate);
     }
 
     if (message.sanityMarginPercentage !== "") {
-      writer.uint32(138).string(message.sanityMarginPercentage);
+      writer.uint32(146).string(message.sanityMarginPercentage);
     }
 
     if (message.allowSells === true) {
-      writer.uint32(144).bool(message.allowSells);
+      writer.uint32(152).bool(message.allowSells);
     }
 
     if (message.allowReserveWithdrawals === true) {
-      writer.uint32(152).bool(message.allowReserveWithdrawals);
+      writer.uint32(160).bool(message.allowReserveWithdrawals);
     }
 
     if (message.alphaBond === true) {
-      writer.uint32(160).bool(message.alphaBond);
+      writer.uint32(168).bool(message.alphaBond);
     }
 
     if (message.batchBlocks !== "") {
-      writer.uint32(170).string(message.batchBlocks);
+      writer.uint32(178).string(message.batchBlocks);
     }
 
     if (message.outcomePayment !== "") {
-      writer.uint32(178).string(message.outcomePayment);
+      writer.uint32(186).string(message.outcomePayment);
     }
 
     if (message.creatorAddress !== "") {
-      writer.uint32(186).string(message.creatorAddress);
+      writer.uint32(194).string(message.creatorAddress);
     }
 
     return writer;
@@ -434,62 +443,66 @@ export const MsgCreateBond = {
           break;
 
         case 9:
-          message.reserveTokens.push(reader.string());
+          message.oracleDid = reader.string();
           break;
 
         case 10:
-          message.txFeePercentage = reader.string();
+          message.reserveTokens.push(reader.string());
           break;
 
         case 11:
-          message.exitFeePercentage = reader.string();
+          message.txFeePercentage = reader.string();
           break;
 
         case 12:
-          message.feeAddress = reader.string();
+          message.exitFeePercentage = reader.string();
           break;
 
         case 13:
-          message.reserveWithdrawalAddress = reader.string();
+          message.feeAddress = reader.string();
           break;
 
         case 14:
-          message.maxSupply = Coin.decode(reader, reader.uint32());
+          message.reserveWithdrawalAddress = reader.string();
           break;
 
         case 15:
-          message.orderQuantityLimits.push(Coin.decode(reader, reader.uint32()));
+          message.maxSupply = Coin.decode(reader, reader.uint32());
           break;
 
         case 16:
-          message.sanityRate = reader.string();
+          message.orderQuantityLimits.push(Coin.decode(reader, reader.uint32()));
           break;
 
         case 17:
-          message.sanityMarginPercentage = reader.string();
+          message.sanityRate = reader.string();
           break;
 
         case 18:
-          message.allowSells = reader.bool();
+          message.sanityMarginPercentage = reader.string();
           break;
 
         case 19:
-          message.allowReserveWithdrawals = reader.bool();
+          message.allowSells = reader.bool();
           break;
 
         case 20:
-          message.alphaBond = reader.bool();
+          message.allowReserveWithdrawals = reader.bool();
           break;
 
         case 21:
-          message.batchBlocks = reader.string();
+          message.alphaBond = reader.bool();
           break;
 
         case 22:
-          message.outcomePayment = reader.string();
+          message.batchBlocks = reader.string();
           break;
 
         case 23:
+          message.outcomePayment = reader.string();
+          break;
+
+        case 24:
           message.creatorAddress = reader.string();
           break;
 
@@ -512,6 +525,7 @@ export const MsgCreateBond = {
       functionParameters: Array.isArray(object?.functionParameters) ? object.functionParameters.map((e: any) => FunctionParam.fromJSON(e)) : [],
       creatorDid: isSet(object.creatorDid) ? String(object.creatorDid) : "",
       controllerDid: isSet(object.controllerDid) ? String(object.controllerDid) : "",
+      oracleDid: isSet(object.oracleDid) ? String(object.oracleDid) : "",
       reserveTokens: Array.isArray(object?.reserveTokens) ? object.reserveTokens.map((e: any) => String(e)) : [],
       txFeePercentage: isSet(object.txFeePercentage) ? String(object.txFeePercentage) : "",
       exitFeePercentage: isSet(object.exitFeePercentage) ? String(object.exitFeePercentage) : "",
@@ -546,6 +560,7 @@ export const MsgCreateBond = {
 
     message.creatorDid !== undefined && (obj.creatorDid = message.creatorDid);
     message.controllerDid !== undefined && (obj.controllerDid = message.controllerDid);
+    message.oracleDid !== undefined && (obj.oracleDid = message.oracleDid);
 
     if (message.reserveTokens) {
       obj.reserveTokens = message.reserveTokens.map(e => e);
@@ -586,6 +601,7 @@ export const MsgCreateBond = {
     message.functionParameters = object.functionParameters?.map(e => FunctionParam.fromPartial(e)) || [];
     message.creatorDid = object.creatorDid ?? "";
     message.controllerDid = object.controllerDid ?? "";
+    message.oracleDid = object.oracleDid ?? "";
     message.reserveTokens = object.reserveTokens?.map(e => e) || [];
     message.txFeePercentage = object.txFeePercentage ?? "";
     message.exitFeePercentage = object.exitFeePercentage ?? "";
@@ -837,8 +853,9 @@ function createBaseMsgSetNextAlpha(): MsgSetNextAlpha {
   return {
     bondDid: "",
     alpha: "",
-    editorDid: "",
-    editorAddress: ""
+    delta: undefined,
+    oracleDid: "",
+    oracleAddress: ""
   };
 }
 
@@ -852,12 +869,16 @@ export const MsgSetNextAlpha = {
       writer.uint32(18).string(message.alpha);
     }
 
-    if (message.editorDid !== "") {
-      writer.uint32(26).string(message.editorDid);
+    if (message.delta !== undefined) {
+      writer.uint32(26).string(message.delta);
     }
 
-    if (message.editorAddress !== "") {
-      writer.uint32(34).string(message.editorAddress);
+    if (message.oracleDid !== "") {
+      writer.uint32(34).string(message.oracleDid);
+    }
+
+    if (message.oracleAddress !== "") {
+      writer.uint32(42).string(message.oracleAddress);
     }
 
     return writer;
@@ -881,11 +902,15 @@ export const MsgSetNextAlpha = {
           break;
 
         case 3:
-          message.editorDid = reader.string();
+          message.delta = reader.string();
           break;
 
         case 4:
-          message.editorAddress = reader.string();
+          message.oracleDid = reader.string();
+          break;
+
+        case 5:
+          message.oracleAddress = reader.string();
           break;
 
         default:
@@ -901,8 +926,9 @@ export const MsgSetNextAlpha = {
     return {
       bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
       alpha: isSet(object.alpha) ? String(object.alpha) : "",
-      editorDid: isSet(object.editorDid) ? String(object.editorDid) : "",
-      editorAddress: isSet(object.editorAddress) ? String(object.editorAddress) : ""
+      delta: isSet(object.delta) ? String(object.delta) : undefined,
+      oracleDid: isSet(object.oracleDid) ? String(object.oracleDid) : "",
+      oracleAddress: isSet(object.oracleAddress) ? String(object.oracleAddress) : ""
     };
   },
 
@@ -910,8 +936,9 @@ export const MsgSetNextAlpha = {
     const obj: any = {};
     message.bondDid !== undefined && (obj.bondDid = message.bondDid);
     message.alpha !== undefined && (obj.alpha = message.alpha);
-    message.editorDid !== undefined && (obj.editorDid = message.editorDid);
-    message.editorAddress !== undefined && (obj.editorAddress = message.editorAddress);
+    message.delta !== undefined && (obj.delta = message.delta);
+    message.oracleDid !== undefined && (obj.oracleDid = message.oracleDid);
+    message.oracleAddress !== undefined && (obj.oracleAddress = message.oracleAddress);
     return obj;
   },
 
@@ -919,8 +946,9 @@ export const MsgSetNextAlpha = {
     const message = createBaseMsgSetNextAlpha();
     message.bondDid = object.bondDid ?? "";
     message.alpha = object.alpha ?? "";
-    message.editorDid = object.editorDid ?? "";
-    message.editorAddress = object.editorAddress ?? "";
+    message.delta = object.delta ?? undefined;
+    message.oracleDid = object.oracleDid ?? "";
+    message.oracleAddress = object.oracleAddress ?? "";
     return message;
   }
 

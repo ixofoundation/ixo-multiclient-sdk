@@ -59,6 +59,7 @@ export interface Bond {
   outcomePayment: string;
   state: string;
   bondDid: string;
+  oracleDid: string;
 }
 /** Bond defines a token bonding curve type with all of its parameters. */
 
@@ -90,6 +91,7 @@ export interface BondSDKType {
   outcome_payment: string;
   state: string;
   bond_did: string;
+  oracle_did: string;
 }
 /**
  * BaseOrder defines a base order type. It contains all the necessary fields for specifying
@@ -394,7 +396,8 @@ function createBaseBond(): Bond {
     batchBlocks: "",
     outcomePayment: "",
     state: "",
-    bondDid: ""
+    bondDid: "",
+    oracleDid: ""
   };
 }
 
@@ -506,6 +509,10 @@ export const Bond = {
 
     if (message.bondDid !== "") {
       writer.uint32(218).string(message.bondDid);
+    }
+
+    if (message.oracleDid !== "") {
+      writer.uint32(226).string(message.oracleDid);
     }
 
     return writer;
@@ -628,6 +635,10 @@ export const Bond = {
           message.bondDid = reader.string();
           break;
 
+        case 28:
+          message.oracleDid = reader.string();
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -665,7 +676,8 @@ export const Bond = {
       batchBlocks: isSet(object.batchBlocks) ? String(object.batchBlocks) : "",
       outcomePayment: isSet(object.outcomePayment) ? String(object.outcomePayment) : "",
       state: isSet(object.state) ? String(object.state) : "",
-      bondDid: isSet(object.bondDid) ? String(object.bondDid) : ""
+      bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
+      oracleDid: isSet(object.oracleDid) ? String(object.oracleDid) : ""
     };
   },
 
@@ -731,6 +743,7 @@ export const Bond = {
     message.outcomePayment !== undefined && (obj.outcomePayment = message.outcomePayment);
     message.state !== undefined && (obj.state = message.state);
     message.bondDid !== undefined && (obj.bondDid = message.bondDid);
+    message.oracleDid !== undefined && (obj.oracleDid = message.oracleDid);
     return obj;
   },
 
@@ -763,6 +776,7 @@ export const Bond = {
     message.outcomePayment = object.outcomePayment ?? "";
     message.state = object.state ?? "";
     message.bondDid = object.bondDid ?? "";
+    message.oracleDid = object.oracleDid ?? "";
     return message;
   }
 

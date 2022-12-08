@@ -12,6 +12,7 @@ export declare class SigningStargateClient extends StargateClient {
     private readonly aminoTypes;
     private readonly gasPrice;
     private readonly ignoreGetSequence;
+    private tendermintClient;
     static connectWithSigner(endpoint: string | HttpEndpoint, signer: OfflineSigner, options?: SigningStargateClientOptions, ignoreGetSequence?: boolean): Promise<SigningStargateClient>;
     /**
      * Creates a client in offline mode.
