@@ -194,6 +194,7 @@ export interface VerificationMethod {
   blockchainAccountID?: string;
   publicKeyHex?: string;
   publicKeyMultibase?: string;
+  publicKeyBase58?: string;
 }
 export interface VerificationMethodSDKType {
   id: string;
@@ -202,6 +203,7 @@ export interface VerificationMethodSDKType {
   blockchainAccountID?: string;
   publicKeyHex?: string;
   publicKeyMultibase?: string;
+  publicKeyBase58?: string;
 }
 /** Service defines how to find data associated with a identifer */
 
@@ -924,7 +926,8 @@ function createBaseVerificationMethod(): VerificationMethod {
     controller: "",
     blockchainAccountID: undefined,
     publicKeyHex: undefined,
-    publicKeyMultibase: undefined
+    publicKeyMultibase: undefined,
+    publicKeyBase58: undefined
   };
 }
 
@@ -952,6 +955,10 @@ export const VerificationMethod = {
 
     if (message.publicKeyMultibase !== undefined) {
       writer.uint32(50).string(message.publicKeyMultibase);
+    }
+
+    if (message.publicKeyBase58 !== undefined) {
+      writer.uint32(58).string(message.publicKeyBase58);
     }
 
     return writer;
@@ -990,6 +997,10 @@ export const VerificationMethod = {
           message.publicKeyMultibase = reader.string();
           break;
 
+        case 7:
+          message.publicKeyBase58 = reader.string();
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -1006,7 +1017,8 @@ export const VerificationMethod = {
       controller: isSet(object.controller) ? String(object.controller) : "",
       blockchainAccountID: isSet(object.blockchainAccountID) ? String(object.blockchainAccountID) : undefined,
       publicKeyHex: isSet(object.publicKeyHex) ? String(object.publicKeyHex) : undefined,
-      publicKeyMultibase: isSet(object.publicKeyMultibase) ? String(object.publicKeyMultibase) : undefined
+      publicKeyMultibase: isSet(object.publicKeyMultibase) ? String(object.publicKeyMultibase) : undefined,
+      publicKeyBase58: isSet(object.publicKeyBase58) ? String(object.publicKeyBase58) : undefined
     };
   },
 
@@ -1018,6 +1030,7 @@ export const VerificationMethod = {
     message.blockchainAccountID !== undefined && (obj.blockchainAccountID = message.blockchainAccountID);
     message.publicKeyHex !== undefined && (obj.publicKeyHex = message.publicKeyHex);
     message.publicKeyMultibase !== undefined && (obj.publicKeyMultibase = message.publicKeyMultibase);
+    message.publicKeyBase58 !== undefined && (obj.publicKeyBase58 = message.publicKeyBase58);
     return obj;
   },
 
@@ -1029,6 +1042,7 @@ export const VerificationMethod = {
     message.blockchainAccountID = object.blockchainAccountID ?? undefined;
     message.publicKeyHex = object.publicKeyHex ?? undefined;
     message.publicKeyMultibase = object.publicKeyMultibase ?? undefined;
+    message.publicKeyBase58 = object.publicKeyBase58 ?? undefined;
     return message;
   }
 

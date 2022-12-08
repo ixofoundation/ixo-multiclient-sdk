@@ -1,5 +1,6 @@
-import { createClient, getUser, ixo, cosmos } from "./common";
-import { constants, fee, WalletUsers } from "./constants";
+import base58 from "bs58";
+import { createClient, getUser, ixo, cosmos } from "../helpers/common";
+import { constants, fee, WalletUsers } from "../helpers/constants";
 
 export const CreateBond = async (allowSells: boolean) => {
   const client = await createClient();
@@ -7,11 +8,14 @@ export const CreateBond = async (allowSells: boolean) => {
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
   const bondDid = bond.did;
   const feeReserveAddress = myAddress;
+
+  const oracle = getUser(WalletUsers.oracle);
+  const oracleDid = oracle.did;
 
   const message = {
     typeUrl: "/ixo.bonds.v1beta1.MsgCreateBond",
@@ -59,6 +63,7 @@ export const CreateBond = async (allowSells: boolean) => {
       batchBlocks: "1",
       outcomePayment: "300000000",
       creatorAddress: myAddress,
+      oracleDid: oracleDid,
     }),
   };
 
@@ -72,7 +77,7 @@ export const EditBond = async () => {
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
   const bondDid = bond.did;
@@ -103,7 +108,7 @@ export const SetNextAlpha = async (alpha: string = "520000000000000000") => {
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
   const bondDid = bond.did;
@@ -113,8 +118,9 @@ export const SetNextAlpha = async (alpha: string = "520000000000000000") => {
     value: ixo.bonds.v1beta1.MsgSetNextAlpha.fromPartial({
       bondDid: bondDid,
       alpha,
-      editorDid: did,
-      editorAddress: myAddress,
+      delta: "",
+      oracleDid: did,
+      oracleAddress: myAddress,
     }),
   };
 
@@ -133,7 +139,7 @@ export const UpdateBondState = async (
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
   const bondDid = bond.did;
@@ -161,7 +167,7 @@ export const Buy = async (
   const user = getUser(signer);
   const account = (await user.getAccounts())[0];
   const myAddress = account.address;
-  const did = user.did;
+  const did = user.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
   const bondDid = bond.did;
@@ -198,7 +204,7 @@ export const Sell = async (
   const user = getUser(signer);
   const account = (await user.getAccounts())[0];
   const myAddress = account.address;
-  const did = user.did;
+  const did = user.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
   const bondDid = bond.did;
@@ -227,7 +233,7 @@ export const Swap = async () => {
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
   const bondDid = bond.did;
@@ -256,7 +262,7 @@ export const MakeOutcomePayment = async (amount: number) => {
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
   const bondDid = bond.did;
@@ -283,7 +289,7 @@ export const WithdrawShare = async (
   const user = getUser(signer);
   const account = (await user.getAccounts())[0];
   const myAddress = account.address;
-  const did = user.did;
+  const did = user.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
   const bondDid = bond.did;
@@ -310,7 +316,7 @@ export const WithdrawReserve = async (
   const user = getUser(signer);
   const account = (await user.getAccounts())[0];
   const myAddress = account.address;
-  const did = user.did;
+  const did = user.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
   const bondDid = bond.did;

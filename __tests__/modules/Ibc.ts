@@ -1,13 +1,13 @@
 import Long from "long";
 
-import { fee } from "./constants";
+import { fee } from "../helpers/constants";
 import {
   createClient,
   getUser,
   cosmos,
   ibc,
   createQueryClient,
-} from "./common";
+} from "../helpers/common";
 
 export const IbcTransferTrx = async (receiverAddress: string) => {
   const client = await createClient();

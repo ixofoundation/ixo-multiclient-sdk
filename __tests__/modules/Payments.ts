@@ -1,6 +1,7 @@
+import base58 from "bs58";
 import Long from "long";
-import { createClient, getUser, ixo, cosmos } from "./common";
-import { constants, fee, WalletUsers } from "./constants";
+import { createClient, getUser, ixo, cosmos } from "../helpers/common";
+import { constants, fee, WalletUsers } from "../helpers/constants";
 
 export const CreatePaymentTemplate = async () => {
   const client = await createClient();
@@ -8,7 +9,7 @@ export const CreatePaymentTemplate = async () => {
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const message = {
     typeUrl: "/ixo.payments.v1.MsgCreatePaymentTemplate",
@@ -58,7 +59,7 @@ export const CreatePaymentContract = async () => {
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const alice = getUser(WalletUsers.alice);
   const aliceAccount = (await alice.getAccounts())[0];
@@ -92,7 +93,7 @@ export const SetPaymentContractAuthorization = async () => {
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const message = {
     typeUrl: "/ixo.payments.v1.MsgSetPaymentContractAuthorisation",
@@ -114,7 +115,7 @@ export const CreateSubscription = async () => {
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const message = {
     typeUrl: "/ixo.payments.v1.MsgCreateSubscription",
@@ -146,7 +147,7 @@ export const GrantDiscount = async () => {
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const message = {
     typeUrl: "/ixo.payments.v1.MsgGrantDiscount",
@@ -169,7 +170,7 @@ export const RevokeDiscount = async () => {
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const message = {
     typeUrl: "/ixo.payments.v1.MsgRevokeDiscount",
@@ -191,7 +192,7 @@ export const EffectPayment = async () => {
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const message = {
     typeUrl: "/ixo.payments.v1.MsgEffectPayment",

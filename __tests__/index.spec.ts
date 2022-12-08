@@ -4,13 +4,13 @@ import {
   createQueryClient,
   generateNewWallet,
   generateWallets,
-  getDidFromEvents,
+  utils,
   queryClient,
   sendFromFaucet,
   testMsg,
   testQry,
-} from "./modules/common";
-import { generateConstants, WalletUsers } from "./modules/constants";
+} from "./helpers/common";
+import { generateConstants, WalletUsers } from "./helpers/constants";
 import * as Bond from "./modules/Bond";
 import * as Cosmos from "./modules/Cosmos";
 import * as Ibc from "./modules/Ibc";
@@ -19,6 +19,7 @@ import * as Iid from "./modules/Iid";
 import * as Payments from "./modules/Payments";
 import * as Projects from "./modules/Projects";
 import * as Token from "./modules/Token";
+import * as Authz from "./modules/Authz";
 
 beforeAll(() => {
   generateConstants();
@@ -28,6 +29,14 @@ beforeAll(() => {
 describe("Testing the iid module", () => {
   sendFromFaucet(WalletUsers.tester);
   testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () => Iid.CreateIidDoc());
+  // sendFromFaucet(WalletUsers.alice);
+  // testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () =>
+  //   Iid.CreateIidDoc(WalletUsers.alice)
+  // );
+  // sendFromFaucet(WalletUsers.bob);
+  // testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () =>
+  //   Iid.CreateIidDoc(WalletUsers.bob)
+  // );
   // testQry(
   //   "test query",
   //   () => queryClient.ixo.bonds.v1beta1.bond({ bondDid: "adsf" }),
@@ -35,10 +44,7 @@ describe("Testing the iid module", () => {
   //     bonds: [],
   //   }
   // );
-  // sendFromFaucet(WalletUsers.alice);
-  // testMsg('/ixo.iid.v1beta1.MsgCreateIidDocument', () => Iid.CreateIidDoc(WalletUsers.alice));
-  // sendFromFaucet(WalletUsers.bob);
-  // testMsg('/ixo.iid.v1beta1.MsgCreateIidDocument', () => Iid.CreateIidDoc(WalletUsers.bob));
+
   // testMsg("/ixo.iid.v1beta1.MsgUpdateIidDocument", () => Iid.UpdateIidDoc());
   // testMsg("/ixo.iid.v1beta1.MsgUpdateIidMeta", () => Iid.UpdateIidMeta());
   // testMsg("/ixo.iid.v1beta1.MsgAddIidContext", () => Iid.AddIidContext());
@@ -74,17 +80,16 @@ describe("Testing the iid module", () => {
   // testMsg("/ixo.iid.v1beta1.MsgDeleteService", () => Iid.DeleteService());
 });
 
-describe("Testing the Token module", () => {
-  // testMsg("/ixo.token.v1beta1.MsgCreateToken", () => Token.CreateToken());
-  // testMsg("/ixo.token.v1beta1.MsgTransferToken", () => Token.TransferToken());
-});
-
 describe("Testing the entity module", () => {
   // let assetDid: string;
   // testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset", async () => {
   //   const res = await Entity.CreateEntityAsset();
   //   console.log({ res });
-  //   assetDid = getDidFromEvents(res);
+  //   assetDid = utils.common.getValueFromEvents(
+  //     res,
+  //     "ixo.iid.v1beta1.IidDocumentCreatedEvent",
+  //     "did"
+  //   );
   //   console.log({ assetDid });
   //   return res;
   // });
@@ -93,7 +98,7 @@ describe("Testing the entity module", () => {
   //   "/ixo.entity.v1beta1.MsgCreateEntity asset class supamoto",
   //   async () => {
   //     const res = await Entity.CreateEntityAssetSupamoto(assetDid);
-  //     assetSupamotoDid = getDidFromEvents(res);
+  //     assetSupamotoDid = utils.common.getValueFromEvents(res, "ixo.iid.v1beta1.IidDocumentCreatedEvent", "did");
   //     console.log({ assetSupamotoDid });
   //     return res;
   //   }
@@ -105,7 +110,7 @@ describe("Testing the entity module", () => {
   //     const res = await Entity.CreateEntityAssetSupamotoInstance(
   //       assetSupamotoDid
   //     );
-  //     assetSupamotoInstanceDid = getDidFromEvents(res);
+  //     assetSupamotoInstanceDid = utils.common.getValueFromEvents(res, "ixo.iid.v1beta1.IidDocumentCreatedEvent", "did");
   //     console.log({ assetSupamotoInstanceDid });
   //     return res;
   //   }
@@ -136,6 +141,24 @@ describe("Testing the Payments module", () => {
   // testMsg("/ixo.payments.v1.MsgEffectPayment", () => Payments.EffectPayment());
 });
 
+describe("Testing entity projects flow", () => {
+  // sendFromFaucet(WalletUsers.project);
+  // let assetDid: string;
+  // testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset", async () => {
+  //   const res = await Entity.CreateEntityAsset();
+  //   assetDid = utils.common.getValueFromEvents(
+  //     res,
+  //     "ixo.iid.v1beta1.IidDocumentCreatedEvent",
+  //     "did"
+  //   );
+  //   console.log({ assetDid });
+  //   return res;
+  // });
+  // testMsg("/ixo.project.v1.MsgCreateAgent", () =>
+  //   Projects.CreateAgent(undefined, assetDid)
+  // );
+});
+
 describe("Testing the Projects module", () => {
   // testMsg("/ixo.project.v1.MsgCreateProject", () => Projects.CreateProject());
   // testMsg("/ixo.project.v1.MsgUpdateProjectStatus", () =>
@@ -162,10 +185,16 @@ describe("Testing the Bonds module", () => {
   // testMsg("/ixo.bonds.v1beta1.MsgEditBond", () => Bond.EditBond());
   // testMsg("/ixo.bonds.v1beta1.MsgBuy", () => Bond.Buy(WalletUsers.tester, 1)); // Buy one token first to hatch bond
   // testMsg("/ixo.bonds.v1beta1.MsgBuy", () => Bond.Buy(undefined, 20000));
-  // testMsg('/ixo.bonds.v1beta1.MsgSetNextAlpha', () => Bond.SetNextAlpha('520000000000000000'));
-  // testMsg('/ixo.bonds.v1beta1.MsgMakeOutcomePayment', () => Bond.MakeOutcomePayment(1000));
-  // testMsg('/ixo.bonds.v1beta1.MsgUpdateBondState', () => Bond.UpdateBondState('SETTLE'));
-  // testMsg('/ixo.bonds.v1beta1.MsgWithdrawShare', () => Bond.WithdrawShare());
+  // testMsg("/ixo.bonds.v1beta1.MsgSetNextAlpha", () =>
+  //   Bond.SetNextAlpha("520000000000000000")
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgMakeOutcomePayment", () =>
+  //   Bond.MakeOutcomePayment(1000)
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgUpdateBondState", () =>
+  //   Bond.UpdateBondState("SETTLE")
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgWithdrawShare", () => Bond.WithdrawShare());
   // testMsg('/ixo.bonds.v1beta1.MsgWithdrawReserve', () => Bond.WithdrawReserve(10)); // Not tested
   // testMsg('/ixo.bonds.v1beta1.MsgSell', () => Bond.Sell(10)); // Not tested
   // testMsg('/ixo.bonds.v1beta1.MsgSwap', () => Bond.Swap()); // Not tested
@@ -224,6 +253,68 @@ describe('Testing the Bonds module sells enabled', () => {
 	testMsg('/ixo.bonds.v1beta1.MsgWithdrawShare', () => Bond.WithdrawShare(WalletUsers.bob));
 });
 */
+
+describe("Testing the Token module", () => {
+  let contractAddress20: string;
+  let contractAddress721: string;
+  let contractAddress1155: string;
+
+  // testMsg("/ixo.token.v1beta1.MsgSetupMinter", async () => {
+  //   const res = await Token.SetupMinter();
+  //   contractAddress20 = utils.common.getValueFromEvents(
+  //     res,
+  //     "ixo.token.v1beta1.TokenMinter",
+  //     "contractAddress"
+  //   );
+  //   console.log({ contractAddress20 });
+  //   return res;
+  // });
+  // testMsg("/ixo.token.v1beta1.MsgMint", () =>
+  //   Token.MintToken(contractAddress20, "cw20")
+  // );
+
+  // testMsg("/ixo.token.v1beta1.MsgSetupMinter", async () => {
+  //   const res = await Token.SetupMinter(undefined, "cw721");
+  //   contractAddress721 = utils.common.getValueFromEvents(
+  //     res,
+  //     "ixo.token.v1beta1.TokenMinter",
+  //     "contractAddress"
+  //   );
+  //   console.log({ contractAddress721 });
+  //   return res;
+  // });
+  // testMsg("/ixo.token.v1beta1.MsgMint", () =>
+  //   Token.MintToken(contractAddress721, "cw721")
+  // );
+
+  // testMsg("/ixo.token.v1beta1.MsgSetupMinter", async () => {
+  //   const res = await Token.SetupMinter(undefined, "cw1155");
+  //   contractAddress1155 = utils.common.getValueFromEvents(
+  //     res,
+  //     "ixo.token.v1beta1.TokenMinter",
+  //     "contractAddress"
+  //   );
+  //   console.log({ contractAddress1155 });
+  //   return res;
+  // });
+  // testMsg("/ixo.token.v1beta1.MsgMint", () =>
+  //   Token.MintToken(contractAddress1155, "cw1155")
+  // );
+  // testMsg("/cosmos.authz.v1beta1.MsgGrant", () =>
+  //   Authz.MsgGrantContract(
+  //     undefined,
+  //     WalletUsers.alice,
+  //     contractAddress1155,
+  //     "cw1155"
+  //   )
+  // );
+  // testMsg("/cosmos.authz.v1beta1.MsgExec", () =>
+  //   Authz.MsgExecContract(undefined, contractAddress1155, "cw1155")
+  // );
+  // testMsg("/cosmos.authz.v1beta1.MsgRevoke", () => Authz.MsgRevokeContract());
+
+  // testMsg("/ixo.token.v1beta1.MsgTransferToken", () => Token.TransferToken());
+});
 
 describe("Testing the cosmos bank module", () => {
   // testMsg("/cosmos.bank.v1beta1.MsgSend", () => Cosmos.BankSendTrx());

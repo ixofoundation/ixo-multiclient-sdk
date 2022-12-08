@@ -1,6 +1,6 @@
 import base58 from "bs58";
-import { createClient, getUser, ixo, utils } from "./common";
-import { constants, fee, WalletUsers } from "./constants";
+import { createClient, getUser, ixo, utils } from "../helpers/common";
+import { constants, fee, WalletUsers } from "../helpers/constants";
 
 /**
  * Requires CreatePaymentTemplate to be run first to create paymentTemplateId used
@@ -25,7 +25,10 @@ export const CreateProject = async () => {
   );
 
   const tester = getUser();
-  const did = tester.did;
+  const did =
+    tester.did + "#" + base58.encode((await tester.getAccounts())[0].pubkey);
+  // const did = tester.did;
+
   const project = getUser(
     WalletUsers.project,
     constants.projectWalletType as any
@@ -73,7 +76,9 @@ export const UpdateProjectStatus = async (
   );
 
   const tester = getUser();
-  const did = tester.did;
+  const did =
+    tester.did + "#" + base58.encode((await tester.getAccounts())[0].pubkey);
+  // const did = tester.did;
 
   const project = getUser(
     WalletUsers.project,
@@ -102,21 +107,26 @@ export const UpdateProjectStatus = async (
 };
 
 /**
- * @param role one of 'SA' | ''.
+ * @param role one of 'SA' | 'EA' | 'PO'.
  */
-export const CreateAgent = async (role: string = "SA") => {
+export const CreateAgent = async (
+  role: "SA" | "EA" | "PO" = "SA",
+  projectDid: string
+) => {
   const client = await createClient(
     getUser(WalletUsers.project, constants.projectWalletType as any)
   );
 
   const tester = getUser();
-  const did = tester.did;
+  const did =
+    tester.did + "#" + base58.encode((await tester.getAccounts())[0].pubkey);
+  // const did = tester.did;
 
   const project = getUser(
     WalletUsers.project,
     constants.projectWalletType as any
   );
-  const projectDid = project.did;
+  // const projectDid = project.did;
   const projectAccount = (await project.getAccounts())[0];
 
   const message = {
@@ -147,7 +157,9 @@ export const UpdateAgent = async () => {
   );
 
   const tester = getUser();
-  const did = tester.did;
+  const did =
+    tester.did + "#" + base58.encode((await tester.getAccounts())[0].pubkey);
+  // const did = tester.did;
 
   const project = getUser(
     WalletUsers.project,

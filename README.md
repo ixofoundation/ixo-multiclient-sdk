@@ -1,38 +1,54 @@
 # @ixo/impactxclient-sdk
 
+![GitHub contributors](https://img.shields.io/github/contributors/ixofoundation/ixo-multiclient-sdk)
+![GitHub repo size](https://img.shields.io/github/repo-size/ixofoundation/ixo-multiclient-sdk)
+![Twitter Follow](https://img.shields.io/twitter/follow/ixoworld?style=social)
+
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)![Jest](https://img.shields.io/badge/Jest-323330?style=for-the-badge&logo=Jest&logoColor=white)
+
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/545047/188804067-28e67e5e-0214-4449-ab04-2e0c564a6885.svg" width="80"><br />
-    One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them
+  <img  src="images/readme_banner.png"/>
 </p>
 
-## install
+<br />
+
+<h3 align="center">
+    One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them
+</h3>
+
+<br />
+
+## Table of contents
+
+- [@ixo/impactxclient-sdk](#ixoimpactxclient-sdk)
+  - [Table of contents](#table-of-contents)
+  - [Install](#install)
+  - [Usage](#usage)
+    - [RPC Clients](#rpc-clients)
+    - [Composing Messages](#composing-messages)
+      - [IBC Messages](#ibc-messages)
+    - [Utility Functions](#utility-functions)
+  - [Connecting with Wallets and Signing Messages](#connecting-with-wallets-and-signing-messages)
+    - [Initializing the Stargate Client](#initializing-the-stargate-client)
+    - [Creating Signers](#creating-signers)
+    - [Amino Signer](#amino-signer)
+    - [Proto Signer](#proto-signer)
+    - [Broadcasting Messages](#broadcasting-messages)
+  - [Developing](#developing)
+    - [Codegen](#codegen)
+    - [Publishing](#publishing)
+  - [Credits](#credits)
+  - [Disclaimer](#disclaimer)
+
+<br />
+
+## Install
 
 ```sh
 npm install @ixo/impactxclient-sdk
 
 yarn add  @ixo/impactxclient-sdk
 ```
-
-## Table of contents
-
-- [@ixo/impactxclient-sdk](#ixoimpactxclient-sdk)
-  - [install](#install)
-  - [Table of contents](#table-of-contents)
-  - [Usage](#usage)
-    - [RPC Clients](#rpc-clients)
-    - [Composing Messages](#composing-messages)
-      - [IBC Messages](#ibc-messages)
-      - [Cosmos Messages](#cosmos-messages)
-  - [Connecting with Wallets and Signing Messages](#connecting-with-wallets-and-signing-messages)
-    - [Initializing the Stargate Client](#initializing-the-stargate-client)
-    - [Proto Signer](#proto-signer)
-    - [Broadcasting Messages](#broadcasting-messages)
-  - [Advanced Usage](#advanced-usage)
-  - [Developing](#developing)
-    - [Codegen](#codegen)
-    - [Publishing](#publishing)
-  - [Credits](#credits)
-  - [Disclaimer](#disclaimer)
 
 ## Usage
 
@@ -41,16 +57,14 @@ yarn add  @ixo/impactxclient-sdk
 ```js
 import { ixo, createQueryClient } from "@ixo/impactxclient-sdk";
 
-const { createRPCQueryClient } = ixo.ClientFactory;
-const client = await createRPCQueryClient({ rpcEndpoint: RPC_ENDPOINT });
+// BELOW METHOD NOT IMPLEMENTED YET!
+// const { createRPCQueryClient } = ixo.ClientFactory;
+// const client = await createRPCQueryClient({ rpcEndpoint: RPC_ENDPOINT });
 
 // now you can query the cosmos modules
-const balance = await client.cosmos.bank.v1beta1.allBalances({
-  address: "ixo1addresshere",
-});
-
-// you can also query the ixo modules
-const balances = await client.ixo.exchange.v1beta1.exchangeBalances();
+// const balance = await client.cosmos.bank.v1beta1.allBalances({
+//   address: "ixo1addresshere",
+// });
 
 We added a custom queryClient that includes the cosmos modules and ixo modules as well as custom queries
 
@@ -61,22 +75,25 @@ const balance = await client.cosmos.bank.v1beta1.allBalances({
   address: "ixo1addresshere",
 });
 
+// you can also query the ixo modules
+const balances = await client.ixo.exchange.v1beta1.exchangeBalances();
+
 
 ```
 
 ### Composing Messages
 
-Import the `ixo` object from `ixo`.
+Import the `ixo` object from `@ixo/impactxclient-sdk`.
 
 ```js
 import { ixo } from "@ixo/impactxclient-sdk";
 
-const { createSpotLimitOrder, createSpotMarketOrder, deposit } =
-  ixo.exchange.v1beta1.MessageComposer.withTypeUrl;
+// BELOW METHOD NOT IMPLEMENTED YET! READ COMMENT BELOW
+// const { createSpotLimitOrder, createSpotMarketOrder, deposit } =
+//   ixo.exchange.v1beta1.MessageComposer.withTypeUrl;
 ```
 
-Because of the current structure of ixo's blockchain, we had to modify the telescope generation of ts files, thus the above example wont work. For the ixo namespace
-please define message using the types from the namespace itself and not from the MessageComposer, eg:
+Because of the current structure of ixo's blockchain, we had to modify the telescope generation of ts files, thus the above example wont work. You can define a message using the types from the namespace itself and not from the MessageComposer, eg:
 
 ```js
 import { ixo } from "@ixo/impactxclient-sdk";
@@ -111,25 +128,25 @@ Same note from [Composing Messages](#composing-messages) above apply about msg c
 ```js
 import { ibc } from "@ixo/impactxclient-sdk";
 
-const { transfer } = ibc.applications.transfer.v1.MessageComposer.withTypeUrl;
+// DESTRUCTURE MSG FROM NAMESPACE INSTEAD OF USING MessageComposer
+// const { transfer } = ibc.applications.transfer.v1.MessageComposer.withTypeUrl;
 ```
 
-#### Cosmos Messages
+### Utility Functions
 
-Same note from [Composing Messages](#composing-messages) above apply about msg creation
-
-````js
-import { cosmos } from "@ixo/impactxclient-sdk";
-
-const { multiSend, send } = cosmos.bank.v1beta1.MessageComposer.fromPartial;
-
-## Connecting with Wallets and Signing Messages
-
-We added a custom Stargate Signing Client that can be exported and creatable under createSigningClient, please note it only support Direct Proto signing through the rpc endpoint! It already has all the proto defininitions in the registry for ixo modules.
+Import the `utils` object from `@ixo/impactxclient-sdk`.
+From that you can destructure utlity functions to help with using the sdk.
 
 ```js
-import { createSigningClient } from "@ixo/impactxclient-sdk";
+import { utils } from "@ixo/impactxclient-sdk";
+
+const conversionUtils = utils.conversions;
+const didUtils = utils.did;
+const mnemonicUtils = utils.mnemonic;
+const addressUtils = utils.address;
 ```
+
+## Connecting with Wallets and Signing Messages
 
 ⚡️ For web interfaces, we recommend using [cosmos-kit](https://github.com/cosmology-tech/cosmos-kit). Continue below to see how to manually construct signers and clients.
 
@@ -137,6 +154,15 @@ Here are the docs on [creating signers](https://github.com/cosmology-tech/cosmos
 
 ### Initializing the Stargate Client
 
+We added a custom Stargate Signing Client that can be exported and creatable under createSigningClient, please note it only support Direct Proto signing through the rpc endpoint! It already has all the proto defininitions in the registry for ixo modules.
+
+```js
+import { createSigningClient } from "@ixo/impactxclient-sdk";
+
+const signingClient = await createSigningClient(RPC_URL, offlineWallet);
+```
+
+THE FOLLOWING IS JUST ADVICE AS YOU CAN INSTEAD USE THE createSigningClient AS DESCRIBED ABOVE</br>
 Use `getSigningixoClient` to get your `SigningStargateClient`, with the proto/amino messages full-loaded. No need to manually add amino types, just require and initialize the client:
 
 ```js
@@ -146,7 +172,7 @@ const stargateClient = await getSigningixoClient({
   rpcEndpoint,
   signer, // OfflineSigner
 });
-````
+```
 
 ### Creating Signers
 
@@ -158,6 +184,7 @@ To broadcast messages, you can create signers with a variety of options:
 
 ### Amino Signer
 
+THE CURRENT SDK DOES NOT INCLUDE AMINO TYPES< PLEASE USE ONLY PROTO FOR NOW</br>
 Likely you'll want to use the Amino, so unless you need proto, you should use this one:
 
 ```js
@@ -188,6 +215,9 @@ const signer = await getOfflineSigner({
 
 Now that you have your `stargateClient`, you can broadcast messages:
 
+DESTRUCTURE MSG FROM NAMESPACE INSTEAD OF USING MessageComposer AS DESCRIBED IN [Composing Messages](#composing-messages)</br>
+The `stargateClient.signAndBroadcast(address, [msg], fee)` can still be used as in example
+
 ```js
 const { send } = cosmos.bank.v1beta1.MessageComposer.withTypeUrl;
 
@@ -212,54 +242,6 @@ const fee: StdFee = {
   gas: "86364",
 };
 const response = await stargateClient.signAndBroadcast(address, [msg], fee);
-```
-
-## Advanced Usage
-
-If you want to create a stargate client, please use the function createClient that is exported from package as it will create a stargate client for you with all the needed
-registries included and ed key signing capabilities, please note taht only direct signing is supported and not amino signing, so pass in a OfflineDirectSigner when createing client.
-
-If you want to manually construct a stargate client
-
-```js
-import { OfflineSigner, GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
-
-import {
-    cosmosAminoConverters,
-    cosmosProtoRegistry,
-    cosmwasmAminoConverters,
-    cosmwasmProtoRegistry,
-    ibcProtoRegistry,
-    ibcAminoConverters,
-    ixoAminoConverters,
-    ixoProtoRegistry
-} from 'ixo';
-
-const signer: OfflineSigner = /* create your signer (see above)  */
-const rpcEndpint = 'https://rpc.cosmos.directory/ixo'; // or another URL
-
-const protoRegistry: ReadonlyArray<[string, GeneratedType]> = [
-    ...cosmosProtoRegistry,
-    ...cosmwasmProtoRegistry,
-    ...ibcProtoRegistry,
-    ...ixoProtoRegistry
-];
-
-const aminoConverters = {
-    ...cosmosAminoConverters,
-    ...cosmwasmAminoConverters,
-    ...ibcAminoConverters,
-    ...ixoAminoConverters
-};
-
-const registry = new Registry(protoRegistry);
-const aminoTypes = new AminoTypes(aminoConverters);
-
-const stargateClient = await SigningStargateClient.connectWithSigner(rpcEndpoint, signer, {
-    registry,
-    aminoTypes
-});
 ```
 
 ## Developing

@@ -1,16 +1,16 @@
-import { TokenDoc, TokenDocSDKType, Params, ParamsSDKType } from "./token";
+import { TokenMinter, TokenMinterSDKType, Params, ParamsSDKType } from "./token";
 import * as _m0 from "protobufjs/minimal";
 /** GenesisState defines the project module's genesis state. */
 export interface GenesisState {
-    tokenDocs: TokenDoc[];
+    tokenMinters: TokenMinter[];
     /** repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"account_maps\""]; */
-    params?: Params;
+    Params?: Params;
 }
 /** GenesisState defines the project module's genesis state. */
 export interface GenesisStateSDKType {
-    token_docs: TokenDocSDKType[];
+    tokenMinters: TokenMinterSDKType[];
     /** repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"account_maps\""]; */
-    params?: ParamsSDKType;
+    Params?: ParamsSDKType;
 }
 export declare const GenesisState: {
     encode(message: GenesisState, writer?: _m0.Writer): _m0.Writer;

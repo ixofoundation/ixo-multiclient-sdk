@@ -1,25 +1,28 @@
+import { TokenMinter, TokenMinterSDKType } from "./token";
 import * as _m0 from "protobufjs/minimal";
 export interface QueryTokenListRequest {
-    tokenType: string;
-    tokenStatus: string;
+    minterDid: string;
 }
 export interface QueryTokenListRequestSDKType {
-    token_type: string;
-    token_status: string;
+    minter_did: string;
 }
 /** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
 export interface QueryTokenListResponse {
+    contracts: TokenMinter[];
 }
 /** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
 export interface QueryTokenListResponseSDKType {
+    contracts: TokenMinterSDKType[];
 }
 /** QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC method. */
 export interface QueryTokenDocRequest {
-    tokenDid: string;
+    minterDid: string;
+    contractAddress: string;
 }
 /** QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC method. */
 export interface QueryTokenDocRequestSDKType {
-    token_did: string;
+    minter_did: string;
+    contract_address: string;
 }
 /** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
 export interface QueryTokenDocResponse {
@@ -59,11 +62,11 @@ export declare const QueryTokenListRequest: {
     fromPartial(object: Partial<QueryTokenListRequest>): QueryTokenListRequest;
 };
 export declare const QueryTokenListResponse: {
-    encode(_: QueryTokenListResponse, writer?: _m0.Writer): _m0.Writer;
+    encode(message: QueryTokenListResponse, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenListResponse;
-    fromJSON(_: any): QueryTokenListResponse;
-    toJSON(_: QueryTokenListResponse): unknown;
-    fromPartial(_: Partial<QueryTokenListResponse>): QueryTokenListResponse;
+    fromJSON(object: any): QueryTokenListResponse;
+    toJSON(message: QueryTokenListResponse): unknown;
+    fromPartial(object: Partial<QueryTokenListResponse>): QueryTokenListResponse;
 };
 export declare const QueryTokenDocRequest: {
     encode(message: QueryTokenDocRequest, writer?: _m0.Writer): _m0.Writer;

@@ -52,7 +52,7 @@ import { SignMode } from "cosmjs-types/cosmos/tx/signing/v1beta1/signing";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 
 import { encodePubkey } from "./customPubkey";
-import { accountFromAny } from "./EdAccountHandler";
+import { accountFromAny } from "./edAccountHandler";
 import { ixo } from "../codegen";
 import { setupTxExtension } from "./customTxQueries";
 
@@ -640,6 +640,16 @@ export const createRegistry = (): Registry => {
   myRegistry.register(
     "/ixo.bonds.v1beta1.MsgWithdrawReserve",
     ixo.bonds.v1beta1.MsgWithdrawReserve
+  );
+  // Token module
+  myRegistry.register(
+    "/ixo.token.v1beta1.MsgSetupMinter",
+    ixo.token.v1beta1.MsgSetupMinter
+  );
+  myRegistry.register("/ixo.token.v1beta1.MsgMint", ixo.token.v1beta1.MsgMint);
+  myRegistry.register(
+    "/ixo.token.v1beta1.MsgTransferToken",
+    ixo.token.v1beta1.MsgTransferToken
   );
 
   return myRegistry;

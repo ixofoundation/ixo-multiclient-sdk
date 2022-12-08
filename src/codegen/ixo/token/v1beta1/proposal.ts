@@ -1,49 +1,60 @@
 import * as _m0 from "protobufjs/minimal";
 import { Long, isSet } from "../../../helpers";
-export interface InitializeTokenContract {
-  NftContractCodeId: Long;
-  NftMinterAddress: string;
+export interface SetTokenContractCodes {
+  cw20ContractCode: Long;
+  cw721ContractCode: Long;
+  ixo1155ContractCode: Long;
 }
-export interface InitializeTokenContractSDKType {
-  NftContractCodeId: Long;
-  NftMinterAddress: string;
+export interface SetTokenContractCodesSDKType {
+  cw20ContractCode: Long;
+  cw721ContractCode: Long;
+  ixo1155ContractCode: Long;
 }
 
-function createBaseInitializeTokenContract(): InitializeTokenContract {
+function createBaseSetTokenContractCodes(): SetTokenContractCodes {
   return {
-    NftContractCodeId: Long.UZERO,
-    NftMinterAddress: ""
+    cw20ContractCode: Long.UZERO,
+    cw721ContractCode: Long.UZERO,
+    ixo1155ContractCode: Long.UZERO
   };
 }
 
-export const InitializeTokenContract = {
-  encode(message: InitializeTokenContract, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.NftContractCodeId.isZero()) {
-      writer.uint32(8).uint64(message.NftContractCodeId);
+export const SetTokenContractCodes = {
+  encode(message: SetTokenContractCodes, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (!message.cw20ContractCode.isZero()) {
+      writer.uint32(8).uint64(message.cw20ContractCode);
     }
 
-    if (message.NftMinterAddress !== "") {
-      writer.uint32(18).string(message.NftMinterAddress);
+    if (!message.cw721ContractCode.isZero()) {
+      writer.uint32(16).uint64(message.cw721ContractCode);
+    }
+
+    if (!message.ixo1155ContractCode.isZero()) {
+      writer.uint32(24).uint64(message.ixo1155ContractCode);
     }
 
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): InitializeTokenContract {
+  decode(input: _m0.Reader | Uint8Array, length?: number): SetTokenContractCodes {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseInitializeTokenContract();
+    const message = createBaseSetTokenContractCodes();
 
     while (reader.pos < end) {
       const tag = reader.uint32();
 
       switch (tag >>> 3) {
         case 1:
-          message.NftContractCodeId = (reader.uint64() as Long);
+          message.cw20ContractCode = (reader.uint64() as Long);
           break;
 
         case 2:
-          message.NftMinterAddress = reader.string();
+          message.cw721ContractCode = (reader.uint64() as Long);
+          break;
+
+        case 3:
+          message.ixo1155ContractCode = (reader.uint64() as Long);
           break;
 
         default:
@@ -55,24 +66,27 @@ export const InitializeTokenContract = {
     return message;
   },
 
-  fromJSON(object: any): InitializeTokenContract {
+  fromJSON(object: any): SetTokenContractCodes {
     return {
-      NftContractCodeId: isSet(object.NftContractCodeId) ? Long.fromValue(object.NftContractCodeId) : Long.UZERO,
-      NftMinterAddress: isSet(object.NftMinterAddress) ? String(object.NftMinterAddress) : ""
+      cw20ContractCode: isSet(object.cw20ContractCode) ? Long.fromValue(object.cw20ContractCode) : Long.UZERO,
+      cw721ContractCode: isSet(object.cw721ContractCode) ? Long.fromValue(object.cw721ContractCode) : Long.UZERO,
+      ixo1155ContractCode: isSet(object.ixo1155ContractCode) ? Long.fromValue(object.ixo1155ContractCode) : Long.UZERO
     };
   },
 
-  toJSON(message: InitializeTokenContract): unknown {
+  toJSON(message: SetTokenContractCodes): unknown {
     const obj: any = {};
-    message.NftContractCodeId !== undefined && (obj.NftContractCodeId = (message.NftContractCodeId || Long.UZERO).toString());
-    message.NftMinterAddress !== undefined && (obj.NftMinterAddress = message.NftMinterAddress);
+    message.cw20ContractCode !== undefined && (obj.cw20ContractCode = (message.cw20ContractCode || Long.UZERO).toString());
+    message.cw721ContractCode !== undefined && (obj.cw721ContractCode = (message.cw721ContractCode || Long.UZERO).toString());
+    message.ixo1155ContractCode !== undefined && (obj.ixo1155ContractCode = (message.ixo1155ContractCode || Long.UZERO).toString());
     return obj;
   },
 
-  fromPartial(object: Partial<InitializeTokenContract>): InitializeTokenContract {
-    const message = createBaseInitializeTokenContract();
-    message.NftContractCodeId = object.NftContractCodeId !== undefined && object.NftContractCodeId !== null ? Long.fromValue(object.NftContractCodeId) : Long.UZERO;
-    message.NftMinterAddress = object.NftMinterAddress ?? "";
+  fromPartial(object: Partial<SetTokenContractCodes>): SetTokenContractCodes {
+    const message = createBaseSetTokenContractCodes();
+    message.cw20ContractCode = object.cw20ContractCode !== undefined && object.cw20ContractCode !== null ? Long.fromValue(object.cw20ContractCode) : Long.UZERO;
+    message.cw721ContractCode = object.cw721ContractCode !== undefined && object.cw721ContractCode !== null ? Long.fromValue(object.cw721ContractCode) : Long.UZERO;
+    message.ixo1155ContractCode = object.ixo1155ContractCode !== undefined && object.ixo1155ContractCode !== null ? Long.fromValue(object.ixo1155ContractCode) : Long.UZERO;
     return message;
   }
 

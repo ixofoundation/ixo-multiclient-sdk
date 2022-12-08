@@ -14,7 +14,7 @@ export const createQueryClient = async (rpcEndpoint: string) => {
   ).ibc.ClientFactory.createRPCQueryClient({
     rpcEndpoint,
   });
-  const queryCustom = await (
+  const queryEntity = await (
     await import("./entity")
   ).createRpcQueryExtension(rpcEndpoint);
 
@@ -24,7 +24,7 @@ export const createQueryClient = async (rpcEndpoint: string) => {
     ...queryIbc,
     ...queryCosmos,
     custom: {
-      ...queryCustom,
+      ...queryEntity,
     },
   };
 };

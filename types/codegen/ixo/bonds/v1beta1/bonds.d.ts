@@ -53,6 +53,7 @@ export interface Bond {
     outcomePayment: string;
     state: string;
     bondDid: string;
+    oracleDid: string;
 }
 /** Bond defines a token bonding curve type with all of its parameters. */
 export interface BondSDKType {
@@ -83,6 +84,7 @@ export interface BondSDKType {
     outcome_payment: string;
     state: string;
     bond_did: string;
+    oracle_did: string;
 }
 /**
  * BaseOrder defines a base order type. It contains all the necessary fields for specifying
