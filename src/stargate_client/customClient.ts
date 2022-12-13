@@ -15,32 +15,19 @@ import {
   TxBodyEncodeObject,
 } from "@cosmjs/proto-signing";
 import {
-  AminoConverters,
   AminoTypes,
   DeliverTxResponse,
   SignerData,
-  SigningStargateClientOptions,
-  StargateClient,
   defaultRegistryTypes,
   GasPrice,
   calculateFee,
   QueryClient,
-} from "@cosmjs/stargate";
-import {
-  createAuthzAminoConverters,
   MsgDelegateEncodeObject,
   MsgSendEncodeObject,
   MsgUndelegateEncodeObject,
   MsgWithdrawDelegatorRewardEncodeObject,
-  createBankAminoConverters,
-  createDistributionAminoConverters,
-  createFreegrantAminoConverters,
-  createGovAminoConverters,
-  createIbcAminoConverters,
-  createStakingAminoConverters,
-  createVestingAminoConverters,
-} from "@cosmjs/stargate/build/modules";
-import { HttpEndpoint, Tendermint34Client } from "@cosmjs/tendermint-rpc";
+} from "@cosmjs/stargate";
+import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { assert, assertDefined } from "@cosmjs/utils";
 import { Coin } from "cosmjs-types/cosmos/base/v1beta1/coin";
 import { MsgWithdrawDelegatorReward } from "cosmjs-types/cosmos/distribution/v1beta1/tx";
@@ -55,23 +42,33 @@ import { encodePubkey } from "./customPubkey";
 import { accountFromAny } from "./edAccountHandler";
 import { ixo } from "../codegen";
 import { setupTxExtension } from "./customTxQueries";
+import { StargateClient, StargateClientOptions } from "./customStargateClient";
+
+export interface SigningStargateClientOptions extends StargateClientOptions {
+  readonly registry?: Registry;
+  readonly aminoTypes?: AminoTypes;
+  readonly prefix?: string;
+  readonly broadcastTimeoutMs?: number;
+  readonly broadcastPollIntervalMs?: number;
+  readonly gasPrice?: GasPrice;
+}
 
 function createDefaultRegistry(): Registry {
   return new Registry(defaultRegistryTypes);
 }
 
-function createDefaultTypes(prefix: string): AminoConverters {
-  return {
-    ...createAuthzAminoConverters(),
-    ...createBankAminoConverters(),
-    ...createDistributionAminoConverters(),
-    ...createGovAminoConverters(),
-    ...createStakingAminoConverters(prefix),
-    ...createIbcAminoConverters(),
-    ...createFreegrantAminoConverters(),
-    ...createVestingAminoConverters(),
-  };
-}
+// function createDefaultTypes(prefix: string) {
+//   return {
+//     ...createAuthzAminoConverters(),
+//     ...createBankAminoConverters(),
+//     ...createDistributionAminoConverters(),
+//     ...createGovAminoConverters(),
+//     ...createStakingAminoConverters(prefix),
+//     ...createIbcAminoConverters(),
+//     ...createFreegrantAminoConverters(),
+//     ...createVestingAminoConverters(),
+//   };
+// }
 
 export class SigningStargateClient extends StargateClient {
   public readonly registry: Registry;
@@ -86,7 +83,7 @@ export class SigningStargateClient extends StargateClient {
   private tendermintClient: Tendermint34Client;
 
   public static async connectWithSigner(
-    endpoint: string | HttpEndpoint,
+    endpoint: string,
     signer: OfflineSigner,
     options: SigningStargateClientOptions = {},
     ignoreGetSequence?: boolean
@@ -130,10 +127,11 @@ export class SigningStargateClient extends StargateClient {
   ) {
     super(tmClient, options);
     // TODO: do we really want to set a default here? Ideally we could get it from the signer such that users only have to set it once.
-    const prefix = options.prefix ?? "cosmos";
+    const prefix = options.prefix ?? "ixo";
     const {
       registry = createDefaultRegistry(),
-      aminoTypes = new AminoTypes(createDefaultTypes(prefix)),
+      // aminoTypes = new AminoTypes(createDefaultTypes(prefix)),
+      aminoTypes,
     } = options;
     this.tendermintClient = tmClient;
     this.registry = registry;

@@ -10,9 +10,14 @@ import {
   testMsg,
   testQry,
 } from "./helpers/common";
-import { generateConstants, WalletUsers } from "./helpers/constants";
+import {
+  generateConstants,
+  generateNewConstant,
+  WalletUsers,
+} from "./helpers/constants";
 import * as Bond from "./modules/Bond";
 import * as Cosmos from "./modules/Cosmos";
+import * as Gov from "./modules/Gov";
 import * as Ibc from "./modules/Ibc";
 import * as Entity from "./modules/Entity";
 import * as Iid from "./modules/Iid";
@@ -98,7 +103,11 @@ describe("Testing the entity module", () => {
   //   "/ixo.entity.v1beta1.MsgCreateEntity asset class supamoto",
   //   async () => {
   //     const res = await Entity.CreateEntityAssetSupamoto(assetDid);
-  //     assetSupamotoDid = utils.common.getValueFromEvents(res, "ixo.iid.v1beta1.IidDocumentCreatedEvent", "did");
+  //     assetSupamotoDid = utils.common.getValueFromEvents(
+  //       res,
+  //       "ixo.iid.v1beta1.IidDocumentCreatedEvent",
+  //       "did"
+  //     );
   //     console.log({ assetSupamotoDid });
   //     return res;
   //   }
@@ -110,7 +119,11 @@ describe("Testing the entity module", () => {
   //     const res = await Entity.CreateEntityAssetSupamotoInstance(
   //       assetSupamotoDid
   //     );
-  //     assetSupamotoInstanceDid = utils.common.getValueFromEvents(res, "ixo.iid.v1beta1.IidDocumentCreatedEvent", "did");
+  //     assetSupamotoInstanceDid = utils.common.getValueFromEvents(
+  //       res,
+  //       "ixo.iid.v1beta1.IidDocumentCreatedEvent",
+  //       "did"
+  //     );
   //     console.log({ assetSupamotoInstanceDid });
   //     return res;
   //   }
@@ -200,59 +213,133 @@ describe("Testing the Bonds module", () => {
   // testMsg('/ixo.bonds.v1beta1.MsgSwap', () => Bond.Swap()); // Not tested
 });
 
-/*
-describe('Testing the Bonds module sells disabled', () => {
-	beforeAll(() => generateNewWallet(WalletUsers.bond));
-	testMsg('/ixo.bonds.v1beta1.MsgCreateBond', () => Bond.CreateBond(false));
-	testMsg('/ixo.bonds.v1beta1.MsgEditBond', () => Bond.EditBond());
-	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.tester, 400000));
-	// Withdrawing of reserve during HATCH state not possible...
-	testMsg('/ixo.bonds.v1beta1.MsgWithdrawReserve', () => Bond.WithdrawReserve(WalletUsers.alice, 10), false);
-	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.alice, 400000));
-	// Cannot buy 200001 as d0 is 1mil and must buy exact amount to hatch bond
-	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.bob, 200001), false);
-	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.bob, 200000));
-	testMsg('/ixo.bonds.v1beta1.MsgWithdrawReserve', () => Bond.WithdrawReserve(WalletUsers.tester, 400000));
-	testMsg('/ixo.bonds.v1beta1.MsgSetNextAlpha', () => Bond.SetNextAlpha('510000000000000000'));
-	testMsg('/ixo.bonds.v1beta1.MsgWithdrawReserve', () => Bond.WithdrawReserve(WalletUsers.tester, 5000));
-	// Cannot withdraw 595001res due to insufficient funds...
-	testMsg('/ixo.bonds.v1beta1.MsgWithdrawReserve', () => Bond.WithdrawReserve(WalletUsers.tester, 595001), false);
-	testMsg('/ixo.bonds.v1beta1.MsgSetNextAlpha', () => Bond.SetNextAlpha('400000000000000000'));
-	// Cannot change public alpha 0.4->0.6...
-	testMsg('/ixo.bonds.v1beta1.MsgSetNextAlpha', () => Bond.SetNextAlpha('600000000000000000'), false);
-	// Cannot sell because sells are disabled...
-	testMsg('/ixo.bonds.v1beta1.MsgSell', () => Bond.Sell(WalletUsers.alice, 10), false);
-	testMsg('/ixo.bonds.v1beta1.MsgMakeOutcomePayment', () => Bond.MakeOutcomePayment(8000000));
-	testMsg('/ixo.bonds.v1beta1.MsgUpdateBondState', () => Bond.UpdateBondState('SETTLE'));
-	testMsg('/ixo.bonds.v1beta1.MsgWithdrawShare', () => Bond.WithdrawShare(WalletUsers.alice));
-	testMsg('/ixo.bonds.v1beta1.MsgWithdrawShare', () => Bond.WithdrawShare(WalletUsers.bob));
+describe("Testing the Bonds module sells disabled", () => {
+  // beforeAll(() => {
+  //   generateNewConstant("bondToken");
+  //   return generateNewWallet(WalletUsers.bond);
+  // });
+  // testMsg("/ixo.bonds.v1beta1.MsgCreateBond", () => Bond.CreateBond(false));
+  // testMsg("/ixo.bonds.v1beta1.MsgEditBond", () => Bond.EditBond());
+  // testMsg("/ixo.bonds.v1beta1.MsgBuy", () =>
+  //   Bond.Buy(WalletUsers.tester, 400000)
+  // );
+  // // Withdrawing of reserve during HATCH state not possible...
+  // testMsg(
+  //   "/ixo.bonds.v1beta1.MsgWithdrawReserve",
+  //   () => Bond.WithdrawReserve(WalletUsers.alice, 10),
+  //   false
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgBuy", () =>
+  //   Bond.Buy(WalletUsers.alice, 400000)
+  // );
+  // // Cannot buy 200001 as d0 is 1mil and must buy exact amount to hatch bond
+  // testMsg(
+  //   "/ixo.bonds.v1beta1.MsgBuy",
+  //   () => Bond.Buy(WalletUsers.bob, 200001),
+  //   false
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgBuy", () => Bond.Buy(WalletUsers.bob, 200000));
+  // testMsg("/ixo.bonds.v1beta1.MsgWithdrawReserve", () =>
+  //   Bond.WithdrawReserve(WalletUsers.tester, 400000)
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgSetNextAlpha", () =>
+  //   Bond.SetNextAlpha("510000000000000000")
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgWithdrawReserve", () =>
+  //   Bond.WithdrawReserve(WalletUsers.tester, 5000)
+  // );
+  // // Cannot withdraw 595001res due to insufficient funds...
+  // testMsg(
+  //   "/ixo.bonds.v1beta1.MsgWithdrawReserve",
+  //   () => Bond.WithdrawReserve(WalletUsers.tester, 595001),
+  //   false
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgSetNextAlpha", () =>
+  //   Bond.SetNextAlpha("400000000000000000")
+  // );
+  // // Cannot change public alpha 0.4->0.6...
+  // testMsg(
+  //   "/ixo.bonds.v1beta1.MsgSetNextAlpha",
+  //   () => Bond.SetNextAlpha("600000000000000000"),
+  //   false
+  // );
+  // // Cannot sell because sells are disabled...
+  // testMsg(
+  //   "/ixo.bonds.v1beta1.MsgSell",
+  //   () => Bond.Sell(WalletUsers.alice, 10),
+  //   false
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgMakeOutcomePayment", () =>
+  //   Bond.MakeOutcomePayment(8000000)
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgUpdateBondState", () =>
+  //   Bond.UpdateBondState("SETTLE")
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgWithdrawShare", () =>
+  //   Bond.WithdrawShare(WalletUsers.alice)
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgWithdrawShare", () =>
+  //   Bond.WithdrawShare(WalletUsers.bob)
+  // );
 });
-*/
 
-/*
-describe('Testing the Bonds module sells enabled', () => {
-	beforeAll(() => generateNewWallet(WalletUsers.bond));
-	testMsg('/ixo.bonds.v1beta1.MsgCreateBond', () => Bond.CreateBond(true));
-	testMsg('/ixo.bonds.v1beta1.MsgEditBond', () => Bond.EditBond());
-	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.tester, 400000));
-	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.alice, 400000));
-	// Cannot buy 200001 as d0 is 1mil and must buy exact amount to hatch bond
-	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.bob, 200001), false);
-	testMsg('/ixo.bonds.v1beta1.MsgBuy', () => Bond.Buy(WalletUsers.bob, 200000));
-	// Cannot withdraw reserve as disabled
-	testMsg('/ixo.bonds.v1beta1.MsgWithdrawReserve', () => Bond.WithdrawReserve(WalletUsers.tester, 400000), false);
-	testMsg('/ixo.bonds.v1beta1.MsgSetNextAlpha', () => Bond.SetNextAlpha('510000000000000000'));
-	testMsg('/ixo.bonds.v1beta1.MsgSetNextAlpha', () => Bond.SetNextAlpha('400000000000000000'));
-	// Cannot change public alpha 0.4->0.6...
-	testMsg('/ixo.bonds.v1beta1.MsgSetNextAlpha', () => Bond.SetNextAlpha('600000000000000000'), false);
-	testMsg('/ixo.bonds.v1beta1.MsgSell', () => Bond.Sell(WalletUsers.alice, 400000));
-	testMsg('/ixo.bonds.v1beta1.MsgMakeOutcomePayment', () => Bond.MakeOutcomePayment(8000000));
-	testMsg('/ixo.bonds.v1beta1.MsgUpdateBondState', () => Bond.UpdateBondState('SETTLE'));
-	// Cannot withdraw sahre as sold all tokens
-	testMsg('/ixo.bonds.v1beta1.MsgWithdrawShare', () => Bond.WithdrawShare(WalletUsers.alice), false);
-	testMsg('/ixo.bonds.v1beta1.MsgWithdrawShare', () => Bond.WithdrawShare(WalletUsers.bob));
+describe("Testing the Bonds module sells enabled", () => {
+  // beforeAll(() => {
+  //   generateNewConstant("bondToken");
+  //   return generateNewWallet(WalletUsers.bond);
+  // });
+  // testMsg("/ixo.bonds.v1beta1.MsgCreateBond", () => Bond.CreateBond(true));
+  // testMsg("/ixo.bonds.v1beta1.MsgEditBond", () => Bond.EditBond());
+  // testMsg("/ixo.bonds.v1beta1.MsgBuy", () =>
+  //   Bond.Buy(WalletUsers.tester, 400000)
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgBuy", () =>
+  //   Bond.Buy(WalletUsers.alice, 400000)
+  // );
+  // // Cannot buy 200001 as d0 is 1mil and must buy exact amount to hatch bond
+  // testMsg(
+  //   "/ixo.bonds.v1beta1.MsgBuy",
+  //   () => Bond.Buy(WalletUsers.bob, 200001),
+  //   false
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgBuy", () => Bond.Buy(WalletUsers.bob, 200000));
+  // // Cannot withdraw reserve as disabled
+  // testMsg(
+  //   "/ixo.bonds.v1beta1.MsgWithdrawReserve",
+  //   () => Bond.WithdrawReserve(WalletUsers.tester, 400000),
+  //   false
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgSetNextAlpha", () =>
+  //   Bond.SetNextAlpha("510000000000000000")
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgSetNextAlpha", () =>
+  //   Bond.SetNextAlpha("400000000000000000")
+  // );
+  // // Cannot change public alpha 0.4->0.6...
+  // testMsg(
+  //   "/ixo.bonds.v1beta1.MsgSetNextAlpha",
+  //   () => Bond.SetNextAlpha("600000000000000000"),
+  //   false
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgSell", () =>
+  //   Bond.Sell(WalletUsers.alice, 400000)
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgMakeOutcomePayment", () =>
+  //   Bond.MakeOutcomePayment(8000000)
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgUpdateBondState", () =>
+  //   Bond.UpdateBondState("SETTLE")
+  // );
+  // // Cannot withdraw sahre as sold all tokens
+  // testMsg(
+  //   "/ixo.bonds.v1beta1.MsgWithdrawShare",
+  //   () => Bond.WithdrawShare(WalletUsers.alice),
+  //   false
+  // );
+  // testMsg("/ixo.bonds.v1beta1.MsgWithdrawShare", () =>
+  //   Bond.WithdrawShare(WalletUsers.bob)
+  // );
 });
-*/
 
 describe("Testing the Token module", () => {
   let contractAddress20: string;
@@ -318,6 +405,10 @@ describe("Testing the Token module", () => {
 
 describe("Testing the cosmos bank module", () => {
   // testMsg("/cosmos.bank.v1beta1.MsgSend", () => Cosmos.BankSendTrx());
+});
+
+describe("Testing the gov module", () => {
+  // testMsg("/cosmos.gov.v1.MsgSubmitProposal", () => Gov.MsgSubmitProposal());
 });
 
 describe("Testing the ibc transfer module", () => {

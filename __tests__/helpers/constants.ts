@@ -20,7 +20,7 @@ export enum WalletUsers {
 
 export let constants: ReturnType<typeof generateConstants>;
 
-export const generateConstants = () => {
+export const generateConstants = (setGlobal = true) => {
   const newConstants = {
     // payments
     paymentTemplateId: `payment:template:${utils.common.generateId(10)}`,
@@ -48,10 +48,19 @@ export const generateConstants = () => {
     linkedResourceId: utils.common.generateId(10),
     serviceId: utils.common.generateId(10),
   };
-  constants = newConstants;
+  if (setGlobal) constants = newConstants;
   // Logs constants for tester to see details for constants
-  console.log({ constants });
+  if (setGlobal) console.log({ constants });
   return newConstants;
+};
+
+export const generateNewConstant = async (constant: keyof typeof constants) => {
+  const newConstants = generateConstants(false);
+  const newConstant = newConstants[constant];
+  // @ts-ignore
+  constants[constant] = newConstant;
+  console.log({ constant: newConstant });
+  return newConstant;
 };
 
 export const fee = {
