@@ -70,5 +70,5 @@ export const fee = {
       amount: "100000",
     },
   ],
-  gas: "3000000",
+  gas: "4000000",
 };

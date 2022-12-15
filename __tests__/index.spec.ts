@@ -85,6 +85,12 @@ describe("Testing the iid module", () => {
   // testMsg("/ixo.iid.v1beta1.MsgDeleteService", () => Iid.DeleteService());
 });
 
+describe("Testing the gov module", () => {
+  // testMsg("/cosmos.gov.v1beta1.MsgSubmitProposal", () =>
+  //   Gov.MsgSubmitProposal()
+  // );
+});
+
 describe("Testing the entity module", () => {
   // let assetDid: string;
   // testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset", async () => {
@@ -405,10 +411,6 @@ describe("Testing the Token module", () => {
 
 describe("Testing the cosmos bank module", () => {
   // testMsg("/cosmos.bank.v1beta1.MsgSend", () => Cosmos.BankSendTrx());
-});
-
-describe("Testing the gov module", () => {
-  // testMsg("/cosmos.gov.v1.MsgSubmitProposal", () => Gov.MsgSubmitProposal());
 });
 
 describe("Testing the ibc transfer module", () => {

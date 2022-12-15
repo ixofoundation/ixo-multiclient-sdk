@@ -1,5 +1,5 @@
 import { pubkeyToRawAddress } from "@cosmjs/tendermint-rpc";
-import { toBech32 } from "@cosmjs/encoding";
+import { Bech32 } from "@cosmjs/encoding";
 import base58 from "bs58";
 
 /**
@@ -12,5 +12,5 @@ export const pubKeyToAddress = (
 ) => {
   const parsedPubKey =
     typeof pubKey === "string" ? base58.decode(pubKey) : pubKey;
-  return toBech32(prefix, pubkeyToRawAddress(type, parsedPubKey));
+  return Bech32.encode(prefix, pubkeyToRawAddress(type, parsedPubKey));
 };

@@ -18,7 +18,6 @@ import {
   AminoTypes,
   DeliverTxResponse,
   SignerData,
-  defaultRegistryTypes,
   GasPrice,
   calculateFee,
   QueryClient,
@@ -37,12 +36,11 @@ import {
 } from "cosmjs-types/cosmos/staking/v1beta1/tx";
 import { SignMode } from "cosmjs-types/cosmos/tx/signing/v1beta1/signing";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
-
 import { encodePubkey } from "./customPubkey";
 import { accountFromAny } from "./edAccountHandler";
-import { ixo } from "../codegen";
 import { setupTxExtension } from "./customTxQueries";
 import { StargateClient, StargateClientOptions } from "./customStargateClient";
+import { createRegistry, defaultRegistryTypes } from "./customRegistries";
 
 export interface SigningStargateClientOptions extends StargateClientOptions {
   readonly registry?: Registry;
@@ -447,208 +445,4 @@ export const createSigningClient = async (
     },
     ignoreGetSequence
   );
-};
-
-export const createRegistry = (): Registry => {
-  const myRegistry = new Registry(defaultRegistryTypes);
-  // Iid module
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgCreateIidDocument",
-    ixo.iid.v1beta1.MsgCreateIidDocument
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgUpdateIidDocument",
-    ixo.iid.v1beta1.MsgUpdateIidDocument
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgUpdateIidMeta",
-    ixo.iid.v1beta1.MsgUpdateIidMeta
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgAddIidContext",
-    ixo.iid.v1beta1.MsgAddIidContext
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgDeleteIidContext",
-    ixo.iid.v1beta1.MsgDeleteIidContext
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgAddVerification",
-    ixo.iid.v1beta1.MsgAddVerification
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgSetVerificationRelationships",
-    ixo.iid.v1beta1.MsgSetVerificationRelationships
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgRevokeVerification",
-    ixo.iid.v1beta1.MsgRevokeVerification
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgAddAccordedRight",
-    ixo.iid.v1beta1.MsgAddAccordedRight
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgDeleteAccordedRight",
-    ixo.iid.v1beta1.MsgDeleteAccordedRight
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgAddController",
-    ixo.iid.v1beta1.MsgAddController
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgDeleteController",
-    ixo.iid.v1beta1.MsgDeleteController
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgAddLinkedEntity",
-    ixo.iid.v1beta1.MsgAddLinkedEntity
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgDeleteLinkedEntity",
-    ixo.iid.v1beta1.MsgDeleteLinkedEntity
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgAddLinkedResource",
-    ixo.iid.v1beta1.MsgAddLinkedResource
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgDeleteLinkedResource",
-    ixo.iid.v1beta1.MsgDeleteLinkedResource
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgAddService",
-    ixo.iid.v1beta1.MsgAddService
-  );
-  myRegistry.register(
-    "/ixo.iid.v1beta1.MsgDeleteService",
-    ixo.iid.v1beta1.MsgDeleteService
-  );
-  // Entity module
-  myRegistry.register(
-    "/ixo.entity.v1beta1.MsgCreateEntity",
-    ixo.entity.v1beta1.MsgCreateEntity
-  );
-  myRegistry.register(
-    "/ixo.entity.v1beta1.MsgCreateEntity",
-    ixo.entity.v1beta1.MsgCreateEntity
-  );
-  myRegistry.register(
-    "/ixo.entity.v1beta1.MsgCreateEntity",
-    ixo.entity.v1beta1.MsgCreateEntity
-  );
-  myRegistry.register(
-    "/ixo.entity.v1beta1.MsgTransferEntity",
-    ixo.entity.v1beta1.MsgTransferEntity
-  );
-  myRegistry.register(
-    "/ixo.entity.v1beta1.MsgUpdateEntity",
-    ixo.entity.v1beta1.MsgUpdateEntity
-  );
-  // Payments module
-  myRegistry.register(
-    "/ixo.payments.v1.MsgCreatePaymentTemplate",
-    ixo.payments.v1.MsgCreatePaymentTemplate
-  );
-  myRegistry.register(
-    "/ixo.payments.v1.MsgCreatePaymentContract",
-    ixo.payments.v1.MsgCreatePaymentContract
-  );
-  myRegistry.register(
-    "/ixo.payments.v1.MsgSetPaymentContractAuthorisation",
-    ixo.payments.v1.MsgSetPaymentContractAuthorisation
-  );
-  myRegistry.register(
-    "/ixo.payments.v1.MsgCreateSubscription",
-    ixo.payments.v1.MsgCreateSubscription
-  );
-  myRegistry.register(
-    "/ixo.payments.v1.MsgGrantDiscount",
-    ixo.payments.v1.MsgGrantDiscount
-  );
-  myRegistry.register(
-    "/ixo.payments.v1.MsgRevokeDiscount",
-    ixo.payments.v1.MsgRevokeDiscount
-  );
-  myRegistry.register(
-    "/ixo.payments.v1.MsgEffectPayment",
-    ixo.payments.v1.MsgEffectPayment
-  );
-  // Project module
-  myRegistry.register(
-    "/ixo.project.v1.MsgCreateProject",
-    ixo.project.v1.MsgCreateProject
-  );
-  myRegistry.register(
-    "/ixo.project.v1.MsgUpdateProjectStatus",
-    ixo.project.v1.MsgUpdateProjectStatus
-  );
-  myRegistry.register(
-    "/ixo.project.v1.MsgCreateAgent",
-    ixo.project.v1.MsgCreateAgent
-  );
-  myRegistry.register(
-    "/ixo.project.v1.MsgUpdateAgent",
-    ixo.project.v1.MsgUpdateAgent
-  );
-  myRegistry.register(
-    "/ixo.project.v1.MsgCreateClaim",
-    ixo.project.v1.MsgCreateClaim
-  );
-  myRegistry.register(
-    "/ixo.project.v1.MsgCreateEvaluation",
-    ixo.project.v1.MsgCreateEvaluation
-  );
-  myRegistry.register(
-    "/ixo.project.v1.MsgWithdrawFunds",
-    ixo.project.v1.MsgWithdrawFunds
-  );
-  myRegistry.register(
-    "/ixo.project.v1.MsgUpdateProjectDoc",
-    ixo.project.v1.MsgUpdateProjectDoc
-  );
-  // Bond module
-  myRegistry.register(
-    "/ixo.bonds.v1beta1.MsgCreateBond",
-    ixo.bonds.v1beta1.MsgCreateBond
-  );
-  myRegistry.register(
-    "/ixo.bonds.v1beta1.MsgEditBond",
-    ixo.bonds.v1beta1.MsgEditBond
-  );
-  myRegistry.register(
-    "/ixo.bonds.v1beta1.MsgSetNextAlpha",
-    ixo.bonds.v1beta1.MsgSetNextAlpha
-  );
-  myRegistry.register(
-    "/ixo.bonds.v1beta1.MsgUpdateBondState",
-    ixo.bonds.v1beta1.MsgUpdateBondState
-  );
-  myRegistry.register("/ixo.bonds.v1beta1.MsgBuy", ixo.bonds.v1beta1.MsgBuy);
-  myRegistry.register("/ixo.bonds.v1beta1.MsgSell", ixo.bonds.v1beta1.MsgSell);
-  myRegistry.register("/ixo.bonds.v1beta1.MsgSwap", ixo.bonds.v1beta1.MsgSwap);
-  myRegistry.register(
-    "/ixo.bonds.v1beta1.MsgMakeOutcomePayment",
-    ixo.bonds.v1beta1.MsgMakeOutcomePayment
-  );
-  myRegistry.register(
-    "/ixo.bonds.v1beta1.MsgWithdrawShare",
-    ixo.bonds.v1beta1.MsgWithdrawShare
-  );
-  myRegistry.register(
-    "/ixo.bonds.v1beta1.MsgWithdrawReserve",
-    ixo.bonds.v1beta1.MsgWithdrawReserve
-  );
-  // Token module
-  myRegistry.register(
-    "/ixo.token.v1beta1.MsgSetupMinter",
-    ixo.token.v1beta1.MsgSetupMinter
-  );
-  myRegistry.register("/ixo.token.v1beta1.MsgMint", ixo.token.v1beta1.MsgMint);
-  myRegistry.register(
-    "/ixo.token.v1beta1.MsgTransferToken",
-    ixo.token.v1beta1.MsgTransferToken
-  );
-
-  return myRegistry;
 };

@@ -60,15 +60,6 @@ export const CreateIidDoc = async (
     }),
   };
 
-  // const iidDoc = await queryClient.ixo.iid.v1beta1.iidDocument({
-  //   id: "did:ixo:GV1B2NuW5MvczufYCtCTfk",
-  // });
-  // const banances = await queryClient.cosmos.bank.v1beta1.allBalances({
-  //   address: "ixo1ky7wad4d7gjtcy5yklc83geev76cudcevmnhhn",
-  // });
-  // console.log(iidDoc.iidDocument);
-  // console.log(banances.balances);
-
   const response = await client.signAndBroadcast(myAddress, [message], fee);
   return response;
 };
