@@ -1,3 +1,4 @@
+import { Uint8ArrayToJS } from "../../src/utils/conversions";
 import { queryClient } from "../helpers/common";
 
 export const AllBonds = async () => {
@@ -5,7 +6,9 @@ export const AllBonds = async () => {
 };
 
 export const ProjectDoc = async (did: string) => {
-  return await queryClient.ixo.project.v1.projectDoc({
+  const project = await queryClient.ixo.project.v1.projectDoc({
     projectDid: did,
   });
+  console.log(Uint8ArrayToJS(project.projectDoc?.data as Uint8Array))
+  return project
 };

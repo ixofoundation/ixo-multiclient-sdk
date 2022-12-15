@@ -9,5 +9,5 @@ beforeAll(() => {
 
 describe("Running queries", () => {
   runQry("AllBonds", () => Queries.AllBonds());
-  // runQry("ProjectDoc", () => Queries.ProjectDoc("did:ixo:"));
+  runQry("ProjectDoc", () => Queries.ProjectDoc("did:ixo:3toYaoMnRyMBvHreQmYrwo"));
 });
