@@ -39,6 +39,7 @@
   - [Developing](#developing)
     - [Codegen](#codegen)
     - [Publishing](#publishing)
+  - [React Native](#React-Native)
   - [Credits](#credits)
   - [Disclaimer](#disclaimer)
 
@@ -270,9 +271,10 @@ yarn build:ts
 yarn publish
 ```
 
-# React Native Additional instructions
+#React-Native 
 
-Install the below Library and import into your main app entry file.
+
+Install the below Library and import into your main app entry file. This ensures the required Polyfils are covered on mobile. 
 
 ```
 yarn add @walletconnect/react-native-compat
