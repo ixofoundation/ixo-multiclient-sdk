@@ -3,6 +3,8 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/ixofoundation/ixo-multiclient-sdk)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ixofoundation/ixo-multiclient-sdk)
 ![Twitter Follow](https://img.shields.io/twitter/follow/ixoworld?style=social)
+![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)
+
 
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)![Jest](https://img.shields.io/badge/Jest-323330?style=for-the-badge&logo=Jest&logoColor=white)
 
@@ -12,9 +14,9 @@
 
 <br />
 
-<h3 align="center">
-    One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them
-</h3>
+<h2 align="center">
+    The ultimate utility client for the IXO Blockchain for impact.
+</h2>
 
 <br />
 
