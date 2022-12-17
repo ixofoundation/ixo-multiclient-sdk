@@ -1,39 +1,39 @@
-import * as _154 from "../ixo/legacy/did/did";
-import * as _155 from "../ixo/legacy/did/diddoc";
+import * as _160 from "../ixo/legacy/did/did";
+import * as _161 from "../ixo/legacy/did/diddoc";
 export declare const legacydid: {
     BaseDidDoc: {
-        encode(message: _155.BaseDidDoc, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-        decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _155.BaseDidDoc;
-        fromJSON(object: any): _155.BaseDidDoc;
-        toJSON(message: _155.BaseDidDoc): unknown;
-        fromPartial(object: Partial<_155.BaseDidDoc>): _155.BaseDidDoc;
+        encode(message: _161.BaseDidDoc, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+        decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.BaseDidDoc;
+        fromJSON(object: any): _161.BaseDidDoc;
+        toJSON(message: _161.BaseDidDoc): unknown;
+        fromPartial(object: Partial<_161.BaseDidDoc>): _161.BaseDidDoc;
     };
     DidCredential: {
-        encode(message: _154.DidCredential, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-        decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _154.DidCredential;
-        fromJSON(object: any): _154.DidCredential;
-        toJSON(message: _154.DidCredential): unknown;
-        fromPartial(object: Partial<_154.DidCredential>): _154.DidCredential;
+        encode(message: _160.DidCredential, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+        decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _160.DidCredential;
+        fromJSON(object: any): _160.DidCredential;
+        toJSON(message: _160.DidCredential): unknown;
+        fromPartial(object: Partial<_160.DidCredential>): _160.DidCredential;
     };
     Claim: {
-        encode(message: _154.Claim, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-        decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _154.Claim;
-        fromJSON(object: any): _154.Claim;
-        toJSON(message: _154.Claim): unknown;
-        fromPartial(object: Partial<_154.Claim>): _154.Claim;
+        encode(message: _160.Claim, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+        decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _160.Claim;
+        fromJSON(object: any): _160.Claim;
+        toJSON(message: _160.Claim): unknown;
+        fromPartial(object: Partial<_160.Claim>): _160.Claim;
     };
     IxoDid: {
-        encode(message: _154.IxoDid, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-        decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _154.IxoDid;
-        fromJSON(object: any): _154.IxoDid;
-        toJSON(message: _154.IxoDid): unknown;
-        fromPartial(object: Partial<_154.IxoDid>): _154.IxoDid;
+        encode(message: _160.IxoDid, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+        decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _160.IxoDid;
+        fromJSON(object: any): _160.IxoDid;
+        toJSON(message: _160.IxoDid): unknown;
+        fromPartial(object: Partial<_160.IxoDid>): _160.IxoDid;
     };
     Secret: {
-        encode(message: _154.Secret, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-        decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _154.Secret;
-        fromJSON(object: any): _154.Secret;
-        toJSON(message: _154.Secret): unknown;
-        fromPartial(object: Partial<_154.Secret>): _154.Secret;
+        encode(message: _160.Secret, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+        decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _160.Secret;
+        fromJSON(object: any): _160.Secret;
+        toJSON(message: _160.Secret): unknown;
+        fromPartial(object: Partial<_160.Secret>): _160.Secret;
     };
 };

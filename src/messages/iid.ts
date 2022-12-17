@@ -2,19 +2,26 @@ import { toHex } from "@cosmjs/encoding";
 import { ixo } from "../codegen";
 import base58 from "bs58";
 
+export type KeyTypes = "ed" | "secp";
+
 /**
  * Only use SECP generated creds!!!
  */
 export const createVerificationMethod = (
   did: string,
   pubkey: Uint8Array,
-  controller: string
+  controller: string,
+  // this param is only for testing, ONLY USE SECP!
+  type: KeyTypes = "secp"
 ) => {
   const pubkeyBase58 = base58.encode(pubkey);
 
   return ixo.iid.v1beta1.VerificationMethod.fromPartial({
     id: did + "#" + pubkeyBase58,
-    type: "EcdsaSecp256k1VerificationKey2019",
+    type:
+      type === "ed"
+        ? "Ed25519VerificationKey2018"
+        : "EcdsaSecp256k1VerificationKey2019",
     publicKeyBase58: pubkeyBase58,
     controller: controller,
   });
@@ -25,6 +32,7 @@ type createIidVerificationMethodsProps = {
   pubkey: Uint8Array;
   address: string; // Bech32 encoded address
   controller: string; // Did of controller
+  type?: KeyTypes;
 };
 /**
  * Only use SECP generated user creds!!!
@@ -34,6 +42,8 @@ export const createIidVerificationMethods = ({
   pubkey,
   controller,
   address,
+  // this param is only for testing, ONLY USE SECP!
+  type = "secp",
 }: createIidVerificationMethodsProps) => {
   const pubkeyHex = toHex(pubkey);
   const pubkeyBase58 = base58.encode(pubkey);
@@ -43,7 +53,10 @@ export const createIidVerificationMethods = ({
       relationships: ["authentication"],
       method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
         id: did,
-        type: "EcdsaSecp256k1VerificationKey2019",
+        type:
+          type === "ed"
+            ? "Ed25519VerificationKey2018"
+            : "EcdsaSecp256k1VerificationKey2019",
         publicKeyBase58: pubkeyBase58,
         controller: controller,
       }),
@@ -52,7 +65,10 @@ export const createIidVerificationMethods = ({
       relationships: ["authentication"],
       method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
         id: did + "#" + pubkeyHex,
-        type: "EcdsaSecp256k1VerificationKey2019",
+        type:
+          type === "ed"
+            ? "Ed25519VerificationKey2018"
+            : "EcdsaSecp256k1VerificationKey2019",
         publicKeyMultibase: "F" + pubkeyHex,
         controller: controller,
       }),
@@ -61,7 +77,10 @@ export const createIidVerificationMethods = ({
       relationships: ["authentication"],
       method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
         id: did + "#" + pubkeyBase58,
-        type: "EcdsaSecp256k1VerificationKey2019",
+        type:
+          type === "ed"
+            ? "Ed25519VerificationKey2018"
+            : "EcdsaSecp256k1VerificationKey2019",
         publicKeyBase58: pubkeyBase58,
         controller: controller,
       }),

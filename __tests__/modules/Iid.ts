@@ -2,8 +2,14 @@ import {
   createAgentIidContext,
   createIidVerificationMethods,
 } from "../../src/messages/iid";
-import { getUser, customMessages, createClient, ixo } from "../helpers/common";
-import { constants, fee, WalletUsers } from "../helpers/constants";
+import {
+  getUser,
+  customMessages,
+  createClient,
+  ixo,
+  queryClient,
+} from "../helpers/common";
+import { constants, fee, keyType, WalletUsers } from "../helpers/constants";
 
 export const CreateIidDoc = async (
   signer: WalletUsers = WalletUsers.tester,
@@ -22,6 +28,7 @@ export const CreateIidDoc = async (
     pubkey: myPubKey,
     address: myAddress,
     controller: did,
+    type: keyType,
   });
 
   if (userToAddToVerifications) {
@@ -37,6 +44,7 @@ export const CreateIidDoc = async (
         pubkey: eUserPubKey,
         address: eUserAddress,
         controller: eUserdid,
+        type: keyType,
       })
     );
   }
@@ -172,7 +180,8 @@ export const AddVerification = async (
         method: customMessages.iid.createVerificationMethod(
           alice.did,
           aliceAccount.pubkey,
-          alice.did
+          alice.did,
+          keyType
         ),
       }),
       signer: myAddress,

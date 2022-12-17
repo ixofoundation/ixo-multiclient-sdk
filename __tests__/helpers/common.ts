@@ -12,12 +12,13 @@ import {
   ixo,
   ibc,
   cosmos,
+  cosmwasm,
   createQueryClient as createQueryClientImport,
   customMessages,
 } from "../../src";
 import { IObjectKeys } from "./types";
 
-export { ixo, cosmos, utils, ibc, customMessages };
+export { ixo, cosmos, utils, ibc, customMessages, cosmwasm };
 
 export const sendFaucet = async (address: string) => {
   const faucetUrl = RPC_URL.includes("devnet")
@@ -176,6 +177,15 @@ export const testQry = (
   return test(message, async () => {
     console.log("Testing query " + message);
     checkSuccessQry(await query(), equal);
+  });
+};
+
+export const runQry = (message: string, query: () => Promise<any>) => {
+  return test(message, async () => {
+    console.log("Running query " + message);
+    const res = await query();
+    console.log(res);
+    expect(true).toBeTruthy();
   });
 };
 
