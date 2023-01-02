@@ -38,10 +38,10 @@ export const MsgSubmitProposal = async () => {
             description: "Description",
             runAs: myAddress,
             wasmByteCode: new Uint8Array(contractBuffer),
-            // instantiatePermission: cosmwasm.wasm.v1.AccessConfig.fromPartial({
-            //   permission: cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_EVERYBODY,
-            //   address: myAddress,
-            // }),
+            instantiatePermission: cosmwasm.wasm.v1.AccessConfig.fromPartial({
+              permission: cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_EVERYBODY,
+            }),
+            unpinCode: false,
           })
         ).finish(),
       },

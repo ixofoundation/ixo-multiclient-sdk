@@ -19,6 +19,9 @@ export interface StoreCodeProposal {
   /** InstantiatePermission to apply on contract creation, optional */
 
   instantiatePermission?: AccessConfig;
+  /** UnpinCode code on upload, optional */
+
+  unpinCode: boolean;
 }
 /** StoreCodeProposal gov proposal content type to submit WASM code to the system */
 
@@ -37,6 +40,9 @@ export interface StoreCodeProposalSDKType {
   /** InstantiatePermission to apply on contract creation, optional */
 
   instantiate_permission?: AccessConfigSDKType;
+  /** UnpinCode code on upload, optional */
+
+  unpin_code: boolean;
 }
 /**
  * InstantiateContractProposal gov proposal content type to instantiate a
@@ -109,7 +115,7 @@ export interface MigrateContractProposal {
   /** Contract is the address of the smart contract */
 
   contract: string;
-  /** CodeID references the new WASM codesudo */
+  /** CodeID references the new WASM code */
 
   codeId: Long;
   /** Msg json encoded message to be passed to the contract on migration */
@@ -127,7 +133,7 @@ export interface MigrateContractProposalSDKType {
   /** Contract is the address of the smart contract */
 
   contract: string;
-  /** CodeID references the new WASM codesudo */
+  /** CodeID references the new WASM code */
 
   code_id: Long;
   /** Msg json encoded message to be passed to the contract on migration */
@@ -332,6 +338,66 @@ export interface UnpinCodesProposalSDKType {
 
   code_ids: Long[];
 }
+/**
+ * AccessConfigUpdate contains the code id and the access config to be
+ * applied.
+ */
+
+export interface AccessConfigUpdate {
+  /** CodeID is the reference to the stored WASM code to be updated */
+  codeId: Long;
+  /** InstantiatePermission to apply to the set of code ids */
+
+  instantiatePermission?: AccessConfig;
+}
+/**
+ * AccessConfigUpdate contains the code id and the access config to be
+ * applied.
+ */
+
+export interface AccessConfigUpdateSDKType {
+  /** CodeID is the reference to the stored WASM code to be updated */
+  code_id: Long;
+  /** InstantiatePermission to apply to the set of code ids */
+
+  instantiate_permission?: AccessConfigSDKType;
+}
+/**
+ * UpdateInstantiateConfigProposal gov proposal content type to update
+ * instantiate config to a  set of code ids.
+ */
+
+export interface UpdateInstantiateConfigProposal {
+  /** Title is a short summary */
+  title: string;
+  /** Description is a human readable text */
+
+  description: string;
+  /**
+   * AccessConfigUpdate contains the list of code ids and the access config
+   * to be applied.
+   */
+
+  accessConfigUpdates: AccessConfigUpdate[];
+}
+/**
+ * UpdateInstantiateConfigProposal gov proposal content type to update
+ * instantiate config to a  set of code ids.
+ */
+
+export interface UpdateInstantiateConfigProposalSDKType {
+  /** Title is a short summary */
+  title: string;
+  /** Description is a human readable text */
+
+  description: string;
+  /**
+   * AccessConfigUpdate contains the list of code ids and the access config
+   * to be applied.
+   */
+
+  access_config_updates: AccessConfigUpdateSDKType[];
+}
 
 function createBaseStoreCodeProposal(): StoreCodeProposal {
   return {
@@ -339,7 +405,8 @@ function createBaseStoreCodeProposal(): StoreCodeProposal {
     description: "",
     runAs: "",
     wasmByteCode: new Uint8Array(),
-    instantiatePermission: undefined
+    instantiatePermission: undefined,
+    unpinCode: false
   };
 }
 
@@ -363,6 +430,10 @@ export const StoreCodeProposal = {
 
     if (message.instantiatePermission !== undefined) {
       AccessConfig.encode(message.instantiatePermission, writer.uint32(58).fork()).ldelim();
+    }
+
+    if (message.unpinCode === true) {
+      writer.uint32(64).bool(message.unpinCode);
     }
 
     return writer;
@@ -397,6 +468,10 @@ export const StoreCodeProposal = {
           message.instantiatePermission = AccessConfig.decode(reader, reader.uint32());
           break;
 
+        case 8:
+          message.unpinCode = reader.bool();
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -412,7 +487,8 @@ export const StoreCodeProposal = {
       description: isSet(object.description) ? String(object.description) : "",
       runAs: isSet(object.runAs) ? String(object.runAs) : "",
       wasmByteCode: isSet(object.wasmByteCode) ? bytesFromBase64(object.wasmByteCode) : new Uint8Array(),
-      instantiatePermission: isSet(object.instantiatePermission) ? AccessConfig.fromJSON(object.instantiatePermission) : undefined
+      instantiatePermission: isSet(object.instantiatePermission) ? AccessConfig.fromJSON(object.instantiatePermission) : undefined,
+      unpinCode: isSet(object.unpinCode) ? Boolean(object.unpinCode) : false
     };
   },
 
@@ -423,6 +499,7 @@ export const StoreCodeProposal = {
     message.runAs !== undefined && (obj.runAs = message.runAs);
     message.wasmByteCode !== undefined && (obj.wasmByteCode = base64FromBytes(message.wasmByteCode !== undefined ? message.wasmByteCode : new Uint8Array()));
     message.instantiatePermission !== undefined && (obj.instantiatePermission = message.instantiatePermission ? AccessConfig.toJSON(message.instantiatePermission) : undefined);
+    message.unpinCode !== undefined && (obj.unpinCode = message.unpinCode);
     return obj;
   },
 
@@ -433,6 +510,7 @@ export const StoreCodeProposal = {
     message.runAs = object.runAs ?? "";
     message.wasmByteCode = object.wasmByteCode ?? new Uint8Array();
     message.instantiatePermission = object.instantiatePermission !== undefined && object.instantiatePermission !== null ? AccessConfig.fromPartial(object.instantiatePermission) : undefined;
+    message.unpinCode = object.unpinCode ?? false;
     return message;
   }
 
@@ -1273,6 +1351,162 @@ export const UnpinCodesProposal = {
     message.title = object.title ?? "";
     message.description = object.description ?? "";
     message.codeIds = object.codeIds?.map(e => Long.fromValue(e)) || [];
+    return message;
+  }
+
+};
+
+function createBaseAccessConfigUpdate(): AccessConfigUpdate {
+  return {
+    codeId: Long.UZERO,
+    instantiatePermission: undefined
+  };
+}
+
+export const AccessConfigUpdate = {
+  encode(message: AccessConfigUpdate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (!message.codeId.isZero()) {
+      writer.uint32(8).uint64(message.codeId);
+    }
+
+    if (message.instantiatePermission !== undefined) {
+      AccessConfig.encode(message.instantiatePermission, writer.uint32(18).fork()).ldelim();
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): AccessConfigUpdate {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAccessConfigUpdate();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.codeId = (reader.uint64() as Long);
+          break;
+
+        case 2:
+          message.instantiatePermission = AccessConfig.decode(reader, reader.uint32());
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): AccessConfigUpdate {
+    return {
+      codeId: isSet(object.codeId) ? Long.fromValue(object.codeId) : Long.UZERO,
+      instantiatePermission: isSet(object.instantiatePermission) ? AccessConfig.fromJSON(object.instantiatePermission) : undefined
+    };
+  },
+
+  toJSON(message: AccessConfigUpdate): unknown {
+    const obj: any = {};
+    message.codeId !== undefined && (obj.codeId = (message.codeId || Long.UZERO).toString());
+    message.instantiatePermission !== undefined && (obj.instantiatePermission = message.instantiatePermission ? AccessConfig.toJSON(message.instantiatePermission) : undefined);
+    return obj;
+  },
+
+  fromPartial(object: Partial<AccessConfigUpdate>): AccessConfigUpdate {
+    const message = createBaseAccessConfigUpdate();
+    message.codeId = object.codeId !== undefined && object.codeId !== null ? Long.fromValue(object.codeId) : Long.UZERO;
+    message.instantiatePermission = object.instantiatePermission !== undefined && object.instantiatePermission !== null ? AccessConfig.fromPartial(object.instantiatePermission) : undefined;
+    return message;
+  }
+
+};
+
+function createBaseUpdateInstantiateConfigProposal(): UpdateInstantiateConfigProposal {
+  return {
+    title: "",
+    description: "",
+    accessConfigUpdates: []
+  };
+}
+
+export const UpdateInstantiateConfigProposal = {
+  encode(message: UpdateInstantiateConfigProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.title !== "") {
+      writer.uint32(10).string(message.title);
+    }
+
+    if (message.description !== "") {
+      writer.uint32(18).string(message.description);
+    }
+
+    for (const v of message.accessConfigUpdates) {
+      AccessConfigUpdate.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): UpdateInstantiateConfigProposal {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseUpdateInstantiateConfigProposal();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.title = reader.string();
+          break;
+
+        case 2:
+          message.description = reader.string();
+          break;
+
+        case 3:
+          message.accessConfigUpdates.push(AccessConfigUpdate.decode(reader, reader.uint32()));
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): UpdateInstantiateConfigProposal {
+    return {
+      title: isSet(object.title) ? String(object.title) : "",
+      description: isSet(object.description) ? String(object.description) : "",
+      accessConfigUpdates: Array.isArray(object?.accessConfigUpdates) ? object.accessConfigUpdates.map((e: any) => AccessConfigUpdate.fromJSON(e)) : []
+    };
+  },
+
+  toJSON(message: UpdateInstantiateConfigProposal): unknown {
+    const obj: any = {};
+    message.title !== undefined && (obj.title = message.title);
+    message.description !== undefined && (obj.description = message.description);
+
+    if (message.accessConfigUpdates) {
+      obj.accessConfigUpdates = message.accessConfigUpdates.map(e => e ? AccessConfigUpdate.toJSON(e) : undefined);
+    } else {
+      obj.accessConfigUpdates = [];
+    }
+
+    return obj;
+  },
+
+  fromPartial(object: Partial<UpdateInstantiateConfigProposal>): UpdateInstantiateConfigProposal {
+    const message = createBaseUpdateInstantiateConfigProposal();
+    message.title = object.title ?? "";
+    message.description = object.description ?? "";
+    message.accessConfigUpdates = object.accessConfigUpdates?.map(e => AccessConfigUpdate.fromPartial(e)) || [];
     return message;
   }
 
