@@ -22,12 +22,9 @@ export { ixo, cosmos, utils, ibc, customMessages, cosmwasm };
 
 export const sendFaucet = async (address: string) => {
   const faucetUrl = RPC_URL.includes("devnet")
-    ? "https://devnet-faucet.ixo.earth/credit"
-    : "https://testnet-faucet.ixo.earth/credit";
-  return await axios.post(faucetUrl, {
-    denom: "uixo",
-    address: address,
-  });
+    ? `https://faucet.devnet.ixo.earth/send/${address}`
+    : `https://faucet.testnet.ixo.earth/send/${address}`;
+  return await axios.get(faucetUrl);
 };
 
 export type wallet = {
@@ -195,7 +192,7 @@ export const sendFromFaucet = (user: WalletUsers) => {
     const account = (await tester.getAccounts())[0];
     console.log(`Sending tokens from faucet to: ${user}(${account.address})`);
     const res = await sendFaucet(account.address);
-    expect(res.data).toBe("ok");
+    expect(res.data.result.code).toBe(0);
   });
 };
 

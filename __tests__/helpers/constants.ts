@@ -12,6 +12,7 @@ export enum WalletUsers {
   tester = "tester",
   alice = "alice",
   bob = "bob",
+  charlie = "charlie",
   project = "project",
   bond = "bond",
   oracle = "oracle",

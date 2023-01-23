@@ -224,6 +224,7 @@ export const CreateEntityAssetSupamotoInstance = async (
           value: inheritEntityDid,
         }),
       ],
+      // controller: [],
       service: [],
       linkedResource: [
         ixo.iid.v1beta1.LinkedResource.fromPartial({
