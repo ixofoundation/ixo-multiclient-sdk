@@ -1,4 +1,4 @@
-import { testMsg } from "../helpers/common";
+import { testMsg, utils } from "../helpers/common";
 import * as Cosmos from "../modules/Cosmos";
 
 export const bankBasic = () =>
@@ -8,7 +8,33 @@ export const bankBasic = () =>
 
 export const govBasic = () =>
   describe("Testing the gov module", () => {
-    testMsg("/cosmos.gov.v1beta1.MsgSubmitProposal", () =>
-      Cosmos.MsgSubmitProposal()
-    );
+    // let proposalIdStoreCW721: number;
+    // testMsg("/cosmos.gov.v1beta1.MsgSubmitProposal", async () => {
+    //   const res = await Cosmos.MsgSubmitProposalStoreCW721();
+    //   proposalIdStoreCW721 = utils.common.getValueFromEvents(
+    //     res,
+    //     "submit_proposal",
+    //     "proposal_id"
+    //   );
+    //   console.log({ proposalIdStoreCW721 });
+    //   return res;
+    // });
+    // testMsg("/cosmos.gov.v1beta1.MsgSubmitProposal", () =>
+    //   Cosmos.MsgVote(proposalIdStoreCW721)
+    // );
+    //
+    // let proposalIdUpdateEntityParams: number;
+    // testMsg("/cosmos.gov.v1beta1.MsgSubmitProposal", async () => {
+    //   const res = await Cosmos.MsgSubmitProposalUpdateEntityParams(1);
+    //   proposalIdUpdateEntityParams = utils.common.getValueFromEvents(
+    //     res,
+    //     "submit_proposal",
+    //     "proposal_id"
+    //   );
+    //   console.log({ proposalIdUpdateEntityParams });
+    //   return res;
+    // });
+    // testMsg("/cosmos.gov.v1beta1.MsgSubmitProposal", () =>
+    //   Cosmos.MsgVote(proposalIdUpdateEntityParams)
+    // );
   });

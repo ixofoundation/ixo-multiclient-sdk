@@ -11,7 +11,24 @@ import * as Iid from "../modules/Iid";
 export const registerIids = () =>
   describe("Testing the faucet and creation of Iids", () => {
     // below is example to make a user from a know mnemonic
-    // beforeAll(() => generateNewWallet(WalletUsers.tester, "top eye name"));
+    // beforeAll(() =>
+    //   generateNewWallet(
+    //     WalletUsers.tester,
+    //     "visa catch design whip maple peasant ribbon dawn office hole video order ready height bottom suggest renew lake sister excite couch alone fan width"
+    //   )
+    // );
+    // beforeAll(() =>
+    //   generateNewWallet(
+    //     WalletUsers.alice,
+    //     "curve drive liar wear present uncover pet aisle magnet where reason rate dice enact supreme apple text deny idle jazz shiver mixture analyst execute"
+    //   )
+    // );
+    // beforeAll(() =>
+    //   generateNewWallet(
+    //     WalletUsers.bob,
+    //     "legend level swamp nut black demise ring treat replace rally click frozen unfair general inside quantum camera coffee lake rocket aunt emotion convince asthma"
+    //   )
+    // );
 
     const users = Object.values(WalletUsers).filter(
       (user) =>
@@ -20,8 +37,10 @@ export const registerIids = () =>
           "bond",
           "oracle",
           "accordedRight",
-          "bob",
           "charlie",
+          // "bob",
+          // "alice",
+          // "tester",
         ].includes(user)
     );
 
