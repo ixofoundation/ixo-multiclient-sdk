@@ -1,9 +1,11 @@
 import axios from "axios";
 
 import { ChainInfo, ChainNetwork, Endpoint } from "./chain.types";
-import { preferredEndpoints } from "./chain.constants";
-import TESTNET from "./chain.testnet.json";
-import DEVNET from "./chain.devnet.json";
+import {
+  preferredEndpoints,
+  testnetRegistry,
+  devnetRegistry,
+} from "./chain.constants";
 
 const fetchMainnetChainInfo = async (chainName: string) => {
   const url = `https://proxy.atomscan.com/directory/${chainName}/chain.json`;
@@ -17,7 +19,7 @@ const fetchTestnetChainInfo = async (chainName: string) => {
     const response = await axios.get(url);
     return response.data as ChainInfo;
   } catch (error) {
-    const chainInfo = TESTNET[chainName];
+    const chainInfo = testnetRegistry[chainName];
     if (!chainInfo)
       throw new Error("Cannot find testnet chain info for " + chainName);
     return chainInfo as ChainInfo;
@@ -25,7 +27,7 @@ const fetchTestnetChainInfo = async (chainName: string) => {
 };
 
 const fetchDevnetChainInfo = (chainName: string) => {
-  const chainInfo = DEVNET[chainName];
+  const chainInfo = devnetRegistry[chainName];
   if (!chainInfo)
     throw new Error("Cannot find devnet chain info for " + chainName);
   return chainInfo as ChainInfo;
@@ -49,7 +51,7 @@ export const getChainInfoFromChainName = async (
       return chainInfo;
     }
     if (chainNetwork === "devnet") {
-      const chainInfo = await fetchDevnetChainInfo(chainName);
+      const chainInfo = fetchDevnetChainInfo(chainName);
       return chainInfo;
     }
     throw new Error("Cannot find chain info for network type " + chainNetwork);

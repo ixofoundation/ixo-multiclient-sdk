@@ -10,5 +10,5 @@
     "source.fixAll.eslint": true
   },
   "eslint.validate": ["javascript", "javascriptreact"],
-  "cSpell.words": ["codegen", "Devnet", "Rpcs"]
+  "cSpell.words": ["codegen", "devnet", "impacthub", "rpcs"]
 }
