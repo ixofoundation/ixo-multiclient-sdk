@@ -433,7 +433,8 @@ export class SigningStargateClient extends StargateClient {
 export const createSigningClient = async (
   rpcEndpoint: string,
   offlineWallet: OfflineSigner,
-  ignoreGetSequence?: boolean
+  ignoreGetSequence?: boolean,
+  options?: SigningStargateClientOptions
 ): Promise<SigningStargateClient> => {
   return await SigningStargateClient.connectWithSigner(
     rpcEndpoint,
@@ -442,6 +443,7 @@ export const createSigningClient = async (
       // registry: new Registry([...defaultRegistryTypes, ...ixoProtoRegistry]),
       registry: createRegistry(),
       accountParser: accountFromAny,
+      ...options,
     },
     ignoreGetSequence
   );
