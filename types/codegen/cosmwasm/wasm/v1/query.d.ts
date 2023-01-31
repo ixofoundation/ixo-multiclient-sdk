@@ -1,5 +1,5 @@
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { ContractInfo, ContractInfoSDKType, ContractCodeHistoryEntry, ContractCodeHistoryEntrySDKType, Model, ModelSDKType } from "./types";
+import { ContractInfo, ContractInfoSDKType, ContractCodeHistoryEntry, ContractCodeHistoryEntrySDKType, Model, ModelSDKType, AccessConfig, AccessConfigSDKType, Params, ParamsSDKType } from "./types";
 import * as _m0 from "protobufjs/minimal";
 import { Long } from "../../../helpers";
 /**
@@ -241,12 +241,14 @@ export interface CodeInfoResponse {
     codeId: Long;
     creator: string;
     dataHash: Uint8Array;
+    instantiatePermission?: AccessConfig;
 }
 /** CodeInfoResponse contains code meta data from CodeInfo */
 export interface CodeInfoResponseSDKType {
     code_id: Long;
     creator: string;
     data_hash: Uint8Array;
+    instantiate_permission?: AccessConfigSDKType;
 }
 /** QueryCodeResponse is the response type for the Query/Code RPC method */
 export interface QueryCodeResponse {
@@ -313,6 +315,22 @@ export interface QueryPinnedCodesResponseSDKType {
     code_ids: Long[];
     /** pagination defines the pagination in the response. */
     pagination?: PageResponseSDKType;
+}
+/** QueryParamsRequest is the request type for the Query/Params RPC method. */
+export interface QueryParamsRequest {
+}
+/** QueryParamsRequest is the request type for the Query/Params RPC method. */
+export interface QueryParamsRequestSDKType {
+}
+/** QueryParamsResponse is the response type for the Query/Params RPC method. */
+export interface QueryParamsResponse {
+    /** params defines the parameters of the module. */
+    params?: Params;
+}
+/** QueryParamsResponse is the response type for the Query/Params RPC method. */
+export interface QueryParamsResponseSDKType {
+    /** params defines the parameters of the module. */
+    params?: ParamsSDKType;
 }
 export declare const QueryContractInfoRequest: {
     encode(message: QueryContractInfoRequest, writer?: _m0.Writer): _m0.Writer;
@@ -446,4 +464,18 @@ export declare const QueryPinnedCodesResponse: {
     fromJSON(object: any): QueryPinnedCodesResponse;
     toJSON(message: QueryPinnedCodesResponse): unknown;
     fromPartial(object: Partial<QueryPinnedCodesResponse>): QueryPinnedCodesResponse;
+};
+export declare const QueryParamsRequest: {
+    encode(_: QueryParamsRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsRequest;
+    fromJSON(_: any): QueryParamsRequest;
+    toJSON(_: QueryParamsRequest): unknown;
+    fromPartial(_: Partial<QueryParamsRequest>): QueryParamsRequest;
+};
+export declare const QueryParamsResponse: {
+    encode(message: QueryParamsResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsResponse;
+    fromJSON(object: any): QueryParamsResponse;
+    toJSON(message: QueryParamsResponse): unknown;
+    fromPartial(object: Partial<QueryParamsResponse>): QueryParamsResponse;
 };

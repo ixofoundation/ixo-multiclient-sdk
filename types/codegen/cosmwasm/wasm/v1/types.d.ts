@@ -7,10 +7,15 @@ export declare enum AccessType {
     ACCESS_TYPE_UNSPECIFIED = 0,
     /** ACCESS_TYPE_NOBODY - AccessTypeNobody forbidden */
     ACCESS_TYPE_NOBODY = 1,
-    /** ACCESS_TYPE_ONLY_ADDRESS - AccessTypeOnlyAddress restricted to an address */
+    /**
+     * ACCESS_TYPE_ONLY_ADDRESS - AccessTypeOnlyAddress restricted to a single address
+     * Deprecated: use AccessTypeAnyOfAddresses instead
+     */
     ACCESS_TYPE_ONLY_ADDRESS = 2,
     /** ACCESS_TYPE_EVERYBODY - AccessTypeEverybody unrestricted */
     ACCESS_TYPE_EVERYBODY = 3,
+    /** ACCESS_TYPE_ANY_OF_ADDRESSES - AccessTypeAnyOfAddresses allow any of the addresses */
+    ACCESS_TYPE_ANY_OF_ADDRESSES = 4,
     UNRECOGNIZED = -1
 }
 /** AccessType permission types */
@@ -19,10 +24,15 @@ export declare enum AccessTypeSDKType {
     ACCESS_TYPE_UNSPECIFIED = 0,
     /** ACCESS_TYPE_NOBODY - AccessTypeNobody forbidden */
     ACCESS_TYPE_NOBODY = 1,
-    /** ACCESS_TYPE_ONLY_ADDRESS - AccessTypeOnlyAddress restricted to an address */
+    /**
+     * ACCESS_TYPE_ONLY_ADDRESS - AccessTypeOnlyAddress restricted to a single address
+     * Deprecated: use AccessTypeAnyOfAddresses instead
+     */
     ACCESS_TYPE_ONLY_ADDRESS = 2,
     /** ACCESS_TYPE_EVERYBODY - AccessTypeEverybody unrestricted */
     ACCESS_TYPE_EVERYBODY = 3,
+    /** ACCESS_TYPE_ANY_OF_ADDRESSES - AccessTypeAnyOfAddresses allow any of the addresses */
+    ACCESS_TYPE_ANY_OF_ADDRESSES = 4,
     UNRECOGNIZED = -1
 }
 export declare function accessTypeFromJSON(object: any): AccessType;
@@ -64,24 +74,32 @@ export interface AccessTypeParamSDKType {
 /** AccessConfig access control type. */
 export interface AccessConfig {
     permission: AccessType;
+    /**
+     * Address
+     * Deprecated: replaced by addresses
+     */
     address: string;
+    addresses: string[];
 }
 /** AccessConfig access control type. */
 export interface AccessConfigSDKType {
     permission: AccessTypeSDKType;
+    /**
+     * Address
+     * Deprecated: replaced by addresses
+     */
     address: string;
+    addresses: string[];
 }
 /** Params defines the set of wasm parameters. */
 export interface Params {
     codeUploadAccess?: AccessConfig;
     instantiateDefaultPermission: AccessType;
-    maxWasmCodeSize: Long;
 }
 /** Params defines the set of wasm parameters. */
 export interface ParamsSDKType {
     code_upload_access?: AccessConfigSDKType;
     instantiate_default_permission: AccessTypeSDKType;
-    max_wasm_code_size: Long;
 }
 /** CodeInfo is data for the uploaded contract WASM code */
 export interface CodeInfo {

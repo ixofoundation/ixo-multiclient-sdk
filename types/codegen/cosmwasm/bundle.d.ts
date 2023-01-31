@@ -21,6 +21,7 @@ export declare namespace cosmwasm {
                 code(request: _97.QueryCodeRequest): Promise<_97.QueryCodeResponse>;
                 codes(request?: _97.QueryCodesRequest): Promise<_97.QueryCodesResponse>;
                 pinnedCodes(request?: _97.QueryPinnedCodesRequest): Promise<_97.QueryPinnedCodesResponse>;
+                params(request?: _97.QueryParamsRequest): Promise<_97.QueryParamsResponse>;
             };
             accessTypeFromJSON(object: any): _99.AccessType;
             accessTypeToJSON(object: _99.AccessType): string;
@@ -107,12 +108,26 @@ export declare namespace cosmwasm {
                 toJSON(message: _98.MsgInstantiateContract): unknown;
                 fromPartial(object: Partial<_98.MsgInstantiateContract>): _98.MsgInstantiateContract;
             };
+            MsgInstantiateContract2: {
+                encode(message: _98.MsgInstantiateContract2, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _98.MsgInstantiateContract2;
+                fromJSON(object: any): _98.MsgInstantiateContract2;
+                toJSON(message: _98.MsgInstantiateContract2): unknown;
+                fromPartial(object: Partial<_98.MsgInstantiateContract2>): _98.MsgInstantiateContract2;
+            };
             MsgInstantiateContractResponse: {
                 encode(message: _98.MsgInstantiateContractResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _98.MsgInstantiateContractResponse;
                 fromJSON(object: any): _98.MsgInstantiateContractResponse;
                 toJSON(message: _98.MsgInstantiateContractResponse): unknown;
                 fromPartial(object: Partial<_98.MsgInstantiateContractResponse>): _98.MsgInstantiateContractResponse;
+            };
+            MsgInstantiateContract2Response: {
+                encode(message: _98.MsgInstantiateContract2Response, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _98.MsgInstantiateContract2Response;
+                fromJSON(object: any): _98.MsgInstantiateContract2Response;
+                toJSON(message: _98.MsgInstantiateContract2Response): unknown;
+                fromPartial(object: Partial<_98.MsgInstantiateContract2Response>): _98.MsgInstantiateContract2Response;
             };
             MsgExecuteContract: {
                 encode(message: _98.MsgExecuteContract, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
@@ -303,6 +318,20 @@ export declare namespace cosmwasm {
                 toJSON(message: _97.QueryPinnedCodesResponse): unknown;
                 fromPartial(object: Partial<_97.QueryPinnedCodesResponse>): _97.QueryPinnedCodesResponse;
             };
+            QueryParamsRequest: {
+                encode(_: _97.QueryParamsRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _97.QueryParamsRequest;
+                fromJSON(_: any): _97.QueryParamsRequest;
+                toJSON(_: _97.QueryParamsRequest): unknown;
+                fromPartial(_: Partial<_97.QueryParamsRequest>): _97.QueryParamsRequest;
+            };
+            QueryParamsResponse: {
+                encode(message: _97.QueryParamsResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _97.QueryParamsResponse;
+                fromJSON(object: any): _97.QueryParamsResponse;
+                toJSON(message: _97.QueryParamsResponse): unknown;
+                fromPartial(object: Partial<_97.QueryParamsResponse>): _97.QueryParamsResponse;
+            };
             StoreCodeProposal: {
                 encode(message: _96.StoreCodeProposal, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _96.StoreCodeProposal;
@@ -365,6 +394,20 @@ export declare namespace cosmwasm {
                 fromJSON(object: any): _96.UnpinCodesProposal;
                 toJSON(message: _96.UnpinCodesProposal): unknown;
                 fromPartial(object: Partial<_96.UnpinCodesProposal>): _96.UnpinCodesProposal;
+            };
+            AccessConfigUpdate: {
+                encode(message: _96.AccessConfigUpdate, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _96.AccessConfigUpdate;
+                fromJSON(object: any): _96.AccessConfigUpdate;
+                toJSON(message: _96.AccessConfigUpdate): unknown;
+                fromPartial(object: Partial<_96.AccessConfigUpdate>): _96.AccessConfigUpdate;
+            };
+            UpdateInstantiateConfigProposal: {
+                encode(message: _96.UpdateInstantiateConfigProposal, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _96.UpdateInstantiateConfigProposal;
+                fromJSON(object: any): _96.UpdateInstantiateConfigProposal;
+                toJSON(message: _96.UpdateInstantiateConfigProposal): unknown;
+                fromPartial(object: Partial<_96.UpdateInstantiateConfigProposal>): _96.UpdateInstantiateConfigProposal;
             };
             MsgIBCSend: {
                 encode(message: _95.MsgIBCSend, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
@@ -666,6 +709,7 @@ export declare namespace cosmwasm {
                         code(request: _97.QueryCodeRequest): Promise<_97.QueryCodeResponse>;
                         codes(request?: _97.QueryCodesRequest): Promise<_97.QueryCodesResponse>;
                         pinnedCodes(request?: _97.QueryPinnedCodesRequest): Promise<_97.QueryPinnedCodesResponse>;
+                        params(request?: _97.QueryParamsRequest): Promise<_97.QueryParamsResponse>;
                     };
                 };
             };
