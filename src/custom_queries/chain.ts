@@ -13,7 +13,7 @@ import {
   ApiEndpoint,
 } from "./chain.types";
 
-const fetchMainnetChainRegistryInfo = async (
+const fetchMainnetRegistryChainInfo = async (
   chainName: string
 ): Promise<RegistryChainInfo> => {
   const url = `https://proxy.atomscan.com/directory/${chainName}/chain.json`;
@@ -21,7 +21,7 @@ const fetchMainnetChainRegistryInfo = async (
   return response.data as RegistryChainInfo;
 };
 
-const fetchTestnetChainRegistryInfo = async (
+const fetchTestnetRegistryChainInfo = async (
   chainName: string
 ): Promise<RegistryChainInfo> => {
   try {
@@ -36,7 +36,7 @@ const fetchTestnetChainRegistryInfo = async (
   }
 };
 
-const fetchDevnetChainRegistryInfo = (chainName: string): RegistryChainInfo => {
+const fetchDevnetRegistryChainInfo = (chainName: string): RegistryChainInfo => {
   const chainInfo = devnetRegistry[chainName];
   if (!chainInfo)
     throw new Error("Cannot find devnet chain info for " + chainName);
@@ -47,21 +47,21 @@ const fetchDevnetChainRegistryInfo = (chainName: string): RegistryChainInfo => {
  * @param chainName string - defined in cosmos chain registry [github.com/cosmos/chain-registry]
  * @param chainNetwork 'mainnet' | 'testnet' | 'devnet' - defaults to mainnet
  */
-export const getChainRegistryInfo = async (
+export const getRegistryChainInfo = async (
   chainName: string,
   chainNetwork: ChainNetwork = "mainnet"
 ): Promise<RegistryChainInfo> => {
   try {
     if (chainNetwork === "mainnet") {
-      const chainInfo = await fetchMainnetChainRegistryInfo(chainName);
+      const chainInfo = await fetchMainnetRegistryChainInfo(chainName);
       return chainInfo;
     }
     if (chainNetwork === "testnet") {
-      const chainInfo = await fetchTestnetChainRegistryInfo(chainName);
+      const chainInfo = await fetchTestnetRegistryChainInfo(chainName);
       return chainInfo;
     }
     if (chainNetwork === "devnet") {
-      const chainInfo = fetchDevnetChainRegistryInfo(chainName);
+      const chainInfo = fetchDevnetRegistryChainInfo(chainName);
       return chainInfo;
     }
     throw new Error("Cannot find chain info for network type " + chainNetwork);
@@ -73,7 +73,7 @@ export const getChainRegistryInfo = async (
 /** Fetch an active RPC endpoint from the provided chain info
  * @param chainInfo RegistryChainInfo
  */
-export const getActiveRpcFromChainRegistryInfo = (
+export const getActiveRpcFromRegistryChainInfo = (
   chainInfo: RegistryChainInfo
 ): string => {
   try {
@@ -113,8 +113,8 @@ export const getActiveRpcFromChainName = async (
   chainNetwork: ChainNetwork = "mainnet"
 ): Promise<string> => {
   try {
-    const chainInfo = await getChainRegistryInfo(chainName, chainNetwork);
-    const rpcEndpoint = getActiveRpcFromChainRegistryInfo(chainInfo);
+    const chainInfo = await getRegistryChainInfo(chainName, chainNetwork);
+    const rpcEndpoint = getActiveRpcFromRegistryChainInfo(chainInfo);
     return rpcEndpoint;
   } catch (error) {
     throw error;
@@ -124,7 +124,7 @@ export const getActiveRpcFromChainName = async (
 /** Fetch an active REST endpoint from the provided chain info
  * @param chainInfo RegistryChainInfo
  */
-export const getActiveRestFromChainRegistryInfo = (
+export const getActiveRestFromRegistryChainInfo = (
   chainInfo: RegistryChainInfo
 ): string => {
   try {
@@ -164,8 +164,8 @@ export const getActiveRestFromChainName = async (
   chainNetwork: ChainNetwork = "mainnet"
 ): Promise<string> => {
   try {
-    const chainInfo = await getChainRegistryInfo(chainName, chainNetwork);
-    const restEndpoint = getActiveRestFromChainRegistryInfo(chainInfo);
+    const chainInfo = await getRegistryChainInfo(chainName, chainNetwork);
+    const restEndpoint = getActiveRestFromRegistryChainInfo(chainInfo);
     return restEndpoint;
   } catch (error) {
     throw error;
@@ -175,7 +175,7 @@ export const getActiveRestFromChainName = async (
 /** Fetch the keplr chain info for the provided registry chain info
  * @param chainInfo RegistryChainInfo
  */
-export const getChainKeplrInfoFromChainRegistryInfo = (
+export const getKeplrChainInfoFromRegistryChainInfo = (
   chainInfo: RegistryChainInfo
 ): KeplrChainInfo => {
   const {
@@ -191,8 +191,8 @@ export const getChainKeplrInfoFromChainRegistryInfo = (
     ...keplrChainInfo,
     chainId,
     chainName: chainPrettyName,
-    rpc: getActiveRpcFromChainRegistryInfo(chainInfo),
-    rest: getActiveRestFromChainRegistryInfo(chainInfo),
+    rpc: getActiveRpcFromRegistryChainInfo(chainInfo),
+    rest: getActiveRestFromRegistryChainInfo(chainInfo),
   };
 };
 
@@ -205,8 +205,8 @@ export const getKeplrChainInfoFromChainName = async (
   chainNetwork: ChainNetwork = "mainnet"
 ): Promise<KeplrChainInfo> => {
   try {
-    const chainInfo = await getChainRegistryInfo(chainName, chainNetwork);
-    const keplrChainInfo = getChainKeplrInfoFromChainRegistryInfo(chainInfo);
+    const chainInfo = await getRegistryChainInfo(chainName, chainNetwork);
+    const keplrChainInfo = getKeplrChainInfoFromRegistryChainInfo(chainInfo);
     return keplrChainInfo;
   } catch (error) {
     throw error;

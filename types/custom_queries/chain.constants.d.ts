@@ -363,16 +363,25 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: ({
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         } | {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
             coinGeckoId?: undefined;
         })[];
         feeCurrencies: ({
@@ -415,12 +424,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -447,7 +464,14 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
@@ -484,12 +508,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -512,11 +544,19 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -538,12 +578,25 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
-        currencies: {
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
+        currencies: ({
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
-        }[];
+            coinImageUrl: string;
+        } | {
+            coinDenom: string;
+            coinMinimalDenom: string;
+            coinDecimals: number;
+            coinImageUrl?: undefined;
+        })[];
         feeCurrencies: {
             coinDenom: string;
             coinMinimalDenom: string;
@@ -571,11 +624,19 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -602,11 +663,19 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -633,11 +702,19 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -660,12 +737,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -710,6 +795,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -741,12 +827,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -769,11 +863,19 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -803,17 +905,26 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: ({
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         } | {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId?: undefined;
+            coinImageUrl?: undefined;
         })[];
         feeCurrencies: ({
             coinDenom: string;
@@ -853,12 +964,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -888,11 +1007,19 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         }[];
         feeCurrencies: ({
             coinDenom: string;
@@ -929,11 +1056,19 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -957,12 +1092,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1009,6 +1152,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1040,12 +1184,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: ({
             coinDenom: string;
@@ -1096,17 +1248,32 @@ export declare const keplrChainInfos: {
         alternativeBIP44s: {
             coinType: number;
         }[];
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: ({
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
+        } | {
+            coinDenom: string;
+            coinMinimalDenom: string;
+            coinDecimals: number;
+            coinImageUrl: string;
+            coinGeckoId?: undefined;
         } | {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId?: undefined;
+            coinImageUrl?: undefined;
         })[];
         feeCurrencies: {
             coinDenom: string;
@@ -1133,11 +1300,19 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1160,12 +1335,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1188,11 +1371,19 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1219,7 +1410,14 @@ export declare const keplrChainInfos: {
         alternativeBIP44s: {
             coinType: number;
         }[];
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
@@ -1250,11 +1448,19 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1277,12 +1483,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1319,12 +1533,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1356,17 +1578,26 @@ export declare const keplrChainInfos: {
         alternativeBIP44s: {
             coinType: number;
         }[];
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: ({
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         } | {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId?: undefined;
+            coinImageUrl?: undefined;
         })[];
         feeCurrencies: {
             coinDenom: string;
@@ -1437,12 +1668,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1477,12 +1716,20 @@ export declare const keplrChainInfos: {
         alternativeBIP44s: {
             coinType: number;
         }[];
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1517,12 +1764,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1552,12 +1807,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1583,17 +1846,26 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: ({
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         } | {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId?: undefined;
+            coinImageUrl?: undefined;
         })[];
         feeCurrencies: {
             coinDenom: string;
@@ -1625,12 +1897,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1657,12 +1937,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1693,12 +1981,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1732,16 +2028,25 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: ({
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         } | {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
             coinGeckoId?: undefined;
         })[];
         feeCurrencies: {
@@ -1784,6 +2089,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1825,6 +2131,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1853,11 +2160,19 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1884,11 +2199,19 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;
@@ -1919,12 +2242,20 @@ export declare const keplrChainInfos: {
         bip44: {
             coinType: number;
         };
-        bech32Config: string;
+        bech32Config: {
+            bech32PrefixAccAddr: string;
+            bech32PrefixAccPub: string;
+            bech32PrefixValAddr: string;
+            bech32PrefixValPub: string;
+            bech32PrefixConsAddr: string;
+            bech32PrefixConsPub: string;
+        };
         currencies: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         }[];
         feeCurrencies: {
             coinDenom: string;

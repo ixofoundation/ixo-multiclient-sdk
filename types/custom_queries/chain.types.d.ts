@@ -111,7 +111,7 @@ export declare type KeplrChainInfo = {
     alternativeBIP44s?: {
         coinType: number;
     }[];
-    bech32Config: string | {
+    bech32Config: {
         bech32PrefixAccAddr: string;
         bech32PrefixAccPub: string;
         bech32PrefixValAddr: string;
@@ -124,6 +124,7 @@ export declare type KeplrChainInfo = {
         coinMinimalDenom: string;
         coinDecimals: number;
         coinGeckoId?: string;
+        coinImageUrl?: string;
     }[];
     feeCurrencies?: {
         coinDenom: string;

@@ -114,21 +114,20 @@ export type KeplrChainInfo = {
   alternativeBIP44s?: {
     coinType: number;
   }[];
-  bech32Config:
-    | string
-    | {
-        bech32PrefixAccAddr: string;
-        bech32PrefixAccPub: string;
-        bech32PrefixValAddr: string;
-        bech32PrefixValPub: string;
-        bech32PrefixConsAddr: string;
-        bech32PrefixConsPub: string;
-      };
+  bech32Config: {
+    bech32PrefixAccAddr: string;
+    bech32PrefixAccPub: string;
+    bech32PrefixValAddr: string;
+    bech32PrefixValPub: string;
+    bech32PrefixConsAddr: string;
+    bech32PrefixConsPub: string;
+  };
   currencies?: {
     coinDenom: string;
     coinMinimalDenom: string;
     coinDecimals: number;
     coinGeckoId?: string;
+    coinImageUrl?: string;
   }[];
   feeCurrencies?: {
     coinDenom: string;

@@ -165,12 +165,12 @@ export class SigningStargateClient extends StargateClient {
       ? { sequence: 0 }
       : await this.getSequence(signerAddress);
 
-    const queryCleint = QueryClient.withExtensions(
+    const queryClient = QueryClient.withExtensions(
       this.tendermintClient,
       setupTxExtension
     );
 
-    const { gasInfo } = await queryCleint.tx.simulate(
+    const { gasInfo } = await queryClient.tx.simulate(
       anyMsgs,
       memo,
       pubkey as any,

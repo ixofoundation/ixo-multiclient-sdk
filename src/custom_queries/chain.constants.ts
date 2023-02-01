@@ -389,18 +389,27 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 564,
     },
-    bech32Config: "agoric",
+    bech32Config: {
+      bech32PrefixAccAddr: "agoric",
+      bech32PrefixAccPub: "agoricpub",
+      bech32PrefixValAddr: "agoricvaloper",
+      bech32PrefixValPub: "agoricvaloperpub",
+      bech32PrefixConsAddr: "agoricvalcons",
+      bech32PrefixConsPub: "agoricvalconspub",
+    },
     currencies: [
       {
         coinDenom: "BLD",
         coinMinimalDenom: "ubld",
         coinDecimals: 6,
         coinGeckoId: "agoric",
+        coinImageUrl: "https://app.osmosis.zone/tokens/bld.png",
       },
       {
         coinDenom: "IST",
         coinMinimalDenom: "uist",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/ist.png",
       },
     ],
     feeCurrencies: [
@@ -446,13 +455,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "akash",
+    bech32Config: {
+      bech32PrefixAccAddr: "akash",
+      bech32PrefixAccPub: "akashpub",
+      bech32PrefixValAddr: "akashvaloper",
+      bech32PrefixValPub: "akashvaloperpub",
+      bech32PrefixConsAddr: "akashvalcons",
+      bech32PrefixConsPub: "akashvalconspub",
+    },
     currencies: [
       {
         coinDenom: "AKT",
         coinMinimalDenom: "uakt",
         coinDecimals: 6,
         coinGeckoId: "akash-network",
+        coinImageUrl: "https://app.osmosis.zone/tokens/akt.svg",
       },
     ],
     feeCurrencies: [
@@ -482,7 +499,14 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "axelar",
+    bech32Config: {
+      bech32PrefixAccAddr: "axelar",
+      bech32PrefixAccPub: "axelarpub",
+      bech32PrefixValAddr: "axelarvaloper",
+      bech32PrefixValPub: "axelarvaloperpub",
+      bech32PrefixConsAddr: "axelarvalcons",
+      bech32PrefixConsPub: "axelarvalconspub",
+    },
     currencies: [
       {
         coinDenom: "AXL",
@@ -632,13 +656,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "bcna",
+    bech32Config: {
+      bech32PrefixAccAddr: "bcna",
+      bech32PrefixAccPub: "bcnapub",
+      bech32PrefixValAddr: "bcnavaloper",
+      bech32PrefixValPub: "bcnavaloperpub",
+      bech32PrefixConsAddr: "bcnavalcons",
+      bech32PrefixConsPub: "bcnavalconspub",
+    },
     currencies: [
       {
         coinDenom: "BCNA",
         coinMinimalDenom: "ubcna",
         coinDecimals: 6,
         coinGeckoId: "bitcanna",
+        coinImageUrl: "https://app.osmosis.zone/tokens/bcna.svg",
       },
     ],
     feeCurrencies: [
@@ -664,12 +696,20 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 639,
     },
-    bech32Config: "bitsong",
+    bech32Config: {
+      bech32PrefixAccAddr: "bitsong",
+      bech32PrefixAccPub: "bitsongpub",
+      bech32PrefixValAddr: "bitsongvaloper",
+      bech32PrefixValPub: "bitsongvaloperpub",
+      bech32PrefixConsAddr: "bitsongvalcons",
+      bech32PrefixConsPub: "bitsongvalconspub",
+    },
     currencies: [
       {
         coinDenom: "BTSG",
         coinMinimalDenom: "ubtsg",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/btsg.svg",
       },
     ],
     feeCurrencies: [
@@ -694,12 +734,20 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "bostrom",
+    bech32Config: {
+      bech32PrefixAccAddr: "bostrom",
+      bech32PrefixAccPub: "bostrompub",
+      bech32PrefixValAddr: "bostromvaloper",
+      bech32PrefixValPub: "bostromvaloperpub",
+      bech32PrefixConsAddr: "bostromvalcons",
+      bech32PrefixConsPub: "bostromvalconspub",
+    },
     currencies: [
       {
         coinDenom: "BOOT",
         coinMinimalDenom: "boot",
         coinDecimals: 0,
+        coinImageUrl: "https://app.osmosis.zone/tokens/boot.png",
       },
       {
         coinDenom: "H",
@@ -751,12 +799,20 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "cheqd",
+    bech32Config: {
+      bech32PrefixAccAddr: "cheqd",
+      bech32PrefixAccPub: "cheqdpub",
+      bech32PrefixValAddr: "cheqdvaloper",
+      bech32PrefixValPub: "cheqdvaloperpub",
+      bech32PrefixConsAddr: "cheqdvalcons",
+      bech32PrefixConsPub: "cheqdvalconspub",
+    },
     currencies: [
       {
         coinDenom: "CHEQ",
         coinMinimalDenom: "ncheq",
         coinDecimals: 9,
+        coinImageUrl: "https://app.osmosis.zone/tokens/cheq.svg",
       },
     ],
     feeCurrencies: [
@@ -786,12 +842,20 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "chihuahua",
+    bech32Config: {
+      bech32PrefixAccAddr: "chihuahua",
+      bech32PrefixAccPub: "chihuahuapub",
+      bech32PrefixValAddr: "chihuahuavaloper",
+      bech32PrefixValPub: "chihuahuavaloperpub",
+      bech32PrefixConsAddr: "chihuahuavalcons",
+      bech32PrefixConsPub: "chihuahuavalconspub",
+    },
     currencies: [
       {
         coinDenom: "HUAHUA",
         coinMinimalDenom: "uhuahua",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/huahua.png",
       },
     ],
     feeCurrencies: [
@@ -821,12 +885,20 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "comdex",
+    bech32Config: {
+      bech32PrefixAccAddr: "comdex",
+      bech32PrefixAccPub: "comdexpub",
+      bech32PrefixValAddr: "comdexvaloper",
+      bech32PrefixValPub: "comdexvaloperpub",
+      bech32PrefixConsAddr: "comdexvalcons",
+      bech32PrefixConsPub: "comdexvalconspub",
+    },
     currencies: [
       {
         coinDenom: "CMDX",
         coinMinimalDenom: "ucmdx",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/cmdx.png",
       },
     ],
     feeCurrencies: [
@@ -852,13 +924,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "cosmos",
+    bech32Config: {
+      bech32PrefixAccAddr: "cosmos",
+      bech32PrefixAccPub: "cosmospub",
+      bech32PrefixValAddr: "cosmosvaloper",
+      bech32PrefixValPub: "cosmosvaloperpub",
+      bech32PrefixConsAddr: "cosmosvalcons",
+      bech32PrefixConsPub: "cosmosvalconspub",
+    },
     currencies: [
       {
         coinDenom: "ATOM",
         coinMinimalDenom: "uatom",
         coinDecimals: 6,
         coinGeckoId: "cosmos",
+        coinImageUrl: "https://app.osmosis.zone/tokens/atom.svg",
       },
     ],
     feeCurrencies: [
@@ -907,6 +987,7 @@ export const keplrChainInfos = {
         coinMinimalDenom: "basecro",
         coinDecimals: 8,
         coinGeckoId: "crypto-com-chain",
+        coinImageUrl: "https://app.osmosis.zone/tokens/cro.png",
       },
     ],
     feeCurrencies: [
@@ -942,13 +1023,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 852,
     },
-    bech32Config: "desmos",
+    bech32Config: {
+      bech32PrefixAccAddr: "desmos",
+      bech32PrefixAccPub: "desmospub",
+      bech32PrefixValAddr: "desmosvaloper",
+      bech32PrefixValPub: "desmosvaloperpub",
+      bech32PrefixConsAddr: "desmosvalcons",
+      bech32PrefixConsPub: "desmosvalconspub",
+    },
     currencies: [
       {
         coinDenom: "DSM",
         coinMinimalDenom: "udsm",
         coinDecimals: 6,
         coinGeckoId: "desmos",
+        coinImageUrl: "https://app.osmosis.zone/tokens/dsm.svg",
       },
     ],
     feeCurrencies: [
@@ -974,12 +1063,20 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "dig",
+    bech32Config: {
+      bech32PrefixAccAddr: "dig",
+      bech32PrefixAccPub: "digpub",
+      bech32PrefixValAddr: "digvaloper",
+      bech32PrefixValPub: "digvaloperpub",
+      bech32PrefixConsAddr: "digvalcons",
+      bech32PrefixConsPub: "digvalconspub",
+    },
     currencies: [
       {
         coinDenom: "DIG",
         coinMinimalDenom: "udig",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/dig.png",
       },
     ],
     feeCurrencies: [
@@ -1012,19 +1109,28 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "emoney",
+    bech32Config: {
+      bech32PrefixAccAddr: "emoney",
+      bech32PrefixAccPub: "emoneypub",
+      bech32PrefixValAddr: "emoneyvaloper",
+      bech32PrefixValPub: "emoneyvaloperpub",
+      bech32PrefixConsAddr: "emoneyvalcons",
+      bech32PrefixConsPub: "emoneyvalconspub",
+    },
     currencies: [
       {
         coinDenom: "NGM",
         coinMinimalDenom: "ungm",
         coinDecimals: 6,
         coinGeckoId: "e-money",
+        coinImageUrl: "https://app.osmosis.zone/tokens/ngm.png",
       },
       {
         coinDenom: "EEUR",
         coinMinimalDenom: "eeur",
         coinDecimals: 6,
         coinGeckoId: "e-money-eur",
+        coinImageUrl: "https://app.osmosis.zone/tokens/eeur.png",
       },
       {
         coinDenom: "EDKK",
@@ -1128,13 +1234,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 60,
     },
-    bech32Config: "evmos",
+    bech32Config: {
+      bech32PrefixAccAddr: "evmos",
+      bech32PrefixAccPub: "evmospub",
+      bech32PrefixValAddr: "evmosvaloper",
+      bech32PrefixValPub: "evmosvaloperpub",
+      bech32PrefixConsAddr: "evmosvalcons",
+      bech32PrefixConsPub: "evmosvalconspub",
+    },
     currencies: [
       {
         coinDenom: "EVMOS",
         coinMinimalDenom: "aevmos",
         coinDecimals: 18,
         coinGeckoId: "evmos",
+        coinImageUrl: "https://app.osmosis.zone/tokens/evmos.svg",
       },
     ],
     feeCurrencies: [
@@ -1167,12 +1281,20 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "gravity",
+    bech32Config: {
+      bech32PrefixAccAddr: "gravity",
+      bech32PrefixAccPub: "gravitypub",
+      bech32PrefixValAddr: "gravityvaloper",
+      bech32PrefixValPub: "gravityvaloperpub",
+      bech32PrefixConsAddr: "gravityvalcons",
+      bech32PrefixConsPub: "gravityvalconspub",
+    },
     currencies: [
       {
         coinDenom: "GRAV",
         coinMinimalDenom: "ugraviton",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/grav.svg",
       },
     ],
     feeCurrencies: [
@@ -1222,12 +1344,20 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "ixo",
+    bech32Config: {
+      bech32PrefixAccAddr: "ixo",
+      bech32PrefixAccPub: "ixopub",
+      bech32PrefixValAddr: "ixovaloper",
+      bech32PrefixValPub: "ixovaloperpub",
+      bech32PrefixConsAddr: "ixovalcons",
+      bech32PrefixConsPub: "ixovalconspub",
+    },
     currencies: [
       {
         coinDenom: "IXO",
         coinMinimalDenom: "uixo",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/ixo.png",
       },
     ],
     feeCurrencies: [
@@ -1254,13 +1384,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 60,
     },
-    bech32Config: "inj",
+    bech32Config: {
+      bech32PrefixAccAddr: "inj",
+      bech32PrefixAccPub: "injpub",
+      bech32PrefixValAddr: "injvaloper",
+      bech32PrefixValPub: "injvaloperpub",
+      bech32PrefixConsAddr: "injvalcons",
+      bech32PrefixConsPub: "injvalconspub",
+    },
     currencies: [
       {
         coinDenom: "INJ",
         coinMinimalDenom: "inj",
         coinDecimals: 18,
         coinGeckoId: "injective-protocol",
+        coinImageUrl: "https://app.osmosis.zone/tokens/inj.svg",
       },
     ],
     feeCurrencies: [
@@ -1313,6 +1451,7 @@ export const keplrChainInfos = {
         coinMinimalDenom: "uiris",
         coinDecimals: 6,
         coinGeckoId: "iris-network",
+        coinImageUrl: "https://app.osmosis.zone/tokens/iris.svg",
       },
     ],
     feeCurrencies: [
@@ -1347,13 +1486,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "juno",
+    bech32Config: {
+      bech32PrefixAccAddr: "juno",
+      bech32PrefixAccPub: "junopub",
+      bech32PrefixValAddr: "junovaloper",
+      bech32PrefixValPub: "junovaloperpub",
+      bech32PrefixConsAddr: "junovalcons",
+      bech32PrefixConsPub: "junovalconspub",
+    },
     currencies: [
       {
         coinDenom: "JUNO",
         coinMinimalDenom: "ujuno",
         coinDecimals: 6,
         coinGeckoId: "juno-network",
+        coinImageUrl: "https://app.osmosis.zone/tokens/juno.svg",
       },
     ],
     feeCurrencies: [
@@ -1410,30 +1557,41 @@ export const keplrChainInfos = {
         coinType: 118,
       },
     ],
-    bech32Config: "kava",
+    bech32Config: {
+      bech32PrefixAccAddr: "kava",
+      bech32PrefixAccPub: "kavapub",
+      bech32PrefixValAddr: "kavavaloper",
+      bech32PrefixValPub: "kavavaloperpub",
+      bech32PrefixConsAddr: "kavavalcons",
+      bech32PrefixConsPub: "kavavalconspub",
+    },
     currencies: [
       {
         coinDenom: "KAVA",
         coinMinimalDenom: "ukava",
         coinDecimals: 6,
         coinGeckoId: "kava",
+        coinImageUrl: "https://app.osmosis.zone/tokens/kava.png",
       },
       {
         coinDenom: "SWP",
         coinMinimalDenom: "swp",
         coinDecimals: 6,
         coinGeckoId: "kava-swap",
+        coinImageUrl: "https://app.osmosis.zone/tokens/swp.svg",
       },
       {
         coinDenom: "USDX",
         coinMinimalDenom: "usdx",
         coinDecimals: 6,
         coinGeckoId: "usdx",
+        coinImageUrl: "https://app.osmosis.zone/tokens/usdx.png",
       },
       {
         coinDenom: "HARD",
         coinMinimalDenom: "hard",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/hard.svg",
       },
       {
         coinDenom: "BNB",
@@ -1483,12 +1641,20 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "ki",
+    bech32Config: {
+      bech32PrefixAccAddr: "ki",
+      bech32PrefixAccPub: "kipub",
+      bech32PrefixValAddr: "kivaloper",
+      bech32PrefixValPub: "kivaloperpub",
+      bech32PrefixConsAddr: "kivalcons",
+      bech32PrefixConsPub: "kivalconspub",
+    },
     currencies: [
       {
         coinDenom: "XKI",
         coinMinimalDenom: "uxki",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/xki.svg",
       },
     ],
     feeCurrencies: [
@@ -1514,13 +1680,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "like",
+    bech32Config: {
+      bech32PrefixAccAddr: "like",
+      bech32PrefixAccPub: "likepub",
+      bech32PrefixValAddr: "likevaloper",
+      bech32PrefixValPub: "likevaloperpub",
+      bech32PrefixConsAddr: "likevalcons",
+      bech32PrefixConsPub: "likevalconspub",
+    },
     currencies: [
       {
         coinDenom: "LIKE",
         coinMinimalDenom: "nanolike",
         coinDecimals: 9,
         coinGeckoId: "likecoin",
+        coinImageUrl: "https://app.osmosis.zone/tokens/like.svg",
       },
     ],
     feeCurrencies: [
@@ -1546,12 +1720,20 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "lum",
+    bech32Config: {
+      bech32PrefixAccAddr: "lum",
+      bech32PrefixAccPub: "lumpub",
+      bech32PrefixValAddr: "lumvaloper",
+      bech32PrefixValPub: "lumvaloperpub",
+      bech32PrefixConsAddr: "lumvalcons",
+      bech32PrefixConsPub: "lumvalconspub",
+    },
     currencies: [
       {
         coinDenom: "LUM",
         coinMinimalDenom: "ulum",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/lum.svg",
       },
     ],
     feeCurrencies: [
@@ -1583,7 +1765,14 @@ export const keplrChainInfos = {
         coinType: 330,
       },
     ],
-    bech32Config: "mars",
+    bech32Config: {
+      bech32PrefixAccAddr: "mars",
+      bech32PrefixAccPub: "marspub",
+      bech32PrefixValAddr: "marsvaloper",
+      bech32PrefixValPub: "marsvaloperpub",
+      bech32PrefixConsAddr: "marsvalcons",
+      bech32PrefixConsPub: "marsvalconspub",
+    },
     currencies: [
       {
         coinDenom: "MARS",
@@ -1618,12 +1807,20 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "micro",
+    bech32Config: {
+      bech32PrefixAccAddr: "micro",
+      bech32PrefixAccPub: "micropub",
+      bech32PrefixValAddr: "microvaloper",
+      bech32PrefixValPub: "microvaloperpub",
+      bech32PrefixConsAddr: "microvalcons",
+      bech32PrefixConsPub: "microvalconspub",
+    },
     currencies: [
       {
         coinDenom: "TICK",
         coinMinimalDenom: "utick",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/tick.svg",
       },
     ],
     feeCurrencies: [
@@ -1649,19 +1846,28 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "osmo",
+    bech32Config: {
+      bech32PrefixAccAddr: "osmo",
+      bech32PrefixAccPub: "osmopub",
+      bech32PrefixValAddr: "osmovaloper",
+      bech32PrefixValPub: "osmovaloperpub",
+      bech32PrefixConsAddr: "osmovalcons",
+      bech32PrefixConsPub: "osmovalconspub",
+    },
     currencies: [
       {
         coinDenom: "OSMO",
         coinMinimalDenom: "uosmo",
         coinDecimals: 6,
         coinGeckoId: "osmosis",
+        coinImageUrl: "https://app.osmosis.zone/tokens/osmo.svg",
       },
       {
         coinDenom: "ION",
         coinMinimalDenom: "uion",
         coinDecimals: 6,
         coinGeckoId: "ion",
+        coinImageUrl: "https://app.osmosis.zone/tokens/ion.png",
       },
     ],
     feeCurrencies: [
@@ -1707,13 +1913,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 371,
     },
-    bech32Config: "panacea",
+    bech32Config: {
+      bech32PrefixAccAddr: "panacea",
+      bech32PrefixAccPub: "panaceapub",
+      bech32PrefixValAddr: "panaceavaloper",
+      bech32PrefixValPub: "panaceavaloperpub",
+      bech32PrefixConsAddr: "panaceavalcons",
+      bech32PrefixConsPub: "panaceavalconspub",
+    },
     currencies: [
       {
         coinDenom: "MED",
         coinMinimalDenom: "umed",
         coinDecimals: 6,
         coinGeckoId: "medibloc",
+        coinImageUrl: "https://app.osmosis.zone/tokens/med.png",
       },
     ],
     feeCurrencies: [
@@ -1750,13 +1964,21 @@ export const keplrChainInfos = {
         coinType: 750,
       },
     ],
-    bech32Config: "persistence",
+    bech32Config: {
+      bech32PrefixAccAddr: "persistence",
+      bech32PrefixAccPub: "persistencepub",
+      bech32PrefixValAddr: "persistencevaloper",
+      bech32PrefixValPub: "persistencevaloperpub",
+      bech32PrefixConsAddr: "persistencevalcons",
+      bech32PrefixConsPub: "persistencevalconspub",
+    },
     currencies: [
       {
         coinDenom: "XPRT",
         coinMinimalDenom: "uxprt",
         coinDecimals: 6,
         coinGeckoId: "persistence",
+        coinImageUrl: "https://app.osmosis.zone/tokens/xprt.png",
       },
       {
         coinDenom: "STKATOM",
@@ -1840,13 +2062,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "regen",
+    bech32Config: {
+      bech32PrefixAccAddr: "regen",
+      bech32PrefixAccPub: "regenpub",
+      bech32PrefixValAddr: "regenvaloper",
+      bech32PrefixValPub: "regenvaloperpub",
+      bech32PrefixConsAddr: "regenvalcons",
+      bech32PrefixConsPub: "regenvalconspub",
+    },
     currencies: [
       {
         coinDenom: "REGEN",
         coinMinimalDenom: "uregen",
         coinDecimals: 6,
         coinGeckoId: "regen",
+        coinImageUrl: "https://app.osmosis.zone/tokens/regen.png",
       },
     ],
     feeCurrencies: [
@@ -1886,13 +2116,21 @@ export const keplrChainInfos = {
         coinType: 118,
       },
     ],
-    bech32Config: "secret",
+    bech32Config: {
+      bech32PrefixAccAddr: "secret",
+      bech32PrefixAccPub: "secretpub",
+      bech32PrefixValAddr: "secretvaloper",
+      bech32PrefixValPub: "secretvaloperpub",
+      bech32PrefixConsAddr: "secretvalcons",
+      bech32PrefixConsPub: "secretvalconspub",
+    },
     currencies: [
       {
         coinDenom: "SCRT",
         coinMinimalDenom: "uscrt",
         coinDecimals: 6,
         coinGeckoId: "secret",
+        coinImageUrl: "https://app.osmosis.zone/tokens/scrt.svg",
       },
     ],
     feeCurrencies: [
@@ -1931,13 +2169,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "sent",
+    bech32Config: {
+      bech32PrefixAccAddr: "sent",
+      bech32PrefixAccPub: "sentpub",
+      bech32PrefixValAddr: "sentvaloper",
+      bech32PrefixValPub: "sentvaloperpub",
+      bech32PrefixConsAddr: "sentvalcons",
+      bech32PrefixConsPub: "sentvalconspub",
+    },
     currencies: [
       {
         coinDenom: "DVPN",
         coinMinimalDenom: "udvpn",
         coinDecimals: 6,
         coinGeckoId: "sentinel",
+        coinImageUrl: "https://app.osmosis.zone/tokens/dvpn.png",
       },
     ],
     feeCurrencies: [
@@ -1971,13 +2217,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "certik",
+    bech32Config: {
+      bech32PrefixAccAddr: "certik",
+      bech32PrefixAccPub: "certikpub",
+      bech32PrefixValAddr: "certikvaloper",
+      bech32PrefixValPub: "certikvaloperpub",
+      bech32PrefixConsAddr: "certikvalcons",
+      bech32PrefixConsPub: "certikvalconspub",
+    },
     currencies: [
       {
         coinDenom: "CTK",
         coinMinimalDenom: "uctk",
         coinDecimals: 6,
         coinGeckoId: "certik",
+        coinImageUrl: "https://app.osmosis.zone/tokens/ctk.png",
       },
     ],
     feeCurrencies: [
@@ -2006,13 +2260,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "sif",
+    bech32Config: {
+      bech32PrefixAccAddr: "sif",
+      bech32PrefixAccPub: "sifpub",
+      bech32PrefixValAddr: "sifvaloper",
+      bech32PrefixValPub: "sifvaloperpub",
+      bech32PrefixConsAddr: "sifvalcons",
+      bech32PrefixConsPub: "sifvalconspub",
+    },
     currencies: [
       {
         coinDenom: "ROWAN",
         coinMinimalDenom: "rowan",
         coinDecimals: 18,
         coinGeckoId: "sifchain",
+        coinImageUrl: "https://app.osmosis.zone/tokens/rowan.svg",
       },
       {
         coinDenom: "Tether USDT",
@@ -2468,13 +2730,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "somm",
+    bech32Config: {
+      bech32PrefixAccAddr: "somm",
+      bech32PrefixAccPub: "sommpub",
+      bech32PrefixValAddr: "sommvaloper",
+      bech32PrefixValPub: "sommvaloperpub",
+      bech32PrefixConsAddr: "sommvalcons",
+      bech32PrefixConsPub: "sommvalconspub",
+    },
     currencies: [
       {
         coinDenom: "SOMM",
         coinMinimalDenom: "usomm",
         coinDecimals: 6,
         coinGeckoId: "sommelier",
+        coinImageUrl: "https://app.osmosis.zone/tokens/somm.png",
       },
     ],
     feeCurrencies: [
@@ -2504,13 +2774,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "stars",
+    bech32Config: {
+      bech32PrefixAccAddr: "stars",
+      bech32PrefixAccPub: "starspub",
+      bech32PrefixValAddr: "starsvaloper",
+      bech32PrefixValPub: "starsvaloperpub",
+      bech32PrefixConsAddr: "starsvalcons",
+      bech32PrefixConsPub: "starsvalconspub",
+    },
     currencies: [
       {
         coinDenom: "STARS",
         coinMinimalDenom: "ustars",
         coinDecimals: 6,
         coinGeckoId: "stargaze",
+        coinImageUrl: "https://app.osmosis.zone/tokens/stars.png",
       },
     ],
     feeCurrencies: [
@@ -2545,13 +2823,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 234,
     },
-    bech32Config: "star",
+    bech32Config: {
+      bech32PrefixAccAddr: "star",
+      bech32PrefixAccPub: "starpub",
+      bech32PrefixValAddr: "starvaloper",
+      bech32PrefixValPub: "starvaloperpub",
+      bech32PrefixConsAddr: "starvalcons",
+      bech32PrefixConsPub: "starvalconspub",
+    },
     currencies: [
       {
         coinDenom: "IOV",
         coinMinimalDenom: "uiov",
         coinDecimals: 6,
         coinGeckoId: "starname",
+        coinImageUrl: "https://app.osmosis.zone/tokens/iov.png",
       },
     ],
     feeCurrencies: [
@@ -2589,33 +2875,45 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "stride",
+    bech32Config: {
+      bech32PrefixAccAddr: "stride",
+      bech32PrefixAccPub: "stridepub",
+      bech32PrefixValAddr: "stridevaloper",
+      bech32PrefixValPub: "stridevaloperpub",
+      bech32PrefixConsAddr: "stridevalcons",
+      bech32PrefixConsPub: "stridevalconspub",
+    },
     currencies: [
       {
         coinDenom: "STRD",
         coinMinimalDenom: "ustrd",
         coinDecimals: 6,
         coinGeckoId: "stride",
+        coinImageUrl: "https://app.osmosis.zone/tokens/strd.svg",
       },
       {
         coinDenom: "stATOM",
         coinMinimalDenom: "stuatom",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/statom.svg",
       },
       {
         coinDenom: "stOSMO",
         coinMinimalDenom: "stuosmo",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/stosmo.svg",
       },
       {
         coinDenom: "stJUNO",
         coinMinimalDenom: "stujuno",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/stjuno.svg",
       },
       {
         coinDenom: "stSTARS",
         coinMinimalDenom: "stustars",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/ststars.svg",
       },
     ],
     feeCurrencies: [
@@ -2661,12 +2959,14 @@ export const keplrChainInfos = {
         coinMinimalDenom: "uluna",
         coinDecimals: 6,
         coinGeckoId: "terra-luna",
+        coinImageUrl: "https://app.osmosis.zone/tokens/luna.svg",
       },
       {
         coinDenom: "USTC",
         coinMinimalDenom: "uusd",
         coinDecimals: 6,
         coinGeckoId: "terrausd",
+        coinImageUrl: "https://app.osmosis.zone/tokens/ustc.png",
       },
     ],
     feeCurrencies: [
@@ -2723,6 +3023,7 @@ export const keplrChainInfos = {
         coinMinimalDenom: "uluna",
         coinDecimals: 6,
         coinGeckoId: "terra-luna-2",
+        coinImageUrl: "https://app.osmosis.zone/tokens/luna.svg",
       },
     ],
     feeCurrencies: [
@@ -2754,12 +3055,20 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "tgrade",
+    bech32Config: {
+      bech32PrefixAccAddr: "tgrade",
+      bech32PrefixAccPub: "tgradepub",
+      bech32PrefixValAddr: "tgradevaloper",
+      bech32PrefixValPub: "tgradevaloperpub",
+      bech32PrefixConsAddr: "tgradevalcons",
+      bech32PrefixConsPub: "tgradevalconspub",
+    },
     currencies: [
       {
         coinDenom: "TGD",
         coinMinimalDenom: "utgd",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/tgrade.svg",
       },
     ],
     feeCurrencies: [
@@ -2789,12 +3098,20 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 118,
     },
-    bech32Config: "umee",
+    bech32Config: {
+      bech32PrefixAccAddr: "umee",
+      bech32PrefixAccPub: "umeepub",
+      bech32PrefixValAddr: "umeevaloper",
+      bech32PrefixValPub: "umeevaloperpub",
+      bech32PrefixConsAddr: "umeevalcons",
+      bech32PrefixConsPub: "umeevalconspub",
+    },
     currencies: [
       {
         coinDenom: "UMEE",
         coinMinimalDenom: "uumee",
         coinDecimals: 6,
+        coinImageUrl: "https://app.osmosis.zone/tokens/umee.png",
       },
     ],
     feeCurrencies: [
@@ -2828,13 +3145,21 @@ export const keplrChainInfos = {
     bip44: {
       coinType: 370,
     },
-    bech32Config: "vdl",
+    bech32Config: {
+      bech32PrefixAccAddr: "vdl",
+      bech32PrefixAccPub: "vdlpub",
+      bech32PrefixValAddr: "vdlvaloper",
+      bech32PrefixValPub: "vdlvaloperpub",
+      bech32PrefixConsAddr: "vdlvalcons",
+      bech32PrefixConsPub: "vdlvalconspub",
+    },
     currencies: [
       {
         coinDenom: "VDL",
         coinMinimalDenom: "uvdl",
         coinDecimals: 6,
         coinGeckoId: "vidulum",
+        coinImageUrl: "https://app.osmosis.zone/tokens/vdl.svg",
       },
     ],
     feeCurrencies: [
