@@ -359,6 +359,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -420,6 +421,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -504,6 +506,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -540,6 +543,7 @@ export declare const keplrChainInfos: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -574,6 +578,7 @@ export declare const keplrChainInfos: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -620,6 +625,7 @@ export declare const keplrChainInfos: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -659,6 +665,7 @@ export declare const keplrChainInfos: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -698,6 +705,7 @@ export declare const keplrChainInfos: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -733,6 +741,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -778,6 +787,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -823,6 +833,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -859,6 +870,7 @@ export declare const keplrChainInfos: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -899,6 +911,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         walletUrl: string;
         walletUrlForStaking: string;
@@ -960,6 +973,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1003,6 +1017,7 @@ export declare const keplrChainInfos: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1050,6 +1065,7 @@ export declare const keplrChainInfos: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         };
         walletUrl: string;
         walletUrlForStaking: string;
@@ -1088,6 +1104,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1132,6 +1149,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1180,6 +1198,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1239,6 +1258,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         walletUrl: string;
         walletUrlForStaking: string;
@@ -1296,6 +1316,7 @@ export declare const keplrChainInfos: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1331,6 +1352,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1367,6 +1389,7 @@ export declare const keplrChainInfos: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1444,6 +1467,7 @@ export declare const keplrChainInfos: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1479,6 +1503,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1529,6 +1554,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1571,6 +1597,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1664,6 +1691,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1709,6 +1737,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1758,6 +1787,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         walletUrl: string;
         walletUrlForStaking: string;
@@ -1803,6 +1833,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1842,6 +1873,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1893,6 +1925,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1933,6 +1966,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -1977,6 +2011,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -2022,6 +2057,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         walletUrl: string;
         walletUrlForStaking: string;
@@ -2072,6 +2108,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -2114,6 +2151,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -2156,6 +2194,7 @@ export declare const keplrChainInfos: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -2195,6 +2234,7 @@ export declare const keplrChainInfos: {
             coinDenom: string;
             coinMinimalDenom: string;
             coinDecimals: number;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;
@@ -2238,6 +2278,7 @@ export declare const keplrChainInfos: {
             coinMinimalDenom: string;
             coinDecimals: number;
             coinGeckoId: string;
+            coinImageUrl: string;
         };
         bip44: {
             coinType: number;

@@ -385,6 +385,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "ubld",
       coinDecimals: 6,
       coinGeckoId: "agoric",
+      coinImageUrl: "https://app.osmosis.zone/tokens/bld.png",
     },
     bip44: {
       coinType: 564,
@@ -451,6 +452,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "uakt",
       coinDecimals: 6,
       coinGeckoId: "akash-network",
+      coinImageUrl: "https://app.osmosis.zone/tokens/akt.svg",
     },
     bip44: {
       coinType: 118,
@@ -652,6 +654,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "ubcna",
       coinDecimals: 6,
       coinGeckoId: "bitcanna",
+      coinImageUrl: "https://app.osmosis.zone/tokens/bcna.svg",
     },
     bip44: {
       coinType: 118,
@@ -692,6 +695,7 @@ export const keplrChainInfos = {
       coinDenom: "BTSG",
       coinMinimalDenom: "ubtsg",
       coinDecimals: 6,
+      coinImageUrl: "https://app.osmosis.zone/tokens/btsg.svg",
     },
     bip44: {
       coinType: 639,
@@ -730,6 +734,7 @@ export const keplrChainInfos = {
       coinDenom: "BOOT",
       coinMinimalDenom: "boot",
       coinDecimals: 0,
+      coinImageUrl: "https://app.osmosis.zone/tokens/boot.png",
     },
     bip44: {
       coinType: 118,
@@ -795,6 +800,7 @@ export const keplrChainInfos = {
       coinDenom: "CHEQ",
       coinMinimalDenom: "ncheq",
       coinDecimals: 9,
+      coinImageUrl: "https://app.osmosis.zone/tokens/cheq.svg",
     },
     bip44: {
       coinType: 118,
@@ -838,6 +844,7 @@ export const keplrChainInfos = {
       coinDenom: "HUAHUA",
       coinMinimalDenom: "uhuahua",
       coinDecimals: 6,
+      coinImageUrl: "https://app.osmosis.zone/tokens/huahua.png",
     },
     bip44: {
       coinType: 118,
@@ -881,6 +888,7 @@ export const keplrChainInfos = {
       coinDenom: "CMDX",
       coinMinimalDenom: "ucmdx",
       coinDecimals: 6,
+      coinImageUrl: "https://app.osmosis.zone/tokens/cmdx.png",
     },
     bip44: {
       coinType: 118,
@@ -920,6 +928,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "uatom",
       coinDecimals: 6,
       coinGeckoId: "cosmos",
+      coinImageUrl: "https://app.osmosis.zone/tokens/atom.svg",
     },
     bip44: {
       coinType: 118,
@@ -969,6 +978,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "basecro",
       coinDecimals: 8,
       coinGeckoId: "crypto-com-chain",
+      coinImageUrl: "https://app.osmosis.zone/tokens/cro.png",
     },
     bip44: {
       coinType: 394,
@@ -1019,6 +1029,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "udsm",
       coinDecimals: 6,
       coinGeckoId: "desmos",
+      coinImageUrl: "https://app.osmosis.zone/tokens/dsm.svg",
     },
     bip44: {
       coinType: 852,
@@ -1059,6 +1070,7 @@ export const keplrChainInfos = {
       coinDenom: "DIG",
       coinMinimalDenom: "udig",
       coinDecimals: 6,
+      coinImageUrl: "https://app.osmosis.zone/tokens/dig.png",
     },
     bip44: {
       coinType: 118,
@@ -1103,6 +1115,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "ungm",
       coinDecimals: 6,
       coinGeckoId: "e-money",
+      coinImageUrl: "https://app.osmosis.zone/tokens/ngm.png",
     },
     walletUrl: "https://wallet.keplr.app/chains/e-money",
     walletUrlForStaking: "https://wallet.keplr.app/chains/e-money",
@@ -1230,6 +1243,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "aevmos",
       coinDecimals: 18,
       coinGeckoId: "evmos",
+      coinImageUrl: "https://app.osmosis.zone/tokens/evmos.svg",
     },
     bip44: {
       coinType: 60,
@@ -1277,6 +1291,7 @@ export const keplrChainInfos = {
       coinDenom: "GRAV",
       coinMinimalDenom: "ugraviton",
       coinDecimals: 6,
+      coinImageUrl: "https://app.osmosis.zone/tokens/grav.svg",
     },
     bip44: {
       coinType: 118,
@@ -1338,6 +1353,7 @@ export const keplrChainInfos = {
       coinDenom: "IXO",
       coinMinimalDenom: "uixo",
       coinDecimals: 6,
+      coinImageUrl: "https://app.osmosis.zone/tokens/ixo.png",
     },
     walletUrl: "https://wallet.keplr.app/chains/ixo",
     walletUrlForStaking: "https://wallet.keplr.app/chains/ixo",
@@ -1380,6 +1396,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "inj",
       coinDecimals: 18,
       coinGeckoId: "injective-protocol",
+      coinImageUrl: "https://app.osmosis.zone/tokens/inj.svg",
     },
     bip44: {
       coinType: 60,
@@ -1428,6 +1445,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "uiris",
       coinDecimals: 6,
       coinGeckoId: "iris-network",
+      coinImageUrl: "https://app.osmosis.zone/tokens/iris.svg",
     },
     bip44: {
       coinType: 118,
@@ -1482,6 +1500,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "ujuno",
       coinDecimals: 6,
       coinGeckoId: "juno-network",
+      coinImageUrl: "https://app.osmosis.zone/tokens/juno.svg",
     },
     bip44: {
       coinType: 118,
@@ -1546,6 +1565,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "ukava",
       coinDecimals: 6,
       coinGeckoId: "kava",
+      coinImageUrl: "https://app.osmosis.zone/tokens/kava.png",
     },
     walletUrl: "https://wallet.keplr.app/chains/kava",
     walletUrlForStaking: "https://wallet.keplr.app/chains/kava",
@@ -1637,6 +1657,7 @@ export const keplrChainInfos = {
       coinDenom: "XKI",
       coinMinimalDenom: "uxki",
       coinDecimals: 6,
+      coinImageUrl: "https://app.osmosis.zone/tokens/xki.svg",
     },
     bip44: {
       coinType: 118,
@@ -1676,6 +1697,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "nanolike",
       coinDecimals: 9,
       coinGeckoId: "likecoin",
+      coinImageUrl: "https://app.osmosis.zone/tokens/like.svg",
     },
     bip44: {
       coinType: 118,
@@ -1716,6 +1738,7 @@ export const keplrChainInfos = {
       coinDenom: "LUM",
       coinMinimalDenom: "ulum",
       coinDecimals: 6,
+      coinImageUrl: "https://app.osmosis.zone/tokens/lum.svg",
     },
     bip44: {
       coinType: 118,
@@ -1803,6 +1826,7 @@ export const keplrChainInfos = {
       coinDenom: "TICK",
       coinMinimalDenom: "utick",
       coinDecimals: 6,
+      coinImageUrl: "https://app.osmosis.zone/tokens/tick.svg",
     },
     bip44: {
       coinType: 118,
@@ -1842,6 +1866,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "uosmo",
       coinDecimals: 6,
       coinGeckoId: "osmosis",
+      coinImageUrl: "https://app.osmosis.zone/tokens/osmo.svg",
     },
     bip44: {
       coinType: 118,
@@ -1909,6 +1934,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "umed",
       coinDecimals: 6,
       coinGeckoId: "medibloc",
+      coinImageUrl: "https://app.osmosis.zone/tokens/med.png",
     },
     bip44: {
       coinType: 371,
@@ -1955,6 +1981,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "uxprt",
       coinDecimals: 6,
       coinGeckoId: "persistence",
+      coinImageUrl: "https://app.osmosis.zone/tokens/xprt.png",
     },
     bip44: {
       coinType: 118,
@@ -2058,6 +2085,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "uregen",
       coinDecimals: 6,
       coinGeckoId: "regen",
+      coinImageUrl: "https://app.osmosis.zone/tokens/regen.png",
     },
     bip44: {
       coinType: 118,
@@ -2107,6 +2135,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "uscrt",
       coinDecimals: 6,
       coinGeckoId: "secret",
+      coinImageUrl: "https://app.osmosis.zone/tokens/scrt.svg",
     },
     bip44: {
       coinType: 529,
@@ -2163,6 +2192,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "udvpn",
       coinDecimals: 6,
       coinGeckoId: "sentinel",
+      coinImageUrl: "https://app.osmosis.zone/tokens/dvpn.png",
     },
     walletUrl: "https://wallet.keplr.app/chains/sentinel",
     walletUrlForStaking: "https://wallet.keplr.app/chains/sentinel",
@@ -2213,6 +2243,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "uctk",
       coinDecimals: 6,
       coinGeckoId: "certik",
+      coinImageUrl: "https://app.osmosis.zone/tokens/ctk.png",
     },
     bip44: {
       coinType: 118,
@@ -2256,6 +2287,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "rowan",
       coinDecimals: 18,
       coinGeckoId: "sifchain",
+      coinImageUrl: "https://app.osmosis.zone/tokens/rowan.svg",
     },
     bip44: {
       coinType: 118,
@@ -2726,6 +2758,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "usomm",
       coinDecimals: 6,
       coinGeckoId: "sommelier",
+      coinImageUrl: "https://app.osmosis.zone/tokens/somm.png",
     },
     bip44: {
       coinType: 118,
@@ -2770,6 +2803,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "ustars",
       coinDecimals: 6,
       coinGeckoId: "stargaze",
+      coinImageUrl: "https://app.osmosis.zone/tokens/stars.png",
     },
     bip44: {
       coinType: 118,
@@ -2819,6 +2853,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "uiov",
       coinDecimals: 6,
       coinGeckoId: "starname",
+      coinImageUrl: "https://app.osmosis.zone/tokens/iov.png",
     },
     bip44: {
       coinType: 234,
@@ -2869,6 +2904,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "ustrd",
       coinDecimals: 6,
       coinGeckoId: "stride",
+      coinImageUrl: "https://app.osmosis.zone/tokens/strd.svg",
     },
     walletUrl: "https://wallet.keplr.app/chains/stride",
     walletUrlForStaking: "https://wallet.keplr.app/chains/stride",
@@ -2941,6 +2977,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "uluna",
       coinDecimals: 6,
       coinGeckoId: "terra-luna",
+      coinImageUrl: "https://app.osmosis.zone/tokens/luna.svg",
     },
     bip44: {
       coinType: 330,
@@ -3005,6 +3042,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "uluna",
       coinDecimals: 6,
       coinGeckoId: "terra-luna-2",
+      coinImageUrl: "https://app.osmosis.zone/tokens/luna.svg",
     },
     bip44: {
       coinType: 330,
@@ -3051,6 +3089,7 @@ export const keplrChainInfos = {
       coinDenom: "TGD",
       coinMinimalDenom: "utgd",
       coinDecimals: 6,
+      coinImageUrl: "https://app.osmosis.zone/tokens/tgrade.svg",
     },
     bip44: {
       coinType: 118,
@@ -3094,6 +3133,7 @@ export const keplrChainInfos = {
       coinDenom: "UMEE",
       coinMinimalDenom: "uumee",
       coinDecimals: 6,
+      coinImageUrl: "https://app.osmosis.zone/tokens/umee.png",
     },
     bip44: {
       coinType: 118,
@@ -3141,6 +3181,7 @@ export const keplrChainInfos = {
       coinMinimalDenom: "uvdl",
       coinDecimals: 6,
       coinGeckoId: "vidulum",
+      coinImageUrl: "https://app.osmosis.zone/tokens/vdl.svg",
     },
     bip44: {
       coinType: 370,

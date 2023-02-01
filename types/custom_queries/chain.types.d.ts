@@ -102,6 +102,7 @@ export declare type KeplrChainInfo = {
         coinMinimalDenom: string;
         coinDecimals: number;
         coinGeckoId?: string;
+        coinImageUrl?: string;
     };
     walletUrl?: string;
     walletUrlForStaking?: string;
