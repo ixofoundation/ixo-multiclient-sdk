@@ -184,7 +184,8 @@ export const getKeplrChainInfoFromRegistryChainInfo = (
     network_type: chainNetwork,
     pretty_name: chainPrettyName,
   } = chainInfo;
-  const keplrChainInfo = keplrChainInfos[chainName];
+  const keplrChainInfo =
+    keplrChainInfos[chainName.replace(/testnet|devnet/i, "")];
   if (!keplrChainInfo?.chainId) return null;
   if (chainNetwork === "mainnet") return keplrChainInfo;
   return {
