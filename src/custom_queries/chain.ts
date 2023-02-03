@@ -75,34 +75,32 @@ export const getRegistryChainInfo = async (
  */
 export const getActiveRpcFromRegistryChainInfo = (
   chainInfo: RegistryChainInfo
-): string => {
-  try {
-    const chainRpcs = chainInfo.apis?.rpc;
-    // ensure chainInfo contains RPC endpoints
-    if (!chainRpcs?.length)
-      throw new Error("No RPC endpoints found in provided chain info");
-    // check RPC endpoints against preferred endpoints
-    const chainName = chainInfo.chain_name.replace(/testnet/i, "");
-    const preferredRpcEndpoints = preferredEndpoints[chainName]?.rpc;
-    if (preferredRpcEndpoints?.length) {
-      const rpcEndpoints = chainRpcs.filter((rpc: ApiEndpoint) =>
-        preferredRpcEndpoints.some((preferredRpc: string) =>
-          rpc.address.includes(preferredRpc)
-        )
-      );
-      if (rpcEndpoints.length) return rpcEndpoints[0].address;
+): Promise<string> =>
+  new Promise(async (resolve, reject) => {
+    try {
+      let chainRpcs = chainInfo.apis?.rpc?.map((rpc) => rpc.address);
+      if (!chainRpcs?.length)
+        throw new Error("No RPC endpoints found in provided chain info");
+      const chainName = chainInfo.chain_name.replace(/testnet|devnet/i, "");
+      chainRpcs = chainRpcs.sort((rpc1: string, rpc2: string) => {
+        if ((preferredEndpoints[chainName]?.rpc || []).includes(rpc1))
+          return -1;
+        if ((preferredEndpoints[chainName]?.rpc || []).includes(rpc2)) return 1;
+        return 0;
+      });
+      for (let rpc of chainRpcs) {
+        try {
+          const res = await axios.get(rpc);
+          if (res.status === 200) return resolve(rpc);
+        } catch (error) {
+          continue;
+        }
+      }
+      throw new Error("No RPC endpoints available at the moment");
+    } catch (error) {
+      return reject(error);
     }
-    // check if RPC endpoints contain 'keplr.app' endpoint
-    const keplrEndpoints = chainRpcs.filter((rpc: ApiEndpoint) =>
-      /keplr.app/i.test(rpc.address)
-    );
-    if (keplrEndpoints.length) return keplrEndpoints[0].address;
-    // return first found rpc endpoint
-    return chainRpcs[0].address;
-  } catch (error) {
-    throw error;
-  }
-};
+  });
 
 /** Fetch an active RPC endpoint for the provided chain name and chain network
  * @param chainName string - defined in cosmos chain registry [github.com/cosmos/chain-registry]
@@ -114,87 +112,90 @@ export const getActiveRpcFromChainName = async (
 ): Promise<string> => {
   try {
     const chainInfo = await getRegistryChainInfo(chainName, chainNetwork);
-    const rpcEndpoint = getActiveRpcFromRegistryChainInfo(chainInfo);
+    const rpcEndpoint = await getActiveRpcFromRegistryChainInfo(chainInfo);
     return rpcEndpoint;
   } catch (error) {
     throw error;
   }
 };
 
-/** Fetch an active REST endpoint from the provided chain info
- * @param chainInfo RegistryChainInfo
- */
-export const getActiveRestFromRegistryChainInfo = (
-  chainInfo: RegistryChainInfo
-): string => {
-  try {
-    const chainRest = chainInfo.apis?.rest;
-    // ensure chainInfo contains REST endpoints
-    if (!chainRest?.length)
-      throw new Error("No REST endpoints found in provided chain info");
-    // check REST endpoints against preferred endpoints
-    const chainName = chainInfo.chain_name.replace(/testnet/i, "");
-    const preferredRestEndpoints = preferredEndpoints[chainName]?.rpc;
-    if (preferredRestEndpoints?.length) {
-      const restEndpoints = chainRest.filter((rest: ApiEndpoint) =>
-        preferredRestEndpoints.some((preferredRest: string) =>
-          rest.address.includes(preferredRest)
-        )
-      );
-      if (restEndpoints.length) return restEndpoints[0].address;
-    }
-    // check if REST endpoints contain 'keplr.app' endpoint
-    const keplrEndpoints = chainRest.filter((rest: ApiEndpoint) =>
-      /keplr.app/i.test(rest.address)
-    );
-    if (keplrEndpoints.length) return keplrEndpoints[0].address;
-    // return first found REST endpoint
-    return chainRest[0].address;
-  } catch (error) {
-    throw error;
-  }
-};
+// const preferredEndpointsContainRest = (
+//   chainName: string,
+//   rest: string
+// ): boolean =>
+//   (preferredEndpoints[chainName]?.rest || []).some((preferredRest: string) =>
+//     rest.includes(preferredRest)
+//   );
 
-/** Fetch an active REST endpoint for the provided chain name and chain network
- * @param chainName string - defined in cosmos chain registry [github.com/cosmos/chain-registry]
- * @param chainNetwork 'mainnet' | 'testnet' | 'devnet' - defaults to mainnet
- */
-export const getActiveRestFromChainName = async (
-  chainName: string,
-  chainNetwork: ChainNetwork = "mainnet"
-): Promise<string> => {
-  try {
-    const chainInfo = await getRegistryChainInfo(chainName, chainNetwork);
-    const restEndpoint = getActiveRestFromRegistryChainInfo(chainInfo);
-    return restEndpoint;
-  } catch (error) {
-    throw error;
-  }
-};
+// /** Fetch an active REST endpoint from the provided chain info
+//  * @param chainInfo RegistryChainInfo
+//  */
+// export const getActiveRestFromRegistryChainInfo = async (
+//   chainInfo: RegistryChainInfo
+// ): Promise<string> => {
+//   try {
+//     let chainRests = chainInfo.apis?.rest?.map((rest) => rest.address);
+//     if (!chainRests?.length)
+//       throw new Error("No RPC endpoints found in provided chain info");
+//     const chainName = chainInfo.chain_name.replace(/testnet/i, "");
+//     chainRests = chainRests.sort((rest1: string, rest2: string) => {
+//       if (preferredEndpointsContainRest(chainName, rest1)) return -1;
+//       if (preferredEndpointsContainRest(chainName, rest2)) return 1;
+//       return 0;
+//     });
+//     for (let rest of chainRests) {
+//       try {
+//         const res = await axios.get(rest);
+//         if (res.status === 200 || res.status === 501) return rest;
+//       } catch (error) {
+//         if (error.status === 501) return rest;
+//         continue;
+//       }
+//     }
+//     throw new Error("No Rest endpoints available at the moment");
+//   } catch (error) {
+//     throw error;
+//   }
+// };
+
+// /** Fetch an active REST endpoint for the provided chain name and chain network
+//  * @param chainName string - defined in cosmos chain registry [github.com/cosmos/chain-registry]
+//  * @param chainNetwork 'mainnet' | 'testnet' | 'devnet' - defaults to mainnet
+//  */
+// export const getActiveRestFromChainName = async (
+//   chainName: string,
+//   chainNetwork: ChainNetwork = "mainnet"
+// ): Promise<string> => {
+//   try {
+//     const chainInfo = await getRegistryChainInfo(chainName, chainNetwork);
+//     const restEndpoint = await getActiveRestFromRegistryChainInfo(chainInfo);
+//     return restEndpoint;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
 /** Fetch the keplr chain info for the provided registry chain info
  * @param chainInfo RegistryChainInfo
  */
-export const getKeplrChainInfoFromRegistryChainInfo = (
+export const getKeplrChainInfoFromRegistryChainInfo = async (
   chainInfo: RegistryChainInfo
-): KeplrChainInfo => {
-  const {
-    chain_id: chainId,
-    chain_name: chainName,
-    network_type: chainNetwork,
-    pretty_name: chainPrettyName,
-  } = chainInfo;
-  const keplrChainInfo =
-    keplrChainInfos[chainName.replace(/testnet|devnet/i, "")];
-  if (!keplrChainInfo?.chainId) return null;
-  if (chainNetwork === "mainnet") return keplrChainInfo;
-  return {
-    ...keplrChainInfo,
-    chainId,
-    chainName: chainPrettyName,
-    rpc: getActiveRpcFromRegistryChainInfo(chainInfo),
-    rest: getActiveRestFromRegistryChainInfo(chainInfo),
-  };
+): Promise<KeplrChainInfo> => {
+  try {
+    const chainName =
+      chainInfo.chain_name?.replace(/testnet|devnet/i, "") ?? "";
+    const keplrChainInfo = keplrChainInfos[chainName];
+    if (!keplrChainInfo?.chainId) return null;
+    const rpc = await getActiveRpcFromRegistryChainInfo(chainInfo);
+    return {
+      ...keplrChainInfo,
+      chainId: chainInfo.chain_id,
+      chainName: chainInfo.pretty_name,
+      rpc,
+    };
+  } catch (error) {
+    throw error;
+  }
 };
 
 /** Fetch the keplr chain info for the provided chain name and network type

@@ -1,3 +1,4 @@
+// Manually defined preferred rpc and rest endpoints for chains
 export const preferredEndpoints = {
   agoric: {
     rpc: ["https://main.rpc.agoric.net"],
@@ -104,8 +105,18 @@ export const preferredEndpoints = {
     rest: ["https://gravitychain.io:1317"],
   },
   impacthub: {
-    rpc: ["https://rpc-impacthub.keplr.app"],
-    rest: ["https://lcd-impacthub.keplr.app"],
+    rpc: [
+      "https://impacthub-rpc.lavenderfive.com/",
+      "https://rpc-ixo-ia.cosmosia.notional.ventures/",
+      "https://testnet.ixo.earth/rpc",
+      "https://devnet.ixo.earth/rpc",
+    ],
+    rest: [
+      "https://impacthub-api.lavenderfive.com/",
+      "https://api-ixo-ia.cosmosia.notional.ventures/",
+      "https://testnet.ixo.earth/rest",
+      "https://devnet.ixo.earth/rest",
+    ],
   },
   injective: {
     rpc: ["https://public.api.injective.network"],
@@ -371,7 +382,7 @@ export const devnetRegistry = {
   },
 };
 
-// Extracted from chainapsis's keplr-wallet github repo at:
+// Extracted from chainapsis keplr-wallet github repo at:
 // https://github.com/chainapsis/keplr-wallet/blob/master/packages/mobile/src/config.ts
 // https://github.com/chainapsis/keplr-wallet/blob/master/packages/extension/src/config.ts
 export const keplrChainInfos = {

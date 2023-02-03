@@ -7,25 +7,16 @@ export declare const getRegistryChainInfo: (chainName: string, chainNetwork?: Ch
 /** Fetch an active RPC endpoint from the provided chain info
  * @param chainInfo RegistryChainInfo
  */
-export declare const getActiveRpcFromRegistryChainInfo: (chainInfo: RegistryChainInfo) => string;
+export declare const getActiveRpcFromRegistryChainInfo: (chainInfo: RegistryChainInfo) => Promise<string>;
 /** Fetch an active RPC endpoint for the provided chain name and chain network
  * @param chainName string - defined in cosmos chain registry [github.com/cosmos/chain-registry]
  * @param chainNetwork 'mainnet' | 'testnet' | 'devnet' - defaults to mainnet
  */
 export declare const getActiveRpcFromChainName: (chainName: string, chainNetwork?: ChainNetwork) => Promise<string>;
-/** Fetch an active REST endpoint from the provided chain info
- * @param chainInfo RegistryChainInfo
- */
-export declare const getActiveRestFromRegistryChainInfo: (chainInfo: RegistryChainInfo) => string;
-/** Fetch an active REST endpoint for the provided chain name and chain network
- * @param chainName string - defined in cosmos chain registry [github.com/cosmos/chain-registry]
- * @param chainNetwork 'mainnet' | 'testnet' | 'devnet' - defaults to mainnet
- */
-export declare const getActiveRestFromChainName: (chainName: string, chainNetwork?: ChainNetwork) => Promise<string>;
 /** Fetch the keplr chain info for the provided registry chain info
  * @param chainInfo RegistryChainInfo
  */
-export declare const getKeplrChainInfoFromRegistryChainInfo: (chainInfo: RegistryChainInfo) => KeplrChainInfo;
+export declare const getKeplrChainInfoFromRegistryChainInfo: (chainInfo: RegistryChainInfo) => Promise<KeplrChainInfo>;
 /** Fetch the keplr chain info for the provided chain name and network type
  * @param chainName string - defined in cosmos chain registry [github.com/cosmos/chain-registry]
  * @param chainNetwork 'mainnet' | 'testnet' | 'devnet' - defaults to mainnet
