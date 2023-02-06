@@ -187,10 +187,6 @@ export const createRegistry = (): Registry => {
     ixo.iid.v1beta1.MsgUpdateIidDocument
   );
   myRegistry.register(
-    "/ixo.iid.v1beta1.MsgUpdateIidMeta",
-    ixo.iid.v1beta1.MsgUpdateIidMeta
-  );
-  myRegistry.register(
     "/ixo.iid.v1beta1.MsgAddIidContext",
     ixo.iid.v1beta1.MsgAddIidContext
   );
@@ -250,16 +246,12 @@ export const createRegistry = (): Registry => {
     "/ixo.iid.v1beta1.MsgDeleteService",
     ixo.iid.v1beta1.MsgDeleteService
   );
+  myRegistry.register(
+    "/ixo.iid.v1beta1.MsgDeactivateIID",
+    ixo.iid.v1beta1.MsgDeactivateIID
+  );
 
   // Ixo Entity module
-  myRegistry.register(
-    "/ixo.entity.v1beta1.MsgCreateEntity",
-    ixo.entity.v1beta1.MsgCreateEntity
-  );
-  myRegistry.register(
-    "/ixo.entity.v1beta1.MsgCreateEntity",
-    ixo.entity.v1beta1.MsgCreateEntity
-  );
   myRegistry.register(
     "/ixo.entity.v1beta1.MsgCreateEntity",
     ixo.entity.v1beta1.MsgCreateEntity
@@ -271,6 +263,10 @@ export const createRegistry = (): Registry => {
   myRegistry.register(
     "/ixo.entity.v1beta1.MsgUpdateEntity",
     ixo.entity.v1beta1.MsgUpdateEntity
+  );
+  myRegistry.register(
+    "/ixo.entity.v1beta1.MsgUpdateEntityVerified",
+    ixo.entity.v1beta1.MsgUpdateEntityVerified
   );
 
   // Ixo Payments module

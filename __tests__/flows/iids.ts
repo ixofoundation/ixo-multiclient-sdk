@@ -10,25 +10,32 @@ import * as Iid from "../modules/Iid";
 
 export const registerIids = () =>
   describe("Testing the faucet and creation of Iids", () => {
-    // below is example to make a user from a know mnemonic
-    // beforeAll(() =>
-    //   generateNewWallet(
-    //     WalletUsers.tester,
-    //     "visa catch design whip maple peasant ribbon dawn office hole video order ready height bottom suggest renew lake sister excite couch alone fan width"
-    //   )
-    // );
-    // beforeAll(() =>
-    //   generateNewWallet(
-    //     WalletUsers.alice,
-    //     "curve drive liar wear present uncover pet aisle magnet where reason rate dice enact supreme apple text deny idle jazz shiver mixture analyst execute"
-    //   )
-    // );
-    // beforeAll(() =>
-    //   generateNewWallet(
-    //     WalletUsers.bob,
-    //     "legend level swamp nut black demise ring treat replace rally click frozen unfair general inside quantum camera coffee lake rocket aunt emotion convince asthma"
-    //   )
-    // );
+    // below is example to make a user from a know mnemonic, below is same users as chain scripts to test this sdk
+    // against same local chain
+    beforeAll(() =>
+      generateNewWallet(
+        WalletUsers.tester, // Miguel
+        "jungle brave person inmate dirt upset try rotate twin fossil grid border"
+      )
+    );
+    beforeAll(() =>
+      generateNewWallet(
+        WalletUsers.alice,
+        "fall sound heavy fantasy start army shop license insane nuclear emotion execute"
+      )
+    );
+    beforeAll(() =>
+      generateNewWallet(
+        WalletUsers.bob,
+        "genuine suspect someone trip school order amateur heart cheap similar creek turn"
+      )
+    );
+    beforeAll(() =>
+      generateNewWallet(
+        WalletUsers.charlie,
+        "faith game good hover hope area detect scout easily filter piece measure"
+      )
+    );
 
     const users = Object.values(WalletUsers).filter(
       (user) =>
@@ -37,7 +44,7 @@ export const registerIids = () =>
           "bond",
           "oracle",
           "accordedRight",
-          "charlie",
+          // "charlie",
           // "bob",
           // "alice",
           // "tester",
@@ -63,18 +70,17 @@ export const registerIids = () =>
 export const iidsBasic = () =>
   describe("Testing the Iid module", () => {
     testMsg("/ixo.iid.v1beta1.MsgUpdateIidDocument", () => Iid.UpdateIidDoc());
-    testMsg("/ixo.iid.v1beta1.MsgUpdateIidMeta", () => Iid.UpdateIidMeta());
     testMsg("/ixo.iid.v1beta1.MsgAddIidContext", () => Iid.AddIidContext());
     testMsg("/ixo.iid.v1beta1.MsgDeleteIidContext", () =>
       Iid.DeleteIidContext()
     );
     testMsg("/ixo.iid.v1beta1.MsgAddVerification", () => Iid.AddVerification());
-    // testMsg("/ixo.iid.v1beta1.MsgSetVerificationRelationships", () =>
-    //   Iid.SetVerificationRelationships()
-    // );
-    // testMsg("/ixo.iid.v1beta1.MsgRevokeVerification", () =>
-    //   Iid.RevokeVerification()
-    // );
+    testMsg("/ixo.iid.v1beta1.MsgSetVerificationRelationships", () =>
+      Iid.SetVerificationRelationships()
+    );
+    testMsg("/ixo.iid.v1beta1.MsgRevokeVerification", () =>
+      Iid.RevokeVerification()
+    );
     sendFromFaucet(WalletUsers.accordedRight);
     testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () =>
       Iid.CreateIidDoc(WalletUsers.accordedRight, WalletUsers.tester)

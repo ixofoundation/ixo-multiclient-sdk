@@ -18,18 +18,30 @@ export interface QueryBondsResponse {
 export interface QueryBondsResponseSDKType {
   bonds: string[];
 }
-/** QueryBondsDetailedRequest is the request type for the Query/BondsDetailed RPC method. */
+/**
+ * QueryBondsDetailedRequest is the request type for the Query/BondsDetailed RPC
+ * method.
+ */
 
 export interface QueryBondsDetailedRequest {}
-/** QueryBondsDetailedRequest is the request type for the Query/BondsDetailed RPC method. */
+/**
+ * QueryBondsDetailedRequest is the request type for the Query/BondsDetailed RPC
+ * method.
+ */
 
 export interface QueryBondsDetailedRequestSDKType {}
-/** QueryBondsDetailedResponse is the response type for the Query/BondsDetailed RPC method. */
+/**
+ * QueryBondsDetailedResponse is the response type for the Query/BondsDetailed
+ * RPC method.
+ */
 
 export interface QueryBondsDetailedResponse {
   bondsDetailed: BondDetails[];
 }
-/** QueryBondsDetailedResponse is the response type for the Query/BondsDetailed RPC method. */
+/**
+ * QueryBondsDetailedResponse is the response type for the Query/BondsDetailed
+ * RPC method.
+ */
 
 export interface QueryBondsDetailedResponseSDKType {
   bonds_detailed: BondDetailsSDKType[];
@@ -84,111 +96,174 @@ export interface QueryLastBatchRequest {
 export interface QueryLastBatchRequestSDKType {
   bond_did: string;
 }
-/** QueryLastBatchResponse is the response type for the Query/LastBatch RPC method. */
+/**
+ * QueryLastBatchResponse is the response type for the Query/LastBatch RPC
+ * method.
+ */
 
 export interface QueryLastBatchResponse {
   lastBatch?: Batch;
 }
-/** QueryLastBatchResponse is the response type for the Query/LastBatch RPC method. */
+/**
+ * QueryLastBatchResponse is the response type for the Query/LastBatch RPC
+ * method.
+ */
 
 export interface QueryLastBatchResponseSDKType {
   last_batch?: BatchSDKType;
 }
-/** QueryCurrentPriceRequest is the request type for the Query/CurrentPrice RPC method. */
+/**
+ * QueryCurrentPriceRequest is the request type for the Query/CurrentPrice RPC
+ * method.
+ */
 
 export interface QueryCurrentPriceRequest {
   bondDid: string;
 }
-/** QueryCurrentPriceRequest is the request type for the Query/CurrentPrice RPC method. */
+/**
+ * QueryCurrentPriceRequest is the request type for the Query/CurrentPrice RPC
+ * method.
+ */
 
 export interface QueryCurrentPriceRequestSDKType {
   bond_did: string;
 }
-/** QueryCurrentPriceResponse is the response type for the Query/CurrentPrice RPC method. */
+/**
+ * QueryCurrentPriceResponse is the response type for the Query/CurrentPrice RPC
+ * method.
+ */
 
 export interface QueryCurrentPriceResponse {
   currentPrice: DecCoin[];
 }
-/** QueryCurrentPriceResponse is the response type for the Query/CurrentPrice RPC method. */
+/**
+ * QueryCurrentPriceResponse is the response type for the Query/CurrentPrice RPC
+ * method.
+ */
 
 export interface QueryCurrentPriceResponseSDKType {
   current_price: DecCoinSDKType[];
 }
-/** QueryCurrentReserveRequest is the request type for the Query/CurrentReserve RPC method. */
+/**
+ * QueryCurrentReserveRequest is the request type for the Query/CurrentReserve
+ * RPC method.
+ */
 
 export interface QueryCurrentReserveRequest {
   bondDid: string;
 }
-/** QueryCurrentReserveRequest is the request type for the Query/CurrentReserve RPC method. */
+/**
+ * QueryCurrentReserveRequest is the request type for the Query/CurrentReserve
+ * RPC method.
+ */
 
 export interface QueryCurrentReserveRequestSDKType {
   bond_did: string;
 }
-/** QueryCurrentReserveResponse is the response type for the Query/CurrentReserve RPC method. */
+/**
+ * QueryCurrentReserveResponse is the response type for the Query/CurrentReserve
+ * RPC method.
+ */
 
 export interface QueryCurrentReserveResponse {
   currentReserve: Coin[];
 }
-/** QueryCurrentReserveResponse is the response type for the Query/CurrentReserve RPC method. */
+/**
+ * QueryCurrentReserveResponse is the response type for the Query/CurrentReserve
+ * RPC method.
+ */
 
 export interface QueryCurrentReserveResponseSDKType {
   current_reserve: CoinSDKType[];
 }
-/** QueryAvailableReserveRequest is the request type for the Query/AvailableReserve RPC method. */
+/**
+ * QueryAvailableReserveRequest is the request type for the
+ * Query/AvailableReserve RPC method.
+ */
 
 export interface QueryAvailableReserveRequest {
   bondDid: string;
 }
-/** QueryAvailableReserveRequest is the request type for the Query/AvailableReserve RPC method. */
+/**
+ * QueryAvailableReserveRequest is the request type for the
+ * Query/AvailableReserve RPC method.
+ */
 
 export interface QueryAvailableReserveRequestSDKType {
   bond_did: string;
 }
-/** QueryAvailableReserveResponse is the response type for the Query/AvailableReserve RPC method. */
+/**
+ * QueryAvailableReserveResponse is the response type for the
+ * Query/AvailableReserve RPC method.
+ */
 
 export interface QueryAvailableReserveResponse {
   availableReserve: Coin[];
 }
-/** QueryAvailableReserveResponse is the response type for the Query/AvailableReserve RPC method. */
+/**
+ * QueryAvailableReserveResponse is the response type for the
+ * Query/AvailableReserve RPC method.
+ */
 
 export interface QueryAvailableReserveResponseSDKType {
   available_reserve: CoinSDKType[];
 }
-/** QueryCustomPriceRequest is the request type for the Query/CustomPrice RPC method. */
+/**
+ * QueryCustomPriceRequest is the request type for the Query/CustomPrice RPC
+ * method.
+ */
 
 export interface QueryCustomPriceRequest {
   bondDid: string;
   bondAmount: string;
 }
-/** QueryCustomPriceRequest is the request type for the Query/CustomPrice RPC method. */
+/**
+ * QueryCustomPriceRequest is the request type for the Query/CustomPrice RPC
+ * method.
+ */
 
 export interface QueryCustomPriceRequestSDKType {
   bond_did: string;
   bond_amount: string;
 }
-/** QueryCustomPriceResponse is the response type for the Query/CustomPrice RPC method. */
+/**
+ * QueryCustomPriceResponse is the response type for the Query/CustomPrice RPC
+ * method.
+ */
 
 export interface QueryCustomPriceResponse {
   price: DecCoin[];
 }
-/** QueryCustomPriceResponse is the response type for the Query/CustomPrice RPC method. */
+/**
+ * QueryCustomPriceResponse is the response type for the Query/CustomPrice RPC
+ * method.
+ */
 
 export interface QueryCustomPriceResponseSDKType {
   price: DecCoinSDKType[];
 }
-/** QueryCustomPriceRequest is the request type for the Query/BuyPrice RPC method. */
+/**
+ * QueryCustomPriceRequest is the request type for the Query/BuyPrice RPC
+ * method.
+ */
 
 export interface QueryBuyPriceRequest {
   bondDid: string;
   bondAmount: string;
 }
-/** QueryCustomPriceRequest is the request type for the Query/BuyPrice RPC method. */
+/**
+ * QueryCustomPriceRequest is the request type for the Query/BuyPrice RPC
+ * method.
+ */
 
 export interface QueryBuyPriceRequestSDKType {
   bond_did: string;
   bond_amount: string;
 }
-/** QueryCustomPriceResponse is the response type for the Query/BuyPrice RPC method. */
+/**
+ * QueryCustomPriceResponse is the response type for the Query/BuyPrice RPC
+ * method.
+ */
 
 export interface QueryBuyPriceResponse {
   adjustedSupply?: Coin;
@@ -197,7 +272,10 @@ export interface QueryBuyPriceResponse {
   totalPrices: Coin[];
   totalFees: Coin[];
 }
-/** QueryCustomPriceResponse is the response type for the Query/BuyPrice RPC method. */
+/**
+ * QueryCustomPriceResponse is the response type for the Query/BuyPrice RPC
+ * method.
+ */
 
 export interface QueryBuyPriceResponseSDKType {
   adjusted_supply?: CoinSDKType;
@@ -206,19 +284,28 @@ export interface QueryBuyPriceResponseSDKType {
   total_prices: CoinSDKType[];
   total_fees: CoinSDKType[];
 }
-/** QuerySellReturnRequest is the request type for the Query/SellReturn RPC method. */
+/**
+ * QuerySellReturnRequest is the request type for the Query/SellReturn RPC
+ * method.
+ */
 
 export interface QuerySellReturnRequest {
   bondDid: string;
   bondAmount: string;
 }
-/** QuerySellReturnRequest is the request type for the Query/SellReturn RPC method. */
+/**
+ * QuerySellReturnRequest is the request type for the Query/SellReturn RPC
+ * method.
+ */
 
 export interface QuerySellReturnRequestSDKType {
   bond_did: string;
   bond_amount: string;
 }
-/** QuerySellReturnResponse is the response type for the Query/SellReturn RPC method. */
+/**
+ * QuerySellReturnResponse is the response type for the Query/SellReturn RPC
+ * method.
+ */
 
 export interface QuerySellReturnResponse {
   adjustedSupply?: Coin;
@@ -228,7 +315,10 @@ export interface QuerySellReturnResponse {
   totalReturns: Coin[];
   totalFees: Coin[];
 }
-/** QuerySellReturnResponse is the response type for the Query/SellReturn RPC method. */
+/**
+ * QuerySellReturnResponse is the response type for the Query/SellReturn RPC
+ * method.
+ */
 
 export interface QuerySellReturnResponseSDKType {
   adjusted_supply?: CoinSDKType;
@@ -238,49 +328,73 @@ export interface QuerySellReturnResponseSDKType {
   total_returns: CoinSDKType[];
   total_fees: CoinSDKType[];
 }
-/** QuerySwapReturnRequest is the request type for the Query/SwapReturn RPC method. */
+/**
+ * QuerySwapReturnRequest is the request type for the Query/SwapReturn RPC
+ * method.
+ */
 
 export interface QuerySwapReturnRequest {
   bondDid: string;
   fromTokenWithAmount: string;
   toToken: string;
 }
-/** QuerySwapReturnRequest is the request type for the Query/SwapReturn RPC method. */
+/**
+ * QuerySwapReturnRequest is the request type for the Query/SwapReturn RPC
+ * method.
+ */
 
 export interface QuerySwapReturnRequestSDKType {
   bond_did: string;
   from_token_with_amount: string;
   to_token: string;
 }
-/** QuerySwapReturnResponse is the response type for the Query/SwapReturn RPC method. */
+/**
+ * QuerySwapReturnResponse is the response type for the Query/SwapReturn RPC
+ * method.
+ */
 
 export interface QuerySwapReturnResponse {
   totalReturns: Coin[];
   totalFees: Coin[];
 }
-/** QuerySwapReturnResponse is the response type for the Query/SwapReturn RPC method. */
+/**
+ * QuerySwapReturnResponse is the response type for the Query/SwapReturn RPC
+ * method.
+ */
 
 export interface QuerySwapReturnResponseSDKType {
   total_returns: CoinSDKType[];
   total_fees: CoinSDKType[];
 }
-/** QueryAlphaMaximumsRequest is the request type for the Query/AlphaMaximums RPC method. */
+/**
+ * QueryAlphaMaximumsRequest is the request type for the Query/AlphaMaximums RPC
+ * method.
+ */
 
 export interface QueryAlphaMaximumsRequest {
   bondDid: string;
 }
-/** QueryAlphaMaximumsRequest is the request type for the Query/AlphaMaximums RPC method. */
+/**
+ * QueryAlphaMaximumsRequest is the request type for the Query/AlphaMaximums RPC
+ * method.
+ */
 
 export interface QueryAlphaMaximumsRequestSDKType {
   bond_did: string;
 }
-/** QueryAlphaMaximumsResponse is the response type for the Query/AlphaMaximums RPC method. */
+/**
+ * QueryAlphaMaximumsResponse is the response type for the Query/AlphaMaximums
+ * RPC method.
+ */
 
 export interface QueryAlphaMaximumsResponse {
   maxSystemAlphaIncrease: string;
   maxSystemAlpha: string;
 }
-/** QueryAlphaMaximumsResponse is the response type for the Query/AlphaMaximums RPC method. */
+/**
+ * QueryAlphaMaximumsResponse is the response type for the Query/AlphaMaximums
+ * RPC method.
+ */
 
 export interface QueryAlphaMaximumsResponseSDKType {
   max_system_alpha_increase: string;

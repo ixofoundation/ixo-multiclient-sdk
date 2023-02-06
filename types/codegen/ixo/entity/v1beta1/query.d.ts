@@ -1,56 +1,127 @@
+import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { Entity, EntitySDKType } from "./entity";
+import { IidDocument, IidDocumentSDKType } from "../../iid/v1beta1/iid";
 import * as _m0 from "protobufjs/minimal";
+export interface QueryEntityRequest {
+    id: string;
+}
+export interface QueryEntityRequestSDKType {
+    id: string;
+}
+export interface QueryEntityResponse {
+    entity?: Entity;
+    iidDocument?: IidDocument;
+}
+export interface QueryEntityResponseSDKType {
+    entity?: EntitySDKType;
+    iidDocument?: IidDocumentSDKType;
+}
+export interface QueryEntityMetadataRequest {
+    id: string;
+}
+export interface QueryEntityMetadataRequestSDKType {
+    id: string;
+}
+export interface QueryEntityMetadataResponse {
+    entity?: Entity;
+}
+export interface QueryEntityMetadataResponseSDKType {
+    entity?: EntitySDKType;
+}
+export interface QueryEntityIidDocumentRequest {
+    id: string;
+}
+export interface QueryEntityIidDocumentRequestSDKType {
+    id: string;
+}
+export interface QueryEntityIidDocumentResponse {
+    iidDocument?: IidDocument;
+}
+export interface QueryEntityIidDocumentResponseSDKType {
+    iidDocument?: IidDocumentSDKType;
+}
+export interface QueryEntityVerifiedRequest {
+    id: string;
+}
+export interface QueryEntityVerifiedRequestSDKType {
+    id: string;
+}
+export interface QueryEntityVerifiedResponse {
+    entityVerified: boolean;
+}
+export interface QueryEntityVerifiedResponseSDKType {
+    entity_verified: boolean;
+}
 export interface QueryEntityListRequest {
-    entityType: string;
-    entityStatus: string;
+    pagination?: PageRequest;
 }
 export interface QueryEntityListRequestSDKType {
-    entity_type: string;
-    entity_status: string;
+    pagination?: PageRequestSDKType;
 }
-/** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
 export interface QueryEntityListResponse {
+    entities: Entity[];
+    pagination?: PageResponse;
 }
-/** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
 export interface QueryEntityListResponseSDKType {
+    entities: EntitySDKType[];
+    pagination?: PageResponseSDKType;
 }
-/** QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC method. */
-export interface QueryEntityDocRequest {
-    entityDid: string;
-}
-/** QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC method. */
-export interface QueryEntityDocRequestSDKType {
-    entity_did: string;
-}
-/** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
-export interface QueryEntityDocResponse {
-}
-/** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
-export interface QueryEntityDocResponseSDKType {
-}
-export interface QueryEntityConfigRequest {
-}
-export interface QueryEntityConfigRequestSDKType {
-}
-export interface QueryEntityConfigResponse_MapEntry {
-    key: string;
-    value: string;
-}
-export interface QueryEntityConfigResponse_MapEntrySDKType {
-    key: string;
-    value: string;
-}
-/** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
-export interface QueryEntityConfigResponse {
-    map: {
-        [key: string]: string;
-    };
-}
-/** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
-export interface QueryEntityConfigResponseSDKType {
-    map: {
-        [key: string]: string;
-    };
-}
+export declare const QueryEntityRequest: {
+    encode(message: QueryEntityRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryEntityRequest;
+    fromJSON(object: any): QueryEntityRequest;
+    toJSON(message: QueryEntityRequest): unknown;
+    fromPartial(object: Partial<QueryEntityRequest>): QueryEntityRequest;
+};
+export declare const QueryEntityResponse: {
+    encode(message: QueryEntityResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryEntityResponse;
+    fromJSON(object: any): QueryEntityResponse;
+    toJSON(message: QueryEntityResponse): unknown;
+    fromPartial(object: Partial<QueryEntityResponse>): QueryEntityResponse;
+};
+export declare const QueryEntityMetadataRequest: {
+    encode(message: QueryEntityMetadataRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryEntityMetadataRequest;
+    fromJSON(object: any): QueryEntityMetadataRequest;
+    toJSON(message: QueryEntityMetadataRequest): unknown;
+    fromPartial(object: Partial<QueryEntityMetadataRequest>): QueryEntityMetadataRequest;
+};
+export declare const QueryEntityMetadataResponse: {
+    encode(message: QueryEntityMetadataResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryEntityMetadataResponse;
+    fromJSON(object: any): QueryEntityMetadataResponse;
+    toJSON(message: QueryEntityMetadataResponse): unknown;
+    fromPartial(object: Partial<QueryEntityMetadataResponse>): QueryEntityMetadataResponse;
+};
+export declare const QueryEntityIidDocumentRequest: {
+    encode(message: QueryEntityIidDocumentRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryEntityIidDocumentRequest;
+    fromJSON(object: any): QueryEntityIidDocumentRequest;
+    toJSON(message: QueryEntityIidDocumentRequest): unknown;
+    fromPartial(object: Partial<QueryEntityIidDocumentRequest>): QueryEntityIidDocumentRequest;
+};
+export declare const QueryEntityIidDocumentResponse: {
+    encode(message: QueryEntityIidDocumentResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryEntityIidDocumentResponse;
+    fromJSON(object: any): QueryEntityIidDocumentResponse;
+    toJSON(message: QueryEntityIidDocumentResponse): unknown;
+    fromPartial(object: Partial<QueryEntityIidDocumentResponse>): QueryEntityIidDocumentResponse;
+};
+export declare const QueryEntityVerifiedRequest: {
+    encode(message: QueryEntityVerifiedRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryEntityVerifiedRequest;
+    fromJSON(object: any): QueryEntityVerifiedRequest;
+    toJSON(message: QueryEntityVerifiedRequest): unknown;
+    fromPartial(object: Partial<QueryEntityVerifiedRequest>): QueryEntityVerifiedRequest;
+};
+export declare const QueryEntityVerifiedResponse: {
+    encode(message: QueryEntityVerifiedResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryEntityVerifiedResponse;
+    fromJSON(object: any): QueryEntityVerifiedResponse;
+    toJSON(message: QueryEntityVerifiedResponse): unknown;
+    fromPartial(object: Partial<QueryEntityVerifiedResponse>): QueryEntityVerifiedResponse;
+};
 export declare const QueryEntityListRequest: {
     encode(message: QueryEntityListRequest, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): QueryEntityListRequest;
@@ -59,44 +130,9 @@ export declare const QueryEntityListRequest: {
     fromPartial(object: Partial<QueryEntityListRequest>): QueryEntityListRequest;
 };
 export declare const QueryEntityListResponse: {
-    encode(_: QueryEntityListResponse, writer?: _m0.Writer): _m0.Writer;
+    encode(message: QueryEntityListResponse, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): QueryEntityListResponse;
-    fromJSON(_: any): QueryEntityListResponse;
-    toJSON(_: QueryEntityListResponse): unknown;
-    fromPartial(_: Partial<QueryEntityListResponse>): QueryEntityListResponse;
-};
-export declare const QueryEntityDocRequest: {
-    encode(message: QueryEntityDocRequest, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): QueryEntityDocRequest;
-    fromJSON(object: any): QueryEntityDocRequest;
-    toJSON(message: QueryEntityDocRequest): unknown;
-    fromPartial(object: Partial<QueryEntityDocRequest>): QueryEntityDocRequest;
-};
-export declare const QueryEntityDocResponse: {
-    encode(_: QueryEntityDocResponse, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): QueryEntityDocResponse;
-    fromJSON(_: any): QueryEntityDocResponse;
-    toJSON(_: QueryEntityDocResponse): unknown;
-    fromPartial(_: Partial<QueryEntityDocResponse>): QueryEntityDocResponse;
-};
-export declare const QueryEntityConfigRequest: {
-    encode(_: QueryEntityConfigRequest, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): QueryEntityConfigRequest;
-    fromJSON(_: any): QueryEntityConfigRequest;
-    toJSON(_: QueryEntityConfigRequest): unknown;
-    fromPartial(_: Partial<QueryEntityConfigRequest>): QueryEntityConfigRequest;
-};
-export declare const QueryEntityConfigResponse_MapEntry: {
-    encode(message: QueryEntityConfigResponse_MapEntry, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): QueryEntityConfigResponse_MapEntry;
-    fromJSON(object: any): QueryEntityConfigResponse_MapEntry;
-    toJSON(message: QueryEntityConfigResponse_MapEntry): unknown;
-    fromPartial(object: Partial<QueryEntityConfigResponse_MapEntry>): QueryEntityConfigResponse_MapEntry;
-};
-export declare const QueryEntityConfigResponse: {
-    encode(message: QueryEntityConfigResponse, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): QueryEntityConfigResponse;
-    fromJSON(object: any): QueryEntityConfigResponse;
-    toJSON(message: QueryEntityConfigResponse): unknown;
-    fromPartial(object: Partial<QueryEntityConfigResponse>): QueryEntityConfigResponse;
+    fromJSON(object: any): QueryEntityListResponse;
+    toJSON(message: QueryEntityListResponse): unknown;
+    fromPartial(object: Partial<QueryEntityListResponse>): QueryEntityListResponse;
 };

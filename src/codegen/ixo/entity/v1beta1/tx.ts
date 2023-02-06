@@ -3,12 +3,13 @@ import { Verification, VerificationSDKType } from "../../iid/v1beta1/tx";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import * as _m0 from "protobufjs/minimal";
 import { isSet, fromJsonTimestamp, bytesFromBase64, fromTimestamp, base64FromBytes } from "../../../helpers";
-/** MsgCreateEntity defines a message for creating a project. */
-
 export interface MsgCreateEntity {
   /** An Entity Type as defined by the implementer */
   entityType: string;
-  /** Status of the Entity as defined by the implementer and interpreted by Client applications */
+  /**
+   * Status of the Entity as defined by the implementer and interpreted by
+   * Client applications
+   */
 
   entityStatus: number;
   /** the list of controller DIDs */
@@ -29,55 +30,44 @@ export interface MsgCreateEntity {
   /** Digital resources associated with the Subject */
 
   linkedResource: LinkedResource[];
-  /** DID of a linked Entity and its relationship with the Subject */
+  /**
+   * DID of a linked Entity and its relationship with the Subject
+   * Start Date of the Entity as defined by the implementer and interpreted by
+   * Client applications
+   */
 
   linkedEntity: LinkedEntity[];
-  /**
-   * Operational status of the Entity
-   * Start Date of the Entity as defined by the implementer and interpreted by Client applications
-   */
-
-  deactivated: boolean;
-  /**
-   * address of the account signing the message
-   * End Date of the Entity as defined by the implementer and interpreted by Client applications
-   */
-
   startDate?: Timestamp;
-  /** address of the account signing the message */
+  /**
+   * End Date of the Entity as defined by the implementer and interpreted by
+   * Client applications
+   */
 
   endDate?: Timestamp;
+  /** DID of the operator through which the Entity was created */
+
+  relayerNode: string;
   /**
-   * State of the Entity as defined by the implementer and interpreted by Client applications
-   * DID of the operator through which the Entity was created
+   * Content ID or Hash of public Verifiable Credentials associated with the
+   * subject
    */
 
-  stage: string;
-  relayerNode: string;
-  /** Public proof that the Entity is verified */
-
-  verificationStatus: string;
-  /** Content ID or Hash of public Verifiable Credentials associated with the  subject */
-
-  verifiableCredential: string[];
-  /** Owner of the Entity NFT | The ownersdid used to sign this transaction. */
-
+  credentials: string[];
   ownerDid: string;
   /** The ownersdid address used to sign this transaction. */
 
   ownerAddress: string;
-  /** Extention data */
-
   data: Uint8Array;
 }
-/** MsgCreateEntity defines a message for creating a project. */
-
 export interface MsgCreateEntitySDKType {
   /** An Entity Type as defined by the implementer */
-  entityType: string;
-  /** Status of the Entity as defined by the implementer and interpreted by Client applications */
+  entity_type: string;
+  /**
+   * Status of the Entity as defined by the implementer and interpreted by
+   * Client applications
+   */
 
-  entityStatus: number;
+  entity_status: number;
   /** the list of controller DIDs */
 
   controller: string[];
@@ -92,170 +82,170 @@ export interface MsgCreateEntitySDKType {
   service: ServiceSDKType[];
   /** Legal or Electronic Rights and associated Object Capabilities */
 
-  accordedRight: AccordedRightSDKType[];
+  accorded_right: AccordedRightSDKType[];
   /** Digital resources associated with the Subject */
 
-  linkedResource: LinkedResourceSDKType[];
-  /** DID of a linked Entity and its relationship with the Subject */
-
-  linkedEntity: LinkedEntitySDKType[];
+  linked_resource: LinkedResourceSDKType[];
   /**
-   * Operational status of the Entity
-   * Start Date of the Entity as defined by the implementer and interpreted by Client applications
+   * DID of a linked Entity and its relationship with the Subject
+   * Start Date of the Entity as defined by the implementer and interpreted by
+   * Client applications
    */
 
-  deactivated: boolean;
+  linked_entity: LinkedEntitySDKType[];
+  start_date?: TimestampSDKType;
   /**
-   * address of the account signing the message
-   * End Date of the Entity as defined by the implementer and interpreted by Client applications
+   * End Date of the Entity as defined by the implementer and interpreted by
+   * Client applications
    */
 
-  startDate?: TimestampSDKType;
-  /** address of the account signing the message */
+  end_date?: TimestampSDKType;
+  /** DID of the operator through which the Entity was created */
 
-  endDate?: TimestampSDKType;
+  relayer_node: string;
   /**
-   * State of the Entity as defined by the implementer and interpreted by Client applications
-   * DID of the operator through which the Entity was created
+   * Content ID or Hash of public Verifiable Credentials associated with the
+   * subject
    */
 
-  stage: string;
-  relayerNode: string;
-  /** Public proof that the Entity is verified */
-
-  verificationStatus: string;
-  /** Content ID or Hash of public Verifiable Credentials associated with the  subject */
-
-  verifiableCredential: string[];
-  /** Owner of the Entity NFT | The ownersdid used to sign this transaction. */
-
-  ownerDid: string;
+  credentials: string[];
+  owner_did: string;
   /** The ownersdid address used to sign this transaction. */
 
-  ownerAddress: string;
-  /** Extention data */
-
+  owner_address: string;
   data: Uint8Array;
 }
-/** MsgCreateProjectResponse defines the Msg/CreateProject response type. */
-
 export interface MsgCreateEntityResponse {
   entityId: string;
   entityType: string;
   entityStatus: number;
 }
-/** MsgCreateProjectResponse defines the Msg/CreateProject response type. */
-
 export interface MsgCreateEntityResponseSDKType {
-  entityId: string;
-  entityType: string;
-  entityStatus: number;
+  entity_id: string;
+  entity_type: string;
+  entity_status: number;
 }
-/** MsgUpdateEntityStatus defines a message for updating a entity's current status. */
+/**
+ * Updates the entity with all the fields, so if field empty will be updated
+ * with default go type, aka never null
+ */
 
 export interface MsgUpdateEntity {
-  /** The status of the entity. Should represent an enum in the client. */
-  status: number;
+  /** Id of entity to be updated */
+  id: string;
   /**
-   * Whether this entity is enabled ot not, basically a soft delete.
-   * refer to iid module for more information
+   * Status of the Entity as defined by the implementer and interpreted by
+   * Client applications
    */
 
-  deactivated: boolean;
+  entityStatus: number;
   /**
-   * address of the account signing the message
-   * refer to iid module for more information
+   * Start Date of the Entity as defined by the implementer and interpreted by
+   * Client applications
    */
 
   startDate?: Timestamp;
-  /** address of the account signing the message */
+  /**
+   * End Date of the Entity as defined by the implementer and interpreted by
+   * Client applications
+   */
 
   endDate?: Timestamp;
   /**
-   * refer to iid module meta data for more information
-   * refer to iid module for more information
+   * Content ID or Hash of public Verifiable Credentials associated with the
+   * subject
    */
 
-  stage: string;
-  relayerNode: string;
-  /** refer to iid module for more information */
-
-  verifiableCredential: string;
-  /** The ownersdid used to sign this transaction. */
-
+  credentials: string[];
   controllerDid: string;
-  /** The ownersdid used to sign this transaction. */
+  /** The controllerAddress used to sign this transaction. */
 
   controllerAddress: string;
 }
-/** MsgUpdateEntityStatus defines a message for updating a entity's current status. */
+/**
+ * Updates the entity with all the fields, so if field empty will be updated
+ * with default go type, aka never null
+ */
 
 export interface MsgUpdateEntitySDKType {
-  /** The status of the entity. Should represent an enum in the client. */
-  status: number;
+  /** Id of entity to be updated */
+  id: string;
   /**
-   * Whether this entity is enabled ot not, basically a soft delete.
-   * refer to iid module for more information
+   * Status of the Entity as defined by the implementer and interpreted by
+   * Client applications
    */
 
-  deactivated: boolean;
+  entity_status: number;
   /**
-   * address of the account signing the message
-   * refer to iid module for more information
+   * Start Date of the Entity as defined by the implementer and interpreted by
+   * Client applications
    */
 
-  startDate?: TimestampSDKType;
-  /** address of the account signing the message */
-
-  endDate?: TimestampSDKType;
+  start_date?: TimestampSDKType;
   /**
-   * refer to iid module meta data for more information
-   * refer to iid module for more information
+   * End Date of the Entity as defined by the implementer and interpreted by
+   * Client applications
    */
 
-  stage: string;
-  relayerNode: string;
-  /** refer to iid module for more information */
+  end_date?: TimestampSDKType;
+  /**
+   * Content ID or Hash of public Verifiable Credentials associated with the
+   * subject
+   */
 
-  verifiableCredential: string;
-  /** The ownersdid used to sign this transaction. */
+  credentials: string[];
+  controller_did: string;
+  /** The controllerAddress used to sign this transaction. */
 
-  controllerDid: string;
-  /** The ownersdid used to sign this transaction. */
-
-  controllerAddress: string;
+  controller_address: string;
 }
-/** MsgUpdateProjectStatusResponse defines the Msg/UpdateEntityStatus response type. */
-
 export interface MsgUpdateEntityResponse {}
-/** MsgUpdateProjectStatusResponse defines the Msg/UpdateEntityStatus response type. */
-
 export interface MsgUpdateEntityResponseSDKType {}
-export interface MsgTransferEntity {
-  entityDid: string;
-  /** The ownersdid used to sign this transaction. */
+/** Only relayer nodes can update entity field 'entityVerified' */
 
+export interface MsgUpdateEntityVerified {
+  /** Id of entity to be updated */
+  id: string;
+  /** Whether entity is verified or not based on credentials */
+
+  entityVerified: boolean;
+  relayerNodeDid: string;
+  /** The relayer node's address used to sign this transaction. */
+
+  relayerNodeAddress: string;
+}
+/** Only relayer nodes can update entity field 'entityVerified' */
+
+export interface MsgUpdateEntityVerifiedSDKType {
+  /** Id of entity to be updated */
+  id: string;
+  /** Whether entity is verified or not based on credentials */
+
+  entity_verified: boolean;
+  relayer_node_did: string;
+  /** The relayer node's address used to sign this transaction. */
+
+  relayer_node_address: string;
+}
+export interface MsgUpdateEntityVerifiedResponse {}
+export interface MsgUpdateEntityVerifiedResponseSDKType {}
+export interface MsgTransferEntity {
+  id: string;
   ownerDid: string;
-  /** The ownersdid used to sign this transaction. */
+  /** The owner_address used to sign this transaction. */
 
   ownerAddress: string;
   recipientDid: string;
 }
 export interface MsgTransferEntitySDKType {
-  entityDid: string;
-  /** The ownersdid used to sign this transaction. */
+  id: string;
+  owner_did: string;
+  /** The owner_address used to sign this transaction. */
 
-  ownerDid: string;
-  /** The ownersdid used to sign this transaction. */
-
-  ownerAddress: string;
-  recipientDid: string;
+  owner_address: string;
+  recipient_did: string;
 }
-/** MsgUpdateProjectStatusResponse defines the Msg/UpdateEntityStatus response type. */
-
 export interface MsgTransferEntityResponse {}
-/** MsgUpdateProjectStatusResponse defines the Msg/UpdateEntityStatus response type. */
-
 export interface MsgTransferEntityResponseSDKType {}
 
 function createBaseMsgCreateEntity(): MsgCreateEntity {
@@ -269,13 +259,10 @@ function createBaseMsgCreateEntity(): MsgCreateEntity {
     accordedRight: [],
     linkedResource: [],
     linkedEntity: [],
-    deactivated: false,
     startDate: undefined,
     endDate: undefined,
-    stage: "",
     relayerNode: "",
-    verificationStatus: "",
-    verifiableCredential: [],
+    credentials: [],
     ownerDid: "",
     ownerAddress: "",
     data: new Uint8Array()
@@ -320,44 +307,32 @@ export const MsgCreateEntity = {
       LinkedEntity.encode(v!, writer.uint32(74).fork()).ldelim();
     }
 
-    if (message.deactivated === true) {
-      writer.uint32(80).bool(message.deactivated);
-    }
-
     if (message.startDate !== undefined) {
-      Timestamp.encode(message.startDate, writer.uint32(90).fork()).ldelim();
+      Timestamp.encode(message.startDate, writer.uint32(82).fork()).ldelim();
     }
 
     if (message.endDate !== undefined) {
-      Timestamp.encode(message.endDate, writer.uint32(98).fork()).ldelim();
-    }
-
-    if (message.stage !== "") {
-      writer.uint32(106).string(message.stage);
+      Timestamp.encode(message.endDate, writer.uint32(90).fork()).ldelim();
     }
 
     if (message.relayerNode !== "") {
-      writer.uint32(114).string(message.relayerNode);
+      writer.uint32(98).string(message.relayerNode);
     }
 
-    if (message.verificationStatus !== "") {
-      writer.uint32(122).string(message.verificationStatus);
-    }
-
-    for (const v of message.verifiableCredential) {
-      writer.uint32(130).string(v!);
+    for (const v of message.credentials) {
+      writer.uint32(106).string(v!);
     }
 
     if (message.ownerDid !== "") {
-      writer.uint32(138).string(message.ownerDid);
+      writer.uint32(114).string(message.ownerDid);
     }
 
     if (message.ownerAddress !== "") {
-      writer.uint32(146).string(message.ownerAddress);
+      writer.uint32(122).string(message.ownerAddress);
     }
 
     if (message.data.length !== 0) {
-      writer.uint32(154).bytes(message.data);
+      writer.uint32(130).bytes(message.data);
     }
 
     return writer;
@@ -409,42 +384,30 @@ export const MsgCreateEntity = {
           break;
 
         case 10:
-          message.deactivated = reader.bool();
-          break;
-
-        case 11:
           message.startDate = Timestamp.decode(reader, reader.uint32());
           break;
 
-        case 12:
+        case 11:
           message.endDate = Timestamp.decode(reader, reader.uint32());
           break;
 
-        case 13:
-          message.stage = reader.string();
-          break;
-
-        case 14:
+        case 12:
           message.relayerNode = reader.string();
           break;
 
-        case 15:
-          message.verificationStatus = reader.string();
+        case 13:
+          message.credentials.push(reader.string());
           break;
 
-        case 16:
-          message.verifiableCredential.push(reader.string());
-          break;
-
-        case 17:
+        case 14:
           message.ownerDid = reader.string();
           break;
 
-        case 18:
+        case 15:
           message.ownerAddress = reader.string();
           break;
 
-        case 19:
+        case 16:
           message.data = reader.bytes();
           break;
 
@@ -468,13 +431,10 @@ export const MsgCreateEntity = {
       accordedRight: Array.isArray(object?.accordedRight) ? object.accordedRight.map((e: any) => AccordedRight.fromJSON(e)) : [],
       linkedResource: Array.isArray(object?.linkedResource) ? object.linkedResource.map((e: any) => LinkedResource.fromJSON(e)) : [],
       linkedEntity: Array.isArray(object?.linkedEntity) ? object.linkedEntity.map((e: any) => LinkedEntity.fromJSON(e)) : [],
-      deactivated: isSet(object.deactivated) ? Boolean(object.deactivated) : false,
       startDate: isSet(object.startDate) ? fromJsonTimestamp(object.startDate) : undefined,
       endDate: isSet(object.endDate) ? fromJsonTimestamp(object.endDate) : undefined,
-      stage: isSet(object.stage) ? String(object.stage) : "",
       relayerNode: isSet(object.relayerNode) ? String(object.relayerNode) : "",
-      verificationStatus: isSet(object.verificationStatus) ? String(object.verificationStatus) : "",
-      verifiableCredential: Array.isArray(object?.verifiableCredential) ? object.verifiableCredential.map((e: any) => String(e)) : [],
+      credentials: Array.isArray(object?.credentials) ? object.credentials.map((e: any) => String(e)) : [],
       ownerDid: isSet(object.ownerDid) ? String(object.ownerDid) : "",
       ownerAddress: isSet(object.ownerAddress) ? String(object.ownerAddress) : "",
       data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array()
@@ -528,17 +488,14 @@ export const MsgCreateEntity = {
       obj.linkedEntity = [];
     }
 
-    message.deactivated !== undefined && (obj.deactivated = message.deactivated);
     message.startDate !== undefined && (obj.startDate = fromTimestamp(message.startDate).toISOString());
     message.endDate !== undefined && (obj.endDate = fromTimestamp(message.endDate).toISOString());
-    message.stage !== undefined && (obj.stage = message.stage);
     message.relayerNode !== undefined && (obj.relayerNode = message.relayerNode);
-    message.verificationStatus !== undefined && (obj.verificationStatus = message.verificationStatus);
 
-    if (message.verifiableCredential) {
-      obj.verifiableCredential = message.verifiableCredential.map(e => e);
+    if (message.credentials) {
+      obj.credentials = message.credentials.map(e => e);
     } else {
-      obj.verifiableCredential = [];
+      obj.credentials = [];
     }
 
     message.ownerDid !== undefined && (obj.ownerDid = message.ownerDid);
@@ -558,13 +515,10 @@ export const MsgCreateEntity = {
     message.accordedRight = object.accordedRight?.map(e => AccordedRight.fromPartial(e)) || [];
     message.linkedResource = object.linkedResource?.map(e => LinkedResource.fromPartial(e)) || [];
     message.linkedEntity = object.linkedEntity?.map(e => LinkedEntity.fromPartial(e)) || [];
-    message.deactivated = object.deactivated ?? false;
     message.startDate = object.startDate !== undefined && object.startDate !== null ? Timestamp.fromPartial(object.startDate) : undefined;
     message.endDate = object.endDate !== undefined && object.endDate !== null ? Timestamp.fromPartial(object.endDate) : undefined;
-    message.stage = object.stage ?? "";
     message.relayerNode = object.relayerNode ?? "";
-    message.verificationStatus = object.verificationStatus ?? "";
-    message.verifiableCredential = object.verifiableCredential?.map(e => e) || [];
+    message.credentials = object.credentials?.map(e => e) || [];
     message.ownerDid = object.ownerDid ?? "";
     message.ownerAddress = object.ownerAddress ?? "";
     message.data = object.data ?? new Uint8Array();
@@ -656,13 +610,11 @@ export const MsgCreateEntityResponse = {
 
 function createBaseMsgUpdateEntity(): MsgUpdateEntity {
   return {
-    status: 0,
-    deactivated: false,
+    id: "",
+    entityStatus: 0,
     startDate: undefined,
     endDate: undefined,
-    stage: "",
-    relayerNode: "",
-    verifiableCredential: "",
+    credentials: [],
     controllerDid: "",
     controllerAddress: ""
   };
@@ -670,12 +622,12 @@ function createBaseMsgUpdateEntity(): MsgUpdateEntity {
 
 export const MsgUpdateEntity = {
   encode(message: MsgUpdateEntity, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.status !== 0) {
-      writer.uint32(8).int32(message.status);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
     }
 
-    if (message.deactivated === true) {
-      writer.uint32(16).bool(message.deactivated);
+    if (message.entityStatus !== 0) {
+      writer.uint32(16).int32(message.entityStatus);
     }
 
     if (message.startDate !== undefined) {
@@ -686,24 +638,16 @@ export const MsgUpdateEntity = {
       Timestamp.encode(message.endDate, writer.uint32(34).fork()).ldelim();
     }
 
-    if (message.stage !== "") {
-      writer.uint32(42).string(message.stage);
-    }
-
-    if (message.relayerNode !== "") {
-      writer.uint32(50).string(message.relayerNode);
-    }
-
-    if (message.verifiableCredential !== "") {
-      writer.uint32(58).string(message.verifiableCredential);
+    for (const v of message.credentials) {
+      writer.uint32(42).string(v!);
     }
 
     if (message.controllerDid !== "") {
-      writer.uint32(66).string(message.controllerDid);
+      writer.uint32(50).string(message.controllerDid);
     }
 
     if (message.controllerAddress !== "") {
-      writer.uint32(74).string(message.controllerAddress);
+      writer.uint32(58).string(message.controllerAddress);
     }
 
     return writer;
@@ -719,11 +663,11 @@ export const MsgUpdateEntity = {
 
       switch (tag >>> 3) {
         case 1:
-          message.status = reader.int32();
+          message.id = reader.string();
           break;
 
         case 2:
-          message.deactivated = reader.bool();
+          message.entityStatus = reader.int32();
           break;
 
         case 3:
@@ -735,22 +679,14 @@ export const MsgUpdateEntity = {
           break;
 
         case 5:
-          message.stage = reader.string();
+          message.credentials.push(reader.string());
           break;
 
         case 6:
-          message.relayerNode = reader.string();
-          break;
-
-        case 7:
-          message.verifiableCredential = reader.string();
-          break;
-
-        case 8:
           message.controllerDid = reader.string();
           break;
 
-        case 9:
+        case 7:
           message.controllerAddress = reader.string();
           break;
 
@@ -765,13 +701,11 @@ export const MsgUpdateEntity = {
 
   fromJSON(object: any): MsgUpdateEntity {
     return {
-      status: isSet(object.status) ? Number(object.status) : 0,
-      deactivated: isSet(object.deactivated) ? Boolean(object.deactivated) : false,
+      id: isSet(object.id) ? String(object.id) : "",
+      entityStatus: isSet(object.entityStatus) ? Number(object.entityStatus) : 0,
       startDate: isSet(object.startDate) ? fromJsonTimestamp(object.startDate) : undefined,
       endDate: isSet(object.endDate) ? fromJsonTimestamp(object.endDate) : undefined,
-      stage: isSet(object.stage) ? String(object.stage) : "",
-      relayerNode: isSet(object.relayerNode) ? String(object.relayerNode) : "",
-      verifiableCredential: isSet(object.verifiableCredential) ? String(object.verifiableCredential) : "",
+      credentials: Array.isArray(object?.credentials) ? object.credentials.map((e: any) => String(e)) : [],
       controllerDid: isSet(object.controllerDid) ? String(object.controllerDid) : "",
       controllerAddress: isSet(object.controllerAddress) ? String(object.controllerAddress) : ""
     };
@@ -779,13 +713,17 @@ export const MsgUpdateEntity = {
 
   toJSON(message: MsgUpdateEntity): unknown {
     const obj: any = {};
-    message.status !== undefined && (obj.status = Math.round(message.status));
-    message.deactivated !== undefined && (obj.deactivated = message.deactivated);
+    message.id !== undefined && (obj.id = message.id);
+    message.entityStatus !== undefined && (obj.entityStatus = Math.round(message.entityStatus));
     message.startDate !== undefined && (obj.startDate = fromTimestamp(message.startDate).toISOString());
     message.endDate !== undefined && (obj.endDate = fromTimestamp(message.endDate).toISOString());
-    message.stage !== undefined && (obj.stage = message.stage);
-    message.relayerNode !== undefined && (obj.relayerNode = message.relayerNode);
-    message.verifiableCredential !== undefined && (obj.verifiableCredential = message.verifiableCredential);
+
+    if (message.credentials) {
+      obj.credentials = message.credentials.map(e => e);
+    } else {
+      obj.credentials = [];
+    }
+
     message.controllerDid !== undefined && (obj.controllerDid = message.controllerDid);
     message.controllerAddress !== undefined && (obj.controllerAddress = message.controllerAddress);
     return obj;
@@ -793,13 +731,11 @@ export const MsgUpdateEntity = {
 
   fromPartial(object: Partial<MsgUpdateEntity>): MsgUpdateEntity {
     const message = createBaseMsgUpdateEntity();
-    message.status = object.status ?? 0;
-    message.deactivated = object.deactivated ?? false;
+    message.id = object.id ?? "";
+    message.entityStatus = object.entityStatus ?? 0;
     message.startDate = object.startDate !== undefined && object.startDate !== null ? Timestamp.fromPartial(object.startDate) : undefined;
     message.endDate = object.endDate !== undefined && object.endDate !== null ? Timestamp.fromPartial(object.endDate) : undefined;
-    message.stage = object.stage ?? "";
-    message.relayerNode = object.relayerNode ?? "";
-    message.verifiableCredential = object.verifiableCredential ?? "";
+    message.credentials = object.credentials?.map(e => e) || [];
     message.controllerDid = object.controllerDid ?? "";
     message.controllerAddress = object.controllerAddress ?? "";
     return message;
@@ -850,9 +786,145 @@ export const MsgUpdateEntityResponse = {
 
 };
 
+function createBaseMsgUpdateEntityVerified(): MsgUpdateEntityVerified {
+  return {
+    id: "",
+    entityVerified: false,
+    relayerNodeDid: "",
+    relayerNodeAddress: ""
+  };
+}
+
+export const MsgUpdateEntityVerified = {
+  encode(message: MsgUpdateEntityVerified, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+
+    if (message.entityVerified === true) {
+      writer.uint32(16).bool(message.entityVerified);
+    }
+
+    if (message.relayerNodeDid !== "") {
+      writer.uint32(26).string(message.relayerNodeDid);
+    }
+
+    if (message.relayerNodeAddress !== "") {
+      writer.uint32(34).string(message.relayerNodeAddress);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateEntityVerified {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateEntityVerified();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+
+        case 2:
+          message.entityVerified = reader.bool();
+          break;
+
+        case 3:
+          message.relayerNodeDid = reader.string();
+          break;
+
+        case 4:
+          message.relayerNodeAddress = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateEntityVerified {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      entityVerified: isSet(object.entityVerified) ? Boolean(object.entityVerified) : false,
+      relayerNodeDid: isSet(object.relayerNodeDid) ? String(object.relayerNodeDid) : "",
+      relayerNodeAddress: isSet(object.relayerNodeAddress) ? String(object.relayerNodeAddress) : ""
+    };
+  },
+
+  toJSON(message: MsgUpdateEntityVerified): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.entityVerified !== undefined && (obj.entityVerified = message.entityVerified);
+    message.relayerNodeDid !== undefined && (obj.relayerNodeDid = message.relayerNodeDid);
+    message.relayerNodeAddress !== undefined && (obj.relayerNodeAddress = message.relayerNodeAddress);
+    return obj;
+  },
+
+  fromPartial(object: Partial<MsgUpdateEntityVerified>): MsgUpdateEntityVerified {
+    const message = createBaseMsgUpdateEntityVerified();
+    message.id = object.id ?? "";
+    message.entityVerified = object.entityVerified ?? false;
+    message.relayerNodeDid = object.relayerNodeDid ?? "";
+    message.relayerNodeAddress = object.relayerNodeAddress ?? "";
+    return message;
+  }
+
+};
+
+function createBaseMsgUpdateEntityVerifiedResponse(): MsgUpdateEntityVerifiedResponse {
+  return {};
+}
+
+export const MsgUpdateEntityVerifiedResponse = {
+  encode(_: MsgUpdateEntityVerifiedResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateEntityVerifiedResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateEntityVerifiedResponse();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(_: any): MsgUpdateEntityVerifiedResponse {
+    return {};
+  },
+
+  toJSON(_: MsgUpdateEntityVerifiedResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: Partial<MsgUpdateEntityVerifiedResponse>): MsgUpdateEntityVerifiedResponse {
+    const message = createBaseMsgUpdateEntityVerifiedResponse();
+    return message;
+  }
+
+};
+
 function createBaseMsgTransferEntity(): MsgTransferEntity {
   return {
-    entityDid: "",
+    id: "",
     ownerDid: "",
     ownerAddress: "",
     recipientDid: ""
@@ -861,8 +933,8 @@ function createBaseMsgTransferEntity(): MsgTransferEntity {
 
 export const MsgTransferEntity = {
   encode(message: MsgTransferEntity, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.entityDid !== "") {
-      writer.uint32(10).string(message.entityDid);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
     }
 
     if (message.ownerDid !== "") {
@@ -890,7 +962,7 @@ export const MsgTransferEntity = {
 
       switch (tag >>> 3) {
         case 1:
-          message.entityDid = reader.string();
+          message.id = reader.string();
           break;
 
         case 2:
@@ -916,7 +988,7 @@ export const MsgTransferEntity = {
 
   fromJSON(object: any): MsgTransferEntity {
     return {
-      entityDid: isSet(object.entityDid) ? String(object.entityDid) : "",
+      id: isSet(object.id) ? String(object.id) : "",
       ownerDid: isSet(object.ownerDid) ? String(object.ownerDid) : "",
       ownerAddress: isSet(object.ownerAddress) ? String(object.ownerAddress) : "",
       recipientDid: isSet(object.recipientDid) ? String(object.recipientDid) : ""
@@ -925,7 +997,7 @@ export const MsgTransferEntity = {
 
   toJSON(message: MsgTransferEntity): unknown {
     const obj: any = {};
-    message.entityDid !== undefined && (obj.entityDid = message.entityDid);
+    message.id !== undefined && (obj.id = message.id);
     message.ownerDid !== undefined && (obj.ownerDid = message.ownerDid);
     message.ownerAddress !== undefined && (obj.ownerAddress = message.ownerAddress);
     message.recipientDid !== undefined && (obj.recipientDid = message.recipientDid);
@@ -934,7 +1006,7 @@ export const MsgTransferEntity = {
 
   fromPartial(object: Partial<MsgTransferEntity>): MsgTransferEntity {
     const message = createBaseMsgTransferEntity();
-    message.entityDid = object.entityDid ?? "";
+    message.id = object.id ?? "";
     message.ownerDid = object.ownerDid ?? "";
     message.ownerAddress = object.ownerAddress ?? "";
     message.recipientDid = object.recipientDid ?? "";

@@ -8,39 +8,47 @@ export interface MsgCreateTokenResponse {}
 export interface MsgCreateTokenResponseSDKType {}
 export interface MsgTransferToken {
   tokenDid: string;
-  /** The ownersdid used to sign this transaction. */
-
   ownerDid: string;
-  /** The ownersdid used to sign this transaction. */
-
   ownerAddress: string;
   recipientDid: string;
 }
 export interface MsgTransferTokenSDKType {
   tokenDid: string;
-  /** The ownersdid used to sign this transaction. */
-
   ownerDid: string;
-  /** The ownersdid used to sign this transaction. */
-
   ownerAddress: string;
   recipientDid: string;
 }
-/** MsgUpdateProjectStatusResponse defines the Msg/UpdateTokenStatus response type. */
+/**
+ * MsgUpdateProjectStatusResponse defines the Msg/UpdateTokenStatus response
+ * type.
+ */
 
 export interface MsgTransferTokenResponse {}
-/** MsgUpdateProjectStatusResponse defines the Msg/UpdateTokenStatus response type. */
+/**
+ * MsgUpdateProjectStatusResponse defines the Msg/UpdateTokenStatus response
+ * type.
+ */
 
 export interface MsgTransferTokenResponseSDKType {}
+export interface Cw20Coin {
+  address: string;
+  amount: Long;
+}
+export interface Cw20CoinSDKType {
+  address: string;
+  amount: Long;
+}
 export interface SetupCw20 {
   symbol: string;
   decimals: number;
   cap: Long;
+  instialBalances: Cw20Coin[];
 }
 export interface SetupCw20SDKType {
   symbol: string;
   decimals: number;
   cap: Long;
+  instialBalances: Cw20CoinSDKType[];
 }
 export interface SetupCw721 {
   symbol: string;
@@ -79,33 +87,44 @@ export interface MintCw20SDKType {
 export interface MintCw721 {
   /** An IID that identifies the asset that this token represents */
   id: string;
-  /** A URI pointing to a resource with media type image/* representing the asset to which this token represents. Consider making any images at a width between 320 and 1080 pixels and aspect ratio between 1.91:1 and 4:5 inclusive. */
+  /**
+   * A URI pointing to a resource with media type image/* representing
+   * the asset to which this token represents. Consider making any
+   * images at a width between 320 and 1080 pixels and aspect ratio
+   * between 1.91:1 and 4:5 inclusive.
+   */
 
   image?: string;
   /** Uri */
 
   uri?: string;
-  /** "Arbitrary properties. Values may be strings, numbers, object or arrays."]; */
-
   properties: Uint8Array;
 }
 export interface MintCw721SDKType {
   /** An IID that identifies the asset that this token represents */
   id: string;
-  /** A URI pointing to a resource with media type image/* representing the asset to which this token represents. Consider making any images at a width between 320 and 1080 pixels and aspect ratio between 1.91:1 and 4:5 inclusive. */
+  /**
+   * A URI pointing to a resource with media type image/* representing
+   * the asset to which this token represents. Consider making any
+   * images at a width between 320 and 1080 pixels and aspect ratio
+   * between 1.91:1 and 4:5 inclusive.
+   */
 
   image?: string;
   /** Uri */
 
   uri?: string;
-  /** "Arbitrary properties. Values may be strings, numbers, object or arrays."]; */
-
   properties: Uint8Array;
 }
 export interface MintCw1155 {
   /** An IID that identifies the asset that this token represents */
   id: string;
-  /** A URI pointing to a resource with media type image/* representing the asset to which this token represents. Consider making any images at a width between 320 and 1080 pixels and aspect ratio between 1.91:1 and 4:5 inclusive. */
+  /**
+   * A URI pointing to a resource with media type image/* representing
+   * the asset to which this token represents. Consider making any
+   * images at a width between 320 and 1080 pixels and aspect ratio
+   * between 1.91:1 and 4:5 inclusive.
+   */
 
   image?: string;
   /** Uri */
@@ -116,7 +135,12 @@ export interface MintCw1155 {
 export interface MintCw1155SDKType {
   /** An IID that identifies the asset that this token represents */
   id: string;
-  /** A URI pointing to a resource with media type image/* representing the asset to which this token represents. Consider making any images at a width between 320 and 1080 pixels and aspect ratio between 1.91:1 and 4:5 inclusive. */
+  /**
+   * A URI pointing to a resource with media type image/* representing
+   * the asset to which this token represents. Consider making any
+   * images at a width between 320 and 1080 pixels and aspect ratio
+   * between 1.91:1 and 4:5 inclusive.
+   */
 
   image?: string;
   /** Uri */
@@ -324,11 +348,81 @@ export const MsgTransferTokenResponse = {
 
 };
 
+function createBaseCw20Coin(): Cw20Coin {
+  return {
+    address: "",
+    amount: Long.UZERO
+  };
+}
+
+export const Cw20Coin = {
+  encode(message: Cw20Coin, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+
+    if (!message.amount.isZero()) {
+      writer.uint32(16).uint64(message.amount);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Cw20Coin {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCw20Coin();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+
+        case 2:
+          message.amount = (reader.uint64() as Long);
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): Cw20Coin {
+    return {
+      address: isSet(object.address) ? String(object.address) : "",
+      amount: isSet(object.amount) ? Long.fromValue(object.amount) : Long.UZERO
+    };
+  },
+
+  toJSON(message: Cw20Coin): unknown {
+    const obj: any = {};
+    message.address !== undefined && (obj.address = message.address);
+    message.amount !== undefined && (obj.amount = (message.amount || Long.UZERO).toString());
+    return obj;
+  },
+
+  fromPartial(object: Partial<Cw20Coin>): Cw20Coin {
+    const message = createBaseCw20Coin();
+    message.address = object.address ?? "";
+    message.amount = object.amount !== undefined && object.amount !== null ? Long.fromValue(object.amount) : Long.UZERO;
+    return message;
+  }
+
+};
+
 function createBaseSetupCw20(): SetupCw20 {
   return {
     symbol: "",
     decimals: 0,
-    cap: Long.UZERO
+    cap: undefined,
+    instialBalances: undefined
   };
 }
 
@@ -342,8 +436,12 @@ export const SetupCw20 = {
       writer.uint32(16).uint32(message.decimals);
     }
 
-    if (!message.cap.isZero()) {
+    if (message.cap !== undefined) {
       writer.uint32(24).uint64(message.cap);
+    }
+
+    for (const v of message.instialBalances) {
+      Cw20Coin.encode(v!, writer.uint32(34).fork()).ldelim();
     }
 
     return writer;
@@ -370,6 +468,10 @@ export const SetupCw20 = {
           message.cap = (reader.uint64() as Long);
           break;
 
+        case 4:
+          message.instialBalances.push(Cw20Coin.decode(reader, reader.uint32()));
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -383,7 +485,8 @@ export const SetupCw20 = {
     return {
       symbol: isSet(object.symbol) ? String(object.symbol) : "",
       decimals: isSet(object.decimals) ? Number(object.decimals) : 0,
-      cap: isSet(object.cap) ? Long.fromValue(object.cap) : Long.UZERO
+      cap: isSet(object.cap) ? Long.fromValue(object.cap) : undefined,
+      instialBalances: Array.isArray(object?.instialBalances) ? object.instialBalances.map((e: any) => Cw20Coin.fromJSON(e)) : []
     };
   },
 
@@ -391,7 +494,14 @@ export const SetupCw20 = {
     const obj: any = {};
     message.symbol !== undefined && (obj.symbol = message.symbol);
     message.decimals !== undefined && (obj.decimals = Math.round(message.decimals));
-    message.cap !== undefined && (obj.cap = (message.cap || Long.UZERO).toString());
+    message.cap !== undefined && (obj.cap = (message.cap || undefined).toString());
+
+    if (message.instialBalances) {
+      obj.instialBalances = message.instialBalances.map(e => e ? Cw20Coin.toJSON(e) : undefined);
+    } else {
+      obj.instialBalances = [];
+    }
+
     return obj;
   },
 
@@ -399,7 +509,8 @@ export const SetupCw20 = {
     const message = createBaseSetupCw20();
     message.symbol = object.symbol ?? "";
     message.decimals = object.decimals ?? 0;
-    message.cap = object.cap !== undefined && object.cap !== null ? Long.fromValue(object.cap) : Long.UZERO;
+    message.cap = object.cap !== undefined && object.cap !== null ? Long.fromValue(object.cap) : undefined;
+    message.instialBalances = object.instialBalances?.map(e => Cw20Coin.fromPartial(e)) || [];
     return message;
   }
 

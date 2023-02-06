@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import { MsgCreateIidDocument, MsgCreateIidDocumentResponse, MsgUpdateIidDocument, MsgUpdateIidDocumentResponse, MsgAddVerification, MsgAddVerificationResponse, MsgRevokeVerification, MsgRevokeVerificationResponse, MsgSetVerificationRelationships, MsgSetVerificationRelationshipsResponse, MsgAddService, MsgAddServiceResponse, MsgDeleteService, MsgDeleteServiceResponse, MsgAddController, MsgAddControllerResponse, MsgDeleteController, MsgDeleteControllerResponse, MsgAddLinkedResource, MsgAddLinkedResourceResponse, MsgDeleteLinkedResource, MsgDeleteLinkedResourceResponse, MsgAddLinkedEntity, MsgAddLinkedEntityResponse, MsgDeleteLinkedEntity, MsgDeleteLinkedEntityResponse, MsgAddAccordedRight, MsgAddAccordedRightResponse, MsgDeleteAccordedRight, MsgDeleteAccordedRightResponse, MsgAddIidContext, MsgAddIidContextResponse, MsgDeactivateIID, MsgDeactivateIIDResponse, MsgDeleteIidContext, MsgDeleteIidContextResponse, MsgUpdateIidMeta, MsgUpdateIidMetaResponse } from "./tx";
+import { MsgCreateIidDocument, MsgCreateIidDocumentResponse, MsgUpdateIidDocument, MsgUpdateIidDocumentResponse, MsgAddVerification, MsgAddVerificationResponse, MsgRevokeVerification, MsgRevokeVerificationResponse, MsgSetVerificationRelationships, MsgSetVerificationRelationshipsResponse, MsgAddService, MsgAddServiceResponse, MsgDeleteService, MsgDeleteServiceResponse, MsgAddController, MsgAddControllerResponse, MsgDeleteController, MsgDeleteControllerResponse, MsgAddLinkedResource, MsgAddLinkedResourceResponse, MsgDeleteLinkedResource, MsgDeleteLinkedResourceResponse, MsgAddLinkedEntity, MsgAddLinkedEntityResponse, MsgDeleteLinkedEntity, MsgDeleteLinkedEntityResponse, MsgAddAccordedRight, MsgAddAccordedRightResponse, MsgDeleteAccordedRight, MsgDeleteAccordedRightResponse, MsgAddIidContext, MsgAddIidContextResponse, MsgDeactivateIID, MsgDeactivateIIDResponse, MsgDeleteIidContext, MsgDeleteIidContextResponse } from "./tx";
 /** Msg defines the identity Msg service. */
 export interface Msg {
     /** CreateDidDocument defines a method for creating a new identity. */
@@ -8,7 +8,10 @@ export interface Msg {
     updateIidDocument(request: MsgUpdateIidDocument): Promise<MsgUpdateIidDocumentResponse>;
     /** AddVerificationMethod adds a new verification method */
     addVerification(request: MsgAddVerification): Promise<MsgAddVerificationResponse>;
-    /** RevokeVerification remove the verification method and all associated verification Relations */
+    /**
+     * RevokeVerification remove the verification method and all associated
+     * verification Relations
+     */
     revokeVerification(request: MsgRevokeVerification): Promise<MsgRevokeVerificationResponse>;
     /** SetVerificationRelationships overwrite current verification relationships */
     setVerificationRelationships(request: MsgSetVerificationRelationships): Promise<MsgSetVerificationRelationshipsResponse>;
@@ -33,8 +36,6 @@ export interface Msg {
     addIidContext(request: MsgAddIidContext): Promise<MsgAddIidContextResponse>;
     deactivateIID(request: MsgDeactivateIID): Promise<MsgDeactivateIIDResponse>;
     deleteIidContext(request: MsgDeleteIidContext): Promise<MsgDeleteIidContextResponse>;
-    /** Update META */
-    updateMetaData(request: MsgUpdateIidMeta): Promise<MsgUpdateIidMetaResponse>;
 }
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
@@ -57,5 +58,4 @@ export declare class MsgClientImpl implements Msg {
     addIidContext(request: MsgAddIidContext): Promise<MsgAddIidContextResponse>;
     deactivateIID(request: MsgDeactivateIID): Promise<MsgDeactivateIIDResponse>;
     deleteIidContext(request: MsgDeleteIidContext): Promise<MsgDeleteIidContextResponse>;
-    updateMetaData(request: MsgUpdateIidMeta): Promise<MsgUpdateIidMetaResponse>;
 }

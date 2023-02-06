@@ -39,14 +39,6 @@ export const BankSendTrx = async () => {
     }),
   };
 
-  const tx = await queryClient.cosmos.tx.v1beta1.getTx({
-    hash: "DE04417E8E5E138CA3FE1E7839944F1D5A470E78F25BBE826E044FB3A36058AE",
-  });
-  const createProjectMessage = client.registry.decode(tx.tx!.body!.messages[0]);
-  console.log(
-    JSON.parse(utils.conversions.Uint8ArrayToJS(createProjectMessage.data))
-  );
-
   const response = await client.signAndBroadcast(myAddress, [message], fee);
   return response;
 };

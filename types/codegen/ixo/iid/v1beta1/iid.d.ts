@@ -14,15 +14,15 @@ export interface IidDocument {
     /** id represents the id for the did document. */
     id: string;
     /**
-     * A DID controller is an entity that is authorized to make changes to a DID document.
-     * cfr. https://www.w3.org/TR/did-core/#did-controller
+     * A DID controller is an entity that is authorized to make changes to a DID
+     * document. cfr. https://www.w3.org/TR/did-core/#did-controller
      */
     controller: string[];
     /**
      * A DID document can express verification methods,
      * such as cryptographic public keys, which can be used
-     * to authenticate or authorize interactions with the DID subject or associated parties.
-     * https://www.w3.org/TR/did-core/#verification-methods
+     * to authenticate or authorize interactions with the DID subject or
+     * associated parties. https://www.w3.org/TR/did-core/#verification-methods
      */
     verificationMethod: VerificationMethod[];
     /**
@@ -66,6 +66,11 @@ export interface IidDocument {
     accordedRight: AccordedRight[];
     linkedEntity: LinkedEntity[];
     alsoKnownAs: string;
+    /**
+     * Metadata concerning the IidDocument such as versionId, created, updated and
+     * deactivated
+     */
+    metadata?: IidMetadata;
 }
 export interface IidDocumentSDKType {
     /** @context is spec for did document. */
@@ -73,15 +78,15 @@ export interface IidDocumentSDKType {
     /** id represents the id for the did document. */
     id: string;
     /**
-     * A DID controller is an entity that is authorized to make changes to a DID document.
-     * cfr. https://www.w3.org/TR/did-core/#did-controller
+     * A DID controller is an entity that is authorized to make changes to a DID
+     * document. cfr. https://www.w3.org/TR/did-core/#did-controller
      */
     controller: string[];
     /**
      * A DID document can express verification methods,
      * such as cryptographic public keys, which can be used
-     * to authenticate or authorize interactions with the DID subject or associated parties.
-     * https://www.w3.org/TR/did-core/#verification-methods
+     * to authenticate or authorize interactions with the DID subject or
+     * associated parties. https://www.w3.org/TR/did-core/#verification-methods
      */
     verificationMethod: VerificationMethodSDKType[];
     /**
@@ -125,6 +130,11 @@ export interface IidDocumentSDKType {
     accordedRight: AccordedRightSDKType[];
     linkedEntity: LinkedEntitySDKType[];
     alsoKnownAs: string;
+    /**
+     * Metadata concerning the IidDocument such as versionId, created, updated and
+     * deactivated
+     */
+    metadata?: IidMetadataSDKType;
 }
 export interface AccordedRight {
     type: string;
@@ -161,10 +171,12 @@ export interface LinkedResourceSDKType {
     right: string;
 }
 export interface LinkedEntity {
+    type: string;
     id: string;
     relationship: string;
 }
 export interface LinkedEntitySDKType {
+    type: string;
     id: string;
     relationship: string;
 }
@@ -198,43 +210,19 @@ export interface ServiceSDKType {
     type: string;
     serviceEndpoint: string;
 }
-/**
- * DidMetadata defines metadata associated to a did document such as
- * the status of the DID document
- */
+/** IidMetadata defines metadata associated to a Iid document */
 export interface IidMetadata {
-    id: string;
     versionId: string;
     created?: Timestamp;
     updated?: Timestamp;
     deactivated: boolean;
-    entityType: string;
-    startDate?: Timestamp;
-    endDate?: Timestamp;
-    status: number;
-    stage: string;
-    relayerNode: string;
-    verifiableCredential: string;
-    credentials: string[];
 }
-/**
- * DidMetadata defines metadata associated to a did document such as
- * the status of the DID document
- */
+/** IidMetadata defines metadata associated to a Iid document */
 export interface IidMetadataSDKType {
-    id: string;
     versionId: string;
     created?: TimestampSDKType;
     updated?: TimestampSDKType;
     deactivated: boolean;
-    entityType: string;
-    startDate?: TimestampSDKType;
-    endDate?: TimestampSDKType;
-    status: number;
-    stage: string;
-    relayerNode: string;
-    verifiableCredential: string;
-    credentials: string[];
 }
 export declare const Context: {
     encode(message: Context, writer?: _m0.Writer): _m0.Writer;

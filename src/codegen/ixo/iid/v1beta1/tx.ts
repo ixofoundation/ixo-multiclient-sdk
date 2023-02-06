@@ -1,4 +1,4 @@
-import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, IidDocument, IidDocumentSDKType, IidMetadata, IidMetadataSDKType, VerificationMethod, VerificationMethodSDKType } from "./iid";
+import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, IidDocument, IidDocumentSDKType, VerificationMethod, VerificationMethodSDKType } from "./iid";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 /**
@@ -7,10 +7,7 @@ import { isSet } from "../../../helpers";
  */
 
 export interface Verification {
-  /**
-   * verificationRelationships defines which relationships
-   * are allowed to use the verification method
-   */
+  /** relationships that the method is allowed into. */
   relationships: string[];
   /** public key associated with the did document. */
 
@@ -25,10 +22,7 @@ export interface Verification {
  */
 
 export interface VerificationSDKType {
-  /**
-   * verificationRelationships defines which relationships
-   * are allowed to use the verification method
-   */
+  /** relationships that the method is allowed into. */
   relationships: string[];
   /** public key associated with the did document. */
 
@@ -362,7 +356,7 @@ export interface MsgAddAccordedRightSDKType {
 export interface MsgDeleteAccordedRight {
   /** the did */
   id: string;
-  /** the service id */
+  /** the Accorded right id */
 
   rightId: string;
   /** address of the account signing the message */
@@ -372,7 +366,7 @@ export interface MsgDeleteAccordedRight {
 export interface MsgDeleteAccordedRightSDKType {
   /** the did */
   id: string;
-  /** the service id */
+  /** the Accorded right id */
 
   right_id: string;
   /** address of the account signing the message */
@@ -435,26 +429,6 @@ export interface MsgDeleteIidContextSDKType {
 
   signer: string;
 }
-export interface MsgUpdateIidMeta {
-  /** the did */
-  id: string;
-  /** the context to add */
-
-  meta?: IidMetadata;
-  /** address of the account signing the message */
-
-  signer: string;
-}
-export interface MsgUpdateIidMetaSDKType {
-  /** the did */
-  id: string;
-  /** the context to add */
-
-  meta?: IidMetadataSDKType;
-  /** address of the account signing the message */
-
-  signer: string;
-}
 export interface MsgAddLinkedResourceResponse {}
 export interface MsgAddLinkedResourceResponseSDKType {}
 export interface MsgDeleteLinkedResourceResponse {}
@@ -471,8 +445,6 @@ export interface MsgAddIidContextResponse {}
 export interface MsgAddIidContextResponseSDKType {}
 export interface MsgDeleteIidContextResponse {}
 export interface MsgDeleteIidContextResponseSDKType {}
-export interface MsgUpdateIidMetaResponse {}
-export interface MsgUpdateIidMetaResponseSDKType {}
 export interface MsgDeactivateIIDResponse {}
 export interface MsgDeactivateIIDResponseSDKType {}
 
@@ -2528,87 +2500,6 @@ export const MsgDeleteIidContext = {
 
 };
 
-function createBaseMsgUpdateIidMeta(): MsgUpdateIidMeta {
-  return {
-    id: "",
-    meta: undefined,
-    signer: ""
-  };
-}
-
-export const MsgUpdateIidMeta = {
-  encode(message: MsgUpdateIidMeta, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
-    }
-
-    if (message.meta !== undefined) {
-      IidMetadata.encode(message.meta, writer.uint32(18).fork()).ldelim();
-    }
-
-    if (message.signer !== "") {
-      writer.uint32(26).string(message.signer);
-    }
-
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateIidMeta {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgUpdateIidMeta();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        case 1:
-          message.id = reader.string();
-          break;
-
-        case 2:
-          message.meta = IidMetadata.decode(reader, reader.uint32());
-          break;
-
-        case 3:
-          message.signer = reader.string();
-          break;
-
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(object: any): MsgUpdateIidMeta {
-    return {
-      id: isSet(object.id) ? String(object.id) : "",
-      meta: isSet(object.meta) ? IidMetadata.fromJSON(object.meta) : undefined,
-      signer: isSet(object.signer) ? String(object.signer) : ""
-    };
-  },
-
-  toJSON(message: MsgUpdateIidMeta): unknown {
-    const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? IidMetadata.toJSON(message.meta) : undefined);
-    message.signer !== undefined && (obj.signer = message.signer);
-    return obj;
-  },
-
-  fromPartial(object: Partial<MsgUpdateIidMeta>): MsgUpdateIidMeta {
-    const message = createBaseMsgUpdateIidMeta();
-    message.id = object.id ?? "";
-    message.meta = object.meta !== undefined && object.meta !== null ? IidMetadata.fromPartial(object.meta) : undefined;
-    message.signer = object.signer ?? "";
-    return message;
-  }
-
-};
-
 function createBaseMsgAddLinkedResourceResponse(): MsgAddLinkedResourceResponse {
   return {};
 }
@@ -2948,49 +2839,6 @@ export const MsgDeleteIidContextResponse = {
 
   fromPartial(_: Partial<MsgDeleteIidContextResponse>): MsgDeleteIidContextResponse {
     const message = createBaseMsgDeleteIidContextResponse();
-    return message;
-  }
-
-};
-
-function createBaseMsgUpdateIidMetaResponse(): MsgUpdateIidMetaResponse {
-  return {};
-}
-
-export const MsgUpdateIidMetaResponse = {
-  encode(_: MsgUpdateIidMetaResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateIidMetaResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgUpdateIidMetaResponse();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(_: any): MsgUpdateIidMetaResponse {
-    return {};
-  },
-
-  toJSON(_: MsgUpdateIidMetaResponse): unknown {
-    const obj: any = {};
-    return obj;
-  },
-
-  fromPartial(_: Partial<MsgUpdateIidMetaResponse>): MsgUpdateIidMetaResponse {
-    const message = createBaseMsgUpdateIidMetaResponse();
     return message;
   }
 

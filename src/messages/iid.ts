@@ -89,7 +89,7 @@ export const createIidVerificationMethods = ({
       relationships: ["authentication"],
       method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
         id: did + "#" + address,
-        type: "tendermint/PubKeySecp256k1",
+        type: "CosmosAccountAddress",
         blockchainAccountID: address,
         controller: controller,
       }),
@@ -101,6 +101,6 @@ export const createAgentIidContext = () => [
   ixo.iid.v1beta1.Context.fromPartial({
     key: "ixo",
     // @ts-ignore
-    value: "https://w3id.org/ixo/v1",
+    value: "https://w3id.org/ixo/ns/context/v1",
   }),
 ];

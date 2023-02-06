@@ -89,27 +89,6 @@ export const UpdateIidDoc = async () => {
   return response;
 };
 
-export const UpdateIidMeta = async () => {
-  const client = await createClient();
-
-  const tester = getUser();
-  const account = (await tester.getAccounts())[0];
-  const myAddress = account.address;
-  const did = tester.did;
-
-  const message = {
-    typeUrl: "/ixo.iid.v1beta1.MsgUpdateIidMeta",
-    value: ixo.iid.v1beta1.MsgUpdateIidMeta.fromPartial({
-      id: did,
-      meta: ixo.iid.v1beta1.IidMetadata.fromPartial({ versionId: "2" }),
-      signer: myAddress,
-    }),
-  };
-
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
-  return response;
-};
-
 export const AddIidContext = async () => {
   const client = await createClient();
 

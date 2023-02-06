@@ -7,7 +7,10 @@ export interface Query {
     paymentTemplate(request: QueryPaymentTemplateRequest): Promise<QueryPaymentTemplateResponse>;
     /** PaymentContract queries info of a specific payment contract. */
     paymentContract(request: QueryPaymentContractRequest): Promise<QueryPaymentContractResponse>;
-    /** PaymentContractsByIdPrefix lists all payment contracts having an id with a specific prefix. */
+    /**
+     * PaymentContractsByIdPrefix lists all payment contracts having an id with a
+     * specific prefix.
+     */
     paymentContractsByIdPrefix(request: QueryPaymentContractsByIdPrefixRequest): Promise<QueryPaymentContractsByIdPrefixResponse>;
     /** Subscription queries info of a specific Subscription. */
     subscription(request: QuerySubscriptionRequest): Promise<QuerySubscriptionResponse>;

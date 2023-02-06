@@ -22,21 +22,21 @@ import * as _128 from "./lightclients/localhost/v1/localhost";
 import * as _129 from "./lightclients/solomachine/v1/solomachine";
 import * as _130 from "./lightclients/solomachine/v2/solomachine";
 import * as _131 from "./lightclients/tendermint/v1/tendermint";
-import * as _207 from "./applications/transfer/v1/query.rpc.Query";
-import * as _208 from "./core/channel/v1/query.rpc.Query";
-import * as _209 from "./core/client/v1/query.rpc.Query";
-import * as _210 from "./core/connection/v1/query.rpc.Query";
-import * as _211 from "./core/port/v1/query.rpc.Query";
-import * as _212 from "./applications/transfer/v1/tx.rpc.msg";
-import * as _213 from "./core/channel/v1/tx.rpc.msg";
-import * as _214 from "./core/client/v1/tx.rpc.msg";
-import * as _215 from "./core/connection/v1/tx.rpc.msg";
+import * as _208 from "./applications/transfer/v1/query.rpc.Query";
+import * as _209 from "./core/channel/v1/query.rpc.Query";
+import * as _210 from "./core/client/v1/query.rpc.Query";
+import * as _211 from "./core/connection/v1/query.rpc.Query";
+import * as _212 from "./core/port/v1/query.rpc.Query";
+import * as _213 from "./applications/transfer/v1/tx.rpc.msg";
+import * as _214 from "./core/channel/v1/tx.rpc.msg";
+import * as _215 from "./core/client/v1/tx.rpc.msg";
+import * as _216 from "./core/connection/v1/tx.rpc.msg";
 export declare namespace ibc {
     namespace applications {
         namespace transfer {
             const v1: {
-                MsgClientImpl: typeof _212.MsgClientImpl;
-                QueryClientImpl: typeof _207.QueryClientImpl;
+                MsgClientImpl: typeof _213.MsgClientImpl;
+                QueryClientImpl: typeof _208.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     denomTrace(request: _109.QueryDenomTraceRequest): Promise<_109.QueryDenomTraceResponse>;
                     denomTraces(request?: _109.QueryDenomTracesRequest): Promise<_109.QueryDenomTracesResponse>;
@@ -134,8 +134,8 @@ export declare namespace ibc {
     namespace core {
         namespace channel {
             const v1: {
-                MsgClientImpl: typeof _213.MsgClientImpl;
-                QueryClientImpl: typeof _208.QueryClientImpl;
+                MsgClientImpl: typeof _214.MsgClientImpl;
+                QueryClientImpl: typeof _209.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     channel(request: _115.QueryChannelRequest): Promise<_115.QueryChannelResponse>;
                     channels(request?: _115.QueryChannelsRequest): Promise<_115.QueryChannelsResponse>;
@@ -541,8 +541,8 @@ export declare namespace ibc {
         }
         namespace client {
             const v1: {
-                MsgClientImpl: typeof _214.MsgClientImpl;
-                QueryClientImpl: typeof _209.QueryClientImpl;
+                MsgClientImpl: typeof _215.MsgClientImpl;
+                QueryClientImpl: typeof _210.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     clientState(request: _119.QueryClientStateRequest): Promise<_119.QueryClientStateResponse>;
                     clientStates(request?: _119.QueryClientStatesRequest): Promise<_119.QueryClientStatesResponse>;
@@ -827,8 +827,8 @@ export declare namespace ibc {
         }
         namespace connection {
             const v1: {
-                MsgClientImpl: typeof _215.MsgClientImpl;
-                QueryClientImpl: typeof _210.QueryClientImpl;
+                MsgClientImpl: typeof _216.MsgClientImpl;
+                QueryClientImpl: typeof _211.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     connection(request: _124.QueryConnectionRequest): Promise<_124.QueryConnectionResponse>;
                     connections(request?: _124.QueryConnectionsRequest): Promise<_124.QueryConnectionsResponse>;
@@ -1026,7 +1026,7 @@ export declare namespace ibc {
         }
         namespace port {
             const v1: {
-                QueryClientImpl: typeof _211.QueryClientImpl;
+                QueryClientImpl: typeof _212.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     appVersion(request: _126.QueryAppVersionRequest): Promise<_126.QueryAppVersionResponse>;
                 };
@@ -1397,18 +1397,18 @@ export declare namespace ibc {
             ibc: {
                 applications: {
                     transfer: {
-                        v1: _212.MsgClientImpl;
+                        v1: _213.MsgClientImpl;
                     };
                 };
                 core: {
                     channel: {
-                        v1: _213.MsgClientImpl;
-                    };
-                    client: {
                         v1: _214.MsgClientImpl;
                     };
-                    connection: {
+                    client: {
                         v1: _215.MsgClientImpl;
+                    };
+                    connection: {
+                        v1: _216.MsgClientImpl;
                     };
                 };
             };

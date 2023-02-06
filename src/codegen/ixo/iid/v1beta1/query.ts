@@ -1,87 +1,52 @@
-import { IidDocument, IidDocumentSDKType, IidMetadata, IidMetadataSDKType } from "./iid";
+import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { IidDocument, IidDocumentSDKType } from "./iid";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
-/** QueryDidDocumentsRequest is request type for Query/DidDocuments RPC method. */
-
 export interface QueryIidDocumentsRequest {
-  /** status enables to query for validators matching a given status. */
-  status: string;
+  /** pagination defines an optional pagination for the request. */
+  pagination?: PageRequest;
 }
-/** QueryDidDocumentsRequest is request type for Query/DidDocuments RPC method. */
-
 export interface QueryIidDocumentsRequestSDKType {
-  /** status enables to query for validators matching a given status. */
-  status: string;
+  /** pagination defines an optional pagination for the request. */
+  pagination?: PageRequestSDKType;
 }
-/** QueryDidDocumentsResponse is response type for the Query/DidDocuments RPC method */
-
 export interface QueryIidDocumentsResponse {
-  /** validators contains all the queried validators. */
   iidDocuments: IidDocument[];
-}
-/** QueryDidDocumentsResponse is response type for the Query/DidDocuments RPC method */
+  /** pagination defines the pagination in the response. */
 
+  pagination?: PageResponse;
+}
 export interface QueryIidDocumentsResponseSDKType {
-  /** validators contains all the queried validators. */
   iidDocuments: IidDocumentSDKType[];
-}
-/** QueryDidDocumentsRequest is request type for Query/DidDocuments RPC method. */
+  /** pagination defines the pagination in the response. */
 
+  pagination?: PageResponseSDKType;
+}
 export interface QueryIidDocumentRequest {
-  /** status enables to query for validators matching a given status. */
+  /** did id of iid document querying */
   id: string;
 }
-/** QueryDidDocumentsRequest is request type for Query/DidDocuments RPC method. */
-
 export interface QueryIidDocumentRequestSDKType {
-  /** status enables to query for validators matching a given status. */
+  /** did id of iid document querying */
   id: string;
 }
-/** QueryDidDocumentsResponse is response type for the Query/DidDocuments RPC method */
-
 export interface QueryIidDocumentResponse {
-  /** validators contains all the queried validators. */
   iidDocument?: IidDocument;
 }
-/** QueryDidDocumentsResponse is response type for the Query/DidDocuments RPC method */
-
 export interface QueryIidDocumentResponseSDKType {
-  /** validators contains all the queried validators. */
   iidDocument?: IidDocumentSDKType;
-}
-export interface QueryIidMetaDataRequest {
-  /** status enables to query for validators matching a given status. */
-  id: string;
-}
-export interface QueryIidMetaDataRequestSDKType {
-  /** status enables to query for validators matching a given status. */
-  id: string;
-}
-export interface QueryIidMetaDataResponse {
-  /**
-   * validators contains all the queried validators.
-   * IidDocument iidDocument = 1  [(gogoproto.nullable) = false];
-   */
-  didMetadata?: IidMetadata;
-}
-export interface QueryIidMetaDataResponseSDKType {
-  /**
-   * validators contains all the queried validators.
-   * IidDocument iidDocument = 1  [(gogoproto.nullable) = false];
-   */
-  didMetadata?: IidMetadataSDKType;
 }
 
 function createBaseQueryIidDocumentsRequest(): QueryIidDocumentsRequest {
   return {
-    status: ""
+    pagination: undefined
   };
 }
 
 export const QueryIidDocumentsRequest = {
   encode(message: QueryIidDocumentsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.status !== "") {
-      writer.uint32(10).string(message.status);
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
 
     return writer;
@@ -97,7 +62,7 @@ export const QueryIidDocumentsRequest = {
 
       switch (tag >>> 3) {
         case 1:
-          message.status = reader.string();
+          message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
 
         default:
@@ -111,19 +76,19 @@ export const QueryIidDocumentsRequest = {
 
   fromJSON(object: any): QueryIidDocumentsRequest {
     return {
-      status: isSet(object.status) ? String(object.status) : ""
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
     };
   },
 
   toJSON(message: QueryIidDocumentsRequest): unknown {
     const obj: any = {};
-    message.status !== undefined && (obj.status = message.status);
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
 
   fromPartial(object: Partial<QueryIidDocumentsRequest>): QueryIidDocumentsRequest {
     const message = createBaseQueryIidDocumentsRequest();
-    message.status = object.status ?? "";
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
   }
 
@@ -131,7 +96,8 @@ export const QueryIidDocumentsRequest = {
 
 function createBaseQueryIidDocumentsResponse(): QueryIidDocumentsResponse {
   return {
-    iidDocuments: []
+    iidDocuments: [],
+    pagination: undefined
   };
 }
 
@@ -139,6 +105,10 @@ export const QueryIidDocumentsResponse = {
   encode(message: QueryIidDocumentsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.iidDocuments) {
       IidDocument.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
 
     return writer;
@@ -157,6 +127,10 @@ export const QueryIidDocumentsResponse = {
           message.iidDocuments.push(IidDocument.decode(reader, reader.uint32()));
           break;
 
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -168,7 +142,8 @@ export const QueryIidDocumentsResponse = {
 
   fromJSON(object: any): QueryIidDocumentsResponse {
     return {
-      iidDocuments: Array.isArray(object?.iidDocuments) ? object.iidDocuments.map((e: any) => IidDocument.fromJSON(e)) : []
+      iidDocuments: Array.isArray(object?.iidDocuments) ? object.iidDocuments.map((e: any) => IidDocument.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
     };
   },
 
@@ -181,12 +156,14 @@ export const QueryIidDocumentsResponse = {
       obj.iidDocuments = [];
     }
 
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
 
   fromPartial(object: Partial<QueryIidDocumentsResponse>): QueryIidDocumentsResponse {
     const message = createBaseQueryIidDocumentsResponse();
     message.iidDocuments = object.iidDocuments?.map(e => IidDocument.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   }
 
@@ -301,120 +278,6 @@ export const QueryIidDocumentResponse = {
   fromPartial(object: Partial<QueryIidDocumentResponse>): QueryIidDocumentResponse {
     const message = createBaseQueryIidDocumentResponse();
     message.iidDocument = object.iidDocument !== undefined && object.iidDocument !== null ? IidDocument.fromPartial(object.iidDocument) : undefined;
-    return message;
-  }
-
-};
-
-function createBaseQueryIidMetaDataRequest(): QueryIidMetaDataRequest {
-  return {
-    id: ""
-  };
-}
-
-export const QueryIidMetaDataRequest = {
-  encode(message: QueryIidMetaDataRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
-    }
-
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryIidMetaDataRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryIidMetaDataRequest();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        case 1:
-          message.id = reader.string();
-          break;
-
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(object: any): QueryIidMetaDataRequest {
-    return {
-      id: isSet(object.id) ? String(object.id) : ""
-    };
-  },
-
-  toJSON(message: QueryIidMetaDataRequest): unknown {
-    const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    return obj;
-  },
-
-  fromPartial(object: Partial<QueryIidMetaDataRequest>): QueryIidMetaDataRequest {
-    const message = createBaseQueryIidMetaDataRequest();
-    message.id = object.id ?? "";
-    return message;
-  }
-
-};
-
-function createBaseQueryIidMetaDataResponse(): QueryIidMetaDataResponse {
-  return {
-    didMetadata: undefined
-  };
-}
-
-export const QueryIidMetaDataResponse = {
-  encode(message: QueryIidMetaDataResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.didMetadata !== undefined) {
-      IidMetadata.encode(message.didMetadata, writer.uint32(18).fork()).ldelim();
-    }
-
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryIidMetaDataResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryIidMetaDataResponse();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        case 2:
-          message.didMetadata = IidMetadata.decode(reader, reader.uint32());
-          break;
-
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(object: any): QueryIidMetaDataResponse {
-    return {
-      didMetadata: isSet(object.didMetadata) ? IidMetadata.fromJSON(object.didMetadata) : undefined
-    };
-  },
-
-  toJSON(message: QueryIidMetaDataResponse): unknown {
-    const obj: any = {};
-    message.didMetadata !== undefined && (obj.didMetadata = message.didMetadata ? IidMetadata.toJSON(message.didMetadata) : undefined);
-    return obj;
-  },
-
-  fromPartial(object: Partial<QueryIidMetaDataResponse>): QueryIidMetaDataResponse {
-    const message = createBaseQueryIidMetaDataResponse();
-    message.didMetadata = object.didMetadata !== undefined && object.didMetadata !== null ? IidMetadata.fromPartial(object.didMetadata) : undefined;
     return message;
   }
 

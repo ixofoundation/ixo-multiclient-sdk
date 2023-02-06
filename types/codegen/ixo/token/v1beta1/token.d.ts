@@ -1,4 +1,18 @@
 import * as _m0 from "protobufjs/minimal";
+export declare enum ContractType {
+    CW20 = 0,
+    CW721 = 1,
+    IXO1155 = 2,
+    UNRECOGNIZED = -1
+}
+export declare enum ContractTypeSDKType {
+    CW20 = 0,
+    CW721 = 1,
+    IXO1155 = 2,
+    UNRECOGNIZED = -1
+}
+export declare function contractTypeFromJSON(object: any): ContractType;
+export declare function contractTypeToJSON(object: ContractType): string;
 export interface Contract {
     id: string;
     address: string;
@@ -21,6 +35,7 @@ export interface TokenMinter {
     minterDid: string;
     minterAddress: string;
     contractAddress: string;
+    contractType: ContractType;
     name: string;
     description: string;
 }
@@ -28,6 +43,7 @@ export interface TokenMinterSDKType {
     minterDid: string;
     minterAddress: string;
     contractAddress: string;
+    contractType: ContractTypeSDKType;
     name: string;
     description: string;
 }

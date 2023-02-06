@@ -24,10 +24,16 @@ export interface Msg {
   /** Swap defines a method for swapping from one reserve bond token to another. */
 
   swap(request: MsgSwap): Promise<MsgSwapResponse>;
-  /** MakeOutcomePayment defines a method for making an outcome payment to a bond. */
+  /**
+   * MakeOutcomePayment defines a method for making an outcome payment to a
+   * bond.
+   */
 
   makeOutcomePayment(request: MsgMakeOutcomePayment): Promise<MsgMakeOutcomePaymentResponse>;
-  /** WithdrawShare defines a method for withdrawing a share from a bond that is in the SETTLE stage. */
+  /**
+   * WithdrawShare defines a method for withdrawing a share from a bond that is
+   * in the SETTLE stage.
+   */
 
   withdrawShare(request: MsgWithdrawShare): Promise<MsgWithdrawShareResponse>;
   /** WithdrawReserve defines a method for withdrawing reserve from a bond. */

@@ -204,16 +204,17 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
         };
         entity: {
             v1beta1: {
-                entityList(request: import("./entity/v1beta1/query").QueryEntityListRequest): Promise<import("./entity/v1beta1/query").QueryEntityListResponse>;
-                entityDoc(request: import("./entity/v1beta1/query").QueryEntityDocRequest): Promise<import("./entity/v1beta1/query").QueryEntityDocResponse>;
-                entityConfig(request?: import("./entity/v1beta1/query").QueryEntityConfigRequest): Promise<import("./entity/v1beta1/query").QueryEntityConfigResponse>;
+                entity(request: import("./entity/v1beta1/query").QueryEntityRequest): Promise<import("./entity/v1beta1/query").QueryEntityResponse>;
+                entityMetaData(request: import("./entity/v1beta1/query").QueryEntityMetadataRequest): Promise<import("./entity/v1beta1/query").QueryEntityMetadataResponse>;
+                entityIidDocument(request: import("./entity/v1beta1/query").QueryEntityIidDocumentRequest): Promise<import("./entity/v1beta1/query").QueryEntityIidDocumentResponse>;
+                entityVerified(request: import("./entity/v1beta1/query").QueryEntityVerifiedRequest): Promise<import("./entity/v1beta1/query").QueryEntityVerifiedResponse>;
+                entityList(request?: import("./entity/v1beta1/query").QueryEntityListRequest): Promise<import("./entity/v1beta1/query").QueryEntityListResponse>;
             };
         };
         iid: {
             v1beta1: {
-                iidDocuments(request: import("./iid/v1beta1/query").QueryIidDocumentsRequest): Promise<import("./iid/v1beta1/query").QueryIidDocumentsResponse>;
+                iidDocuments(request?: import("./iid/v1beta1/query").QueryIidDocumentsRequest): Promise<import("./iid/v1beta1/query").QueryIidDocumentsResponse>;
                 iidDocument(request: import("./iid/v1beta1/query").QueryIidDocumentRequest): Promise<import("./iid/v1beta1/query").QueryIidDocumentResponse>;
-                metaData(request: import("./iid/v1beta1/query").QueryIidMetaDataRequest): Promise<import("./iid/v1beta1/query").QueryIidMetaDataResponse>;
             };
         };
         payments: {

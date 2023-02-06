@@ -1,9 +1,9 @@
 export declare const createQueryClient: (rpcEndpoint: string) => Promise<{
     custom: {
         entity: {
-            getEntityContext: ({ entityDid }: {
-                entityDid: string;
-            }) => Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityDocResponse>;
+            getEntityContext: ({ id }: {
+                id: string;
+            }) => Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityResponse>;
         };
     };
     cosmos: {
@@ -265,16 +265,17 @@ export declare const createQueryClient: (rpcEndpoint: string) => Promise<{
         };
         entity: {
             v1beta1: {
-                entityList(request: import("../codegen/ixo/entity/v1beta1/query").QueryEntityListRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityListResponse>;
-                entityDoc(request: import("../codegen/ixo/entity/v1beta1/query").QueryEntityDocRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityDocResponse>;
-                entityConfig(request?: import("../codegen/ixo/entity/v1beta1/query").QueryEntityConfigRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityConfigResponse>;
+                entity(request: import("../codegen/ixo/entity/v1beta1/query").QueryEntityRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityResponse>;
+                entityMetaData(request: import("../codegen/ixo/entity/v1beta1/query").QueryEntityMetadataRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityMetadataResponse>;
+                entityIidDocument(request: import("../codegen/ixo/entity/v1beta1/query").QueryEntityIidDocumentRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityIidDocumentResponse>;
+                entityVerified(request: import("../codegen/ixo/entity/v1beta1/query").QueryEntityVerifiedRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityVerifiedResponse>;
+                entityList(request?: import("../codegen/ixo/entity/v1beta1/query").QueryEntityListRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityListResponse>;
             };
         };
         iid: {
             v1beta1: {
-                iidDocuments(request: import("../codegen/ixo/iid/v1beta1/query").QueryIidDocumentsRequest): Promise<import("../codegen/ixo/iid/v1beta1/query").QueryIidDocumentsResponse>;
+                iidDocuments(request?: import("../codegen/ixo/iid/v1beta1/query").QueryIidDocumentsRequest): Promise<import("../codegen/ixo/iid/v1beta1/query").QueryIidDocumentsResponse>;
                 iidDocument(request: import("../codegen/ixo/iid/v1beta1/query").QueryIidDocumentRequest): Promise<import("../codegen/ixo/iid/v1beta1/query").QueryIidDocumentResponse>;
-                metaData(request: import("../codegen/ixo/iid/v1beta1/query").QueryIidMetaDataRequest): Promise<import("../codegen/ixo/iid/v1beta1/query").QueryIidMetaDataResponse>;
             };
         };
         payments: {

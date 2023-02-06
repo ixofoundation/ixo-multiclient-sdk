@@ -1,34 +1,30 @@
-import { EntityDoc, EntityDocSDKType, Params, ParamsSDKType } from "./entity";
+import { Entity, EntitySDKType, Params, ParamsSDKType } from "./entity";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 /** GenesisState defines the project module's genesis state. */
 
 export interface GenesisState {
-  entityDocs: EntityDoc[];
-  /** repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"account_maps\""]; */
-
+  entities: Entity[];
   params?: Params;
 }
 /** GenesisState defines the project module's genesis state. */
 
 export interface GenesisStateSDKType {
-  entity_docs: EntityDocSDKType[];
-  /** repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"account_maps\""]; */
-
+  entities: EntitySDKType[];
   params?: ParamsSDKType;
 }
 
 function createBaseGenesisState(): GenesisState {
   return {
-    entityDocs: [],
+    entities: [],
     params: undefined
   };
 }
 
 export const GenesisState = {
   encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.entityDocs) {
-      EntityDoc.encode(v!, writer.uint32(10).fork()).ldelim();
+    for (const v of message.entities) {
+      Entity.encode(v!, writer.uint32(10).fork()).ldelim();
     }
 
     if (message.params !== undefined) {
@@ -48,7 +44,7 @@ export const GenesisState = {
 
       switch (tag >>> 3) {
         case 1:
-          message.entityDocs.push(EntityDoc.decode(reader, reader.uint32()));
+          message.entities.push(Entity.decode(reader, reader.uint32()));
           break;
 
         case 2:
@@ -66,7 +62,7 @@ export const GenesisState = {
 
   fromJSON(object: any): GenesisState {
     return {
-      entityDocs: Array.isArray(object?.entityDocs) ? object.entityDocs.map((e: any) => EntityDoc.fromJSON(e)) : [],
+      entities: Array.isArray(object?.entities) ? object.entities.map((e: any) => Entity.fromJSON(e)) : [],
       params: isSet(object.params) ? Params.fromJSON(object.params) : undefined
     };
   },
@@ -74,10 +70,10 @@ export const GenesisState = {
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
 
-    if (message.entityDocs) {
-      obj.entityDocs = message.entityDocs.map(e => e ? EntityDoc.toJSON(e) : undefined);
+    if (message.entities) {
+      obj.entities = message.entities.map(e => e ? Entity.toJSON(e) : undefined);
     } else {
-      obj.entityDocs = [];
+      obj.entities = [];
     }
 
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
@@ -86,7 +82,7 @@ export const GenesisState = {
 
   fromPartial(object: Partial<GenesisState>): GenesisState {
     const message = createBaseGenesisState();
-    message.entityDocs = object.entityDocs?.map(e => EntityDoc.fromPartial(e)) || [];
+    message.entities = object.entities?.map(e => Entity.fromPartial(e)) || [];
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
   }

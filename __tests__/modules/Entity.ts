@@ -302,7 +302,7 @@ export const TransferEntity = async (entityDid: string) => {
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgTransferEntity",
     value: ixo.entity.v1beta1.MsgTransferEntity.fromPartial({
-      entityDid: entityDid,
+      id: entityDid,
       ownerDid: did,
       ownerAddress: myAddress,
       recipientDid: alice.did,
@@ -324,7 +324,7 @@ export const UpdateEntity = async () => {
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgUpdateEntity",
     value: ixo.entity.v1beta1.MsgUpdateEntity.fromPartial({
-      status: 1,
+      entityStatus: 1,
       controllerDid: did,
       controllerAddress: myAddress,
     }),

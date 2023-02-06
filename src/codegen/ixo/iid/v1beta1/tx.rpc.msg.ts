@@ -1,6 +1,6 @@
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { MsgCreateIidDocument, MsgCreateIidDocumentResponse, MsgUpdateIidDocument, MsgUpdateIidDocumentResponse, MsgAddVerification, MsgAddVerificationResponse, MsgRevokeVerification, MsgRevokeVerificationResponse, MsgSetVerificationRelationships, MsgSetVerificationRelationshipsResponse, MsgAddService, MsgAddServiceResponse, MsgDeleteService, MsgDeleteServiceResponse, MsgAddController, MsgAddControllerResponse, MsgDeleteController, MsgDeleteControllerResponse, MsgAddLinkedResource, MsgAddLinkedResourceResponse, MsgDeleteLinkedResource, MsgDeleteLinkedResourceResponse, MsgAddLinkedEntity, MsgAddLinkedEntityResponse, MsgDeleteLinkedEntity, MsgDeleteLinkedEntityResponse, MsgAddAccordedRight, MsgAddAccordedRightResponse, MsgDeleteAccordedRight, MsgDeleteAccordedRightResponse, MsgAddIidContext, MsgAddIidContextResponse, MsgDeactivateIID, MsgDeactivateIIDResponse, MsgDeleteIidContext, MsgDeleteIidContextResponse, MsgUpdateIidMeta, MsgUpdateIidMetaResponse } from "./tx";
+import { MsgCreateIidDocument, MsgCreateIidDocumentResponse, MsgUpdateIidDocument, MsgUpdateIidDocumentResponse, MsgAddVerification, MsgAddVerificationResponse, MsgRevokeVerification, MsgRevokeVerificationResponse, MsgSetVerificationRelationships, MsgSetVerificationRelationshipsResponse, MsgAddService, MsgAddServiceResponse, MsgDeleteService, MsgDeleteServiceResponse, MsgAddController, MsgAddControllerResponse, MsgDeleteController, MsgDeleteControllerResponse, MsgAddLinkedResource, MsgAddLinkedResourceResponse, MsgDeleteLinkedResource, MsgDeleteLinkedResourceResponse, MsgAddLinkedEntity, MsgAddLinkedEntityResponse, MsgDeleteLinkedEntity, MsgDeleteLinkedEntityResponse, MsgAddAccordedRight, MsgAddAccordedRightResponse, MsgDeleteAccordedRight, MsgDeleteAccordedRightResponse, MsgAddIidContext, MsgAddIidContextResponse, MsgDeactivateIID, MsgDeactivateIIDResponse, MsgDeleteIidContext, MsgDeleteIidContextResponse } from "./tx";
 /** Msg defines the identity Msg service. */
 
 export interface Msg {
@@ -12,7 +12,10 @@ export interface Msg {
   /** AddVerificationMethod adds a new verification method */
 
   addVerification(request: MsgAddVerification): Promise<MsgAddVerificationResponse>;
-  /** RevokeVerification remove the verification method and all associated verification Relations */
+  /**
+   * RevokeVerification remove the verification method and all associated
+   * verification Relations
+   */
 
   revokeVerification(request: MsgRevokeVerification): Promise<MsgRevokeVerificationResponse>;
   /** SetVerificationRelationships overwrite current verification relationships */
@@ -47,9 +50,6 @@ export interface Msg {
   addIidContext(request: MsgAddIidContext): Promise<MsgAddIidContextResponse>;
   deactivateIID(request: MsgDeactivateIID): Promise<MsgDeactivateIIDResponse>;
   deleteIidContext(request: MsgDeleteIidContext): Promise<MsgDeleteIidContextResponse>;
-  /** Update META */
-
-  updateMetaData(request: MsgUpdateIidMeta): Promise<MsgUpdateIidMetaResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -74,7 +74,6 @@ export class MsgClientImpl implements Msg {
     this.addIidContext = this.addIidContext.bind(this);
     this.deactivateIID = this.deactivateIID.bind(this);
     this.deleteIidContext = this.deleteIidContext.bind(this);
-    this.updateMetaData = this.updateMetaData.bind(this);
   }
 
   createIidDocument(request: MsgCreateIidDocument): Promise<MsgCreateIidDocumentResponse> {
@@ -183,12 +182,6 @@ export class MsgClientImpl implements Msg {
     const data = MsgDeleteIidContext.encode(request).finish();
     const promise = this.rpc.request("ixo.iid.v1beta1.Msg", "DeleteIidContext", data);
     return promise.then(data => MsgDeleteIidContextResponse.decode(new _m0.Reader(data)));
-  }
-
-  updateMetaData(request: MsgUpdateIidMeta): Promise<MsgUpdateIidMetaResponse> {
-    const data = MsgUpdateIidMeta.encode(request).finish();
-    const promise = this.rpc.request("ixo.iid.v1beta1.Msg", "UpdateMetaData", data);
-    return promise.then(data => MsgUpdateIidMetaResponse.decode(new _m0.Reader(data)));
   }
 
 }

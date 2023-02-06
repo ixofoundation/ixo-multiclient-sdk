@@ -4,7 +4,10 @@ import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import * as _m0 from "protobufjs/minimal";
 import { isSet, Long, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
-/** PaymentTemplate contains details about a payment, with no info about the payer or payee. */
+/**
+ * PaymentTemplate contains details about a payment, with no info about the
+ * payer or payee.
+ */
 
 export interface PaymentTemplate {
   id: string;
@@ -13,7 +16,10 @@ export interface PaymentTemplate {
   paymentMaximum: Coin[];
   discounts: Discount[];
 }
-/** PaymentTemplate contains details about a payment, with no info about the payer or payee. */
+/**
+ * PaymentTemplate contains details about a payment, with no info about the
+ * payer or payee.
+ */
 
 export interface PaymentTemplateSDKType {
   id: string;
@@ -34,21 +40,27 @@ export interface DiscountSDKType {
   id: string;
   percent: string;
 }
-/** DistributionShare specifies the share of a specific payment an address will receive. */
+/**
+ * DistributionShare specifies the share of a specific payment an address will
+ * receive.
+ */
 
 export interface DistributionShare {
   address: string;
   percentage: string;
 }
-/** DistributionShare specifies the share of a specific payment an address will receive. */
+/**
+ * DistributionShare specifies the share of a specific payment an address will
+ * receive.
+ */
 
 export interface DistributionShareSDKType {
   address: string;
   percentage: string;
 }
 /**
- * PaymentContract specifies an agreement between a payer and payee/s which can be invoked
- * once or multiple times to effect payment/s.
+ * PaymentContract specifies an agreement between a payer and payee/s which can
+ * be invoked once or multiple times to effect payment/s.
  */
 
 export interface PaymentContract {
@@ -64,8 +76,8 @@ export interface PaymentContract {
   discountId: string;
 }
 /**
- * PaymentContract specifies an agreement between a payer and payee/s which can be invoked
- * once or multiple times to effect payment/s.
+ * PaymentContract specifies an agreement between a payer and payee/s which can
+ * be invoked once or multiple times to effect payment/s.
  */
 
 export interface PaymentContractSDKType {
@@ -101,8 +113,8 @@ export interface SubscriptionSDKType {
   period?: AnySDKType;
 }
 /**
- * BlockPeriod implements the Period interface and specifies a period in terms of number
- * of blocks.
+ * BlockPeriod implements the Period interface and specifies a period in terms
+ * of number of blocks.
  */
 
 export interface BlockPeriod {
@@ -110,29 +122,35 @@ export interface BlockPeriod {
   periodStartBlock: Long;
 }
 /**
- * BlockPeriod implements the Period interface and specifies a period in terms of number
- * of blocks.
+ * BlockPeriod implements the Period interface and specifies a period in terms
+ * of number of blocks.
  */
 
 export interface BlockPeriodSDKType {
   period_length: Long;
   period_start_block: Long;
 }
-/** TimePeriod implements the Period interface and specifies a period in terms of time. */
+/**
+ * TimePeriod implements the Period interface and specifies a period in terms of
+ * time.
+ */
 
 export interface TimePeriod {
   periodDurationNs?: Duration;
   periodStartTime?: Timestamp;
 }
-/** TimePeriod implements the Period interface and specifies a period in terms of time. */
+/**
+ * TimePeriod implements the Period interface and specifies a period in terms of
+ * time.
+ */
 
 export interface TimePeriodSDKType {
   period_duration_ns?: DurationSDKType;
   period_start_time?: TimestampSDKType;
 }
 /**
- * TestPeriod implements the Period interface and is identical to BlockPeriod, except it
- * ignores the context in periodEnded() and periodStarted().
+ * TestPeriod implements the Period interface and is identical to BlockPeriod,
+ * except it ignores the context in periodEnded() and periodStarted().
  */
 
 export interface TestPeriod {
@@ -140,8 +158,8 @@ export interface TestPeriod {
   periodStartBlock: Long;
 }
 /**
- * TestPeriod implements the Period interface and is identical to BlockPeriod, except it
- * ignores the context in periodEnded() and periodStarted().
+ * TestPeriod implements the Period interface and is identical to BlockPeriod,
+ * except it ignores the context in periodEnded() and periodStarted().
  */
 
 export interface TestPeriodSDKType {

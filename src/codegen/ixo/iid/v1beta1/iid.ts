@@ -16,16 +16,16 @@ export interface IidDocument {
 
   id: string;
   /**
-   * A DID controller is an entity that is authorized to make changes to a DID document.
-   * cfr. https://www.w3.org/TR/did-core/#did-controller
+   * A DID controller is an entity that is authorized to make changes to a DID
+   * document. cfr. https://www.w3.org/TR/did-core/#did-controller
    */
 
   controller: string[];
   /**
    * A DID document can express verification methods,
    * such as cryptographic public keys, which can be used
-   * to authenticate or authorize interactions with the DID subject or associated parties.
-   * https://www.w3.org/TR/did-core/#verification-methods
+   * to authenticate or authorize interactions with the DID subject or
+   * associated parties. https://www.w3.org/TR/did-core/#verification-methods
    */
 
   verificationMethod: VerificationMethod[];
@@ -76,6 +76,12 @@ export interface IidDocument {
   accordedRight: AccordedRight[];
   linkedEntity: LinkedEntity[];
   alsoKnownAs: string;
+  /**
+   * Metadata concerning the IidDocument such as versionId, created, updated and
+   * deactivated
+   */
+
+  metadata?: IidMetadata;
 }
 export interface IidDocumentSDKType {
   /** @context is spec for did document. */
@@ -84,16 +90,16 @@ export interface IidDocumentSDKType {
 
   id: string;
   /**
-   * A DID controller is an entity that is authorized to make changes to a DID document.
-   * cfr. https://www.w3.org/TR/did-core/#did-controller
+   * A DID controller is an entity that is authorized to make changes to a DID
+   * document. cfr. https://www.w3.org/TR/did-core/#did-controller
    */
 
   controller: string[];
   /**
    * A DID document can express verification methods,
    * such as cryptographic public keys, which can be used
-   * to authenticate or authorize interactions with the DID subject or associated parties.
-   * https://www.w3.org/TR/did-core/#verification-methods
+   * to authenticate or authorize interactions with the DID subject or
+   * associated parties. https://www.w3.org/TR/did-core/#verification-methods
    */
 
   verificationMethod: VerificationMethodSDKType[];
@@ -144,6 +150,12 @@ export interface IidDocumentSDKType {
   accordedRight: AccordedRightSDKType[];
   linkedEntity: LinkedEntitySDKType[];
   alsoKnownAs: string;
+  /**
+   * Metadata concerning the IidDocument such as versionId, created, updated and
+   * deactivated
+   */
+
+  metadata?: IidMetadataSDKType;
 }
 export interface AccordedRight {
   type: string;
@@ -180,10 +192,12 @@ export interface LinkedResourceSDKType {
   right: string;
 }
 export interface LinkedEntity {
+  type: string;
   id: string;
   relationship: string;
 }
 export interface LinkedEntitySDKType {
+  type: string;
   id: string;
   relationship: string;
 }
@@ -219,45 +233,21 @@ export interface ServiceSDKType {
   type: string;
   serviceEndpoint: string;
 }
-/**
- * DidMetadata defines metadata associated to a did document such as
- * the status of the DID document
- */
+/** IidMetadata defines metadata associated to a Iid document */
 
 export interface IidMetadata {
-  id: string;
   versionId: string;
   created?: Timestamp;
   updated?: Timestamp;
   deactivated: boolean;
-  entityType: string;
-  startDate?: Timestamp;
-  endDate?: Timestamp;
-  status: number;
-  stage: string;
-  relayerNode: string;
-  verifiableCredential: string;
-  credentials: string[];
 }
-/**
- * DidMetadata defines metadata associated to a did document such as
- * the status of the DID document
- */
+/** IidMetadata defines metadata associated to a Iid document */
 
 export interface IidMetadataSDKType {
-  id: string;
   versionId: string;
   created?: TimestampSDKType;
   updated?: TimestampSDKType;
   deactivated: boolean;
-  entityType: string;
-  startDate?: TimestampSDKType;
-  endDate?: TimestampSDKType;
-  status: number;
-  stage: string;
-  relayerNode: string;
-  verifiableCredential: string;
-  credentials: string[];
 }
 
 function createBaseContext(): Context {
@@ -344,7 +334,8 @@ function createBaseIidDocument(): IidDocument {
     linkedResource: [],
     accordedRight: [],
     linkedEntity: [],
-    alsoKnownAs: ""
+    alsoKnownAs: "",
+    metadata: undefined
   };
 }
 
@@ -404,6 +395,10 @@ export const IidDocument = {
 
     if (message.alsoKnownAs !== "") {
       writer.uint32(114).string(message.alsoKnownAs);
+    }
+
+    if (message.metadata !== undefined) {
+      IidMetadata.encode(message.metadata, writer.uint32(122).fork()).ldelim();
     }
 
     return writer;
@@ -474,6 +469,10 @@ export const IidDocument = {
           message.alsoKnownAs = reader.string();
           break;
 
+        case 15:
+          message.metadata = IidMetadata.decode(reader, reader.uint32());
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -498,7 +497,8 @@ export const IidDocument = {
       linkedResource: Array.isArray(object?.linkedResource) ? object.linkedResource.map((e: any) => LinkedResource.fromJSON(e)) : [],
       accordedRight: Array.isArray(object?.accordedRight) ? object.accordedRight.map((e: any) => AccordedRight.fromJSON(e)) : [],
       linkedEntity: Array.isArray(object?.linkedEntity) ? object.linkedEntity.map((e: any) => LinkedEntity.fromJSON(e)) : [],
-      alsoKnownAs: isSet(object.alsoKnownAs) ? String(object.alsoKnownAs) : ""
+      alsoKnownAs: isSet(object.alsoKnownAs) ? String(object.alsoKnownAs) : "",
+      metadata: isSet(object.metadata) ? IidMetadata.fromJSON(object.metadata) : undefined
     };
   },
 
@@ -580,6 +580,7 @@ export const IidDocument = {
     }
 
     message.alsoKnownAs !== undefined && (obj.alsoKnownAs = message.alsoKnownAs);
+    message.metadata !== undefined && (obj.metadata = message.metadata ? IidMetadata.toJSON(message.metadata) : undefined);
     return obj;
   },
 
@@ -599,6 +600,7 @@ export const IidDocument = {
     message.accordedRight = object.accordedRight?.map(e => AccordedRight.fromPartial(e)) || [];
     message.linkedEntity = object.linkedEntity?.map(e => LinkedEntity.fromPartial(e)) || [];
     message.alsoKnownAs = object.alsoKnownAs ?? "";
+    message.metadata = object.metadata !== undefined && object.metadata !== null ? IidMetadata.fromPartial(object.metadata) : undefined;
     return message;
   }
 
@@ -852,6 +854,7 @@ export const LinkedResource = {
 
 function createBaseLinkedEntity(): LinkedEntity {
   return {
+    type: "",
     id: "",
     relationship: ""
   };
@@ -859,6 +862,10 @@ function createBaseLinkedEntity(): LinkedEntity {
 
 export const LinkedEntity = {
   encode(message: LinkedEntity, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.type !== "") {
+      writer.uint32(10).string(message.type);
+    }
+
     if (message.id !== "") {
       writer.uint32(18).string(message.id);
     }
@@ -879,6 +886,10 @@ export const LinkedEntity = {
       const tag = reader.uint32();
 
       switch (tag >>> 3) {
+        case 1:
+          message.type = reader.string();
+          break;
+
         case 2:
           message.id = reader.string();
           break;
@@ -898,6 +909,7 @@ export const LinkedEntity = {
 
   fromJSON(object: any): LinkedEntity {
     return {
+      type: isSet(object.type) ? String(object.type) : "",
       id: isSet(object.id) ? String(object.id) : "",
       relationship: isSet(object.relationship) ? String(object.relationship) : ""
     };
@@ -905,6 +917,7 @@ export const LinkedEntity = {
 
   toJSON(message: LinkedEntity): unknown {
     const obj: any = {};
+    message.type !== undefined && (obj.type = message.type);
     message.id !== undefined && (obj.id = message.id);
     message.relationship !== undefined && (obj.relationship = message.relationship);
     return obj;
@@ -912,6 +925,7 @@ export const LinkedEntity = {
 
   fromPartial(object: Partial<LinkedEntity>): LinkedEntity {
     const message = createBaseLinkedEntity();
+    message.type = object.type ?? "";
     message.id = object.id ?? "";
     message.relationship = object.relationship ?? "";
     return message;
@@ -1131,74 +1145,29 @@ export const Service = {
 
 function createBaseIidMetadata(): IidMetadata {
   return {
-    id: "",
     versionId: "",
     created: undefined,
     updated: undefined,
-    deactivated: false,
-    entityType: "",
-    startDate: undefined,
-    endDate: undefined,
-    status: 0,
-    stage: "",
-    relayerNode: "",
-    verifiableCredential: "",
-    credentials: []
+    deactivated: false
   };
 }
 
 export const IidMetadata = {
   encode(message: IidMetadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
-    }
-
     if (message.versionId !== "") {
-      writer.uint32(18).string(message.versionId);
+      writer.uint32(10).string(message.versionId);
     }
 
     if (message.created !== undefined) {
-      Timestamp.encode(message.created, writer.uint32(26).fork()).ldelim();
+      Timestamp.encode(message.created, writer.uint32(18).fork()).ldelim();
     }
 
     if (message.updated !== undefined) {
-      Timestamp.encode(message.updated, writer.uint32(34).fork()).ldelim();
+      Timestamp.encode(message.updated, writer.uint32(26).fork()).ldelim();
     }
 
     if (message.deactivated === true) {
-      writer.uint32(40).bool(message.deactivated);
-    }
-
-    if (message.entityType !== "") {
-      writer.uint32(50).string(message.entityType);
-    }
-
-    if (message.startDate !== undefined) {
-      Timestamp.encode(message.startDate, writer.uint32(58).fork()).ldelim();
-    }
-
-    if (message.endDate !== undefined) {
-      Timestamp.encode(message.endDate, writer.uint32(66).fork()).ldelim();
-    }
-
-    if (message.status !== 0) {
-      writer.uint32(72).int32(message.status);
-    }
-
-    if (message.stage !== "") {
-      writer.uint32(82).string(message.stage);
-    }
-
-    if (message.relayerNode !== "") {
-      writer.uint32(90).string(message.relayerNode);
-    }
-
-    if (message.verifiableCredential !== "") {
-      writer.uint32(98).string(message.verifiableCredential);
-    }
-
-    for (const v of message.credentials) {
-      writer.uint32(106).string(v!);
+      writer.uint32(32).bool(message.deactivated);
     }
 
     return writer;
@@ -1214,55 +1183,19 @@ export const IidMetadata = {
 
       switch (tag >>> 3) {
         case 1:
-          message.id = reader.string();
-          break;
-
-        case 2:
           message.versionId = reader.string();
           break;
 
-        case 3:
+        case 2:
           message.created = Timestamp.decode(reader, reader.uint32());
           break;
 
-        case 4:
+        case 3:
           message.updated = Timestamp.decode(reader, reader.uint32());
           break;
 
-        case 5:
+        case 4:
           message.deactivated = reader.bool();
-          break;
-
-        case 6:
-          message.entityType = reader.string();
-          break;
-
-        case 7:
-          message.startDate = Timestamp.decode(reader, reader.uint32());
-          break;
-
-        case 8:
-          message.endDate = Timestamp.decode(reader, reader.uint32());
-          break;
-
-        case 9:
-          message.status = reader.int32();
-          break;
-
-        case 10:
-          message.stage = reader.string();
-          break;
-
-        case 11:
-          message.relayerNode = reader.string();
-          break;
-
-        case 12:
-          message.verifiableCredential = reader.string();
-          break;
-
-        case 13:
-          message.credentials.push(reader.string());
           break;
 
         default:
@@ -1276,61 +1209,28 @@ export const IidMetadata = {
 
   fromJSON(object: any): IidMetadata {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
       versionId: isSet(object.versionId) ? String(object.versionId) : "",
       created: isSet(object.created) ? fromJsonTimestamp(object.created) : undefined,
       updated: isSet(object.updated) ? fromJsonTimestamp(object.updated) : undefined,
-      deactivated: isSet(object.deactivated) ? Boolean(object.deactivated) : false,
-      entityType: isSet(object.entityType) ? String(object.entityType) : "",
-      startDate: isSet(object.startDate) ? fromJsonTimestamp(object.startDate) : undefined,
-      endDate: isSet(object.endDate) ? fromJsonTimestamp(object.endDate) : undefined,
-      status: isSet(object.status) ? Number(object.status) : 0,
-      stage: isSet(object.stage) ? String(object.stage) : "",
-      relayerNode: isSet(object.relayerNode) ? String(object.relayerNode) : "",
-      verifiableCredential: isSet(object.verifiableCredential) ? String(object.verifiableCredential) : "",
-      credentials: Array.isArray(object?.credentials) ? object.credentials.map((e: any) => String(e)) : []
+      deactivated: isSet(object.deactivated) ? Boolean(object.deactivated) : false
     };
   },
 
   toJSON(message: IidMetadata): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
     message.versionId !== undefined && (obj.versionId = message.versionId);
     message.created !== undefined && (obj.created = fromTimestamp(message.created).toISOString());
     message.updated !== undefined && (obj.updated = fromTimestamp(message.updated).toISOString());
     message.deactivated !== undefined && (obj.deactivated = message.deactivated);
-    message.entityType !== undefined && (obj.entityType = message.entityType);
-    message.startDate !== undefined && (obj.startDate = fromTimestamp(message.startDate).toISOString());
-    message.endDate !== undefined && (obj.endDate = fromTimestamp(message.endDate).toISOString());
-    message.status !== undefined && (obj.status = Math.round(message.status));
-    message.stage !== undefined && (obj.stage = message.stage);
-    message.relayerNode !== undefined && (obj.relayerNode = message.relayerNode);
-    message.verifiableCredential !== undefined && (obj.verifiableCredential = message.verifiableCredential);
-
-    if (message.credentials) {
-      obj.credentials = message.credentials.map(e => e);
-    } else {
-      obj.credentials = [];
-    }
-
     return obj;
   },
 
   fromPartial(object: Partial<IidMetadata>): IidMetadata {
     const message = createBaseIidMetadata();
-    message.id = object.id ?? "";
     message.versionId = object.versionId ?? "";
     message.created = object.created !== undefined && object.created !== null ? Timestamp.fromPartial(object.created) : undefined;
     message.updated = object.updated !== undefined && object.updated !== null ? Timestamp.fromPartial(object.updated) : undefined;
     message.deactivated = object.deactivated ?? false;
-    message.entityType = object.entityType ?? "";
-    message.startDate = object.startDate !== undefined && object.startDate !== null ? Timestamp.fromPartial(object.startDate) : undefined;
-    message.endDate = object.endDate !== undefined && object.endDate !== null ? Timestamp.fromPartial(object.endDate) : undefined;
-    message.status = object.status ?? 0;
-    message.stage = object.stage ?? "";
-    message.relayerNode = object.relayerNode ?? "";
-    message.verifiableCredential = object.verifiableCredential ?? "";
-    message.credentials = object.credentials?.map(e => e) || [];
     return message;
   }
 

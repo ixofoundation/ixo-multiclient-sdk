@@ -1,14 +1,11 @@
-import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, IidDocument, IidDocumentSDKType, IidMetadata, IidMetadataSDKType, VerificationMethod, VerificationMethodSDKType } from "./iid";
+import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, IidDocument, IidDocumentSDKType, VerificationMethod, VerificationMethodSDKType } from "./iid";
 import * as _m0 from "protobufjs/minimal";
 /**
  * Verification is a message that allows to assign a verification method
  * to one or more verification relationships
  */
 export interface Verification {
-    /**
-     * verificationRelationships defines which relationships
-     * are allowed to use the verification method
-     */
+    /** relationships that the method is allowed into. */
     relationships: string[];
     /** public key associated with the did document. */
     method?: VerificationMethod;
@@ -20,10 +17,7 @@ export interface Verification {
  * to one or more verification relationships
  */
 export interface VerificationSDKType {
-    /**
-     * verificationRelationships defines which relationships
-     * are allowed to use the verification method
-     */
+    /** relationships that the method is allowed into. */
     relationships: string[];
     /** public key associated with the did document. */
     method?: VerificationMethodSDKType;
@@ -311,7 +305,7 @@ export interface MsgAddAccordedRightSDKType {
 export interface MsgDeleteAccordedRight {
     /** the did */
     id: string;
-    /** the service id */
+    /** the Accorded right id */
     rightId: string;
     /** address of the account signing the message */
     signer: string;
@@ -319,7 +313,7 @@ export interface MsgDeleteAccordedRight {
 export interface MsgDeleteAccordedRightSDKType {
     /** the did */
     id: string;
-    /** the service id */
+    /** the Accorded right id */
     right_id: string;
     /** address of the account signing the message */
     signer: string;
@@ -370,22 +364,6 @@ export interface MsgDeleteIidContextSDKType {
     /** address of the account signing the message */
     signer: string;
 }
-export interface MsgUpdateIidMeta {
-    /** the did */
-    id: string;
-    /** the context to add */
-    meta?: IidMetadata;
-    /** address of the account signing the message */
-    signer: string;
-}
-export interface MsgUpdateIidMetaSDKType {
-    /** the did */
-    id: string;
-    /** the context to add */
-    meta?: IidMetadataSDKType;
-    /** address of the account signing the message */
-    signer: string;
-}
 export interface MsgAddLinkedResourceResponse {
 }
 export interface MsgAddLinkedResourceResponseSDKType {
@@ -417,10 +395,6 @@ export interface MsgAddIidContextResponseSDKType {
 export interface MsgDeleteIidContextResponse {
 }
 export interface MsgDeleteIidContextResponseSDKType {
-}
-export interface MsgUpdateIidMetaResponse {
-}
-export interface MsgUpdateIidMetaResponseSDKType {
 }
 export interface MsgDeactivateIIDResponse {
 }
@@ -622,13 +596,6 @@ export declare const MsgDeleteIidContext: {
     toJSON(message: MsgDeleteIidContext): unknown;
     fromPartial(object: Partial<MsgDeleteIidContext>): MsgDeleteIidContext;
 };
-export declare const MsgUpdateIidMeta: {
-    encode(message: MsgUpdateIidMeta, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateIidMeta;
-    fromJSON(object: any): MsgUpdateIidMeta;
-    toJSON(message: MsgUpdateIidMeta): unknown;
-    fromPartial(object: Partial<MsgUpdateIidMeta>): MsgUpdateIidMeta;
-};
 export declare const MsgAddLinkedResourceResponse: {
     encode(_: MsgAddLinkedResourceResponse, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddLinkedResourceResponse;
@@ -684,13 +651,6 @@ export declare const MsgDeleteIidContextResponse: {
     fromJSON(_: any): MsgDeleteIidContextResponse;
     toJSON(_: MsgDeleteIidContextResponse): unknown;
     fromPartial(_: Partial<MsgDeleteIidContextResponse>): MsgDeleteIidContextResponse;
-};
-export declare const MsgUpdateIidMetaResponse: {
-    encode(_: MsgUpdateIidMetaResponse, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateIidMetaResponse;
-    fromJSON(_: any): MsgUpdateIidMetaResponse;
-    toJSON(_: MsgUpdateIidMetaResponse): unknown;
-    fromPartial(_: Partial<MsgUpdateIidMetaResponse>): MsgUpdateIidMetaResponse;
 };
 export declare const MsgDeactivateIIDResponse: {
     encode(_: MsgDeactivateIIDResponse, writer?: _m0.Writer): _m0.Writer;
