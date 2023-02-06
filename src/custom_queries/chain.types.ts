@@ -95,6 +95,16 @@ export type RegistryChainInfo = {
   keywords?: string[];
 };
 
+export type TokenAsset = {
+  coinDenom: string;
+  coinMinimalDenom: string;
+  coinDecimals: number;
+  coinGeckoId?: string;
+  coinImageUrl?: string;
+  isStakeCurrency?: boolean;
+  isFeeCurrency?: boolean;
+};
+
 export type KeplrChainInfo = {
   rpc: string;
   rest: string;
@@ -123,13 +133,7 @@ export type KeplrChainInfo = {
     bech32PrefixConsAddr: string;
     bech32PrefixConsPub: string;
   };
-  currencies?: {
-    coinDenom: string;
-    coinMinimalDenom: string;
-    coinDecimals: number;
-    coinGeckoId?: string;
-    coinImageUrl?: string;
-  }[];
+  currencies?: TokenAsset[];
   feeCurrencies?: {
     coinDenom: string;
     coinMinimalDenom: string;
