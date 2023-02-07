@@ -3,6 +3,8 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/ixofoundation/ixo-multiclient-sdk)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ixofoundation/ixo-multiclient-sdk)
 ![Twitter Follow](https://img.shields.io/twitter/follow/ixoworld?style=social)
+![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)
+
 
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)![Jest](https://img.shields.io/badge/Jest-323330?style=for-the-badge&logo=Jest&logoColor=white)
 
@@ -12,9 +14,9 @@
 
 <br />
 
-<h3 align="center">
-    One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them
-</h3>
+<h2 align="center">
+    The ultimate utility client for the IXO Blockchain for impact.
+</h2>
 
 <br />
 
@@ -38,6 +40,7 @@
   - [Developing](#developing)
     - [Codegen](#codegen)
     - [Publishing](#publishing)
+  - [React Native](#React-Native)
   - [Credits](#credits)
   - [Disclaimer](#disclaimer)
 
@@ -67,7 +70,7 @@ import { ixo, createQueryClient } from "@ixo/impactxclient-sdk";
 //   address: "ixo1addresshere",
 // });
 
-We added a custom queryCleint that includes the cosmos modules and ixo modules as well as custom queries
+We added a custom queryClient that includes the cosmos modules and ixo modules as well as custom queries
 
 const queryClient = await createQueryClient(RPC_ENDPOINT);
 
@@ -182,8 +185,6 @@ const token = customQueries.currency.findTokenFromDenom("uixo");
 ```
 
 ## Connecting with Wallets and Signing Messages
-
-⚡️ For web interfaces, we recommend using [cosmos-kit](https://github.com/cosmology-tech/cosmos-kit). Continue below to see how to manually construct signers and clients.
 
 Here are the docs on [creating signers](https://github.com/cosmology-tech/cosmos-kit/tree/main/packages/react#signing-clients) in cosmos-kit that can be used with Keplr and other wallets.
 
@@ -305,15 +306,22 @@ yarn build:ts
 yarn publish
 ```
 
+#React-Native 
+
+
+Install the below Library and import into your main app entry file. This ensures the required Polyfils are covered on mobile. 
+
+```
+yarn add @walletconnect/react-native-compat
+```
+
+# BigInt React Native
+
+To ensure no issues with the React Native bigInt implementation, be sure to wrap your decimal gas amounts and others in a JS Double.
+
 ## Credits
 
-🛠 Built by Cosmology — if you like our tools, please consider delegating to [our validator ⚛️](https://cosmology.tech/validator)
-
-Code built with the help of these related projects:
-
-- [@cosmwasm/ts-codegen](https://github.com/CosmWasm/ts-codegen) for generated CosmWasm contract Typescript classes
-- [@osmonauts/telescope](https://github.com/osmosis-labs/telescope) a "babel for the Cosmos", Telescope is a TypeScript Transpiler for Cosmos Protobufs.
-- [cosmos-kit](https://github.com/cosmology-tech/cosmos-kit) A wallet connector for the Cosmos ⚛️
+🛠 Built using Telescope from Cosmology.
 
 ## Disclaimer
 
