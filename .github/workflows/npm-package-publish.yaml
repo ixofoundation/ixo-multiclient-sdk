@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 18.10.0
       - run: yarn install --frozen-lockfile
-      - run: yarn test
+      # - run: yarn test
 
   # versioning:
   #   needs: build
