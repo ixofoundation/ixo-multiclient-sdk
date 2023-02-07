@@ -1,4 +1,5 @@
 import { testMsg, utils } from "../helpers/common";
+import { WalletUsers } from "../helpers/constants";
 import * as Entity from "../modules/Entity";
 
 export const enititiesBasic = () =>
@@ -15,7 +16,7 @@ export const enititiesBasic = () =>
       console.log({ assetDid });
       return res;
     });
-    // let assetSupamotoDid: string;
+    let assetSupamotoDid: string;
     // testMsg(
     //   "/ixo.entity.v1beta1.MsgCreateEntity asset class supamoto",
     //   async () => {
@@ -29,24 +30,11 @@ export const enititiesBasic = () =>
     //     return res;
     //   }
     // );
-    // let assetSupamotoInstanceDid: string;
-    // testMsg(
-    //   "/ixo.entity.v1beta1.MsgCreateEntity asset class supamoto instance",
-    //   async () => {
-    //     const res = await Entity.CreateEntityAssetSupamotoInstance(
-    //       assetSupamotoDid
-    //     );
-    //     assetSupamotoInstanceDid = utils.common.getValueFromEvents(
-    //       res,
-    //       "ixo.iid.v1beta1.IidDocumentCreatedEvent",
-    //       "did"
-    //     );
-    //     console.log({ assetSupamotoInstanceDid });
-    //     return res;
-    //   }
+    // testMsg("/ixo.entity.v1beta1.MsgUpdateEntityVerified", () =>
+    //   Entity.TransferEntity(WalletUsers.alice, assetSupamotoDid)
     // );
     // testMsg("/ixo.entity.v1beta1.MsgTransferEntity", () =>
-    //   Entity.TransferEntity(assetSupamotoInstanceDid)
+    //   Entity.TransferEntity(undefined, assetSupamotoDid)
     // );
     // testMsg("/ixo.entity.v1beta1.MsgUpdateEntity", () => Entity.UpdateEntity());
   });

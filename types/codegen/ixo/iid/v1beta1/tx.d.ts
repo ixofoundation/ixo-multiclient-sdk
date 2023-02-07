@@ -1,4 +1,4 @@
-import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, IidDocument, IidDocumentSDKType, VerificationMethod, VerificationMethodSDKType } from "./iid";
+import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, VerificationMethod, VerificationMethodSDKType } from "./iid";
 import * as _m0 from "protobufjs/minimal";
 /**
  * Verification is a message that allows to assign a verification method
@@ -37,6 +37,7 @@ export interface MsgCreateIidDocument {
     accordedRight: AccordedRight[];
     linkedResource: LinkedResource[];
     linkedEntity: LinkedEntity[];
+    alsoKnownAs: string;
     /** address of the account signing the message */
     signer: string;
 }
@@ -53,6 +54,7 @@ export interface MsgCreateIidDocumentSDKType {
     accordedRight: AccordedRightSDKType[];
     linkedResource: LinkedResourceSDKType[];
     linkedEntity: LinkedEntitySDKType[];
+    alsoKnownAs: string;
     /** address of the account signing the message */
     signer: string;
 }
@@ -60,17 +62,43 @@ export interface MsgCreateIidDocumentResponse {
 }
 export interface MsgCreateIidDocumentResponseSDKType {
 }
-/** MsgUpdateDidDocument replace an existing did document with a new version */
+/**
+ * Updates the entity with all the fields, so if field empty will be updated
+ * with default go type, aka never null
+ */
 export interface MsgUpdateIidDocument {
-    /** the did document to replace */
-    doc?: IidDocument;
+    /** the did */
+    id: string;
+    /** the list of controller DIDs */
+    controllers: string[];
+    context: Context[];
+    /** the list of verification methods and relationships */
+    verifications: Verification[];
+    services: Service[];
+    accordedRight: AccordedRight[];
+    linkedResource: LinkedResource[];
+    linkedEntity: LinkedEntity[];
+    alsoKnownAs: string;
     /** address of the account signing the message */
     signer: string;
 }
-/** MsgUpdateDidDocument replace an existing did document with a new version */
+/**
+ * Updates the entity with all the fields, so if field empty will be updated
+ * with default go type, aka never null
+ */
 export interface MsgUpdateIidDocumentSDKType {
-    /** the did document to replace */
-    doc?: IidDocumentSDKType;
+    /** the did */
+    id: string;
+    /** the list of controller DIDs */
+    controllers: string[];
+    context: ContextSDKType[];
+    /** the list of verification methods and relationships */
+    verifications: VerificationSDKType[];
+    services: ServiceSDKType[];
+    accordedRight: AccordedRightSDKType[];
+    linkedResource: LinkedResourceSDKType[];
+    linkedEntity: LinkedEntitySDKType[];
+    alsoKnownAs: string;
     /** address of the account signing the message */
     signer: string;
 }

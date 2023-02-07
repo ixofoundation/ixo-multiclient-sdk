@@ -7,11 +7,9 @@ import {
   queryClient,
   utils,
   ixo,
+  getFileFromPath,
 } from "../helpers/common";
 import Long from "long";
-
-const fs = require("fs");
-const path = require("path");
 
 export const BankSendTrx = async () => {
   const client = await createClient();
@@ -50,15 +48,6 @@ export const MsgSubmitProposalStoreCW721 = async () => {
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
 
-  const contractPath = path.resolve(
-    __dirname,
-    "..",
-    "..",
-    "assets",
-    "cw721.wasm"
-  );
-  const contractBuffer = fs.readFileSync(contractPath);
-
   const message = {
     typeUrl: "/cosmos.gov.v1beta1.MsgSubmitProposal",
     value: cosmos.gov.v1beta1.MsgSubmitProposal.fromPartial({
@@ -76,7 +65,9 @@ export const MsgSubmitProposalStoreCW721 = async () => {
             title: "Upload cw721 smart contract",
             description: "Description",
             runAs: myAddress,
-            wasmByteCode: new Uint8Array(contractBuffer),
+            wasmByteCode: new Uint8Array(
+              getFileFromPath(["contracts", "ixo", "cw721.wasm"], "")
+            ),
             instantiatePermission: cosmwasm.wasm.v1.AccessConfig.fromPartial({
               permission: cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_EVERYBODY,
             }),

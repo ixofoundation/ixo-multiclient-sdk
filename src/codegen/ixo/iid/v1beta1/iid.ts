@@ -195,11 +195,13 @@ export interface LinkedEntity {
   type: string;
   id: string;
   relationship: string;
+  service: string;
 }
 export interface LinkedEntitySDKType {
   type: string;
   id: string;
   relationship: string;
+  service: string;
 }
 export interface VerificationMethod {
   id: string;
@@ -856,7 +858,8 @@ function createBaseLinkedEntity(): LinkedEntity {
   return {
     type: "",
     id: "",
-    relationship: ""
+    relationship: "",
+    service: ""
   };
 }
 
@@ -872,6 +875,10 @@ export const LinkedEntity = {
 
     if (message.relationship !== "") {
       writer.uint32(26).string(message.relationship);
+    }
+
+    if (message.service !== "") {
+      writer.uint32(34).string(message.service);
     }
 
     return writer;
@@ -898,6 +905,10 @@ export const LinkedEntity = {
           message.relationship = reader.string();
           break;
 
+        case 4:
+          message.service = reader.string();
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -911,7 +922,8 @@ export const LinkedEntity = {
     return {
       type: isSet(object.type) ? String(object.type) : "",
       id: isSet(object.id) ? String(object.id) : "",
-      relationship: isSet(object.relationship) ? String(object.relationship) : ""
+      relationship: isSet(object.relationship) ? String(object.relationship) : "",
+      service: isSet(object.service) ? String(object.service) : ""
     };
   },
 
@@ -920,6 +932,7 @@ export const LinkedEntity = {
     message.type !== undefined && (obj.type = message.type);
     message.id !== undefined && (obj.id = message.id);
     message.relationship !== undefined && (obj.relationship = message.relationship);
+    message.service !== undefined && (obj.service = message.service);
     return obj;
   },
 
@@ -928,6 +941,7 @@ export const LinkedEntity = {
     message.type = object.type ?? "";
     message.id = object.id ?? "";
     message.relationship = object.relationship ?? "";
+    message.service = object.service ?? "";
     return message;
   }
 

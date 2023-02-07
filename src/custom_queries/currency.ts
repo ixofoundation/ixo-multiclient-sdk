@@ -22,6 +22,5 @@ export const findTokenFromDenom = (denom: string): TokenAsset | undefined => {
     } as TokenAsset;
     return currency;
   });
-  // @ts-ignore
   return token;
 };

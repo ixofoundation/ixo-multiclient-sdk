@@ -86,18 +86,29 @@ message MsgCreateIidDocument {
   repeated AccordedRight accordedRight = 6;
   repeated LinkedResource linkedResource = 7;
   repeated LinkedEntity linkedEntity = 8;
-  string signer = 9; // address of the account signing the message
+  string alsoKnownAs = 9;
+  string signer = 10; // address of the account signing the message
 }
 
 message MsgCreateIidDocumentResponse {}
 
-// MsgUpdateDidDocument replace an existing did document with a new version
+// Updates the entity with all the fields, so if field empty will be updated
+// with default go type, aka never null
 message MsgUpdateIidDocument {
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
 
-  IidDocument doc = 1; // the did document to replace
-  string signer = 5;   // address of the account signing the message
+  string id = 1;                   // the did
+  repeated string controllers = 2; // the list of controller DIDs
+  repeated Context context = 3;
+  repeated Verification verifications =
+      4; // the list of verification methods and relationships
+  repeated Service services = 5;
+  repeated AccordedRight accordedRight = 6;
+  repeated LinkedResource linkedResource = 7;
+  repeated LinkedEntity linkedEntity = 8;
+  string alsoKnownAs = 9;
+  string signer = 10; // address of the account signing the message
 }
 
 message MsgUpdateIidDocumentResponse {}

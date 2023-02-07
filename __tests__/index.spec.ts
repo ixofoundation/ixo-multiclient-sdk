@@ -7,7 +7,11 @@ import {
   bondsSellsDisabled,
   bondsSellsEnabled,
 } from "./flows/bonds";
-import { iidsBasic, registerIids } from "./flows/iids";
+import {
+  iidsBasic,
+  registerIids,
+  generateBlockchainTestUsers,
+} from "./flows/iids";
 import { enititiesBasic, supamotoFlow } from "./flows/entities";
 import { paymentsBasic } from "./flows/payments";
 import { ibcBasic } from "./flows/ibc";
@@ -20,8 +24,11 @@ beforeAll(() => {
   return Promise.all([createQueryClient(), generateWallets()]);
 });
 
-registerIids();
-// iidsBasic();
+// To generate mapping of blockchain test users to sdk test users with set mnemonics
+generateBlockchainTestUsers();
+
+// registerIids();
+iidsBasic();
 // paymentsBasic();
 // projectsBasic();
 // bondsBasic();

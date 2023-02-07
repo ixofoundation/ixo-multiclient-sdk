@@ -19,10 +19,9 @@ export const govBasic = () =>
     //   console.log({ proposalIdStoreCW721 });
     //   return res;
     // });
-    // testMsg("/cosmos.gov.v1beta1.MsgSubmitProposal", () =>
+    // testMsg("/cosmos.gov.v1beta1.MsgVote", () =>
     //   Cosmos.MsgVote(proposalIdStoreCW721)
     // );
-    //
     // let proposalIdUpdateEntityParams: number;
     // testMsg("/cosmos.gov.v1beta1.MsgSubmitProposal", async () => {
     //   const res = await Cosmos.MsgSubmitProposalUpdateEntityParams(1);

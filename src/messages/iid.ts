@@ -100,7 +100,6 @@ export const createIidVerificationMethods = ({
 export const createAgentIidContext = () => [
   ixo.iid.v1beta1.Context.fromPartial({
     key: "ixo",
-    // @ts-ignore
-    value: "https://w3id.org/ixo/ns/context/v1",
+    val: "https://w3id.org/ixo/ns/context/v1",
   }),
 ];

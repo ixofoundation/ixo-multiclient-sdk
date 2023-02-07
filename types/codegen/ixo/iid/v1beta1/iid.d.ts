@@ -174,11 +174,13 @@ export interface LinkedEntity {
     type: string;
     id: string;
     relationship: string;
+    service: string;
 }
 export interface LinkedEntitySDKType {
     type: string;
     id: string;
     relationship: string;
+    service: string;
 }
 export interface VerificationMethod {
     id: string;

@@ -1,3 +1,9 @@
+import base58 from "bs58";
+import {
+  getWeb3Doc,
+  uploadPublicDoc,
+  uploadWeb3Doc,
+} from "../../src/custom_queries/cellnode";
 import {
   createAgentIidContext,
   createIidVerificationMethods,
@@ -8,6 +14,7 @@ import {
   createClient,
   ixo,
   queryClient,
+  getFileFromPath,
 } from "../helpers/common";
 import { constants, fee, keyType, WalletUsers } from "../helpers/constants";
 
@@ -54,6 +61,7 @@ export const CreateIidDoc = async (
     value: ixo.iid.v1beta1.MsgCreateIidDocument.fromPartial({
       context: createAgentIidContext(),
       id: did,
+      alsoKnownAs: "user",
       verifications,
       signer: myAddress,
       controllers: [did],
@@ -64,30 +72,30 @@ export const CreateIidDoc = async (
   return response;
 };
 
-export const UpdateIidDoc = async () => {
-  const client = await createClient();
+// export const UpdateIidDoc = async () => {
+//   const client = await createClient();
 
-  const tester = getUser();
-  const account = (await tester.getAccounts())[0];
-  const myAddress = account.address;
-  const did = tester.did;
+//   const tester = getUser();
+//   const account = (await tester.getAccounts())[0];
+//   const myAddress = account.address;
+//   const did = tester.did;
 
-  const alice = getUser(WalletUsers.alice);
+//   const alice = getUser(WalletUsers.alice);
 
-  const message = {
-    typeUrl: "/ixo.iid.v1beta1.MsgUpdateIidDocument",
-    value: ixo.iid.v1beta1.MsgUpdateIidDocument.fromPartial({
-      doc: ixo.iid.v1beta1.IidDocument.fromPartial({
-        id: did,
-        controller: [alice.did],
-      }),
-      signer: myAddress,
-    }),
-  };
+//   const message = {
+//     typeUrl: "/ixo.iid.v1beta1.MsgUpdateIidDocument",
+//     value: ixo.iid.v1beta1.MsgUpdateIidDocument.fromPartial({
+//       doc: ixo.iid.v1beta1.IidDocument.fromPartial({
+//         id: did,
+//         controller: [alice.did],
+//       }),
+//       signer: myAddress,
+//     }),
+//   };
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
-  return response;
-};
+//   const response = await client.signAndBroadcast(myAddress, [message], fee);
+//   return response;
+// };
 
 export const AddIidContext = async () => {
   const client = await createClient();
@@ -115,6 +123,33 @@ export const AddIidContext = async () => {
 
 export const DeleteIidContext = async () => {
   const client = await createClient();
+
+  // const res = await uploadWeb3Doc(
+  //   "testPdfUpload",
+  //   "pdf",
+  //   getFileFromPath([
+  //     "documents",
+  //     "MimiMoto report Aprovecho Research Center March 2017.pdf",
+  //   ]),
+  //   undefined,
+  //   "devnet"
+  // );
+  // console.log(res);
+
+  // const res = await getWeb3Doc(
+  //   "bafybeia4al2szs4d2kvwqhippp3kfguhkvx42oayuy6w2rixsdhoersib4",
+  //   undefined,
+  //   "devnet"
+  // );
+  // console.log(res);
+
+  // const res = await uploadPublicDoc(
+  //   "image",
+  //   getFileFromPath(["documents", "supamoto-NFT image.png"]),
+  //   undefined,
+  //   "devnet"
+  // );
+  // console.log(res);
 
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
@@ -185,12 +220,13 @@ export const SetVerificationRelationships = async (
   const did = tester.did;
 
   const alice = getUser(WalletUsers.alice);
+  const pubkeyBase58 = base58.encode((await alice.getAccounts())[0].pubkey);
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgSetVerificationRelationships",
     value: ixo.iid.v1beta1.MsgSetVerificationRelationships.fromPartial({
       id: did,
-      methodId: alice.did,
+      methodId: alice.did + "#" + pubkeyBase58,
       relationships: relationships,
       signer: myAddress,
     }),
@@ -209,12 +245,13 @@ export const RevokeVerification = async () => {
   const did = tester.did;
 
   const alice = getUser(WalletUsers.alice);
+  const pubkeyBase58 = base58.encode((await alice.getAccounts())[0].pubkey);
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgRevokeVerification",
     value: ixo.iid.v1beta1.MsgRevokeVerification.fromPartial({
       id: did,
-      methodId: alice.did,
+      methodId: alice.did + "#" + pubkeyBase58,
       signer: myAddress,
     }),
   };
@@ -229,13 +266,12 @@ export const AddAccordedRight = async () => {
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-
-  const accordedRight = getUser(WalletUsers.accordedRight);
+  const did = tester.did;
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgAddAccordedRight",
     value: ixo.iid.v1beta1.MsgAddAccordedRight.fromPartial({
-      id: accordedRight.did,
+      id: did,
       accordedRight: ixo.iid.v1beta1.AccordedRight.fromPartial({
         type: "type",
         id: constants.accordedRightId,
@@ -257,13 +293,12 @@ export const DeleteAccordedRight = async () => {
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-
-  const accordedRight = getUser(WalletUsers.accordedRight);
+  const did = tester.did;
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgDeleteAccordedRight",
     value: ixo.iid.v1beta1.MsgDeleteAccordedRight.fromPartial({
-      id: accordedRight.did,
+      id: did,
       rightId: constants.accordedRightId,
       signer: myAddress,
     }),

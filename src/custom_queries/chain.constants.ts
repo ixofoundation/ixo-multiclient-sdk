@@ -106,14 +106,15 @@ export const preferredEndpoints = {
   },
   impacthub: {
     rpc: [
-      "https://impacthub-rpc.lavenderfive.com/",
+      "https://ixo-rpc.ibs.team",
       "https://rpc-ixo-ia.cosmosia.notional.ventures/",
+      "https://impacthub-rpc.lavenderfive.com/",
       "https://testnet.ixo.earth/rpc",
       "https://devnet.ixo.earth/rpc",
     ],
     rest: [
-      "https://impacthub-api.lavenderfive.com/",
       "https://api-ixo-ia.cosmosia.notional.ventures/",
+      "https://impacthub-api.lavenderfive.com/",
       "https://testnet.ixo.earth/rest",
       "https://devnet.ixo.earth/rest",
     ],

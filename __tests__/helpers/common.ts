@@ -18,6 +18,9 @@ import {
 } from "../../src";
 import { IObjectKeys } from "./types";
 
+const fs = require("fs");
+const path = require("path");
+
 export { ixo, cosmos, utils, ibc, customMessages, cosmwasm };
 
 export const sendFaucet = async (address: string) => {
@@ -196,7 +199,7 @@ export const sendFromFaucet = (user: WalletUsers) => {
   });
 };
 
-function findVal(object: IObjectKeys, key: string) {
+const findVal = (object: IObjectKeys, key: string) => {
   var value: any;
   Object.keys(object).some((k) => {
     if (k === key) {
@@ -209,4 +212,14 @@ function findVal(object: IObjectKeys, key: string) {
     }
   });
   return value;
-}
+};
+
+// Helper to get file from within assets folder in root
+export const getFileFromPath = (
+  pathList: string[],
+  encoding: string = "base64"
+) => {
+  const newPath = path.resolve(__dirname, "..", "..", "assets", ...pathList);
+  const fileBuffer = fs.readFileSync(newPath, encoding && { encoding });
+  return fileBuffer;
+};

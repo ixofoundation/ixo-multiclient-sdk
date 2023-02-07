@@ -15,6 +15,7 @@ definition: https://w3c.github.io/did-core/
 message Context {
   option (gogoproto.equal) = true;
   option (gogoproto.goproto_getters) = false;
+
   string key = 1;
   string val = 2;
 }
@@ -22,6 +23,7 @@ message Context {
 message IidDocument {
   option (gogoproto.equal) = true;
   option (gogoproto.goproto_getters) = false;
+
   // @context is spec for did document.
   repeated Context context = 1 [ (gogoproto.jsontag) = "@context,omitempty" ];
   // id represents the id for the did document.
@@ -77,6 +79,7 @@ message IidDocument {
 message AccordedRight {
   option (gogoproto.equal) = true;
   option (gogoproto.goproto_getters) = false;
+
   string type = 1;
   string id = 2;
   string mechanism = 3;
@@ -87,6 +90,7 @@ message AccordedRight {
 message LinkedResource {
   option (gogoproto.equal) = true;
   option (gogoproto.goproto_getters) = false;
+
   string type = 1;
   string id = 2;
   string description = 3;
@@ -99,9 +103,11 @@ message LinkedResource {
 message LinkedEntity {
   option (gogoproto.equal) = true;
   option (gogoproto.goproto_getters) = false;
+
   string type = 1;
   string id = 2;
   string relationship = 3;
+  string service = 4;
 }
 
 message VerificationMethod {

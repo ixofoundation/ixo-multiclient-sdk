@@ -16,7 +16,6 @@ export enum WalletUsers {
   project = "project",
   bond = "bond",
   oracle = "oracle",
-  accordedRight = "accordedRight",
 }
 
 export let constants: ReturnType<typeof generateConstants>;
