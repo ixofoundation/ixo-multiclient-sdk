@@ -27,8 +27,8 @@ beforeAll(() => {
 // To generate mapping of blockchain test users to sdk test users with set mnemonics
 generateBlockchainTestUsers();
 
-// registerIids();
-iidsBasic();
+registerIids();
+// iidsBasic();
 // paymentsBasic();
 // projectsBasic();
 // bondsBasic();
