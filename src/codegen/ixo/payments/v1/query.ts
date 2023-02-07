@@ -1,82 +1,130 @@
 import { PaymentTemplate, PaymentTemplateSDKType, PaymentContract, PaymentContractSDKType, Subscription, SubscriptionSDKType } from "./payments";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
-/** QueryPaymentTemplateRequest is the request type for the Query/PaymentTemplate RPC method. */
+/**
+ * QueryPaymentTemplateRequest is the request type for the Query/PaymentTemplate
+ * RPC method.
+ */
 
 export interface QueryPaymentTemplateRequest {
   paymentTemplateId: string;
 }
-/** QueryPaymentTemplateRequest is the request type for the Query/PaymentTemplate RPC method. */
+/**
+ * QueryPaymentTemplateRequest is the request type for the Query/PaymentTemplate
+ * RPC method.
+ */
 
 export interface QueryPaymentTemplateRequestSDKType {
   payment_template_id: string;
 }
-/** QueryPaymentTemplateResponse is the response type for the Query/PaymentTemplate RPC method. */
+/**
+ * QueryPaymentTemplateResponse is the response type for the
+ * Query/PaymentTemplate RPC method.
+ */
 
 export interface QueryPaymentTemplateResponse {
   paymentTemplate?: PaymentTemplate;
 }
-/** QueryPaymentTemplateResponse is the response type for the Query/PaymentTemplate RPC method. */
+/**
+ * QueryPaymentTemplateResponse is the response type for the
+ * Query/PaymentTemplate RPC method.
+ */
 
 export interface QueryPaymentTemplateResponseSDKType {
   payment_template?: PaymentTemplateSDKType;
 }
-/** QueryPaymentContractRequest is the request type for the Query/PaymentContract RPC method. */
+/**
+ * QueryPaymentContractRequest is the request type for the Query/PaymentContract
+ * RPC method.
+ */
 
 export interface QueryPaymentContractRequest {
   paymentContractId: string;
 }
-/** QueryPaymentContractRequest is the request type for the Query/PaymentContract RPC method. */
+/**
+ * QueryPaymentContractRequest is the request type for the Query/PaymentContract
+ * RPC method.
+ */
 
 export interface QueryPaymentContractRequestSDKType {
   payment_contract_id: string;
 }
-/** QueryPaymentContractResponse is the response type for the Query/PaymentContract RPC method. */
+/**
+ * QueryPaymentContractResponse is the response type for the
+ * Query/PaymentContract RPC method.
+ */
 
 export interface QueryPaymentContractResponse {
   paymentContract?: PaymentContract;
 }
-/** QueryPaymentContractResponse is the response type for the Query/PaymentContract RPC method. */
+/**
+ * QueryPaymentContractResponse is the response type for the
+ * Query/PaymentContract RPC method.
+ */
 
 export interface QueryPaymentContractResponseSDKType {
   payment_contract?: PaymentContractSDKType;
 }
-/** QueryPaymentContractsByIdPrefixRequest is the request type for the Query/PaymentContractsByIdPrefix RPC method. */
+/**
+ * QueryPaymentContractsByIdPrefixRequest is the request type for the
+ * Query/PaymentContractsByIdPrefix RPC method.
+ */
 
 export interface QueryPaymentContractsByIdPrefixRequest {
   paymentContractsIdPrefix: string;
 }
-/** QueryPaymentContractsByIdPrefixRequest is the request type for the Query/PaymentContractsByIdPrefix RPC method. */
+/**
+ * QueryPaymentContractsByIdPrefixRequest is the request type for the
+ * Query/PaymentContractsByIdPrefix RPC method.
+ */
 
 export interface QueryPaymentContractsByIdPrefixRequestSDKType {
   payment_contracts_id_prefix: string;
 }
-/** QueryPaymentContractsByIdPrefixResponse is the response type for the Query/PaymentContractsByIdPrefix RPC method. */
+/**
+ * QueryPaymentContractsByIdPrefixResponse is the response type for the
+ * Query/PaymentContractsByIdPrefix RPC method.
+ */
 
 export interface QueryPaymentContractsByIdPrefixResponse {
   paymentContracts: PaymentContract[];
 }
-/** QueryPaymentContractsByIdPrefixResponse is the response type for the Query/PaymentContractsByIdPrefix RPC method. */
+/**
+ * QueryPaymentContractsByIdPrefixResponse is the response type for the
+ * Query/PaymentContractsByIdPrefix RPC method.
+ */
 
 export interface QueryPaymentContractsByIdPrefixResponseSDKType {
   payment_contracts: PaymentContractSDKType[];
 }
-/** QuerySubscriptionRequest is the request type for the Query/Subscription RPC method. */
+/**
+ * QuerySubscriptionRequest is the request type for the Query/Subscription RPC
+ * method.
+ */
 
 export interface QuerySubscriptionRequest {
   subscriptionId: string;
 }
-/** QuerySubscriptionRequest is the request type for the Query/Subscription RPC method. */
+/**
+ * QuerySubscriptionRequest is the request type for the Query/Subscription RPC
+ * method.
+ */
 
 export interface QuerySubscriptionRequestSDKType {
   subscription_id: string;
 }
-/** QuerySubscriptionResponse is the response type for the Query/Subscription RPC method. */
+/**
+ * QuerySubscriptionResponse is the response type for the Query/Subscription RPC
+ * method.
+ */
 
 export interface QuerySubscriptionResponse {
   subscription?: Subscription;
 }
-/** QuerySubscriptionResponse is the response type for the Query/Subscription RPC method. */
+/**
+ * QuerySubscriptionResponse is the response type for the Query/Subscription RPC
+ * method.
+ */
 
 export interface QuerySubscriptionResponseSDKType {
   subscription?: SubscriptionSDKType;

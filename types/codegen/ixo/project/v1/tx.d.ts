@@ -24,7 +24,10 @@ export interface MsgCreateProjectResponse {
 /** MsgCreateProjectResponse defines the Msg/CreateProject response type. */
 export interface MsgCreateProjectResponseSDKType {
 }
-/** MsgUpdateProjectStatus defines a message for updating a project's current status. */
+/**
+ * MsgUpdateProjectStatus defines a message for updating a project's current
+ * status.
+ */
 export interface MsgUpdateProjectStatus {
     txHash: string;
     senderDid: string;
@@ -32,7 +35,10 @@ export interface MsgUpdateProjectStatus {
     data?: UpdateProjectStatusDoc;
     projectAddress: string;
 }
-/** MsgUpdateProjectStatus defines a message for updating a project's current status. */
+/**
+ * MsgUpdateProjectStatus defines a message for updating a project's current
+ * status.
+ */
 export interface MsgUpdateProjectStatusSDKType {
     tx_hash: string;
     sender_did: string;
@@ -40,10 +46,16 @@ export interface MsgUpdateProjectStatusSDKType {
     data?: UpdateProjectStatusDocSDKType;
     project_address: string;
 }
-/** MsgUpdateProjectStatusResponse defines the Msg/UpdateProjectStatus response type. */
+/**
+ * MsgUpdateProjectStatusResponse defines the Msg/UpdateProjectStatus response
+ * type.
+ */
 export interface MsgUpdateProjectStatusResponse {
 }
-/** MsgUpdateProjectStatusResponse defines the Msg/UpdateProjectStatus response type. */
+/**
+ * MsgUpdateProjectStatusResponse defines the Msg/UpdateProjectStatus response
+ * type.
+ */
 export interface MsgUpdateProjectStatusResponseSDKType {
 }
 /** MsgCreateAgent defines a message for creating an agent on a project. */
@@ -112,7 +124,10 @@ export interface MsgCreateClaimResponse {
 /** MsgCreateClaimResponse defines the Msg/CreateClaim response type. */
 export interface MsgCreateClaimResponseSDKType {
 }
-/** MsgCreateEvaluation defines a message for creating an evaluation for a specific claim on a project. */
+/**
+ * MsgCreateEvaluation defines a message for creating an evaluation for a
+ * specific claim on a project.
+ */
 export interface MsgCreateEvaluation {
     txHash: string;
     senderDid: string;
@@ -120,7 +135,10 @@ export interface MsgCreateEvaluation {
     data?: CreateEvaluationDoc;
     projectAddress: string;
 }
-/** MsgCreateEvaluation defines a message for creating an evaluation for a specific claim on a project. */
+/**
+ * MsgCreateEvaluation defines a message for creating an evaluation for a
+ * specific claim on a project.
+ */
 export interface MsgCreateEvaluationSDKType {
     tx_hash: string;
     sender_did: string;
@@ -134,13 +152,19 @@ export interface MsgCreateEvaluationResponse {
 /** MsgCreateEvaluationResponse defines the Msg/CreateEvaluation response type. */
 export interface MsgCreateEvaluationResponseSDKType {
 }
-/** MsgWithdrawFunds defines a message for project agents to withdraw their funds from a project. */
+/**
+ * MsgWithdrawFunds defines a message for project agents to withdraw their funds
+ * from a project.
+ */
 export interface MsgWithdrawFunds {
     senderDid: string;
     data?: WithdrawFundsDoc;
     senderAddress: string;
 }
-/** MsgWithdrawFunds defines a message for project agents to withdraw their funds from a project. */
+/**
+ * MsgWithdrawFunds defines a message for project agents to withdraw their funds
+ * from a project.
+ */
 export interface MsgWithdrawFundsSDKType {
     sender_did: string;
     data?: WithdrawFundsDocSDKType;

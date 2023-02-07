@@ -1,66 +1,37 @@
-import { IidDocument, IidDocumentSDKType, IidMetadata, IidMetadataSDKType } from "./iid";
+import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { IidDocument, IidDocumentSDKType } from "./iid";
 import * as _m0 from "protobufjs/minimal";
-/** QueryDidDocumentsRequest is request type for Query/DidDocuments RPC method. */
 export interface QueryIidDocumentsRequest {
-    /** status enables to query for validators matching a given status. */
-    status: string;
+    /** pagination defines an optional pagination for the request. */
+    pagination?: PageRequest;
 }
-/** QueryDidDocumentsRequest is request type for Query/DidDocuments RPC method. */
 export interface QueryIidDocumentsRequestSDKType {
-    /** status enables to query for validators matching a given status. */
-    status: string;
+    /** pagination defines an optional pagination for the request. */
+    pagination?: PageRequestSDKType;
 }
-/** QueryDidDocumentsResponse is response type for the Query/DidDocuments RPC method */
 export interface QueryIidDocumentsResponse {
-    /** validators contains all the queried validators. */
     iidDocuments: IidDocument[];
+    /** pagination defines the pagination in the response. */
+    pagination?: PageResponse;
 }
-/** QueryDidDocumentsResponse is response type for the Query/DidDocuments RPC method */
 export interface QueryIidDocumentsResponseSDKType {
-    /** validators contains all the queried validators. */
     iidDocuments: IidDocumentSDKType[];
+    /** pagination defines the pagination in the response. */
+    pagination?: PageResponseSDKType;
 }
-/** QueryDidDocumentsRequest is request type for Query/DidDocuments RPC method. */
 export interface QueryIidDocumentRequest {
-    /** status enables to query for validators matching a given status. */
+    /** did id of iid document querying */
     id: string;
 }
-/** QueryDidDocumentsRequest is request type for Query/DidDocuments RPC method. */
 export interface QueryIidDocumentRequestSDKType {
-    /** status enables to query for validators matching a given status. */
+    /** did id of iid document querying */
     id: string;
 }
-/** QueryDidDocumentsResponse is response type for the Query/DidDocuments RPC method */
 export interface QueryIidDocumentResponse {
-    /** validators contains all the queried validators. */
     iidDocument?: IidDocument;
 }
-/** QueryDidDocumentsResponse is response type for the Query/DidDocuments RPC method */
 export interface QueryIidDocumentResponseSDKType {
-    /** validators contains all the queried validators. */
     iidDocument?: IidDocumentSDKType;
-}
-export interface QueryIidMetaDataRequest {
-    /** status enables to query for validators matching a given status. */
-    id: string;
-}
-export interface QueryIidMetaDataRequestSDKType {
-    /** status enables to query for validators matching a given status. */
-    id: string;
-}
-export interface QueryIidMetaDataResponse {
-    /**
-     * validators contains all the queried validators.
-     * IidDocument iidDocument = 1  [(gogoproto.nullable) = false];
-     */
-    didMetadata?: IidMetadata;
-}
-export interface QueryIidMetaDataResponseSDKType {
-    /**
-     * validators contains all the queried validators.
-     * IidDocument iidDocument = 1  [(gogoproto.nullable) = false];
-     */
-    didMetadata?: IidMetadataSDKType;
 }
 export declare const QueryIidDocumentsRequest: {
     encode(message: QueryIidDocumentsRequest, writer?: _m0.Writer): _m0.Writer;
@@ -89,18 +60,4 @@ export declare const QueryIidDocumentResponse: {
     fromJSON(object: any): QueryIidDocumentResponse;
     toJSON(message: QueryIidDocumentResponse): unknown;
     fromPartial(object: Partial<QueryIidDocumentResponse>): QueryIidDocumentResponse;
-};
-export declare const QueryIidMetaDataRequest: {
-    encode(message: QueryIidMetaDataRequest, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): QueryIidMetaDataRequest;
-    fromJSON(object: any): QueryIidMetaDataRequest;
-    toJSON(message: QueryIidMetaDataRequest): unknown;
-    fromPartial(object: Partial<QueryIidMetaDataRequest>): QueryIidMetaDataRequest;
-};
-export declare const QueryIidMetaDataResponse: {
-    encode(message: QueryIidMetaDataResponse, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): QueryIidMetaDataResponse;
-    fromJSON(object: any): QueryIidMetaDataResponse;
-    toJSON(message: QueryIidMetaDataResponse): unknown;
-    fromPartial(object: Partial<QueryIidMetaDataResponse>): QueryIidMetaDataResponse;
 };

@@ -1,14 +1,20 @@
 import { DidCredential, DidCredentialSDKType } from "./did";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
-/** BaseDidDoc defines a base DID document type. It implements the DidDoc interface. */
+/**
+ * BaseDidDoc defines a base DID document type. It implements the DidDoc
+ * interface.
+ */
 
 export interface BaseDidDoc {
   did: string;
   pubKey: string;
   credentials: DidCredential[];
 }
-/** BaseDidDoc defines a base DID document type. It implements the DidDoc interface. */
+/**
+ * BaseDidDoc defines a base DID document type. It implements the DidDoc
+ * interface.
+ */
 
 export interface BaseDidDocSDKType {
   did: string;

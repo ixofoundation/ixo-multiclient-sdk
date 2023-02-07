@@ -1,9 +1,18 @@
 import { StdFee } from "@cosmjs/amino";
 import { EncodeObject, OfflineSigner, Registry } from "@cosmjs/proto-signing";
-import { DeliverTxResponse, SignerData, SigningStargateClientOptions, StargateClient } from "@cosmjs/stargate";
-import { HttpEndpoint, Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { AminoTypes, DeliverTxResponse, SignerData, GasPrice } from "@cosmjs/stargate";
+import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { Coin } from "cosmjs-types/cosmos/base/v1beta1/coin";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
+import { StargateClient, StargateClientOptions } from "./customStargateClient";
+export interface SigningStargateClientOptions extends StargateClientOptions {
+    readonly registry?: Registry;
+    readonly aminoTypes?: AminoTypes;
+    readonly prefix?: string;
+    readonly broadcastTimeoutMs?: number;
+    readonly broadcastPollIntervalMs?: number;
+    readonly gasPrice?: GasPrice;
+}
 export declare class SigningStargateClient extends StargateClient {
     readonly registry: Registry;
     readonly broadcastTimeoutMs: number | undefined;
@@ -13,7 +22,7 @@ export declare class SigningStargateClient extends StargateClient {
     private readonly gasPrice;
     private readonly ignoreGetSequence;
     private tendermintClient;
-    static connectWithSigner(endpoint: string | HttpEndpoint, signer: OfflineSigner, options?: SigningStargateClientOptions, ignoreGetSequence?: boolean): Promise<SigningStargateClient>;
+    static connectWithSigner(endpoint: string, signer: OfflineSigner, options?: SigningStargateClientOptions, ignoreGetSequence?: boolean): Promise<SigningStargateClient>;
     /**
      * Creates a client in offline mode.
      *
@@ -45,5 +54,4 @@ export declare class SigningStargateClient extends StargateClient {
     private signAmino;
     private signDirect;
 }
-export declare const createSigningClient: (rpcEndpoint: string, offlineWallet: OfflineSigner, ignoreGetSequence?: boolean) => Promise<SigningStargateClient>;
-export declare const createRegistry: () => Registry;
+export declare const createSigningClient: (rpcEndpoint: string, offlineWallet: OfflineSigner, ignoreGetSequence?: boolean, options?: SigningStargateClientOptions) => Promise<SigningStargateClient>;

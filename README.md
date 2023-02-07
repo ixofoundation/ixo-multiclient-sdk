@@ -30,6 +30,7 @@
     - [Composing Messages](#composing-messages)
       - [IBC Messages](#ibc-messages)
     - [Utility Functions](#utility-functions)
+    - [Custom Queries](#custom-queries)
   - [Connecting with Wallets and Signing Messages](#connecting-with-wallets-and-signing-messages)
     - [Initializing the Stargate Client](#initializing-the-stargate-client)
     - [Creating Signers](#creating-signers)
@@ -147,6 +148,40 @@ const conversionUtils = utils.conversions;
 const didUtils = utils.did;
 const mnemonicUtils = utils.mnemonic;
 const addressUtils = utils.address;
+```
+
+### Custom Queries
+
+Import the `customQueries` object from `@ixo/impactxclient-sdk`.
+From that you can destructure `chain` functions that will fetch the latest chain info from the cosmos chain registry or request an active RPC endpoint. You can also use the `currency` functions that will allow you to get the token info based on the provided denom.
+
+```js
+import { customQueries } from "@ixo/impactxclient-sdk";
+
+// fetch chain info based on chain name and chain network (default mainnet)
+const registryChainInfo = customQueries.chain.getRegistryChainInfo(
+  "impacthub",
+  "testnet"
+);
+// request an active RPC endpoint based on registry chain info
+const activeRpc =
+  customQueries.chain.getActiveRpcFromRegistryChainInfo(chainInfo);
+// or request an active RPC endpoint based on chain name and chain network (default mainnet)
+const activeRpc = customQueries.chain.getActiveRpcFromChainName(
+  "impacthub",
+  "testnet"
+);
+// fetch chain info based on Keplr's preferred format using registry chain info
+const keplrChainInfo =
+  customQueries.chain.getKeplrChainInfoFromRegistryChainInfo(chainInfo);
+// or fetch Keplr chain info using chain name and chain network (default mainnet)
+const keplrChainInfo = customQueries.chain.getKeplrChainInfoFromChainName(
+  "impacthub",
+  "testnet"
+);
+
+// get token info based on denom (coinMinimalDenom)
+const token = customQueries.currency.findTokenFromDenom("uixo");
 ```
 
 ## Connecting with Wallets and Signing Messages

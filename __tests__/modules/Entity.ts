@@ -1,5 +1,9 @@
+import {
+  createAgentIidContext,
+  createIidVerificationMethods,
+} from "../../src/messages/iid";
 import { createClient, getUser, ixo, queryClient } from "../helpers/common";
-import { fee, WalletUsers } from "../helpers/constants";
+import { fee, keyType, WalletUsers } from "../helpers/constants";
 
 export const CreateEntityAsset = async (
   signer: WalletUsers = WalletUsers.tester
@@ -9,22 +13,24 @@ export const CreateEntityAsset = async (
   const tester = getUser(signer);
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
+  const myPubKey = account.pubkey;
   const did = tester.did;
 
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgCreateEntity",
     value: ixo.entity.v1beta1.MsgCreateEntity.fromPartial({
-      entityType: "asset",
-      entityStatus: 0,
-      context: [
-        ixo.iid.v1beta1.Context.fromPartial({
-          key: "ixo",
-          // @ts-ignore
-          value: "https://w3id.org/ixo/v1",
-        }),
-      ],
+      entityType: "protocol",
+      context: createAgentIidContext(),
+      verification: createIidVerificationMethods({
+        did,
+        pubkey: myPubKey,
+        address: myAddress,
+        controller: did,
+        type: keyType,
+      }),
       ownerDid: did,
       ownerAddress: myAddress,
+      relayerNode: tester.did,
     }),
   };
 
@@ -40,6 +46,8 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
   const myAddress = account.address;
   const did = tester.did;
 
+  const alice = getUser(WalletUsers.alice);
+
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgCreateEntity",
     value: ixo.entity.v1beta1.MsgCreateEntity.fromPartial({
@@ -48,8 +56,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
       context: [
         ixo.iid.v1beta1.Context.fromPartial({
           key: "ixo",
-          // @ts-ignore
-          value: inheritEntityDid,
+          val: inheritEntityDid,
         }),
       ],
       service: [
@@ -190,6 +197,7 @@ export const CreateEntityAssetSupamoto = async (inheritEntityDid: string) => {
       linkedEntity: [],
       ownerDid: did,
       ownerAddress: myAddress,
+      relayerNode: alice.did,
     }),
   };
 
@@ -212,6 +220,8 @@ export const CreateEntityAssetSupamotoInstance = async (
   const myAddress = account.address;
   const did = tester.did;
 
+  const alice = getUser(WalletUsers.alice);
+
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgCreateEntity",
     value: ixo.entity.v1beta1.MsgCreateEntity.fromPartial({
@@ -220,10 +230,10 @@ export const CreateEntityAssetSupamotoInstance = async (
       context: [
         ixo.iid.v1beta1.Context.fromPartial({
           key: "ixo",
-          // @ts-ignore
-          value: inheritEntityDid,
+          val: inheritEntityDid,
         }),
       ],
+      // controller: [],
       service: [],
       linkedResource: [
         ixo.iid.v1beta1.LinkedResource.fromPartial({
@@ -281,6 +291,7 @@ export const CreateEntityAssetSupamotoInstance = async (
       linkedEntity: [],
       ownerDid: did,
       ownerAddress: myAddress,
+      relayerNode: alice.did,
     }),
   };
 
@@ -288,20 +299,23 @@ export const CreateEntityAssetSupamotoInstance = async (
   return response;
 };
 
-export const TransferEntity = async (entityDid: string) => {
-  const client = await createClient();
+export const TransferEntity = async (
+  signer: WalletUsers = WalletUsers.tester,
+  entityDid: string
+) => {
+  const client = await createClient(getUser(signer));
 
-  const tester = getUser();
+  const tester = getUser(signer);
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
   const did = tester.did;
 
-  const alice = getUser(WalletUsers.alice);
+  const alice = getUser(WalletUsers.tester);
 
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgTransferEntity",
     value: ixo.entity.v1beta1.MsgTransferEntity.fromPartial({
-      entityDid: entityDid,
+      id: entityDid,
       ownerDid: did,
       ownerAddress: myAddress,
       recipientDid: alice.did,
@@ -323,9 +337,34 @@ export const UpdateEntity = async () => {
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgUpdateEntity",
     value: ixo.entity.v1beta1.MsgUpdateEntity.fromPartial({
-      status: 1,
+      entityStatus: 1,
       controllerDid: did,
       controllerAddress: myAddress,
+    }),
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const UpdateEntityVerified = async (
+  signer: WalletUsers = WalletUsers.tester,
+  entityDid: string
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = getUser(signer);
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+  const did = tester.did;
+
+  const message = {
+    typeUrl: "/ixo.entity.v1beta1.MsgUpdateEntityVerified",
+    value: ixo.entity.v1beta1.MsgUpdateEntityVerified.fromPartial({
+      id: entityDid,
+      entityVerified: true,
+      relayerNodeDid: did,
+      relayerNodeAddress: myAddress,
     }),
   };
 

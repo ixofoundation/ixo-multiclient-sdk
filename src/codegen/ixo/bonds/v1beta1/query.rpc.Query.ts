@@ -7,7 +7,10 @@ import { QueryBondsRequest, QueryBondsResponse, QueryBondsDetailedRequest, Query
 export interface Query {
   /** Bonds returns all existing bonds. */
   bonds(request?: QueryBondsRequest): Promise<QueryBondsResponse>;
-  /** BondsDetailed returns a list of all existing bonds with some details about their current state. */
+  /**
+   * BondsDetailed returns a list of all existing bonds with some details about
+   * their current state.
+   */
 
   bondsDetailed(request?: QueryBondsDetailedRequest): Promise<QueryBondsDetailedResponse>;
   /** Params queries the paramaters of x/bonds module. */
@@ -25,25 +28,43 @@ export interface Query {
   /** CurrentPrice queries the current price/s of a specific bond. */
 
   currentPrice(request: QueryCurrentPriceRequest): Promise<QueryCurrentPriceResponse>;
-  /** CurrentReserve queries the current balance/s of the reserve pool for a specific bond. */
+  /**
+   * CurrentReserve queries the current balance/s of the reserve pool for a
+   * specific bond.
+   */
 
   currentReserve(request: QueryCurrentReserveRequest): Promise<QueryCurrentReserveResponse>;
-  /** AvailableReserve queries current available balance/s of the reserve pool for a specific bond. */
+  /**
+   * AvailableReserve queries current available balance/s of the reserve pool
+   * for a specific bond.
+   */
 
   availableReserve(request: QueryAvailableReserveRequest): Promise<QueryAvailableReserveResponse>;
   /** CustomPrice queries price/s of a specific bond at a specific supply. */
 
   customPrice(request: QueryCustomPriceRequest): Promise<QueryCustomPriceResponse>;
-  /** BuyPrice queries price/s of buying an amount of tokens from a specific bond. */
+  /**
+   * BuyPrice queries price/s of buying an amount of tokens from a specific
+   * bond.
+   */
 
   buyPrice(request: QueryBuyPriceRequest): Promise<QueryBuyPriceResponse>;
-  /** SellReturn queries return/s on selling an amount of tokens of a specific bond. */
+  /**
+   * SellReturn queries return/s on selling an amount of tokens of a specific
+   * bond.
+   */
 
   sellReturn(request: QuerySellReturnRequest): Promise<QuerySellReturnResponse>;
-  /** SwapReturn queries return/s on swapping an amount of tokens to another token of a specific bond. */
+  /**
+   * SwapReturn queries return/s on swapping an amount of tokens to another
+   * token of a specific bond.
+   */
 
   swapReturn(request: QuerySwapReturnRequest): Promise<QuerySwapReturnResponse>;
-  /** AlphaMaximums queries alpha maximums for a specific augmented bonding curve. */
+  /**
+   * AlphaMaximums queries alpha maximums for a specific augmented bonding
+   * curve.
+   */
 
   alphaMaximums(request: QueryAlphaMaximumsRequest): Promise<QueryAlphaMaximumsResponse>;
 }

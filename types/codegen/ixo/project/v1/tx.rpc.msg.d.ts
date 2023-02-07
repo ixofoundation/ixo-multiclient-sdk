@@ -4,7 +4,10 @@ import { MsgCreateProject, MsgCreateProjectResponse, MsgUpdateProjectStatus, Msg
 export interface Msg {
     /** CreateProject defines a method for creating a project. */
     createProject(request: MsgCreateProject): Promise<MsgCreateProjectResponse>;
-    /** UpdateProjectStatus defines a method for updating a project's current status. */
+    /**
+     * UpdateProjectStatus defines a method for updating a project's current
+     * status.
+     */
     updateProjectStatus(request: MsgUpdateProjectStatus): Promise<MsgUpdateProjectStatusResponse>;
     /** CreateAgent defines a method for creating an agent on a project. */
     createAgent(request: MsgCreateAgent): Promise<MsgCreateAgentResponse>;
@@ -12,9 +15,15 @@ export interface Msg {
     updateAgent(request: MsgUpdateAgent): Promise<MsgUpdateAgentResponse>;
     /** CreateClaim defines a method for creating a claim on a project. */
     createClaim(request: MsgCreateClaim): Promise<MsgCreateClaimResponse>;
-    /** CreateEvaluation defines a method for creating an evaluation for a specific claim on a project. */
+    /**
+     * CreateEvaluation defines a method for creating an evaluation for a specific
+     * claim on a project.
+     */
     createEvaluation(request: MsgCreateEvaluation): Promise<MsgCreateEvaluationResponse>;
-    /** WithdrawFunds defines a method for project agents to withdraw their funds from a project. */
+    /**
+     * WithdrawFunds defines a method for project agents to withdraw their funds
+     * from a project.
+     */
     withdrawFunds(request: MsgWithdrawFunds): Promise<MsgWithdrawFundsResponse>;
     /** UpdateProjectDoc defines a method for updating a project's data. */
     updateProjectDoc(request: MsgUpdateProjectDoc): Promise<MsgUpdateProjectDocResponse>;

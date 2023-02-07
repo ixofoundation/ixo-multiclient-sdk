@@ -12,21 +12,22 @@ import {
   ixo,
   ibc,
   cosmos,
+  cosmwasm,
   createQueryClient as createQueryClientImport,
   customMessages,
 } from "../../src";
 import { IObjectKeys } from "./types";
 
-export { ixo, cosmos, utils, ibc, customMessages };
+const fs = require("fs");
+const path = require("path");
+
+export { ixo, cosmos, utils, ibc, customMessages, cosmwasm };
 
 export const sendFaucet = async (address: string) => {
   const faucetUrl = RPC_URL.includes("devnet")
-    ? "https://devnet-faucet.ixo.earth/credit"
-    : "https://testnet-faucet.ixo.earth/credit";
-  return await axios.post(faucetUrl, {
-    denom: "uixo",
-    address: address,
-  });
+    ? `https://faucet.devnet.ixo.earth/send/${address}`
+    : `https://faucet.testnet.ixo.earth/send/${address}`;
+  return await axios.get(faucetUrl);
 };
 
 export type wallet = {
@@ -179,17 +180,26 @@ export const testQry = (
   });
 };
 
+export const runQry = (message: string, query: () => Promise<any>) => {
+  return test(message, async () => {
+    console.log("Running query " + message);
+    const res = await query();
+    console.log(res);
+    expect(true).toBeTruthy();
+  });
+};
+
 export const sendFromFaucet = (user: WalletUsers) => {
   return test("send tokens from faucet", async () => {
     const tester = getUser(user);
     const account = (await tester.getAccounts())[0];
     console.log(`Sending tokens from faucet to: ${user}(${account.address})`);
     const res = await sendFaucet(account.address);
-    expect(res.data).toBe("ok");
+    expect(res.data.result.code).toBe(0);
   });
 };
 
-function findVal(object: IObjectKeys, key: string) {
+const findVal = (object: IObjectKeys, key: string) => {
   var value: any;
   Object.keys(object).some((k) => {
     if (k === key) {
@@ -202,4 +212,14 @@ function findVal(object: IObjectKeys, key: string) {
     }
   });
   return value;
-}
+};
+
+// Helper to get file from within assets folder in root
+export const getFileFromPath = (
+  pathList: string[],
+  encoding: string = "base64"
+) => {
+  const newPath = path.resolve(__dirname, "..", "..", "assets", ...pathList);
+  const fileBuffer = fs.readFileSync(newPath, encoding && { encoding });
+  return fileBuffer;
+};

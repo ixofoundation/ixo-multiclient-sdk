@@ -8,35 +8,47 @@ export interface MsgCreateTokenResponseSDKType {
 }
 export interface MsgTransferToken {
     tokenDid: string;
-    /** The ownersdid used to sign this transaction. */
     ownerDid: string;
-    /** The ownersdid used to sign this transaction. */
     ownerAddress: string;
     recipientDid: string;
 }
 export interface MsgTransferTokenSDKType {
     tokenDid: string;
-    /** The ownersdid used to sign this transaction. */
     ownerDid: string;
-    /** The ownersdid used to sign this transaction. */
     ownerAddress: string;
     recipientDid: string;
 }
-/** MsgUpdateProjectStatusResponse defines the Msg/UpdateTokenStatus response type. */
+/**
+ * MsgUpdateProjectStatusResponse defines the Msg/UpdateTokenStatus response
+ * type.
+ */
 export interface MsgTransferTokenResponse {
 }
-/** MsgUpdateProjectStatusResponse defines the Msg/UpdateTokenStatus response type. */
+/**
+ * MsgUpdateProjectStatusResponse defines the Msg/UpdateTokenStatus response
+ * type.
+ */
 export interface MsgTransferTokenResponseSDKType {
+}
+export interface Cw20Coin {
+    address: string;
+    amount: Long;
+}
+export interface Cw20CoinSDKType {
+    address: string;
+    amount: Long;
 }
 export interface SetupCw20 {
     symbol: string;
     decimals: number;
     cap: Long;
+    instialBalances: Cw20Coin[];
 }
 export interface SetupCw20SDKType {
     symbol: string;
     decimals: number;
     cap: Long;
+    instialBalances: Cw20CoinSDKType[];
 }
 export interface SetupCw721 {
     symbol: string;
@@ -79,27 +91,40 @@ export interface MintCw20SDKType {
 export interface MintCw721 {
     /** An IID that identifies the asset that this token represents */
     id: string;
-    /** A URI pointing to a resource with media type image/* representing the asset to which this token represents. Consider making any images at a width between 320 and 1080 pixels and aspect ratio between 1.91:1 and 4:5 inclusive. */
+    /**
+     * A URI pointing to a resource with media type image/* representing
+     * the asset to which this token represents. Consider making any
+     * images at a width between 320 and 1080 pixels and aspect ratio
+     * between 1.91:1 and 4:5 inclusive.
+     */
     image?: string;
     /** Uri */
     uri?: string;
-    /** "Arbitrary properties. Values may be strings, numbers, object or arrays."]; */
     properties: Uint8Array;
 }
 export interface MintCw721SDKType {
     /** An IID that identifies the asset that this token represents */
     id: string;
-    /** A URI pointing to a resource with media type image/* representing the asset to which this token represents. Consider making any images at a width between 320 and 1080 pixels and aspect ratio between 1.91:1 and 4:5 inclusive. */
+    /**
+     * A URI pointing to a resource with media type image/* representing
+     * the asset to which this token represents. Consider making any
+     * images at a width between 320 and 1080 pixels and aspect ratio
+     * between 1.91:1 and 4:5 inclusive.
+     */
     image?: string;
     /** Uri */
     uri?: string;
-    /** "Arbitrary properties. Values may be strings, numbers, object or arrays."]; */
     properties: Uint8Array;
 }
 export interface MintCw1155 {
     /** An IID that identifies the asset that this token represents */
     id: string;
-    /** A URI pointing to a resource with media type image/* representing the asset to which this token represents. Consider making any images at a width between 320 and 1080 pixels and aspect ratio between 1.91:1 and 4:5 inclusive. */
+    /**
+     * A URI pointing to a resource with media type image/* representing
+     * the asset to which this token represents. Consider making any
+     * images at a width between 320 and 1080 pixels and aspect ratio
+     * between 1.91:1 and 4:5 inclusive.
+     */
     image?: string;
     /** Uri */
     uri?: string;
@@ -108,7 +133,12 @@ export interface MintCw1155 {
 export interface MintCw1155SDKType {
     /** An IID that identifies the asset that this token represents */
     id: string;
-    /** A URI pointing to a resource with media type image/* representing the asset to which this token represents. Consider making any images at a width between 320 and 1080 pixels and aspect ratio between 1.91:1 and 4:5 inclusive. */
+    /**
+     * A URI pointing to a resource with media type image/* representing
+     * the asset to which this token represents. Consider making any
+     * images at a width between 320 and 1080 pixels and aspect ratio
+     * between 1.91:1 and 4:5 inclusive.
+     */
     image?: string;
     /** Uri */
     uri?: string;
@@ -156,6 +186,13 @@ export declare const MsgTransferTokenResponse: {
     fromJSON(_: any): MsgTransferTokenResponse;
     toJSON(_: MsgTransferTokenResponse): unknown;
     fromPartial(_: Partial<MsgTransferTokenResponse>): MsgTransferTokenResponse;
+};
+export declare const Cw20Coin: {
+    encode(message: Cw20Coin, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): Cw20Coin;
+    fromJSON(object: any): Cw20Coin;
+    toJSON(message: Cw20Coin): unknown;
+    fromPartial(object: Partial<Cw20Coin>): Cw20Coin;
 };
 export declare const SetupCw20: {
     encode(message: SetupCw20, writer?: _m0.Writer): _m0.Writer;

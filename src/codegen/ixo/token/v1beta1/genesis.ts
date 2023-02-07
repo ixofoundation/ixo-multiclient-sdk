@@ -5,7 +5,10 @@ import { isSet } from "../../../helpers";
 
 export interface GenesisState {
   tokenMinters: TokenMinter[];
-  /** repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"account_maps\""]; */
+  /**
+   * repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) =
+   * false, (gogoproto.moretags) = "yaml:\"account_maps\""];
+   */
 
   Params?: Params;
 }
@@ -13,7 +16,10 @@ export interface GenesisState {
 
 export interface GenesisStateSDKType {
   tokenMinters: TokenMinterSDKType[];
-  /** repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"account_maps\""]; */
+  /**
+   * repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) =
+   * false, (gogoproto.moretags) = "yaml:\"account_maps\""];
+   */
 
   Params?: ParamsSDKType;
 }

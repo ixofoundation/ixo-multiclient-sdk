@@ -1,15 +1,13 @@
-import { EntityDoc, EntityDocSDKType, Params, ParamsSDKType } from "./entity";
+import { Entity, EntitySDKType, Params, ParamsSDKType } from "./entity";
 import * as _m0 from "protobufjs/minimal";
 /** GenesisState defines the project module's genesis state. */
 export interface GenesisState {
-    entityDocs: EntityDoc[];
-    /** repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"account_maps\""]; */
+    entities: Entity[];
     params?: Params;
 }
 /** GenesisState defines the project module's genesis state. */
 export interface GenesisStateSDKType {
-    entity_docs: EntityDocSDKType[];
-    /** repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"account_maps\""]; */
+    entities: EntitySDKType[];
     params?: ParamsSDKType;
 }
 export declare const GenesisState: {

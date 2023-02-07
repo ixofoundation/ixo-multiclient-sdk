@@ -7,32 +7,50 @@ export interface QueryTokenListRequest {
 export interface QueryTokenListRequestSDKType {
   minter_did: string;
 }
-/** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
+/**
+ * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
+ * method.
+ */
 
 export interface QueryTokenListResponse {
   contracts: TokenMinter[];
 }
-/** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
+/**
+ * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
+ * method.
+ */
 
 export interface QueryTokenListResponseSDKType {
   contracts: TokenMinterSDKType[];
 }
-/** QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC method. */
+/**
+ * QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC
+ * method.
+ */
 
 export interface QueryTokenDocRequest {
   minterDid: string;
   contractAddress: string;
 }
-/** QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC method. */
+/**
+ * QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC
+ * method.
+ */
 
 export interface QueryTokenDocRequestSDKType {
   minter_did: string;
   contract_address: string;
 }
-/** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
+/**
+ * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
+ * method.
+ */
 
 export interface QueryTokenDocResponse {}
-/** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
+/**
+ * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
+ * method.
+ */
 
 export interface QueryTokenDocResponseSDKType {}
 export interface QueryTokenConfigRequest {}
@@ -45,14 +63,20 @@ export interface QueryTokenConfigResponse_MapEntrySDKType {
   key: string;
   value: string;
 }
-/** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
+/**
+ * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
+ * method.
+ */
 
 export interface QueryTokenConfigResponse {
   map: {
     [key: string]: string;
   };
 }
-/** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
+/**
+ * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
+ * method.
+ */
 
 export interface QueryTokenConfigResponseSDKType {
   map: {

@@ -182,7 +182,10 @@ export interface MsgSellResponse {}
 /** MsgSellResponse defines the Msg/Sell response type. */
 
 export interface MsgSellResponseSDKType {}
-/** MsgSwap defines a message for swapping from one reserve bond token to another. */
+/**
+ * MsgSwap defines a message for swapping from one reserve bond token to
+ * another.
+ */
 
 export interface MsgSwap {
   swapperDid: string;
@@ -191,7 +194,10 @@ export interface MsgSwap {
   toToken: string;
   swapperAddress: string;
 }
-/** MsgSwap defines a message for swapping from one reserve bond token to another. */
+/**
+ * MsgSwap defines a message for swapping from one reserve bond token to
+ * another.
+ */
 
 export interface MsgSwapSDKType {
   swapper_did: string;
@@ -206,7 +212,10 @@ export interface MsgSwapResponse {}
 /** MsgSwapResponse defines the Msg/Swap response type. */
 
 export interface MsgSwapResponseSDKType {}
-/** MsgMakeOutcomePayment defines a message for making an outcome payment to a bond. */
+/**
+ * MsgMakeOutcomePayment defines a message for making an outcome payment to a
+ * bond.
+ */
 
 export interface MsgMakeOutcomePayment {
   senderDid: string;
@@ -214,7 +223,10 @@ export interface MsgMakeOutcomePayment {
   bondDid: string;
   senderAddress: string;
 }
-/** MsgMakeOutcomePayment defines a message for making an outcome payment to a bond. */
+/**
+ * MsgMakeOutcomePayment defines a message for making an outcome payment to a
+ * bond.
+ */
 
 export interface MsgMakeOutcomePaymentSDKType {
   sender_did: string;
@@ -222,20 +234,32 @@ export interface MsgMakeOutcomePaymentSDKType {
   bond_did: string;
   sender_address: string;
 }
-/** MsgMakeOutcomePaymentResponse defines the Msg/MakeOutcomePayment response type. */
+/**
+ * MsgMakeOutcomePaymentResponse defines the Msg/MakeOutcomePayment response
+ * type.
+ */
 
 export interface MsgMakeOutcomePaymentResponse {}
-/** MsgMakeOutcomePaymentResponse defines the Msg/MakeOutcomePayment response type. */
+/**
+ * MsgMakeOutcomePaymentResponse defines the Msg/MakeOutcomePayment response
+ * type.
+ */
 
 export interface MsgMakeOutcomePaymentResponseSDKType {}
-/** MsgWithdrawShare defines a message for withdrawing a share from a bond that is in the SETTLE stage. */
+/**
+ * MsgWithdrawShare defines a message for withdrawing a share from a bond that
+ * is in the SETTLE stage.
+ */
 
 export interface MsgWithdrawShare {
   recipientDid: string;
   bondDid: string;
   recipientAddress: string;
 }
-/** MsgWithdrawShare defines a message for withdrawing a share from a bond that is in the SETTLE stage. */
+/**
+ * MsgWithdrawShare defines a message for withdrawing a share from a bond that
+ * is in the SETTLE stage.
+ */
 
 export interface MsgWithdrawShareSDKType {
   recipient_did: string;

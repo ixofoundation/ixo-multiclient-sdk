@@ -1,42 +1,66 @@
 import { ProjectDoc, ProjectDocSDKType, AccountMap, AccountMapSDKType, WithdrawalInfoDocs, WithdrawalInfoDocsSDKType, Params, ParamsSDKType } from "./project";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
-/** QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC method. */
+/**
+ * QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC
+ * method.
+ */
 
 export interface QueryProjectDocRequest {
   projectDid: string;
 }
-/** QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC method. */
+/**
+ * QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC
+ * method.
+ */
 
 export interface QueryProjectDocRequestSDKType {
   project_did: string;
 }
-/** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
+/**
+ * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
+ * method.
+ */
 
 export interface QueryProjectDocResponse {
   projectDoc?: ProjectDoc;
 }
-/** QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC method. */
+/**
+ * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
+ * method.
+ */
 
 export interface QueryProjectDocResponseSDKType {
   project_doc?: ProjectDocSDKType;
 }
-/** QueryProjectAccountsRequest is the request type for the Query/ProjectAccounts RPC method. */
+/**
+ * QueryProjectAccountsRequest is the request type for the Query/ProjectAccounts
+ * RPC method.
+ */
 
 export interface QueryProjectAccountsRequest {
   projectDid: string;
 }
-/** QueryProjectAccountsRequest is the request type for the Query/ProjectAccounts RPC method. */
+/**
+ * QueryProjectAccountsRequest is the request type for the Query/ProjectAccounts
+ * RPC method.
+ */
 
 export interface QueryProjectAccountsRequestSDKType {
   project_did: string;
 }
-/** QueryProjectAccountsResponse is the response type for the Query/ProjectAccounts RPC method. */
+/**
+ * QueryProjectAccountsResponse is the response type for the
+ * Query/ProjectAccounts RPC method.
+ */
 
 export interface QueryProjectAccountsResponse {
   accountMap?: AccountMap;
 }
-/** QueryProjectAccountsResponse is the response type for the Query/ProjectAccounts RPC method. */
+/**
+ * QueryProjectAccountsResponse is the response type for the
+ * Query/ProjectAccounts RPC method.
+ */
 
 export interface QueryProjectAccountsResponseSDKType {
   account_map?: AccountMapSDKType;
@@ -51,12 +75,18 @@ export interface QueryProjectTxRequest {
 export interface QueryProjectTxRequestSDKType {
   project_did: string;
 }
-/** QueryProjectTxResponse is the response type for the Query/ProjectTx RPC method. */
+/**
+ * QueryProjectTxResponse is the response type for the Query/ProjectTx RPC
+ * method.
+ */
 
 export interface QueryProjectTxResponse {
   txs?: WithdrawalInfoDocs;
 }
-/** QueryProjectTxResponse is the response type for the Query/ProjectTx RPC method. */
+/**
+ * QueryProjectTxResponse is the response type for the Query/ProjectTx RPC
+ * method.
+ */
 
 export interface QueryProjectTxResponseSDKType {
   txs?: WithdrawalInfoDocsSDKType;

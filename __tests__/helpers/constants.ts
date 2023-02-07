@@ -12,15 +12,15 @@ export enum WalletUsers {
   tester = "tester",
   alice = "alice",
   bob = "bob",
+  charlie = "charlie",
   project = "project",
   bond = "bond",
   oracle = "oracle",
-  accordedRight = "accordedRight",
 }
 
 export let constants: ReturnType<typeof generateConstants>;
 
-export const generateConstants = () => {
+export const generateConstants = (setGlobal = true) => {
   const newConstants = {
     // payments
     paymentTemplateId: `payment:template:${utils.common.generateId(10)}`,
@@ -48,10 +48,19 @@ export const generateConstants = () => {
     linkedResourceId: utils.common.generateId(10),
     serviceId: utils.common.generateId(10),
   };
-  constants = newConstants;
+  if (setGlobal) constants = newConstants;
   // Logs constants for tester to see details for constants
-  console.log({ constants });
+  if (setGlobal) console.log({ constants });
   return newConstants;
+};
+
+export const generateNewConstant = async (constant: keyof typeof constants) => {
+  const newConstants = generateConstants(false);
+  const newConstant = newConstants[constant];
+  // @ts-ignore
+  constants[constant] = newConstant;
+  console.log({ constant: newConstant });
+  return newConstant;
 };
 
 export const fee = {
@@ -61,5 +70,5 @@ export const fee = {
       amount: "100000",
     },
   ],
-  gas: "3000000",
+  gas: "4000000",
 };

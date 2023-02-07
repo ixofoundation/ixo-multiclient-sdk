@@ -2,11 +2,13 @@ import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, Accord
 import { Verification, VerificationSDKType } from "../../iid/v1beta1/tx";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import * as _m0 from "protobufjs/minimal";
-/** MsgCreateEntity defines a message for creating a project. */
 export interface MsgCreateEntity {
     /** An Entity Type as defined by the implementer */
     entityType: string;
-    /** Status of the Entity as defined by the implementer and interpreted by Client applications */
+    /**
+     * Status of the Entity as defined by the implementer and interpreted by
+     * Client applications
+     */
     entityStatus: number;
     /** the list of controller DIDs */
     controller: string[];
@@ -20,43 +22,38 @@ export interface MsgCreateEntity {
     accordedRight: AccordedRight[];
     /** Digital resources associated with the Subject */
     linkedResource: LinkedResource[];
-    /** DID of a linked Entity and its relationship with the Subject */
+    /**
+     * DID of a linked Entity and its relationship with the Subject
+     * Start Date of the Entity as defined by the implementer and interpreted by
+     * Client applications
+     */
     linkedEntity: LinkedEntity[];
-    /**
-     * Operational status of the Entity
-     * Start Date of the Entity as defined by the implementer and interpreted by Client applications
-     */
-    deactivated: boolean;
-    /**
-     * address of the account signing the message
-     * End Date of the Entity as defined by the implementer and interpreted by Client applications
-     */
     startDate?: Timestamp;
-    /** address of the account signing the message */
-    endDate?: Timestamp;
     /**
-     * State of the Entity as defined by the implementer and interpreted by Client applications
-     * DID of the operator through which the Entity was created
+     * End Date of the Entity as defined by the implementer and interpreted by
+     * Client applications
      */
-    stage: string;
+    endDate?: Timestamp;
+    /** DID of the operator through which the Entity was created */
     relayerNode: string;
-    /** Public proof that the Entity is verified */
-    verificationStatus: string;
-    /** Content ID or Hash of public Verifiable Credentials associated with the  subject */
-    verifiableCredential: string[];
-    /** Owner of the Entity NFT | The ownersdid used to sign this transaction. */
+    /**
+     * Content ID or Hash of public Verifiable Credentials associated with the
+     * subject
+     */
+    credentials: string[];
     ownerDid: string;
     /** The ownersdid address used to sign this transaction. */
     ownerAddress: string;
-    /** Extention data */
     data: Uint8Array;
 }
-/** MsgCreateEntity defines a message for creating a project. */
 export interface MsgCreateEntitySDKType {
     /** An Entity Type as defined by the implementer */
-    entityType: string;
-    /** Status of the Entity as defined by the implementer and interpreted by Client applications */
-    entityStatus: number;
+    entity_type: string;
+    /**
+     * Status of the Entity as defined by the implementer and interpreted by
+     * Client applications
+     */
+    entity_status: number;
     /** the list of controller DIDs */
     controller: string[];
     /** JSON-LD contexts */
@@ -66,136 +63,149 @@ export interface MsgCreateEntitySDKType {
     /** Service endpoints */
     service: ServiceSDKType[];
     /** Legal or Electronic Rights and associated Object Capabilities */
-    accordedRight: AccordedRightSDKType[];
+    accorded_right: AccordedRightSDKType[];
     /** Digital resources associated with the Subject */
-    linkedResource: LinkedResourceSDKType[];
-    /** DID of a linked Entity and its relationship with the Subject */
-    linkedEntity: LinkedEntitySDKType[];
+    linked_resource: LinkedResourceSDKType[];
     /**
-     * Operational status of the Entity
-     * Start Date of the Entity as defined by the implementer and interpreted by Client applications
+     * DID of a linked Entity and its relationship with the Subject
+     * Start Date of the Entity as defined by the implementer and interpreted by
+     * Client applications
      */
-    deactivated: boolean;
+    linked_entity: LinkedEntitySDKType[];
+    start_date?: TimestampSDKType;
     /**
-     * address of the account signing the message
-     * End Date of the Entity as defined by the implementer and interpreted by Client applications
+     * End Date of the Entity as defined by the implementer and interpreted by
+     * Client applications
      */
-    startDate?: TimestampSDKType;
-    /** address of the account signing the message */
-    endDate?: TimestampSDKType;
+    end_date?: TimestampSDKType;
+    /** DID of the operator through which the Entity was created */
+    relayer_node: string;
     /**
-     * State of the Entity as defined by the implementer and interpreted by Client applications
-     * DID of the operator through which the Entity was created
+     * Content ID or Hash of public Verifiable Credentials associated with the
+     * subject
      */
-    stage: string;
-    relayerNode: string;
-    /** Public proof that the Entity is verified */
-    verificationStatus: string;
-    /** Content ID or Hash of public Verifiable Credentials associated with the  subject */
-    verifiableCredential: string[];
-    /** Owner of the Entity NFT | The ownersdid used to sign this transaction. */
-    ownerDid: string;
+    credentials: string[];
+    owner_did: string;
     /** The ownersdid address used to sign this transaction. */
-    ownerAddress: string;
-    /** Extention data */
+    owner_address: string;
     data: Uint8Array;
 }
-/** MsgCreateProjectResponse defines the Msg/CreateProject response type. */
 export interface MsgCreateEntityResponse {
     entityId: string;
     entityType: string;
     entityStatus: number;
 }
-/** MsgCreateProjectResponse defines the Msg/CreateProject response type. */
 export interface MsgCreateEntityResponseSDKType {
-    entityId: string;
-    entityType: string;
-    entityStatus: number;
+    entity_id: string;
+    entity_type: string;
+    entity_status: number;
 }
-/** MsgUpdateEntityStatus defines a message for updating a entity's current status. */
+/**
+ * Updates the entity with all the fields, so if field empty will be updated
+ * with default go type, aka never null
+ */
 export interface MsgUpdateEntity {
-    /** The status of the entity. Should represent an enum in the client. */
-    status: number;
+    /** Id of entity to be updated */
+    id: string;
     /**
-     * Whether this entity is enabled ot not, basically a soft delete.
-     * refer to iid module for more information
+     * Status of the Entity as defined by the implementer and interpreted by
+     * Client applications
      */
-    deactivated: boolean;
+    entityStatus: number;
     /**
-     * address of the account signing the message
-     * refer to iid module for more information
+     * Start Date of the Entity as defined by the implementer and interpreted by
+     * Client applications
      */
     startDate?: Timestamp;
-    /** address of the account signing the message */
+    /**
+     * End Date of the Entity as defined by the implementer and interpreted by
+     * Client applications
+     */
     endDate?: Timestamp;
     /**
-     * refer to iid module meta data for more information
-     * refer to iid module for more information
+     * Content ID or Hash of public Verifiable Credentials associated with the
+     * subject
      */
-    stage: string;
-    relayerNode: string;
-    /** refer to iid module for more information */
-    verifiableCredential: string;
-    /** The ownersdid used to sign this transaction. */
+    credentials: string[];
     controllerDid: string;
-    /** The ownersdid used to sign this transaction. */
+    /** The controllerAddress used to sign this transaction. */
     controllerAddress: string;
 }
-/** MsgUpdateEntityStatus defines a message for updating a entity's current status. */
+/**
+ * Updates the entity with all the fields, so if field empty will be updated
+ * with default go type, aka never null
+ */
 export interface MsgUpdateEntitySDKType {
-    /** The status of the entity. Should represent an enum in the client. */
-    status: number;
+    /** Id of entity to be updated */
+    id: string;
     /**
-     * Whether this entity is enabled ot not, basically a soft delete.
-     * refer to iid module for more information
+     * Status of the Entity as defined by the implementer and interpreted by
+     * Client applications
      */
-    deactivated: boolean;
+    entity_status: number;
     /**
-     * address of the account signing the message
-     * refer to iid module for more information
+     * Start Date of the Entity as defined by the implementer and interpreted by
+     * Client applications
      */
-    startDate?: TimestampSDKType;
-    /** address of the account signing the message */
-    endDate?: TimestampSDKType;
+    start_date?: TimestampSDKType;
     /**
-     * refer to iid module meta data for more information
-     * refer to iid module for more information
+     * End Date of the Entity as defined by the implementer and interpreted by
+     * Client applications
      */
-    stage: string;
-    relayerNode: string;
-    /** refer to iid module for more information */
-    verifiableCredential: string;
-    /** The ownersdid used to sign this transaction. */
-    controllerDid: string;
-    /** The ownersdid used to sign this transaction. */
-    controllerAddress: string;
+    end_date?: TimestampSDKType;
+    /**
+     * Content ID or Hash of public Verifiable Credentials associated with the
+     * subject
+     */
+    credentials: string[];
+    controller_did: string;
+    /** The controllerAddress used to sign this transaction. */
+    controller_address: string;
 }
-/** MsgUpdateProjectStatusResponse defines the Msg/UpdateEntityStatus response type. */
 export interface MsgUpdateEntityResponse {
 }
-/** MsgUpdateProjectStatusResponse defines the Msg/UpdateEntityStatus response type. */
 export interface MsgUpdateEntityResponseSDKType {
 }
+/** Only relayer nodes can update entity field 'entityVerified' */
+export interface MsgUpdateEntityVerified {
+    /** Id of entity to be updated */
+    id: string;
+    /** Whether entity is verified or not based on credentials */
+    entityVerified: boolean;
+    relayerNodeDid: string;
+    /** The relayer node's address used to sign this transaction. */
+    relayerNodeAddress: string;
+}
+/** Only relayer nodes can update entity field 'entityVerified' */
+export interface MsgUpdateEntityVerifiedSDKType {
+    /** Id of entity to be updated */
+    id: string;
+    /** Whether entity is verified or not based on credentials */
+    entity_verified: boolean;
+    relayer_node_did: string;
+    /** The relayer node's address used to sign this transaction. */
+    relayer_node_address: string;
+}
+export interface MsgUpdateEntityVerifiedResponse {
+}
+export interface MsgUpdateEntityVerifiedResponseSDKType {
+}
 export interface MsgTransferEntity {
-    entityDid: string;
-    /** The ownersdid used to sign this transaction. */
+    id: string;
     ownerDid: string;
-    /** The ownersdid used to sign this transaction. */
+    /** The owner_address used to sign this transaction. */
     ownerAddress: string;
     recipientDid: string;
 }
 export interface MsgTransferEntitySDKType {
-    entityDid: string;
-    /** The ownersdid used to sign this transaction. */
-    ownerDid: string;
-    /** The ownersdid used to sign this transaction. */
-    ownerAddress: string;
-    recipientDid: string;
+    id: string;
+    owner_did: string;
+    /** The owner_address used to sign this transaction. */
+    owner_address: string;
+    recipient_did: string;
 }
-/** MsgUpdateProjectStatusResponse defines the Msg/UpdateEntityStatus response type. */
 export interface MsgTransferEntityResponse {
 }
-/** MsgUpdateProjectStatusResponse defines the Msg/UpdateEntityStatus response type. */
 export interface MsgTransferEntityResponseSDKType {
 }
 export declare const MsgCreateEntity: {
@@ -225,6 +235,20 @@ export declare const MsgUpdateEntityResponse: {
     fromJSON(_: any): MsgUpdateEntityResponse;
     toJSON(_: MsgUpdateEntityResponse): unknown;
     fromPartial(_: Partial<MsgUpdateEntityResponse>): MsgUpdateEntityResponse;
+};
+export declare const MsgUpdateEntityVerified: {
+    encode(message: MsgUpdateEntityVerified, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateEntityVerified;
+    fromJSON(object: any): MsgUpdateEntityVerified;
+    toJSON(message: MsgUpdateEntityVerified): unknown;
+    fromPartial(object: Partial<MsgUpdateEntityVerified>): MsgUpdateEntityVerified;
+};
+export declare const MsgUpdateEntityVerifiedResponse: {
+    encode(_: MsgUpdateEntityVerifiedResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateEntityVerifiedResponse;
+    fromJSON(_: any): MsgUpdateEntityVerifiedResponse;
+    toJSON(_: MsgUpdateEntityVerifiedResponse): unknown;
+    fromPartial(_: Partial<MsgUpdateEntityVerifiedResponse>): MsgUpdateEntityVerifiedResponse;
 };
 export declare const MsgTransferEntity: {
     encode(message: MsgTransferEntity, writer?: _m0.Writer): _m0.Writer;

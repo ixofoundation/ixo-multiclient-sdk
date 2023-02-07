@@ -1,4 +1,4 @@
-import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, IidDocument, IidDocumentSDKType, IidMetadata, IidMetadataSDKType, VerificationMethod, VerificationMethodSDKType } from "./iid";
+import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, VerificationMethod, VerificationMethodSDKType } from "./iid";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 /**
@@ -7,10 +7,7 @@ import { isSet } from "../../../helpers";
  */
 
 export interface Verification {
-  /**
-   * verificationRelationships defines which relationships
-   * are allowed to use the verification method
-   */
+  /** relationships that the method is allowed into. */
   relationships: string[];
   /** public key associated with the did document. */
 
@@ -25,10 +22,7 @@ export interface Verification {
  */
 
 export interface VerificationSDKType {
-  /**
-   * verificationRelationships defines which relationships
-   * are allowed to use the verification method
-   */
+  /** relationships that the method is allowed into. */
   relationships: string[];
   /** public key associated with the did document. */
 
@@ -53,6 +47,7 @@ export interface MsgCreateIidDocument {
   accordedRight: AccordedRight[];
   linkedResource: LinkedResource[];
   linkedEntity: LinkedEntity[];
+  alsoKnownAs: string;
   /** address of the account signing the message */
 
   signer: string;
@@ -73,26 +68,57 @@ export interface MsgCreateIidDocumentSDKType {
   accordedRight: AccordedRightSDKType[];
   linkedResource: LinkedResourceSDKType[];
   linkedEntity: LinkedEntitySDKType[];
+  alsoKnownAs: string;
   /** address of the account signing the message */
 
   signer: string;
 }
 export interface MsgCreateIidDocumentResponse {}
 export interface MsgCreateIidDocumentResponseSDKType {}
-/** MsgUpdateDidDocument replace an existing did document with a new version */
+/**
+ * Updates the entity with all the fields, so if field empty will be updated
+ * with default go type, aka never null
+ */
 
 export interface MsgUpdateIidDocument {
-  /** the did document to replace */
-  doc?: IidDocument;
+  /** the did */
+  id: string;
+  /** the list of controller DIDs */
+
+  controllers: string[];
+  context: Context[];
+  /** the list of verification methods and relationships */
+
+  verifications: Verification[];
+  services: Service[];
+  accordedRight: AccordedRight[];
+  linkedResource: LinkedResource[];
+  linkedEntity: LinkedEntity[];
+  alsoKnownAs: string;
   /** address of the account signing the message */
 
   signer: string;
 }
-/** MsgUpdateDidDocument replace an existing did document with a new version */
+/**
+ * Updates the entity with all the fields, so if field empty will be updated
+ * with default go type, aka never null
+ */
 
 export interface MsgUpdateIidDocumentSDKType {
-  /** the did document to replace */
-  doc?: IidDocumentSDKType;
+  /** the did */
+  id: string;
+  /** the list of controller DIDs */
+
+  controllers: string[];
+  context: ContextSDKType[];
+  /** the list of verification methods and relationships */
+
+  verifications: VerificationSDKType[];
+  services: ServiceSDKType[];
+  accordedRight: AccordedRightSDKType[];
+  linkedResource: LinkedResourceSDKType[];
+  linkedEntity: LinkedEntitySDKType[];
+  alsoKnownAs: string;
   /** address of the account signing the message */
 
   signer: string;
@@ -362,7 +388,7 @@ export interface MsgAddAccordedRightSDKType {
 export interface MsgDeleteAccordedRight {
   /** the did */
   id: string;
-  /** the service id */
+  /** the Accorded right id */
 
   rightId: string;
   /** address of the account signing the message */
@@ -372,7 +398,7 @@ export interface MsgDeleteAccordedRight {
 export interface MsgDeleteAccordedRightSDKType {
   /** the did */
   id: string;
-  /** the service id */
+  /** the Accorded right id */
 
   right_id: string;
   /** address of the account signing the message */
@@ -435,26 +461,6 @@ export interface MsgDeleteIidContextSDKType {
 
   signer: string;
 }
-export interface MsgUpdateIidMeta {
-  /** the did */
-  id: string;
-  /** the context to add */
-
-  meta?: IidMetadata;
-  /** address of the account signing the message */
-
-  signer: string;
-}
-export interface MsgUpdateIidMetaSDKType {
-  /** the did */
-  id: string;
-  /** the context to add */
-
-  meta?: IidMetadataSDKType;
-  /** address of the account signing the message */
-
-  signer: string;
-}
 export interface MsgAddLinkedResourceResponse {}
 export interface MsgAddLinkedResourceResponseSDKType {}
 export interface MsgDeleteLinkedResourceResponse {}
@@ -471,8 +477,6 @@ export interface MsgAddIidContextResponse {}
 export interface MsgAddIidContextResponseSDKType {}
 export interface MsgDeleteIidContextResponse {}
 export interface MsgDeleteIidContextResponseSDKType {}
-export interface MsgUpdateIidMetaResponse {}
-export interface MsgUpdateIidMetaResponseSDKType {}
 export interface MsgDeactivateIIDResponse {}
 export interface MsgDeactivateIIDResponseSDKType {}
 
@@ -579,6 +583,7 @@ function createBaseMsgCreateIidDocument(): MsgCreateIidDocument {
     accordedRight: [],
     linkedResource: [],
     linkedEntity: [],
+    alsoKnownAs: "",
     signer: ""
   };
 }
@@ -617,8 +622,12 @@ export const MsgCreateIidDocument = {
       LinkedEntity.encode(v!, writer.uint32(66).fork()).ldelim();
     }
 
+    if (message.alsoKnownAs !== "") {
+      writer.uint32(74).string(message.alsoKnownAs);
+    }
+
     if (message.signer !== "") {
-      writer.uint32(74).string(message.signer);
+      writer.uint32(82).string(message.signer);
     }
 
     return writer;
@@ -666,6 +675,10 @@ export const MsgCreateIidDocument = {
           break;
 
         case 9:
+          message.alsoKnownAs = reader.string();
+          break;
+
+        case 10:
           message.signer = reader.string();
           break;
 
@@ -688,6 +701,7 @@ export const MsgCreateIidDocument = {
       accordedRight: Array.isArray(object?.accordedRight) ? object.accordedRight.map((e: any) => AccordedRight.fromJSON(e)) : [],
       linkedResource: Array.isArray(object?.linkedResource) ? object.linkedResource.map((e: any) => LinkedResource.fromJSON(e)) : [],
       linkedEntity: Array.isArray(object?.linkedEntity) ? object.linkedEntity.map((e: any) => LinkedEntity.fromJSON(e)) : [],
+      alsoKnownAs: isSet(object.alsoKnownAs) ? String(object.alsoKnownAs) : "",
       signer: isSet(object.signer) ? String(object.signer) : ""
     };
   },
@@ -738,6 +752,7 @@ export const MsgCreateIidDocument = {
       obj.linkedEntity = [];
     }
 
+    message.alsoKnownAs !== undefined && (obj.alsoKnownAs = message.alsoKnownAs);
     message.signer !== undefined && (obj.signer = message.signer);
     return obj;
   },
@@ -752,6 +767,7 @@ export const MsgCreateIidDocument = {
     message.accordedRight = object.accordedRight?.map(e => AccordedRight.fromPartial(e)) || [];
     message.linkedResource = object.linkedResource?.map(e => LinkedResource.fromPartial(e)) || [];
     message.linkedEntity = object.linkedEntity?.map(e => LinkedEntity.fromPartial(e)) || [];
+    message.alsoKnownAs = object.alsoKnownAs ?? "";
     message.signer = object.signer ?? "";
     return message;
   }
@@ -803,19 +819,59 @@ export const MsgCreateIidDocumentResponse = {
 
 function createBaseMsgUpdateIidDocument(): MsgUpdateIidDocument {
   return {
-    doc: undefined,
+    id: "",
+    controllers: [],
+    context: [],
+    verifications: [],
+    services: [],
+    accordedRight: [],
+    linkedResource: [],
+    linkedEntity: [],
+    alsoKnownAs: "",
     signer: ""
   };
 }
 
 export const MsgUpdateIidDocument = {
   encode(message: MsgUpdateIidDocument, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.doc !== undefined) {
-      IidDocument.encode(message.doc, writer.uint32(10).fork()).ldelim();
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+
+    for (const v of message.controllers) {
+      writer.uint32(18).string(v!);
+    }
+
+    for (const v of message.context) {
+      Context.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+
+    for (const v of message.verifications) {
+      Verification.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+
+    for (const v of message.services) {
+      Service.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+
+    for (const v of message.accordedRight) {
+      AccordedRight.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+
+    for (const v of message.linkedResource) {
+      LinkedResource.encode(v!, writer.uint32(58).fork()).ldelim();
+    }
+
+    for (const v of message.linkedEntity) {
+      LinkedEntity.encode(v!, writer.uint32(66).fork()).ldelim();
+    }
+
+    if (message.alsoKnownAs !== "") {
+      writer.uint32(74).string(message.alsoKnownAs);
     }
 
     if (message.signer !== "") {
-      writer.uint32(42).string(message.signer);
+      writer.uint32(82).string(message.signer);
     }
 
     return writer;
@@ -831,10 +887,42 @@ export const MsgUpdateIidDocument = {
 
       switch (tag >>> 3) {
         case 1:
-          message.doc = IidDocument.decode(reader, reader.uint32());
+          message.id = reader.string();
+          break;
+
+        case 2:
+          message.controllers.push(reader.string());
+          break;
+
+        case 3:
+          message.context.push(Context.decode(reader, reader.uint32()));
+          break;
+
+        case 4:
+          message.verifications.push(Verification.decode(reader, reader.uint32()));
           break;
 
         case 5:
+          message.services.push(Service.decode(reader, reader.uint32()));
+          break;
+
+        case 6:
+          message.accordedRight.push(AccordedRight.decode(reader, reader.uint32()));
+          break;
+
+        case 7:
+          message.linkedResource.push(LinkedResource.decode(reader, reader.uint32()));
+          break;
+
+        case 8:
+          message.linkedEntity.push(LinkedEntity.decode(reader, reader.uint32()));
+          break;
+
+        case 9:
+          message.alsoKnownAs = reader.string();
+          break;
+
+        case 10:
           message.signer = reader.string();
           break;
 
@@ -849,21 +937,81 @@ export const MsgUpdateIidDocument = {
 
   fromJSON(object: any): MsgUpdateIidDocument {
     return {
-      doc: isSet(object.doc) ? IidDocument.fromJSON(object.doc) : undefined,
+      id: isSet(object.id) ? String(object.id) : "",
+      controllers: Array.isArray(object?.controllers) ? object.controllers.map((e: any) => String(e)) : [],
+      context: Array.isArray(object?.context) ? object.context.map((e: any) => Context.fromJSON(e)) : [],
+      verifications: Array.isArray(object?.verifications) ? object.verifications.map((e: any) => Verification.fromJSON(e)) : [],
+      services: Array.isArray(object?.services) ? object.services.map((e: any) => Service.fromJSON(e)) : [],
+      accordedRight: Array.isArray(object?.accordedRight) ? object.accordedRight.map((e: any) => AccordedRight.fromJSON(e)) : [],
+      linkedResource: Array.isArray(object?.linkedResource) ? object.linkedResource.map((e: any) => LinkedResource.fromJSON(e)) : [],
+      linkedEntity: Array.isArray(object?.linkedEntity) ? object.linkedEntity.map((e: any) => LinkedEntity.fromJSON(e)) : [],
+      alsoKnownAs: isSet(object.alsoKnownAs) ? String(object.alsoKnownAs) : "",
       signer: isSet(object.signer) ? String(object.signer) : ""
     };
   },
 
   toJSON(message: MsgUpdateIidDocument): unknown {
     const obj: any = {};
-    message.doc !== undefined && (obj.doc = message.doc ? IidDocument.toJSON(message.doc) : undefined);
+    message.id !== undefined && (obj.id = message.id);
+
+    if (message.controllers) {
+      obj.controllers = message.controllers.map(e => e);
+    } else {
+      obj.controllers = [];
+    }
+
+    if (message.context) {
+      obj.context = message.context.map(e => e ? Context.toJSON(e) : undefined);
+    } else {
+      obj.context = [];
+    }
+
+    if (message.verifications) {
+      obj.verifications = message.verifications.map(e => e ? Verification.toJSON(e) : undefined);
+    } else {
+      obj.verifications = [];
+    }
+
+    if (message.services) {
+      obj.services = message.services.map(e => e ? Service.toJSON(e) : undefined);
+    } else {
+      obj.services = [];
+    }
+
+    if (message.accordedRight) {
+      obj.accordedRight = message.accordedRight.map(e => e ? AccordedRight.toJSON(e) : undefined);
+    } else {
+      obj.accordedRight = [];
+    }
+
+    if (message.linkedResource) {
+      obj.linkedResource = message.linkedResource.map(e => e ? LinkedResource.toJSON(e) : undefined);
+    } else {
+      obj.linkedResource = [];
+    }
+
+    if (message.linkedEntity) {
+      obj.linkedEntity = message.linkedEntity.map(e => e ? LinkedEntity.toJSON(e) : undefined);
+    } else {
+      obj.linkedEntity = [];
+    }
+
+    message.alsoKnownAs !== undefined && (obj.alsoKnownAs = message.alsoKnownAs);
     message.signer !== undefined && (obj.signer = message.signer);
     return obj;
   },
 
   fromPartial(object: Partial<MsgUpdateIidDocument>): MsgUpdateIidDocument {
     const message = createBaseMsgUpdateIidDocument();
-    message.doc = object.doc !== undefined && object.doc !== null ? IidDocument.fromPartial(object.doc) : undefined;
+    message.id = object.id ?? "";
+    message.controllers = object.controllers?.map(e => e) || [];
+    message.context = object.context?.map(e => Context.fromPartial(e)) || [];
+    message.verifications = object.verifications?.map(e => Verification.fromPartial(e)) || [];
+    message.services = object.services?.map(e => Service.fromPartial(e)) || [];
+    message.accordedRight = object.accordedRight?.map(e => AccordedRight.fromPartial(e)) || [];
+    message.linkedResource = object.linkedResource?.map(e => LinkedResource.fromPartial(e)) || [];
+    message.linkedEntity = object.linkedEntity?.map(e => LinkedEntity.fromPartial(e)) || [];
+    message.alsoKnownAs = object.alsoKnownAs ?? "";
     message.signer = object.signer ?? "";
     return message;
   }
@@ -2528,87 +2676,6 @@ export const MsgDeleteIidContext = {
 
 };
 
-function createBaseMsgUpdateIidMeta(): MsgUpdateIidMeta {
-  return {
-    id: "",
-    meta: undefined,
-    signer: ""
-  };
-}
-
-export const MsgUpdateIidMeta = {
-  encode(message: MsgUpdateIidMeta, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
-    }
-
-    if (message.meta !== undefined) {
-      IidMetadata.encode(message.meta, writer.uint32(18).fork()).ldelim();
-    }
-
-    if (message.signer !== "") {
-      writer.uint32(26).string(message.signer);
-    }
-
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateIidMeta {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgUpdateIidMeta();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        case 1:
-          message.id = reader.string();
-          break;
-
-        case 2:
-          message.meta = IidMetadata.decode(reader, reader.uint32());
-          break;
-
-        case 3:
-          message.signer = reader.string();
-          break;
-
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(object: any): MsgUpdateIidMeta {
-    return {
-      id: isSet(object.id) ? String(object.id) : "",
-      meta: isSet(object.meta) ? IidMetadata.fromJSON(object.meta) : undefined,
-      signer: isSet(object.signer) ? String(object.signer) : ""
-    };
-  },
-
-  toJSON(message: MsgUpdateIidMeta): unknown {
-    const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? IidMetadata.toJSON(message.meta) : undefined);
-    message.signer !== undefined && (obj.signer = message.signer);
-    return obj;
-  },
-
-  fromPartial(object: Partial<MsgUpdateIidMeta>): MsgUpdateIidMeta {
-    const message = createBaseMsgUpdateIidMeta();
-    message.id = object.id ?? "";
-    message.meta = object.meta !== undefined && object.meta !== null ? IidMetadata.fromPartial(object.meta) : undefined;
-    message.signer = object.signer ?? "";
-    return message;
-  }
-
-};
-
 function createBaseMsgAddLinkedResourceResponse(): MsgAddLinkedResourceResponse {
   return {};
 }
@@ -2948,49 +3015,6 @@ export const MsgDeleteIidContextResponse = {
 
   fromPartial(_: Partial<MsgDeleteIidContextResponse>): MsgDeleteIidContextResponse {
     const message = createBaseMsgDeleteIidContextResponse();
-    return message;
-  }
-
-};
-
-function createBaseMsgUpdateIidMetaResponse(): MsgUpdateIidMetaResponse {
-  return {};
-}
-
-export const MsgUpdateIidMetaResponse = {
-  encode(_: MsgUpdateIidMetaResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateIidMetaResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgUpdateIidMetaResponse();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(_: any): MsgUpdateIidMetaResponse {
-    return {};
-  },
-
-  toJSON(_: MsgUpdateIidMetaResponse): unknown {
-    const obj: any = {};
-    return obj;
-  },
-
-  fromPartial(_: Partial<MsgUpdateIidMetaResponse>): MsgUpdateIidMetaResponse {
-    const message = createBaseMsgUpdateIidMetaResponse();
     return message;
   }
 

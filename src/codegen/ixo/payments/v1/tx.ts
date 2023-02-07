@@ -3,7 +3,10 @@ import { Any, AnySDKType } from "../../../google/protobuf/any";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
-/** MsgSetPaymentContractAuthorisation defines a message for authorising or deauthorising a payment contract. */
+/**
+ * MsgSetPaymentContractAuthorisation defines a message for authorising or
+ * deauthorising a payment contract.
+ */
 
 export interface MsgSetPaymentContractAuthorisation {
   paymentContractId: string;
@@ -11,7 +14,10 @@ export interface MsgSetPaymentContractAuthorisation {
   authorised: boolean;
   payerAddress: string;
 }
-/** MsgSetPaymentContractAuthorisation defines a message for authorising or deauthorising a payment contract. */
+/**
+ * MsgSetPaymentContractAuthorisation defines a message for authorising or
+ * deauthorising a payment contract.
+ */
 
 export interface MsgSetPaymentContractAuthorisationSDKType {
   payment_contract_id: string;
@@ -19,10 +25,16 @@ export interface MsgSetPaymentContractAuthorisationSDKType {
   authorised: boolean;
   payer_address: string;
 }
-/** MsgSetPaymentContractAuthorisationResponse defines the Msg/SetPaymentContractAuthorisation response type. */
+/**
+ * MsgSetPaymentContractAuthorisationResponse defines the
+ * Msg/SetPaymentContractAuthorisation response type.
+ */
 
 export interface MsgSetPaymentContractAuthorisationResponse {}
-/** MsgSetPaymentContractAuthorisationResponse defines the Msg/SetPaymentContractAuthorisation response type. */
+/**
+ * MsgSetPaymentContractAuthorisationResponse defines the
+ * Msg/SetPaymentContractAuthorisation response type.
+ */
 
 export interface MsgSetPaymentContractAuthorisationResponseSDKType {}
 /** MsgCreatePaymentTemplate defines a message for creating a payment template. */
@@ -39,10 +51,16 @@ export interface MsgCreatePaymentTemplateSDKType {
   payment_template?: PaymentTemplateSDKType;
   creator_address: string;
 }
-/** MsgCreatePaymentTemplateResponse defines the Msg/CreatePaymentTemplate response type. */
+/**
+ * MsgCreatePaymentTemplateResponse defines the Msg/CreatePaymentTemplate
+ * response type.
+ */
 
 export interface MsgCreatePaymentTemplateResponse {}
-/** MsgCreatePaymentTemplateResponse defines the Msg/CreatePaymentTemplate response type. */
+/**
+ * MsgCreatePaymentTemplateResponse defines the Msg/CreatePaymentTemplate
+ * response type.
+ */
 
 export interface MsgCreatePaymentTemplateResponseSDKType {}
 /** MsgCreatePaymentContract defines a message for creating a payment contract. */
@@ -69,10 +87,16 @@ export interface MsgCreatePaymentContractSDKType {
   discount_id: string;
   creator_address: string;
 }
-/** MsgCreatePaymentContractResponse defines the Msg/CreatePaymentContract response type. */
+/**
+ * MsgCreatePaymentContractResponse defines the Msg/CreatePaymentContract
+ * response type.
+ */
 
 export interface MsgCreatePaymentContractResponse {}
-/** MsgCreatePaymentContractResponse defines the Msg/CreatePaymentContract response type. */
+/**
+ * MsgCreatePaymentContractResponse defines the Msg/CreatePaymentContract
+ * response type.
+ */
 
 export interface MsgCreatePaymentContractResponseSDKType {}
 /** MsgCreateSubscription defines a message for creating a subscription. */
@@ -95,13 +119,22 @@ export interface MsgCreateSubscriptionSDKType {
   period?: AnySDKType;
   creator_address: string;
 }
-/** MsgCreateSubscriptionResponse defines the Msg/CreateSubscription response type. */
+/**
+ * MsgCreateSubscriptionResponse defines the Msg/CreateSubscription response
+ * type.
+ */
 
 export interface MsgCreateSubscriptionResponse {}
-/** MsgCreateSubscriptionResponse defines the Msg/CreateSubscription response type. */
+/**
+ * MsgCreateSubscriptionResponse defines the Msg/CreateSubscription response
+ * type.
+ */
 
 export interface MsgCreateSubscriptionResponseSDKType {}
-/** MsgGrantDiscount defines a message for granting a discount to a payer on a specific payment contract. */
+/**
+ * MsgGrantDiscount defines a message for granting a discount to a payer on a
+ * specific payment contract.
+ */
 
 export interface MsgGrantDiscount {
   senderDid: string;
@@ -110,7 +143,10 @@ export interface MsgGrantDiscount {
   recipient: string;
   senderAddress: string;
 }
-/** MsgGrantDiscount defines a message for granting a discount to a payer on a specific payment contract. */
+/**
+ * MsgGrantDiscount defines a message for granting a discount to a payer on a
+ * specific payment contract.
+ */
 
 export interface MsgGrantDiscountSDKType {
   sender_did: string;
@@ -125,7 +161,10 @@ export interface MsgGrantDiscountResponse {}
 /** MsgGrantDiscountResponse defines the Msg/GrantDiscount response type. */
 
 export interface MsgGrantDiscountResponseSDKType {}
-/** MsgRevokeDiscount defines a message for revoking a discount previously granted to a payer. */
+/**
+ * MsgRevokeDiscount defines a message for revoking a discount previously
+ * granted to a payer.
+ */
 
 export interface MsgRevokeDiscount {
   senderDid: string;
@@ -133,7 +172,10 @@ export interface MsgRevokeDiscount {
   holder: string;
   senderAddress: string;
 }
-/** MsgRevokeDiscount defines a message for revoking a discount previously granted to a payer. */
+/**
+ * MsgRevokeDiscount defines a message for revoking a discount previously
+ * granted to a payer.
+ */
 
 export interface MsgRevokeDiscountSDKType {
   sender_did: string;
@@ -147,7 +189,10 @@ export interface MsgRevokeDiscountResponse {}
 /** MsgRevokeDiscountResponse defines the Msg/RevokeDiscount response type. */
 
 export interface MsgRevokeDiscountResponseSDKType {}
-/** MsgEffectPayment defines a message for putting a specific payment contract into effect. */
+/**
+ * MsgEffectPayment defines a message for putting a specific payment contract
+ * into effect.
+ */
 
 export interface MsgEffectPayment {
   senderDid: string;
@@ -155,7 +200,10 @@ export interface MsgEffectPayment {
   partialPaymentAmount: Coin[];
   senderAddress: string;
 }
-/** MsgEffectPayment defines a message for putting a specific payment contract into effect. */
+/**
+ * MsgEffectPayment defines a message for putting a specific payment contract
+ * into effect.
+ */
 
 export interface MsgEffectPaymentSDKType {
   sender_did: string;

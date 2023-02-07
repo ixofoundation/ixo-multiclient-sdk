@@ -1,11 +1,17 @@
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import * as _m0 from "protobufjs/minimal";
-/** UpdateProjectStatusDoc contains details required to update a project's status. */
+/**
+ * UpdateProjectStatusDoc contains details required to update a project's
+ * status.
+ */
 export interface UpdateProjectStatusDoc {
     status: string;
     ethFundingTxnId: string;
 }
-/** UpdateProjectStatusDoc contains details required to update a project's status. */
+/**
+ * UpdateProjectStatusDoc contains details required to update a project's
+ * status.
+ */
 export interface UpdateProjectStatusDocSDKType {
     status: string;
     eth_funding_txn_id: string;
@@ -42,24 +48,36 @@ export interface CreateClaimDocSDKType {
     claim_id: string;
     claim_template_id: string;
 }
-/** CreateEvaluationDoc contains details required to create an evaluation for a specific claim on a project. */
+/**
+ * CreateEvaluationDoc contains details required to create an evaluation for a
+ * specific claim on a project.
+ */
 export interface CreateEvaluationDoc {
     claimId: string;
     status: string;
 }
-/** CreateEvaluationDoc contains details required to create an evaluation for a specific claim on a project. */
+/**
+ * CreateEvaluationDoc contains details required to create an evaluation for a
+ * specific claim on a project.
+ */
 export interface CreateEvaluationDocSDKType {
     claim_id: string;
     status: string;
 }
-/** WithdrawFundsDoc contains details required to withdraw funds from a specific project. */
+/**
+ * WithdrawFundsDoc contains details required to withdraw funds from a specific
+ * project.
+ */
 export interface WithdrawFundsDoc {
     projectDid: string;
     recipientDid: string;
     amount: string;
     isRefund: boolean;
 }
-/** WithdrawFundsDoc contains details required to withdraw funds from a specific project. */
+/**
+ * WithdrawFundsDoc contains details required to withdraw funds from a specific
+ * project.
+ */
 export interface WithdrawFundsDocSDKType {
     project_did: string;
     recipient_did: string;
@@ -84,13 +102,19 @@ export interface ProjectDocSDKType {
     status: string;
     data: Uint8Array;
 }
-/** WithdrawalInfoDoc contains details required to withdraw from a specific project. */
+/**
+ * WithdrawalInfoDoc contains details required to withdraw from a specific
+ * project.
+ */
 export interface WithdrawalInfoDoc {
     projectDid: string;
     recipientDid: string;
     amount?: Coin;
 }
-/** WithdrawalInfoDoc contains details required to withdraw from a specific project. */
+/**
+ * WithdrawalInfoDoc contains details required to withdraw from a specific
+ * project.
+ */
 export interface WithdrawalInfoDocSDKType {
     project_did: string;
     recipient_did: string;
@@ -132,13 +156,19 @@ export interface GenesisAccountMap_MapEntrySDKType {
     key: string;
     value: string;
 }
-/** GenesisAccountMap is a type used at genesis that maps a specific project's account names to the accounts' addresses. */
+/**
+ * GenesisAccountMap is a type used at genesis that maps a specific project's
+ * account names to the accounts' addresses.
+ */
 export interface GenesisAccountMap {
     map: {
         [key: string]: string;
     };
 }
-/** GenesisAccountMap is a type used at genesis that maps a specific project's account names to the accounts' addresses. */
+/**
+ * GenesisAccountMap is a type used at genesis that maps a specific project's
+ * account names to the accounts' addresses.
+ */
 export interface GenesisAccountMapSDKType {
     map: {
         [key: string]: string;
@@ -152,13 +182,19 @@ export interface AccountMap_MapEntrySDKType {
     key: string;
     value: string;
 }
-/** AccountMap maps a specific project's account names to the accounts' addresses. */
+/**
+ * AccountMap maps a specific project's account names to the accounts'
+ * addresses.
+ */
 export interface AccountMap {
     map: {
         [key: string]: string;
     };
 }
-/** AccountMap maps a specific project's account names to the accounts' addresses. */
+/**
+ * AccountMap maps a specific project's account names to the accounts'
+ * addresses.
+ */
 export interface AccountMapSDKType {
     map: {
         [key: string]: string;

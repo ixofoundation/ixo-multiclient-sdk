@@ -1,11 +1,13 @@
 import { Rpc } from "../../../helpers";
-import { MsgCreateEntity, MsgCreateEntityResponse, MsgUpdateEntity, MsgUpdateEntityResponse, MsgTransferEntity, MsgTransferEntityResponse } from "./tx";
+import { MsgCreateEntity, MsgCreateEntityResponse, MsgUpdateEntity, MsgUpdateEntityResponse, MsgUpdateEntityVerified, MsgUpdateEntityVerifiedResponse, MsgTransferEntity, MsgTransferEntityResponse } from "./tx";
 /** Msg defines the project Msg service. */
 export interface Msg {
-    /** CreateProject defines a method for creating a project. */
+    /** CreateEntity defines a method for creating a entity. */
     createEntity(request: MsgCreateEntity): Promise<MsgCreateEntityResponse>;
-    /** UpdateEntityStatus defines a method for updating a entity's current status. */
+    /** UpdateEntity defines a method for updating a entity */
     updateEntity(request: MsgUpdateEntity): Promise<MsgUpdateEntityResponse>;
+    /** UpdateEntityVerified defines a method for updating if an entity is verified */
+    updateEntityVerified(request: MsgUpdateEntityVerified): Promise<MsgUpdateEntityVerifiedResponse>;
     /** Transfers an entity and its nft to the recipient */
     transferEntity(request: MsgTransferEntity): Promise<MsgTransferEntityResponse>;
 }
@@ -14,5 +16,6 @@ export declare class MsgClientImpl implements Msg {
     constructor(rpc: Rpc);
     createEntity(request: MsgCreateEntity): Promise<MsgCreateEntityResponse>;
     updateEntity(request: MsgUpdateEntity): Promise<MsgUpdateEntityResponse>;
+    updateEntityVerified(request: MsgUpdateEntityVerified): Promise<MsgUpdateEntityVerifiedResponse>;
     transferEntity(request: MsgTransferEntity): Promise<MsgTransferEntityResponse>;
 }

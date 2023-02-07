@@ -1,5 +1,53 @@
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
+export enum ContractType {
+  CW20 = 0,
+  CW721 = 1,
+  IXO1155 = 2,
+  UNRECOGNIZED = -1,
+}
+export enum ContractTypeSDKType {
+  CW20 = 0,
+  CW721 = 1,
+  IXO1155 = 2,
+  UNRECOGNIZED = -1,
+}
+export function contractTypeFromJSON(object: any): ContractType {
+  switch (object) {
+    case 0:
+    case "CW20":
+      return ContractType.CW20;
+
+    case 1:
+    case "CW721":
+      return ContractType.CW721;
+
+    case 2:
+    case "IXO1155":
+      return ContractType.IXO1155;
+
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return ContractType.UNRECOGNIZED;
+  }
+}
+export function contractTypeToJSON(object: ContractType): string {
+  switch (object) {
+    case ContractType.CW20:
+      return "CW20";
+
+    case ContractType.CW721:
+      return "CW721";
+
+    case ContractType.IXO1155:
+      return "IXO1155";
+
+    case ContractType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
 export interface Contract {
   id: string;
   address: string;
@@ -22,6 +70,7 @@ export interface TokenMinter {
   minterDid: string;
   minterAddress: string;
   contractAddress: string;
+  contractType: ContractType;
   name: string;
   description: string;
 }
@@ -29,6 +78,7 @@ export interface TokenMinterSDKType {
   minterDid: string;
   minterAddress: string;
   contractAddress: string;
+  contractType: ContractTypeSDKType;
   name: string;
   description: string;
 }
@@ -188,6 +238,7 @@ function createBaseTokenMinter(): TokenMinter {
     minterDid: "",
     minterAddress: "",
     contractAddress: "",
+    contractType: 0,
     name: "",
     description: ""
   };
@@ -207,12 +258,16 @@ export const TokenMinter = {
       writer.uint32(26).string(message.contractAddress);
     }
 
+    if (message.contractType !== 0) {
+      writer.uint32(32).int32(message.contractType);
+    }
+
     if (message.name !== "") {
-      writer.uint32(34).string(message.name);
+      writer.uint32(42).string(message.name);
     }
 
     if (message.description !== "") {
-      writer.uint32(42).string(message.description);
+      writer.uint32(50).string(message.description);
     }
 
     return writer;
@@ -240,10 +295,14 @@ export const TokenMinter = {
           break;
 
         case 4:
-          message.name = reader.string();
+          message.contractType = (reader.int32() as any);
           break;
 
         case 5:
+          message.name = reader.string();
+          break;
+
+        case 6:
           message.description = reader.string();
           break;
 
@@ -261,6 +320,7 @@ export const TokenMinter = {
       minterDid: isSet(object.minterDid) ? String(object.minterDid) : "",
       minterAddress: isSet(object.minterAddress) ? String(object.minterAddress) : "",
       contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
+      contractType: isSet(object.contractType) ? contractTypeFromJSON(object.contractType) : 0,
       name: isSet(object.name) ? String(object.name) : "",
       description: isSet(object.description) ? String(object.description) : ""
     };
@@ -271,6 +331,7 @@ export const TokenMinter = {
     message.minterDid !== undefined && (obj.minterDid = message.minterDid);
     message.minterAddress !== undefined && (obj.minterAddress = message.minterAddress);
     message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
+    message.contractType !== undefined && (obj.contractType = contractTypeToJSON(message.contractType));
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined && (obj.description = message.description);
     return obj;
@@ -281,6 +342,7 @@ export const TokenMinter = {
     message.minterDid = object.minterDid ?? "";
     message.minterAddress = object.minterAddress ?? "";
     message.contractAddress = object.contractAddress ?? "";
+    message.contractType = object.contractType ?? 0;
     message.name = object.name ?? "";
     message.description = object.description ?? "";
     return message;

@@ -1,13 +1,19 @@
 import { DecCoin, DecCoinSDKType, Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
-/** FunctionParam is a key-value pair used for specifying a specific bond parameter. */
+/**
+ * FunctionParam is a key-value pair used for specifying a specific bond
+ * parameter.
+ */
 
 export interface FunctionParam {
   param: string;
   value: string;
 }
-/** FunctionParam is a key-value pair used for specifying a specific bond parameter. */
+/**
+ * FunctionParam is a key-value pair used for specifying a specific bond
+ * parameter.
+ */
 
 export interface FunctionParamSDKType {
   param: string;
@@ -94,8 +100,8 @@ export interface BondSDKType {
   oracle_did: string;
 }
 /**
- * BaseOrder defines a base order type. It contains all the necessary fields for specifying
- * the general details about a buy, sell, or swap order.
+ * BaseOrder defines a base order type. It contains all the necessary fields for
+ * specifying the general details about a buy, sell, or swap order.
  */
 
 export interface BaseOrder {
@@ -105,8 +111,8 @@ export interface BaseOrder {
   cancelReason: string;
 }
 /**
- * BaseOrder defines a base order type. It contains all the necessary fields for specifying
- * the general details about a buy, sell, or swap order.
+ * BaseOrder defines a base order type. It contains all the necessary fields for
+ * specifying the general details about a buy, sell, or swap order.
  */
 
 export interface BaseOrderSDKType {
@@ -116,8 +122,8 @@ export interface BaseOrderSDKType {
   cancel_reason: string;
 }
 /**
- * BuyOrder defines a type for submitting a buy order on a bond, together with the maximum
- * amount of reserve tokens the buyer is willing to pay.
+ * BuyOrder defines a type for submitting a buy order on a bond, together with
+ * the maximum amount of reserve tokens the buyer is willing to pay.
  */
 
 export interface BuyOrder {
@@ -125,8 +131,8 @@ export interface BuyOrder {
   maxPrices: Coin[];
 }
 /**
- * BuyOrder defines a type for submitting a buy order on a bond, together with the maximum
- * amount of reserve tokens the buyer is willing to pay.
+ * BuyOrder defines a type for submitting a buy order on a bond, together with
+ * the maximum amount of reserve tokens the buyer is willing to pay.
  */
 
 export interface BuyOrderSDKType {
@@ -143,19 +149,28 @@ export interface SellOrder {
 export interface SellOrderSDKType {
   base_order?: BaseOrderSDKType;
 }
-/** SwapOrder defines a type for submitting a swap order between two tokens on a bond. */
+/**
+ * SwapOrder defines a type for submitting a swap order between two tokens on a
+ * bond.
+ */
 
 export interface SwapOrder {
   baseOrder?: BaseOrder;
   toToken: string;
 }
-/** SwapOrder defines a type for submitting a swap order between two tokens on a bond. */
+/**
+ * SwapOrder defines a type for submitting a swap order between two tokens on a
+ * bond.
+ */
 
 export interface SwapOrderSDKType {
   base_order?: BaseOrderSDKType;
   to_token: string;
 }
-/** Batch holds a collection of outstanding buy, sell, and swap orders on a particular bond. */
+/**
+ * Batch holds a collection of outstanding buy, sell, and swap orders on a
+ * particular bond.
+ */
 
 export interface Batch {
   bondDid: string;
@@ -169,7 +184,10 @@ export interface Batch {
   sells: SellOrder[];
   swaps: SwapOrder[];
 }
-/** Batch holds a collection of outstanding buy, sell, and swap orders on a particular bond. */
+/**
+ * Batch holds a collection of outstanding buy, sell, and swap orders on a
+ * particular bond.
+ */
 
 export interface BatchSDKType {
   bond_did: string;
