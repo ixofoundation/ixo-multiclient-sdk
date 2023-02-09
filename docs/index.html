@@ -18,17 +18,18 @@
 </a>
 <p><img src="https://img.shields.io/github/contributors/ixofoundation/ixo-multiclient-sdk" alt="GitHub contributors">
 <img src="https://img.shields.io/github/repo-size/ixofoundation/ixo-multiclient-sdk" alt="GitHub repo size">
-<img src="https://img.shields.io/twitter/follow/ixoworld?style=social" alt="Twitter Follow"></p>
+<img src="https://img.shields.io/twitter/follow/ixoworld?style=social" alt="Twitter Follow">
+<img src="https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white" alt="Medium"></p>
 <p><img src="https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white" alt="NodeJS"><img src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"><img src="https://img.shields.io/badge/Jest-323330?style=for-the-badge&logo=Jest&logoColor=white" alt="Jest"></p>
 <p align="center">
-  <img  src="images/readme_banner.png"/>
+  <img  src="assets/images/readme_banner.png"/>
 </p>
 
 <br />
 
-<h3 align="center">
-    One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them
-</h3>
+<h2 align="center">
+    The ultimate utility client for the IXO Blockchain for impact.
+</h2>
 
 <br />
 
@@ -63,6 +64,9 @@
 <li><a href="#publishing">Publishing</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a href="#bigint-react-native">BigInt React Native</a><ul>
 <li><a href="#credits">Credits</a></li>
 <li><a href="#disclaimer">Disclaimer</a></li>
 </ul>
@@ -84,7 +88,7 @@
 <a href="#rpc-clients" id="rpc-clients" style="color: inherit; text-decoration: none;">
   <h3>RPC Clients</h3>
 </a>
-<pre><code class="language-js"><span class="hl-1">import</span><span class="hl-0"> { </span><span class="hl-2">ixo</span><span class="hl-0">, </span><span class="hl-2">createQueryClient</span><span class="hl-0"> } </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&quot;@ixo/impactxclient-sdk&quot;</span><span class="hl-0">;</span><br/><br/><span class="hl-4">// BELOW METHOD NOT IMPLEMENTED YET!</span><br/><span class="hl-4">// const { createRPCQueryClient } = ixo.ClientFactory;</span><br/><span class="hl-4">// const client = await createRPCQueryClient({ rpcEndpoint: RPC_ENDPOINT });</span><br/><br/><span class="hl-4">// now you can query the cosmos modules</span><br/><span class="hl-4">// const balance = await client.cosmos.bank.v1beta1.allBalances({</span><br/><span class="hl-4">//   address: &quot;ixo1addresshere&quot;,</span><br/><span class="hl-4">// });</span><br/><br/><span class="hl-2">We</span><span class="hl-0"> </span><span class="hl-2">added</span><span class="hl-0"> </span><span class="hl-2">a</span><span class="hl-0"> </span><span class="hl-2">custom</span><span class="hl-0"> </span><span class="hl-2">queryCleint</span><span class="hl-0"> </span><span class="hl-2">that</span><span class="hl-0"> </span><span class="hl-2">includes</span><span class="hl-0"> </span><span class="hl-2">the</span><span class="hl-0"> </span><span class="hl-2">cosmos</span><span class="hl-0"> </span><span class="hl-2">modules</span><span class="hl-0"> </span><span class="hl-2">and</span><span class="hl-0"> </span><span class="hl-2">ixo</span><span class="hl-0"> </span><span class="hl-2">modules</span><span class="hl-0"> </span><span class="hl-1">as</span><span class="hl-0"> </span><span class="hl-5">well</span><span class="hl-0"> </span><span class="hl-1">as</span><span class="hl-0"> </span><span class="hl-5">custom</span><span class="hl-0"> </span><span class="hl-5">queries</span><br/><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">queryClient</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-8">createQueryClient</span><span class="hl-0">(</span><span class="hl-7">RPC_ENDPOINT</span><span class="hl-0">);</span><br/><br/><span class="hl-4">// now you can query any module</span><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">balance</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-2">client</span><span class="hl-0">.</span><span class="hl-2">cosmos</span><span class="hl-0">.</span><span class="hl-2">bank</span><span class="hl-0">.</span><span class="hl-2">v1beta1</span><span class="hl-0">.</span><span class="hl-8">allBalances</span><span class="hl-0">({</span><br/><span class="hl-0">  </span><span class="hl-2">address:</span><span class="hl-0"> </span><span class="hl-3">&quot;ixo1addresshere&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">});</span><br/><br/><span class="hl-4">// you can also query the ixo modules</span><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">balances</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-2">client</span><span class="hl-0">.</span><span class="hl-2">ixo</span><span class="hl-0">.</span><span class="hl-2">exchange</span><span class="hl-0">.</span><span class="hl-2">v1beta1</span><span class="hl-0">.</span><span class="hl-8">exchangeBalances</span><span class="hl-0">();</span><br/><br/>
+<pre><code class="language-js"><span class="hl-1">import</span><span class="hl-0"> { </span><span class="hl-2">ixo</span><span class="hl-0">, </span><span class="hl-2">createQueryClient</span><span class="hl-0"> } </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&quot;@ixo/impactxclient-sdk&quot;</span><span class="hl-0">;</span><br/><br/><span class="hl-4">// BELOW METHOD NOT IMPLEMENTED YET!</span><br/><span class="hl-4">// const { createRPCQueryClient } = ixo.ClientFactory;</span><br/><span class="hl-4">// const client = await createRPCQueryClient({ rpcEndpoint: RPC_ENDPOINT });</span><br/><br/><span class="hl-4">// now you can query the cosmos modules</span><br/><span class="hl-4">// const balance = await client.cosmos.bank.v1beta1.allBalances({</span><br/><span class="hl-4">//   address: &quot;ixo1addresshere&quot;,</span><br/><span class="hl-4">// });</span><br/><br/><span class="hl-2">We</span><span class="hl-0"> </span><span class="hl-2">added</span><span class="hl-0"> </span><span class="hl-2">a</span><span class="hl-0"> </span><span class="hl-2">custom</span><span class="hl-0"> </span><span class="hl-2">queryClient</span><span class="hl-0"> </span><span class="hl-2">that</span><span class="hl-0"> </span><span class="hl-2">includes</span><span class="hl-0"> </span><span class="hl-2">the</span><span class="hl-0"> </span><span class="hl-2">cosmos</span><span class="hl-0"> </span><span class="hl-2">modules</span><span class="hl-0"> </span><span class="hl-2">and</span><span class="hl-0"> </span><span class="hl-2">ixo</span><span class="hl-0"> </span><span class="hl-2">modules</span><span class="hl-0"> </span><span class="hl-1">as</span><span class="hl-0"> </span><span class="hl-5">well</span><span class="hl-0"> </span><span class="hl-1">as</span><span class="hl-0"> </span><span class="hl-5">custom</span><span class="hl-0"> </span><span class="hl-5">queries</span><br/><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">queryClient</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-8">createQueryClient</span><span class="hl-0">(</span><span class="hl-7">RPC_ENDPOINT</span><span class="hl-0">);</span><br/><br/><span class="hl-4">// now you can query any module</span><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">balance</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-2">client</span><span class="hl-0">.</span><span class="hl-2">cosmos</span><span class="hl-0">.</span><span class="hl-2">bank</span><span class="hl-0">.</span><span class="hl-2">v1beta1</span><span class="hl-0">.</span><span class="hl-8">allBalances</span><span class="hl-0">({</span><br/><span class="hl-0">  </span><span class="hl-2">address:</span><span class="hl-0"> </span><span class="hl-3">&quot;ixo1addresshere&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">});</span><br/><br/><span class="hl-4">// you can also query the ixo modules</span><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">balances</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-2">client</span><span class="hl-0">.</span><span class="hl-2">ixo</span><span class="hl-0">.</span><span class="hl-2">exchange</span><span class="hl-0">.</span><span class="hl-2">v1beta1</span><span class="hl-0">.</span><span class="hl-8">exchangeBalances</span><span class="hl-0">();</span><br/><br/>
 </code></pre>
 
 <a href="#composing-messages" id="composing-messages" style="color: inherit; text-decoration: none;">
@@ -124,7 +128,6 @@ From that you can destructure <code>chain</code> functions that will fetch the l
 <a href="#connecting-with-wallets-and-signing-messages" id="connecting-with-wallets-and-signing-messages" style="color: inherit; text-decoration: none;">
   <h2>Connecting with Wallets and Signing Messages</h2>
 </a>
-<p>⚡️ For web interfaces, we recommend using <a href="https://github.com/cosmology-tech/cosmos-kit">cosmos-kit</a>. Continue below to see how to manually construct signers and clients.</p>
 <p>Here are the docs on <a href="https://github.com/cosmology-tech/cosmos-kit/tree/main/packages/react#signing-clients">creating signers</a> in cosmos-kit that can be used with Keplr and other wallets.</p>
 
 <a href="#initializing-the-stargate-client" id="initializing-the-stargate-client" style="color: inherit; text-decoration: none;">
@@ -194,17 +197,20 @@ The <code>stargateClient.signAndBroadcast(address, [msg], fee)</code> can still 
 <p>Build the types and then publish:</p>
 <pre><code><span class="hl-2">yarn</span><span class="hl-0"> </span><span class="hl-9">build</span><span class="hl-0">:</span><span class="hl-2">ts</span><br/><span class="hl-2">yarn</span><span class="hl-0"> </span><span class="hl-2">publish</span>
 </code></pre>
+<p>#React-Native</p>
+<p>Install the below Library and import into your main app entry file. This ensures the required Polyfils are covered on mobile.</p>
+<pre><code><span class="hl-2">yarn</span><span class="hl-0"> </span><span class="hl-2">add</span><span class="hl-0"> @</span><span class="hl-2">walletconnect</span><span class="hl-0">/</span><span class="hl-2">react</span><span class="hl-0">-</span><span class="hl-2">native</span><span class="hl-0">-</span><span class="hl-2">compat</span>
+</code></pre>
+
+<a href="#bigint-react-native" id="bigint-react-native" style="color: inherit; text-decoration: none;">
+  <h1>BigInt React Native</h1>
+</a>
+<p>To ensure no issues with the React Native bigInt implementation, be sure to wrap your decimal gas amounts and others in a JS Double.</p>
 
 <a href="#credits" id="credits" style="color: inherit; text-decoration: none;">
   <h2>Credits</h2>
 </a>
-<p>🛠 Built by Cosmology — if you like our tools, please consider delegating to <a href="https://cosmology.tech/validator">our validator ⚛️</a></p>
-<p>Code built with the help of these related projects:</p>
-<ul>
-<li><a href="https://github.com/CosmWasm/ts-codegen">@cosmwasm/ts-codegen</a> for generated CosmWasm contract Typescript classes</li>
-<li><a href="https://github.com/osmosis-labs/telescope">@osmonauts/telescope</a> a &quot;babel for the Cosmos&quot;, Telescope is a TypeScript Transpiler for Cosmos Protobufs.</li>
-<li><a href="https://github.com/cosmology-tech/cosmos-kit">cosmos-kit</a> A wallet connector for the Cosmos ⚛️</li>
-</ul>
+<p>🛠 Built using Telescope from Cosmology.</p>
 
 <a href="#disclaimer" id="disclaimer" style="color: inherit; text-decoration: none;">
   <h2>Disclaimer</h2>

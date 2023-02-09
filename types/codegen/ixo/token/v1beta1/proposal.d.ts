@@ -6,9 +6,9 @@ export interface SetTokenContractCodes {
     ixo1155ContractCode: Long;
 }
 export interface SetTokenContractCodesSDKType {
-    cw20ContractCode: Long;
-    cw721ContractCode: Long;
-    ixo1155ContractCode: Long;
+    cw20_contract_code: Long;
+    cw721_contract_code: Long;
+    ixo1155_contract_code: Long;
 }
 export declare const SetTokenContractCodes: {
     encode(message: SetTokenContractCodes, writer?: _m0.Writer): _m0.Writer;

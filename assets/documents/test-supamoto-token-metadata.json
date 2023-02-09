@@ -1,0 +1,14 @@
+{
+  "id": "{id}#1",
+  "type": "ImpactToken",
+  "name": "SupaMoto",
+  "tokenName": "SupaMoto NFT",
+  "decimals": 1,
+  "description": "SupaMoto NFT Malawi Collection",
+  "image": "imageLink",
+  "properties": {
+    "denom": "SUPAMOTO",
+    "icon": "iconLink",
+    "maxSupply": "1600"
+  }
+}

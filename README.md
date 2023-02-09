@@ -5,11 +5,10 @@
 ![Twitter Follow](https://img.shields.io/twitter/follow/ixoworld?style=social)
 ![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)
 
-
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)![Jest](https://img.shields.io/badge/Jest-323330?style=for-the-badge&logo=Jest&logoColor=white)
 
 <p align="center">
-  <img  src="images/readme_banner.png"/>
+  <img  src="assets/images/readme_banner.png"/>
 </p>
 
 <br />
@@ -40,7 +39,7 @@
   - [Developing](#developing)
     - [Codegen](#codegen)
     - [Publishing](#publishing)
-  - [React Native](#React-Native)
+- [BigInt React Native](#bigint-react-native)
   - [Credits](#credits)
   - [Disclaimer](#disclaimer)
 
@@ -306,10 +305,9 @@ yarn build:ts
 yarn publish
 ```
 
-#React-Native 
+#React-Native
 
-
-Install the below Library and import into your main app entry file. This ensures the required Polyfils are covered on mobile. 
+Install the below Library and import into your main app entry file. This ensures the required Polyfils are covered on mobile.
 
 ```
 yarn add @walletconnect/react-native-compat

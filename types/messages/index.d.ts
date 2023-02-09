@@ -9,6 +9,9 @@ export declare namespace customMessages {
             controller: string;
             type?: _1.KeyTypes;
         }) => import("../codegen/ixo/iid/v1beta1/tx").Verification[];
-        createAgentIidContext: () => import("../codegen/ixo/iid/v1beta1/iid").Context[];
+        createAgentIidContext: (contexts?: [{
+            key: string;
+            val: string;
+        }]) => import("../codegen/ixo/iid/v1beta1/iid").Context[];
     };
 }

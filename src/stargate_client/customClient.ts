@@ -123,17 +123,16 @@ export class SigningStargateClient extends StargateClient {
     options: SigningStargateClientOptions,
     ignoreGetSequence: boolean = false
   ) {
-    super(tmClient, options);
-    // TODO: do we really want to set a default here? Ideally we could get it from the signer such that users only have to set it once.
+    super(tmClient!, options);
     const prefix = options.prefix ?? "ixo";
     const {
       registry = createDefaultRegistry(),
       // aminoTypes = new AminoTypes(createDefaultTypes(prefix)),
       aminoTypes,
     } = options;
-    this.tendermintClient = tmClient;
+    this.tendermintClient = tmClient!;
     this.registry = registry;
-    this.aminoTypes = aminoTypes;
+    this.aminoTypes = aminoTypes!;
     this.signer = signer;
     this.broadcastTimeoutMs = options.broadcastTimeoutMs;
     this.broadcastPollIntervalMs = options.broadcastPollIntervalMs;

@@ -1,10 +1,10 @@
 import * as _m0 from "protobufjs/minimal";
 import { Long } from "../../../helpers";
 export interface Cw20Constraints {
-    maxAmmount: Long;
+    maxAmount: Long;
 }
 export interface Cw20ConstraintsSDKType {
-    maxAmmount: Long;
+    max_amount: Long;
 }
 export interface Cw721Constraints {
 }
@@ -24,18 +24,18 @@ export interface MintConstraints {
     cw1155Constraints?: Cw1155Constraints;
 }
 export interface MintConstraintsSDKType {
-    contractAddress: string;
+    contract_address: string;
     limit: Long;
-    cw20Constraints?: Cw20ConstraintsSDKType;
-    cw721Constraints?: Cw721ConstraintsSDKType;
-    cw1155Constraints?: Cw1155ConstraintsSDKType;
+    cw20_constraints?: Cw20ConstraintsSDKType;
+    cw721_constraints?: Cw721ConstraintsSDKType;
+    cw1155_constraints?: Cw1155ConstraintsSDKType;
 }
 export interface MintAuthorization {
     minterDid: string;
     constraints: MintConstraints[];
 }
 export interface MintAuthorizationSDKType {
-    minterDid: string;
+    minter_did: string;
     constraints: MintConstraintsSDKType[];
 }
 export declare const Cw20Constraints: {

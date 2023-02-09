@@ -1,0 +1,39 @@
+{
+  "@context": [
+    "https://www.w3.org/2018/credentials/v1",
+    "https://w3id.org/ixo/ns/context/v1",
+    "https://w3id.org/ixo/ns/protocol/entity#creator",
+    {
+      "@version": 1,
+      "@protected": true,
+      "id": "@id",
+      "type": "@type"
+    }
+  ],
+  "id": "https://w3id.org/ixo/ns/credential-schemas/organization/v1",
+  "type": [
+    "VerifiableCredential",
+    "CreatorCredential"
+  ],
+  "issuer": "issuerDid",
+  "issuanceDate": "2023-01-07T00:00:00Z",
+  "validFrom": "2023-01-07T00:00:00Z",
+  "expirationDate": "",
+  "credentialSubject": {
+    "id": "ecsDaoOrgDid",
+    "type": "creator",
+    "displayName": "Emerging Cooking Solutions",
+    "location": "SE",
+    "email": "connect@emerging.se",
+    "mission": "Clean Cooking all the way",
+    "website": "https://emerging.se",
+    "logo": "logoLink"
+  },
+  "proof": {
+    "type": "EcdsaSecp256k1Signature2019",
+    "created": "2023-01-01T19:23:24Z",
+    "proofPurpose": "assertionMethod",
+    "verificationMethod": "did:ixo:entity:abc123#key-1",
+    "jws": ""
+  }
+}

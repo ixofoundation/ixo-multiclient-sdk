@@ -7,16 +7,16 @@ export interface GenesisState {
      * repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) =
      * false, (gogoproto.moretags) = "yaml:\"account_maps\""];
      */
-    Params?: Params;
+    params?: Params;
 }
 /** GenesisState defines the project module's genesis state. */
 export interface GenesisStateSDKType {
-    tokenMinters: TokenMinterSDKType[];
+    token_minters: TokenMinterSDKType[];
     /**
      * repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) =
      * false, (gogoproto.moretags) = "yaml:\"account_maps\""];
      */
-    Params?: ParamsSDKType;
+    params?: ParamsSDKType;
 }
 export declare const GenesisState: {
     encode(message: GenesisState, writer?: _m0.Writer): _m0.Writer;

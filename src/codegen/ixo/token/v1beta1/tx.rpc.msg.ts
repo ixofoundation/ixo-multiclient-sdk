@@ -1,13 +1,13 @@
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { MsgSetupMinter, MsgSetupMinterResponse, MsgMint, MsgMintResponse, MsgTransferToken, MsgTransferTokenResponse } from "./tx";
+import { MsgSetupMinter, MsgSetupMinterResponse, MsgMintToken, MsgMintTokenResponse, MsgTransferToken, MsgTransferTokenResponse } from "./tx";
 /** Msg defines the project Msg service. */
 
 export interface Msg {
-  /** CreateProject defines a method for creating a project. */
+  /** SetupMinter defines a method for setting up a minter */
   setupMinter(request: MsgSetupMinter): Promise<MsgSetupMinterResponse>;
-  mintToken(request: MsgMint): Promise<MsgMintResponse>;
-  /** Transfers an token and its nft to the recipient */
+  mintToken(request: MsgMintToken): Promise<MsgMintTokenResponse>;
+  /** Transfers a token and its nft to the recipient */
 
   transferToken(request: MsgTransferToken): Promise<MsgTransferTokenResponse>;
 }
@@ -27,10 +27,10 @@ export class MsgClientImpl implements Msg {
     return promise.then(data => MsgSetupMinterResponse.decode(new _m0.Reader(data)));
   }
 
-  mintToken(request: MsgMint): Promise<MsgMintResponse> {
-    const data = MsgMint.encode(request).finish();
+  mintToken(request: MsgMintToken): Promise<MsgMintTokenResponse> {
+    const data = MsgMintToken.encode(request).finish();
     const promise = this.rpc.request("ixo.token.v1beta1.Msg", "MintToken", data);
-    return promise.then(data => MsgMintResponse.decode(new _m0.Reader(data)));
+    return promise.then(data => MsgMintTokenResponse.decode(new _m0.Reader(data)));
   }
 
   transferToken(request: MsgTransferToken): Promise<MsgTransferTokenResponse> {

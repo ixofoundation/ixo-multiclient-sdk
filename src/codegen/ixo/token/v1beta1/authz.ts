@@ -1,10 +1,10 @@
 import * as _m0 from "protobufjs/minimal";
 import { Long, isSet } from "../../../helpers";
 export interface Cw20Constraints {
-  maxAmmount: Long;
+  maxAmount: Long;
 }
 export interface Cw20ConstraintsSDKType {
-  maxAmmount: Long;
+  max_amount: Long;
 }
 export interface Cw721Constraints {}
 export interface Cw721ConstraintsSDKType {}
@@ -22,31 +22,31 @@ export interface MintConstraints {
   cw1155Constraints?: Cw1155Constraints;
 }
 export interface MintConstraintsSDKType {
-  contractAddress: string;
+  contract_address: string;
   limit: Long;
-  cw20Constraints?: Cw20ConstraintsSDKType;
-  cw721Constraints?: Cw721ConstraintsSDKType;
-  cw1155Constraints?: Cw1155ConstraintsSDKType;
+  cw20_constraints?: Cw20ConstraintsSDKType;
+  cw721_constraints?: Cw721ConstraintsSDKType;
+  cw1155_constraints?: Cw1155ConstraintsSDKType;
 }
 export interface MintAuthorization {
   minterDid: string;
   constraints: MintConstraints[];
 }
 export interface MintAuthorizationSDKType {
-  minterDid: string;
+  minter_did: string;
   constraints: MintConstraintsSDKType[];
 }
 
 function createBaseCw20Constraints(): Cw20Constraints {
   return {
-    maxAmmount: Long.UZERO
+    maxAmount: Long.UZERO
   };
 }
 
 export const Cw20Constraints = {
   encode(message: Cw20Constraints, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.maxAmmount.isZero()) {
-      writer.uint32(8).uint64(message.maxAmmount);
+    if (!message.maxAmount.isZero()) {
+      writer.uint32(8).uint64(message.maxAmount);
     }
 
     return writer;
@@ -62,7 +62,7 @@ export const Cw20Constraints = {
 
       switch (tag >>> 3) {
         case 1:
-          message.maxAmmount = (reader.uint64() as Long);
+          message.maxAmount = (reader.uint64() as Long);
           break;
 
         default:
@@ -76,19 +76,19 @@ export const Cw20Constraints = {
 
   fromJSON(object: any): Cw20Constraints {
     return {
-      maxAmmount: isSet(object.maxAmmount) ? Long.fromValue(object.maxAmmount) : Long.UZERO
+      maxAmount: isSet(object.maxAmount) ? Long.fromValue(object.maxAmount) : Long.UZERO
     };
   },
 
   toJSON(message: Cw20Constraints): unknown {
     const obj: any = {};
-    message.maxAmmount !== undefined && (obj.maxAmmount = (message.maxAmmount || Long.UZERO).toString());
+    message.maxAmount !== undefined && (obj.maxAmount = (message.maxAmount || Long.UZERO).toString());
     return obj;
   },
 
   fromPartial(object: Partial<Cw20Constraints>): Cw20Constraints {
     const message = createBaseCw20Constraints();
-    message.maxAmmount = object.maxAmmount !== undefined && object.maxAmmount !== null ? Long.fromValue(object.maxAmmount) : Long.UZERO;
+    message.maxAmount = object.maxAmount !== undefined && object.maxAmount !== null ? Long.fromValue(object.maxAmount) : Long.UZERO;
     return message;
   }
 

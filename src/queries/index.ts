@@ -14,6 +14,11 @@ export const createQueryClient = async (rpcEndpoint: string) => {
   ).ibc.ClientFactory.createRPCQueryClient({
     rpcEndpoint,
   });
+  const queryCosmWasm = await (
+    await import("../codegen")
+  ).cosmwasm.ClientFactory.createRPCQueryClient({
+    rpcEndpoint,
+  });
   const queryEntity = await (
     await import("./entity")
   ).createRpcQueryExtension(rpcEndpoint);
@@ -23,6 +28,7 @@ export const createQueryClient = async (rpcEndpoint: string) => {
     ...queryIxo,
     ...queryIbc,
     ...queryCosmos,
+    ...queryCosmWasm,
     custom: {
       ...queryEntity,
     },

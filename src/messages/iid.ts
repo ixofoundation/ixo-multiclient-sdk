@@ -97,9 +97,19 @@ export const createIidVerificationMethods = ({
   ];
 };
 
-export const createAgentIidContext = () => [
+export const createAgentIidContext = (
+  contexts?: [{ key: string; val: string }]
+) => [
   ixo.iid.v1beta1.Context.fromPartial({
     key: "ixo",
     val: "https://w3id.org/ixo/ns/context/v1",
   }),
+  ...(contexts
+    ? contexts.map(({ key, val }) =>
+        ixo.iid.v1beta1.Context.fromPartial({
+          key,
+          val,
+        })
+      )
+    : []),
 ];

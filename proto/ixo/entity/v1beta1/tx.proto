@@ -65,6 +65,7 @@ message MsgCreateEntity {
       15; // The ownersdid address used to sign this transaction.
   bytes data = 16
       [ (gogoproto.casttype) = "encoding/json.RawMessage" ]; // Extention data
+  string alsoKnownAs = 17;
 }
 
 message MsgCreateEntityResponse {

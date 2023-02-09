@@ -58,6 +58,7 @@ export interface MsgCreateEntity {
 
   ownerAddress: string;
   data: Uint8Array;
+  alsoKnownAs: string;
 }
 export interface MsgCreateEntitySDKType {
   /** An Entity Type as defined by the implementer */
@@ -114,6 +115,7 @@ export interface MsgCreateEntitySDKType {
 
   owner_address: string;
   data: Uint8Array;
+  alsoKnownAs: string;
 }
 export interface MsgCreateEntityResponse {
   entityId: string;
@@ -265,7 +267,8 @@ function createBaseMsgCreateEntity(): MsgCreateEntity {
     credentials: [],
     ownerDid: "",
     ownerAddress: "",
-    data: new Uint8Array()
+    data: new Uint8Array(),
+    alsoKnownAs: ""
   };
 }
 
@@ -333,6 +336,10 @@ export const MsgCreateEntity = {
 
     if (message.data.length !== 0) {
       writer.uint32(130).bytes(message.data);
+    }
+
+    if (message.alsoKnownAs !== "") {
+      writer.uint32(138).string(message.alsoKnownAs);
     }
 
     return writer;
@@ -411,6 +418,10 @@ export const MsgCreateEntity = {
           message.data = reader.bytes();
           break;
 
+        case 17:
+          message.alsoKnownAs = reader.string();
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -437,7 +448,8 @@ export const MsgCreateEntity = {
       credentials: Array.isArray(object?.credentials) ? object.credentials.map((e: any) => String(e)) : [],
       ownerDid: isSet(object.ownerDid) ? String(object.ownerDid) : "",
       ownerAddress: isSet(object.ownerAddress) ? String(object.ownerAddress) : "",
-      data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array()
+      data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array(),
+      alsoKnownAs: isSet(object.alsoKnownAs) ? String(object.alsoKnownAs) : ""
     };
   },
 
@@ -501,6 +513,7 @@ export const MsgCreateEntity = {
     message.ownerDid !== undefined && (obj.ownerDid = message.ownerDid);
     message.ownerAddress !== undefined && (obj.ownerAddress = message.ownerAddress);
     message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+    message.alsoKnownAs !== undefined && (obj.alsoKnownAs = message.alsoKnownAs);
     return obj;
   },
 
@@ -522,6 +535,7 @@ export const MsgCreateEntity = {
     message.ownerDid = object.ownerDid ?? "";
     message.ownerAddress = object.ownerAddress ?? "";
     message.data = object.data ?? new Uint8Array();
+    message.alsoKnownAs = object.alsoKnownAs ?? "";
     return message;
   }
 
