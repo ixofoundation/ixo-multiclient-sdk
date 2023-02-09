@@ -45,6 +45,7 @@ export interface MsgCreateEntity {
     /** The ownersdid address used to sign this transaction. */
     ownerAddress: string;
     data: Uint8Array;
+    alsoKnownAs: string;
 }
 export interface MsgCreateEntitySDKType {
     /** An Entity Type as defined by the implementer */
@@ -89,6 +90,7 @@ export interface MsgCreateEntitySDKType {
     /** The ownersdid address used to sign this transaction. */
     owner_address: string;
     data: Uint8Array;
+    alsoKnownAs: string;
 }
 export interface MsgCreateEntityResponse {
     entityId: string;

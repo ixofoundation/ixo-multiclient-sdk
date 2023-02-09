@@ -55,8 +55,8 @@ export const MintToken = async (
   const did = tester.did;
 
   const message = {
-    typeUrl: "/ixo.token.v1beta1.MsgMint",
-    value: ixo.token.v1beta1.MsgMint.fromPartial({
+    typeUrl: "/ixo.token.v1beta1.MsgMintToken",
+    value: ixo.token.v1beta1.MsgMintToken.fromPartial({
       minterDid: did,
       minterAddress: myAddress,
       contractAddress: contractAddress,

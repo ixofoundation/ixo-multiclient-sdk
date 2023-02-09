@@ -1,0 +1,45 @@
+{
+  "@context": {
+    "ixo": "https://w3id.org/ixo/ns/context/v1",
+    "class": "did:ixo:entity:..."
+  },
+  "alsoKnownAs": "{id}#1",
+  "Service": {},
+  "linkedResource": [
+    {
+      "id": "{entity}#device-credential",
+      "type": "VerifiableCredential",
+      "description": "Certificate of Manufacture",
+      "mediaType": "application/ld+json",
+      "serviceEndpoint": "bafybeighdr656eowjtal7vei7tindlb5utctkituj72abcwioicqcokloi.ipfs.w3s.link/fkYpjHYQIwHY",
+      "proof": "bafybeighdr656eowjtal7vei7tindlb5utctkituj72abcwioicqcokloi",
+      "encrypted": "false",
+      "right": ""
+    },
+    {
+      "id": "{id}#asset-dashboard",
+      "type": "WebDashboard",
+      "description": "SupaMoto Dashboard",
+      "mediaType": "application/html",
+      "serviceEndpoint": "dashboard-supamoto:1",
+      "proof": "",
+      "encrypted": "false",
+      "right": "#apitoken"
+    }
+  ],
+  "accordedRight": [
+    {
+      "id": "{did}#view",
+      "type": "capability/access",
+      "mechanism": "zcap",
+      "service": ""
+    }
+  ],
+  "linkedEntity": [
+    {
+      "id": "",
+      "type": "",
+      "relationship": ""
+    }
+  ]
+}

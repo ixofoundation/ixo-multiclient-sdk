@@ -1,35 +1,5 @@
 import * as _m0 from "protobufjs/minimal";
-import { isSet, Long, bytesFromBase64, base64FromBytes } from "../../../helpers";
-/** MsgCreateProjectResponse defines the Msg/CreateProject response type. */
-
-export interface MsgCreateTokenResponse {}
-/** MsgCreateProjectResponse defines the Msg/CreateProject response type. */
-
-export interface MsgCreateTokenResponseSDKType {}
-export interface MsgTransferToken {
-  tokenDid: string;
-  ownerDid: string;
-  ownerAddress: string;
-  recipientDid: string;
-}
-export interface MsgTransferTokenSDKType {
-  tokenDid: string;
-  ownerDid: string;
-  ownerAddress: string;
-  recipientDid: string;
-}
-/**
- * MsgUpdateProjectStatusResponse defines the Msg/UpdateTokenStatus response
- * type.
- */
-
-export interface MsgTransferTokenResponse {}
-/**
- * MsgUpdateProjectStatusResponse defines the Msg/UpdateTokenStatus response
- * type.
- */
-
-export interface MsgTransferTokenResponseSDKType {}
+import { Long, isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
 export interface Cw20Coin {
   address: string;
   amount: Long;
@@ -42,13 +12,13 @@ export interface SetupCw20 {
   symbol: string;
   decimals: number;
   cap: Long;
-  instialBalances: Cw20Coin[];
+  initialBalances: Cw20Coin[];
 }
 export interface SetupCw20SDKType {
   symbol: string;
   decimals: number;
   cap: Long;
-  instialBalances: Cw20CoinSDKType[];
+  initialBalances: Cw20CoinSDKType[];
 }
 export interface SetupCw721 {
   symbol: string;
@@ -68,8 +38,8 @@ export interface MsgSetupMinter {
   cw1155?: SetupCw1155;
 }
 export interface MsgSetupMinterSDKType {
-  minterDid: string;
-  minterAddress: string;
+  minter_did: string;
+  minter_address: string;
   name: string;
   description: string;
   cw20?: SetupCw20SDKType;
@@ -148,7 +118,7 @@ export interface MintCw1155SDKType {
   uri?: string;
   value: Long;
 }
-export interface MsgMint {
+export interface MsgMintToken {
   minterDid: string;
   minterAddress: string;
   contractAddress: string;
@@ -157,196 +127,39 @@ export interface MsgMint {
   cw721?: MintCw721;
   cw1155?: MintCw1155;
 }
-export interface MsgMintSDKType {
-  minterDid: string;
-  minterAddress: string;
-  contractAddress: string;
-  ownerDid: string;
+export interface MsgMintTokenSDKType {
+  minter_did: string;
+  minter_address: string;
+  contract_address: string;
+  owner_did: string;
   cw20?: MintCw20SDKType;
   cw721?: MintCw721SDKType;
   cw1155?: MintCw1155SDKType;
 }
-export interface MsgMintResponse {}
-export interface MsgMintResponseSDKType {}
+export interface MsgMintTokenResponse {}
+export interface MsgMintTokenResponseSDKType {}
+export interface MsgTransferToken {
+  tokenDid: string;
+  /** The ownersdid used to sign this transaction. */
 
-function createBaseMsgCreateTokenResponse(): MsgCreateTokenResponse {
-  return {};
+  ownerDid: string;
+  /** The owners address used to sign this transaction. */
+
+  ownerAddress: string;
+  recipientDid: string;
 }
+export interface MsgTransferTokenSDKType {
+  token_did: string;
+  /** The ownersdid used to sign this transaction. */
 
-export const MsgCreateTokenResponse = {
-  encode(_: MsgCreateTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    return writer;
-  },
+  owner_did: string;
+  /** The owners address used to sign this transaction. */
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateTokenResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgCreateTokenResponse();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(_: any): MsgCreateTokenResponse {
-    return {};
-  },
-
-  toJSON(_: MsgCreateTokenResponse): unknown {
-    const obj: any = {};
-    return obj;
-  },
-
-  fromPartial(_: Partial<MsgCreateTokenResponse>): MsgCreateTokenResponse {
-    const message = createBaseMsgCreateTokenResponse();
-    return message;
-  }
-
-};
-
-function createBaseMsgTransferToken(): MsgTransferToken {
-  return {
-    tokenDid: "",
-    ownerDid: "",
-    ownerAddress: "",
-    recipientDid: ""
-  };
+  owner_address: string;
+  recipient_did: string;
 }
-
-export const MsgTransferToken = {
-  encode(message: MsgTransferToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.tokenDid !== "") {
-      writer.uint32(10).string(message.tokenDid);
-    }
-
-    if (message.ownerDid !== "") {
-      writer.uint32(18).string(message.ownerDid);
-    }
-
-    if (message.ownerAddress !== "") {
-      writer.uint32(26).string(message.ownerAddress);
-    }
-
-    if (message.recipientDid !== "") {
-      writer.uint32(34).string(message.recipientDid);
-    }
-
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgTransferToken {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgTransferToken();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        case 1:
-          message.tokenDid = reader.string();
-          break;
-
-        case 2:
-          message.ownerDid = reader.string();
-          break;
-
-        case 3:
-          message.ownerAddress = reader.string();
-          break;
-
-        case 4:
-          message.recipientDid = reader.string();
-          break;
-
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(object: any): MsgTransferToken {
-    return {
-      tokenDid: isSet(object.tokenDid) ? String(object.tokenDid) : "",
-      ownerDid: isSet(object.ownerDid) ? String(object.ownerDid) : "",
-      ownerAddress: isSet(object.ownerAddress) ? String(object.ownerAddress) : "",
-      recipientDid: isSet(object.recipientDid) ? String(object.recipientDid) : ""
-    };
-  },
-
-  toJSON(message: MsgTransferToken): unknown {
-    const obj: any = {};
-    message.tokenDid !== undefined && (obj.tokenDid = message.tokenDid);
-    message.ownerDid !== undefined && (obj.ownerDid = message.ownerDid);
-    message.ownerAddress !== undefined && (obj.ownerAddress = message.ownerAddress);
-    message.recipientDid !== undefined && (obj.recipientDid = message.recipientDid);
-    return obj;
-  },
-
-  fromPartial(object: Partial<MsgTransferToken>): MsgTransferToken {
-    const message = createBaseMsgTransferToken();
-    message.tokenDid = object.tokenDid ?? "";
-    message.ownerDid = object.ownerDid ?? "";
-    message.ownerAddress = object.ownerAddress ?? "";
-    message.recipientDid = object.recipientDid ?? "";
-    return message;
-  }
-
-};
-
-function createBaseMsgTransferTokenResponse(): MsgTransferTokenResponse {
-  return {};
-}
-
-export const MsgTransferTokenResponse = {
-  encode(_: MsgTransferTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgTransferTokenResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgTransferTokenResponse();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(_: any): MsgTransferTokenResponse {
-    return {};
-  },
-
-  toJSON(_: MsgTransferTokenResponse): unknown {
-    const obj: any = {};
-    return obj;
-  },
-
-  fromPartial(_: Partial<MsgTransferTokenResponse>): MsgTransferTokenResponse {
-    const message = createBaseMsgTransferTokenResponse();
-    return message;
-  }
-
-};
+export interface MsgTransferTokenResponse {}
+export interface MsgTransferTokenResponseSDKType {}
 
 function createBaseCw20Coin(): Cw20Coin {
   return {
@@ -422,7 +235,7 @@ function createBaseSetupCw20(): SetupCw20 {
     symbol: "",
     decimals: 0,
     cap: undefined,
-    instialBalances: undefined
+    initialBalances: undefined
   };
 }
 
@@ -440,7 +253,7 @@ export const SetupCw20 = {
       writer.uint32(24).uint64(message.cap);
     }
 
-    for (const v of message.instialBalances) {
+    for (const v of message.initialBalances) {
       Cw20Coin.encode(v!, writer.uint32(34).fork()).ldelim();
     }
 
@@ -469,7 +282,7 @@ export const SetupCw20 = {
           break;
 
         case 4:
-          message.instialBalances.push(Cw20Coin.decode(reader, reader.uint32()));
+          message.initialBalances.push(Cw20Coin.decode(reader, reader.uint32()));
           break;
 
         default:
@@ -486,7 +299,7 @@ export const SetupCw20 = {
       symbol: isSet(object.symbol) ? String(object.symbol) : "",
       decimals: isSet(object.decimals) ? Number(object.decimals) : 0,
       cap: isSet(object.cap) ? Long.fromValue(object.cap) : undefined,
-      instialBalances: Array.isArray(object?.instialBalances) ? object.instialBalances.map((e: any) => Cw20Coin.fromJSON(e)) : []
+      initialBalances: Array.isArray(object?.initialBalances) ? object.initialBalances.map((e: any) => Cw20Coin.fromJSON(e)) : []
     };
   },
 
@@ -496,10 +309,10 @@ export const SetupCw20 = {
     message.decimals !== undefined && (obj.decimals = Math.round(message.decimals));
     message.cap !== undefined && (obj.cap = (message.cap || undefined).toString());
 
-    if (message.instialBalances) {
-      obj.instialBalances = message.instialBalances.map(e => e ? Cw20Coin.toJSON(e) : undefined);
+    if (message.initialBalances) {
+      obj.initialBalances = message.initialBalances.map(e => e ? Cw20Coin.toJSON(e) : undefined);
     } else {
-      obj.instialBalances = [];
+      obj.initialBalances = [];
     }
 
     return obj;
@@ -510,7 +323,7 @@ export const SetupCw20 = {
     message.symbol = object.symbol ?? "";
     message.decimals = object.decimals ?? 0;
     message.cap = object.cap !== undefined && object.cap !== null ? Long.fromValue(object.cap) : undefined;
-    message.instialBalances = object.instialBalances?.map(e => Cw20Coin.fromPartial(e)) || [];
+    message.initialBalances = object.initialBalances?.map(e => Cw20Coin.fromPartial(e)) || [];
     return message;
   }
 
@@ -639,23 +452,23 @@ export const MsgSetupMinter = {
     }
 
     if (message.name !== "") {
-      writer.uint32(34).string(message.name);
+      writer.uint32(26).string(message.name);
     }
 
     if (message.description !== "") {
-      writer.uint32(42).string(message.description);
+      writer.uint32(34).string(message.description);
     }
 
     if (message.cw20 !== undefined) {
-      SetupCw20.encode(message.cw20, writer.uint32(50).fork()).ldelim();
+      SetupCw20.encode(message.cw20, writer.uint32(42).fork()).ldelim();
     }
 
     if (message.cw721 !== undefined) {
-      SetupCw721.encode(message.cw721, writer.uint32(58).fork()).ldelim();
+      SetupCw721.encode(message.cw721, writer.uint32(50).fork()).ldelim();
     }
 
     if (message.cw1155 !== undefined) {
-      SetupCw1155.encode(message.cw1155, writer.uint32(66).fork()).ldelim();
+      SetupCw1155.encode(message.cw1155, writer.uint32(58).fork()).ldelim();
     }
 
     return writer;
@@ -678,23 +491,23 @@ export const MsgSetupMinter = {
           message.minterAddress = reader.string();
           break;
 
-        case 4:
+        case 3:
           message.name = reader.string();
           break;
 
-        case 5:
+        case 4:
           message.description = reader.string();
           break;
 
-        case 6:
+        case 5:
           message.cw20 = SetupCw20.decode(reader, reader.uint32());
           break;
 
-        case 7:
+        case 6:
           message.cw721 = SetupCw721.decode(reader, reader.uint32());
           break;
 
-        case 8:
+        case 7:
           message.cw1155 = SetupCw1155.decode(reader, reader.uint32());
           break;
 
@@ -1031,7 +844,7 @@ export const MintCw1155 = {
 
 };
 
-function createBaseMsgMint(): MsgMint {
+function createBaseMsgMintToken(): MsgMintToken {
   return {
     minterDid: "",
     minterAddress: "",
@@ -1043,8 +856,8 @@ function createBaseMsgMint(): MsgMint {
   };
 }
 
-export const MsgMint = {
-  encode(message: MsgMint, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const MsgMintToken = {
+  encode(message: MsgMintToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.minterDid !== "") {
       writer.uint32(10).string(message.minterDid);
     }
@@ -1076,10 +889,10 @@ export const MsgMint = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgMint {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgMintToken {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgMint();
+    const message = createBaseMsgMintToken();
 
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -1122,7 +935,7 @@ export const MsgMint = {
     return message;
   },
 
-  fromJSON(object: any): MsgMint {
+  fromJSON(object: any): MsgMintToken {
     return {
       minterDid: isSet(object.minterDid) ? String(object.minterDid) : "",
       minterAddress: isSet(object.minterAddress) ? String(object.minterAddress) : "",
@@ -1134,7 +947,7 @@ export const MsgMint = {
     };
   },
 
-  toJSON(message: MsgMint): unknown {
+  toJSON(message: MsgMintToken): unknown {
     const obj: any = {};
     message.minterDid !== undefined && (obj.minterDid = message.minterDid);
     message.minterAddress !== undefined && (obj.minterAddress = message.minterAddress);
@@ -1146,8 +959,8 @@ export const MsgMint = {
     return obj;
   },
 
-  fromPartial(object: Partial<MsgMint>): MsgMint {
-    const message = createBaseMsgMint();
+  fromPartial(object: Partial<MsgMintToken>): MsgMintToken {
+    const message = createBaseMsgMintToken();
     message.minterDid = object.minterDid ?? "";
     message.minterAddress = object.minterAddress ?? "";
     message.contractAddress = object.contractAddress ?? "";
@@ -1160,19 +973,19 @@ export const MsgMint = {
 
 };
 
-function createBaseMsgMintResponse(): MsgMintResponse {
+function createBaseMsgMintTokenResponse(): MsgMintTokenResponse {
   return {};
 }
 
-export const MsgMintResponse = {
-  encode(_: MsgMintResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const MsgMintTokenResponse = {
+  encode(_: MsgMintTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgMintResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgMintTokenResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgMintResponse();
+    const message = createBaseMsgMintTokenResponse();
 
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -1187,17 +1000,153 @@ export const MsgMintResponse = {
     return message;
   },
 
-  fromJSON(_: any): MsgMintResponse {
+  fromJSON(_: any): MsgMintTokenResponse {
     return {};
   },
 
-  toJSON(_: MsgMintResponse): unknown {
+  toJSON(_: MsgMintTokenResponse): unknown {
     const obj: any = {};
     return obj;
   },
 
-  fromPartial(_: Partial<MsgMintResponse>): MsgMintResponse {
-    const message = createBaseMsgMintResponse();
+  fromPartial(_: Partial<MsgMintTokenResponse>): MsgMintTokenResponse {
+    const message = createBaseMsgMintTokenResponse();
+    return message;
+  }
+
+};
+
+function createBaseMsgTransferToken(): MsgTransferToken {
+  return {
+    tokenDid: "",
+    ownerDid: "",
+    ownerAddress: "",
+    recipientDid: ""
+  };
+}
+
+export const MsgTransferToken = {
+  encode(message: MsgTransferToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.tokenDid !== "") {
+      writer.uint32(10).string(message.tokenDid);
+    }
+
+    if (message.ownerDid !== "") {
+      writer.uint32(18).string(message.ownerDid);
+    }
+
+    if (message.ownerAddress !== "") {
+      writer.uint32(26).string(message.ownerAddress);
+    }
+
+    if (message.recipientDid !== "") {
+      writer.uint32(34).string(message.recipientDid);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgTransferToken {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgTransferToken();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.tokenDid = reader.string();
+          break;
+
+        case 2:
+          message.ownerDid = reader.string();
+          break;
+
+        case 3:
+          message.ownerAddress = reader.string();
+          break;
+
+        case 4:
+          message.recipientDid = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): MsgTransferToken {
+    return {
+      tokenDid: isSet(object.tokenDid) ? String(object.tokenDid) : "",
+      ownerDid: isSet(object.ownerDid) ? String(object.ownerDid) : "",
+      ownerAddress: isSet(object.ownerAddress) ? String(object.ownerAddress) : "",
+      recipientDid: isSet(object.recipientDid) ? String(object.recipientDid) : ""
+    };
+  },
+
+  toJSON(message: MsgTransferToken): unknown {
+    const obj: any = {};
+    message.tokenDid !== undefined && (obj.tokenDid = message.tokenDid);
+    message.ownerDid !== undefined && (obj.ownerDid = message.ownerDid);
+    message.ownerAddress !== undefined && (obj.ownerAddress = message.ownerAddress);
+    message.recipientDid !== undefined && (obj.recipientDid = message.recipientDid);
+    return obj;
+  },
+
+  fromPartial(object: Partial<MsgTransferToken>): MsgTransferToken {
+    const message = createBaseMsgTransferToken();
+    message.tokenDid = object.tokenDid ?? "";
+    message.ownerDid = object.ownerDid ?? "";
+    message.ownerAddress = object.ownerAddress ?? "";
+    message.recipientDid = object.recipientDid ?? "";
+    return message;
+  }
+
+};
+
+function createBaseMsgTransferTokenResponse(): MsgTransferTokenResponse {
+  return {};
+}
+
+export const MsgTransferTokenResponse = {
+  encode(_: MsgTransferTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgTransferTokenResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgTransferTokenResponse();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(_: any): MsgTransferTokenResponse {
+    return {};
+  },
+
+  toJSON(_: MsgTransferTokenResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: Partial<MsgTransferTokenResponse>): MsgTransferTokenResponse {
+    const message = createBaseMsgTransferTokenResponse();
     return message;
   }
 

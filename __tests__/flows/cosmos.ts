@@ -9,7 +9,7 @@ export const bankBasic = () =>
 export const govBasic = () =>
   describe("Testing the gov module", () => {
     // let proposalIdStoreCW721: number;
-    // testMsg("/cosmos.gov.v1beta1.MsgSubmitProposal", async () => {
+    // testMsg("/cosmos.gov.v1beta1.MsgSubmitProposal store cw721", async () => {
     //   const res = await Cosmos.MsgSubmitProposalStoreCW721();
     //   proposalIdStoreCW721 = utils.common.getValueFromEvents(
     //     res,
@@ -23,7 +23,7 @@ export const govBasic = () =>
     //   Cosmos.MsgVote(proposalIdStoreCW721)
     // );
     // let proposalIdUpdateEntityParams: number;
-    // testMsg("/cosmos.gov.v1beta1.MsgSubmitProposal", async () => {
+    // testMsg("/cosmos.gov.v1beta1.MsgSubmitProposal update entity params", async () => {
     //   const res = await Cosmos.MsgSubmitProposalUpdateEntityParams(1);
     //   proposalIdUpdateEntityParams = utils.common.getValueFromEvents(
     //     res,

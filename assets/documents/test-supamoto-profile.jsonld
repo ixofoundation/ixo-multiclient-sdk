@@ -1,0 +1,62 @@
+{
+  "@context": {
+    "ixo": "https://w3id.org/ixo/ns/protocol/",
+    "@id": "@type",
+    "type": "@type",
+    "@protected": true
+  },
+  "id": "ixo:entity#profile",
+  "type": "profile",
+  "name": "SupaMoto Malawi",
+  "image": "imageLink",
+  "logo": "logoLink",
+  "brand": "SupaMoto",
+  "location": "MW",
+  "description": "The SupaMoto clean cookstove is a smart, IoT-connected device that helps households cut carbon emissions while cooking with affordable and renewable biomass fuel. This convenient solution offers a more cost-effective, healthy, and time-saving alternative to traditional cooking methods.",
+  "attributes": [
+    {
+      "key": "Model",
+      "value": "MimiMoto"
+    },
+    {
+      "key": "Location",
+      "value": "Malawi"
+    },
+    {
+      "key": "Fuel",
+      "value": "Renewable Biomass Pellets"
+    },
+    {
+      "key": "Usage",
+      "value": "Domestic"
+    },
+    {
+      "key": "Conversion",
+      "value": "1kg = 0.01 credits"
+    },
+    {
+      "key": "Product",
+      "value": "CARBON credit tokens"
+    }
+  ],
+  "metrics": [
+    {
+      "prefix": "USD",
+      "metric": "Token Price",
+      "suffix": "Average/NFT",
+      "source": "https://example.com/dfdfcv"
+    },
+    {
+      "prefix": "Credits",
+      "metric": "CARBON",
+      "suffix": "/month (moving average)",
+      "source": "https://example.com/dfdfcv"
+    },
+    {
+      "prefix": "Performance",
+      "metric": "Alpha",
+      "suffix": "",
+      "source": "https://example.com/dfdfcv"
+    }
+  ]
+}

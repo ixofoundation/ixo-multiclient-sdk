@@ -1,0 +1,164 @@
+{
+  "@context": {
+    "ixo": "https://w3id.org/ixo/ns/context/v1",
+    "class": "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14"
+  },
+  "Service": [
+    {
+      "id": "{id}#cellnode-pandora",
+      "type": "cellnode",
+      "serviceEndpoint": "https://devnet-cellnode.ixo.earth/"
+    },
+    {
+      "id": "{id}#ixo",
+      "type": "ChainService",
+      "serviceEndpoint": "https://github.com/cosmos/chain-registry/blob/master/ixo/chain.json?rpc/"
+    },
+    {
+      "id": "{id}#dashboard-collection",
+      "type": "LinkedDomains",
+      "serviceEndpoint": "https://app.emerging.eco/collection/?id="
+    },
+    {
+      "id": "{id}#dashboard-supamoto",
+      "type": "LinkedDomains",
+      "serviceEndpoint": "https://supamoto.jambo.earth/?id="
+    }
+  ],
+  "linkedResource": [
+    {
+      "id": "{id}#profile",
+      "type": "Settings",
+      "description": "Profile",
+      "mediaType": "application/ld+json",
+      "serviceEndpoint": "bafybeihkirmfisihjgdbntfxc5r3ghhyxb4ppliijykkkvxwxadfw7ixqu.ipfs.w3s.link/XElCCzOMUXwv",
+      "proof": "bafybeihkirmfisihjgdbntfxc5r3ghhyxb4ppliijykkkvxwxadfw7ixqu",
+      "encrypted": "false",
+      "right": ""
+    },
+    {
+      "id": "{id}#page",
+      "type": "Settings",
+      "description": "Page",
+      "mediaType": "application/ld+json",
+      "serviceEndpoint": "#cellnode-pandora/public/v8a2sefpkildvj6uoz",
+      "proof": "v8a2sefpkildvj6uoz",
+      "encrypted": "false",
+      "right": ""
+    },
+    {
+      "id": "{id}#creator",
+      "type": "verifiableCredential",
+      "description": "Creator",
+      "mediaType": "application/ld+json",
+      "serviceEndpoint": "#cellnode-pandora/public/n6gwc55a7xnldvixauq",
+      "proof": "n6gwc55a7xnldvixauq",
+      "encrypted": "false",
+      "right": ""
+    },
+    {
+      "id": "{id}#administrator",
+      "type": "VerifiableCredential",
+      "description": "Administrator",
+      "mediaType": "application/ld+json",
+      "serviceEndpoint": "#cellnode-pandora/public/7rdx69w7a5ldvixba2",
+      "proof": "7rdx69w7a5ldvixba2",
+      "encrypted": "false",
+      "right": ""
+    },
+    {
+      "id": "{id}#tags",
+      "type": "Settings",
+      "description": "Tags",
+      "mediaType": "application/ld+json",
+      "serviceEndpoint": "#cellnode-pandora/public/22ggqwt3o28ldvj5lwt",
+      "proof": "22ggqwt3o28ldvj5lwt",
+      "encrypted": "false",
+      "right": ""
+    },
+    {
+      "id": "{id}#claims",
+      "type": "Settings",
+      "description": "Claims",
+      "mediaType": "application/ld+json",
+      "serviceEndpoint": "#cellnode-pandora/public/0dmrovnlrgjdldvlaivn",
+      "proof": "0dmrovnlrgjdldvlaivn",
+      "encrypted": "false",
+      "right": ""
+    },
+    {
+      "id": "{{id}#token",
+      "type": "TokenMetadata",
+      "description": "Impact Token",
+      "mediaType": "application/json",
+      "serviceEndpoint": "bafybeian4ebd3n543kn2ut4qpbs3uch5sffaovbithdmrgcq5hqknl7whe.ipfs.w3s.link/HIfPFdwYFWhg",
+      "proof": "bafybeian4ebd3n543kn2ut4qpbs3uch5sffaovbithdmrgcq5hqknl7whe",
+      "encrypted": "false",
+      "right": ""
+    },
+    {
+      "id": "{id}#project-credential",
+      "type": "VerifiableCredential",
+      "description": "Project Certificate",
+      "mediaType": "application/ld+json",
+      "serviceEndpoint": "bafybeihbwdz6zosv344nx3nnrvzmg5xkdsceiclqjuuym6biz4evywihcy.ipfs.w3s.link/wGQbmcHLfdFT",
+      "proof": "bafybeihbwdz6zosv344nx3nnrvzmg5xkdsceiclqjuuym6biz4evywihcy",
+      "encrypted": "false",
+      "right": ""
+    },
+    {
+      "id": "{id}#collection-dashboard",
+      "type": "WebDashboard",
+      "description": "Collection Dashboard",
+      "mediaType": "application/html",
+      "serviceEndpoint": "#dashboard-collection",
+      "proof": "",
+      "encrypted": "false",
+      "right": "#apitoken"
+    },
+    {
+      "id": "{id}#asset-dashboard",
+      "type": "WebDashboard",
+      "description": "SupaMoto Dashboard",
+      "mediaType": "application/html",
+      "serviceEndpoint": "#dashboard-supamoto",
+      "proof": "",
+      "encrypted": "false",
+      "right": "#apitoken"
+    }
+  ],
+  "accordedRight": [
+    {
+      "id": "{id}#mintNFT",
+      "type": "capability/mint",
+      "mechanism": "cw721",
+      "message": "msgMintNFT",
+      "service": "#ixo"
+    },
+    {
+      "id": "{id}#carbon-claim",
+      "type": "capability/attest",
+      "mechanism": "x/claims",
+      "message": "msgSubmitClaim",
+      "service": "#cellnode"
+    },
+    {
+      "id": "{id}#legal",
+      "type": "legal",
+      "mechanism": "judicial"
+    },
+    {
+      "id": "{id}#apitoken",
+      "type": "AccessToken",
+      "mechanism": "authentication"
+    }
+  ],
+  "linkedEntity": [
+    {
+      "id": "did:ixo:entity:4d94f9b6078432648a755203eed50644",
+      "type": "oracle",
+      "relationship": "verifies",
+      "service": ""
+    }
+  ]
+}

@@ -1,21 +1,9 @@
 import base58 from "bs58";
 import {
-  getWeb3Doc,
-  uploadPublicDoc,
-  uploadWeb3Doc,
-} from "../../src/custom_queries/cellnode";
-import {
   createAgentIidContext,
   createIidVerificationMethods,
 } from "../../src/messages/iid";
-import {
-  getUser,
-  customMessages,
-  createClient,
-  ixo,
-  queryClient,
-  getFileFromPath,
-} from "../helpers/common";
+import { getUser, customMessages, createClient, ixo } from "../helpers/common";
 import { constants, fee, keyType, WalletUsers } from "../helpers/constants";
 
 export const CreateIidDoc = async (
@@ -123,33 +111,6 @@ export const AddIidContext = async () => {
 
 export const DeleteIidContext = async () => {
   const client = await createClient();
-
-  // const res = await uploadWeb3Doc(
-  //   "testPdfUpload",
-  //   "pdf",
-  //   getFileFromPath([
-  //     "documents",
-  //     "MimiMoto report Aprovecho Research Center March 2017.pdf",
-  //   ]),
-  //   undefined,
-  //   "devnet"
-  // );
-  // console.log(res);
-
-  // const res = await getWeb3Doc(
-  //   "bafybeia4al2szs4d2kvwqhippp3kfguhkvx42oayuy6w2rixsdhoersib4",
-  //   undefined,
-  //   "devnet"
-  // );
-  // console.log(res);
-
-  // const res = await uploadPublicDoc(
-  //   "image",
-  //   getFileFromPath(["documents", "supamoto-NFT image.png"]),
-  //   undefined,
-  //   "devnet"
-  // );
-  // console.log(res);
 
   const tester = getUser();
   const account = (await tester.getAccounts())[0];

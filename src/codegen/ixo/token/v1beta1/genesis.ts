@@ -10,24 +10,24 @@ export interface GenesisState {
    * false, (gogoproto.moretags) = "yaml:\"account_maps\""];
    */
 
-  Params?: Params;
+  params?: Params;
 }
 /** GenesisState defines the project module's genesis state. */
 
 export interface GenesisStateSDKType {
-  tokenMinters: TokenMinterSDKType[];
+  token_minters: TokenMinterSDKType[];
   /**
    * repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) =
    * false, (gogoproto.moretags) = "yaml:\"account_maps\""];
    */
 
-  Params?: ParamsSDKType;
+  params?: ParamsSDKType;
 }
 
 function createBaseGenesisState(): GenesisState {
   return {
     tokenMinters: [],
-    Params: undefined
+    params: undefined
   };
 }
 
@@ -37,8 +37,8 @@ export const GenesisState = {
       TokenMinter.encode(v!, writer.uint32(10).fork()).ldelim();
     }
 
-    if (message.Params !== undefined) {
-      Params.encode(message.Params, writer.uint32(18).fork()).ldelim();
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(18).fork()).ldelim();
     }
 
     return writer;
@@ -58,7 +58,7 @@ export const GenesisState = {
           break;
 
         case 2:
-          message.Params = Params.decode(reader, reader.uint32());
+          message.params = Params.decode(reader, reader.uint32());
           break;
 
         default:
@@ -73,7 +73,7 @@ export const GenesisState = {
   fromJSON(object: any): GenesisState {
     return {
       tokenMinters: Array.isArray(object?.tokenMinters) ? object.tokenMinters.map((e: any) => TokenMinter.fromJSON(e)) : [],
-      Params: isSet(object.Params) ? Params.fromJSON(object.Params) : undefined
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined
     };
   },
 
@@ -86,14 +86,14 @@ export const GenesisState = {
       obj.tokenMinters = [];
     }
 
-    message.Params !== undefined && (obj.Params = message.Params ? Params.toJSON(message.Params) : undefined);
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
   },
 
   fromPartial(object: Partial<GenesisState>): GenesisState {
     const message = createBaseGenesisState();
     message.tokenMinters = object.tokenMinters?.map(e => TokenMinter.fromPartial(e)) || [];
-    message.Params = object.Params !== undefined && object.Params !== null ? Params.fromPartial(object.Params) : undefined;
+    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
   }
 

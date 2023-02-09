@@ -1,35 +1,5 @@
 import * as _m0 from "protobufjs/minimal";
 import { Long } from "../../../helpers";
-/** MsgCreateProjectResponse defines the Msg/CreateProject response type. */
-export interface MsgCreateTokenResponse {
-}
-/** MsgCreateProjectResponse defines the Msg/CreateProject response type. */
-export interface MsgCreateTokenResponseSDKType {
-}
-export interface MsgTransferToken {
-    tokenDid: string;
-    ownerDid: string;
-    ownerAddress: string;
-    recipientDid: string;
-}
-export interface MsgTransferTokenSDKType {
-    tokenDid: string;
-    ownerDid: string;
-    ownerAddress: string;
-    recipientDid: string;
-}
-/**
- * MsgUpdateProjectStatusResponse defines the Msg/UpdateTokenStatus response
- * type.
- */
-export interface MsgTransferTokenResponse {
-}
-/**
- * MsgUpdateProjectStatusResponse defines the Msg/UpdateTokenStatus response
- * type.
- */
-export interface MsgTransferTokenResponseSDKType {
-}
 export interface Cw20Coin {
     address: string;
     amount: Long;
@@ -42,13 +12,13 @@ export interface SetupCw20 {
     symbol: string;
     decimals: number;
     cap: Long;
-    instialBalances: Cw20Coin[];
+    initialBalances: Cw20Coin[];
 }
 export interface SetupCw20SDKType {
     symbol: string;
     decimals: number;
     cap: Long;
-    instialBalances: Cw20CoinSDKType[];
+    initialBalances: Cw20CoinSDKType[];
 }
 export interface SetupCw721 {
     symbol: string;
@@ -70,8 +40,8 @@ export interface MsgSetupMinter {
     cw1155?: SetupCw1155;
 }
 export interface MsgSetupMinterSDKType {
-    minterDid: string;
-    minterAddress: string;
+    minter_did: string;
+    minter_address: string;
     name: string;
     description: string;
     cw20?: SetupCw20SDKType;
@@ -144,7 +114,7 @@ export interface MintCw1155SDKType {
     uri?: string;
     value: Long;
 }
-export interface MsgMint {
+export interface MsgMintToken {
     minterDid: string;
     minterAddress: string;
     contractAddress: string;
@@ -153,40 +123,39 @@ export interface MsgMint {
     cw721?: MintCw721;
     cw1155?: MintCw1155;
 }
-export interface MsgMintSDKType {
-    minterDid: string;
-    minterAddress: string;
-    contractAddress: string;
-    ownerDid: string;
+export interface MsgMintTokenSDKType {
+    minter_did: string;
+    minter_address: string;
+    contract_address: string;
+    owner_did: string;
     cw20?: MintCw20SDKType;
     cw721?: MintCw721SDKType;
     cw1155?: MintCw1155SDKType;
 }
-export interface MsgMintResponse {
+export interface MsgMintTokenResponse {
 }
-export interface MsgMintResponseSDKType {
+export interface MsgMintTokenResponseSDKType {
 }
-export declare const MsgCreateTokenResponse: {
-    encode(_: MsgCreateTokenResponse, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateTokenResponse;
-    fromJSON(_: any): MsgCreateTokenResponse;
-    toJSON(_: MsgCreateTokenResponse): unknown;
-    fromPartial(_: Partial<MsgCreateTokenResponse>): MsgCreateTokenResponse;
-};
-export declare const MsgTransferToken: {
-    encode(message: MsgTransferToken, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): MsgTransferToken;
-    fromJSON(object: any): MsgTransferToken;
-    toJSON(message: MsgTransferToken): unknown;
-    fromPartial(object: Partial<MsgTransferToken>): MsgTransferToken;
-};
-export declare const MsgTransferTokenResponse: {
-    encode(_: MsgTransferTokenResponse, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): MsgTransferTokenResponse;
-    fromJSON(_: any): MsgTransferTokenResponse;
-    toJSON(_: MsgTransferTokenResponse): unknown;
-    fromPartial(_: Partial<MsgTransferTokenResponse>): MsgTransferTokenResponse;
-};
+export interface MsgTransferToken {
+    tokenDid: string;
+    /** The ownersdid used to sign this transaction. */
+    ownerDid: string;
+    /** The owners address used to sign this transaction. */
+    ownerAddress: string;
+    recipientDid: string;
+}
+export interface MsgTransferTokenSDKType {
+    token_did: string;
+    /** The ownersdid used to sign this transaction. */
+    owner_did: string;
+    /** The owners address used to sign this transaction. */
+    owner_address: string;
+    recipient_did: string;
+}
+export interface MsgTransferTokenResponse {
+}
+export interface MsgTransferTokenResponseSDKType {
+}
 export declare const Cw20Coin: {
     encode(message: Cw20Coin, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): Cw20Coin;
@@ -250,17 +219,31 @@ export declare const MintCw1155: {
     toJSON(message: MintCw1155): unknown;
     fromPartial(object: Partial<MintCw1155>): MintCw1155;
 };
-export declare const MsgMint: {
-    encode(message: MsgMint, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): MsgMint;
-    fromJSON(object: any): MsgMint;
-    toJSON(message: MsgMint): unknown;
-    fromPartial(object: Partial<MsgMint>): MsgMint;
+export declare const MsgMintToken: {
+    encode(message: MsgMintToken, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgMintToken;
+    fromJSON(object: any): MsgMintToken;
+    toJSON(message: MsgMintToken): unknown;
+    fromPartial(object: Partial<MsgMintToken>): MsgMintToken;
 };
-export declare const MsgMintResponse: {
-    encode(_: MsgMintResponse, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): MsgMintResponse;
-    fromJSON(_: any): MsgMintResponse;
-    toJSON(_: MsgMintResponse): unknown;
-    fromPartial(_: Partial<MsgMintResponse>): MsgMintResponse;
+export declare const MsgMintTokenResponse: {
+    encode(_: MsgMintTokenResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgMintTokenResponse;
+    fromJSON(_: any): MsgMintTokenResponse;
+    toJSON(_: MsgMintTokenResponse): unknown;
+    fromPartial(_: Partial<MsgMintTokenResponse>): MsgMintTokenResponse;
+};
+export declare const MsgTransferToken: {
+    encode(message: MsgTransferToken, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgTransferToken;
+    fromJSON(object: any): MsgTransferToken;
+    toJSON(message: MsgTransferToken): unknown;
+    fromPartial(object: Partial<MsgTransferToken>): MsgTransferToken;
+};
+export declare const MsgTransferTokenResponse: {
+    encode(_: MsgTransferTokenResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgTransferTokenResponse;
+    fromJSON(_: any): MsgTransferTokenResponse;
+    toJSON(_: MsgTransferTokenResponse): unknown;
+    fromPartial(_: Partial<MsgTransferTokenResponse>): MsgTransferTokenResponse;
 };

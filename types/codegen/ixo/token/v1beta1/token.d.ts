@@ -1,4 +1,5 @@
 import * as _m0 from "protobufjs/minimal";
+import { Long } from "../../../helpers";
 export declare enum ContractType {
     CW20 = 0,
     CW721 = 1,
@@ -22,14 +23,14 @@ export interface ContractSDKType {
     address: string;
 }
 export interface Params {
-    cw20ContractCode: string;
-    cw721ContractCode: string;
-    ixo1155ContractCode: string;
+    cw20ContractCode: Long;
+    cw721ContractCode: Long;
+    ixo1155ContractCode: Long;
 }
 export interface ParamsSDKType {
-    cw20ContractCode: string;
-    cw721ContractCode: string;
-    ixo1155ContractCode: string;
+    cw20_contract_code: Long;
+    cw721_contract_code: Long;
+    ixo1155_contract_code: Long;
 }
 export interface TokenMinter {
     minterDid: string;
@@ -40,10 +41,10 @@ export interface TokenMinter {
     description: string;
 }
 export interface TokenMinterSDKType {
-    minterDid: string;
-    minterAddress: string;
-    contractAddress: string;
-    contractType: ContractTypeSDKType;
+    minter_did: string;
+    minter_address: string;
+    contract_address: string;
+    contract_type: ContractTypeSDKType;
     name: string;
     description: string;
 }

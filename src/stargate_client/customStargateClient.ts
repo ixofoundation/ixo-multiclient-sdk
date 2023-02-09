@@ -57,7 +57,7 @@ export class StargateClient {
         setupTxExtension
       );
     }
-    const { accountParser = accountFromAny } = options;
+    const { accountParser = accountFromAny } = options!;
     this.accountParser = accountParser;
   }
   static async connect(endpoint: string, options: StargateClientOptions = {}) {
@@ -211,8 +211,8 @@ export class StargateClient {
     query: SearchTxQuery,
     filter?: SearchTxFilter
   ): Promise<readonly IndexedTx[]> {
-    const minHeight = filter.minHeight || 0;
-    const maxHeight = filter.maxHeight || Number.MAX_SAFE_INTEGER;
+    const minHeight = filter?.minHeight || 0;
+    const maxHeight = filter?.maxHeight || Number.MAX_SAFE_INTEGER;
     if (maxHeight < minHeight) return []; // optional optimization
     function withFilters(originalQuery) {
       return `${originalQuery} AND tx.height>=${minHeight} AND tx.height<=${maxHeight}`;

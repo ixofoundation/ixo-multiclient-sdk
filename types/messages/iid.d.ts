@@ -14,5 +14,8 @@ declare type createIidVerificationMethodsProps = {
  * Only use SECP generated user creds!!!
  */
 export declare const createIidVerificationMethods: ({ did, pubkey, controller, address, type, }: createIidVerificationMethodsProps) => import("../codegen/ixo/iid/v1beta1/tx").Verification[];
-export declare const createAgentIidContext: () => import("../codegen/ixo/iid/v1beta1/iid").Context[];
+export declare const createAgentIidContext: (contexts?: [{
+    key: string;
+    val: string;
+}]) => import("../codegen/ixo/iid/v1beta1/iid").Context[];
 export {};

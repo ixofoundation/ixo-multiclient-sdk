@@ -18,17 +18,18 @@
 </a>
 <p><img src="https://img.shields.io/github/contributors/ixofoundation/ixo-multiclient-sdk" alt="GitHub contributors">
 <img src="https://img.shields.io/github/repo-size/ixofoundation/ixo-multiclient-sdk" alt="GitHub repo size">
-<img src="https://img.shields.io/twitter/follow/ixoworld?style=social" alt="Twitter Follow"></p>
+<img src="https://img.shields.io/twitter/follow/ixoworld?style=social" alt="Twitter Follow">
+<img src="https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white" alt="Medium"></p>
 <p><img src="https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white" alt="NodeJS"><img src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"><img src="https://img.shields.io/badge/Jest-323330?style=for-the-badge&logo=Jest&logoColor=white" alt="Jest"></p>
 <p align="center">
-  <img  src="images/readme_banner.png"/>
+  <img  src="assets/images/readme_banner.png"/>
 </p>
 
 <br />
 
-<h3 align="center">
-    One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them
-</h3>
+<h2 align="center">
+    The ultimate utility client for the IXO Blockchain for impact.
+</h2>
 
 <br />
 
@@ -63,6 +64,9 @@
 <li><a href="#publishing">Publishing</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a href="#bigint-react-native">BigInt React Native</a><ul>
 <li><a href="#credits">Credits</a></li>
 <li><a href="#disclaimer">Disclaimer</a></li>
 </ul>
@@ -84,7 +88,7 @@
 <a href="#rpc-clients" id="rpc-clients" style="color: inherit; text-decoration: none;">
   <h3>RPC Clients</h3>
 </a>
-<pre><code class="language-js"><span class="hl-1">import</span><span class="hl-0"> { </span><span class="hl-2">ixo</span><span class="hl-0">, </span><span class="hl-2">createQueryClient</span><span class="hl-0"> } </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&quot;@ixo/impactxclient-sdk&quot;</span><span class="hl-0">;</span><br/><br/><span class="hl-4">// BELOW METHOD NOT IMPLEMENTED YET!</span><br/><span class="hl-4">// const { createRPCQueryClient } = ixo.ClientFactory;</span><br/><span class="hl-4">// const client = await createRPCQueryClient({ rpcEndpoint: RPC_ENDPOINT });</span><br/><br/><span class="hl-4">// now you can query the cosmos modules</span><br/><span class="hl-4">// const balance = await client.cosmos.bank.v1beta1.allBalances({</span><br/><span class="hl-4">//   address: &quot;ixo1addresshere&quot;,</span><br/><span class="hl-4">// });</span><br/><br/><span class="hl-2">We</span><span class="hl-0"> </span><span class="hl-2">added</span><span class="hl-0"> </span><span class="hl-2">a</span><span class="hl-0"> </span><span class="hl-2">custom</span><span class="hl-0"> </span><span class="hl-2">queryCleint</span><span class="hl-0"> </span><span class="hl-2">that</span><span class="hl-0"> </span><span class="hl-2">includes</span><span class="hl-0"> </span><span class="hl-2">the</span><span class="hl-0"> </span><span class="hl-2">cosmos</span><span class="hl-0"> </span><span class="hl-2">modules</span><span class="hl-0"> </span><span class="hl-2">and</span><span class="hl-0"> </span><span class="hl-2">ixo</span><span class="hl-0"> </span><span class="hl-2">modules</span><span class="hl-0"> </span><span class="hl-1">as</span><span class="hl-0"> </span><span class="hl-5">well</span><span class="hl-0"> </span><span class="hl-1">as</span><span class="hl-0"> </span><span class="hl-5">custom</span><span class="hl-0"> </span><span class="hl-5">queries</span><br/><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">queryClient</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-8">createQueryClient</span><span class="hl-0">(</span><span class="hl-7">RPC_ENDPOINT</span><span class="hl-0">);</span><br/><br/><span class="hl-4">// now you can query any module</span><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">balance</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-2">client</span><span class="hl-0">.</span><span class="hl-2">cosmos</span><span class="hl-0">.</span><span class="hl-2">bank</span><span class="hl-0">.</span><span class="hl-2">v1beta1</span><span class="hl-0">.</span><span class="hl-8">allBalances</span><span class="hl-0">({</span><br/><span class="hl-0">  </span><span class="hl-2">address:</span><span class="hl-0"> </span><span class="hl-3">&quot;ixo1addresshere&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">});</span><br/><br/><span class="hl-4">// you can also query the ixo modules</span><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">balances</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-2">client</span><span class="hl-0">.</span><span class="hl-2">ixo</span><span class="hl-0">.</span><span class="hl-2">exchange</span><span class="hl-0">.</span><span class="hl-2">v1beta1</span><span class="hl-0">.</span><span class="hl-8">exchangeBalances</span><span class="hl-0">();</span><br/><br/>
+<pre><code class="language-js"><span class="hl-1">import</span><span class="hl-0"> { </span><span class="hl-2">ixo</span><span class="hl-0">, </span><span class="hl-2">createQueryClient</span><span class="hl-0"> } </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&quot;@ixo/impactxclient-sdk&quot;</span><span class="hl-0">;</span><br/><br/><span class="hl-4">// BELOW METHOD NOT IMPLEMENTED YET!</span><br/><span class="hl-4">// const { createRPCQueryClient } = ixo.ClientFactory;</span><br/><span class="hl-4">// const client = await createRPCQueryClient({ rpcEndpoint: RPC_ENDPOINT });</span><br/><br/><span class="hl-4">// now you can query the cosmos modules</span><br/><span class="hl-4">// const balance = await client.cosmos.bank.v1beta1.allBalances({</span><br/><span class="hl-4">//   address: &quot;ixo1addresshere&quot;,</span><br/><span class="hl-4">// });</span><br/><br/><span class="hl-2">We</span><span class="hl-0"> </span><span class="hl-2">added</span><span class="hl-0"> </span><span class="hl-2">a</span><span class="hl-0"> </span><span class="hl-2">custom</span><span class="hl-0"> </span><span class="hl-2">queryClient</span><span class="hl-0"> </span><span class="hl-2">that</span><span class="hl-0"> </span><span class="hl-2">includes</span><span class="hl-0"> </span><span class="hl-2">the</span><span class="hl-0"> </span><span class="hl-2">cosmos</span><span class="hl-0"> </span><span class="hl-2">modules</span><span class="hl-0"> </span><span class="hl-2">and</span><span class="hl-0"> </span><span class="hl-2">ixo</span><span class="hl-0"> </span><span class="hl-2">modules</span><span class="hl-0"> </span><span class="hl-1">as</span><span class="hl-0"> </span><span class="hl-5">well</span><span class="hl-0"> </span><span class="hl-1">as</span><span class="hl-0"> </span><span class="hl-5">custom</span><span class="hl-0"> </span><span class="hl-5">queries</span><br/><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">queryClient</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-8">createQueryClient</span><span class="hl-0">(</span><span class="hl-7">RPC_ENDPOINT</span><span class="hl-0">);</span><br/><br/><span class="hl-4">// now you can query any module</span><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">balance</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-2">client</span><span class="hl-0">.</span><span class="hl-2">cosmos</span><span class="hl-0">.</span><span class="hl-2">bank</span><span class="hl-0">.</span><span class="hl-2">v1beta1</span><span class="hl-0">.</span><span class="hl-8">allBalances</span><span class="hl-0">({</span><br/><span class="hl-0">  </span><span class="hl-2">address:</span><span class="hl-0"> </span><span class="hl-3">&quot;ixo1addresshere&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">});</span><br/><br/><span class="hl-4">// you can also query the ixo modules</span><br/><span class="hl-6">const</span><span class="hl-0"> </span><span class="hl-7">balances</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-2">client</span><span class="hl-0">.</span><span class="hl-2">ixo</span><span class="hl-0">.</span><span class="hl-2">exchange</span><span class="hl-0">.</span><span class="hl-2">v1beta1</span><span class="hl-0">.</span><span class="hl-8">exchangeBalances</span><span class="hl-0">();</span><br/><br/>
 </code></pre>
 
 <a href="#composing-messages" id="composing-messages" style="color: inherit; text-decoration: none;">
@@ -124,7 +128,6 @@ From that you can destructure <code>chain</code> functions that will fetch the l
 <a href="#connecting-with-wallets-and-signing-messages" id="connecting-with-wallets-and-signing-messages" style="color: inherit; text-decoration: none;">
   <h2>Connecting with Wallets and Signing Messages</h2>
 </a>
-<p>⚡️ For web interfaces, we recommend using <a href="https://github.com/cosmology-tech/cosmos-kit">cosmos-kit</a>. Continue below to see how to manually construct signers and clients.</p>
 <p>Here are the docs on <a href="https://github.com/cosmology-tech/cosmos-kit/tree/main/packages/react#signing-clients">creating signers</a> in cosmos-kit that can be used with Keplr and other wallets.</p>
 
 <a href="#initializing-the-stargate-client" id="initializing-the-stargate-client" style="color: inherit; text-decoration: none;">
@@ -194,17 +197,20 @@ The <code>stargateClient.signAndBroadcast(address, [msg], fee)</code> can still 
 <p>Build the types and then publish:</p>
 <pre><code><span class="hl-2">yarn</span><span class="hl-0"> </span><span class="hl-9">build</span><span class="hl-0">:</span><span class="hl-2">ts</span><br/><span class="hl-2">yarn</span><span class="hl-0"> </span><span class="hl-2">publish</span>
 </code></pre>
+<p>#React-Native</p>
+<p>Install the below Library and import into your main app entry file. This ensures the required Polyfils are covered on mobile.</p>
+<pre><code><span class="hl-2">yarn</span><span class="hl-0"> </span><span class="hl-2">add</span><span class="hl-0"> @</span><span class="hl-2">walletconnect</span><span class="hl-0">/</span><span class="hl-2">react</span><span class="hl-0">-</span><span class="hl-2">native</span><span class="hl-0">-</span><span class="hl-2">compat</span>
+</code></pre>
+
+<a href="#bigint-react-native" id="bigint-react-native" style="color: inherit; text-decoration: none;">
+  <h1>BigInt React Native</h1>
+</a>
+<p>To ensure no issues with the React Native bigInt implementation, be sure to wrap your decimal gas amounts and others in a JS Double.</p>
 
 <a href="#credits" id="credits" style="color: inherit; text-decoration: none;">
   <h2>Credits</h2>
 </a>
-<p>🛠 Built by Cosmology — if you like our tools, please consider delegating to <a href="https://cosmology.tech/validator">our validator ⚛️</a></p>
-<p>Code built with the help of these related projects:</p>
-<ul>
-<li><a href="https://github.com/CosmWasm/ts-codegen">@cosmwasm/ts-codegen</a> for generated CosmWasm contract Typescript classes</li>
-<li><a href="https://github.com/osmosis-labs/telescope">@osmonauts/telescope</a> a &quot;babel for the Cosmos&quot;, Telescope is a TypeScript Transpiler for Cosmos Protobufs.</li>
-<li><a href="https://github.com/cosmology-tech/cosmos-kit">cosmos-kit</a> A wallet connector for the Cosmos ⚛️</li>
-</ul>
+<p>🛠 Built using Telescope from Cosmology.</p>
 
 <a href="#disclaimer" id="disclaimer" style="color: inherit; text-decoration: none;">
   <h2>Disclaimer</h2>
@@ -314,10 +320,12 @@ The <code>stargateClient.signAndBroadcast(address, [msg], fee)</code> can still 
 <li class="tsd-kind-class"><a href="classes/SigningStargateClient.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-class)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-128-path"></rect><path d="M11.898 16.1201C11.098 16.1201 10.466 15.8961 10.002 15.4481C9.53803 15.0001 9.30603 14.3841 9.30603 13.6001V9.64012C9.30603 8.85612 9.53803 8.24012 10.002 7.79212C10.466 7.34412 11.098 7.12012 11.898 7.12012C12.682 7.12012 13.306 7.34812 13.77 7.80412C14.234 8.25212 14.466 8.86412 14.466 9.64012H13.386C13.386 9.14412 13.254 8.76412 12.99 8.50012C12.734 8.22812 12.37 8.09212 11.898 8.09212C11.426 8.09212 11.054 8.22412 10.782 8.48812C10.518 8.75212 10.386 9.13212 10.386 9.62812V13.6001C10.386 14.0961 10.518 14.4801 10.782 14.7521C11.054 15.0161 11.426 15.1481 11.898 15.1481C12.37 15.1481 12.734 15.0161 12.99 14.7521C13.254 14.4801 13.386 14.0961 13.386 13.6001H14.466C14.466 14.3761 14.234 14.9921 13.77 15.4481C13.306 15.8961 12.682 16.1201 11.898 16.1201Z" fill="var(--color-text)" id="icon-128-text"></path></svg>Signing<wbr/>Stargate<wbr/>Client</a></li>
 <li class="tsd-kind-interface"><a href="interfaces/SigningStargateClientOptions.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-interface)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-256-path"></rect><path d="M9.51 16V15.016H11.298V8.224H9.51V7.24H14.19V8.224H12.402V15.016H14.19V16H9.51Z" fill="var(--color-text)" id="icon-256-text"></path></svg>Signing<wbr/>Stargate<wbr/>Client<wbr/>Options</a></li>
 <li class="tsd-kind-variable"><a href="variables/cosmos_proto.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-variable)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-32-path"></rect><path d="M11.106 16L8.85 7.24H9.966L11.454 13.192C11.558 13.608 11.646 13.996 11.718 14.356C11.79 14.708 11.842 14.976 11.874 15.16C11.906 14.976 11.954 14.708 12.018 14.356C12.09 13.996 12.178 13.608 12.282 13.192L13.758 7.24H14.85L12.582 16H11.106Z" fill="var(--color-text)" id="icon-32-text"></path></svg>cosmos_<wbr/>proto</a></li>
+<li class="tsd-kind-variable"><a href="variables/defaultRegistryTypes.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-32-path"></use><use href="#icon-32-text"></use></svg>default<wbr/>Registry<wbr/>Types</a></li>
 <li class="tsd-kind-variable"><a href="variables/gogoproto.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-32-path"></use><use href="#icon-32-text"></use></svg>gogoproto</a></li>
 <li class="tsd-kind-variable"><a href="variables/ics23.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-32-path"></use><use href="#icon-32-text"></use></svg>ics23</a></li>
 <li class="tsd-kind-variable"><a href="variables/legacydid.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-32-path"></use><use href="#icon-32-text"></use></svg>legacydid</a></li>
 <li class="tsd-kind-function"><a href="functions/createQueryClient.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-function)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-64-path"></rect><path d="M9.39 16V7.24H14.55V8.224H10.446V11.128H14.238V12.112H10.47V16H9.39Z" fill="var(--color-text)" id="icon-64-text"></path></svg>create<wbr/>Query<wbr/>Client</a></li>
+<li class="tsd-kind-function"><a href="functions/createRegistry.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>create<wbr/>Registry</a></li>
 <li class="tsd-kind-function"><a href="functions/createSigningClient.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>create<wbr/>Signing<wbr/>Client</a></li></ul></nav></div></div>
 <div class="container tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>

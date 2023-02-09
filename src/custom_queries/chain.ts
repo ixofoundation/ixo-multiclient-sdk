@@ -2,16 +2,13 @@ import axios from "axios";
 
 import {
   preferredEndpoints,
-  testnetRegistry,
-  devnetRegistry,
-  keplrChainInfos,
+  localTestnetRegistry,
+  localDevnetRegistry,
+  registryChainNamesToKeplrChainNames,
+  keplrChainNamesToRegistryChainNames,
 } from "./chain.constants";
-import {
-  RegistryChainInfo,
-  KeplrChainInfo,
-  ChainNetwork,
-  ApiEndpoint,
-} from "./chain.types";
+import { RegistryChainInfo, KeplrChainInfo, ChainNetwork } from "./chain.types";
+import { prepareKeplrChainInfoTokenAssets } from "./currency";
 
 const fetchMainnetRegistryChainInfo = async (
   chainName: string
@@ -29,7 +26,7 @@ const fetchTestnetRegistryChainInfo = async (
     const response = await axios.get(url);
     return response.data as RegistryChainInfo;
   } catch (error) {
-    const chainInfo = testnetRegistry[chainName];
+    const chainInfo = localTestnetRegistry[chainName];
     if (!chainInfo)
       throw new Error("Cannot find testnet chain info for " + chainName);
     return chainInfo as RegistryChainInfo;
@@ -37,7 +34,7 @@ const fetchTestnetRegistryChainInfo = async (
 };
 
 const fetchDevnetRegistryChainInfo = (chainName: string): RegistryChainInfo => {
-  const chainInfo = devnetRegistry[chainName];
+  const chainInfo = localDevnetRegistry[chainName];
   if (!chainInfo)
     throw new Error("Cannot find devnet chain info for " + chainName);
   return chainInfo as RegistryChainInfo;
@@ -175,42 +172,68 @@ export const getActiveRpcFromChainName = async (
 //   }
 // };
 
+const fetchKeplrChainInfo = async (chainName: string) => {
+  const keplrChainName =
+    registryChainNamesToKeplrChainNames[chainName] ?? chainName;
+  const url = `https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/cosmos/${keplrChainName}.json`;
+  const response = await axios.get(url);
+  return response.data as KeplrChainInfo;
+};
+
 /** Fetch the keplr chain info for the provided registry chain info
  * @param chainInfo RegistryChainInfo
  */
 export const getKeplrChainInfoFromRegistryChainInfo = async (
   chainInfo: RegistryChainInfo
 ): Promise<KeplrChainInfo> => {
-  try {
-    const chainName =
-      chainInfo.chain_name?.replace(/testnet|devnet/i, "") ?? "";
-    const keplrChainInfo = keplrChainInfos[chainName];
-    if (!keplrChainInfo?.chainId) return null;
-    const rpc = await getActiveRpcFromRegistryChainInfo(chainInfo);
-    return {
-      ...keplrChainInfo,
-      chainId: chainInfo.chain_id,
-      chainName: chainInfo.pretty_name,
-      rpc,
-    };
-  } catch (error) {
-    throw error;
-  }
+  const chainName = chainInfo.chain_name?.replace(/testnet|devnet/i, "") ?? "";
+  let keplrChainInfo = await fetchKeplrChainInfo(chainName);
+  if (!keplrChainInfo?.chainId)
+    throw new Error(`Unable to fetch keplr chain info for ${chainName}`);
+  keplrChainInfo = prepareKeplrChainInfoTokenAssets(keplrChainInfo);
+  const rpc = await getActiveRpcFromRegistryChainInfo(chainInfo);
+  return {
+    ...keplrChainInfo,
+    chainId: chainInfo.chain_id,
+    chainName: chainInfo.pretty_name,
+    rpc,
+  };
 };
 
 /** Fetch the keplr chain info for the provided chain name and network type
  * @param chainName string - defined in cosmos chain registry [github.com/cosmos/chain-registry]
  * @param chainNetwork 'mainnet' | 'testnet' | 'devnet' - defaults to mainnet
  */
-export const getKeplrChainInfoFromChainName = async (
+export const getKeplrChainInfo = async (
   chainName: string,
   chainNetwork: ChainNetwork = "mainnet"
 ): Promise<KeplrChainInfo> => {
+  const keplrChainInfoResult = await fetchKeplrChainInfo(chainName);
+  if (!keplrChainInfoResult?.chainId)
+    throw new Error(`Unable to fetch keplr chain info for ${chainName}`);
+  const keplrChainInfo = prepareKeplrChainInfoTokenAssets(keplrChainInfoResult);
+  let registryChainInfo: RegistryChainInfo;
   try {
-    const chainInfo = await getRegistryChainInfo(chainName, chainNetwork);
-    const keplrChainInfo = getKeplrChainInfoFromRegistryChainInfo(chainInfo);
-    return keplrChainInfo;
+    const registryChainName =
+      keplrChainNamesToRegistryChainNames[chainName] ?? chainName;
+    registryChainInfo = await getRegistryChainInfo(
+      registryChainName,
+      chainNetwork
+    );
   } catch (error) {
     throw error;
   }
+  if (!registryChainInfo) {
+    if (chainNetwork === "mainnet") return keplrChainInfo;
+    throw new Error(
+      `Unable to fetch keplr chain info for ${chainName} ${chainNetwork}`
+    );
+  }
+  const rpc = await getActiveRpcFromRegistryChainInfo(registryChainInfo);
+  return {
+    ...keplrChainInfo,
+    chainId: registryChainInfo.chain_id,
+    chainName: registryChainInfo.pretty_name,
+    rpc: rpc,
+  };
 };

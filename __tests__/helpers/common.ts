@@ -15,13 +15,14 @@ import {
   cosmwasm,
   createQueryClient as createQueryClientImport,
   customMessages,
+  customQueries,
 } from "../../src";
 import { IObjectKeys } from "./types";
 
 const fs = require("fs");
 const path = require("path");
 
-export { ixo, cosmos, utils, ibc, customMessages, cosmwasm };
+export { ixo, cosmos, utils, ibc, customMessages, cosmwasm, customQueries };
 
 export const sendFaucet = async (address: string) => {
   const faucetUrl = RPC_URL.includes("devnet")

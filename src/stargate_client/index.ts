@@ -1,1 +1,2 @@
-export * from './customClient';
+export * from "./customClient";
+export * from "./customRegistries";

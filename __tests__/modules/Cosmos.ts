@@ -124,7 +124,7 @@ export const MsgSubmitProposalUpdateEntityParams = async (
     value: cosmos.gov.v1beta1.MsgSubmitProposal.fromPartial({
       initialDeposit: [
         cosmos.base.v1beta1.Coin.fromPartial({
-          amount: "10000000000",
+          amount: "1000000000",
           denom: "uixo",
         }),
       ],

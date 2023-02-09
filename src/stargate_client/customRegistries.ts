@@ -1,6 +1,5 @@
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
 import { ixo, cosmwasm, cosmos, ibc } from "../codegen";
-import { Coin } from "../codegen/cosmos/base/v1beta1/coin";
 
 export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
   // base
@@ -371,7 +370,10 @@ export const createRegistry = (): Registry => {
     "/ixo.token.v1beta1.MsgSetupMinter",
     ixo.token.v1beta1.MsgSetupMinter
   );
-  myRegistry.register("/ixo.token.v1beta1.MsgMint", ixo.token.v1beta1.MsgMint);
+  myRegistry.register(
+    "/ixo.token.v1beta1.MsgMintToken",
+    ixo.token.v1beta1.MsgMintToken
+  );
   myRegistry.register(
     "/ixo.token.v1beta1.MsgTransferToken",
     ixo.token.v1beta1.MsgTransferToken

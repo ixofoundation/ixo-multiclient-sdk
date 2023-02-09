@@ -1,0 +1,24 @@
+{
+  "@context": {
+    "ixo": "https://w3id.org/ixo/ns/protocol/",
+    "@id": "@type",
+    "type": "@type",
+    "@protected": true
+  },
+  "type": "ixo:entity#claim",
+  "entityClaims": [
+    {
+      "template": {
+        "id": "did:ixo:entity:abc123",
+        "title": "Carbon Emission Reduction",
+        "description": "Amount of Carbon Emissions reduced through the use of an energy-efficient clean cookstove."
+      },
+      "submissions": {
+        "maximum": 100,
+        "startDate": "20-Jan-2023",
+        "endDate": "22-Feb-2026"
+      }
+    }
+  ],
+  "headlineMetric": "did:ixo:entity:abc123"
+}
