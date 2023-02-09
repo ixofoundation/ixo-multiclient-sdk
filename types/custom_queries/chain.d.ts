@@ -21,4 +21,4 @@ export declare const getKeplrChainInfoFromRegistryChainInfo: (chainInfo: Registr
  * @param chainName string - defined in cosmos chain registry [github.com/cosmos/chain-registry]
  * @param chainNetwork 'mainnet' | 'testnet' | 'devnet' - defaults to mainnet
  */
-export declare const getKeplrChainInfoFromChainName: (chainName: string, chainNetwork?: ChainNetwork) => Promise<KeplrChainInfo>;
+export declare const getKeplrChainInfo: (chainName: string, chainNetwork?: ChainNetwork) => Promise<KeplrChainInfo>;

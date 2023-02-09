@@ -1,3 +1,4 @@
+import { TokenAsset } from "./currency.types";
 export declare type ChainNetwork = "mainnet" | "testnet" | "devnet";
 export declare type ApiEndpoint = {
     address: string;
@@ -92,27 +93,12 @@ export declare type RegistryChainInfo = {
     update_link?: string;
     keywords?: string[];
 };
-export declare type TokenAsset = {
-    coinDenom: string;
-    coinMinimalDenom: string;
-    coinDecimals: number;
-    coinGeckoId?: string;
-    coinImageUrl?: string;
-    isStakeCurrency?: boolean;
-    isFeeCurrency?: boolean;
-};
 export declare type KeplrChainInfo = {
     rpc: string;
     rest: string;
     chainId: string;
     chainName: string;
-    stakeCurrency: {
-        coinDenom: string;
-        coinMinimalDenom: string;
-        coinDecimals: number;
-        coinGeckoId?: string;
-        coinImageUrl?: string;
-    };
+    stakeCurrency: TokenAsset;
     walletUrl?: string;
     walletUrlForStaking?: string;
     bip44: {
@@ -130,17 +116,7 @@ export declare type KeplrChainInfo = {
         bech32PrefixConsPub: string;
     };
     currencies?: TokenAsset[];
-    feeCurrencies?: {
-        coinDenom: string;
-        coinMinimalDenom: string;
-        coinDecimals: number;
-        coinGeckoId?: string;
-        gasPriceStep?: {
-            low: number;
-            average: number;
-            high: number;
-        };
-    }[];
+    feeCurrencies?: TokenAsset[];
     coinType?: number;
     chainSymbolImageUrl?: string;
     features?: string[];

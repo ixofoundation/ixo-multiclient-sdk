@@ -11,6 +11,7 @@ export declare type CellnodeWeb3Resource = {
     cid: string;
     name: string;
     ipfs: string;
+    url: string;
 };
 export declare const cellNodeChainMapping: {
     [network in ChainNetwork]: string;

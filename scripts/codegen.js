@@ -69,6 +69,10 @@ telescope({
           dir: join(contractsDir, '/daodao/external/cw-vesting')
         },
         {
+          name: 'dao-migrator',
+          dir: join(contractsDir, '/daodao/external/dao-migrator')
+        },
+        {
           name: 'dao-pre-propose-approval-single',
           dir: join(
             contractsDir,
@@ -92,6 +96,18 @@ telescope({
         {
           name: 'dao-pre-propose-single',
           dir: join(contractsDir, '/daodao/pre-propose/dao-pre-propose-single')
+        },
+        {
+          name: 'dao-proposal-condorcet',
+          dir: join(contractsDir, '/daodao/proposal/dao-proposal-condorcet')
+        },
+        {
+          name: 'dao-proposal-multiple',
+          dir: join(contractsDir, '/daodao/proposal/dao-proposal-multiple')
+        },
+        {
+          name: 'dao-proposal-single',
+          dir: join(contractsDir, '/daodao/proposal/dao-proposal-single')
         },
         {
           name: 'cw20-stake',

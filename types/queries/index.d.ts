@@ -188,6 +188,22 @@ export declare const createQueryClient: (rpcEndpoint: string) => Promise<{
             };
         };
     };
+    cosmwasm: {
+        wasm: {
+            v1: {
+                contractInfo(request: import("../codegen/cosmwasm/wasm/v1/query").QueryContractInfoRequest): Promise<import("../codegen/cosmwasm/wasm/v1/query").QueryContractInfoResponse>;
+                contractHistory(request: import("../codegen/cosmwasm/wasm/v1/query").QueryContractHistoryRequest): Promise<import("../codegen/cosmwasm/wasm/v1/query").QueryContractHistoryResponse>;
+                contractsByCode(request: import("../codegen/cosmwasm/wasm/v1/query").QueryContractsByCodeRequest): Promise<import("../codegen/cosmwasm/wasm/v1/query").QueryContractsByCodeResponse>;
+                allContractState(request: import("../codegen/cosmwasm/wasm/v1/query").QueryAllContractStateRequest): Promise<import("../codegen/cosmwasm/wasm/v1/query").QueryAllContractStateResponse>;
+                rawContractState(request: import("../codegen/cosmwasm/wasm/v1/query").QueryRawContractStateRequest): Promise<import("../codegen/cosmwasm/wasm/v1/query").QueryRawContractStateResponse>;
+                smartContractState(request: import("../codegen/cosmwasm/wasm/v1/query").QuerySmartContractStateRequest): Promise<import("../codegen/cosmwasm/wasm/v1/query").QuerySmartContractStateResponse>;
+                code(request: import("../codegen/cosmwasm/wasm/v1/query").QueryCodeRequest): Promise<import("../codegen/cosmwasm/wasm/v1/query").QueryCodeResponse>;
+                codes(request?: import("../codegen/cosmwasm/wasm/v1/query").QueryCodesRequest): Promise<import("../codegen/cosmwasm/wasm/v1/query").QueryCodesResponse>;
+                pinnedCodes(request?: import("../codegen/cosmwasm/wasm/v1/query").QueryPinnedCodesRequest): Promise<import("../codegen/cosmwasm/wasm/v1/query").QueryPinnedCodesResponse>;
+                params(request?: import("../codegen/cosmwasm/wasm/v1/query").QueryParamsRequest): Promise<import("../codegen/cosmwasm/wasm/v1/query").QueryParamsResponse>;
+            };
+        };
+    };
     ibc: {
         applications: {
             transfer: {

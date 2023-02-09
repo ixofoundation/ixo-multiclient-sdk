@@ -5,10 +5,11 @@ export declare namespace customQueries {
         getActiveRpcFromRegistryChainInfo: (chainInfo: import("./chain.types").RegistryChainInfo) => Promise<string>;
         getActiveRpcFromChainName: (chainName: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<string>;
         getKeplrChainInfoFromRegistryChainInfo: (chainInfo: import("./chain.types").RegistryChainInfo) => Promise<import("./chain.types").KeplrChainInfo>;
-        getKeplrChainInfoFromChainName: (chainName: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<import("./chain.types").KeplrChainInfo>;
+        getKeplrChainInfo: (chainName: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<import("./chain.types").KeplrChainInfo>;
     };
     const currency: {
-        findTokenFromDenom: (denom: string) => import("./chain.types").TokenAsset;
+        prepareKeplrChainInfoTokenAssets: (chainInfo: import("./chain.types").KeplrChainInfo) => import("./chain.types").KeplrChainInfo;
+        findTokenFromDenom: (denom: string) => import("./currency.types").TokenAsset;
     };
     const cellnode: {
         cellNodeChainMapping: {
