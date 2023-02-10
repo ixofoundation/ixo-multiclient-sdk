@@ -41,7 +41,7 @@ export const BankSendTrx = async () => {
   return response;
 };
 
-export const MsgSubmitProposalStoreCW721 = async () => {
+export const MsgSubmitProposalStoreCW = async (contract: string = "cw721") => {
   const client = await createClient();
 
   const tester = getUser();
@@ -62,11 +62,11 @@ export const MsgSubmitProposalStoreCW721 = async () => {
         typeUrl: "/cosmwasm.wasm.v1.StoreCodeProposal",
         value: cosmwasm.wasm.v1.StoreCodeProposal.encode(
           cosmwasm.wasm.v1.StoreCodeProposal.fromPartial({
-            title: "Upload cw721 smart contract",
+            title: `Upload ${contract} smart contract`,
             description: "Description",
             runAs: myAddress,
             wasmByteCode: new Uint8Array(
-              getFileFromPath(["contracts", "ixo", "cw721.wasm"], "")
+              getFileFromPath(["contracts", "ixo", `${contract}.wasm`], "")
             ),
             instantiatePermission: cosmwasm.wasm.v1.AccessConfig.fromPartial({
               permission: cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_EVERYBODY,
