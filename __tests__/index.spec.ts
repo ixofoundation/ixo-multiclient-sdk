@@ -19,6 +19,7 @@ import { bankBasic, govBasic } from "./flows/cosmos";
 import { tokenBasic } from "./flows/tokens";
 import { projectsBasic } from "./flows/projects";
 import { wasmBasic } from "./flows/cosmwasm";
+import { quickQueries } from "./flows/quickQueries";
 
 beforeAll(() => {
   generateConstants();
@@ -30,6 +31,7 @@ generateBlockchainTestUsers();
 
 // registerIids();
 // iidsBasic();
+// quickQueries();
 // paymentsBasic();
 // projectsBasic();
 // bondsBasic();
@@ -41,4 +43,4 @@ generateBlockchainTestUsers();
 // ibcBasic();
 // bankBasic();
 // govBasic();
-wasmBasic();
+// wasmBasic();
