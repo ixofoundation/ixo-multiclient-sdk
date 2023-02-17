@@ -13,6 +13,10 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
   // bank
   ["/cosmos.bank.v1beta1.MsgMultiSend", cosmos.bank.v1beta1.MsgMultiSend],
   ["/cosmos.bank.v1beta1.MsgSend", cosmos.bank.v1beta1.MsgSend],
+  [
+    "/cosmos.bank.v1beta1.SendAuthorization",
+    cosmos.bank.v1beta1.SendAuthorization,
+  ],
 
   // distribution
   [
@@ -367,8 +371,8 @@ export const createRegistry = (): Registry => {
 
   // Ixo Token module
   myRegistry.register(
-    "/ixo.token.v1beta1.MsgSetupMinter",
-    ixo.token.v1beta1.MsgSetupMinter
+    "/ixo.token.v1beta1.MsgCreateToken",
+    ixo.token.v1beta1.MsgCreateToken
   );
   myRegistry.register(
     "/ixo.token.v1beta1.MsgMintToken",
@@ -377,6 +381,10 @@ export const createRegistry = (): Registry => {
   myRegistry.register(
     "/ixo.token.v1beta1.MsgTransferToken",
     ixo.token.v1beta1.MsgTransferToken
+  );
+  myRegistry.register(
+    "/ixo.token.v1beta1.MintAuthorization",
+    ixo.token.v1beta1.MintAuthorization
   );
 
   // Cosmwasm

@@ -1,4 +1,4 @@
-import { TokenMinter, TokenMinterSDKType } from "./token";
+import { Token, TokenSDKType } from "./token";
 import * as _m0 from "protobufjs/minimal";
 import { isSet, isObject } from "../../../helpers";
 export interface QueryTokenListRequest {
@@ -13,7 +13,7 @@ export interface QueryTokenListRequestSDKType {
  */
 
 export interface QueryTokenListResponse {
-  contracts: TokenMinter[];
+  contracts: Token[];
 }
 /**
  * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
@@ -21,7 +21,7 @@ export interface QueryTokenListResponse {
  */
 
 export interface QueryTokenListResponseSDKType {
-  contracts: TokenMinterSDKType[];
+  contracts: TokenSDKType[];
 }
 /**
  * QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC
@@ -150,7 +150,7 @@ function createBaseQueryTokenListResponse(): QueryTokenListResponse {
 export const QueryTokenListResponse = {
   encode(message: QueryTokenListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.contracts) {
-      TokenMinter.encode(v!, writer.uint32(10).fork()).ldelim();
+      Token.encode(v!, writer.uint32(10).fork()).ldelim();
     }
 
     return writer;
@@ -166,7 +166,7 @@ export const QueryTokenListResponse = {
 
       switch (tag >>> 3) {
         case 1:
-          message.contracts.push(TokenMinter.decode(reader, reader.uint32()));
+          message.contracts.push(Token.decode(reader, reader.uint32()));
           break;
 
         default:
@@ -180,7 +180,7 @@ export const QueryTokenListResponse = {
 
   fromJSON(object: any): QueryTokenListResponse {
     return {
-      contracts: Array.isArray(object?.contracts) ? object.contracts.map((e: any) => TokenMinter.fromJSON(e)) : []
+      contracts: Array.isArray(object?.contracts) ? object.contracts.map((e: any) => Token.fromJSON(e)) : []
     };
   },
 
@@ -188,7 +188,7 @@ export const QueryTokenListResponse = {
     const obj: any = {};
 
     if (message.contracts) {
-      obj.contracts = message.contracts.map(e => e ? TokenMinter.toJSON(e) : undefined);
+      obj.contracts = message.contracts.map(e => e ? Token.toJSON(e) : undefined);
     } else {
       obj.contracts = [];
     }
@@ -198,7 +198,7 @@ export const QueryTokenListResponse = {
 
   fromPartial(object: Partial<QueryTokenListResponse>): QueryTokenListResponse {
     const message = createBaseQueryTokenListResponse();
-    message.contracts = object.contracts?.map(e => TokenMinter.fromPartial(e)) || [];
+    message.contracts = object.contracts?.map(e => Token.fromPartial(e)) || [];
     return message;
   }
 

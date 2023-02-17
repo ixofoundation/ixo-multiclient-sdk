@@ -144,3 +144,37 @@ export const MsgSubmitProposalUpdateEntityParams = async (
   const response = await client.signAndBroadcast(myAddress, [message], fee);
   return response;
 };
+
+export const MsgSubmitProposalUpdateTokenParams = async (
+  nftContractCodeId: number
+) => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const message = {
+    typeUrl: "/cosmos.gov.v1beta1.MsgSubmitProposal",
+    value: cosmos.gov.v1beta1.MsgSubmitProposal.fromPartial({
+      initialDeposit: [
+        cosmos.base.v1beta1.Coin.fromPartial({
+          amount: "1000000000",
+          denom: "uixo",
+        }),
+      ],
+      proposer: myAddress,
+      content: {
+        typeUrl: "/ixo.token.v1beta1.SetTokenContractCodes",
+        value: ixo.token.v1beta1.SetTokenContractCodes.encode(
+          ixo.token.v1beta1.SetTokenContractCodes.fromPartial({
+            ixo1155ContractCode: Long.fromNumber(nftContractCodeId),
+          })
+        ).finish(),
+      },
+    }),
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};

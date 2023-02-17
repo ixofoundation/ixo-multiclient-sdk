@@ -67,7 +67,7 @@ export const CreateEntityAssetSupamoto = async (
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgCreateEntity",
     value: ixo.entity.v1beta1.MsgCreateEntity.fromPartial({
-      entityType: "protocol",
+      entityType: "asset/collection",
       entityStatus: 0,
       controller: [did],
       context: createAgentIidContext([

@@ -1,4 +1,4 @@
-import { TokenMinter, TokenMinterSDKType } from "./token";
+import { Token, TokenSDKType } from "./token";
 import * as _m0 from "protobufjs/minimal";
 export interface QueryTokenListRequest {
     minterDid: string;
@@ -11,14 +11,14 @@ export interface QueryTokenListRequestSDKType {
  * method.
  */
 export interface QueryTokenListResponse {
-    contracts: TokenMinter[];
+    contracts: Token[];
 }
 /**
  * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
  * method.
  */
 export interface QueryTokenListResponseSDKType {
-    contracts: TokenMinterSDKType[];
+    contracts: TokenSDKType[];
 }
 /**
  * QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC

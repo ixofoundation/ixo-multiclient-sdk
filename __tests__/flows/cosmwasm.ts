@@ -9,7 +9,7 @@ export const wasmBasic = () =>
   describe("Testing the wasmd module", () => {
     let contractAddress: string;
     contractAddress =
-      "ixo1xr3rq8yvd7qplsw5yx90ftsr2zdhg4e9z60h5duusgxpv72hud3sq0mjl6";
+      "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
     testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
       const tester = (await getUser().getAccounts())[0].address;
       const msg = { minter: tester };
@@ -35,11 +35,15 @@ export const wasmBasic = () =>
       const alice = (await getUser(WalletUsers.alice).getAccounts())[0].address;
       const bob = (await getUser(WalletUsers.bob).getAccounts())[0].address;
       const msg = {
-        mint: {
-          to: alice,
-          token_id: tokenId2,
-          value: "5000",
-          uri: "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14",
+        // mint: {
+        //   to: alice,
+        //   token_id: tokenId2,
+        //   value: "5000",
+        //   uri: "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14",
+        // },
+        batch_mint: {
+          to: tester,
+          batch: [[tokenId2, "5000", "uri"]],
         },
         // send_from: {
         //   from: tester,
@@ -62,6 +66,7 @@ export const wasmBasic = () =>
         JSON.stringify(msg),
         WalletUsers.tester
       );
+      console.log(res);
       console.log(JSON.parse(res.rawLog!)[0].events);
       return res;
     });
@@ -83,7 +88,6 @@ export const wasmBasic = () =>
         //   token_id: tokenId2,
         // },
       };
-
       const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
         address: contractAddress,
         queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),

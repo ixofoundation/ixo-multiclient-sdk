@@ -24,7 +24,7 @@
     "build:ts": "tsc --project ./tsconfig.json",
     "build:docs": "typedoc src/index.ts",
     "build": "npm run build:module && npm run build:main",
-    "buidl": "npm run build && npm run build:ts",
+    "build:prepare": "npm run build && npm run build:ts && npm run build:docs",
     "codegen": "cross-env NODE_ENV=development babel-node scripts/codegen.js",
     "prepare": "npm run build",
     "dev": "cross-env NODE_ENV=development babel-node src/index --extensions \".tsx,.ts,.js\"",

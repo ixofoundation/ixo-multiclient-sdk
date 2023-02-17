@@ -4,10 +4,8 @@ import { ChainNetwork } from "./chain.types";
 export type CellnodePublicResource = {
   key: string;
   contentType: string; // mimetype
-  data: {
-    type: string;
-    data: any;
-  };
+  data: string;
+  url: string;
 };
 
 export type CellnodeWeb3Resource = {
@@ -27,11 +25,11 @@ export const getPublicDoc = async (
   cid: string,
   cellnodeUrl?: string,
   chainNetwork: ChainNetwork = "mainnet"
-): Promise<CellnodePublicResource> => {
+): Promise<any> => {
   const baseUrl = cellnodeUrl || cellNodeChainMapping[chainNetwork];
   const url = `${baseUrl}/public/${cid}`;
   const response = await axios.get(url);
-  return response.data as CellnodePublicResource;
+  return response.data;
 };
 
 export const uploadPublicDoc = async (
@@ -46,21 +44,21 @@ export const uploadPublicDoc = async (
     contentType,
     data,
   });
-  return response.data as CellnodePublicResource;
+  return {
+    ...response.data,
+    url: `${baseUrl}/public/${response.data.key}`,
+  } as CellnodePublicResource;
 };
 
 export const getWeb3Doc = async (
   cid: string,
   cellnodeUrl?: string,
   chainNetwork: ChainNetwork = "mainnet"
-): Promise<CellnodeWeb3Resource> => {
+): Promise<any> => {
   const baseUrl = cellnodeUrl || cellNodeChainMapping[chainNetwork];
   const url = `${baseUrl}/storage/retrieve/${cid}`;
   const response = await axios.get(url);
-  return {
-    ...response.data,
-    url: `https://${response.data.ipfs}`,
-  } as CellnodeWeb3Resource;
+  return response.data;
 };
 
 export const uploadWeb3Doc = async (

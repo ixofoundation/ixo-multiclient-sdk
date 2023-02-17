@@ -1,140 +1,115 @@
+import { TokenData, TokenDataSDKType } from "./token";
 import * as _m0 from "protobufjs/minimal";
-import { Long, isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
-export interface Cw20Coin {
-  address: string;
-  amount: Long;
-}
-export interface Cw20CoinSDKType {
-  address: string;
-  amount: Long;
-}
-export interface SetupCw20 {
-  symbol: string;
-  decimals: number;
-  cap: Long;
-  initialBalances: Cw20Coin[];
-}
-export interface SetupCw20SDKType {
-  symbol: string;
-  decimals: number;
-  cap: Long;
-  initialBalances: Cw20CoinSDKType[];
-}
-export interface SetupCw721 {
-  symbol: string;
-}
-export interface SetupCw721SDKType {
-  symbol: string;
-}
-export interface SetupCw1155 {}
-export interface SetupCw1155SDKType {}
-export interface MsgSetupMinter {
+import { isSet } from "../../../helpers";
+export interface MsgCreateToken {
   minterDid: string;
   minterAddress: string;
+  /** class is the token protocol entity DID (validated) */
+
+  class: string;
+  /** name is the token name, which must be unique (namespace) */
+
   name: string;
+  /** description is any arbitrary description */
+
   description: string;
-  cw20?: SetupCw20;
-  cw721?: SetupCw721;
-  cw1155?: SetupCw1155;
+  /** image is the image url for the token */
+
+  image: string;
+  /** type is the token type (eg ixo1155) */
+
+  tokenType: string;
+  /**
+   * cap is the maximum number of tokens with this name that can be minted, 0 is
+   * unlimited
+   */
+
+  cap: string;
 }
-export interface MsgSetupMinterSDKType {
+export interface MsgCreateTokenSDKType {
   minter_did: string;
   minter_address: string;
+  /** class is the token protocol entity DID (validated) */
+
+  class: string;
+  /** name is the token name, which must be unique (namespace) */
+
   name: string;
+  /** description is any arbitrary description */
+
   description: string;
-  cw20?: SetupCw20SDKType;
-  cw721?: SetupCw721SDKType;
-  cw1155?: SetupCw1155SDKType;
-}
-export interface MsgSetupMinterResponse {}
-export interface MsgSetupMinterResponseSDKType {}
-export interface MintCw20 {
-  amount: Long;
-}
-export interface MintCw20SDKType {
-  amount: Long;
-}
-export interface MintCw721 {
-  /** An IID that identifies the asset that this token represents */
-  id: string;
+  /** image is the image url for the token */
+
+  image: string;
+  /** type is the token type (eg ixo1155) */
+
+  token_type: string;
   /**
-   * A URI pointing to a resource with media type image/* representing
-   * the asset to which this token represents. Consider making any
-   * images at a width between 320 and 1080 pixels and aspect ratio
-   * between 1.91:1 and 4:5 inclusive.
+   * cap is the maximum number of tokens with this name that can be minted, 0 is
+   * unlimited
    */
 
-  image?: string;
-  /** Uri */
-
-  uri?: string;
-  properties: Uint8Array;
+  cap: string;
 }
-export interface MintCw721SDKType {
-  /** An IID that identifies the asset that this token represents */
-  id: string;
-  /**
-   * A URI pointing to a resource with media type image/* representing
-   * the asset to which this token represents. Consider making any
-   * images at a width between 320 and 1080 pixels and aspect ratio
-   * between 1.91:1 and 4:5 inclusive.
-   */
-
-  image?: string;
-  /** Uri */
-
-  uri?: string;
-  properties: Uint8Array;
-}
-export interface MintCw1155 {
-  /** An IID that identifies the asset that this token represents */
-  id: string;
-  /**
-   * A URI pointing to a resource with media type image/* representing
-   * the asset to which this token represents. Consider making any
-   * images at a width between 320 and 1080 pixels and aspect ratio
-   * between 1.91:1 and 4:5 inclusive.
-   */
-
-  image?: string;
-  /** Uri */
-
-  uri?: string;
-  value: Long;
-}
-export interface MintCw1155SDKType {
-  /** An IID that identifies the asset that this token represents */
-  id: string;
-  /**
-   * A URI pointing to a resource with media type image/* representing
-   * the asset to which this token represents. Consider making any
-   * images at a width between 320 and 1080 pixels and aspect ratio
-   * between 1.91:1 and 4:5 inclusive.
-   */
-
-  image?: string;
-  /** Uri */
-
-  uri?: string;
-  value: Long;
-}
+export interface MsgCreateTokenResponse {}
+export interface MsgCreateTokenResponseSDKType {}
 export interface MsgMintToken {
   minterDid: string;
   minterAddress: string;
   contractAddress: string;
   ownerDid: string;
-  cw20?: MintCw20;
-  cw721?: MintCw721;
-  cw1155?: MintCw1155;
+  mintBatch: MintBatch[];
 }
 export interface MsgMintTokenSDKType {
   minter_did: string;
   minter_address: string;
   contract_address: string;
   owner_did: string;
-  cw20?: MintCw20SDKType;
-  cw721?: MintCw721SDKType;
-  cw1155?: MintCw1155SDKType;
+  mintBatch: MintBatchSDKType[];
+}
+export interface MintBatch {
+  /**
+   * name is the token name, which must be unique (namespace), will be verified
+   * against Token name provided on msgCreateToken
+   */
+  name: string;
+  /** index is the unique identifier hexstring that identifies the token */
+
+  index: string;
+  /** amount is the number of tokens to mint */
+
+  amount: string;
+  /** did of collection (eg Supamoto Malawi) */
+
+  collection: string;
+  /**
+   * tokenData is the linkedResources added to tokenMetadata when queried eg
+   * (credential link ***.ipfs)
+   */
+
+  tokenData: TokenData[];
+}
+export interface MintBatchSDKType {
+  /**
+   * name is the token name, which must be unique (namespace), will be verified
+   * against Token name provided on msgCreateToken
+   */
+  name: string;
+  /** index is the unique identifier hexstring that identifies the token */
+
+  index: string;
+  /** amount is the number of tokens to mint */
+
+  amount: string;
+  /** did of collection (eg Supamoto Malawi) */
+
+  collection: string;
+  /**
+   * tokenData is the linkedResources added to tokenMetadata when queried eg
+   * (credential link ***.ipfs)
+   */
+
+  tokenData: TokenDataSDKType[];
 }
 export interface MsgMintTokenResponse {}
 export interface MsgMintTokenResponseSDKType {}
@@ -161,288 +136,21 @@ export interface MsgTransferTokenSDKType {
 export interface MsgTransferTokenResponse {}
 export interface MsgTransferTokenResponseSDKType {}
 
-function createBaseCw20Coin(): Cw20Coin {
-  return {
-    address: "",
-    amount: Long.UZERO
-  };
-}
-
-export const Cw20Coin = {
-  encode(message: Cw20Coin, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.address !== "") {
-      writer.uint32(10).string(message.address);
-    }
-
-    if (!message.amount.isZero()) {
-      writer.uint32(16).uint64(message.amount);
-    }
-
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): Cw20Coin {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCw20Coin();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        case 1:
-          message.address = reader.string();
-          break;
-
-        case 2:
-          message.amount = (reader.uint64() as Long);
-          break;
-
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(object: any): Cw20Coin {
-    return {
-      address: isSet(object.address) ? String(object.address) : "",
-      amount: isSet(object.amount) ? Long.fromValue(object.amount) : Long.UZERO
-    };
-  },
-
-  toJSON(message: Cw20Coin): unknown {
-    const obj: any = {};
-    message.address !== undefined && (obj.address = message.address);
-    message.amount !== undefined && (obj.amount = (message.amount || Long.UZERO).toString());
-    return obj;
-  },
-
-  fromPartial(object: Partial<Cw20Coin>): Cw20Coin {
-    const message = createBaseCw20Coin();
-    message.address = object.address ?? "";
-    message.amount = object.amount !== undefined && object.amount !== null ? Long.fromValue(object.amount) : Long.UZERO;
-    return message;
-  }
-
-};
-
-function createBaseSetupCw20(): SetupCw20 {
-  return {
-    symbol: "",
-    decimals: 0,
-    cap: undefined,
-    initialBalances: undefined
-  };
-}
-
-export const SetupCw20 = {
-  encode(message: SetupCw20, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.symbol !== "") {
-      writer.uint32(10).string(message.symbol);
-    }
-
-    if (message.decimals !== 0) {
-      writer.uint32(16).uint32(message.decimals);
-    }
-
-    if (message.cap !== undefined) {
-      writer.uint32(24).uint64(message.cap);
-    }
-
-    for (const v of message.initialBalances) {
-      Cw20Coin.encode(v!, writer.uint32(34).fork()).ldelim();
-    }
-
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SetupCw20 {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSetupCw20();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        case 1:
-          message.symbol = reader.string();
-          break;
-
-        case 2:
-          message.decimals = reader.uint32();
-          break;
-
-        case 3:
-          message.cap = (reader.uint64() as Long);
-          break;
-
-        case 4:
-          message.initialBalances.push(Cw20Coin.decode(reader, reader.uint32()));
-          break;
-
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(object: any): SetupCw20 {
-    return {
-      symbol: isSet(object.symbol) ? String(object.symbol) : "",
-      decimals: isSet(object.decimals) ? Number(object.decimals) : 0,
-      cap: isSet(object.cap) ? Long.fromValue(object.cap) : undefined,
-      initialBalances: Array.isArray(object?.initialBalances) ? object.initialBalances.map((e: any) => Cw20Coin.fromJSON(e)) : []
-    };
-  },
-
-  toJSON(message: SetupCw20): unknown {
-    const obj: any = {};
-    message.symbol !== undefined && (obj.symbol = message.symbol);
-    message.decimals !== undefined && (obj.decimals = Math.round(message.decimals));
-    message.cap !== undefined && (obj.cap = (message.cap || undefined).toString());
-
-    if (message.initialBalances) {
-      obj.initialBalances = message.initialBalances.map(e => e ? Cw20Coin.toJSON(e) : undefined);
-    } else {
-      obj.initialBalances = [];
-    }
-
-    return obj;
-  },
-
-  fromPartial(object: Partial<SetupCw20>): SetupCw20 {
-    const message = createBaseSetupCw20();
-    message.symbol = object.symbol ?? "";
-    message.decimals = object.decimals ?? 0;
-    message.cap = object.cap !== undefined && object.cap !== null ? Long.fromValue(object.cap) : undefined;
-    message.initialBalances = object.initialBalances?.map(e => Cw20Coin.fromPartial(e)) || [];
-    return message;
-  }
-
-};
-
-function createBaseSetupCw721(): SetupCw721 {
-  return {
-    symbol: ""
-  };
-}
-
-export const SetupCw721 = {
-  encode(message: SetupCw721, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.symbol !== "") {
-      writer.uint32(10).string(message.symbol);
-    }
-
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SetupCw721 {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSetupCw721();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        case 1:
-          message.symbol = reader.string();
-          break;
-
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(object: any): SetupCw721 {
-    return {
-      symbol: isSet(object.symbol) ? String(object.symbol) : ""
-    };
-  },
-
-  toJSON(message: SetupCw721): unknown {
-    const obj: any = {};
-    message.symbol !== undefined && (obj.symbol = message.symbol);
-    return obj;
-  },
-
-  fromPartial(object: Partial<SetupCw721>): SetupCw721 {
-    const message = createBaseSetupCw721();
-    message.symbol = object.symbol ?? "";
-    return message;
-  }
-
-};
-
-function createBaseSetupCw1155(): SetupCw1155 {
-  return {};
-}
-
-export const SetupCw1155 = {
-  encode(_: SetupCw1155, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SetupCw1155 {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSetupCw1155();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(_: any): SetupCw1155 {
-    return {};
-  },
-
-  toJSON(_: SetupCw1155): unknown {
-    const obj: any = {};
-    return obj;
-  },
-
-  fromPartial(_: Partial<SetupCw1155>): SetupCw1155 {
-    const message = createBaseSetupCw1155();
-    return message;
-  }
-
-};
-
-function createBaseMsgSetupMinter(): MsgSetupMinter {
+function createBaseMsgCreateToken(): MsgCreateToken {
   return {
     minterDid: "",
     minterAddress: "",
+    class: "",
     name: "",
     description: "",
-    cw20: undefined,
-    cw721: undefined,
-    cw1155: undefined
+    image: "",
+    tokenType: "",
+    cap: ""
   };
 }
 
-export const MsgSetupMinter = {
-  encode(message: MsgSetupMinter, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const MsgCreateToken = {
+  encode(message: MsgCreateToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.minterDid !== "") {
       writer.uint32(10).string(message.minterDid);
     }
@@ -451,33 +159,37 @@ export const MsgSetupMinter = {
       writer.uint32(18).string(message.minterAddress);
     }
 
+    if (message.class !== "") {
+      writer.uint32(26).string(message.class);
+    }
+
     if (message.name !== "") {
-      writer.uint32(26).string(message.name);
+      writer.uint32(34).string(message.name);
     }
 
     if (message.description !== "") {
-      writer.uint32(34).string(message.description);
+      writer.uint32(42).string(message.description);
     }
 
-    if (message.cw20 !== undefined) {
-      SetupCw20.encode(message.cw20, writer.uint32(42).fork()).ldelim();
+    if (message.image !== "") {
+      writer.uint32(50).string(message.image);
     }
 
-    if (message.cw721 !== undefined) {
-      SetupCw721.encode(message.cw721, writer.uint32(50).fork()).ldelim();
+    if (message.tokenType !== "") {
+      writer.uint32(58).string(message.tokenType);
     }
 
-    if (message.cw1155 !== undefined) {
-      SetupCw1155.encode(message.cw1155, writer.uint32(58).fork()).ldelim();
+    if (message.cap !== "") {
+      writer.uint32(66).string(message.cap);
     }
 
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetupMinter {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateToken {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgSetupMinter();
+    const message = createBaseMsgCreateToken();
 
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -492,23 +204,27 @@ export const MsgSetupMinter = {
           break;
 
         case 3:
+          message.class = reader.string();
+          break;
+
+        case 4:
           message.name = reader.string();
           break;
 
-        case 4:
+        case 5:
           message.description = reader.string();
           break;
 
-        case 5:
-          message.cw20 = SetupCw20.decode(reader, reader.uint32());
-          break;
-
         case 6:
-          message.cw721 = SetupCw721.decode(reader, reader.uint32());
+          message.image = reader.string();
           break;
 
         case 7:
-          message.cw1155 = SetupCw1155.decode(reader, reader.uint32());
+          message.tokenType = reader.string();
+          break;
+
+        case 8:
+          message.cap = reader.string();
           break;
 
         default:
@@ -520,57 +236,60 @@ export const MsgSetupMinter = {
     return message;
   },
 
-  fromJSON(object: any): MsgSetupMinter {
+  fromJSON(object: any): MsgCreateToken {
     return {
       minterDid: isSet(object.minterDid) ? String(object.minterDid) : "",
       minterAddress: isSet(object.minterAddress) ? String(object.minterAddress) : "",
+      class: isSet(object.class) ? String(object.class) : "",
       name: isSet(object.name) ? String(object.name) : "",
       description: isSet(object.description) ? String(object.description) : "",
-      cw20: isSet(object.cw20) ? SetupCw20.fromJSON(object.cw20) : undefined,
-      cw721: isSet(object.cw721) ? SetupCw721.fromJSON(object.cw721) : undefined,
-      cw1155: isSet(object.cw1155) ? SetupCw1155.fromJSON(object.cw1155) : undefined
+      image: isSet(object.image) ? String(object.image) : "",
+      tokenType: isSet(object.tokenType) ? String(object.tokenType) : "",
+      cap: isSet(object.cap) ? String(object.cap) : ""
     };
   },
 
-  toJSON(message: MsgSetupMinter): unknown {
+  toJSON(message: MsgCreateToken): unknown {
     const obj: any = {};
     message.minterDid !== undefined && (obj.minterDid = message.minterDid);
     message.minterAddress !== undefined && (obj.minterAddress = message.minterAddress);
+    message.class !== undefined && (obj.class = message.class);
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined && (obj.description = message.description);
-    message.cw20 !== undefined && (obj.cw20 = message.cw20 ? SetupCw20.toJSON(message.cw20) : undefined);
-    message.cw721 !== undefined && (obj.cw721 = message.cw721 ? SetupCw721.toJSON(message.cw721) : undefined);
-    message.cw1155 !== undefined && (obj.cw1155 = message.cw1155 ? SetupCw1155.toJSON(message.cw1155) : undefined);
+    message.image !== undefined && (obj.image = message.image);
+    message.tokenType !== undefined && (obj.tokenType = message.tokenType);
+    message.cap !== undefined && (obj.cap = message.cap);
     return obj;
   },
 
-  fromPartial(object: Partial<MsgSetupMinter>): MsgSetupMinter {
-    const message = createBaseMsgSetupMinter();
+  fromPartial(object: Partial<MsgCreateToken>): MsgCreateToken {
+    const message = createBaseMsgCreateToken();
     message.minterDid = object.minterDid ?? "";
     message.minterAddress = object.minterAddress ?? "";
+    message.class = object.class ?? "";
     message.name = object.name ?? "";
     message.description = object.description ?? "";
-    message.cw20 = object.cw20 !== undefined && object.cw20 !== null ? SetupCw20.fromPartial(object.cw20) : undefined;
-    message.cw721 = object.cw721 !== undefined && object.cw721 !== null ? SetupCw721.fromPartial(object.cw721) : undefined;
-    message.cw1155 = object.cw1155 !== undefined && object.cw1155 !== null ? SetupCw1155.fromPartial(object.cw1155) : undefined;
+    message.image = object.image ?? "";
+    message.tokenType = object.tokenType ?? "";
+    message.cap = object.cap ?? "";
     return message;
   }
 
 };
 
-function createBaseMsgSetupMinterResponse(): MsgSetupMinterResponse {
+function createBaseMsgCreateTokenResponse(): MsgCreateTokenResponse {
   return {};
 }
 
-export const MsgSetupMinterResponse = {
-  encode(_: MsgSetupMinterResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const MsgCreateTokenResponse = {
+  encode(_: MsgCreateTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetupMinterResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateTokenResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgSetupMinterResponse();
+    const message = createBaseMsgCreateTokenResponse();
 
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -585,260 +304,17 @@ export const MsgSetupMinterResponse = {
     return message;
   },
 
-  fromJSON(_: any): MsgSetupMinterResponse {
+  fromJSON(_: any): MsgCreateTokenResponse {
     return {};
   },
 
-  toJSON(_: MsgSetupMinterResponse): unknown {
+  toJSON(_: MsgCreateTokenResponse): unknown {
     const obj: any = {};
     return obj;
   },
 
-  fromPartial(_: Partial<MsgSetupMinterResponse>): MsgSetupMinterResponse {
-    const message = createBaseMsgSetupMinterResponse();
-    return message;
-  }
-
-};
-
-function createBaseMintCw20(): MintCw20 {
-  return {
-    amount: Long.UZERO
-  };
-}
-
-export const MintCw20 = {
-  encode(message: MintCw20, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.amount.isZero()) {
-      writer.uint32(8).uint64(message.amount);
-    }
-
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): MintCw20 {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMintCw20();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        case 1:
-          message.amount = (reader.uint64() as Long);
-          break;
-
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(object: any): MintCw20 {
-    return {
-      amount: isSet(object.amount) ? Long.fromValue(object.amount) : Long.UZERO
-    };
-  },
-
-  toJSON(message: MintCw20): unknown {
-    const obj: any = {};
-    message.amount !== undefined && (obj.amount = (message.amount || Long.UZERO).toString());
-    return obj;
-  },
-
-  fromPartial(object: Partial<MintCw20>): MintCw20 {
-    const message = createBaseMintCw20();
-    message.amount = object.amount !== undefined && object.amount !== null ? Long.fromValue(object.amount) : Long.UZERO;
-    return message;
-  }
-
-};
-
-function createBaseMintCw721(): MintCw721 {
-  return {
-    id: "",
-    image: undefined,
-    uri: undefined,
-    properties: new Uint8Array()
-  };
-}
-
-export const MintCw721 = {
-  encode(message: MintCw721, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
-    }
-
-    if (message.image !== undefined) {
-      writer.uint32(18).string(message.image);
-    }
-
-    if (message.uri !== undefined) {
-      writer.uint32(26).string(message.uri);
-    }
-
-    if (message.properties.length !== 0) {
-      writer.uint32(34).bytes(message.properties);
-    }
-
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): MintCw721 {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMintCw721();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        case 1:
-          message.id = reader.string();
-          break;
-
-        case 2:
-          message.image = reader.string();
-          break;
-
-        case 3:
-          message.uri = reader.string();
-          break;
-
-        case 4:
-          message.properties = reader.bytes();
-          break;
-
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(object: any): MintCw721 {
-    return {
-      id: isSet(object.id) ? String(object.id) : "",
-      image: isSet(object.image) ? String(object.image) : undefined,
-      uri: isSet(object.uri) ? String(object.uri) : undefined,
-      properties: isSet(object.properties) ? bytesFromBase64(object.properties) : new Uint8Array()
-    };
-  },
-
-  toJSON(message: MintCw721): unknown {
-    const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    message.image !== undefined && (obj.image = message.image);
-    message.uri !== undefined && (obj.uri = message.uri);
-    message.properties !== undefined && (obj.properties = base64FromBytes(message.properties !== undefined ? message.properties : new Uint8Array()));
-    return obj;
-  },
-
-  fromPartial(object: Partial<MintCw721>): MintCw721 {
-    const message = createBaseMintCw721();
-    message.id = object.id ?? "";
-    message.image = object.image ?? undefined;
-    message.uri = object.uri ?? undefined;
-    message.properties = object.properties ?? new Uint8Array();
-    return message;
-  }
-
-};
-
-function createBaseMintCw1155(): MintCw1155 {
-  return {
-    id: "",
-    image: undefined,
-    uri: undefined,
-    value: Long.UZERO
-  };
-}
-
-export const MintCw1155 = {
-  encode(message: MintCw1155, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
-    }
-
-    if (message.image !== undefined) {
-      writer.uint32(18).string(message.image);
-    }
-
-    if (message.uri !== undefined) {
-      writer.uint32(26).string(message.uri);
-    }
-
-    if (!message.value.isZero()) {
-      writer.uint32(32).uint64(message.value);
-    }
-
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): MintCw1155 {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMintCw1155();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        case 1:
-          message.id = reader.string();
-          break;
-
-        case 2:
-          message.image = reader.string();
-          break;
-
-        case 3:
-          message.uri = reader.string();
-          break;
-
-        case 4:
-          message.value = (reader.uint64() as Long);
-          break;
-
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(object: any): MintCw1155 {
-    return {
-      id: isSet(object.id) ? String(object.id) : "",
-      image: isSet(object.image) ? String(object.image) : undefined,
-      uri: isSet(object.uri) ? String(object.uri) : undefined,
-      value: isSet(object.value) ? Long.fromValue(object.value) : Long.UZERO
-    };
-  },
-
-  toJSON(message: MintCw1155): unknown {
-    const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    message.image !== undefined && (obj.image = message.image);
-    message.uri !== undefined && (obj.uri = message.uri);
-    message.value !== undefined && (obj.value = (message.value || Long.UZERO).toString());
-    return obj;
-  },
-
-  fromPartial(object: Partial<MintCw1155>): MintCw1155 {
-    const message = createBaseMintCw1155();
-    message.id = object.id ?? "";
-    message.image = object.image ?? undefined;
-    message.uri = object.uri ?? undefined;
-    message.value = object.value !== undefined && object.value !== null ? Long.fromValue(object.value) : Long.UZERO;
+  fromPartial(_: Partial<MsgCreateTokenResponse>): MsgCreateTokenResponse {
+    const message = createBaseMsgCreateTokenResponse();
     return message;
   }
 
@@ -850,9 +326,7 @@ function createBaseMsgMintToken(): MsgMintToken {
     minterAddress: "",
     contractAddress: "",
     ownerDid: "",
-    cw20: undefined,
-    cw721: undefined,
-    cw1155: undefined
+    mintBatch: []
   };
 }
 
@@ -874,16 +348,8 @@ export const MsgMintToken = {
       writer.uint32(34).string(message.ownerDid);
     }
 
-    if (message.cw20 !== undefined) {
-      MintCw20.encode(message.cw20, writer.uint32(42).fork()).ldelim();
-    }
-
-    if (message.cw721 !== undefined) {
-      MintCw721.encode(message.cw721, writer.uint32(50).fork()).ldelim();
-    }
-
-    if (message.cw1155 !== undefined) {
-      MintCw1155.encode(message.cw1155, writer.uint32(58).fork()).ldelim();
+    for (const v of message.mintBatch) {
+      MintBatch.encode(v!, writer.uint32(42).fork()).ldelim();
     }
 
     return writer;
@@ -915,15 +381,7 @@ export const MsgMintToken = {
           break;
 
         case 5:
-          message.cw20 = MintCw20.decode(reader, reader.uint32());
-          break;
-
-        case 6:
-          message.cw721 = MintCw721.decode(reader, reader.uint32());
-          break;
-
-        case 7:
-          message.cw1155 = MintCw1155.decode(reader, reader.uint32());
+          message.mintBatch.push(MintBatch.decode(reader, reader.uint32()));
           break;
 
         default:
@@ -941,9 +399,7 @@ export const MsgMintToken = {
       minterAddress: isSet(object.minterAddress) ? String(object.minterAddress) : "",
       contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
       ownerDid: isSet(object.ownerDid) ? String(object.ownerDid) : "",
-      cw20: isSet(object.cw20) ? MintCw20.fromJSON(object.cw20) : undefined,
-      cw721: isSet(object.cw721) ? MintCw721.fromJSON(object.cw721) : undefined,
-      cw1155: isSet(object.cw1155) ? MintCw1155.fromJSON(object.cw1155) : undefined
+      mintBatch: Array.isArray(object?.mintBatch) ? object.mintBatch.map((e: any) => MintBatch.fromJSON(e)) : []
     };
   },
 
@@ -953,9 +409,13 @@ export const MsgMintToken = {
     message.minterAddress !== undefined && (obj.minterAddress = message.minterAddress);
     message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
     message.ownerDid !== undefined && (obj.ownerDid = message.ownerDid);
-    message.cw20 !== undefined && (obj.cw20 = message.cw20 ? MintCw20.toJSON(message.cw20) : undefined);
-    message.cw721 !== undefined && (obj.cw721 = message.cw721 ? MintCw721.toJSON(message.cw721) : undefined);
-    message.cw1155 !== undefined && (obj.cw1155 = message.cw1155 ? MintCw1155.toJSON(message.cw1155) : undefined);
+
+    if (message.mintBatch) {
+      obj.mintBatch = message.mintBatch.map(e => e ? MintBatch.toJSON(e) : undefined);
+    } else {
+      obj.mintBatch = [];
+    }
+
     return obj;
   },
 
@@ -965,9 +425,118 @@ export const MsgMintToken = {
     message.minterAddress = object.minterAddress ?? "";
     message.contractAddress = object.contractAddress ?? "";
     message.ownerDid = object.ownerDid ?? "";
-    message.cw20 = object.cw20 !== undefined && object.cw20 !== null ? MintCw20.fromPartial(object.cw20) : undefined;
-    message.cw721 = object.cw721 !== undefined && object.cw721 !== null ? MintCw721.fromPartial(object.cw721) : undefined;
-    message.cw1155 = object.cw1155 !== undefined && object.cw1155 !== null ? MintCw1155.fromPartial(object.cw1155) : undefined;
+    message.mintBatch = object.mintBatch?.map(e => MintBatch.fromPartial(e)) || [];
+    return message;
+  }
+
+};
+
+function createBaseMintBatch(): MintBatch {
+  return {
+    name: "",
+    index: "",
+    amount: "",
+    collection: "",
+    tokenData: []
+  };
+}
+
+export const MintBatch = {
+  encode(message: MintBatch, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+
+    if (message.index !== "") {
+      writer.uint32(18).string(message.index);
+    }
+
+    if (message.amount !== "") {
+      writer.uint32(26).string(message.amount);
+    }
+
+    if (message.collection !== "") {
+      writer.uint32(34).string(message.collection);
+    }
+
+    for (const v of message.tokenData) {
+      TokenData.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MintBatch {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMintBatch();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.name = reader.string();
+          break;
+
+        case 2:
+          message.index = reader.string();
+          break;
+
+        case 3:
+          message.amount = reader.string();
+          break;
+
+        case 4:
+          message.collection = reader.string();
+          break;
+
+        case 5:
+          message.tokenData.push(TokenData.decode(reader, reader.uint32()));
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): MintBatch {
+    return {
+      name: isSet(object.name) ? String(object.name) : "",
+      index: isSet(object.index) ? String(object.index) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "",
+      collection: isSet(object.collection) ? String(object.collection) : "",
+      tokenData: Array.isArray(object?.tokenData) ? object.tokenData.map((e: any) => TokenData.fromJSON(e)) : []
+    };
+  },
+
+  toJSON(message: MintBatch): unknown {
+    const obj: any = {};
+    message.name !== undefined && (obj.name = message.name);
+    message.index !== undefined && (obj.index = message.index);
+    message.amount !== undefined && (obj.amount = message.amount);
+    message.collection !== undefined && (obj.collection = message.collection);
+
+    if (message.tokenData) {
+      obj.tokenData = message.tokenData.map(e => e ? TokenData.toJSON(e) : undefined);
+    } else {
+      obj.tokenData = [];
+    }
+
+    return obj;
+  },
+
+  fromPartial(object: Partial<MintBatch>): MintBatch {
+    const message = createBaseMintBatch();
+    message.name = object.name ?? "";
+    message.index = object.index ?? "";
+    message.amount = object.amount ?? "";
+    message.collection = object.collection ?? "";
+    message.tokenData = object.tokenData?.map(e => TokenData.fromPartial(e)) || [];
     return message;
   }
 

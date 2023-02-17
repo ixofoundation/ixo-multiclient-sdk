@@ -31,7 +31,6 @@ generateBlockchainTestUsers();
 
 // registerIids();
 // iidsBasic();
-// quickQueries();
 // paymentsBasic();
 // projectsBasic();
 // bondsBasic();
@@ -44,3 +43,4 @@ generateBlockchainTestUsers();
 // bankBasic();
 // govBasic();
 // wasmBasic();
+quickQueries();
