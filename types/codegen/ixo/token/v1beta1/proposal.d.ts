@@ -1,13 +1,9 @@
 import * as _m0 from "protobufjs/minimal";
 import { Long } from "../../../helpers";
 export interface SetTokenContractCodes {
-    cw20ContractCode: Long;
-    cw721ContractCode: Long;
     ixo1155ContractCode: Long;
 }
 export interface SetTokenContractCodesSDKType {
-    cw20_contract_code: Long;
-    cw721_contract_code: Long;
     ixo1155_contract_code: Long;
 }
 export declare const SetTokenContractCodes: {

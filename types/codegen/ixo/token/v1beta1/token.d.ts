@@ -1,60 +1,103 @@
 import * as _m0 from "protobufjs/minimal";
 import { Long } from "../../../helpers";
-export declare enum ContractType {
-    CW20 = 0,
-    CW721 = 1,
-    IXO1155 = 2,
-    UNRECOGNIZED = -1
-}
-export declare enum ContractTypeSDKType {
-    CW20 = 0,
-    CW721 = 1,
-    IXO1155 = 2,
-    UNRECOGNIZED = -1
-}
-export declare function contractTypeFromJSON(object: any): ContractType;
-export declare function contractTypeToJSON(object: ContractType): string;
-export interface Contract {
-    id: string;
-    address: string;
-}
-export interface ContractSDKType {
-    id: string;
-    address: string;
-}
 export interface Params {
-    cw20ContractCode: Long;
-    cw721ContractCode: Long;
     ixo1155ContractCode: Long;
 }
 export interface ParamsSDKType {
-    cw20_contract_code: Long;
-    cw721_contract_code: Long;
     ixo1155_contract_code: Long;
 }
-export interface TokenMinter {
+export interface Token {
     minterDid: string;
     minterAddress: string;
+    /** Generated on token intiation through MsgSetupMinter */
     contractAddress: string;
-    contractType: ContractType;
+    /** class is the token protocol entity DID (validated) */
+    class: string;
+    /** name is the token name, which must be unique (namespace) */
     name: string;
+    /** description is any arbitrary description */
     description: string;
+    /** image is the image url for the token */
+    image: string;
+    /** type is the token type (eg ixo1155) */
+    type: string;
+    /**
+     * cap is the maximum number of tokens with this name that can be minted, 0 is
+     * unlimited
+     */
+    cap: string;
+    /** how much has already been minted for this Token type, aka the supply */
+    supply: string;
+    /** stop allowance of token minter temporarily */
+    paused: boolean;
+    /** stop allowance of token minter permanently */
+    deactivated: boolean;
 }
-export interface TokenMinterSDKType {
+export interface TokenSDKType {
     minter_did: string;
     minter_address: string;
+    /** Generated on token intiation through MsgSetupMinter */
     contract_address: string;
-    contract_type: ContractTypeSDKType;
+    /** class is the token protocol entity DID (validated) */
+    class: string;
+    /** name is the token name, which must be unique (namespace) */
     name: string;
+    /** description is any arbitrary description */
     description: string;
+    /** image is the image url for the token */
+    image: string;
+    /** type is the token type (eg ixo1155) */
+    type: string;
+    /**
+     * cap is the maximum number of tokens with this name that can be minted, 0 is
+     * unlimited
+     */
+    cap: string;
+    /** how much has already been minted for this Token type, aka the supply */
+    supply: string;
+    /** stop allowance of token minter temporarily */
+    paused: boolean;
+    /** stop allowance of token minter permanently */
+    deactivated: boolean;
 }
-export declare const Contract: {
-    encode(message: Contract, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): Contract;
-    fromJSON(object: any): Contract;
-    toJSON(message: Contract): unknown;
-    fromPartial(object: Partial<Contract>): Contract;
-};
+export interface TokenProperties {
+    id: string;
+    /** index is the unique identifier hexstring that identifies the token */
+    index: string;
+    /** did of collection (eg Supamoto Malawi) */
+    collection: string;
+    /**
+     * tokenData is the linkedResources added to tokenMetadata when queried eg
+     * (credential link ***.ipfs)
+     */
+    tokenData: TokenData[];
+}
+export interface TokenPropertiesSDKType {
+    id: string;
+    /** index is the unique identifier hexstring that identifies the token */
+    index: string;
+    /** did of collection (eg Supamoto Malawi) */
+    collection: string;
+    /**
+     * tokenData is the linkedResources added to tokenMetadata when queried eg
+     * (credential link ***.ipfs)
+     */
+    tokenData: TokenDataSDKType[];
+}
+export interface TokenData {
+    /** media type value should always be "application/json" */
+    uri: string;
+    encrypted: boolean;
+    proof: string;
+    type: string;
+}
+export interface TokenDataSDKType {
+    /** media type value should always be "application/json" */
+    uri: string;
+    encrypted: boolean;
+    proof: string;
+    type: string;
+}
 export declare const Params: {
     encode(message: Params, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): Params;
@@ -62,10 +105,24 @@ export declare const Params: {
     toJSON(message: Params): unknown;
     fromPartial(object: Partial<Params>): Params;
 };
-export declare const TokenMinter: {
-    encode(message: TokenMinter, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): TokenMinter;
-    fromJSON(object: any): TokenMinter;
-    toJSON(message: TokenMinter): unknown;
-    fromPartial(object: Partial<TokenMinter>): TokenMinter;
+export declare const Token: {
+    encode(message: Token, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): Token;
+    fromJSON(object: any): Token;
+    toJSON(message: Token): unknown;
+    fromPartial(object: Partial<Token>): Token;
+};
+export declare const TokenProperties: {
+    encode(message: TokenProperties, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): TokenProperties;
+    fromJSON(object: any): TokenProperties;
+    toJSON(message: TokenProperties): unknown;
+    fromPartial(object: Partial<TokenProperties>): TokenProperties;
+};
+export declare const TokenData: {
+    encode(message: TokenData, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): TokenData;
+    fromJSON(object: any): TokenData;
+    toJSON(message: TokenData): unknown;
+    fromPartial(object: Partial<TokenData>): TokenData;
 };

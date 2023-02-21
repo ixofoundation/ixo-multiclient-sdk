@@ -16,28 +16,44 @@ import * as _8 from "./CwTokenSwap.types";
 import * as _9 from "./CwTokenSwap.client";
 import * as _10 from "./CwVesting.types";
 import * as _11 from "./CwVesting.client";
-import * as _12 from "./DaoPreProposeApprovalSingle.types";
-import * as _13 from "./DaoPreProposeApprovalSingle.client";
-import * as _14 from "./DaoPreProposeApprover.types";
-import * as _15 from "./DaoPreProposeApprover.client";
-import * as _16 from "./DaoPreProposeMultiple.types";
-import * as _17 from "./DaoPreProposeMultiple.client";
-import * as _18 from "./DaoPreProposeSingle.types";
-import * as _19 from "./DaoPreProposeSingle.client";
-import * as _20 from "./Cw20Stake.types";
-import * as _21 from "./Cw20Stake.client";
-import * as _22 from "./Cw20StakeExternalRewards.types";
-import * as _23 from "./Cw20StakeExternalRewards.client";
-import * as _24 from "./Cw20StakeRewardDistributor.types";
-import * as _25 from "./Cw20StakeRewardDistributor.client";
-import * as _26 from "./DaoVotingCw4.types";
-import * as _27 from "./DaoVotingCw4.client";
-import * as _28 from "./DaoVotingCw20Staked.types";
-import * as _29 from "./DaoVotingCw20Staked.client";
-import * as _30 from "./DaoVotingCw721Staked.types";
-import * as _31 from "./DaoVotingCw721Staked.client";
-import * as _32 from "./DaoVotingNativeStaked.types";
-import * as _33 from "./DaoVotingNativeStaked.client";
+import * as _12 from "./DaoMigrator.types";
+import * as _13 from "./DaoMigrator.client";
+import * as _14 from "./DaoPreProposeApprovalSingle.types";
+import * as _15 from "./DaoPreProposeApprovalSingle.client";
+import * as _16 from "./DaoPreProposeApprover.types";
+import * as _17 from "./DaoPreProposeApprover.client";
+import * as _18 from "./DaoPreProposeMultiple.types";
+import * as _19 from "./DaoPreProposeMultiple.client";
+import * as _20 from "./DaoPreProposeSingle.types";
+import * as _21 from "./DaoPreProposeSingle.client";
+import * as _22 from "./DaoProposalCondorcet.types";
+import * as _23 from "./DaoProposalCondorcet.client";
+import * as _24 from "./DaoProposalMultiple.types";
+import * as _25 from "./DaoProposalMultiple.client";
+import * as _26 from "./DaoProposalSingle.types";
+import * as _27 from "./DaoProposalSingle.client";
+import * as _28 from "./Cw20Stake.types";
+import * as _29 from "./Cw20Stake.client";
+import * as _30 from "./Cw20StakeExternalRewards.types";
+import * as _31 from "./Cw20StakeExternalRewards.client";
+import * as _32 from "./Cw20StakeRewardDistributor.types";
+import * as _33 from "./Cw20StakeRewardDistributor.client";
+import * as _34 from "./DaoVotingCw4.types";
+import * as _35 from "./DaoVotingCw4.client";
+import * as _36 from "./DaoVotingCw20Staked.types";
+import * as _37 from "./DaoVotingCw20Staked.client";
+import * as _38 from "./DaoVotingCw721Staked.types";
+import * as _39 from "./DaoVotingCw721Staked.client";
+import * as _40 from "./DaoVotingNativeStaked.types";
+import * as _41 from "./DaoVotingNativeStaked.client";
+import * as _42 from "./Cw4Group.types";
+import * as _43 from "./Cw4Group.client";
+import * as _44 from "./Cw20Base.types";
+import * as _45 from "./Cw20Base.client";
+import * as _46 from "./Cw721Base.types";
+import * as _47 from "./Cw721Base.client";
+import * as _48 from "./Wasmswap.types";
+import * as _49 from "./Wasmswap.client";
 export namespace contracts {
   export const DaoCore = { ..._0,
     ..._1
@@ -57,37 +73,61 @@ export namespace contracts {
   export const CwVesting = { ..._10,
     ..._11
   };
-  export const DaoPreProposeApprovalSingle = { ..._12,
+  export const DaoMigrator = { ..._12,
     ..._13
   };
-  export const DaoPreProposeApprover = { ..._14,
+  export const DaoPreProposeApprovalSingle = { ..._14,
     ..._15
   };
-  export const DaoPreProposeMultiple = { ..._16,
+  export const DaoPreProposeApprover = { ..._16,
     ..._17
   };
-  export const DaoPreProposeSingle = { ..._18,
+  export const DaoPreProposeMultiple = { ..._18,
     ..._19
   };
-  export const Cw20Stake = { ..._20,
+  export const DaoPreProposeSingle = { ..._20,
     ..._21
   };
-  export const Cw20StakeExternalRewards = { ..._22,
+  export const DaoProposalCondorcet = { ..._22,
     ..._23
   };
-  export const Cw20StakeRewardDistributor = { ..._24,
+  export const DaoProposalMultiple = { ..._24,
     ..._25
   };
-  export const DaoVotingCw4 = { ..._26,
+  export const DaoProposalSingle = { ..._26,
     ..._27
   };
-  export const DaoVotingCw20Staked = { ..._28,
+  export const Cw20Stake = { ..._28,
     ..._29
   };
-  export const DaoVotingCw721Staked = { ..._30,
+  export const Cw20StakeExternalRewards = { ..._30,
     ..._31
   };
-  export const DaoVotingNativeStaked = { ..._32,
+  export const Cw20StakeRewardDistributor = { ..._32,
     ..._33
+  };
+  export const DaoVotingCw4 = { ..._34,
+    ..._35
+  };
+  export const DaoVotingCw20Staked = { ..._36,
+    ..._37
+  };
+  export const DaoVotingCw721Staked = { ..._38,
+    ..._39
+  };
+  export const DaoVotingNativeStaked = { ..._40,
+    ..._41
+  };
+  export const Cw4Group = { ..._42,
+    ..._43
+  };
+  export const Cw20Base = { ..._44,
+    ..._45
+  };
+  export const Cw721Base = { ..._46,
+    ..._47
+  };
+  export const Wasmswap = { ..._48,
+    ..._49
   };
 }

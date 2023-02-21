@@ -1,10 +1,13 @@
-import Long from "long";
+import { TokenData } from "../../src/codegen/ixo/token/v1beta1/token";
 import { createClient, getUser, ixo } from "../helpers/common";
-import { constants, fee, WalletUsers } from "../helpers/constants";
+import { fee, WalletUsers } from "../helpers/constants";
 
-export const SetupMinter = async (
-  signer: WalletUsers = WalletUsers.tester,
-  type: "cw721" | "cw1155" | "cw20" = "cw20"
+export const CreateToken = async (
+  name: string,
+  description: string,
+  cap: number,
+  token_class: string,
+  signer: WalletUsers = WalletUsers.tester
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -14,28 +17,17 @@ export const SetupMinter = async (
   const did = tester.did;
 
   const message = {
-    typeUrl: "/ixo.token.v1beta1.MsgSetupMinter",
-    value: ixo.token.v1beta1.MsgSetupMinter.fromPartial({
+    typeUrl: "/ixo.token.v1beta1.MsgCreateToken",
+    value: ixo.token.v1beta1.MsgCreateToken.fromPartial({
       minterDid: did,
       minterAddress: myAddress,
-      name: "name",
-      description: "description",
-      ...(type === "cw721"
-        ? {
-            cw721: ixo.token.v1beta1.SetupCw721.fromPartial({
-              symbol: "symbol",
-            }),
-          }
-        : type === "cw1155"
-        ? {
-            cw1155: ixo.token.v1beta1.SetupCw1155.fromPartial({}),
-          }
-        : {
-            cw20: ixo.token.v1beta1.SetupCw20.fromPartial({
-              symbol: "symbol",
-              decimals: 6,
-            }),
-          }),
+      name,
+      description,
+      image:
+        "https://static.javatpoint.com/business/images/carbon-credits-and-how-they-can-offset-your-carbon-footprint.jpg",
+      tokenType: "ixo1155",
+      cap: cap.toString(),
+      class: token_class,
     }),
   };
 
@@ -45,7 +37,13 @@ export const SetupMinter = async (
 
 export const MintToken = async (
   contractAddress: string,
-  type: "cw721" | "cw1155" | "cw20" = "cw20"
+  batches: {
+    name: string;
+    index: string;
+    amount: number;
+    collection: string;
+    tokenData?: TokenData[];
+  }[]
 ) => {
   const client = await createClient();
 
@@ -61,26 +59,15 @@ export const MintToken = async (
       minterAddress: myAddress,
       contractAddress: contractAddress,
       ownerDid: did,
-      ...(type === "cw721"
-        ? {
-            cw721: ixo.token.v1beta1.MintCw721.fromPartial({
-              id: "id",
-              uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png",
-            }),
-          }
-        : type === "cw1155"
-        ? {
-            cw1155: ixo.token.v1beta1.MintCw1155.fromPartial({
-              id: "id",
-              uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png",
-              value: Long.fromNumber(1),
-            }),
-          }
-        : {
-            cw20: ixo.token.v1beta1.MintCw20.fromPartial({
-              amount: Long.fromNumber(30),
-            }),
-          }),
+      mintBatch: batches.map((b) =>
+        ixo.token.v1beta1.MintBatch.fromPartial({
+          name: b.name,
+          index: b.index,
+          collection: b.collection,
+          tokenData: b.tokenData,
+          amount: b.amount.toString(),
+        })
+      ),
     }),
   };
 

@@ -14,10 +14,7 @@ export interface ParamsSDKType {
 export interface Entity {
     /** id represents the id for the entity document. */
     id: string;
-    /**
-     * Status of the Entity as defined by the implementer and interpreted by
-     * Client applications
-     */
+    /** Type of entity, eg protocol or asset */
     type: string;
     /**
      * Start Date of the Entity as defined by the implementer and interpreted by
@@ -49,10 +46,7 @@ export interface Entity {
 export interface EntitySDKType {
     /** id represents the id for the entity document. */
     id: string;
-    /**
-     * Status of the Entity as defined by the implementer and interpreted by
-     * Client applications
-     */
+    /** Type of entity, eg protocol or asset */
     type: string;
     /**
      * Start Date of the Entity as defined by the implementer and interpreted by

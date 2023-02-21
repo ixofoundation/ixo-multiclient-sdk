@@ -41,7 +41,7 @@ export const BankSendTrx = async () => {
   return response;
 };
 
-export const MsgSubmitProposalStoreCW721 = async () => {
+export const MsgSubmitProposalStoreCW = async (contract: string = "cw721") => {
   const client = await createClient();
 
   const tester = getUser();
@@ -62,11 +62,11 @@ export const MsgSubmitProposalStoreCW721 = async () => {
         typeUrl: "/cosmwasm.wasm.v1.StoreCodeProposal",
         value: cosmwasm.wasm.v1.StoreCodeProposal.encode(
           cosmwasm.wasm.v1.StoreCodeProposal.fromPartial({
-            title: "Upload cw721 smart contract",
+            title: `Upload ${contract} smart contract`,
             description: "Description",
             runAs: myAddress,
             wasmByteCode: new Uint8Array(
-              getFileFromPath(["contracts", "ixo", "cw721.wasm"], "")
+              getFileFromPath(["contracts", "ixo", `${contract}.wasm`], "")
             ),
             instantiatePermission: cosmwasm.wasm.v1.AccessConfig.fromPartial({
               permission: cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_EVERYBODY,
@@ -135,6 +135,40 @@ export const MsgSubmitProposalUpdateEntityParams = async (
           ixo.entity.v1beta1.InitializeNftContract.fromPartial({
             NftContractCodeId: Long.fromNumber(nftContractCodeId),
             NftMinterAddress: myAddress,
+          })
+        ).finish(),
+      },
+    }),
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const MsgSubmitProposalUpdateTokenParams = async (
+  nftContractCodeId: number
+) => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const message = {
+    typeUrl: "/cosmos.gov.v1beta1.MsgSubmitProposal",
+    value: cosmos.gov.v1beta1.MsgSubmitProposal.fromPartial({
+      initialDeposit: [
+        cosmos.base.v1beta1.Coin.fromPartial({
+          amount: "1000000000",
+          denom: "uixo",
+        }),
+      ],
+      proposer: myAddress,
+      content: {
+        typeUrl: "/ixo.token.v1beta1.SetTokenContractCodes",
+        value: ixo.token.v1beta1.SetTokenContractCodes.encode(
+          ixo.token.v1beta1.SetTokenContractCodes.fromPartial({
+            ixo1155ContractCode: Long.fromNumber(nftContractCodeId),
           })
         ).finish(),
       },

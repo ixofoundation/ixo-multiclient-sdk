@@ -1,44 +1,41 @@
-import { TokenMinter, TokenMinterSDKType, Params, ParamsSDKType } from "./token";
+import { Params, ParamsSDKType, Token, TokenSDKType, TokenProperties, TokenPropertiesSDKType } from "./token";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
-/** GenesisState defines the project module's genesis state. */
+/** GenesisState defines the module's genesis state. */
 
 export interface GenesisState {
-  tokenMinters: TokenMinter[];
-  /**
-   * repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) =
-   * false, (gogoproto.moretags) = "yaml:\"account_maps\""];
-   */
-
   params?: Params;
+  tokens: Token[];
+  tokenProperties: TokenProperties[];
 }
-/** GenesisState defines the project module's genesis state. */
+/** GenesisState defines the module's genesis state. */
 
 export interface GenesisStateSDKType {
-  token_minters: TokenMinterSDKType[];
-  /**
-   * repeated GenesisAccountMap account_maps       = 2 [(gogoproto.nullable) =
-   * false, (gogoproto.moretags) = "yaml:\"account_maps\""];
-   */
-
   params?: ParamsSDKType;
+  tokens: TokenSDKType[];
+  token_properties: TokenPropertiesSDKType[];
 }
 
 function createBaseGenesisState(): GenesisState {
   return {
-    tokenMinters: [],
-    params: undefined
+    params: undefined,
+    tokens: [],
+    tokenProperties: []
   };
 }
 
 export const GenesisState = {
   encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.tokenMinters) {
-      TokenMinter.encode(v!, writer.uint32(10).fork()).ldelim();
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
 
-    if (message.params !== undefined) {
-      Params.encode(message.params, writer.uint32(18).fork()).ldelim();
+    for (const v of message.tokens) {
+      Token.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+
+    for (const v of message.tokenProperties) {
+      TokenProperties.encode(v!, writer.uint32(26).fork()).ldelim();
     }
 
     return writer;
@@ -54,11 +51,15 @@ export const GenesisState = {
 
       switch (tag >>> 3) {
         case 1:
-          message.tokenMinters.push(TokenMinter.decode(reader, reader.uint32()));
+          message.params = Params.decode(reader, reader.uint32());
           break;
 
         case 2:
-          message.params = Params.decode(reader, reader.uint32());
+          message.tokens.push(Token.decode(reader, reader.uint32()));
+          break;
+
+        case 3:
+          message.tokenProperties.push(TokenProperties.decode(reader, reader.uint32()));
           break;
 
         default:
@@ -72,28 +73,36 @@ export const GenesisState = {
 
   fromJSON(object: any): GenesisState {
     return {
-      tokenMinters: Array.isArray(object?.tokenMinters) ? object.tokenMinters.map((e: any) => TokenMinter.fromJSON(e)) : [],
-      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
+      tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => Token.fromJSON(e)) : [],
+      tokenProperties: Array.isArray(object?.tokenProperties) ? object.tokenProperties.map((e: any) => TokenProperties.fromJSON(e)) : []
     };
   },
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
 
-    if (message.tokenMinters) {
-      obj.tokenMinters = message.tokenMinters.map(e => e ? TokenMinter.toJSON(e) : undefined);
+    if (message.tokens) {
+      obj.tokens = message.tokens.map(e => e ? Token.toJSON(e) : undefined);
     } else {
-      obj.tokenMinters = [];
+      obj.tokens = [];
     }
 
-    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    if (message.tokenProperties) {
+      obj.tokenProperties = message.tokenProperties.map(e => e ? TokenProperties.toJSON(e) : undefined);
+    } else {
+      obj.tokenProperties = [];
+    }
+
     return obj;
   },
 
   fromPartial(object: Partial<GenesisState>): GenesisState {
     const message = createBaseGenesisState();
-    message.tokenMinters = object.tokenMinters?.map(e => TokenMinter.fromPartial(e)) || [];
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    message.tokens = object.tokens?.map(e => Token.fromPartial(e)) || [];
+    message.tokenProperties = object.tokenProperties?.map(e => TokenProperties.fromPartial(e)) || [];
     return message;
   }
 

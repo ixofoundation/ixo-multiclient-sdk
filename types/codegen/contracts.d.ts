@@ -9,17 +9,25 @@ import * as _5 from "./CwFundDistributor.client";
 import * as _7 from "./CwPayrollFactory.client";
 import * as _9 from "./CwTokenSwap.client";
 import * as _11 from "./CwVesting.client";
-import * as _13 from "./DaoPreProposeApprovalSingle.client";
-import * as _15 from "./DaoPreProposeApprover.client";
-import * as _17 from "./DaoPreProposeMultiple.client";
-import * as _19 from "./DaoPreProposeSingle.client";
-import * as _21 from "./Cw20Stake.client";
-import * as _23 from "./Cw20StakeExternalRewards.client";
-import * as _25 from "./Cw20StakeRewardDistributor.client";
-import * as _27 from "./DaoVotingCw4.client";
-import * as _29 from "./DaoVotingCw20Staked.client";
-import * as _31 from "./DaoVotingCw721Staked.client";
-import * as _33 from "./DaoVotingNativeStaked.client";
+import * as _13 from "./DaoMigrator.client";
+import * as _15 from "./DaoPreProposeApprovalSingle.client";
+import * as _17 from "./DaoPreProposeApprover.client";
+import * as _19 from "./DaoPreProposeMultiple.client";
+import * as _21 from "./DaoPreProposeSingle.client";
+import * as _23 from "./DaoProposalCondorcet.client";
+import * as _25 from "./DaoProposalMultiple.client";
+import * as _27 from "./DaoProposalSingle.client";
+import * as _29 from "./Cw20Stake.client";
+import * as _31 from "./Cw20StakeExternalRewards.client";
+import * as _33 from "./Cw20StakeRewardDistributor.client";
+import * as _35 from "./DaoVotingCw4.client";
+import * as _37 from "./DaoVotingCw20Staked.client";
+import * as _39 from "./DaoVotingCw721Staked.client";
+import * as _41 from "./DaoVotingNativeStaked.client";
+import * as _43 from "./Cw4Group.client";
+import * as _45 from "./Cw20Base.client";
+import * as _47 from "./Cw721Base.client";
+import * as _49 from "./Wasmswap.client";
 export declare namespace contracts {
     const DaoCore: {
         DaoCoreQueryClient: typeof _1.DaoCoreQueryClient;
@@ -45,48 +53,80 @@ export declare namespace contracts {
         CwVestingQueryClient: typeof _11.CwVestingQueryClient;
         CwVestingClient: typeof _11.CwVestingClient;
     };
+    const DaoMigrator: {
+        DaoMigratorQueryClient: typeof _13.DaoMigratorQueryClient;
+        DaoMigratorClient: typeof _13.DaoMigratorClient;
+    };
     const DaoPreProposeApprovalSingle: {
-        DaoPreProposeApprovalSingleQueryClient: typeof _13.DaoPreProposeApprovalSingleQueryClient;
-        DaoPreProposeApprovalSingleClient: typeof _13.DaoPreProposeApprovalSingleClient;
+        DaoPreProposeApprovalSingleQueryClient: typeof _15.DaoPreProposeApprovalSingleQueryClient;
+        DaoPreProposeApprovalSingleClient: typeof _15.DaoPreProposeApprovalSingleClient;
     };
     const DaoPreProposeApprover: {
-        DaoPreProposeApproverQueryClient: typeof _15.DaoPreProposeApproverQueryClient;
-        DaoPreProposeApproverClient: typeof _15.DaoPreProposeApproverClient;
+        DaoPreProposeApproverQueryClient: typeof _17.DaoPreProposeApproverQueryClient;
+        DaoPreProposeApproverClient: typeof _17.DaoPreProposeApproverClient;
     };
     const DaoPreProposeMultiple: {
-        DaoPreProposeMultipleQueryClient: typeof _17.DaoPreProposeMultipleQueryClient;
-        DaoPreProposeMultipleClient: typeof _17.DaoPreProposeMultipleClient;
+        DaoPreProposeMultipleQueryClient: typeof _19.DaoPreProposeMultipleQueryClient;
+        DaoPreProposeMultipleClient: typeof _19.DaoPreProposeMultipleClient;
     };
     const DaoPreProposeSingle: {
-        DaoPreProposeSingleQueryClient: typeof _19.DaoPreProposeSingleQueryClient;
-        DaoPreProposeSingleClient: typeof _19.DaoPreProposeSingleClient;
+        DaoPreProposeSingleQueryClient: typeof _21.DaoPreProposeSingleQueryClient;
+        DaoPreProposeSingleClient: typeof _21.DaoPreProposeSingleClient;
+    };
+    const DaoProposalCondorcet: {
+        DaoProposalCondorcetQueryClient: typeof _23.DaoProposalCondorcetQueryClient;
+        DaoProposalCondorcetClient: typeof _23.DaoProposalCondorcetClient;
+    };
+    const DaoProposalMultiple: {
+        DaoProposalMultipleQueryClient: typeof _25.DaoProposalMultipleQueryClient;
+        DaoProposalMultipleClient: typeof _25.DaoProposalMultipleClient;
+    };
+    const DaoProposalSingle: {
+        DaoProposalSingleQueryClient: typeof _27.DaoProposalSingleQueryClient;
+        DaoProposalSingleClient: typeof _27.DaoProposalSingleClient;
     };
     const Cw20Stake: {
-        Cw20StakeQueryClient: typeof _21.Cw20StakeQueryClient;
-        Cw20StakeClient: typeof _21.Cw20StakeClient;
+        Cw20StakeQueryClient: typeof _29.Cw20StakeQueryClient;
+        Cw20StakeClient: typeof _29.Cw20StakeClient;
     };
     const Cw20StakeExternalRewards: {
-        Cw20StakeExternalRewardsQueryClient: typeof _23.Cw20StakeExternalRewardsQueryClient;
-        Cw20StakeExternalRewardsClient: typeof _23.Cw20StakeExternalRewardsClient;
+        Cw20StakeExternalRewardsQueryClient: typeof _31.Cw20StakeExternalRewardsQueryClient;
+        Cw20StakeExternalRewardsClient: typeof _31.Cw20StakeExternalRewardsClient;
     };
     const Cw20StakeRewardDistributor: {
-        Cw20StakeRewardDistributorQueryClient: typeof _25.Cw20StakeRewardDistributorQueryClient;
-        Cw20StakeRewardDistributorClient: typeof _25.Cw20StakeRewardDistributorClient;
+        Cw20StakeRewardDistributorQueryClient: typeof _33.Cw20StakeRewardDistributorQueryClient;
+        Cw20StakeRewardDistributorClient: typeof _33.Cw20StakeRewardDistributorClient;
     };
     const DaoVotingCw4: {
-        DaoVotingCw4QueryClient: typeof _27.DaoVotingCw4QueryClient;
-        DaoVotingCw4Client: typeof _27.DaoVotingCw4Client;
+        DaoVotingCw4QueryClient: typeof _35.DaoVotingCw4QueryClient;
+        DaoVotingCw4Client: typeof _35.DaoVotingCw4Client;
     };
     const DaoVotingCw20Staked: {
-        DaoVotingCw20StakedQueryClient: typeof _29.DaoVotingCw20StakedQueryClient;
-        DaoVotingCw20StakedClient: typeof _29.DaoVotingCw20StakedClient;
+        DaoVotingCw20StakedQueryClient: typeof _37.DaoVotingCw20StakedQueryClient;
+        DaoVotingCw20StakedClient: typeof _37.DaoVotingCw20StakedClient;
     };
     const DaoVotingCw721Staked: {
-        DaoVotingCw721StakedQueryClient: typeof _31.DaoVotingCw721StakedQueryClient;
-        DaoVotingCw721StakedClient: typeof _31.DaoVotingCw721StakedClient;
+        DaoVotingCw721StakedQueryClient: typeof _39.DaoVotingCw721StakedQueryClient;
+        DaoVotingCw721StakedClient: typeof _39.DaoVotingCw721StakedClient;
     };
     const DaoVotingNativeStaked: {
-        DaoVotingNativeStakedQueryClient: typeof _33.DaoVotingNativeStakedQueryClient;
-        DaoVotingNativeStakedClient: typeof _33.DaoVotingNativeStakedClient;
+        DaoVotingNativeStakedQueryClient: typeof _41.DaoVotingNativeStakedQueryClient;
+        DaoVotingNativeStakedClient: typeof _41.DaoVotingNativeStakedClient;
+    };
+    const Cw4Group: {
+        Cw4GroupQueryClient: typeof _43.Cw4GroupQueryClient;
+        Cw4GroupClient: typeof _43.Cw4GroupClient;
+    };
+    const Cw20Base: {
+        Cw20BaseQueryClient: typeof _45.Cw20BaseQueryClient;
+        Cw20BaseClient: typeof _45.Cw20BaseClient;
+    };
+    const Cw721Base: {
+        Cw721BaseQueryClient: typeof _47.Cw721BaseQueryClient;
+        Cw721BaseClient: typeof _47.Cw721BaseClient;
+    };
+    const Wasmswap: {
+        WasmswapQueryClient: typeof _49.WasmswapQueryClient;
+        WasmswapClient: typeof _49.WasmswapClient;
     };
 }
