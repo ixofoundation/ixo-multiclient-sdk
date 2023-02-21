@@ -24,14 +24,8 @@ export const MsgGrantContract = async (
 ) => {
   const client = await createClient(getUser(granter));
 
-  const granterUser = getUser(granter);
-  const granterAcount = (await granterUser.getAccounts())[0];
-  const granterAddress = granterAcount.address;
-  const granterDid = granterUser.did;
-
-  const granteeUser = getUser(grantee);
-  const granteeAccount = (await granteeUser.getAccounts())[0];
-  const granteeAddress = granteeAccount.address;
+  const granterAddress = (await getUser(granter).getAccounts())[0].address;
+  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
 
   const granteeGrants = await queryClient.cosmos.authz.v1beta1.granteeGrants({
     grantee: granteeAddress,
@@ -54,7 +48,7 @@ export const MsgGrantContract = async (
           typeUrl: "/ixo.token.v1beta1.MintAuthorization",
           value: ixo.token.v1beta1.MintAuthorization.encode(
             ixo.token.v1beta1.MintAuthorization.fromPartial({
-              minterDid: granterDid,
+              minter: granterAddress,
               constraints: [
                 ixo.token.v1beta1.MintConstraints.fromPartial({
                   contractAddress: contractAddress,
@@ -100,15 +94,8 @@ export const MsgExecContract = async (
 ) => {
   const client = await createClient(getUser(grantee));
 
-  const granterUser = getUser(granter);
-  const granterAcount = (await granterUser.getAccounts())[0];
-  const granterAddress = granterAcount.address;
-  const granterDid = granterUser.did;
-
-  const granteeUser = getUser(grantee);
-  const granteeAccount = (await granteeUser.getAccounts())[0];
-  const granteeAddress = granteeAccount.address;
-  const granteeDid = granteeUser.did;
+  const granterAddress = (await getUser(granter).getAccounts())[0].address;
+  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
 
   const message = {
     typeUrl: "/cosmos.authz.v1beta1.MsgExec",
@@ -119,10 +106,9 @@ export const MsgExecContract = async (
           typeUrl: "/ixo.token.v1beta1.MsgMintToken",
           value: ixo.token.v1beta1.MsgMintToken.encode(
             ixo.token.v1beta1.MsgMintToken.fromPartial({
-              minterDid: granterDid,
-              minterAddress: granterAddress,
+              minter: granterAddress,
               contractAddress,
-              ownerDid: granteeDid,
+              owner: granteeAddress,
               mintBatch: batches.map((b) =>
                 ixo.token.v1beta1.MintBatch.fromPartial({
                   name: b.name,
@@ -153,13 +139,8 @@ export const MsgRevokeContract = async (
 ) => {
   const client = await createClient(getUser(granter));
 
-  const granterUser = getUser(granter);
-  const granterAcount = (await granterUser.getAccounts())[0];
-  const granterAddress = granterAcount.address;
-
-  const granteeUser = getUser(grantee);
-  const granteeAccount = (await granteeUser.getAccounts())[0];
-  const granteeAddress = granteeAccount.address;
+  const granterAddress = (await getUser(granter).getAccounts())[0].address;
+  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
 
   const message = {
     typeUrl: "/cosmos.authz.v1beta1.MsgRevoke",
@@ -186,13 +167,8 @@ export const MsgGrantSend = async (
 ) => {
   const client = await createClient(getUser(granter));
 
-  const granterUser = getUser(granter);
-  const granterAcount = (await granterUser.getAccounts())[0];
-  const granterAddress = granterAcount.address;
-
-  const granteeUser = getUser(grantee);
-  const granteeAccount = (await granteeUser.getAccounts())[0];
-  const granteeAddress = granteeAccount.address;
+  const granterAddress = (await getUser(granter).getAccounts())[0].address;
+  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
 
   const message = {
     typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
@@ -237,13 +213,8 @@ export const MsgExecSend = async (
 ) => {
   const client = await createClient(getUser(grantee));
 
-  const granterUser = getUser(granter);
-  const granterAcount = (await granterUser.getAccounts())[0];
-  const granterAddress = granterAcount.address;
-
-  const granteeUser = getUser(grantee);
-  const granteeAccount = (await granteeUser.getAccounts())[0];
-  const granteeAddress = granteeAccount.address;
+  const granterAddress = (await getUser(granter).getAccounts())[0].address;
+  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
 
   const message = {
     typeUrl: "/cosmos.authz.v1beta1.MsgExec",

@@ -1,11 +1,13 @@
 import { TokenData, TokenDataSDKType } from "./token";
 import * as _m0 from "protobufjs/minimal";
 export interface MintAuthorization {
-    minterDid: string;
+    /** address of minter */
+    minter: string;
     constraints: MintConstraints[];
 }
 export interface MintAuthorizationSDKType {
-    minter_did: string;
+    /** address of minter */
+    minter: string;
     constraints: MintConstraintsSDKType[];
 }
 export interface MintConstraints {

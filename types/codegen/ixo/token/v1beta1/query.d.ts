@@ -1,82 +1,73 @@
-import { Token, TokenSDKType } from "./token";
+import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { Token, TokenSDKType, TokenData, TokenDataSDKType } from "./token";
 import * as _m0 from "protobufjs/minimal";
 export interface QueryTokenListRequest {
-    minterDid: string;
+    pagination?: PageRequest;
+    /** minter address to get list for */
+    minter: string;
 }
 export interface QueryTokenListRequestSDKType {
-    minter_did: string;
+    pagination?: PageRequestSDKType;
+    /** minter address to get list for */
+    minter: string;
 }
-/**
- * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
- * method.
- */
 export interface QueryTokenListResponse {
-    contracts: Token[];
+    pagination?: PageResponse;
+    tokenDocs: Token[];
 }
-/**
- * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
- * method.
- */
 export interface QueryTokenListResponseSDKType {
-    contracts: TokenSDKType[];
+    pagination?: PageResponseSDKType;
+    tokenDocs: TokenSDKType[];
 }
-/**
- * QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC
- * method.
- */
 export interface QueryTokenDocRequest {
-    minterDid: string;
+    /** minter address to get Token Doc for */
+    minter: string;
     contractAddress: string;
 }
-/**
- * QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC
- * method.
- */
 export interface QueryTokenDocRequestSDKType {
-    minter_did: string;
+    /** minter address to get Token Doc for */
+    minter: string;
     contract_address: string;
 }
-/**
- * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
- * method.
- */
 export interface QueryTokenDocResponse {
+    tokenDoc?: Token;
 }
-/**
- * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
- * method.
- */
 export interface QueryTokenDocResponseSDKType {
+    tokenDoc?: TokenSDKType;
 }
-export interface QueryTokenConfigRequest {
+export interface QueryTokenMetadataRequest {
+    id: string;
 }
-export interface QueryTokenConfigRequestSDKType {
+export interface QueryTokenMetadataRequestSDKType {
+    id: string;
 }
-export interface QueryTokenConfigResponse_MapEntry {
-    key: string;
-    value: string;
+export interface QueryTokenMetadataResponse {
+    name: string;
+    description: string;
+    decimals: string;
+    image: string;
+    index: string;
+    properties?: TokenMetadataProperties;
 }
-export interface QueryTokenConfigResponse_MapEntrySDKType {
-    key: string;
-    value: string;
+export interface QueryTokenMetadataResponseSDKType {
+    name: string;
+    description: string;
+    decimals: string;
+    image: string;
+    index: string;
+    properties?: TokenMetadataPropertiesSDKType;
 }
-/**
- * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
- * method.
- */
-export interface QueryTokenConfigResponse {
-    map: {
-        [key: string]: string;
-    };
+export interface TokenMetadataProperties {
+    class: string;
+    collection: string;
+    cap: string;
+    linkedResources: TokenData[];
 }
-/**
- * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
- * method.
- */
-export interface QueryTokenConfigResponseSDKType {
-    map: {
-        [key: string]: string;
-    };
+export interface TokenMetadataPropertiesSDKType {
+    class: string;
+    collection: string;
+    cap: string;
+    linkedResources: TokenDataSDKType[];
 }
 export declare const QueryTokenListRequest: {
     encode(message: QueryTokenListRequest, writer?: _m0.Writer): _m0.Writer;
@@ -100,30 +91,30 @@ export declare const QueryTokenDocRequest: {
     fromPartial(object: Partial<QueryTokenDocRequest>): QueryTokenDocRequest;
 };
 export declare const QueryTokenDocResponse: {
-    encode(_: QueryTokenDocResponse, writer?: _m0.Writer): _m0.Writer;
+    encode(message: QueryTokenDocResponse, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenDocResponse;
-    fromJSON(_: any): QueryTokenDocResponse;
-    toJSON(_: QueryTokenDocResponse): unknown;
-    fromPartial(_: Partial<QueryTokenDocResponse>): QueryTokenDocResponse;
+    fromJSON(object: any): QueryTokenDocResponse;
+    toJSON(message: QueryTokenDocResponse): unknown;
+    fromPartial(object: Partial<QueryTokenDocResponse>): QueryTokenDocResponse;
 };
-export declare const QueryTokenConfigRequest: {
-    encode(_: QueryTokenConfigRequest, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenConfigRequest;
-    fromJSON(_: any): QueryTokenConfigRequest;
-    toJSON(_: QueryTokenConfigRequest): unknown;
-    fromPartial(_: Partial<QueryTokenConfigRequest>): QueryTokenConfigRequest;
+export declare const QueryTokenMetadataRequest: {
+    encode(message: QueryTokenMetadataRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenMetadataRequest;
+    fromJSON(object: any): QueryTokenMetadataRequest;
+    toJSON(message: QueryTokenMetadataRequest): unknown;
+    fromPartial(object: Partial<QueryTokenMetadataRequest>): QueryTokenMetadataRequest;
 };
-export declare const QueryTokenConfigResponse_MapEntry: {
-    encode(message: QueryTokenConfigResponse_MapEntry, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenConfigResponse_MapEntry;
-    fromJSON(object: any): QueryTokenConfigResponse_MapEntry;
-    toJSON(message: QueryTokenConfigResponse_MapEntry): unknown;
-    fromPartial(object: Partial<QueryTokenConfigResponse_MapEntry>): QueryTokenConfigResponse_MapEntry;
+export declare const QueryTokenMetadataResponse: {
+    encode(message: QueryTokenMetadataResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenMetadataResponse;
+    fromJSON(object: any): QueryTokenMetadataResponse;
+    toJSON(message: QueryTokenMetadataResponse): unknown;
+    fromPartial(object: Partial<QueryTokenMetadataResponse>): QueryTokenMetadataResponse;
 };
-export declare const QueryTokenConfigResponse: {
-    encode(message: QueryTokenConfigResponse, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenConfigResponse;
-    fromJSON(object: any): QueryTokenConfigResponse;
-    toJSON(message: QueryTokenConfigResponse): unknown;
-    fromPartial(object: Partial<QueryTokenConfigResponse>): QueryTokenConfigResponse;
+export declare const TokenMetadataProperties: {
+    encode(message: TokenMetadataProperties, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): TokenMetadataProperties;
+    fromJSON(object: any): TokenMetadataProperties;
+    toJSON(message: TokenMetadataProperties): unknown;
+    fromPartial(object: Partial<TokenMetadataProperties>): TokenMetadataProperties;
 };

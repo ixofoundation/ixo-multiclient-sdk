@@ -1,8 +1,8 @@
 import { TokenData, TokenDataSDKType } from "./token";
 import * as _m0 from "protobufjs/minimal";
 export interface MsgCreateToken {
-    minterDid: string;
-    minterAddress: string;
+    /** address of minter */
+    minter: string;
     /** class is the token protocol entity DID (validated) */
     class: string;
     /** name is the token name, which must be unique (namespace) */
@@ -20,8 +20,8 @@ export interface MsgCreateToken {
     cap: string;
 }
 export interface MsgCreateTokenSDKType {
-    minter_did: string;
-    minter_address: string;
+    /** address of minter */
+    minter: string;
     /** class is the token protocol entity DID (validated) */
     class: string;
     /** name is the token name, which must be unique (namespace) */
@@ -43,18 +43,20 @@ export interface MsgCreateTokenResponse {
 export interface MsgCreateTokenResponseSDKType {
 }
 export interface MsgMintToken {
-    minterDid: string;
-    minterAddress: string;
+    /** address of minter */
+    minter: string;
     contractAddress: string;
-    ownerDid: string;
+    /** address of owner to mint for */
+    owner: string;
     mintBatch: MintBatch[];
 }
 export interface MsgMintTokenSDKType {
-    minter_did: string;
-    minter_address: string;
+    /** address of minter */
+    minter: string;
     contract_address: string;
-    owner_did: string;
-    mintBatch: MintBatchSDKType[];
+    /** address of owner to mint for */
+    owner: string;
+    mint_batch: MintBatchSDKType[];
 }
 export interface MintBatch {
     /**
@@ -90,31 +92,147 @@ export interface MintBatchSDKType {
      * tokenData is the linkedResources added to tokenMetadata when queried eg
      * (credential link ***.ipfs)
      */
-    tokenData: TokenDataSDKType[];
+    token_data: TokenDataSDKType[];
 }
 export interface MsgMintTokenResponse {
 }
 export interface MsgMintTokenResponseSDKType {
 }
 export interface MsgTransferToken {
-    tokenDid: string;
-    /** The ownersdid used to sign this transaction. */
-    ownerDid: string;
-    /** The owners address used to sign this transaction. */
-    ownerAddress: string;
-    recipientDid: string;
+    /** address of owner */
+    owner: string;
+    /** address of receiver */
+    recipient: string;
+    /** all tokens must be in same smart contract */
+    tokens: TokenBatch[];
 }
 export interface MsgTransferTokenSDKType {
-    token_did: string;
-    /** The ownersdid used to sign this transaction. */
-    owner_did: string;
-    /** The owners address used to sign this transaction. */
-    owner_address: string;
-    recipient_did: string;
+    /** address of owner */
+    owner: string;
+    /** address of receiver */
+    recipient: string;
+    /** all tokens must be in same smart contract */
+    tokens: TokenBatchSDKType[];
 }
 export interface MsgTransferTokenResponse {
 }
 export interface MsgTransferTokenResponseSDKType {
+}
+export interface TokenBatch {
+    /** id that identifies the token */
+    id: string;
+    /** amount is the number of tokens to transfer */
+    amount: string;
+}
+export interface TokenBatchSDKType {
+    /** id that identifies the token */
+    id: string;
+    /** amount is the number of tokens to transfer */
+    amount: string;
+}
+export interface MsgRetireToken {
+    /** address of owner */
+    owner: string;
+    /** tokens to retire, all tokens must be in same smart contract */
+    tokens: TokenBatch[];
+    /**
+     * jurisdiction is the jurisdiction of the token owner. A jurisdiction has
+     * the format: <country-code>[-<sub-national-code>[ <postal-code>]]
+     * The country-code must be 2 alphabetic characters, the sub-national-code
+     * can be 1-3 alphanumeric characters, and the postal-code can be up to 64
+     * alphanumeric characters. Only the country-code is required, while the
+     * sub-national-code and postal-code are optional and can be added for
+     * increased precision. See the valid format for this below.
+     */
+    jurisdiction: string;
+    /**
+     * reason is any arbitrary string that specifies the reason for retiring
+     * tokens.
+     */
+    reason: string;
+}
+export interface MsgRetireTokenSDKType {
+    /** address of owner */
+    owner: string;
+    /** tokens to retire, all tokens must be in same smart contract */
+    tokens: TokenBatchSDKType[];
+    /**
+     * jurisdiction is the jurisdiction of the token owner. A jurisdiction has
+     * the format: <country-code>[-<sub-national-code>[ <postal-code>]]
+     * The country-code must be 2 alphabetic characters, the sub-national-code
+     * can be 1-3 alphanumeric characters, and the postal-code can be up to 64
+     * alphanumeric characters. Only the country-code is required, while the
+     * sub-national-code and postal-code are optional and can be added for
+     * increased precision. See the valid format for this below.
+     */
+    jurisdiction: string;
+    /**
+     * reason is any arbitrary string that specifies the reason for retiring
+     * tokens.
+     */
+    reason: string;
+}
+export interface MsgRetireTokenResponse {
+}
+export interface MsgRetireTokenResponseSDKType {
+}
+export interface MsgCancelToken {
+    /** address of owner */
+    owner: string;
+    /** tokens to retire, all tokens must be in same smart contract */
+    tokens: TokenBatch[];
+    /**
+     * reason is any arbitrary string that specifies the reason for retiring
+     * tokens.
+     */
+    reason: string;
+}
+export interface MsgCancelTokenSDKType {
+    /** address of owner */
+    owner: string;
+    /** tokens to retire, all tokens must be in same smart contract */
+    tokens: TokenBatchSDKType[];
+    /**
+     * reason is any arbitrary string that specifies the reason for retiring
+     * tokens.
+     */
+    reason: string;
+}
+export interface MsgCancelTokenResponse {
+}
+export interface MsgCancelTokenResponseSDKType {
+}
+export interface MsgPauseToken {
+    /** address of minter */
+    minter: string;
+    contractAddress: string;
+    /** pause or unpause Token Minting allowance */
+    paused: boolean;
+}
+export interface MsgPauseTokenSDKType {
+    /** address of minter */
+    minter: string;
+    contract_address: string;
+    /** pause or unpause Token Minting allowance */
+    paused: boolean;
+}
+export interface MsgPauseTokenResponse {
+}
+export interface MsgPauseTokenResponseSDKType {
+}
+export interface MsgStopToken {
+    /** address of minter */
+    minter: string;
+    contractAddress: string;
+}
+export interface MsgStopTokenSDKType {
+    /** address of minter */
+    minter: string;
+    contract_address: string;
+}
+export interface MsgStopTokenResponse {
+}
+export interface MsgStopTokenResponseSDKType {
 }
 export declare const MsgCreateToken: {
     encode(message: MsgCreateToken, writer?: _m0.Writer): _m0.Writer;
@@ -164,4 +282,67 @@ export declare const MsgTransferTokenResponse: {
     fromJSON(_: any): MsgTransferTokenResponse;
     toJSON(_: MsgTransferTokenResponse): unknown;
     fromPartial(_: Partial<MsgTransferTokenResponse>): MsgTransferTokenResponse;
+};
+export declare const TokenBatch: {
+    encode(message: TokenBatch, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): TokenBatch;
+    fromJSON(object: any): TokenBatch;
+    toJSON(message: TokenBatch): unknown;
+    fromPartial(object: Partial<TokenBatch>): TokenBatch;
+};
+export declare const MsgRetireToken: {
+    encode(message: MsgRetireToken, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgRetireToken;
+    fromJSON(object: any): MsgRetireToken;
+    toJSON(message: MsgRetireToken): unknown;
+    fromPartial(object: Partial<MsgRetireToken>): MsgRetireToken;
+};
+export declare const MsgRetireTokenResponse: {
+    encode(_: MsgRetireTokenResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgRetireTokenResponse;
+    fromJSON(_: any): MsgRetireTokenResponse;
+    toJSON(_: MsgRetireTokenResponse): unknown;
+    fromPartial(_: Partial<MsgRetireTokenResponse>): MsgRetireTokenResponse;
+};
+export declare const MsgCancelToken: {
+    encode(message: MsgCancelToken, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelToken;
+    fromJSON(object: any): MsgCancelToken;
+    toJSON(message: MsgCancelToken): unknown;
+    fromPartial(object: Partial<MsgCancelToken>): MsgCancelToken;
+};
+export declare const MsgCancelTokenResponse: {
+    encode(_: MsgCancelTokenResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelTokenResponse;
+    fromJSON(_: any): MsgCancelTokenResponse;
+    toJSON(_: MsgCancelTokenResponse): unknown;
+    fromPartial(_: Partial<MsgCancelTokenResponse>): MsgCancelTokenResponse;
+};
+export declare const MsgPauseToken: {
+    encode(message: MsgPauseToken, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgPauseToken;
+    fromJSON(object: any): MsgPauseToken;
+    toJSON(message: MsgPauseToken): unknown;
+    fromPartial(object: Partial<MsgPauseToken>): MsgPauseToken;
+};
+export declare const MsgPauseTokenResponse: {
+    encode(_: MsgPauseTokenResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgPauseTokenResponse;
+    fromJSON(_: any): MsgPauseTokenResponse;
+    toJSON(_: MsgPauseTokenResponse): unknown;
+    fromPartial(_: Partial<MsgPauseTokenResponse>): MsgPauseTokenResponse;
+};
+export declare const MsgStopToken: {
+    encode(message: MsgStopToken, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgStopToken;
+    fromJSON(object: any): MsgStopToken;
+    toJSON(message: MsgStopToken): unknown;
+    fromPartial(object: Partial<MsgStopToken>): MsgStopToken;
+};
+export declare const MsgStopTokenResponse: {
+    encode(_: MsgStopTokenResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgStopTokenResponse;
+    fromJSON(_: any): MsgStopTokenResponse;
+    toJSON(_: MsgStopTokenResponse): unknown;
+    fromPartial(_: Partial<MsgStopTokenResponse>): MsgStopTokenResponse;
 };
