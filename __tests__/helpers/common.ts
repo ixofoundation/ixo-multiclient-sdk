@@ -185,7 +185,20 @@ export const runQry = (message: string, query: () => Promise<any>) => {
   return test(message, async () => {
     console.log("Running query " + message);
     const res = await query();
-    console.log(res);
+    // console.log(res);
+    if (message.indexOf("ProjectDoc") !== -1) {
+      console.log("[\n {\n \"projectDoc\": {\n \"txHash\":\"" + res.projectDoc.txHash
+        + "\",\n \"projectDid\":\"" + res.projectDoc.projectDid
+        + "\",\n \"senderDid\":\"" + res.projectDoc.senderDid
+        + "\",\n \"pubKey\":\"" + res.projectDoc.pubKey
+        + "\",\n \"status\":\"" + res.projectDoc.status
+        + "\",\n \"data\": [\n " + utils.conversions.Uint8ArrayToJS(res.projectDoc.data)
+        + "\n}\n]");
+    } else if (message.indexOf("AllAccounts") !== -1) {
+      console.log(utils.conversions.Uint8ArrayToJS(res.accounts.value));
+    } else {
+      console.log(res);
+    }
     expect(true).toBeTruthy();
   });
 };
