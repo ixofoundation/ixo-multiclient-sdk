@@ -46,6 +46,14 @@ import * as _38 from "./DaoVotingCw721Staked.types";
 import * as _39 from "./DaoVotingCw721Staked.client";
 import * as _40 from "./DaoVotingNativeStaked.types";
 import * as _41 from "./DaoVotingNativeStaked.client";
+import * as _42 from "./Cw4Group.types";
+import * as _43 from "./Cw4Group.client";
+import * as _44 from "./Cw20Base.types";
+import * as _45 from "./Cw20Base.client";
+import * as _46 from "./Cw721Base.types";
+import * as _47 from "./Cw721Base.client";
+import * as _48 from "./Wasmswap.types";
+import * as _49 from "./Wasmswap.client";
 export namespace contracts {
   export const DaoCore = { ..._0,
     ..._1
@@ -109,5 +117,17 @@ export namespace contracts {
   };
   export const DaoVotingNativeStaked = { ..._40,
     ..._41
+  };
+  export const Cw4Group = { ..._42,
+    ..._43
+  };
+  export const Cw20Base = { ..._44,
+    ..._45
+  };
+  export const Cw721Base = { ..._46,
+    ..._47
+  };
+  export const Wasmswap = { ..._48,
+    ..._49
   };
 }

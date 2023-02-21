@@ -174,7 +174,7 @@ const activeRpc = customQueries.chain.getActiveRpcFromChainName(
 const keplrChainInfo =
   customQueries.chain.getKeplrChainInfoFromRegistryChainInfo(chainInfo);
 // or fetch Keplr chain info using chain name and chain network (default mainnet)
-const keplrChainInfo = customQueries.chain.getKeplrChainInfoFromChainName(
+const keplrChainInfo = customQueries.chain.getKeplrChainInfo(
   "impacthub",
   "testnet"
 );

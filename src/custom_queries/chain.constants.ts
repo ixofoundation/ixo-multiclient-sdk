@@ -49,7 +49,11 @@ export const preferredEndpoints = {
     rest: ["https://rest.comdex.one"],
   },
   cosmoshub: {
-    rpc: ["https://rpc-cosmoshub.keplr.app"],
+    rpc: [
+      "https://rpc-cosmoshub.blockapsis.com",
+      "https://rpc-cosmoshub.keplr.app",
+      "https://rpc.sentry-01.theta-testnet.polypore.xyz", // testnet
+    ],
     rest: ["https://lcd-cosmoshub.keplr.app"],
   },
   crescent: {
@@ -108,11 +112,11 @@ export const preferredEndpoints = {
     rpc: [
       "https://ixo-rpc.ibs.team",
       "https://rpc-ixo-ia.cosmosia.notional.ventures/",
-      "https://impacthub-rpc.lavenderfive.com/",
+      // "https://impacthub-rpc.lavenderfive.com/", // removed due to rate-limiter
     ],
     rest: [
       "https://api-ixo-ia.cosmosia.notional.ventures/",
-      "https://impacthub-api.lavenderfive.com/",
+      // "https://impacthub-api.lavenderfive.com/", // removed due to rate-limiter
     ],
   },
   injective: {
@@ -128,7 +132,11 @@ export const preferredEndpoints = {
     rest: ["https://api.jackalprotocol.com"],
   },
   juno: {
-    rpc: ["https://rpc-juno.keplr.app"],
+    rpc: [
+      "https://rpc-juno.itastakers.com",
+      "https://rpc-juno.keplr.app",
+      "https://rpc.uni.junonetwork.io", // testnet
+    ],
     rest: ["https://lcd-juno.keplr.app"],
   },
   kava: {
@@ -180,7 +188,7 @@ export const preferredEndpoints = {
     rest: ["https://lcd.orai.io"],
   },
   osmosis: {
-    rpc: ["https://rpc-osmosis.keplr.app"],
+    rpc: ["https://rpc.osmosis.zone", "https://rpc-osmosis.keplr.app"],
     rest: ["https://lcd-osmosis.keplr.app"],
   },
   persistence: {

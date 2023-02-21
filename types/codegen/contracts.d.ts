@@ -24,6 +24,10 @@ import * as _35 from "./DaoVotingCw4.client";
 import * as _37 from "./DaoVotingCw20Staked.client";
 import * as _39 from "./DaoVotingCw721Staked.client";
 import * as _41 from "./DaoVotingNativeStaked.client";
+import * as _43 from "./Cw4Group.client";
+import * as _45 from "./Cw20Base.client";
+import * as _47 from "./Cw721Base.client";
+import * as _49 from "./Wasmswap.client";
 export declare namespace contracts {
     const DaoCore: {
         DaoCoreQueryClient: typeof _1.DaoCoreQueryClient;
@@ -108,5 +112,21 @@ export declare namespace contracts {
     const DaoVotingNativeStaked: {
         DaoVotingNativeStakedQueryClient: typeof _41.DaoVotingNativeStakedQueryClient;
         DaoVotingNativeStakedClient: typeof _41.DaoVotingNativeStakedClient;
+    };
+    const Cw4Group: {
+        Cw4GroupQueryClient: typeof _43.Cw4GroupQueryClient;
+        Cw4GroupClient: typeof _43.Cw4GroupClient;
+    };
+    const Cw20Base: {
+        Cw20BaseQueryClient: typeof _45.Cw20BaseQueryClient;
+        Cw20BaseClient: typeof _45.Cw20BaseClient;
+    };
+    const Cw721Base: {
+        Cw721BaseQueryClient: typeof _47.Cw721BaseQueryClient;
+        Cw721BaseClient: typeof _47.Cw721BaseClient;
+    };
+    const Wasmswap: {
+        WasmswapQueryClient: typeof _49.WasmswapQueryClient;
+        WasmswapClient: typeof _49.WasmswapClient;
     };
 }

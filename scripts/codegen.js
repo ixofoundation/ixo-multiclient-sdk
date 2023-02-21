@@ -44,10 +44,12 @@ telescope({
     },
     cosmwasm: {
       contracts: [
+        // DAO DAO CORE
         {
           name: 'dao-core',
           dir: join(contractsDir, '/daodao/dao-core')
         },
+        // DAO DAO EXTERNAL
         {
           name: 'cw-admin-factory',
           dir: join(contractsDir, '/daodao/external/cw-admin-factory')
@@ -72,6 +74,7 @@ telescope({
           name: 'dao-migrator',
           dir: join(contractsDir, '/daodao/external/dao-migrator')
         },
+        // DAO DAO PRE PROPOSE
         {
           name: 'dao-pre-propose-approval-single',
           dir: join(
@@ -97,6 +100,7 @@ telescope({
           name: 'dao-pre-propose-single',
           dir: join(contractsDir, '/daodao/pre-propose/dao-pre-propose-single')
         },
+        // DAO DAO PROPOSAL
         {
           name: 'dao-proposal-condorcet',
           dir: join(contractsDir, '/daodao/proposal/dao-proposal-condorcet')
@@ -109,6 +113,7 @@ telescope({
           name: 'dao-proposal-single',
           dir: join(contractsDir, '/daodao/proposal/dao-proposal-single')
         },
+        // DAO DAO STAKING
         {
           name: 'cw20-stake',
           dir: join(contractsDir, '/daodao/staking/cw20-stake')
@@ -124,6 +129,7 @@ telescope({
             '/daodao/staking/cw20-stake-reward-distributor'
           )
         },
+        // DAO DAO VOTING
         {
           name: 'dao-voting-cw4',
           dir: join(contractsDir, '/daodao/voting/dao-voting-cw4')
@@ -139,6 +145,27 @@ telescope({
         {
           name: 'dao-voting-native-staked',
           dir: join(contractsDir, '/daodao/voting/dao-voting-native-staked')
+        },
+        // COSMWASM CW4
+        {
+          name: 'cw4-group',
+          dir: join(contractsDir, '/cosmwasm/cw4-group')
+        },
+        // COSMWASM CW20
+        {
+          name: 'cw20-base',
+          dir: join(contractsDir, '/cosmwasm/cw20-base')
+        },
+        // COSMWASM CW721
+        // Adding @ts-nocheck to top of file to prevent "extension" return type conflicts
+        {
+          name: 'cw721-base',
+          dir: join(contractsDir, '/cosmwasm/cw721-base')
+        },
+        // WASMSWAP
+        {
+          name: 'wasmswap',
+          dir: join(contractsDir, '/wasmswap')
         }
       ],
       outPath,
@@ -159,6 +186,9 @@ telescope({
 })
   .then(() => {
     console.log('✨ all done!');
+    console.log(
+      "IMPORTANT: add '// @ts-nocheck' to the top of cw721-base schema file to prevent type conflicts"
+    );
   })
   .catch((e) => {
     console.error(e);
