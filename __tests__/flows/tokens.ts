@@ -7,39 +7,39 @@ import { TokenData } from "../../src/codegen/ixo/token/v1beta1/token";
 
 export const tokenBasic = () =>
   describe("Testing the Token module", () => {
-    let name = "CARBON";
-    let description = "Carbon credits";
+    let name = "TEST";
+    let description = "Test credits";
     let cap = 50;
 
     // Create token class
     let tokenClass: string;
-    tokenClass = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
-    // testMsg("/ixo.entity.v1beta1.MsgCreateEntity token class", async () => {
-    //   const res = await Entity.CreateEntity("protocol");
-    //   tokenClass = utils.common.getValueFromEvents(
-    //     res,
-    //     "ixo.iid.v1beta1.IidDocumentCreatedEvent",
-    //     "did"
-    //   );
-    //   console.log({ tokenClass });
-    //   return res;
-    // });
+    tokenClass = "did:ixo:entity:4e32697c7c2c74f4fac48e4d1d5628cd";
+    testMsg("/ixo.entity.v1beta1.MsgCreateEntity token class", async () => {
+      const res = await Entity.CreateEntity("protocol");
+      tokenClass = utils.common.getValueFromEvents(
+        res,
+        "ixo.iid.v1beta1.IidDocumentCreatedEvent",
+        "did"
+      );
+      console.log({ tokenClass });
+      return res;
+    });
 
     let contractAddress1155: string;
     contractAddress1155 =
       "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
-    // testMsg("/ixo.token.v1beta1.MsgCreateToken", async () => {
-    //   const res = await Token.CreateToken(name, description, cap, tokenClass);
-    //   contractAddress1155 = utils.common.getValueFromEvents(
-    //     res,
-    //     "ixo.token.v1beta1.TokenCreatedEvent",
-    //     "contract_address"
-    //   );
-    //   console.log({ contractAddress1155 });
-    //   return res;
-    // });
+    testMsg("/ixo.token.v1beta1.MsgCreateToken", async () => {
+      const res = await Token.CreateToken(name, description, cap, tokenClass);
+      contractAddress1155 = utils.common.getValueFromEvents(
+        res,
+        "ixo.token.v1beta1.TokenCreatedEvent",
+        "contract_address"
+      );
+      console.log({ contractAddress1155 });
+      return res;
+    });
 
-    let index = "5";
+    let index = "1";
     let amount = 1;
     let collection = "collection";
     let tokenData: TokenData[];

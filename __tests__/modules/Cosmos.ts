@@ -30,7 +30,7 @@ export const BankSendTrx = async () => {
       toAddress: aliceAccount.address,
       amount: [
         cosmos.base.v1beta1.Coin.fromPartial({
-          amount: "1000000",
+          amount: "10000",
           denom: "uixo",
         }),
       ],
