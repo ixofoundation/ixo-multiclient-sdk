@@ -15,7 +15,7 @@ import {
 import { enititiesBasic, supamotoFlow } from "./flows/entities";
 import { paymentsBasic } from "./flows/payments";
 import { ibcBasic } from "./flows/ibc";
-import { bankBasic, govBasic } from "./flows/cosmos";
+import { bankBasic, govBasic, authzBasic } from "./flows/cosmos";
 import { tokenBasic } from "./flows/tokens";
 import { projectsBasic } from "./flows/projects";
 import { wasmBasic } from "./flows/cosmwasm";
@@ -42,5 +42,6 @@ generateBlockchainTestUsers();
 // ibcBasic();
 // bankBasic();
 // govBasic();
+// authzBasic()
 // wasmBasic();
 quickQueries();

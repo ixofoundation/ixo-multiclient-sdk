@@ -386,6 +386,22 @@ export const createRegistry = (): Registry => {
     "/ixo.token.v1beta1.MintAuthorization",
     ixo.token.v1beta1.MintAuthorization
   );
+  myRegistry.register(
+    "/ixo.token.v1beta1.MsgRetireToken",
+    ixo.token.v1beta1.MsgRetireToken
+  );
+  myRegistry.register(
+    "/ixo.token.v1beta1.MsgCancelToken",
+    ixo.token.v1beta1.MsgCancelToken
+  );
+  myRegistry.register(
+    "/ixo.token.v1beta1.MsgPauseToken",
+    ixo.token.v1beta1.MsgPauseToken
+  );
+  myRegistry.register(
+    "/ixo.token.v1beta1.MsgStopToken",
+    ixo.token.v1beta1.MsgStopToken
+  );
 
   // Cosmwasm
   myRegistry.register(

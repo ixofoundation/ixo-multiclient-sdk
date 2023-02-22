@@ -39,13 +39,78 @@ export const tokenBasic = () =>
     //   return res;
     // });
 
-    let index = "6";
+    let index = "5";
     let amount = 1;
     let collection = "collection";
     let tokenData: TokenData[];
 
-    // testMsg("/ixo.token.v1beta1.MsgMintToken", async () => {
-    //   const res = await Token.MintToken(contractAddress1155, [
+    testMsg("/ixo.token.v1beta1.MsgMintToken", async () => {
+      const res = await Token.MintToken(contractAddress1155, [
+        {
+          name,
+          index,
+          amount,
+          collection,
+          tokenData,
+        },
+      ]);
+      const tokenIds = utils.common.getValueFromEvents(
+        res,
+        "ixo.token.v1beta1.TokenMintedEvent",
+        "batches"
+      );
+      console.log({ tokenIds });
+      return res;
+    });
+
+    // testMsg("/ixo.token.v1beta1.MsgTransferToken", () =>
+    //   Token.TransferToken([
+    //     {
+    //       id: "39d57f760c58ff91c1407925bdcbe0da",
+    //       amount: 1,
+    //     },
+    //   ])
+    // );
+
+    // testMsg("/ixo.token.v1beta1.MsgCancelToken", () =>
+    //   Token.CancelToken([
+    //     {
+    //       id: "39d57f760c58ff91c1407925bdcbe0da",
+    //       amount: 1,
+    //     },
+    //   ])
+    // );
+
+    // testMsg("/ixo.token.v1beta1.MsgRetireToken", () =>
+    //   Token.RetireToken([
+    //     {
+    //       id: "80e3ff80e4a804364749709e100d358f",
+    //       amount: 1,
+    //     },
+    //   ])
+    // );
+
+    // testMsg("/ixo.token.v1beta1.MsgPauseToken", () =>
+    //   Token.PauseToken(contractAddress1155, false)
+    // );
+
+    // testMsg("/ixo.token.v1beta1.MsgStopToken", () =>
+    //   Token.StopToken(contractAddress1155)
+    // );
+
+    // testMsg("/cosmos.authz.v1beta1.MsgGrant", () =>
+    //   Authz.MsgGrantContract(
+    //     contractAddress1155,
+    //     name,
+    //     index,
+    //     collection,
+    //     amount,
+    //     tokenData
+    //   )
+    // );
+
+    // testMsg("/cosmos.authz.v1beta1.MsgExec", () =>
+    //   Authz.MsgExecContract(contractAddress1155, [
     //     {
     //       name,
     //       index,
@@ -53,59 +118,8 @@ export const tokenBasic = () =>
     //       collection,
     //       tokenData,
     //     },
-    //   ]);
-    //   const tokenId = utils.common.getValueFromEvents(
-    //     res,
-    //     "ixo.token.v1beta1.TokenMintedEvent",
-    //     "batches"
-    //   );
-    //   console.log({ tokenId });
-    //   return res;
-    // });
-
-    // testMsg("/cosmos.authz.v1beta1.MsgGrant", async () => {
-    //   const res = await Authz.MsgGrantContract(
-    //     contractAddress1155,
-    //     name,
-    //     index,
-    //     collection,
-    //     amount,
-    //     tokenData
-    //   );
-    //   return res;
-    // });
-
-    testMsg("/cosmos.authz.v1beta1.MsgExec", () =>
-      Authz.MsgExecContract(contractAddress1155, [
-        {
-          name,
-          index: "7",
-          amount,
-          collection,
-          tokenData,
-        },
-        {
-          name,
-          index: "8",
-          amount,
-          collection,
-          tokenData,
-        },
-      ])
-    );
-
-    // testMsg("test Grant Send", async () => {
-    //   const res = await Authz.MsgGrantSend();
-    //   console.log(res);
-    //   return res;
-    // });
-    // testMsg("test Exec Send", async () => {
-    //   const res = await Authz.MsgExecSend();
-    //   console.log(res);
-    //   return res;
-    // });
+    //   ])
+    // );
 
     // testMsg("/cosmos.authz.v1beta1.MsgRevoke", () => Authz.MsgRevokeContract());
-
-    // testMsg("/ixo.token.v1beta1.MsgTransferToken", () => Token.TransferToken());
   });

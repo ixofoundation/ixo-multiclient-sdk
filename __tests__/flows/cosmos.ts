@@ -1,5 +1,6 @@
 import { testMsg, utils } from "../helpers/common";
 import * as Cosmos from "../modules/Cosmos";
+import * as Authz from "../modules/Authz";
 
 export const bankBasic = () =>
   describe("Testing the cosmos bank module", () => {
@@ -59,4 +60,19 @@ export const govBasic = () =>
     testMsg("/cosmos.gov.v1beta1.MsgVote", () =>
       Cosmos.MsgVote(proposalIdUpdateTokenParams)
     );
+  });
+
+export const authzBasic = () =>
+  describe("Testing the cosmos bank module", () => {
+    testMsg("test Grant Send", async () => {
+      const res = await Authz.MsgGrantSend();
+      console.log(res);
+      return res;
+    });
+
+    testMsg("test Exec Send", async () => {
+      const res = await Authz.MsgExecSend();
+      console.log(res);
+      return res;
+    });
   });
