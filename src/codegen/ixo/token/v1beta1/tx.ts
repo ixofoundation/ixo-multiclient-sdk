@@ -2,8 +2,8 @@ import { TokenData, TokenDataSDKType } from "./token";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 export interface MsgCreateToken {
-  minterDid: string;
-  minterAddress: string;
+  /** address of minter */
+  minter: string;
   /** class is the token protocol entity DID (validated) */
 
   class: string;
@@ -27,8 +27,8 @@ export interface MsgCreateToken {
   cap: string;
 }
 export interface MsgCreateTokenSDKType {
-  minter_did: string;
-  minter_address: string;
+  /** address of minter */
+  minter: string;
   /** class is the token protocol entity DID (validated) */
 
   class: string;
@@ -54,18 +54,22 @@ export interface MsgCreateTokenSDKType {
 export interface MsgCreateTokenResponse {}
 export interface MsgCreateTokenResponseSDKType {}
 export interface MsgMintToken {
-  minterDid: string;
-  minterAddress: string;
+  /** address of minter */
+  minter: string;
   contractAddress: string;
-  ownerDid: string;
+  /** address of owner to mint for */
+
+  owner: string;
   mintBatch: MintBatch[];
 }
 export interface MsgMintTokenSDKType {
-  minter_did: string;
-  minter_address: string;
+  /** address of minter */
+  minter: string;
   contract_address: string;
-  owner_did: string;
-  mintBatch: MintBatchSDKType[];
+  /** address of owner to mint for */
+
+  owner: string;
+  mint_batch: MintBatchSDKType[];
 }
 export interface MintBatch {
   /**
@@ -109,37 +113,158 @@ export interface MintBatchSDKType {
    * (credential link ***.ipfs)
    */
 
-  tokenData: TokenDataSDKType[];
+  token_data: TokenDataSDKType[];
 }
 export interface MsgMintTokenResponse {}
 export interface MsgMintTokenResponseSDKType {}
 export interface MsgTransferToken {
-  tokenDid: string;
-  /** The ownersdid used to sign this transaction. */
+  /** address of owner */
+  owner: string;
+  /** address of receiver */
 
-  ownerDid: string;
-  /** The owners address used to sign this transaction. */
+  recipient: string;
+  /** all tokens must be in same smart contract */
 
-  ownerAddress: string;
-  recipientDid: string;
+  tokens: TokenBatch[];
 }
 export interface MsgTransferTokenSDKType {
-  token_did: string;
-  /** The ownersdid used to sign this transaction. */
+  /** address of owner */
+  owner: string;
+  /** address of receiver */
 
-  owner_did: string;
-  /** The owners address used to sign this transaction. */
+  recipient: string;
+  /** all tokens must be in same smart contract */
 
-  owner_address: string;
-  recipient_did: string;
+  tokens: TokenBatchSDKType[];
 }
 export interface MsgTransferTokenResponse {}
 export interface MsgTransferTokenResponseSDKType {}
+export interface TokenBatch {
+  /** id that identifies the token */
+  id: string;
+  /** amount is the number of tokens to transfer */
+
+  amount: string;
+}
+export interface TokenBatchSDKType {
+  /** id that identifies the token */
+  id: string;
+  /** amount is the number of tokens to transfer */
+
+  amount: string;
+}
+export interface MsgRetireToken {
+  /** address of owner */
+  owner: string;
+  /** tokens to retire, all tokens must be in same smart contract */
+
+  tokens: TokenBatch[];
+  /**
+   * jurisdiction is the jurisdiction of the token owner. A jurisdiction has
+   * the format: <country-code>[-<sub-national-code>[ <postal-code>]]
+   * The country-code must be 2 alphabetic characters, the sub-national-code
+   * can be 1-3 alphanumeric characters, and the postal-code can be up to 64
+   * alphanumeric characters. Only the country-code is required, while the
+   * sub-national-code and postal-code are optional and can be added for
+   * increased precision. See the valid format for this below.
+   */
+
+  jurisdiction: string;
+  /**
+   * reason is any arbitrary string that specifies the reason for retiring
+   * tokens.
+   */
+
+  reason: string;
+}
+export interface MsgRetireTokenSDKType {
+  /** address of owner */
+  owner: string;
+  /** tokens to retire, all tokens must be in same smart contract */
+
+  tokens: TokenBatchSDKType[];
+  /**
+   * jurisdiction is the jurisdiction of the token owner. A jurisdiction has
+   * the format: <country-code>[-<sub-national-code>[ <postal-code>]]
+   * The country-code must be 2 alphabetic characters, the sub-national-code
+   * can be 1-3 alphanumeric characters, and the postal-code can be up to 64
+   * alphanumeric characters. Only the country-code is required, while the
+   * sub-national-code and postal-code are optional and can be added for
+   * increased precision. See the valid format for this below.
+   */
+
+  jurisdiction: string;
+  /**
+   * reason is any arbitrary string that specifies the reason for retiring
+   * tokens.
+   */
+
+  reason: string;
+}
+export interface MsgRetireTokenResponse {}
+export interface MsgRetireTokenResponseSDKType {}
+export interface MsgCancelToken {
+  /** address of owner */
+  owner: string;
+  /** tokens to retire, all tokens must be in same smart contract */
+
+  tokens: TokenBatch[];
+  /**
+   * reason is any arbitrary string that specifies the reason for retiring
+   * tokens.
+   */
+
+  reason: string;
+}
+export interface MsgCancelTokenSDKType {
+  /** address of owner */
+  owner: string;
+  /** tokens to retire, all tokens must be in same smart contract */
+
+  tokens: TokenBatchSDKType[];
+  /**
+   * reason is any arbitrary string that specifies the reason for retiring
+   * tokens.
+   */
+
+  reason: string;
+}
+export interface MsgCancelTokenResponse {}
+export interface MsgCancelTokenResponseSDKType {}
+export interface MsgPauseToken {
+  /** address of minter */
+  minter: string;
+  contractAddress: string;
+  /** pause or unpause Token Minting allowance */
+
+  paused: boolean;
+}
+export interface MsgPauseTokenSDKType {
+  /** address of minter */
+  minter: string;
+  contract_address: string;
+  /** pause or unpause Token Minting allowance */
+
+  paused: boolean;
+}
+export interface MsgPauseTokenResponse {}
+export interface MsgPauseTokenResponseSDKType {}
+export interface MsgStopToken {
+  /** address of minter */
+  minter: string;
+  contractAddress: string;
+}
+export interface MsgStopTokenSDKType {
+  /** address of minter */
+  minter: string;
+  contract_address: string;
+}
+export interface MsgStopTokenResponse {}
+export interface MsgStopTokenResponseSDKType {}
 
 function createBaseMsgCreateToken(): MsgCreateToken {
   return {
-    minterDid: "",
-    minterAddress: "",
+    minter: "",
     class: "",
     name: "",
     description: "",
@@ -151,36 +276,32 @@ function createBaseMsgCreateToken(): MsgCreateToken {
 
 export const MsgCreateToken = {
   encode(message: MsgCreateToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.minterDid !== "") {
-      writer.uint32(10).string(message.minterDid);
-    }
-
-    if (message.minterAddress !== "") {
-      writer.uint32(18).string(message.minterAddress);
+    if (message.minter !== "") {
+      writer.uint32(10).string(message.minter);
     }
 
     if (message.class !== "") {
-      writer.uint32(26).string(message.class);
+      writer.uint32(18).string(message.class);
     }
 
     if (message.name !== "") {
-      writer.uint32(34).string(message.name);
+      writer.uint32(26).string(message.name);
     }
 
     if (message.description !== "") {
-      writer.uint32(42).string(message.description);
+      writer.uint32(34).string(message.description);
     }
 
     if (message.image !== "") {
-      writer.uint32(50).string(message.image);
+      writer.uint32(42).string(message.image);
     }
 
     if (message.tokenType !== "") {
-      writer.uint32(58).string(message.tokenType);
+      writer.uint32(50).string(message.tokenType);
     }
 
     if (message.cap !== "") {
-      writer.uint32(66).string(message.cap);
+      writer.uint32(58).string(message.cap);
     }
 
     return writer;
@@ -196,34 +317,30 @@ export const MsgCreateToken = {
 
       switch (tag >>> 3) {
         case 1:
-          message.minterDid = reader.string();
+          message.minter = reader.string();
           break;
 
         case 2:
-          message.minterAddress = reader.string();
-          break;
-
-        case 3:
           message.class = reader.string();
           break;
 
-        case 4:
+        case 3:
           message.name = reader.string();
           break;
 
-        case 5:
+        case 4:
           message.description = reader.string();
           break;
 
-        case 6:
+        case 5:
           message.image = reader.string();
           break;
 
-        case 7:
+        case 6:
           message.tokenType = reader.string();
           break;
 
-        case 8:
+        case 7:
           message.cap = reader.string();
           break;
 
@@ -238,8 +355,7 @@ export const MsgCreateToken = {
 
   fromJSON(object: any): MsgCreateToken {
     return {
-      minterDid: isSet(object.minterDid) ? String(object.minterDid) : "",
-      minterAddress: isSet(object.minterAddress) ? String(object.minterAddress) : "",
+      minter: isSet(object.minter) ? String(object.minter) : "",
       class: isSet(object.class) ? String(object.class) : "",
       name: isSet(object.name) ? String(object.name) : "",
       description: isSet(object.description) ? String(object.description) : "",
@@ -251,8 +367,7 @@ export const MsgCreateToken = {
 
   toJSON(message: MsgCreateToken): unknown {
     const obj: any = {};
-    message.minterDid !== undefined && (obj.minterDid = message.minterDid);
-    message.minterAddress !== undefined && (obj.minterAddress = message.minterAddress);
+    message.minter !== undefined && (obj.minter = message.minter);
     message.class !== undefined && (obj.class = message.class);
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined && (obj.description = message.description);
@@ -264,8 +379,7 @@ export const MsgCreateToken = {
 
   fromPartial(object: Partial<MsgCreateToken>): MsgCreateToken {
     const message = createBaseMsgCreateToken();
-    message.minterDid = object.minterDid ?? "";
-    message.minterAddress = object.minterAddress ?? "";
+    message.minter = object.minter ?? "";
     message.class = object.class ?? "";
     message.name = object.name ?? "";
     message.description = object.description ?? "";
@@ -322,34 +436,29 @@ export const MsgCreateTokenResponse = {
 
 function createBaseMsgMintToken(): MsgMintToken {
   return {
-    minterDid: "",
-    minterAddress: "",
+    minter: "",
     contractAddress: "",
-    ownerDid: "",
+    owner: "",
     mintBatch: []
   };
 }
 
 export const MsgMintToken = {
   encode(message: MsgMintToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.minterDid !== "") {
-      writer.uint32(10).string(message.minterDid);
-    }
-
-    if (message.minterAddress !== "") {
-      writer.uint32(18).string(message.minterAddress);
+    if (message.minter !== "") {
+      writer.uint32(10).string(message.minter);
     }
 
     if (message.contractAddress !== "") {
-      writer.uint32(26).string(message.contractAddress);
+      writer.uint32(18).string(message.contractAddress);
     }
 
-    if (message.ownerDid !== "") {
-      writer.uint32(34).string(message.ownerDid);
+    if (message.owner !== "") {
+      writer.uint32(26).string(message.owner);
     }
 
     for (const v of message.mintBatch) {
-      MintBatch.encode(v!, writer.uint32(42).fork()).ldelim();
+      MintBatch.encode(v!, writer.uint32(34).fork()).ldelim();
     }
 
     return writer;
@@ -365,22 +474,18 @@ export const MsgMintToken = {
 
       switch (tag >>> 3) {
         case 1:
-          message.minterDid = reader.string();
+          message.minter = reader.string();
           break;
 
         case 2:
-          message.minterAddress = reader.string();
-          break;
-
-        case 3:
           message.contractAddress = reader.string();
           break;
 
-        case 4:
-          message.ownerDid = reader.string();
+        case 3:
+          message.owner = reader.string();
           break;
 
-        case 5:
+        case 4:
           message.mintBatch.push(MintBatch.decode(reader, reader.uint32()));
           break;
 
@@ -395,20 +500,18 @@ export const MsgMintToken = {
 
   fromJSON(object: any): MsgMintToken {
     return {
-      minterDid: isSet(object.minterDid) ? String(object.minterDid) : "",
-      minterAddress: isSet(object.minterAddress) ? String(object.minterAddress) : "",
+      minter: isSet(object.minter) ? String(object.minter) : "",
       contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
-      ownerDid: isSet(object.ownerDid) ? String(object.ownerDid) : "",
+      owner: isSet(object.owner) ? String(object.owner) : "",
       mintBatch: Array.isArray(object?.mintBatch) ? object.mintBatch.map((e: any) => MintBatch.fromJSON(e)) : []
     };
   },
 
   toJSON(message: MsgMintToken): unknown {
     const obj: any = {};
-    message.minterDid !== undefined && (obj.minterDid = message.minterDid);
-    message.minterAddress !== undefined && (obj.minterAddress = message.minterAddress);
+    message.minter !== undefined && (obj.minter = message.minter);
     message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
-    message.ownerDid !== undefined && (obj.ownerDid = message.ownerDid);
+    message.owner !== undefined && (obj.owner = message.owner);
 
     if (message.mintBatch) {
       obj.mintBatch = message.mintBatch.map(e => e ? MintBatch.toJSON(e) : undefined);
@@ -421,10 +524,9 @@ export const MsgMintToken = {
 
   fromPartial(object: Partial<MsgMintToken>): MsgMintToken {
     const message = createBaseMsgMintToken();
-    message.minterDid = object.minterDid ?? "";
-    message.minterAddress = object.minterAddress ?? "";
+    message.minter = object.minter ?? "";
     message.contractAddress = object.contractAddress ?? "";
-    message.ownerDid = object.ownerDid ?? "";
+    message.owner = object.owner ?? "";
     message.mintBatch = object.mintBatch?.map(e => MintBatch.fromPartial(e)) || [];
     return message;
   }
@@ -587,29 +689,24 @@ export const MsgMintTokenResponse = {
 
 function createBaseMsgTransferToken(): MsgTransferToken {
   return {
-    tokenDid: "",
-    ownerDid: "",
-    ownerAddress: "",
-    recipientDid: ""
+    owner: "",
+    recipient: "",
+    tokens: []
   };
 }
 
 export const MsgTransferToken = {
   encode(message: MsgTransferToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.tokenDid !== "") {
-      writer.uint32(10).string(message.tokenDid);
+    if (message.owner !== "") {
+      writer.uint32(10).string(message.owner);
     }
 
-    if (message.ownerDid !== "") {
-      writer.uint32(18).string(message.ownerDid);
+    if (message.recipient !== "") {
+      writer.uint32(18).string(message.recipient);
     }
 
-    if (message.ownerAddress !== "") {
-      writer.uint32(26).string(message.ownerAddress);
-    }
-
-    if (message.recipientDid !== "") {
-      writer.uint32(34).string(message.recipientDid);
+    for (const v of message.tokens) {
+      TokenBatch.encode(v!, writer.uint32(26).fork()).ldelim();
     }
 
     return writer;
@@ -625,19 +722,15 @@ export const MsgTransferToken = {
 
       switch (tag >>> 3) {
         case 1:
-          message.tokenDid = reader.string();
+          message.owner = reader.string();
           break;
 
         case 2:
-          message.ownerDid = reader.string();
+          message.recipient = reader.string();
           break;
 
         case 3:
-          message.ownerAddress = reader.string();
-          break;
-
-        case 4:
-          message.recipientDid = reader.string();
+          message.tokens.push(TokenBatch.decode(reader, reader.uint32()));
           break;
 
         default:
@@ -651,28 +744,31 @@ export const MsgTransferToken = {
 
   fromJSON(object: any): MsgTransferToken {
     return {
-      tokenDid: isSet(object.tokenDid) ? String(object.tokenDid) : "",
-      ownerDid: isSet(object.ownerDid) ? String(object.ownerDid) : "",
-      ownerAddress: isSet(object.ownerAddress) ? String(object.ownerAddress) : "",
-      recipientDid: isSet(object.recipientDid) ? String(object.recipientDid) : ""
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      recipient: isSet(object.recipient) ? String(object.recipient) : "",
+      tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => TokenBatch.fromJSON(e)) : []
     };
   },
 
   toJSON(message: MsgTransferToken): unknown {
     const obj: any = {};
-    message.tokenDid !== undefined && (obj.tokenDid = message.tokenDid);
-    message.ownerDid !== undefined && (obj.ownerDid = message.ownerDid);
-    message.ownerAddress !== undefined && (obj.ownerAddress = message.ownerAddress);
-    message.recipientDid !== undefined && (obj.recipientDid = message.recipientDid);
+    message.owner !== undefined && (obj.owner = message.owner);
+    message.recipient !== undefined && (obj.recipient = message.recipient);
+
+    if (message.tokens) {
+      obj.tokens = message.tokens.map(e => e ? TokenBatch.toJSON(e) : undefined);
+    } else {
+      obj.tokens = [];
+    }
+
     return obj;
   },
 
   fromPartial(object: Partial<MsgTransferToken>): MsgTransferToken {
     const message = createBaseMsgTransferToken();
-    message.tokenDid = object.tokenDid ?? "";
-    message.ownerDid = object.ownerDid ?? "";
-    message.ownerAddress = object.ownerAddress ?? "";
-    message.recipientDid = object.recipientDid ?? "";
+    message.owner = object.owner ?? "";
+    message.recipient = object.recipient ?? "";
+    message.tokens = object.tokens?.map(e => TokenBatch.fromPartial(e)) || [];
     return message;
   }
 
@@ -716,6 +812,583 @@ export const MsgTransferTokenResponse = {
 
   fromPartial(_: Partial<MsgTransferTokenResponse>): MsgTransferTokenResponse {
     const message = createBaseMsgTransferTokenResponse();
+    return message;
+  }
+
+};
+
+function createBaseTokenBatch(): TokenBatch {
+  return {
+    id: "",
+    amount: ""
+  };
+}
+
+export const TokenBatch = {
+  encode(message: TokenBatch, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+
+    if (message.amount !== "") {
+      writer.uint32(18).string(message.amount);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TokenBatch {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTokenBatch();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+
+        case 2:
+          message.amount = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): TokenBatch {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      amount: isSet(object.amount) ? String(object.amount) : ""
+    };
+  },
+
+  toJSON(message: TokenBatch): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.amount !== undefined && (obj.amount = message.amount);
+    return obj;
+  },
+
+  fromPartial(object: Partial<TokenBatch>): TokenBatch {
+    const message = createBaseTokenBatch();
+    message.id = object.id ?? "";
+    message.amount = object.amount ?? "";
+    return message;
+  }
+
+};
+
+function createBaseMsgRetireToken(): MsgRetireToken {
+  return {
+    owner: "",
+    tokens: [],
+    jurisdiction: "",
+    reason: ""
+  };
+}
+
+export const MsgRetireToken = {
+  encode(message: MsgRetireToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.owner !== "") {
+      writer.uint32(10).string(message.owner);
+    }
+
+    for (const v of message.tokens) {
+      TokenBatch.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+
+    if (message.jurisdiction !== "") {
+      writer.uint32(26).string(message.jurisdiction);
+    }
+
+    if (message.reason !== "") {
+      writer.uint32(34).string(message.reason);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRetireToken {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRetireToken();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.owner = reader.string();
+          break;
+
+        case 2:
+          message.tokens.push(TokenBatch.decode(reader, reader.uint32()));
+          break;
+
+        case 3:
+          message.jurisdiction = reader.string();
+          break;
+
+        case 4:
+          message.reason = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): MsgRetireToken {
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => TokenBatch.fromJSON(e)) : [],
+      jurisdiction: isSet(object.jurisdiction) ? String(object.jurisdiction) : "",
+      reason: isSet(object.reason) ? String(object.reason) : ""
+    };
+  },
+
+  toJSON(message: MsgRetireToken): unknown {
+    const obj: any = {};
+    message.owner !== undefined && (obj.owner = message.owner);
+
+    if (message.tokens) {
+      obj.tokens = message.tokens.map(e => e ? TokenBatch.toJSON(e) : undefined);
+    } else {
+      obj.tokens = [];
+    }
+
+    message.jurisdiction !== undefined && (obj.jurisdiction = message.jurisdiction);
+    message.reason !== undefined && (obj.reason = message.reason);
+    return obj;
+  },
+
+  fromPartial(object: Partial<MsgRetireToken>): MsgRetireToken {
+    const message = createBaseMsgRetireToken();
+    message.owner = object.owner ?? "";
+    message.tokens = object.tokens?.map(e => TokenBatch.fromPartial(e)) || [];
+    message.jurisdiction = object.jurisdiction ?? "";
+    message.reason = object.reason ?? "";
+    return message;
+  }
+
+};
+
+function createBaseMsgRetireTokenResponse(): MsgRetireTokenResponse {
+  return {};
+}
+
+export const MsgRetireTokenResponse = {
+  encode(_: MsgRetireTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRetireTokenResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRetireTokenResponse();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(_: any): MsgRetireTokenResponse {
+    return {};
+  },
+
+  toJSON(_: MsgRetireTokenResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: Partial<MsgRetireTokenResponse>): MsgRetireTokenResponse {
+    const message = createBaseMsgRetireTokenResponse();
+    return message;
+  }
+
+};
+
+function createBaseMsgCancelToken(): MsgCancelToken {
+  return {
+    owner: "",
+    tokens: [],
+    reason: ""
+  };
+}
+
+export const MsgCancelToken = {
+  encode(message: MsgCancelToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.owner !== "") {
+      writer.uint32(10).string(message.owner);
+    }
+
+    for (const v of message.tokens) {
+      TokenBatch.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+
+    if (message.reason !== "") {
+      writer.uint32(26).string(message.reason);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelToken {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgCancelToken();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.owner = reader.string();
+          break;
+
+        case 2:
+          message.tokens.push(TokenBatch.decode(reader, reader.uint32()));
+          break;
+
+        case 3:
+          message.reason = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): MsgCancelToken {
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => TokenBatch.fromJSON(e)) : [],
+      reason: isSet(object.reason) ? String(object.reason) : ""
+    };
+  },
+
+  toJSON(message: MsgCancelToken): unknown {
+    const obj: any = {};
+    message.owner !== undefined && (obj.owner = message.owner);
+
+    if (message.tokens) {
+      obj.tokens = message.tokens.map(e => e ? TokenBatch.toJSON(e) : undefined);
+    } else {
+      obj.tokens = [];
+    }
+
+    message.reason !== undefined && (obj.reason = message.reason);
+    return obj;
+  },
+
+  fromPartial(object: Partial<MsgCancelToken>): MsgCancelToken {
+    const message = createBaseMsgCancelToken();
+    message.owner = object.owner ?? "";
+    message.tokens = object.tokens?.map(e => TokenBatch.fromPartial(e)) || [];
+    message.reason = object.reason ?? "";
+    return message;
+  }
+
+};
+
+function createBaseMsgCancelTokenResponse(): MsgCancelTokenResponse {
+  return {};
+}
+
+export const MsgCancelTokenResponse = {
+  encode(_: MsgCancelTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelTokenResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgCancelTokenResponse();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(_: any): MsgCancelTokenResponse {
+    return {};
+  },
+
+  toJSON(_: MsgCancelTokenResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: Partial<MsgCancelTokenResponse>): MsgCancelTokenResponse {
+    const message = createBaseMsgCancelTokenResponse();
+    return message;
+  }
+
+};
+
+function createBaseMsgPauseToken(): MsgPauseToken {
+  return {
+    minter: "",
+    contractAddress: "",
+    paused: false
+  };
+}
+
+export const MsgPauseToken = {
+  encode(message: MsgPauseToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.minter !== "") {
+      writer.uint32(10).string(message.minter);
+    }
+
+    if (message.contractAddress !== "") {
+      writer.uint32(18).string(message.contractAddress);
+    }
+
+    if (message.paused === true) {
+      writer.uint32(24).bool(message.paused);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgPauseToken {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgPauseToken();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.minter = reader.string();
+          break;
+
+        case 2:
+          message.contractAddress = reader.string();
+          break;
+
+        case 3:
+          message.paused = reader.bool();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): MsgPauseToken {
+    return {
+      minter: isSet(object.minter) ? String(object.minter) : "",
+      contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
+      paused: isSet(object.paused) ? Boolean(object.paused) : false
+    };
+  },
+
+  toJSON(message: MsgPauseToken): unknown {
+    const obj: any = {};
+    message.minter !== undefined && (obj.minter = message.minter);
+    message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
+    message.paused !== undefined && (obj.paused = message.paused);
+    return obj;
+  },
+
+  fromPartial(object: Partial<MsgPauseToken>): MsgPauseToken {
+    const message = createBaseMsgPauseToken();
+    message.minter = object.minter ?? "";
+    message.contractAddress = object.contractAddress ?? "";
+    message.paused = object.paused ?? false;
+    return message;
+  }
+
+};
+
+function createBaseMsgPauseTokenResponse(): MsgPauseTokenResponse {
+  return {};
+}
+
+export const MsgPauseTokenResponse = {
+  encode(_: MsgPauseTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgPauseTokenResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgPauseTokenResponse();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(_: any): MsgPauseTokenResponse {
+    return {};
+  },
+
+  toJSON(_: MsgPauseTokenResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: Partial<MsgPauseTokenResponse>): MsgPauseTokenResponse {
+    const message = createBaseMsgPauseTokenResponse();
+    return message;
+  }
+
+};
+
+function createBaseMsgStopToken(): MsgStopToken {
+  return {
+    minter: "",
+    contractAddress: ""
+  };
+}
+
+export const MsgStopToken = {
+  encode(message: MsgStopToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.minter !== "") {
+      writer.uint32(10).string(message.minter);
+    }
+
+    if (message.contractAddress !== "") {
+      writer.uint32(18).string(message.contractAddress);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgStopToken {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgStopToken();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.minter = reader.string();
+          break;
+
+        case 2:
+          message.contractAddress = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): MsgStopToken {
+    return {
+      minter: isSet(object.minter) ? String(object.minter) : "",
+      contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : ""
+    };
+  },
+
+  toJSON(message: MsgStopToken): unknown {
+    const obj: any = {};
+    message.minter !== undefined && (obj.minter = message.minter);
+    message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
+    return obj;
+  },
+
+  fromPartial(object: Partial<MsgStopToken>): MsgStopToken {
+    const message = createBaseMsgStopToken();
+    message.minter = object.minter ?? "";
+    message.contractAddress = object.contractAddress ?? "";
+    return message;
+  }
+
+};
+
+function createBaseMsgStopTokenResponse(): MsgStopTokenResponse {
+  return {};
+}
+
+export const MsgStopTokenResponse = {
+  encode(_: MsgStopTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgStopTokenResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgStopTokenResponse();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(_: any): MsgStopTokenResponse {
+    return {};
+  },
+
+  toJSON(_: MsgStopTokenResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: Partial<MsgStopTokenResponse>): MsgStopTokenResponse {
+    const message = createBaseMsgStopTokenResponse();
     return message;
   }
 

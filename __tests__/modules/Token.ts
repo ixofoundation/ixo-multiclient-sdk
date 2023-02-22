@@ -11,16 +11,12 @@ export const CreateToken = async (
 ) => {
   const client = await createClient(getUser(signer));
 
-  const tester = getUser(signer);
-  const account = (await tester.getAccounts())[0];
-  const myAddress = account.address;
-  const did = tester.did;
+  const tester = (await getUser(WalletUsers.tester).getAccounts())[0].address;
 
   const message = {
     typeUrl: "/ixo.token.v1beta1.MsgCreateToken",
     value: ixo.token.v1beta1.MsgCreateToken.fromPartial({
-      minterDid: did,
-      minterAddress: myAddress,
+      minter: tester,
       name,
       description,
       image:
@@ -31,7 +27,7 @@ export const CreateToken = async (
     }),
   };
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  const response = await client.signAndBroadcast(tester, [message], fee);
   return response;
 };
 
@@ -47,18 +43,14 @@ export const MintToken = async (
 ) => {
   const client = await createClient();
 
-  const tester = getUser();
-  const account = (await tester.getAccounts())[0];
-  const myAddress = account.address;
-  const did = tester.did;
+  const tester = (await getUser(WalletUsers.tester).getAccounts())[0].address;
 
   const message = {
     typeUrl: "/ixo.token.v1beta1.MsgMintToken",
     value: ixo.token.v1beta1.MsgMintToken.fromPartial({
-      minterDid: did,
-      minterAddress: myAddress,
+      minter: tester,
       contractAddress: contractAddress,
-      ownerDid: did,
+      owner: tester,
       mintBatch: batches.map((b) =>
         ixo.token.v1beta1.MintBatch.fromPartial({
           name: b.name,
@@ -71,30 +63,127 @@ export const MintToken = async (
     }),
   };
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  const response = await client.signAndBroadcast(tester, [message], fee);
   return response;
 };
 
-export const TransferToken = async () => {
+export const TransferToken = async (
+  tokens: {
+    id: string;
+    amount: number;
+  }[]
+) => {
   const client = await createClient();
 
-  const tester = getUser();
-  const account = (await tester.getAccounts())[0];
-  const myAddress = account.address;
-  const did = tester.did;
-
-  const alice = getUser(WalletUsers.alice);
+  const tester = (await getUser(WalletUsers.tester).getAccounts())[0].address;
+  const alice = (await getUser(WalletUsers.alice).getAccounts())[0].address;
 
   const message = {
     typeUrl: "/ixo.token.v1beta1.MsgTransferToken",
     value: ixo.token.v1beta1.MsgTransferToken.fromPartial({
-      ownerDid: did,
-      ownerAddress: myAddress,
-      recipientDid: alice.did,
-      tokenDid: "",
+      owner: tester,
+      recipient: alice,
+      tokens: tokens.map((b) =>
+        ixo.token.v1beta1.TokenBatch.fromPartial({
+          id: b.id,
+          amount: b.amount.toString(),
+        })
+      ),
     }),
   };
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
+export const CancelToken = async (
+  tokens: {
+    id: string;
+    amount: number;
+  }[]
+) => {
+  const client = await createClient();
+
+  const tester = (await getUser(WalletUsers.tester).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/ixo.token.v1beta1.MsgCancelToken",
+    value: ixo.token.v1beta1.MsgCancelToken.fromPartial({
+      owner: tester,
+      reason: "reason",
+      tokens: tokens.map((b) =>
+        ixo.token.v1beta1.TokenBatch.fromPartial({
+          id: b.id,
+          amount: b.amount.toString(),
+        })
+      ),
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
+export const RetireToken = async (
+  tokens: {
+    id: string;
+    amount: number;
+  }[]
+) => {
+  const client = await createClient();
+
+  const tester = (await getUser(WalletUsers.tester).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/ixo.token.v1beta1.MsgRetireToken",
+    value: ixo.token.v1beta1.MsgRetireToken.fromPartial({
+      owner: tester,
+      reason: "reason",
+      jurisdiction: "jurisdiction",
+      tokens: tokens.map((b) =>
+        ixo.token.v1beta1.TokenBatch.fromPartial({
+          id: b.id,
+          amount: b.amount.toString(),
+        })
+      ),
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
+export const PauseToken = async (contractAddress: string, paused: boolean) => {
+  const client = await createClient();
+
+  const tester = (await getUser(WalletUsers.tester).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/ixo.token.v1beta1.MsgPauseToken",
+    value: ixo.token.v1beta1.MsgPauseToken.fromPartial({
+      minter: tester,
+      contractAddress,
+      paused,
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
+export const StopToken = async (contractAddress: string) => {
+  const client = await createClient();
+
+  const tester = (await getUser(WalletUsers.tester).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/ixo.token.v1beta1.MsgStopToken",
+    value: ixo.token.v1beta1.MsgStopToken.fromPartial({
+      minter: tester,
+      contractAddress,
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
   return response;
 };

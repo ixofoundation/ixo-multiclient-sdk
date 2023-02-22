@@ -7,9 +7,9 @@ export interface ParamsSDKType {
   ixo1155_contract_code: Long;
 }
 export interface Token {
-  minterDid: string;
-  minterAddress: string;
-  /** Generated on token intiation through MsgSetupMinter */
+  /** address of minter */
+  minter: string;
+  /** generated on token intiation through MsgSetupMinter */
 
   contractAddress: string;
   /** class is the token protocol entity DID (validated) */
@@ -41,12 +41,24 @@ export interface Token {
   paused: boolean;
   /** stop allowance of token minter permanently */
 
-  deactivated: boolean;
+  stopped: boolean;
+  /**
+   * tokens that has been retired for this Token with specific name and contract
+   * address
+   */
+
+  retired: TokensRetired[];
+  /**
+   * tokens that has been cancelled for this Token with specific name and
+   * contract address
+   */
+
+  cancelled: TokensCancelled[];
 }
 export interface TokenSDKType {
-  minter_did: string;
-  minter_address: string;
-  /** Generated on token intiation through MsgSetupMinter */
+  /** address of minter */
+  minter: string;
+  /** generated on token intiation through MsgSetupMinter */
 
   contract_address: string;
   /** class is the token protocol entity DID (validated) */
@@ -78,13 +90,54 @@ export interface TokenSDKType {
   paused: boolean;
   /** stop allowance of token minter permanently */
 
-  deactivated: boolean;
+  stopped: boolean;
+  /**
+   * tokens that has been retired for this Token with specific name and contract
+   * address
+   */
+
+  retired: TokensRetiredSDKType[];
+  /**
+   * tokens that has been cancelled for this Token with specific name and
+   * contract address
+   */
+
+  cancelled: TokensCancelledSDKType[];
+}
+export interface TokensRetired {
+  id: string;
+  reason: string;
+  jurisdiction: string;
+  amount: string;
+  owner: string;
+}
+export interface TokensRetiredSDKType {
+  id: string;
+  reason: string;
+  jurisdiction: string;
+  amount: string;
+  owner: string;
+}
+export interface TokensCancelled {
+  id: string;
+  reason: string;
+  amount: string;
+  owner: string;
+}
+export interface TokensCancelledSDKType {
+  id: string;
+  reason: string;
+  amount: string;
+  owner: string;
 }
 export interface TokenProperties {
   id: string;
   /** index is the unique identifier hexstring that identifies the token */
 
   index: string;
+  /** index is the unique identifier hexstring that identifies the token */
+
+  name: string;
   /** did of collection (eg Supamoto Malawi) */
 
   collection: string;
@@ -100,6 +153,9 @@ export interface TokenPropertiesSDKType {
   /** index is the unique identifier hexstring that identifies the token */
 
   index: string;
+  /** index is the unique identifier hexstring that identifies the token */
+
+  name: string;
   /** did of collection (eg Supamoto Malawi) */
 
   collection: string;
@@ -184,8 +240,7 @@ export const Params = {
 
 function createBaseToken(): Token {
   return {
-    minterDid: "",
-    minterAddress: "",
+    minter: "",
     contractAddress: "",
     class: "",
     name: "",
@@ -195,58 +250,64 @@ function createBaseToken(): Token {
     cap: "",
     supply: "",
     paused: false,
-    deactivated: false
+    stopped: false,
+    retired: [],
+    cancelled: []
   };
 }
 
 export const Token = {
   encode(message: Token, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.minterDid !== "") {
-      writer.uint32(10).string(message.minterDid);
-    }
-
-    if (message.minterAddress !== "") {
-      writer.uint32(18).string(message.minterAddress);
+    if (message.minter !== "") {
+      writer.uint32(10).string(message.minter);
     }
 
     if (message.contractAddress !== "") {
-      writer.uint32(26).string(message.contractAddress);
+      writer.uint32(18).string(message.contractAddress);
     }
 
     if (message.class !== "") {
-      writer.uint32(34).string(message.class);
+      writer.uint32(26).string(message.class);
     }
 
     if (message.name !== "") {
-      writer.uint32(42).string(message.name);
+      writer.uint32(34).string(message.name);
     }
 
     if (message.description !== "") {
-      writer.uint32(50).string(message.description);
+      writer.uint32(42).string(message.description);
     }
 
     if (message.image !== "") {
-      writer.uint32(58).string(message.image);
+      writer.uint32(50).string(message.image);
     }
 
     if (message.type !== "") {
-      writer.uint32(66).string(message.type);
+      writer.uint32(58).string(message.type);
     }
 
     if (message.cap !== "") {
-      writer.uint32(74).string(message.cap);
+      writer.uint32(66).string(message.cap);
     }
 
     if (message.supply !== "") {
-      writer.uint32(82).string(message.supply);
+      writer.uint32(74).string(message.supply);
     }
 
     if (message.paused === true) {
-      writer.uint32(88).bool(message.paused);
+      writer.uint32(80).bool(message.paused);
     }
 
-    if (message.deactivated === true) {
-      writer.uint32(96).bool(message.deactivated);
+    if (message.stopped === true) {
+      writer.uint32(88).bool(message.stopped);
+    }
+
+    for (const v of message.retired) {
+      TokensRetired.encode(v!, writer.uint32(98).fork()).ldelim();
+    }
+
+    for (const v of message.cancelled) {
+      TokensCancelled.encode(v!, writer.uint32(106).fork()).ldelim();
     }
 
     return writer;
@@ -262,51 +323,55 @@ export const Token = {
 
       switch (tag >>> 3) {
         case 1:
-          message.minterDid = reader.string();
+          message.minter = reader.string();
           break;
 
         case 2:
-          message.minterAddress = reader.string();
-          break;
-
-        case 3:
           message.contractAddress = reader.string();
           break;
 
-        case 4:
+        case 3:
           message.class = reader.string();
           break;
 
-        case 5:
+        case 4:
           message.name = reader.string();
           break;
 
-        case 6:
+        case 5:
           message.description = reader.string();
           break;
 
-        case 7:
+        case 6:
           message.image = reader.string();
           break;
 
-        case 8:
+        case 7:
           message.type = reader.string();
           break;
 
-        case 9:
+        case 8:
           message.cap = reader.string();
           break;
 
-        case 10:
+        case 9:
           message.supply = reader.string();
           break;
 
-        case 11:
+        case 10:
           message.paused = reader.bool();
           break;
 
+        case 11:
+          message.stopped = reader.bool();
+          break;
+
         case 12:
-          message.deactivated = reader.bool();
+          message.retired.push(TokensRetired.decode(reader, reader.uint32()));
+          break;
+
+        case 13:
+          message.cancelled.push(TokensCancelled.decode(reader, reader.uint32()));
           break;
 
         default:
@@ -320,8 +385,7 @@ export const Token = {
 
   fromJSON(object: any): Token {
     return {
-      minterDid: isSet(object.minterDid) ? String(object.minterDid) : "",
-      minterAddress: isSet(object.minterAddress) ? String(object.minterAddress) : "",
+      minter: isSet(object.minter) ? String(object.minter) : "",
       contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
       class: isSet(object.class) ? String(object.class) : "",
       name: isSet(object.name) ? String(object.name) : "",
@@ -331,14 +395,15 @@ export const Token = {
       cap: isSet(object.cap) ? String(object.cap) : "",
       supply: isSet(object.supply) ? String(object.supply) : "",
       paused: isSet(object.paused) ? Boolean(object.paused) : false,
-      deactivated: isSet(object.deactivated) ? Boolean(object.deactivated) : false
+      stopped: isSet(object.stopped) ? Boolean(object.stopped) : false,
+      retired: Array.isArray(object?.retired) ? object.retired.map((e: any) => TokensRetired.fromJSON(e)) : [],
+      cancelled: Array.isArray(object?.cancelled) ? object.cancelled.map((e: any) => TokensCancelled.fromJSON(e)) : []
     };
   },
 
   toJSON(message: Token): unknown {
     const obj: any = {};
-    message.minterDid !== undefined && (obj.minterDid = message.minterDid);
-    message.minterAddress !== undefined && (obj.minterAddress = message.minterAddress);
+    message.minter !== undefined && (obj.minter = message.minter);
     message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
     message.class !== undefined && (obj.class = message.class);
     message.name !== undefined && (obj.name = message.name);
@@ -348,14 +413,26 @@ export const Token = {
     message.cap !== undefined && (obj.cap = message.cap);
     message.supply !== undefined && (obj.supply = message.supply);
     message.paused !== undefined && (obj.paused = message.paused);
-    message.deactivated !== undefined && (obj.deactivated = message.deactivated);
+    message.stopped !== undefined && (obj.stopped = message.stopped);
+
+    if (message.retired) {
+      obj.retired = message.retired.map(e => e ? TokensRetired.toJSON(e) : undefined);
+    } else {
+      obj.retired = [];
+    }
+
+    if (message.cancelled) {
+      obj.cancelled = message.cancelled.map(e => e ? TokensCancelled.toJSON(e) : undefined);
+    } else {
+      obj.cancelled = [];
+    }
+
     return obj;
   },
 
   fromPartial(object: Partial<Token>): Token {
     const message = createBaseToken();
-    message.minterDid = object.minterDid ?? "";
-    message.minterAddress = object.minterAddress ?? "";
+    message.minter = object.minter ?? "";
     message.contractAddress = object.contractAddress ?? "";
     message.class = object.class ?? "";
     message.name = object.name ?? "";
@@ -365,7 +442,207 @@ export const Token = {
     message.cap = object.cap ?? "";
     message.supply = object.supply ?? "";
     message.paused = object.paused ?? false;
-    message.deactivated = object.deactivated ?? false;
+    message.stopped = object.stopped ?? false;
+    message.retired = object.retired?.map(e => TokensRetired.fromPartial(e)) || [];
+    message.cancelled = object.cancelled?.map(e => TokensCancelled.fromPartial(e)) || [];
+    return message;
+  }
+
+};
+
+function createBaseTokensRetired(): TokensRetired {
+  return {
+    id: "",
+    reason: "",
+    jurisdiction: "",
+    amount: "",
+    owner: ""
+  };
+}
+
+export const TokensRetired = {
+  encode(message: TokensRetired, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+
+    if (message.reason !== "") {
+      writer.uint32(18).string(message.reason);
+    }
+
+    if (message.jurisdiction !== "") {
+      writer.uint32(26).string(message.jurisdiction);
+    }
+
+    if (message.amount !== "") {
+      writer.uint32(34).string(message.amount);
+    }
+
+    if (message.owner !== "") {
+      writer.uint32(42).string(message.owner);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TokensRetired {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTokensRetired();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+
+        case 2:
+          message.reason = reader.string();
+          break;
+
+        case 3:
+          message.jurisdiction = reader.string();
+          break;
+
+        case 4:
+          message.amount = reader.string();
+          break;
+
+        case 5:
+          message.owner = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): TokensRetired {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      reason: isSet(object.reason) ? String(object.reason) : "",
+      jurisdiction: isSet(object.jurisdiction) ? String(object.jurisdiction) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "",
+      owner: isSet(object.owner) ? String(object.owner) : ""
+    };
+  },
+
+  toJSON(message: TokensRetired): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.reason !== undefined && (obj.reason = message.reason);
+    message.jurisdiction !== undefined && (obj.jurisdiction = message.jurisdiction);
+    message.amount !== undefined && (obj.amount = message.amount);
+    message.owner !== undefined && (obj.owner = message.owner);
+    return obj;
+  },
+
+  fromPartial(object: Partial<TokensRetired>): TokensRetired {
+    const message = createBaseTokensRetired();
+    message.id = object.id ?? "";
+    message.reason = object.reason ?? "";
+    message.jurisdiction = object.jurisdiction ?? "";
+    message.amount = object.amount ?? "";
+    message.owner = object.owner ?? "";
+    return message;
+  }
+
+};
+
+function createBaseTokensCancelled(): TokensCancelled {
+  return {
+    id: "",
+    reason: "",
+    amount: "",
+    owner: ""
+  };
+}
+
+export const TokensCancelled = {
+  encode(message: TokensCancelled, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+
+    if (message.reason !== "") {
+      writer.uint32(18).string(message.reason);
+    }
+
+    if (message.amount !== "") {
+      writer.uint32(26).string(message.amount);
+    }
+
+    if (message.owner !== "") {
+      writer.uint32(34).string(message.owner);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TokensCancelled {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTokensCancelled();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+
+        case 2:
+          message.reason = reader.string();
+          break;
+
+        case 3:
+          message.amount = reader.string();
+          break;
+
+        case 4:
+          message.owner = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): TokensCancelled {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      reason: isSet(object.reason) ? String(object.reason) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "",
+      owner: isSet(object.owner) ? String(object.owner) : ""
+    };
+  },
+
+  toJSON(message: TokensCancelled): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.reason !== undefined && (obj.reason = message.reason);
+    message.amount !== undefined && (obj.amount = message.amount);
+    message.owner !== undefined && (obj.owner = message.owner);
+    return obj;
+  },
+
+  fromPartial(object: Partial<TokensCancelled>): TokensCancelled {
+    const message = createBaseTokensCancelled();
+    message.id = object.id ?? "";
+    message.reason = object.reason ?? "";
+    message.amount = object.amount ?? "";
+    message.owner = object.owner ?? "";
     return message;
   }
 
@@ -375,6 +652,7 @@ function createBaseTokenProperties(): TokenProperties {
   return {
     id: "",
     index: "",
+    name: "",
     collection: "",
     tokenData: []
   };
@@ -390,12 +668,16 @@ export const TokenProperties = {
       writer.uint32(18).string(message.index);
     }
 
+    if (message.name !== "") {
+      writer.uint32(26).string(message.name);
+    }
+
     if (message.collection !== "") {
-      writer.uint32(26).string(message.collection);
+      writer.uint32(34).string(message.collection);
     }
 
     for (const v of message.tokenData) {
-      TokenData.encode(v!, writer.uint32(34).fork()).ldelim();
+      TokenData.encode(v!, writer.uint32(42).fork()).ldelim();
     }
 
     return writer;
@@ -419,10 +701,14 @@ export const TokenProperties = {
           break;
 
         case 3:
-          message.collection = reader.string();
+          message.name = reader.string();
           break;
 
         case 4:
+          message.collection = reader.string();
+          break;
+
+        case 5:
           message.tokenData.push(TokenData.decode(reader, reader.uint32()));
           break;
 
@@ -439,6 +725,7 @@ export const TokenProperties = {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       index: isSet(object.index) ? String(object.index) : "",
+      name: isSet(object.name) ? String(object.name) : "",
       collection: isSet(object.collection) ? String(object.collection) : "",
       tokenData: Array.isArray(object?.tokenData) ? object.tokenData.map((e: any) => TokenData.fromJSON(e)) : []
     };
@@ -448,6 +735,7 @@ export const TokenProperties = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.index !== undefined && (obj.index = message.index);
+    message.name !== undefined && (obj.name = message.name);
     message.collection !== undefined && (obj.collection = message.collection);
 
     if (message.tokenData) {
@@ -463,6 +751,7 @@ export const TokenProperties = {
     const message = createBaseTokenProperties();
     message.id = object.id ?? "";
     message.index = object.index ?? "";
+    message.name = object.name ?? "";
     message.collection = object.collection ?? "";
     message.tokenData = object.tokenData?.map(e => TokenData.fromPartial(e)) || [];
     return message;

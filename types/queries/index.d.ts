@@ -314,7 +314,7 @@ export declare const createQueryClient: (rpcEndpoint: string) => Promise<{
             v1beta1: {
                 tokenList(request: import("../codegen/ixo/token/v1beta1/query").QueryTokenListRequest): Promise<import("../codegen/ixo/token/v1beta1/query").QueryTokenListResponse>;
                 tokenDoc(request: import("../codegen/ixo/token/v1beta1/query").QueryTokenDocRequest): Promise<import("../codegen/ixo/token/v1beta1/query").QueryTokenDocResponse>;
-                tokenConfig(request?: import("../codegen/ixo/token/v1beta1/query").QueryTokenConfigRequest): Promise<import("../codegen/ixo/token/v1beta1/query").QueryTokenConfigResponse>;
+                tokenMetadata(request: import("../codegen/ixo/token/v1beta1/query").QueryTokenMetadataRequest): Promise<import("../codegen/ixo/token/v1beta1/query").QueryTokenMetadataResponse>;
             };
         };
     };

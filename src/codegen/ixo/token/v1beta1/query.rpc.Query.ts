@@ -1,13 +1,13 @@
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { QueryTokenListRequest, QueryTokenListResponse, QueryTokenDocRequest, QueryTokenDocResponse, QueryTokenConfigRequest, QueryTokenConfigResponse } from "./query";
+import { QueryTokenListRequest, QueryTokenListResponse, QueryTokenDocRequest, QueryTokenDocResponse, QueryTokenMetadataRequest, QueryTokenMetadataResponse } from "./query";
 /** Query defines the gRPC querier service. */
 
 export interface Query {
   tokenList(request: QueryTokenListRequest): Promise<QueryTokenListResponse>;
   tokenDoc(request: QueryTokenDocRequest): Promise<QueryTokenDocResponse>;
-  tokenConfig(request?: QueryTokenConfigRequest): Promise<QueryTokenConfigResponse>;
+  tokenMetadata(request: QueryTokenMetadataRequest): Promise<QueryTokenMetadataResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -16,7 +16,7 @@ export class QueryClientImpl implements Query {
     this.rpc = rpc;
     this.tokenList = this.tokenList.bind(this);
     this.tokenDoc = this.tokenDoc.bind(this);
-    this.tokenConfig = this.tokenConfig.bind(this);
+    this.tokenMetadata = this.tokenMetadata.bind(this);
   }
 
   tokenList(request: QueryTokenListRequest): Promise<QueryTokenListResponse> {
@@ -31,10 +31,10 @@ export class QueryClientImpl implements Query {
     return promise.then(data => QueryTokenDocResponse.decode(new _m0.Reader(data)));
   }
 
-  tokenConfig(request: QueryTokenConfigRequest = {}): Promise<QueryTokenConfigResponse> {
-    const data = QueryTokenConfigRequest.encode(request).finish();
-    const promise = this.rpc.request("ixo.token.v1beta1.Query", "TokenConfig", data);
-    return promise.then(data => QueryTokenConfigResponse.decode(new _m0.Reader(data)));
+  tokenMetadata(request: QueryTokenMetadataRequest): Promise<QueryTokenMetadataResponse> {
+    const data = QueryTokenMetadataRequest.encode(request).finish();
+    const promise = this.rpc.request("ixo.token.v1beta1.Query", "TokenMetadata", data);
+    return promise.then(data => QueryTokenMetadataResponse.decode(new _m0.Reader(data)));
   }
 
 }
@@ -50,8 +50,8 @@ export const createRpcQueryExtension = (base: QueryClient) => {
       return queryService.tokenDoc(request);
     },
 
-    tokenConfig(request?: QueryTokenConfigRequest): Promise<QueryTokenConfigResponse> {
-      return queryService.tokenConfig(request);
+    tokenMetadata(request: QueryTokenMetadataRequest): Promise<QueryTokenMetadataResponse> {
+      return queryService.tokenMetadata(request);
     }
 
   };

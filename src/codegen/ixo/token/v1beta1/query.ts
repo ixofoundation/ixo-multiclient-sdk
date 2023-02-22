@@ -1,99 +1,93 @@
-import { Token, TokenSDKType } from "./token";
+import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { Token, TokenSDKType, TokenData, TokenDataSDKType } from "./token";
 import * as _m0 from "protobufjs/minimal";
-import { isSet, isObject } from "../../../helpers";
+import { isSet } from "../../../helpers";
 export interface QueryTokenListRequest {
-  minterDid: string;
+  pagination?: PageRequest;
+  /** minter address to get list for */
+
+  minter: string;
 }
 export interface QueryTokenListRequestSDKType {
-  minter_did: string;
-}
-/**
- * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
- * method.
- */
+  pagination?: PageRequestSDKType;
+  /** minter address to get list for */
 
+  minter: string;
+}
 export interface QueryTokenListResponse {
-  contracts: Token[];
+  pagination?: PageResponse;
+  tokenDocs: Token[];
 }
-/**
- * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
- * method.
- */
-
 export interface QueryTokenListResponseSDKType {
-  contracts: TokenSDKType[];
+  pagination?: PageResponseSDKType;
+  tokenDocs: TokenSDKType[];
 }
-/**
- * QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC
- * method.
- */
-
 export interface QueryTokenDocRequest {
-  minterDid: string;
+  /** minter address to get Token Doc for */
+  minter: string;
   contractAddress: string;
 }
-/**
- * QueryProjectDocRequest is the request type for the Query/ProjectDoc RPC
- * method.
- */
-
 export interface QueryTokenDocRequestSDKType {
-  minter_did: string;
+  /** minter address to get Token Doc for */
+  minter: string;
   contract_address: string;
 }
-/**
- * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
- * method.
- */
-
-export interface QueryTokenDocResponse {}
-/**
- * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
- * method.
- */
-
-export interface QueryTokenDocResponseSDKType {}
-export interface QueryTokenConfigRequest {}
-export interface QueryTokenConfigRequestSDKType {}
-export interface QueryTokenConfigResponse_MapEntry {
-  key: string;
-  value: string;
+export interface QueryTokenDocResponse {
+  tokenDoc?: Token;
 }
-export interface QueryTokenConfigResponse_MapEntrySDKType {
-  key: string;
-  value: string;
+export interface QueryTokenDocResponseSDKType {
+  tokenDoc?: TokenSDKType;
 }
-/**
- * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
- * method.
- */
-
-export interface QueryTokenConfigResponse {
-  map: {
-    [key: string]: string;
-  };
+export interface QueryTokenMetadataRequest {
+  id: string;
 }
-/**
- * QueryProjectDocResponse is the response type for the Query/ProjectDoc RPC
- * method.
- */
-
-export interface QueryTokenConfigResponseSDKType {
-  map: {
-    [key: string]: string;
-  };
+export interface QueryTokenMetadataRequestSDKType {
+  id: string;
+}
+export interface QueryTokenMetadataResponse {
+  name: string;
+  description: string;
+  decimals: string;
+  image: string;
+  index: string;
+  properties?: TokenMetadataProperties;
+}
+export interface QueryTokenMetadataResponseSDKType {
+  name: string;
+  description: string;
+  decimals: string;
+  image: string;
+  index: string;
+  properties?: TokenMetadataPropertiesSDKType;
+}
+export interface TokenMetadataProperties {
+  class: string;
+  collection: string;
+  cap: string;
+  linkedResources: TokenData[];
+}
+export interface TokenMetadataPropertiesSDKType {
+  class: string;
+  collection: string;
+  cap: string;
+  linkedResources: TokenDataSDKType[];
 }
 
 function createBaseQueryTokenListRequest(): QueryTokenListRequest {
   return {
-    minterDid: ""
+    pagination: undefined,
+    minter: ""
   };
 }
 
 export const QueryTokenListRequest = {
   encode(message: QueryTokenListRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.minterDid !== "") {
-      writer.uint32(10).string(message.minterDid);
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+
+    if (message.minter !== "") {
+      writer.uint32(18).string(message.minter);
     }
 
     return writer;
@@ -109,7 +103,11 @@ export const QueryTokenListRequest = {
 
       switch (tag >>> 3) {
         case 1:
-          message.minterDid = reader.string();
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+
+        case 2:
+          message.minter = reader.string();
           break;
 
         default:
@@ -123,19 +121,22 @@ export const QueryTokenListRequest = {
 
   fromJSON(object: any): QueryTokenListRequest {
     return {
-      minterDid: isSet(object.minterDid) ? String(object.minterDid) : ""
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
+      minter: isSet(object.minter) ? String(object.minter) : ""
     };
   },
 
   toJSON(message: QueryTokenListRequest): unknown {
     const obj: any = {};
-    message.minterDid !== undefined && (obj.minterDid = message.minterDid);
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    message.minter !== undefined && (obj.minter = message.minter);
     return obj;
   },
 
   fromPartial(object: Partial<QueryTokenListRequest>): QueryTokenListRequest {
     const message = createBaseQueryTokenListRequest();
-    message.minterDid = object.minterDid ?? "";
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    message.minter = object.minter ?? "";
     return message;
   }
 
@@ -143,14 +144,19 @@ export const QueryTokenListRequest = {
 
 function createBaseQueryTokenListResponse(): QueryTokenListResponse {
   return {
-    contracts: []
+    pagination: undefined,
+    tokenDocs: []
   };
 }
 
 export const QueryTokenListResponse = {
   encode(message: QueryTokenListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.contracts) {
-      Token.encode(v!, writer.uint32(10).fork()).ldelim();
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+
+    for (const v of message.tokenDocs) {
+      Token.encode(v!, writer.uint32(18).fork()).ldelim();
     }
 
     return writer;
@@ -166,7 +172,11 @@ export const QueryTokenListResponse = {
 
       switch (tag >>> 3) {
         case 1:
-          message.contracts.push(Token.decode(reader, reader.uint32()));
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+
+        case 2:
+          message.tokenDocs.push(Token.decode(reader, reader.uint32()));
           break;
 
         default:
@@ -180,17 +190,19 @@ export const QueryTokenListResponse = {
 
   fromJSON(object: any): QueryTokenListResponse {
     return {
-      contracts: Array.isArray(object?.contracts) ? object.contracts.map((e: any) => Token.fromJSON(e)) : []
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+      tokenDocs: Array.isArray(object?.tokenDocs) ? object.tokenDocs.map((e: any) => Token.fromJSON(e)) : []
     };
   },
 
   toJSON(message: QueryTokenListResponse): unknown {
     const obj: any = {};
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
 
-    if (message.contracts) {
-      obj.contracts = message.contracts.map(e => e ? Token.toJSON(e) : undefined);
+    if (message.tokenDocs) {
+      obj.tokenDocs = message.tokenDocs.map(e => e ? Token.toJSON(e) : undefined);
     } else {
-      obj.contracts = [];
+      obj.tokenDocs = [];
     }
 
     return obj;
@@ -198,7 +210,8 @@ export const QueryTokenListResponse = {
 
   fromPartial(object: Partial<QueryTokenListResponse>): QueryTokenListResponse {
     const message = createBaseQueryTokenListResponse();
-    message.contracts = object.contracts?.map(e => Token.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    message.tokenDocs = object.tokenDocs?.map(e => Token.fromPartial(e)) || [];
     return message;
   }
 
@@ -206,15 +219,15 @@ export const QueryTokenListResponse = {
 
 function createBaseQueryTokenDocRequest(): QueryTokenDocRequest {
   return {
-    minterDid: "",
+    minter: "",
     contractAddress: ""
   };
 }
 
 export const QueryTokenDocRequest = {
   encode(message: QueryTokenDocRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.minterDid !== "") {
-      writer.uint32(10).string(message.minterDid);
+    if (message.minter !== "") {
+      writer.uint32(10).string(message.minter);
     }
 
     if (message.contractAddress !== "") {
@@ -234,7 +247,7 @@ export const QueryTokenDocRequest = {
 
       switch (tag >>> 3) {
         case 1:
-          message.minterDid = reader.string();
+          message.minter = reader.string();
           break;
 
         case 2:
@@ -252,21 +265,21 @@ export const QueryTokenDocRequest = {
 
   fromJSON(object: any): QueryTokenDocRequest {
     return {
-      minterDid: isSet(object.minterDid) ? String(object.minterDid) : "",
+      minter: isSet(object.minter) ? String(object.minter) : "",
       contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : ""
     };
   },
 
   toJSON(message: QueryTokenDocRequest): unknown {
     const obj: any = {};
-    message.minterDid !== undefined && (obj.minterDid = message.minterDid);
+    message.minter !== undefined && (obj.minter = message.minter);
     message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
     return obj;
   },
 
   fromPartial(object: Partial<QueryTokenDocRequest>): QueryTokenDocRequest {
     const message = createBaseQueryTokenDocRequest();
-    message.minterDid = object.minterDid ?? "";
+    message.minter = object.minter ?? "";
     message.contractAddress = object.contractAddress ?? "";
     return message;
   }
@@ -274,11 +287,17 @@ export const QueryTokenDocRequest = {
 };
 
 function createBaseQueryTokenDocResponse(): QueryTokenDocResponse {
-  return {};
+  return {
+    tokenDoc: undefined
+  };
 }
 
 export const QueryTokenDocResponse = {
-  encode(_: QueryTokenDocResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryTokenDocResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.tokenDoc !== undefined) {
+      Token.encode(message.tokenDoc, writer.uint32(10).fork()).ldelim();
+    }
+
     return writer;
   },
 
@@ -291,6 +310,10 @@ export const QueryTokenDocResponse = {
       const tag = reader.uint32();
 
       switch (tag >>> 3) {
+        case 1:
+          message.tokenDoc = Token.decode(reader, reader.uint32());
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -300,100 +323,154 @@ export const QueryTokenDocResponse = {
     return message;
   },
 
-  fromJSON(_: any): QueryTokenDocResponse {
-    return {};
+  fromJSON(object: any): QueryTokenDocResponse {
+    return {
+      tokenDoc: isSet(object.tokenDoc) ? Token.fromJSON(object.tokenDoc) : undefined
+    };
   },
 
-  toJSON(_: QueryTokenDocResponse): unknown {
+  toJSON(message: QueryTokenDocResponse): unknown {
     const obj: any = {};
+    message.tokenDoc !== undefined && (obj.tokenDoc = message.tokenDoc ? Token.toJSON(message.tokenDoc) : undefined);
     return obj;
   },
 
-  fromPartial(_: Partial<QueryTokenDocResponse>): QueryTokenDocResponse {
+  fromPartial(object: Partial<QueryTokenDocResponse>): QueryTokenDocResponse {
     const message = createBaseQueryTokenDocResponse();
+    message.tokenDoc = object.tokenDoc !== undefined && object.tokenDoc !== null ? Token.fromPartial(object.tokenDoc) : undefined;
     return message;
   }
 
 };
 
-function createBaseQueryTokenConfigRequest(): QueryTokenConfigRequest {
-  return {};
-}
-
-export const QueryTokenConfigRequest = {
-  encode(_: QueryTokenConfigRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenConfigRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryTokenConfigRequest();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(_: any): QueryTokenConfigRequest {
-    return {};
-  },
-
-  toJSON(_: QueryTokenConfigRequest): unknown {
-    const obj: any = {};
-    return obj;
-  },
-
-  fromPartial(_: Partial<QueryTokenConfigRequest>): QueryTokenConfigRequest {
-    const message = createBaseQueryTokenConfigRequest();
-    return message;
-  }
-
-};
-
-function createBaseQueryTokenConfigResponse_MapEntry(): QueryTokenConfigResponse_MapEntry {
+function createBaseQueryTokenMetadataRequest(): QueryTokenMetadataRequest {
   return {
-    key: "",
-    value: ""
+    id: ""
   };
 }
 
-export const QueryTokenConfigResponse_MapEntry = {
-  encode(message: QueryTokenConfigResponse_MapEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.key !== "") {
-      writer.uint32(10).string(message.key);
-    }
-
-    if (message.value !== "") {
-      writer.uint32(18).string(message.value);
+export const QueryTokenMetadataRequest = {
+  encode(message: QueryTokenMetadataRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
     }
 
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenConfigResponse_MapEntry {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenMetadataRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryTokenConfigResponse_MapEntry();
+    const message = createBaseQueryTokenMetadataRequest();
 
     while (reader.pos < end) {
       const tag = reader.uint32();
 
       switch (tag >>> 3) {
         case 1:
-          message.key = reader.string();
+          message.id = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): QueryTokenMetadataRequest {
+    return {
+      id: isSet(object.id) ? String(object.id) : ""
+    };
+  },
+
+  toJSON(message: QueryTokenMetadataRequest): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  fromPartial(object: Partial<QueryTokenMetadataRequest>): QueryTokenMetadataRequest {
+    const message = createBaseQueryTokenMetadataRequest();
+    message.id = object.id ?? "";
+    return message;
+  }
+
+};
+
+function createBaseQueryTokenMetadataResponse(): QueryTokenMetadataResponse {
+  return {
+    name: "",
+    description: "",
+    decimals: "",
+    image: "",
+    index: "",
+    properties: undefined
+  };
+}
+
+export const QueryTokenMetadataResponse = {
+  encode(message: QueryTokenMetadataResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+
+    if (message.description !== "") {
+      writer.uint32(18).string(message.description);
+    }
+
+    if (message.decimals !== "") {
+      writer.uint32(26).string(message.decimals);
+    }
+
+    if (message.image !== "") {
+      writer.uint32(34).string(message.image);
+    }
+
+    if (message.index !== "") {
+      writer.uint32(42).string(message.index);
+    }
+
+    if (message.properties !== undefined) {
+      TokenMetadataProperties.encode(message.properties, writer.uint32(50).fork()).ldelim();
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenMetadataResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryTokenMetadataResponse();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.name = reader.string();
           break;
 
         case 2:
-          message.value = reader.string();
+          message.description = reader.string();
+          break;
+
+        case 3:
+          message.decimals = reader.string();
+          break;
+
+        case 4:
+          message.image = reader.string();
+          break;
+
+        case 5:
+          message.index = reader.string();
+          break;
+
+        case 6:
+          message.properties = TokenMetadataProperties.decode(reader, reader.uint32());
           break;
 
         default:
@@ -405,62 +482,94 @@ export const QueryTokenConfigResponse_MapEntry = {
     return message;
   },
 
-  fromJSON(object: any): QueryTokenConfigResponse_MapEntry {
+  fromJSON(object: any): QueryTokenMetadataResponse {
     return {
-      key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? String(object.value) : ""
+      name: isSet(object.name) ? String(object.name) : "",
+      description: isSet(object.description) ? String(object.description) : "",
+      decimals: isSet(object.decimals) ? String(object.decimals) : "",
+      image: isSet(object.image) ? String(object.image) : "",
+      index: isSet(object.index) ? String(object.index) : "",
+      properties: isSet(object.properties) ? TokenMetadataProperties.fromJSON(object.properties) : undefined
     };
   },
 
-  toJSON(message: QueryTokenConfigResponse_MapEntry): unknown {
+  toJSON(message: QueryTokenMetadataResponse): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value);
+    message.name !== undefined && (obj.name = message.name);
+    message.description !== undefined && (obj.description = message.description);
+    message.decimals !== undefined && (obj.decimals = message.decimals);
+    message.image !== undefined && (obj.image = message.image);
+    message.index !== undefined && (obj.index = message.index);
+    message.properties !== undefined && (obj.properties = message.properties ? TokenMetadataProperties.toJSON(message.properties) : undefined);
     return obj;
   },
 
-  fromPartial(object: Partial<QueryTokenConfigResponse_MapEntry>): QueryTokenConfigResponse_MapEntry {
-    const message = createBaseQueryTokenConfigResponse_MapEntry();
-    message.key = object.key ?? "";
-    message.value = object.value ?? "";
+  fromPartial(object: Partial<QueryTokenMetadataResponse>): QueryTokenMetadataResponse {
+    const message = createBaseQueryTokenMetadataResponse();
+    message.name = object.name ?? "";
+    message.description = object.description ?? "";
+    message.decimals = object.decimals ?? "";
+    message.image = object.image ?? "";
+    message.index = object.index ?? "";
+    message.properties = object.properties !== undefined && object.properties !== null ? TokenMetadataProperties.fromPartial(object.properties) : undefined;
     return message;
   }
 
 };
 
-function createBaseQueryTokenConfigResponse(): QueryTokenConfigResponse {
+function createBaseTokenMetadataProperties(): TokenMetadataProperties {
   return {
-    map: {}
+    class: "",
+    collection: "",
+    cap: "",
+    linkedResources: []
   };
 }
 
-export const QueryTokenConfigResponse = {
-  encode(message: QueryTokenConfigResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    Object.entries(message.map).forEach(([key, value]) => {
-      QueryTokenConfigResponse_MapEntry.encode({
-        key: (key as any),
-        value
-      }, writer.uint32(10).fork()).ldelim();
-    });
+export const TokenMetadataProperties = {
+  encode(message: TokenMetadataProperties, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.class !== "") {
+      writer.uint32(10).string(message.class);
+    }
+
+    if (message.collection !== "") {
+      writer.uint32(18).string(message.collection);
+    }
+
+    if (message.cap !== "") {
+      writer.uint32(26).string(message.cap);
+    }
+
+    for (const v of message.linkedResources) {
+      TokenData.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenConfigResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): TokenMetadataProperties {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryTokenConfigResponse();
+    const message = createBaseTokenMetadataProperties();
 
     while (reader.pos < end) {
       const tag = reader.uint32();
 
       switch (tag >>> 3) {
         case 1:
-          const entry1 = QueryTokenConfigResponse_MapEntry.decode(reader, reader.uint32());
+          message.class = reader.string();
+          break;
 
-          if (entry1.value !== undefined) {
-            message.map[entry1.key] = entry1.value;
-          }
+        case 2:
+          message.collection = reader.string();
+          break;
 
+        case 3:
+          message.cap = reader.string();
+          break;
+
+        case 4:
+          message.linkedResources.push(TokenData.decode(reader, reader.uint32()));
           break;
 
         default:
@@ -472,41 +581,36 @@ export const QueryTokenConfigResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryTokenConfigResponse {
+  fromJSON(object: any): TokenMetadataProperties {
     return {
-      map: isObject(object.map) ? Object.entries(object.map).reduce<{
-        [key: string]: string;
-      }>((acc, [key, value]) => {
-        acc[key] = String(value);
-        return acc;
-      }, {}) : {}
+      class: isSet(object.class) ? String(object.class) : "",
+      collection: isSet(object.collection) ? String(object.collection) : "",
+      cap: isSet(object.cap) ? String(object.cap) : "",
+      linkedResources: Array.isArray(object?.linkedResources) ? object.linkedResources.map((e: any) => TokenData.fromJSON(e)) : []
     };
   },
 
-  toJSON(message: QueryTokenConfigResponse): unknown {
+  toJSON(message: TokenMetadataProperties): unknown {
     const obj: any = {};
-    obj.map = {};
+    message.class !== undefined && (obj.class = message.class);
+    message.collection !== undefined && (obj.collection = message.collection);
+    message.cap !== undefined && (obj.cap = message.cap);
 
-    if (message.map) {
-      Object.entries(message.map).forEach(([k, v]) => {
-        obj.map[k] = v;
-      });
+    if (message.linkedResources) {
+      obj.linkedResources = message.linkedResources.map(e => e ? TokenData.toJSON(e) : undefined);
+    } else {
+      obj.linkedResources = [];
     }
 
     return obj;
   },
 
-  fromPartial(object: Partial<QueryTokenConfigResponse>): QueryTokenConfigResponse {
-    const message = createBaseQueryTokenConfigResponse();
-    message.map = Object.entries(object.map ?? {}).reduce<{
-      [key: string]: string;
-    }>((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[key] = String(value);
-      }
-
-      return acc;
-    }, {});
+  fromPartial(object: Partial<TokenMetadataProperties>): TokenMetadataProperties {
+    const message = createBaseTokenMetadataProperties();
+    message.class = object.class ?? "";
+    message.collection = object.collection ?? "";
+    message.cap = object.cap ?? "";
+    message.linkedResources = object.linkedResources?.map(e => TokenData.fromPartial(e)) || [];
     return message;
   }
 

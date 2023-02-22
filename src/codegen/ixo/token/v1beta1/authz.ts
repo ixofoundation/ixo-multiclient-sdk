@@ -2,11 +2,13 @@ import { TokenData, TokenDataSDKType } from "./token";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 export interface MintAuthorization {
-  minterDid: string;
+  /** address of minter */
+  minter: string;
   constraints: MintConstraints[];
 }
 export interface MintAuthorizationSDKType {
-  minter_did: string;
+  /** address of minter */
+  minter: string;
   constraints: MintConstraintsSDKType[];
 }
 export interface MintConstraints {
@@ -56,15 +58,15 @@ export interface MintConstraintsSDKType {
 
 function createBaseMintAuthorization(): MintAuthorization {
   return {
-    minterDid: "",
+    minter: "",
     constraints: []
   };
 }
 
 export const MintAuthorization = {
   encode(message: MintAuthorization, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.minterDid !== "") {
-      writer.uint32(10).string(message.minterDid);
+    if (message.minter !== "") {
+      writer.uint32(10).string(message.minter);
     }
 
     for (const v of message.constraints) {
@@ -84,7 +86,7 @@ export const MintAuthorization = {
 
       switch (tag >>> 3) {
         case 1:
-          message.minterDid = reader.string();
+          message.minter = reader.string();
           break;
 
         case 2:
@@ -102,14 +104,14 @@ export const MintAuthorization = {
 
   fromJSON(object: any): MintAuthorization {
     return {
-      minterDid: isSet(object.minterDid) ? String(object.minterDid) : "",
+      minter: isSet(object.minter) ? String(object.minter) : "",
       constraints: Array.isArray(object?.constraints) ? object.constraints.map((e: any) => MintConstraints.fromJSON(e)) : []
     };
   },
 
   toJSON(message: MintAuthorization): unknown {
     const obj: any = {};
-    message.minterDid !== undefined && (obj.minterDid = message.minterDid);
+    message.minter !== undefined && (obj.minter = message.minter);
 
     if (message.constraints) {
       obj.constraints = message.constraints.map(e => e ? MintConstraints.toJSON(e) : undefined);
@@ -122,7 +124,7 @@ export const MintAuthorization = {
 
   fromPartial(object: Partial<MintAuthorization>): MintAuthorization {
     const message = createBaseMintAuthorization();
-    message.minterDid = object.minterDid ?? "";
+    message.minter = object.minter ?? "";
     message.constraints = object.constraints?.map(e => MintConstraints.fromPartial(e)) || [];
     return message;
   }

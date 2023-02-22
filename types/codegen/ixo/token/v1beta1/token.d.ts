@@ -7,9 +7,9 @@ export interface ParamsSDKType {
     ixo1155_contract_code: Long;
 }
 export interface Token {
-    minterDid: string;
-    minterAddress: string;
-    /** Generated on token intiation through MsgSetupMinter */
+    /** address of minter */
+    minter: string;
+    /** generated on token intiation through MsgSetupMinter */
     contractAddress: string;
     /** class is the token protocol entity DID (validated) */
     class: string;
@@ -31,12 +31,22 @@ export interface Token {
     /** stop allowance of token minter temporarily */
     paused: boolean;
     /** stop allowance of token minter permanently */
-    deactivated: boolean;
+    stopped: boolean;
+    /**
+     * tokens that has been retired for this Token with specific name and contract
+     * address
+     */
+    retired: TokensRetired[];
+    /**
+     * tokens that has been cancelled for this Token with specific name and
+     * contract address
+     */
+    cancelled: TokensCancelled[];
 }
 export interface TokenSDKType {
-    minter_did: string;
-    minter_address: string;
-    /** Generated on token intiation through MsgSetupMinter */
+    /** address of minter */
+    minter: string;
+    /** generated on token intiation through MsgSetupMinter */
     contract_address: string;
     /** class is the token protocol entity DID (validated) */
     class: string;
@@ -58,12 +68,50 @@ export interface TokenSDKType {
     /** stop allowance of token minter temporarily */
     paused: boolean;
     /** stop allowance of token minter permanently */
-    deactivated: boolean;
+    stopped: boolean;
+    /**
+     * tokens that has been retired for this Token with specific name and contract
+     * address
+     */
+    retired: TokensRetiredSDKType[];
+    /**
+     * tokens that has been cancelled for this Token with specific name and
+     * contract address
+     */
+    cancelled: TokensCancelledSDKType[];
+}
+export interface TokensRetired {
+    id: string;
+    reason: string;
+    jurisdiction: string;
+    amount: string;
+    owner: string;
+}
+export interface TokensRetiredSDKType {
+    id: string;
+    reason: string;
+    jurisdiction: string;
+    amount: string;
+    owner: string;
+}
+export interface TokensCancelled {
+    id: string;
+    reason: string;
+    amount: string;
+    owner: string;
+}
+export interface TokensCancelledSDKType {
+    id: string;
+    reason: string;
+    amount: string;
+    owner: string;
 }
 export interface TokenProperties {
     id: string;
     /** index is the unique identifier hexstring that identifies the token */
     index: string;
+    /** index is the unique identifier hexstring that identifies the token */
+    name: string;
     /** did of collection (eg Supamoto Malawi) */
     collection: string;
     /**
@@ -76,6 +124,8 @@ export interface TokenPropertiesSDKType {
     id: string;
     /** index is the unique identifier hexstring that identifies the token */
     index: string;
+    /** index is the unique identifier hexstring that identifies the token */
+    name: string;
     /** did of collection (eg Supamoto Malawi) */
     collection: string;
     /**
@@ -111,6 +161,20 @@ export declare const Token: {
     fromJSON(object: any): Token;
     toJSON(message: Token): unknown;
     fromPartial(object: Partial<Token>): Token;
+};
+export declare const TokensRetired: {
+    encode(message: TokensRetired, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): TokensRetired;
+    fromJSON(object: any): TokensRetired;
+    toJSON(message: TokensRetired): unknown;
+    fromPartial(object: Partial<TokensRetired>): TokensRetired;
+};
+export declare const TokensCancelled: {
+    encode(message: TokensCancelled, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): TokensCancelled;
+    fromJSON(object: any): TokensCancelled;
+    toJSON(message: TokensCancelled): unknown;
+    fromPartial(object: Partial<TokensCancelled>): TokensCancelled;
 };
 export declare const TokenProperties: {
     encode(message: TokenProperties, writer?: _m0.Writer): _m0.Writer;

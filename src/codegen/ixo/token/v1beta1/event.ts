@@ -1,3 +1,4 @@
+import { TokenBatch, TokenBatchSDKType } from "./tx";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 /** TokenCreatedEvent is an event triggered on a Token creation */
@@ -23,18 +24,18 @@ export interface TokenCreatedEventSDKType {
 export interface TokenUpdatedEvent {
   /** contract_address of token updated */
   contractAddress: string;
-  /** the signer account of the change */
+  /** the owner account of the change */
 
-  signer: string;
+  owner: string;
 }
 /** TokenUpdatedEvent is an event triggered on a Token update */
 
 export interface TokenUpdatedEventSDKType {
   /** contract_address of token updated */
   contract_address: string;
-  /** the signer account of the change */
+  /** the owner account of the change */
 
-  signer: string;
+  owner: string;
 }
 /** TokenMintedEvent is an event triggered on a Token mint execution */
 
@@ -47,7 +48,7 @@ export interface TokenMintedEvent {
   /** the new tokens owner */
 
   owner: string;
-  batches: TokenMintedBatch[];
+  batches: TokenBatch[];
 }
 /** TokenMintedEvent is an event triggered on a Token mint execution */
 
@@ -60,21 +61,87 @@ export interface TokenMintedEventSDKType {
   /** the new tokens owner */
 
   owner: string;
-  batches: TokenMintedBatchSDKType[];
+  batches: TokenBatchSDKType[];
 }
-export interface TokenMintedBatch {
-  /** id of token(s) minted */
-  id: string;
-  /** amount of tokens minted */
+/** TokenTransferedEvent is an event triggered on a Token transfer execution */
 
-  amount: string;
+export interface TokenTransferredEvent {
+  /** the old token owner */
+  owner: string;
+  /** the new tokens owner */
+
+  recipient: string;
+  tokens: TokenBatch[];
 }
-export interface TokenMintedBatchSDKType {
-  /** id of token(s) minted */
-  id: string;
-  /** amount of tokens minted */
+/** TokenTransferedEvent is an event triggered on a Token transfer execution */
 
-  amount: string;
+export interface TokenTransferredEventSDKType {
+  /** the old token owner */
+  owner: string;
+  /** the new tokens owner */
+
+  recipient: string;
+  tokens: TokenBatchSDKType[];
+}
+/** TokenCancelledEvent is an event triggered on a Token cancel execution */
+
+export interface TokenCancelledEvent {
+  /** the token owner */
+  owner: string;
+  tokens: TokenBatch[];
+}
+/** TokenCancelledEvent is an event triggered on a Token cancel execution */
+
+export interface TokenCancelledEventSDKType {
+  /** the token owner */
+  owner: string;
+  tokens: TokenBatchSDKType[];
+}
+/** TokenRetiredEvent is an event triggered on a Token retire execution */
+
+export interface TokenRetiredEvent {
+  /** the token owner */
+  owner: string;
+  tokens: TokenBatch[];
+}
+/** TokenRetiredEvent is an event triggered on a Token retire execution */
+
+export interface TokenRetiredEventSDKType {
+  /** the token owner */
+  owner: string;
+  tokens: TokenBatchSDKType[];
+}
+/** TokenPausedEvent is an event triggered on a Token pause/unpause execution */
+
+export interface TokenPausedEvent {
+  /** the minter address */
+  minter: string;
+  contractAddress: string;
+  paused: boolean;
+}
+/** TokenPausedEvent is an event triggered on a Token pause/unpause execution */
+
+export interface TokenPausedEventSDKType {
+  /** the minter address */
+  minter: string;
+  contract_address: string;
+  paused: boolean;
+}
+/** TokenStoppedEvent is an event triggered on a Token stopped execution */
+
+export interface TokenStoppedEvent {
+  /** the minter address */
+  minter: string;
+  contractAddress: string;
+  stopped: boolean;
+}
+/** TokenStoppedEvent is an event triggered on a Token stopped execution */
+
+export interface TokenStoppedEventSDKType {
+  /** the minter address */
+  minter: string;
+  contract_address: string;
+  stopped: boolean;
 }
 
 function createBaseTokenCreatedEvent(): TokenCreatedEvent {
@@ -149,7 +216,7 @@ export const TokenCreatedEvent = {
 function createBaseTokenUpdatedEvent(): TokenUpdatedEvent {
   return {
     contractAddress: "",
-    signer: ""
+    owner: ""
   };
 }
 
@@ -159,8 +226,8 @@ export const TokenUpdatedEvent = {
       writer.uint32(10).string(message.contractAddress);
     }
 
-    if (message.signer !== "") {
-      writer.uint32(18).string(message.signer);
+    if (message.owner !== "") {
+      writer.uint32(18).string(message.owner);
     }
 
     return writer;
@@ -180,7 +247,7 @@ export const TokenUpdatedEvent = {
           break;
 
         case 2:
-          message.signer = reader.string();
+          message.owner = reader.string();
           break;
 
         default:
@@ -195,21 +262,21 @@ export const TokenUpdatedEvent = {
   fromJSON(object: any): TokenUpdatedEvent {
     return {
       contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
-      signer: isSet(object.signer) ? String(object.signer) : ""
+      owner: isSet(object.owner) ? String(object.owner) : ""
     };
   },
 
   toJSON(message: TokenUpdatedEvent): unknown {
     const obj: any = {};
     message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
-    message.signer !== undefined && (obj.signer = message.signer);
+    message.owner !== undefined && (obj.owner = message.owner);
     return obj;
   },
 
   fromPartial(object: Partial<TokenUpdatedEvent>): TokenUpdatedEvent {
     const message = createBaseTokenUpdatedEvent();
     message.contractAddress = object.contractAddress ?? "";
-    message.signer = object.signer ?? "";
+    message.owner = object.owner ?? "";
     return message;
   }
 
@@ -239,7 +306,7 @@ export const TokenMintedEvent = {
     }
 
     for (const v of message.batches) {
-      TokenMintedBatch.encode(v!, writer.uint32(34).fork()).ldelim();
+      TokenBatch.encode(v!, writer.uint32(34).fork()).ldelim();
     }
 
     return writer;
@@ -267,7 +334,7 @@ export const TokenMintedEvent = {
           break;
 
         case 4:
-          message.batches.push(TokenMintedBatch.decode(reader, reader.uint32()));
+          message.batches.push(TokenBatch.decode(reader, reader.uint32()));
           break;
 
         default:
@@ -284,7 +351,7 @@ export const TokenMintedEvent = {
       contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
       minter: isSet(object.minter) ? String(object.minter) : "",
       owner: isSet(object.owner) ? String(object.owner) : "",
-      batches: Array.isArray(object?.batches) ? object.batches.map((e: any) => TokenMintedBatch.fromJSON(e)) : []
+      batches: Array.isArray(object?.batches) ? object.batches.map((e: any) => TokenBatch.fromJSON(e)) : []
     };
   },
 
@@ -295,7 +362,7 @@ export const TokenMintedEvent = {
     message.owner !== undefined && (obj.owner = message.owner);
 
     if (message.batches) {
-      obj.batches = message.batches.map(e => e ? TokenMintedBatch.toJSON(e) : undefined);
+      obj.batches = message.batches.map(e => e ? TokenBatch.toJSON(e) : undefined);
     } else {
       obj.batches = [];
     }
@@ -308,47 +375,56 @@ export const TokenMintedEvent = {
     message.contractAddress = object.contractAddress ?? "";
     message.minter = object.minter ?? "";
     message.owner = object.owner ?? "";
-    message.batches = object.batches?.map(e => TokenMintedBatch.fromPartial(e)) || [];
+    message.batches = object.batches?.map(e => TokenBatch.fromPartial(e)) || [];
     return message;
   }
 
 };
 
-function createBaseTokenMintedBatch(): TokenMintedBatch {
+function createBaseTokenTransferredEvent(): TokenTransferredEvent {
   return {
-    id: "",
-    amount: ""
+    owner: "",
+    recipient: "",
+    tokens: []
   };
 }
 
-export const TokenMintedBatch = {
-  encode(message: TokenMintedBatch, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
+export const TokenTransferredEvent = {
+  encode(message: TokenTransferredEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.owner !== "") {
+      writer.uint32(10).string(message.owner);
     }
 
-    if (message.amount !== "") {
-      writer.uint32(18).string(message.amount);
+    if (message.recipient !== "") {
+      writer.uint32(18).string(message.recipient);
+    }
+
+    for (const v of message.tokens) {
+      TokenBatch.encode(v!, writer.uint32(26).fork()).ldelim();
     }
 
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): TokenMintedBatch {
+  decode(input: _m0.Reader | Uint8Array, length?: number): TokenTransferredEvent {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseTokenMintedBatch();
+    const message = createBaseTokenTransferredEvent();
 
     while (reader.pos < end) {
       const tag = reader.uint32();
 
       switch (tag >>> 3) {
         case 1:
-          message.id = reader.string();
+          message.owner = reader.string();
           break;
 
         case 2:
-          message.amount = reader.string();
+          message.recipient = reader.string();
+          break;
+
+        case 3:
+          message.tokens.push(TokenBatch.decode(reader, reader.uint32()));
           break;
 
         default:
@@ -360,24 +436,345 @@ export const TokenMintedBatch = {
     return message;
   },
 
-  fromJSON(object: any): TokenMintedBatch {
+  fromJSON(object: any): TokenTransferredEvent {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      amount: isSet(object.amount) ? String(object.amount) : ""
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      recipient: isSet(object.recipient) ? String(object.recipient) : "",
+      tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => TokenBatch.fromJSON(e)) : []
     };
   },
 
-  toJSON(message: TokenMintedBatch): unknown {
+  toJSON(message: TokenTransferredEvent): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    message.amount !== undefined && (obj.amount = message.amount);
+    message.owner !== undefined && (obj.owner = message.owner);
+    message.recipient !== undefined && (obj.recipient = message.recipient);
+
+    if (message.tokens) {
+      obj.tokens = message.tokens.map(e => e ? TokenBatch.toJSON(e) : undefined);
+    } else {
+      obj.tokens = [];
+    }
+
     return obj;
   },
 
-  fromPartial(object: Partial<TokenMintedBatch>): TokenMintedBatch {
-    const message = createBaseTokenMintedBatch();
-    message.id = object.id ?? "";
-    message.amount = object.amount ?? "";
+  fromPartial(object: Partial<TokenTransferredEvent>): TokenTransferredEvent {
+    const message = createBaseTokenTransferredEvent();
+    message.owner = object.owner ?? "";
+    message.recipient = object.recipient ?? "";
+    message.tokens = object.tokens?.map(e => TokenBatch.fromPartial(e)) || [];
+    return message;
+  }
+
+};
+
+function createBaseTokenCancelledEvent(): TokenCancelledEvent {
+  return {
+    owner: "",
+    tokens: []
+  };
+}
+
+export const TokenCancelledEvent = {
+  encode(message: TokenCancelledEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.owner !== "") {
+      writer.uint32(10).string(message.owner);
+    }
+
+    for (const v of message.tokens) {
+      TokenBatch.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TokenCancelledEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTokenCancelledEvent();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.owner = reader.string();
+          break;
+
+        case 2:
+          message.tokens.push(TokenBatch.decode(reader, reader.uint32()));
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): TokenCancelledEvent {
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => TokenBatch.fromJSON(e)) : []
+    };
+  },
+
+  toJSON(message: TokenCancelledEvent): unknown {
+    const obj: any = {};
+    message.owner !== undefined && (obj.owner = message.owner);
+
+    if (message.tokens) {
+      obj.tokens = message.tokens.map(e => e ? TokenBatch.toJSON(e) : undefined);
+    } else {
+      obj.tokens = [];
+    }
+
+    return obj;
+  },
+
+  fromPartial(object: Partial<TokenCancelledEvent>): TokenCancelledEvent {
+    const message = createBaseTokenCancelledEvent();
+    message.owner = object.owner ?? "";
+    message.tokens = object.tokens?.map(e => TokenBatch.fromPartial(e)) || [];
+    return message;
+  }
+
+};
+
+function createBaseTokenRetiredEvent(): TokenRetiredEvent {
+  return {
+    owner: "",
+    tokens: []
+  };
+}
+
+export const TokenRetiredEvent = {
+  encode(message: TokenRetiredEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.owner !== "") {
+      writer.uint32(10).string(message.owner);
+    }
+
+    for (const v of message.tokens) {
+      TokenBatch.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TokenRetiredEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTokenRetiredEvent();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.owner = reader.string();
+          break;
+
+        case 2:
+          message.tokens.push(TokenBatch.decode(reader, reader.uint32()));
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): TokenRetiredEvent {
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => TokenBatch.fromJSON(e)) : []
+    };
+  },
+
+  toJSON(message: TokenRetiredEvent): unknown {
+    const obj: any = {};
+    message.owner !== undefined && (obj.owner = message.owner);
+
+    if (message.tokens) {
+      obj.tokens = message.tokens.map(e => e ? TokenBatch.toJSON(e) : undefined);
+    } else {
+      obj.tokens = [];
+    }
+
+    return obj;
+  },
+
+  fromPartial(object: Partial<TokenRetiredEvent>): TokenRetiredEvent {
+    const message = createBaseTokenRetiredEvent();
+    message.owner = object.owner ?? "";
+    message.tokens = object.tokens?.map(e => TokenBatch.fromPartial(e)) || [];
+    return message;
+  }
+
+};
+
+function createBaseTokenPausedEvent(): TokenPausedEvent {
+  return {
+    minter: "",
+    contractAddress: "",
+    paused: false
+  };
+}
+
+export const TokenPausedEvent = {
+  encode(message: TokenPausedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.minter !== "") {
+      writer.uint32(10).string(message.minter);
+    }
+
+    if (message.contractAddress !== "") {
+      writer.uint32(18).string(message.contractAddress);
+    }
+
+    if (message.paused === true) {
+      writer.uint32(24).bool(message.paused);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TokenPausedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTokenPausedEvent();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.minter = reader.string();
+          break;
+
+        case 2:
+          message.contractAddress = reader.string();
+          break;
+
+        case 3:
+          message.paused = reader.bool();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): TokenPausedEvent {
+    return {
+      minter: isSet(object.minter) ? String(object.minter) : "",
+      contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
+      paused: isSet(object.paused) ? Boolean(object.paused) : false
+    };
+  },
+
+  toJSON(message: TokenPausedEvent): unknown {
+    const obj: any = {};
+    message.minter !== undefined && (obj.minter = message.minter);
+    message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
+    message.paused !== undefined && (obj.paused = message.paused);
+    return obj;
+  },
+
+  fromPartial(object: Partial<TokenPausedEvent>): TokenPausedEvent {
+    const message = createBaseTokenPausedEvent();
+    message.minter = object.minter ?? "";
+    message.contractAddress = object.contractAddress ?? "";
+    message.paused = object.paused ?? false;
+    return message;
+  }
+
+};
+
+function createBaseTokenStoppedEvent(): TokenStoppedEvent {
+  return {
+    minter: "",
+    contractAddress: "",
+    stopped: false
+  };
+}
+
+export const TokenStoppedEvent = {
+  encode(message: TokenStoppedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.minter !== "") {
+      writer.uint32(10).string(message.minter);
+    }
+
+    if (message.contractAddress !== "") {
+      writer.uint32(18).string(message.contractAddress);
+    }
+
+    if (message.stopped === true) {
+      writer.uint32(24).bool(message.stopped);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TokenStoppedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTokenStoppedEvent();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.minter = reader.string();
+          break;
+
+        case 2:
+          message.contractAddress = reader.string();
+          break;
+
+        case 3:
+          message.stopped = reader.bool();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): TokenStoppedEvent {
+    return {
+      minter: isSet(object.minter) ? String(object.minter) : "",
+      contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
+      stopped: isSet(object.stopped) ? Boolean(object.stopped) : false
+    };
+  },
+
+  toJSON(message: TokenStoppedEvent): unknown {
+    const obj: any = {};
+    message.minter !== undefined && (obj.minter = message.minter);
+    message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
+    message.stopped !== undefined && (obj.stopped = message.stopped);
+    return obj;
+  },
+
+  fromPartial(object: Partial<TokenStoppedEvent>): TokenStoppedEvent {
+    const message = createBaseTokenStoppedEvent();
+    message.minter = object.minter ?? "";
+    message.contractAddress = object.contractAddress ?? "";
+    message.stopped = object.stopped ?? false;
     return message;
   }
 
