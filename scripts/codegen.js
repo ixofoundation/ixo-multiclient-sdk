@@ -5,7 +5,7 @@ import { AMINO_MAP } from './aminos';
 
 const protoDirs = [join(__dirname, '/../proto')];
 const outPath = join(__dirname, '../src/codegen');
-const contractsDir = join(__dirname, '../assets/contracts');
+const contractsDir = join(__dirname, '../assets/contract_schemas');
 rimraf(outPath);
 
 telescope({
@@ -157,7 +157,7 @@ telescope({
           dir: join(contractsDir, '/cosmwasm/cw20-base')
         },
         // COSMWASM CW721
-        // Adding @ts-nocheck to top of file to prevent "extension" return type conflicts
+        // Adding @ts-nocheck to top of 'Cw721Base.client.ts' file to prevent "extension" return type conflicts
         {
           name: 'cw721-base',
           dir: join(contractsDir, '/cosmwasm/cw721-base')
@@ -187,7 +187,7 @@ telescope({
   .then(() => {
     console.log('✨ all done!');
     console.log(
-      "IMPORTANT: add '// @ts-nocheck' to the top of cw721-base schema file to prevent type conflicts"
+      "IMPORTANT: add '// @ts-nocheck' to the top of Cw721Base.client.ts file to prevent type conflicts"
     );
   })
   .catch((e) => {

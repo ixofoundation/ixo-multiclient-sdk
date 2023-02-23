@@ -41,7 +41,10 @@ export const BankSendTrx = async () => {
   return response;
 };
 
-export const MsgSubmitProposalStoreCW = async (contract: string = "cw721") => {
+export const MsgSubmitProposalStoreCW = async (
+  contract: string = "cw721",
+  pathList?: string[]
+) => {
   const client = await createClient();
 
   const tester = getUser();
@@ -66,7 +69,10 @@ export const MsgSubmitProposalStoreCW = async (contract: string = "cw721") => {
             description: "Description",
             runAs: myAddress,
             wasmByteCode: new Uint8Array(
-              getFileFromPath(["contracts", "ixo", `${contract}.wasm`], "")
+              getFileFromPath(
+                pathList ?? ["contracts", "ixo", `${contract}.wasm`],
+                ""
+              )
             ),
             instantiatePermission: cosmwasm.wasm.v1.AccessConfig.fromPartial({
               permission: cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_EVERYBODY,

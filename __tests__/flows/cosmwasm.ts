@@ -4,6 +4,7 @@ import { OrderBy } from "../../src/codegen/cosmos/tx/v1beta1/service";
 import { getUser, queryClient, testMsg, utils } from "../helpers/common";
 import { WalletUsers } from "../helpers/constants";
 import * as Wasm from "../modules/CosmWasm";
+import * as Cosmos from "../modules/Cosmos";
 
 export const wasmBasic = () =>
   describe("Testing the wasmd module", () => {
@@ -95,4 +96,140 @@ export const wasmBasic = () =>
       console.log(utils.conversions.Uint8ArrayToJS(res.data));
       expect(res).toBeTruthy();
     });
+  });
+
+export const daoDao = () =>
+  describe("Testing the DaoDao contracts upload", () => {
+    test("query wasm store codes", async () => {
+      const res = await queryClient.cosmwasm.wasm.v1.codes();
+      console.log(res.codeInfos);
+      expect(res).toBeTruthy();
+    });
+
+    const contracts = [
+      {
+        name: "dao_core",
+        path: ["contracts", "daodao", "dao_core.wasm"],
+      },
+      {
+        name: "cw_admin_factory",
+        path: ["contracts", "daodao", "cw_admin_factory.wasm"],
+      },
+      {
+        name: "cw_fund_distributor",
+        path: ["contracts", "daodao", "cw_fund_distributor.wasm"],
+      },
+      {
+        name: "cw_payroll_factory",
+        path: ["contracts", "daodao", "cw_payroll_factory.wasm"],
+      },
+      {
+        name: "cw_token_swap",
+        path: ["contracts", "daodao", "cw_token_swap.wasm"],
+      },
+      {
+        name: "cw_vesting",
+        path: ["contracts", "daodao", "cw_vesting.wasm"],
+      },
+      {
+        name: "dao_migrator",
+        path: ["contracts", "daodao", "dao_migrator.wasm"],
+      },
+      {
+        name: "dao_pre_propose_approval_single",
+        path: ['contracts", "daodao", "dao_pre_propose_approval_singl.wasme'],
+      },
+      {
+        name: "dao_pre_propose_approver",
+        path: ["contracts", "daodao", "dao_pre_propose_approver.wasm"],
+      },
+      {
+        name: "dao_pre_propose_multiple",
+        path: ["contracts", "daodao", "dao_pre_propose_multiple.wasm"],
+      },
+      {
+        name: "dao_pre_propose_single",
+        path: ["contracts", "daodao", "dao_pre_propose_single.wasm"],
+      },
+      {
+        name: "dao_proposal_condorcet",
+        path: ["contracts", "daodao", "dao_proposal_condorcet.wasm"],
+      },
+      {
+        name: "dao_proposal_multiple",
+        path: ["contracts", "daodao", "dao_proposal_multiple.wasm"],
+      },
+      {
+        name: "dao_proposal_single",
+        path: ["contracts", "daodao", "dao_proposal_single.wasm"],
+      },
+      {
+        name: "cw20_stake",
+        path: ["contracts", "daodao", "cw20_stake.wasm"],
+      },
+      {
+        name: "cw20_stake_external_rewards",
+        path: ["contracts", "daodao", "cw20_stake_external_rewards.wasm"],
+      },
+      {
+        name: "cw20_stake_reward_distributor",
+        path: ['contracts", "daodao", "cw20_stake_reward_distributor.wasm'],
+      },
+      {
+        name: "dao_voting_cw4",
+        path: ["contracts", "daodao", "dao_voting_cw4.wasm"],
+      },
+      {
+        name: "dao_voting_cw20_staked",
+        path: ["contracts", "daodao", "dao_voting_cw20_staked.wasm"],
+      },
+      {
+        name: "dao_voting_cw721_staked",
+        path: ["contracts", "daodao", "dao_voting_cw721_staked.wasm"],
+      },
+      {
+        name: "dao_voting_native_staked",
+        path: ["contracts", "daodao", "dao_voting_native_staked.wasm"],
+      },
+      {
+        name: "cw4_group",
+        path: ["contracts", "cosmwasm", "cw4_group.wasm"],
+      },
+      {
+        name: "cw20_base",
+        path: ["contracts", "cosmwasm", "cw20_base.wasm"],
+      },
+      {
+        name: "cw721_base",
+        path: ["contracts", "cosmwasm", "cw721_base.wasm"],
+      },
+      {
+        name: "wasmswap",
+        path: ["contracts", "wasmswap", "wasmswap.wasm"],
+      },
+    ];
+
+    for (const contract of contracts) {
+      let proposalId: number;
+      testMsg(
+        `/cosmos.gov.v1beta1.MsgSubmitProposal store ${contract.name} contract`,
+        async () => {
+          const res = await Cosmos.MsgSubmitProposalStoreCW(
+            contract.name,
+            contract.path
+          );
+          proposalId = utils.common.getValueFromEvents(
+            res,
+            "submit_proposal",
+            "proposal_id"
+          );
+          console.log({ ...contract, proposalId });
+          return res;
+        }
+      );
+      testMsg(
+        `/cosmos.gov.v1beta1.MsgVote vote ${contract.name} contract proposal`,
+        () => Cosmos.MsgVote(proposalId)
+      );
+    }
   });
