@@ -140,6 +140,8 @@ export interface TokenData {
     encrypted: boolean;
     proof: string;
     type: string;
+    /** did of entity to map token to */
+    id: string;
 }
 export interface TokenDataSDKType {
     /** media type value should always be "application/json" */
@@ -147,6 +149,8 @@ export interface TokenDataSDKType {
     encrypted: boolean;
     proof: string;
     type: string;
+    /** did of entity to map token to */
+    id: string;
 }
 export declare const Params: {
     encode(message: Params, writer?: _m0.Writer): _m0.Writer;

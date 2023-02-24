@@ -1,42 +1,32 @@
+import { Entity, EntitySDKType } from "./entity";
 import * as _m0 from "protobufjs/minimal";
 /** EntityCreatedEvent is an event triggered on a Entity creation */
 export interface EntityCreatedEvent {
-    /** the id of entity being created */
-    id: string;
-    /** the entity owner */
+    entity?: Entity;
     owner: string;
 }
 /** EntityCreatedEvent is an event triggered on a Entity creation */
 export interface EntityCreatedEventSDKType {
-    /** the id of entity being created */
-    id: string;
-    /** the entity owner */
+    entity?: EntitySDKType;
     owner: string;
 }
 /** EntityUpdatedEvent is an event triggered on a entity document update */
 export interface EntityUpdatedEvent {
-    /** the id being updated */
-    id: string;
-    /** the signer account of the change */
-    signer: string;
+    entity?: Entity;
+    owner: string;
 }
 /** EntityUpdatedEvent is an event triggered on a entity document update */
 export interface EntityUpdatedEventSDKType {
-    /** the id being updated */
-    id: string;
-    /** the signer account of the change */
-    signer: string;
+    entity?: EntitySDKType;
+    owner: string;
 }
 /**
  * EntityVerifiedUpdatedEvent is an event triggered on a entity verified
  * document update
  */
 export interface EntityVerifiedUpdatedEvent {
-    /** the id being updated */
     id: string;
-    /** the signer account of the change */
-    signer: string;
-    /** whether entity is verified or not */
+    owner: string;
     entityVerified: boolean;
 }
 /**
@@ -44,26 +34,21 @@ export interface EntityVerifiedUpdatedEvent {
  * document update
  */
 export interface EntityVerifiedUpdatedEventSDKType {
-    /** the id being updated */
     id: string;
-    /** the signer account of the change */
-    signer: string;
-    /** whether entity is verified or not */
+    owner: string;
     entity_verified: boolean;
 }
 /** EntityTransferredEvent is an event triggered on a entity transfer */
 export interface EntityTransferredEvent {
-    /** the id if entity being transferred */
     id: string;
-    /** the new owner of the entity */
-    owner: string;
+    from: string;
+    to: string;
 }
 /** EntityTransferredEvent is an event triggered on a entity transfer */
 export interface EntityTransferredEventSDKType {
-    /** the id if entity being transferred */
     id: string;
-    /** the new owner of the entity */
-    owner: string;
+    from: string;
+    to: string;
 }
 export declare const EntityCreatedEvent: {
     encode(message: EntityCreatedEvent, writer?: _m0.Writer): _m0.Writer;
