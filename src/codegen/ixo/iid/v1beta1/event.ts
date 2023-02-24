@@ -1,57 +1,37 @@
+import { IidDocument, IidDocumentSDKType } from "./iid";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
-/** DidDocumentCreatedEvent is an event triggered on a DID document creation */
+/** IidDocumentCreatedEvent is triggered when a new IidDocument is created. */
 
 export interface IidDocumentCreatedEvent {
-  /** the did being created */
-  did: string;
-  /** the signer account creating the did */
-
-  signer: string;
+  iidDocument?: IidDocument;
 }
-/** DidDocumentCreatedEvent is an event triggered on a DID document creation */
+/** IidDocumentCreatedEvent is triggered when a new IidDocument is created. */
 
 export interface IidDocumentCreatedEventSDKType {
-  /** the did being created */
-  did: string;
-  /** the signer account creating the did */
-
-  signer: string;
+  iidDocument?: IidDocumentSDKType;
 }
 /** DidDocumentUpdatedEvent is an event triggered on a DID document update */
 
 export interface IidDocumentUpdatedEvent {
-  /** the did being updated */
-  did: string;
-  /** the signer account of the change */
-
-  signer: string;
+  iidDocument?: IidDocument;
 }
 /** DidDocumentUpdatedEvent is an event triggered on a DID document update */
 
 export interface IidDocumentUpdatedEventSDKType {
-  /** the did being updated */
-  did: string;
-  /** the signer account of the change */
-
-  signer: string;
+  iidDocument?: IidDocumentSDKType;
 }
 
 function createBaseIidDocumentCreatedEvent(): IidDocumentCreatedEvent {
   return {
-    did: "",
-    signer: ""
+    iidDocument: undefined
   };
 }
 
 export const IidDocumentCreatedEvent = {
   encode(message: IidDocumentCreatedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.did !== "") {
-      writer.uint32(10).string(message.did);
-    }
-
-    if (message.signer !== "") {
-      writer.uint32(18).string(message.signer);
+    if (message.iidDocument !== undefined) {
+      IidDocument.encode(message.iidDocument, writer.uint32(10).fork()).ldelim();
     }
 
     return writer;
@@ -67,11 +47,7 @@ export const IidDocumentCreatedEvent = {
 
       switch (tag >>> 3) {
         case 1:
-          message.did = reader.string();
-          break;
-
-        case 2:
-          message.signer = reader.string();
+          message.iidDocument = IidDocument.decode(reader, reader.uint32());
           break;
 
         default:
@@ -85,22 +61,19 @@ export const IidDocumentCreatedEvent = {
 
   fromJSON(object: any): IidDocumentCreatedEvent {
     return {
-      did: isSet(object.did) ? String(object.did) : "",
-      signer: isSet(object.signer) ? String(object.signer) : ""
+      iidDocument: isSet(object.iidDocument) ? IidDocument.fromJSON(object.iidDocument) : undefined
     };
   },
 
   toJSON(message: IidDocumentCreatedEvent): unknown {
     const obj: any = {};
-    message.did !== undefined && (obj.did = message.did);
-    message.signer !== undefined && (obj.signer = message.signer);
+    message.iidDocument !== undefined && (obj.iidDocument = message.iidDocument ? IidDocument.toJSON(message.iidDocument) : undefined);
     return obj;
   },
 
   fromPartial(object: Partial<IidDocumentCreatedEvent>): IidDocumentCreatedEvent {
     const message = createBaseIidDocumentCreatedEvent();
-    message.did = object.did ?? "";
-    message.signer = object.signer ?? "";
+    message.iidDocument = object.iidDocument !== undefined && object.iidDocument !== null ? IidDocument.fromPartial(object.iidDocument) : undefined;
     return message;
   }
 
@@ -108,19 +81,14 @@ export const IidDocumentCreatedEvent = {
 
 function createBaseIidDocumentUpdatedEvent(): IidDocumentUpdatedEvent {
   return {
-    did: "",
-    signer: ""
+    iidDocument: undefined
   };
 }
 
 export const IidDocumentUpdatedEvent = {
   encode(message: IidDocumentUpdatedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.did !== "") {
-      writer.uint32(10).string(message.did);
-    }
-
-    if (message.signer !== "") {
-      writer.uint32(18).string(message.signer);
+    if (message.iidDocument !== undefined) {
+      IidDocument.encode(message.iidDocument, writer.uint32(10).fork()).ldelim();
     }
 
     return writer;
@@ -136,11 +104,7 @@ export const IidDocumentUpdatedEvent = {
 
       switch (tag >>> 3) {
         case 1:
-          message.did = reader.string();
-          break;
-
-        case 2:
-          message.signer = reader.string();
+          message.iidDocument = IidDocument.decode(reader, reader.uint32());
           break;
 
         default:
@@ -154,22 +118,19 @@ export const IidDocumentUpdatedEvent = {
 
   fromJSON(object: any): IidDocumentUpdatedEvent {
     return {
-      did: isSet(object.did) ? String(object.did) : "",
-      signer: isSet(object.signer) ? String(object.signer) : ""
+      iidDocument: isSet(object.iidDocument) ? IidDocument.fromJSON(object.iidDocument) : undefined
     };
   },
 
   toJSON(message: IidDocumentUpdatedEvent): unknown {
     const obj: any = {};
-    message.did !== undefined && (obj.did = message.did);
-    message.signer !== undefined && (obj.signer = message.signer);
+    message.iidDocument !== undefined && (obj.iidDocument = message.iidDocument ? IidDocument.toJSON(message.iidDocument) : undefined);
     return obj;
   },
 
   fromPartial(object: Partial<IidDocumentUpdatedEvent>): IidDocumentUpdatedEvent {
     const message = createBaseIidDocumentUpdatedEvent();
-    message.did = object.did ?? "";
-    message.signer = object.signer ?? "";
+    message.iidDocument = object.iidDocument !== undefined && object.iidDocument !== null ? IidDocument.fromPartial(object.iidDocument) : undefined;
     return message;
   }
 
