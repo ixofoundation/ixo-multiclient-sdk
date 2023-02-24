@@ -172,6 +172,9 @@ export interface TokenData {
   encrypted: boolean;
   proof: string;
   type: string;
+  /** did of entity to map token to */
+
+  id: string;
 }
 export interface TokenDataSDKType {
   /** media type value should always be "application/json" */
@@ -179,6 +182,9 @@ export interface TokenDataSDKType {
   encrypted: boolean;
   proof: string;
   type: string;
+  /** did of entity to map token to */
+
+  id: string;
 }
 
 function createBaseParams(): Params {
@@ -764,7 +770,8 @@ function createBaseTokenData(): TokenData {
     uri: "",
     encrypted: false,
     proof: "",
-    type: ""
+    type: "",
+    id: ""
   };
 }
 
@@ -784,6 +791,10 @@ export const TokenData = {
 
     if (message.type !== "") {
       writer.uint32(34).string(message.type);
+    }
+
+    if (message.id !== "") {
+      writer.uint32(42).string(message.id);
     }
 
     return writer;
@@ -814,6 +825,10 @@ export const TokenData = {
           message.type = reader.string();
           break;
 
+        case 5:
+          message.id = reader.string();
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -828,7 +843,8 @@ export const TokenData = {
       uri: isSet(object.uri) ? String(object.uri) : "",
       encrypted: isSet(object.encrypted) ? Boolean(object.encrypted) : false,
       proof: isSet(object.proof) ? String(object.proof) : "",
-      type: isSet(object.type) ? String(object.type) : ""
+      type: isSet(object.type) ? String(object.type) : "",
+      id: isSet(object.id) ? String(object.id) : ""
     };
   },
 
@@ -838,6 +854,7 @@ export const TokenData = {
     message.encrypted !== undefined && (obj.encrypted = message.encrypted);
     message.proof !== undefined && (obj.proof = message.proof);
     message.type !== undefined && (obj.type = message.type);
+    message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 
@@ -847,6 +864,7 @@ export const TokenData = {
     message.encrypted = object.encrypted ?? false;
     message.proof = object.proof ?? "";
     message.type = object.type ?? "";
+    message.id = object.id ?? "";
     return message;
   }
 

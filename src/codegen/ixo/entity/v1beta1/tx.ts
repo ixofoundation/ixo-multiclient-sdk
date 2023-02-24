@@ -1,5 +1,6 @@
-import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType } from "../../iid/v1beta1/iid";
+import { Context, ContextSDKType } from "../../iid/v1beta1/iid";
 import { Verification, VerificationSDKType } from "../../iid/v1beta1/tx";
+import { Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType } from "../../iid/v1beta1/types";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import * as _m0 from "protobufjs/minimal";
 import { isSet, fromJsonTimestamp, bytesFromBase64, fromTimestamp, base64FromBytes } from "../../../helpers";

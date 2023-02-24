@@ -1,4 +1,5 @@
-import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, VerificationMethod, VerificationMethodSDKType } from "./iid";
+import { Context, ContextSDKType } from "./iid";
+import { Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, VerificationMethod, VerificationMethodSDKType } from "./types";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 /**

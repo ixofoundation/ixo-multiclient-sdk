@@ -15,11 +15,7 @@ export const enititiesBasic = () =>
     let assetDid: string;
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset", async () => {
       const res = await Entity.CreateEntity();
-      assetDid = utils.common.getValueFromEvents(
-        res,
-        "ixo.iid.v1beta1.IidDocumentCreatedEvent",
-        "did"
-      );
+      assetDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
       console.log({ assetDid });
       return res;
     });
@@ -41,11 +37,7 @@ export const supamotoFlow = () =>
     daoDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset", async () => {
       const res = await Entity.CreateEntity("dao");
-      daoDid = utils.common.getValueFromEvents(
-        res,
-        "ixo.iid.v1beta1.IidDocumentCreatedEvent",
-        "did"
-      );
+      daoDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
       console.log({ daoDid });
       return res;
     });
@@ -59,8 +51,8 @@ export const supamotoFlow = () =>
       ]);
       daoCredsIssuerDid = utils.common.getValueFromEvents(
         res,
-        "ixo.iid.v1beta1.IidDocumentCreatedEvent",
-        "did"
+        "wasm",
+        "token_id"
       );
       console.log({ daoCredsIssuerDid });
       return res;
@@ -319,11 +311,7 @@ export const supamotoFlow = () =>
     protocolDid = "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b";
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity protocol", async () => {
       const res = await Entity.CreateEntity("protocol");
-      protocolDid = utils.common.getValueFromEvents(
-        res,
-        "ixo.iid.v1beta1.IidDocumentCreatedEvent",
-        "did"
-      );
+      protocolDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
       console.log({ protocolDid });
       return res;
     });
@@ -346,8 +334,8 @@ export const supamotoFlow = () =>
       });
       protocolAssetDid = utils.common.getValueFromEvents(
         res,
-        "ixo.iid.v1beta1.IidDocumentCreatedEvent",
-        "did"
+        "wasm",
+        "token_id"
       );
       console.log({ protocolAssetDid });
       return res;
@@ -415,8 +403,8 @@ export const supamotoFlow = () =>
           );
           const nftAssetDid = utils.common.getValueFromEvents(
             res,
-            "ixo.iid.v1beta1.IidDocumentCreatedEvent",
-            "did"
+            "wasm",
+            "token_id"
           );
           console.log({ nftAssetDid });
           assetInstanceDids.push(nftAssetDid);
