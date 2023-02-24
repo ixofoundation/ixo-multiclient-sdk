@@ -1,6 +1,7 @@
 import * as _1 from "./chain";
 import * as _2 from "./currency";
 import * as _3 from "./cellnode";
+import * as _4 from "./contract";
 
 export namespace customQueries {
   export const chain = {
@@ -11,5 +12,8 @@ export namespace customQueries {
   };
   export const cellnode = {
     ..._3,
+  };
+  export const contract = {
+    ..._4,
   };
 }
