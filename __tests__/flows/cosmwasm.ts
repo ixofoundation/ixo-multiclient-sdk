@@ -1,9 +1,8 @@
-import Long from "long";
-import { createRegistry } from "../../src";
-import { OrderBy } from "../../src/codegen/cosmos/tx/v1beta1/service";
 import { getUser, queryClient, testMsg, utils } from "../helpers/common";
 import { WalletUsers } from "../helpers/constants";
 import * as Wasm from "../modules/CosmWasm";
+import * as Cosmos from "../modules/Cosmos";
+import { contracts } from "../../src/custom_queries/contract.constants";
 
 export const wasmBasic = () =>
   describe("Testing the wasmd module", () => {
@@ -95,4 +94,41 @@ export const wasmBasic = () =>
       console.log(utils.conversions.Uint8ArrayToJS(res.data));
       expect(res).toBeTruthy();
     });
+  });
+
+export const daoDao = () =>
+  describe("Testing the DaoDao contracts upload", () => {
+    test("query wasm store codes", async () => {
+      const res = await queryClient.cosmwasm.wasm.v1.codes();
+      console.log(res.codeInfos);
+      expect(res).toBeTruthy();
+    });
+
+    const daoDaoContracts = contracts.filter(
+      (contract) => contract.category === "daodao"
+    );
+
+    for (const contract of daoDaoContracts) {
+      let proposalId: number;
+      testMsg(
+        `/cosmos.gov.v1beta1.MsgSubmitProposal store ${contract.name} contract`,
+        async () => {
+          const res = await Cosmos.MsgSubmitProposalStoreCW(
+            contract.name,
+            contract.path
+          );
+          proposalId = utils.common.getValueFromEvents(
+            res,
+            "submit_proposal",
+            "proposal_id"
+          );
+          console.log({ ...contract, proposalId });
+          return res;
+        }
+      );
+      testMsg(
+        `/cosmos.gov.v1beta1.MsgVote vote ${contract.name} contract proposal`,
+        () => Cosmos.MsgVote(proposalId)
+      );
+    }
   });

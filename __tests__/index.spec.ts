@@ -42,6 +42,6 @@ generateBlockchainTestUsers();
 // ibcBasic();
 // bankBasic();
 // govBasic();
-// authzBasic()
+// authzBasic();
 // wasmBasic();
-quickQueries();
+// quickQueries();

@@ -51,7 +51,11 @@ export const registerIids = () =>
 export const iidsBasic = () =>
   describe("Testing the Iid module", () => {
     // testMsg("/ixo.iid.v1beta1.MsgUpdateIidDocument", () => Iid.UpdateIidDoc());
-    // testMsg("/ixo.iid.v1beta1.MsgAddIidContext", () => Iid.AddIidContext());
+    testMsg("/ixo.iid.v1beta1.MsgAddIidContext", async () => {
+      const res = await Iid.AddIidContext();
+      console.log(res);
+      return res;
+    });
     // testMsg("/ixo.iid.v1beta1.MsgDeleteIidContext", () =>
     //   Iid.DeleteIidContext()
     // );

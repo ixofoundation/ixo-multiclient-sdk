@@ -71,49 +71,49 @@ export const supamotoFlow = () =>
     let supaNftImage: string;
     let ecsLogo: string;
     supaLogo =
-      "https://bafybeiads34bdkcskrccnnz2cn64m4x6ms33xjy4klzo6eirmgpddqenym.ipfs.w3s.link/OhwQtFJlRJQX";
+      "https://bafkreifkl6w55nasgqid22d2cqyxccjktbciefzmiqvcudlq3eoer2mzhi.ipfs.w3s.link";
     supaNftImage =
-      "https://bafybeigcubo5k4ux5mofhndysr24xddbo2ifzj7z5uqvfpicazrsky2pxa.ipfs.w3s.link/HfRpXmUcjoaj";
+      "https://bafkreideszg4fdha4tf7ldpecltxbyxbnapb663tkuksk2vcczkzkxppaa.ipfs.w3s.link";
     ecsLogo =
-      "https://bafybeifr2m3c3jne2fjverfs6hkmgeagilahyajw75tukfr7ndgzhfre4e.ipfs.w3s.link/JuwtIQFIQvix";
-    // test("Saving device creds", async () => {
-    //   supaLogo = (
-    //     await customQueries.cellnode.uploadWeb3Doc(
-    //       utils.common.generateId(12),
-    //       "image/png",
-    //       getFileFromPath(["documents", "supamoto_logo.png"]),
-    //       undefined,
-    //       cellNodeNetwork
-    //     )
-    //   ).url;
-    //   console.log({ supaLogo });
-    //   supaNftImage = (
-    //     await customQueries.cellnode.uploadWeb3Doc(
-    //       utils.common.generateId(12),
-    //       "image/png",
-    //       getFileFromPath(["documents", "supamoto-nft-image.png"]),
-    //       undefined,
-    //       cellNodeNetwork
-    //     )
-    //   ).url;
-    //   console.log({ supaNftImage });
-    //   ecsLogo = (
-    //     await customQueries.cellnode.uploadWeb3Doc(
-    //       utils.common.generateId(12),
-    //       "image/png",
-    //       getFileFromPath(["documents", "ecs_logo_flame only.png"]),
-    //       undefined,
-    //       cellNodeNetwork
-    //     )
-    //   ).url;
-    //   console.log({ ecsLogo });
-    //   expect(ecsLogo).toBeTruthy();
-    // });
+      "https://bafkreigkajsskkswn5jwcmfxhn3rqc7gevzgroacq7ygfz6mzkgo72ej4i.ipfs.w3s.link";
+    test("Saving device creds", async () => {
+      supaLogo = (
+        await customQueries.cellnode.uploadWeb3Doc(
+          utils.common.generateId(12),
+          "image/png",
+          getFileFromPath(["documents", "supamoto_logo.png"]),
+          undefined,
+          cellNodeNetwork
+        )
+      ).url;
+      console.log({ supaLogo });
+      supaNftImage = (
+        await customQueries.cellnode.uploadWeb3Doc(
+          utils.common.generateId(12),
+          "image/png",
+          getFileFromPath(["documents", "supamoto-nft-image.png"]),
+          undefined,
+          cellNodeNetwork
+        )
+      ).url;
+      console.log({ supaNftImage });
+      ecsLogo = (
+        await customQueries.cellnode.uploadWeb3Doc(
+          utils.common.generateId(12),
+          "image/png",
+          getFileFromPath(["documents", "ecs_logo_flame only.png"]),
+          undefined,
+          cellNodeNetwork
+        )
+      ).url;
+      console.log({ ecsLogo });
+      expect(ecsLogo).toBeTruthy();
+    });
 
     // Save supamoto credsPdf WEB3
     let projectCertDoc: string;
     projectCertDoc =
-      "https://bafybeicqzthy6ost6t22sjk36t4vyxxwdgudfp23yl42rv4xrxqoclqwyu.ipfs.w3s.link/hBxosbgluRch";
+      "https://bafkreiefafy2u5df4l52yb7vvz32hxrxhcceyaq3z7xww2qlz2fp3ppeum.ipfs.w3s.link";
     test("Saving projectCertDoc", async () => {
       projectCertDoc = (
         await customQueries.cellnode.uploadWeb3Doc(
@@ -134,7 +134,7 @@ export const supamotoFlow = () =>
     // Save supamoto profile WEB3
     let profile: string;
     profile =
-      "https://bafybeiguru4g5mgphmecbwcqrbi33jahplf7b7prdgtakh442vuizts74y.ipfs.w3s.link/gBUEzpTqEcFk";
+      "https://bafkreib5ka542u2ousereo23hr77qfaohtn2inhkr436u74rqzsktefynm.ipfs.w3s.link";
     test("Saving profile", async () => {
       const file = JSON.parse(
         getFileFromPath(["documents", "test-supamoto-profile.jsonld"], "ascii")
@@ -157,7 +157,7 @@ export const supamotoFlow = () =>
 
     // Save supamoto creator CELLNODE
     let creator: string;
-    creator = "wx6icqekxuole8atw3d";
+    creator = "4kavdefz12wlefltwxr";
     test("Saving creator", async () => {
       const tester = getUser();
       const file = JSON.parse(
@@ -181,7 +181,7 @@ export const supamotoFlow = () =>
 
     // Save supamoto administrator CELLNODE
     let administrator: string;
-    administrator = "2udhfhz3duhle8atwit";
+    administrator = "gm7528l8xd4lefltxcz";
     test("Saving administrator", async () => {
       const tester = getUser();
       const file = JSON.parse(
@@ -208,7 +208,7 @@ export const supamotoFlow = () =>
 
     // Save supamoto page CELLNODE
     let page: string;
-    page = "ossnopx57ule8atwww";
+    page = "zh211j0pb0llefltxre";
     test("Saving page", async () => {
       page = (
         await customQueries.cellnode.uploadPublicDoc(
@@ -225,7 +225,7 @@ export const supamotoFlow = () =>
     // Save supamoto projectCreds WEB3
     let projectCreds: string;
     projectCreds =
-      "https://bafybeictgpirfq7erlben4w5hojqkv76uuk4erzar5p5oem4xt5eg7shym.ipfs.w3s.link/wXxQWXgsVVHh";
+      "https://bafkreih2oq64xhbgp7vyarcrgw6dcofms4zdmjqms6vnfx32vzwglj6nd4.ipfs.w3s.link";
     test("Saving projectCert", async () => {
       const file = JSON.parse(
         getFileFromPath(
@@ -257,7 +257,7 @@ export const supamotoFlow = () =>
 
     // Save supamoto tags CELLNODE
     let tags: string;
-    tags = "wmez0a7p1clle8au0tf";
+    tags = "klfh2wqlw9mleflu0u6";
     test("Saving tags", async () => {
       tags = (
         await customQueries.cellnode.uploadPublicDoc(
@@ -274,7 +274,7 @@ export const supamotoFlow = () =>
     // Save supamoto tokenMetadata WEB3
     let tokenMetadata: string;
     tokenMetadata =
-      "https://bafybeicyyaqyea2okvhblqsm664ek2kk6dekazwbcpmh6bpvhl2fbdpzwa.ipfs.w3s.link/GHqsIYfzPdML";
+      "https://bafkreie7kbpppoizx7anxxufblfkdfmuy27mppuz2hq4a4uouudweb2sm4.ipfs.w3s.link";
     test("Saving tokenMetadata", async () => {
       const file = JSON.parse(
         getFileFromPath(
@@ -300,7 +300,7 @@ export const supamotoFlow = () =>
 
     // Save supamoto claims CELLNODE
     let claims: string;
-    claims = "ijz1jfkgb2ale8au4cp";
+    claims = "gf9m2u5ds6tleflu4a8";
     test("Saving claims", async () => {
       claims = (
         await customQueries.cellnode.uploadPublicDoc(
