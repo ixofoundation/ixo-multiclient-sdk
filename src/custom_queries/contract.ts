@@ -1,5 +1,14 @@
-import { daoDaoContractCodes } from "./contract.constants";
+import { ChainNetwork } from "./chain.types";
+import { contracts } from "./contract.constants";
 
-export const getDaoDaoContractCodes = () => {
-  return daoDaoContractCodes;
+export const getContractCodes = (
+  chainNetwork: ChainNetwork,
+  category?: "ixo" | "daodao"
+) => {
+  return contracts
+    .filter((contract) => !category || contract.category === category)
+    .map((contract) => ({
+      name: contract.name,
+      code: contract.code[chainNetwork],
+    }));
 };

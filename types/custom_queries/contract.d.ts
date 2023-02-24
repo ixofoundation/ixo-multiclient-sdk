@@ -1,4 +1,5 @@
-export declare const getDaoDaoContractCodes: () => {
-    contract: string;
-    code: number;
+import { ChainNetwork } from "./chain.types";
+export declare const getContractCodes: (chainNetwork: ChainNetwork, category?: "ixo" | "daodao") => {
+    name: string;
+    code: any;
 }[];

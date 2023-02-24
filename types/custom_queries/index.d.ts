@@ -23,9 +23,9 @@ export declare namespace customQueries {
         uploadWeb3Doc: (name: string, contentType: string, data: string, cellnodeUrl?: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<_3.CellnodeWeb3Resource>;
     };
     const contract: {
-        getDaoDaoContractCodes: () => {
-            contract: string;
-            code: number;
+        getContractCodes: (chainNetwork: import("./chain.types").ChainNetwork, category?: "ixo" | "daodao") => {
+            name: string;
+            code: any;
         }[];
     };
 }
