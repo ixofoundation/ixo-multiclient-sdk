@@ -4,6 +4,8 @@ export declare namespace customQueries {
         getRegistryChainInfo: (chainName: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<import("./chain.types").RegistryChainInfo>;
         getActiveRpcFromRegistryChainInfo: (chainInfo: import("./chain.types").RegistryChainInfo) => Promise<string>;
         getActiveRpcFromChainName: (chainName: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<string>;
+        getChainExplorer: (chainName: string, chainNetwork: import("./chain.types").ChainNetwork, chainExplorers?: import("./chain.types").ChainExplorer[]) => import("./chain.types").KeplrChainExplorer;
+        getChainExplorerAsync: (chainName: string, chainNetwork: import("./chain.types").ChainNetwork) => Promise<import("./chain.types").KeplrChainExplorer>;
         getKeplrChainInfoFromRegistryChainInfo: (chainInfo: import("./chain.types").RegistryChainInfo) => Promise<import("./chain.types").KeplrChainInfo>;
         getKeplrChainInfo: (chainName: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<import("./chain.types").KeplrChainInfo>;
     };

@@ -1,4 +1,4 @@
-import { RegistryChainInfo, KeplrChainInfo, ChainNetwork } from "./chain.types";
+import { RegistryChainInfo, KeplrChainInfo, ChainNetwork, ChainExplorer, KeplrChainExplorer } from "./chain.types";
 /** Fetch the chain info via the chain name and chain network
  * @param chainName string - defined in cosmos chain registry [github.com/cosmos/chain-registry]
  * @param chainNetwork 'mainnet' | 'testnet' | 'devnet' - defaults to mainnet
@@ -13,6 +13,17 @@ export declare const getActiveRpcFromRegistryChainInfo: (chainInfo: RegistryChai
  * @param chainNetwork 'mainnet' | 'testnet' | 'devnet' - defaults to mainnet
  */
 export declare const getActiveRpcFromChainName: (chainName: string, chainNetwork?: ChainNetwork) => Promise<string>;
+/** Fetch the tx explorer info for the provided chain name and network type (and provided explorers)
+ * @param chainName string - defined in cosmos chain registry [github.com/cosmos/chain-registry]
+ * @param chainNetwork 'mainnet' | 'testnet' | 'devnet' - defaults to mainnet
+ * @param chainExplorers ChainExplorer[] - defaults to undefined and uses sdk cache
+ */
+export declare const getChainExplorer: (chainName: string, chainNetwork: ChainNetwork, chainExplorers?: ChainExplorer[]) => KeplrChainExplorer | undefined;
+/** Fetch the tx explorer info for the provided chain name and network type (via cosmos chain registry)
+ * @param chainName string - defined in cosmos chain registry [github.com/cosmos/chain-registry]
+ * @param chainNetwork 'mainnet' | 'testnet' | 'devnet' - defaults to mainnet
+ */
+export declare const getChainExplorerAsync: (chainName: string, chainNetwork: ChainNetwork) => Promise<KeplrChainExplorer | undefined>;
 /** Fetch the keplr chain info for the provided registry chain info
  * @param chainInfo RegistryChainInfo
  */

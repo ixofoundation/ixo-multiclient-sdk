@@ -407,3 +407,930 @@ export declare const registryChainNamesToKeplrChainNames: {
 export declare const registryChainNames: string[];
 export declare const keplrChainNames: string[];
 export declare const keplrChainNamesToRegistryChainNames: {};
+export declare const mainnetChainExplorers: {
+    acrechain: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    agoric: {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    }[];
+    aioz: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    akash: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    arkh: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    assetmantle: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    axelar: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    })[];
+    bandchain: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    })[];
+    beezee: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    bitcanna: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    bitsong: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    bluzelle: {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    }[];
+    bostrom: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    canto: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    carbon: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    cerberus: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    })[];
+    chain4energy: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    cheqd: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    })[];
+    chihuahua: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    })[];
+    chimba: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    chronicnetwork: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    comdex: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    commercionetwork: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    cosmoshub: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    crescent: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    cronos: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    cryptoorgchain: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    cudos: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    decentr: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    desmos: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    dig: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    dyson: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    echelon: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    emoney: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    evmos: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    fetchhub: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    firmachain: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    galaxy: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    genesisl1: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    gravitybridge: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    idep: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    impacthub: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    imversed: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    injective: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    })[];
+    irisnet: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    jackal: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    juno: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    kava: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    kichain: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    konstellation: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    })[];
+    kujira: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    })[];
+    lambda: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    likecoin: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page?: undefined;
+        account_page?: undefined;
+    })[];
+    loyal: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    lumenx: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    lumnetwork: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    mars: {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    }[];
+    medasdigital: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    meme: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    })[];
+    microtick: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    migaloo: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    mises: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    nyx: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page?: undefined;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    octa: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    odin: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    okexchain: {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    }[];
+    omniflixhub: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    onomy: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    })[];
+    oraichain: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    osmosis: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    panacea: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    passage: {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    }[];
+    persistence: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    planq: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    point: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    provenance: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    })[];
+    quicksilver: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    rebus: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    regen: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    rizon: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    secretnetwork: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    sentinel: {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    }[];
+    shareledger: {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    }[];
+    shentu: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    sifchain: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    sommelier: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    })[];
+    stafihub: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    stargaze: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    starname: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    stride: {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    }[];
+    teritori: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    terra: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    terra2: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    tgrade: {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    }[];
+    thorchain: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    umee: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    unification: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    vidulum: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+};
+export declare const testnetChainExplorers: {
+    axelar: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    })[];
+    cheqd: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    cosmoshub: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    cudos: {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    }[];
+    evmos: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    impacthub: {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    }[];
+    imversed: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    jackal: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    juno: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    })[];
+    kichain: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    kujira: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    mars: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    persistence: ({
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page?: undefined;
+    } | {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    })[];
+    quicksilver: {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    }[];
+    secretnetwork: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    stargaze: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+    stride: {
+        kind: string;
+        url: string;
+        tx_page: string;
+    }[];
+};
+export declare const devnetChainExplorers: {
+    impacthub: {
+        kind: string;
+        url: string;
+        tx_page: string;
+        account_page: string;
+    }[];
+};
