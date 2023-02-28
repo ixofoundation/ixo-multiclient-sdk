@@ -27,7 +27,8 @@ export declare namespace customQueries {
     const contract: {
         getContractCodes: (chainNetwork: import("./chain.types").ChainNetwork, category?: "ixo" | "daodao") => {
             name: string;
-            code: any;
+            code?: number;
         }[];
+        getContractCode: (chainNetwork: import("./chain.types").ChainNetwork, contractName: string) => number;
     };
 }

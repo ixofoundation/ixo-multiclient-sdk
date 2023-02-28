@@ -18,7 +18,7 @@ import { ibcBasic } from "./flows/ibc";
 import { bankBasic, govBasic, authzBasic } from "./flows/cosmos";
 import { tokenBasic } from "./flows/tokens";
 import { projectsBasic } from "./flows/projects";
-import { wasmBasic } from "./flows/cosmwasm";
+import { daoCore, wasmBasic } from "./flows/cosmwasm";
 import { quickQueries } from "./flows/quickQueries";
 
 beforeAll(() => {
@@ -44,4 +44,5 @@ generateBlockchainTestUsers();
 // govBasic();
 // authzBasic();
 // wasmBasic();
+daoCore();
 // quickQueries();
