@@ -150,6 +150,47 @@ export const daoDaoContracts = () =>
   });
 
 export const daoCore = () =>
+  /**
+   * This series of tests for a DAODAO DAO (Decentralized Autonomous Organization) smart contract
+   * begin by defining a few variables for different smart contract codes that will be used later
+   * in the tests. Then, the tests go through the following steps:
+   *
+   * Instantiate the DAO Core smart contract using the /cosmwasm.wasm.v1.MsgInstantiateContract message.
+   * This involves passing some configuration information, including details for a DAO proposal
+   * contract and a DAO voting contract. The test checks that the contract was successfully instantiated
+   * and records the contract address for use in later tests.
+   *
+   * Query the DAO Core smart contract using the dump_state query to get information about the proposal
+   * and voting contracts that were created during the instantiation step. The test checks that the
+   * query returns data and records the addresses of the proposal and voting contracts for use in later
+   * tests.
+   *
+   * Query the DAO proposal contract using the proposal_creation_policy query to get information about
+   * the pre-proposal contract that will be used to submit new proposals to the DAO. The test checks
+   * that the query returns data and records the address of the pre-proposal contract for use in later
+   * tests.
+   *
+   * Propose a new action for the DAO using the /cosmwasm.wasm.v1.MsgExecuteContract message. This
+   * involves passing information about the proposal, including a description and a message that will
+   * be executed if the proposal is accepted. In this case, the message is to set a key-value pair in
+   * the DAO's storage. The test checks that the proposal was successfully created and records the
+   * proposal ID for use in later tests.
+   *
+   * Vote on the proposal using the /cosmwasm.wasm.v1.MsgExecuteContract message. This involves passing
+   * the proposal ID and a vote value (yes or no) as part of the message. The test checks that the vote
+   * was successfully cast.
+   *
+   * Wait for the voting period to end and execute the proposal if it was accepted. This involves
+   * checking the status of the proposal using the dao_proposals query and then executing the proposal
+   * if it was accepted. The test checks that the proposal was executed successfully and that the
+   * key-value pair was set in the DAO's storage.
+   *
+   * These tests are designed to test the functionality of the DAO Core smart contract and its
+   * associated contracts for proposing and voting on actions within the DAO. They ensure that the
+   * contracts can be instantiated correctly, proposals can be submitted and voted on, and accepted
+   * proposals can be executed successfully.
+   */
+
   describe("Testing the Dao Core", () => {
     // Set the object below and run tests to see it added to dao via proposal and voting
     const item = {
