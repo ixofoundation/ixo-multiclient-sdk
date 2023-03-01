@@ -4,6 +4,12 @@ export declare type ApiEndpoint = {
     address: string;
     provider: string;
 };
+export declare type ChainExplorer = {
+    kind: string;
+    url: string;
+    tx_page?: string;
+    account_page?: string;
+};
 export declare type RegistryChainInfo = {
     $schema?: string;
     chain_name: string;
@@ -84,14 +90,13 @@ export declare type RegistryChainInfo = {
         grpc?: ApiEndpoint[];
         "grpc-web"?: ApiEndpoint[];
     };
-    explorers?: {
-        kind: string;
-        url: string;
-        tx_page?: string;
-        account_page?: string;
-    }[];
+    explorers?: ChainExplorer[];
     update_link?: string;
     keywords?: string[];
+};
+export declare type KeplrChainExplorer = {
+    name: string;
+    txUrl: string;
 };
 export declare type KeplrChainInfo = {
     rpc: string;
@@ -120,8 +125,5 @@ export declare type KeplrChainInfo = {
     coinType?: number;
     chainSymbolImageUrl?: string;
     features?: string[];
-    txExplorer?: {
-        name: string;
-        txUrl: string;
-    };
+    txExplorer?: KeplrChainExplorer;
 };

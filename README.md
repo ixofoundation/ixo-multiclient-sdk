@@ -28,6 +28,7 @@
     - [RPC Clients](#rpc-clients)
     - [Composing Messages](#composing-messages)
       - [IBC Messages](#ibc-messages)
+    - [Contracts](#contracts)
     - [Utility Functions](#utility-functions)
     - [Custom Queries](#custom-queries)
   - [Connecting with Wallets and Signing Messages](#connecting-with-wallets-and-signing-messages)
@@ -78,7 +79,7 @@ const balance = await client.cosmos.bank.v1beta1.allBalances({
   address: "ixo1addresshere",
 });
 
-// you can also query the ixo modules
+// you can also query the ixo modules.
 const balances = await client.ixo.exchange.v1beta1.exchangeBalances();
 
 
@@ -135,6 +136,87 @@ import { ibc } from "@ixo/impactxclient-sdk";
 // const { transfer } = ibc.applications.transfer.v1.MessageComposer.withTypeUrl;
 ```
 
+### Contracts
+
+To work with a cosmwasm contract, you first need to instantiate it with the contract code and other instantiation data. The contract code is provided by the contract namespace in custom queries. After instantiation, you receive the contract's address as a response, which you must use to execute any further transactions on the contract.
+
+Here is an example code snippet that shows how to instantiate and execute messages on a contract using the ixo1155 contract code:
+
+```js
+import { createSigningClient, customQueries, cosmwasm, cosmos } from '@ixo/impactxclient-sdk';
+
+// create a signing client
+const client = await createSigningClient(rpc, offlineSigner);
+
+// get user account info
+const account = {};
+const myAddress = account.address;
+
+// get contract code to instantiate - using ixo1155 for this example
+const contractCodes = customQueries.contract.getContractCodes('devnet', 'ixo');
+const contractCode = contractCodes.find((contract) => contract.name === 'ixo1155');
+
+// instantiate the contract
+const instantiateContractMessage = {
+  typeUrl: '/cosmwasm.wasm.v1.MsgInstantiateContract',
+  value: cosmwasm.wasm.v1.MsgInstantiateContract.fromPartial({
+    admin: myAddress,
+    codeId: contractCode.code,
+    funds: [
+      cosmos.base.v1beta1.Coin.fromPartial({
+        amount: '1',
+        denom: 'uixo',
+      }),
+    ],
+    label: account.did + 'contract' + contractCode.code,
+		msg: new Uint8Array(Buffer.from(JSON.stringify({
+      minter: myAddress
+    }))),
+    sender: myAddress,
+  }),
+};
+
+const instantiateContractResponse = await client.signAndBroadcast(
+  myAddress,
+  [instantiateContractMessage],
+  "auto"
+);
+const contractAddress = JSON.parse(instantiateContractResponse.rawLog!)[0]
+  .events
+  .instantiate
+  .attributes
+  ._contract_address
+  .value;
+
+// execute messages on the contract
+const tokenId = 'CARBON:bafybeib22s3lyz3guicawoboeieltpyewkdnuuheklpeu3zbrwekmpdew5';
+const executeContractMessage = {
+  typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
+  value: cosmwasm.wasm.v1.MsgExecuteContract.fromPartial({
+    contract: contractAddress,
+    funds: [
+      cosmos.base.v1beta1.Coin.fromPartial({
+        amount: '1',
+        denom: 'uixo',
+      }),
+    ],
+		msg: new Uint8Array(Buffer.from(JSON.stringify({
+      batch_mint: {
+        to: myAddress,
+        batch: [[tokenId, '5000', 'uri']],
+      },
+    }))),
+    sender: myAddress,
+  }),
+};
+
+const executeContractResponse = await client.signAndBroadcast(
+  myAddress,
+  [executeContractMessage],
+  "auto"
+);
+```
+
 ### Utility Functions
 
 Import the `utils` object from `@ixo/impactxclient-sdk`.
@@ -152,7 +234,7 @@ const addressUtils = utils.address;
 ### Custom Queries
 
 Import the `customQueries` object from `@ixo/impactxclient-sdk`.
-From that you can destructure `chain` functions that will fetch the latest chain info from the cosmos chain registry or request an active RPC endpoint. You can also use the `currency` functions that will allow you to get the token info based on the provided denom.
+From that you can destructure `chain` functions that will fetch the latest chain info from the cosmos chain registry or request an active RPC endpoint. You can also use the `currency` functions that will allow you to get the token info based on the provided denom or the `contract` functions that will provide ixo or daodao contract codes for instatiation.
 
 ```js
 import { customQueries } from "@ixo/impactxclient-sdk";
@@ -181,6 +263,13 @@ const keplrChainInfo = customQueries.chain.getKeplrChainInfo(
 
 // get token info based on denom (coinMinimalDenom)
 const token = customQueries.currency.findTokenFromDenom("uixo");
+
+// get daodao contract codes (for devnet) to instatiate
+const contractCodes = customqQueries.contract.getCnontractCodes(
+  "devnet",
+  "daodao"
+); // contractCodes = [{ name: "dao_core", code: 3 }, ...];
+const { code } = contractCodes.find((contract) => contract.name === "dao_core");
 ```
 
 ## Connecting with Wallets and Signing Messages

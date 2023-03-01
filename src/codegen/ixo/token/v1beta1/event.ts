@@ -1,41 +1,30 @@
+import { Token, TokenSDKType, TokenProperties, TokenPropertiesSDKType } from "./token";
 import { TokenBatch, TokenBatchSDKType } from "./tx";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 /** TokenCreatedEvent is an event triggered on a Token creation */
 
 export interface TokenCreatedEvent {
-  /** the contract address of token contract being initialized */
-  contractAddress: string;
-  /** the token minter */
-
-  minter: string;
+  /** TokenCreatedEvent is an event triggered on a Token creation */
+  token?: Token;
 }
 /** TokenCreatedEvent is an event triggered on a Token creation */
 
 export interface TokenCreatedEventSDKType {
-  /** the contract address of token contract being initialized */
-  contract_address: string;
-  /** the token minter */
-
-  minter: string;
+  /** TokenCreatedEvent is an event triggered on a Token creation */
+  token?: TokenSDKType;
 }
 /** TokenUpdatedEvent is an event triggered on a Token update */
 
 export interface TokenUpdatedEvent {
-  /** contract_address of token updated */
-  contractAddress: string;
-  /** the owner account of the change */
-
-  owner: string;
+  /** TokenUpdatedEvent is an event triggered on a Token update */
+  token?: Token;
 }
 /** TokenUpdatedEvent is an event triggered on a Token update */
 
 export interface TokenUpdatedEventSDKType {
-  /** contract_address of token updated */
-  contract_address: string;
-  /** the owner account of the change */
-
-  owner: string;
+  /** TokenUpdatedEvent is an event triggered on a Token update */
+  token?: TokenSDKType;
 }
 /** TokenMintedEvent is an event triggered on a Token mint execution */
 
@@ -48,7 +37,8 @@ export interface TokenMintedEvent {
   /** the new tokens owner */
 
   owner: string;
-  batches: TokenBatch[];
+  amount: string;
+  tokenProperties?: TokenProperties;
 }
 /** TokenMintedEvent is an event triggered on a Token mint execution */
 
@@ -61,7 +51,8 @@ export interface TokenMintedEventSDKType {
   /** the new tokens owner */
 
   owner: string;
-  batches: TokenBatchSDKType[];
+  amount: string;
+  tokenProperties?: TokenPropertiesSDKType;
 }
 /** TokenTransferedEvent is an event triggered on a Token transfer execution */
 
@@ -146,19 +137,14 @@ export interface TokenStoppedEventSDKType {
 
 function createBaseTokenCreatedEvent(): TokenCreatedEvent {
   return {
-    contractAddress: "",
-    minter: ""
+    token: undefined
   };
 }
 
 export const TokenCreatedEvent = {
   encode(message: TokenCreatedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.contractAddress !== "") {
-      writer.uint32(10).string(message.contractAddress);
-    }
-
-    if (message.minter !== "") {
-      writer.uint32(18).string(message.minter);
+    if (message.token !== undefined) {
+      Token.encode(message.token, writer.uint32(10).fork()).ldelim();
     }
 
     return writer;
@@ -174,11 +160,7 @@ export const TokenCreatedEvent = {
 
       switch (tag >>> 3) {
         case 1:
-          message.contractAddress = reader.string();
-          break;
-
-        case 2:
-          message.minter = reader.string();
+          message.token = Token.decode(reader, reader.uint32());
           break;
 
         default:
@@ -192,22 +174,19 @@ export const TokenCreatedEvent = {
 
   fromJSON(object: any): TokenCreatedEvent {
     return {
-      contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
-      minter: isSet(object.minter) ? String(object.minter) : ""
+      token: isSet(object.token) ? Token.fromJSON(object.token) : undefined
     };
   },
 
   toJSON(message: TokenCreatedEvent): unknown {
     const obj: any = {};
-    message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
-    message.minter !== undefined && (obj.minter = message.minter);
+    message.token !== undefined && (obj.token = message.token ? Token.toJSON(message.token) : undefined);
     return obj;
   },
 
   fromPartial(object: Partial<TokenCreatedEvent>): TokenCreatedEvent {
     const message = createBaseTokenCreatedEvent();
-    message.contractAddress = object.contractAddress ?? "";
-    message.minter = object.minter ?? "";
+    message.token = object.token !== undefined && object.token !== null ? Token.fromPartial(object.token) : undefined;
     return message;
   }
 
@@ -215,19 +194,14 @@ export const TokenCreatedEvent = {
 
 function createBaseTokenUpdatedEvent(): TokenUpdatedEvent {
   return {
-    contractAddress: "",
-    owner: ""
+    token: undefined
   };
 }
 
 export const TokenUpdatedEvent = {
   encode(message: TokenUpdatedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.contractAddress !== "") {
-      writer.uint32(10).string(message.contractAddress);
-    }
-
-    if (message.owner !== "") {
-      writer.uint32(18).string(message.owner);
+    if (message.token !== undefined) {
+      Token.encode(message.token, writer.uint32(10).fork()).ldelim();
     }
 
     return writer;
@@ -243,11 +217,7 @@ export const TokenUpdatedEvent = {
 
       switch (tag >>> 3) {
         case 1:
-          message.contractAddress = reader.string();
-          break;
-
-        case 2:
-          message.owner = reader.string();
+          message.token = Token.decode(reader, reader.uint32());
           break;
 
         default:
@@ -261,22 +231,19 @@ export const TokenUpdatedEvent = {
 
   fromJSON(object: any): TokenUpdatedEvent {
     return {
-      contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
-      owner: isSet(object.owner) ? String(object.owner) : ""
+      token: isSet(object.token) ? Token.fromJSON(object.token) : undefined
     };
   },
 
   toJSON(message: TokenUpdatedEvent): unknown {
     const obj: any = {};
-    message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
-    message.owner !== undefined && (obj.owner = message.owner);
+    message.token !== undefined && (obj.token = message.token ? Token.toJSON(message.token) : undefined);
     return obj;
   },
 
   fromPartial(object: Partial<TokenUpdatedEvent>): TokenUpdatedEvent {
     const message = createBaseTokenUpdatedEvent();
-    message.contractAddress = object.contractAddress ?? "";
-    message.owner = object.owner ?? "";
+    message.token = object.token !== undefined && object.token !== null ? Token.fromPartial(object.token) : undefined;
     return message;
   }
 
@@ -287,7 +254,8 @@ function createBaseTokenMintedEvent(): TokenMintedEvent {
     contractAddress: "",
     minter: "",
     owner: "",
-    batches: []
+    amount: "",
+    tokenProperties: undefined
   };
 }
 
@@ -305,8 +273,12 @@ export const TokenMintedEvent = {
       writer.uint32(26).string(message.owner);
     }
 
-    for (const v of message.batches) {
-      TokenBatch.encode(v!, writer.uint32(34).fork()).ldelim();
+    if (message.amount !== "") {
+      writer.uint32(34).string(message.amount);
+    }
+
+    if (message.tokenProperties !== undefined) {
+      TokenProperties.encode(message.tokenProperties, writer.uint32(42).fork()).ldelim();
     }
 
     return writer;
@@ -334,7 +306,11 @@ export const TokenMintedEvent = {
           break;
 
         case 4:
-          message.batches.push(TokenBatch.decode(reader, reader.uint32()));
+          message.amount = reader.string();
+          break;
+
+        case 5:
+          message.tokenProperties = TokenProperties.decode(reader, reader.uint32());
           break;
 
         default:
@@ -351,7 +327,8 @@ export const TokenMintedEvent = {
       contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
       minter: isSet(object.minter) ? String(object.minter) : "",
       owner: isSet(object.owner) ? String(object.owner) : "",
-      batches: Array.isArray(object?.batches) ? object.batches.map((e: any) => TokenBatch.fromJSON(e)) : []
+      amount: isSet(object.amount) ? String(object.amount) : "",
+      tokenProperties: isSet(object.tokenProperties) ? TokenProperties.fromJSON(object.tokenProperties) : undefined
     };
   },
 
@@ -360,13 +337,8 @@ export const TokenMintedEvent = {
     message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
     message.minter !== undefined && (obj.minter = message.minter);
     message.owner !== undefined && (obj.owner = message.owner);
-
-    if (message.batches) {
-      obj.batches = message.batches.map(e => e ? TokenBatch.toJSON(e) : undefined);
-    } else {
-      obj.batches = [];
-    }
-
+    message.amount !== undefined && (obj.amount = message.amount);
+    message.tokenProperties !== undefined && (obj.tokenProperties = message.tokenProperties ? TokenProperties.toJSON(message.tokenProperties) : undefined);
     return obj;
   },
 
@@ -375,7 +347,8 @@ export const TokenMintedEvent = {
     message.contractAddress = object.contractAddress ?? "";
     message.minter = object.minter ?? "";
     message.owner = object.owner ?? "";
-    message.batches = object.batches?.map(e => TokenBatch.fromPartial(e)) || [];
+    message.amount = object.amount ?? "";
+    message.tokenProperties = object.tokenProperties !== undefined && object.tokenProperties !== null ? TokenProperties.fromPartial(object.tokenProperties) : undefined;
     return message;
   }
 

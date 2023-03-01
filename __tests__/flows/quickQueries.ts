@@ -7,13 +7,13 @@ export const quickQueries = () =>
   describe("Quick queries to see states", () => {
     test("Quick queries to see states filler", () => expect(true).toBeTruthy());
 
-    test("Query cosmos.tx.v1beta1.getBlockWithTxs", async () => {
-      const res = await queryClient.cosmos.tx.v1beta1.getTx({
-        hash: "C35404333376CD5FC1AFD57903061394F0333CF6B8047E9A693E0E59350AE695",
-      });
-      console.log(res.txResponse?.events);
-      expect(res).toBeTruthy();
-    });
+    // test("Query cosmos.tx.v1beta1.getBlockWithTxs", async () => {
+    //   const res = await queryClient.cosmos.tx.v1beta1.getTx({
+    //     hash: "C35404333376CD5FC1AFD57903061394F0333CF6B8047E9A693E0E59350AE695",
+    //   });
+    //   console.log(res.txResponse?.events);
+    //   expect(res).toBeTruthy();
+    // });
 
     // test("Query proposal by id", async () => {
     //   const res = await queryClient.cosmos.gov.v1beta1.proposal({

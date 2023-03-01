@@ -6,8 +6,39 @@ import {
   cosmwasm,
   queryClient,
   utils,
+  getFileFromPath,
 } from "../helpers/common";
 import Long from "long";
+
+export const WasmStoreTrx = async (
+  contract: string = "cw721",
+  pathList?: string[]
+) => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const message = {
+    typeUrl: "/cosmwasm.wasm.v1.MsgStoreCode",
+    value: cosmwasm.wasm.v1.MsgStoreCode.fromPartial({
+      sender: myAddress,
+      wasmByteCode: new Uint8Array(
+        getFileFromPath(
+          pathList ?? ["contracts", "ixo", `${contract}.wasm`],
+          ""
+        )
+      ),
+      instantiatePermission: cosmwasm.wasm.v1.AccessConfig.fromPartial({
+        permission: cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_EVERYBODY,
+      }),
+    }),
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
 
 export const WasmInstantiateTrx = async (codeId: number, msg: string) => {
   const client = await createClient();
