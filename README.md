@@ -79,7 +79,7 @@ const balance = await client.cosmos.bank.v1beta1.allBalances({
   address: "ixo1addresshere",
 });
 
-// you can also query the ixo modules
+// you can also query the ixo modules.
 const balances = await client.ixo.exchange.v1beta1.exchangeBalances();
 
 
