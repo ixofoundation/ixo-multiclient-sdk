@@ -1,3 +1,5 @@
+import { toBase64 } from "@cosmjs/encoding";
+
 // JSON to Uint8Array parsing and visa versa
 export const JsonToArray = function (json: string) {
   const ret = new Uint8Array(Buffer.from(json));
@@ -59,4 +61,14 @@ export const concatArrayBuffers = (...bufs: Uint8Array[]) => {
     return offset + buf.byteLength;
   }, 0);
   return result;
+};
+
+export const jsonStringToBase64 = (jsonString: string) => {
+  const base64 = toBase64(JsonToArray(jsonString));
+  return base64;
+};
+
+export const jsonToBase64 = (json: unknown) => {
+  const jsonString = JSON.stringify(json);
+  return jsonStringToBase64(jsonString);
 };

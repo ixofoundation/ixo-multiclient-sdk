@@ -15,7 +15,7 @@ import {
 import { enititiesBasic, supamotoFlow } from "./flows/entities";
 import { paymentsBasic } from "./flows/payments";
 import { ibcBasic } from "./flows/ibc";
-import { bankBasic, govBasic, authzBasic } from "./flows/cosmos";
+import { bankBasic, govBasic, authzBasic, sendTokens } from "./flows/cosmos";
 import { tokenBasic } from "./flows/tokens";
 import { projectsBasic } from "./flows/projects";
 import { daoCore, wasmBasic } from "./flows/cosmwasm";
@@ -29,6 +29,7 @@ beforeAll(() => {
 // To generate mapping of blockchain test users to sdk test users with set mnemonics
 generateBlockchainTestUsers();
 
+sendTokens();
 // registerIids();
 // iidsBasic();
 // paymentsBasic();

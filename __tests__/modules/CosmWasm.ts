@@ -71,7 +71,11 @@ export const WasmInstantiateTrx = async (codeId: number, msg: string) => {
 export const WasmExecuteTrx = async (
   contractAddress: string,
   msg: string,
-  signer: WalletUsers = WalletUsers.tester
+  signer: WalletUsers = WalletUsers.tester,
+  funds = {
+    amount: "1",
+    denom: "uixo",
+  }
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -83,12 +87,7 @@ export const WasmExecuteTrx = async (
     typeUrl: "/cosmwasm.wasm.v1.MsgExecuteContract",
     value: cosmwasm.wasm.v1.MsgExecuteContract.fromPartial({
       contract: contractAddress,
-      funds: [
-        cosmos.base.v1beta1.Coin.fromPartial({
-          amount: "1",
-          denom: "uixo",
-        }),
-      ],
+      funds: [cosmos.base.v1beta1.Coin.fromPartial(funds)],
       msg: utils.conversions.JsonToArray(msg),
       sender: myAddress,
     }),

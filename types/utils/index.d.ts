@@ -4,6 +4,8 @@ export declare namespace utils {
         Uint8ArrayToJS(data: Uint8Array): string;
         JsonToArray: (json: string) => Uint8Array;
         concatArrayBuffers: (...bufs: Uint8Array[]) => Uint8Array;
+        jsonStringToBase64: (jsonString: string) => string;
+        jsonToBase64: (json: unknown) => string;
     };
     const did: {
         generateSecpDid(pubkey: string, prefix?: string): string;
