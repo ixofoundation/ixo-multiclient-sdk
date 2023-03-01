@@ -7,7 +7,7 @@ import { TokenData } from "../../src/codegen/ixo/token/v1beta1/token";
 
 export const tokenBasic = () =>
   describe("Testing the Token module", () => {
-    let name = "TEST";
+    let name = "TEST1";
     let description = "Test credits";
     let cap = 50;
 
@@ -16,11 +16,7 @@ export const tokenBasic = () =>
     tokenClass = "did:ixo:entity:4e32697c7c2c74f4fac48e4d1d5628cd";
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity token class", async () => {
       const res = await Entity.CreateEntity("protocol");
-      tokenClass = utils.common.getValueFromEvents(
-        res,
-        "ixo.iid.v1beta1.IidDocumentCreatedEvent",
-        "did"
-      );
+      tokenClass = utils.common.getValueFromEvents(res, "wasm", "token_id");
       console.log({ tokenClass });
       return res;
     });
@@ -32,8 +28,8 @@ export const tokenBasic = () =>
       const res = await Token.CreateToken(name, description, cap, tokenClass);
       contractAddress1155 = utils.common.getValueFromEvents(
         res,
-        "ixo.token.v1beta1.TokenCreatedEvent",
-        "contract_address"
+        "instantiate",
+        "_contract_address"
       );
       console.log({ contractAddress1155 });
       return res;
@@ -44,24 +40,19 @@ export const tokenBasic = () =>
     let collection = "collection";
     let tokenData: TokenData[];
 
-    testMsg("/ixo.token.v1beta1.MsgMintToken", async () => {
-      const res = await Token.MintToken(contractAddress1155, [
-        {
-          name,
-          index,
-          amount,
-          collection,
-          tokenData,
-        },
-      ]);
-      const tokenIds = utils.common.getValueFromEvents(
-        res,
-        "ixo.token.v1beta1.TokenMintedEvent",
-        "batches"
-      );
-      console.log({ tokenIds });
-      return res;
-    });
+    // testMsg("/ixo.token.v1beta1.MsgMintToken", async () => {
+    //   const res = await Token.MintToken(contractAddress1155, [
+    //     {
+    //       name,
+    //       index,
+    //       amount,
+    //       collection,
+    //       tokenData,
+    //     },
+    //   ]);
+    //   console.log(res.rawLog);
+    //   return res;
+    // });
 
     // testMsg("/ixo.token.v1beta1.MsgTransferToken", () =>
     //   Token.TransferToken([

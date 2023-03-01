@@ -1,32 +1,25 @@
+import { Token, TokenSDKType, TokenProperties, TokenPropertiesSDKType } from "./token";
 import { TokenBatch, TokenBatchSDKType } from "./tx";
 import * as _m0 from "protobufjs/minimal";
 /** TokenCreatedEvent is an event triggered on a Token creation */
 export interface TokenCreatedEvent {
-    /** the contract address of token contract being initialized */
-    contractAddress: string;
-    /** the token minter */
-    minter: string;
+    /** TokenCreatedEvent is an event triggered on a Token creation */
+    token?: Token;
 }
 /** TokenCreatedEvent is an event triggered on a Token creation */
 export interface TokenCreatedEventSDKType {
-    /** the contract address of token contract being initialized */
-    contract_address: string;
-    /** the token minter */
-    minter: string;
+    /** TokenCreatedEvent is an event triggered on a Token creation */
+    token?: TokenSDKType;
 }
 /** TokenUpdatedEvent is an event triggered on a Token update */
 export interface TokenUpdatedEvent {
-    /** contract_address of token updated */
-    contractAddress: string;
-    /** the owner account of the change */
-    owner: string;
+    /** TokenUpdatedEvent is an event triggered on a Token update */
+    token?: Token;
 }
 /** TokenUpdatedEvent is an event triggered on a Token update */
 export interface TokenUpdatedEventSDKType {
-    /** contract_address of token updated */
-    contract_address: string;
-    /** the owner account of the change */
-    owner: string;
+    /** TokenUpdatedEvent is an event triggered on a Token update */
+    token?: TokenSDKType;
 }
 /** TokenMintedEvent is an event triggered on a Token mint execution */
 export interface TokenMintedEvent {
@@ -36,7 +29,8 @@ export interface TokenMintedEvent {
     minter: string;
     /** the new tokens owner */
     owner: string;
-    batches: TokenBatch[];
+    amount: string;
+    tokenProperties?: TokenProperties;
 }
 /** TokenMintedEvent is an event triggered on a Token mint execution */
 export interface TokenMintedEventSDKType {
@@ -46,7 +40,8 @@ export interface TokenMintedEventSDKType {
     minter: string;
     /** the new tokens owner */
     owner: string;
-    batches: TokenBatchSDKType[];
+    amount: string;
+    tokenProperties?: TokenPropertiesSDKType;
 }
 /** TokenTransferedEvent is an event triggered on a Token transfer execution */
 export interface TokenTransferredEvent {

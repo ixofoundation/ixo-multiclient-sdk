@@ -102,6 +102,15 @@ export const wasmBasic = () =>
       console.log(utils.conversions.Uint8ArrayToJS(res.data));
       expect(res).toBeTruthy();
     });
+
+    // testMsg("/cosmwasm.wasm.v1.MsgStoreCode", async () => {
+    //   const tester = (await getUser().getAccounts())[0].address;
+    //   const msg = { minter: tester };
+
+    //   const res = await Wasm.WasmStoreTrx();
+    //   console.log({ res });
+    //   return res;
+    // });
   });
 
 export const daoDaoContracts = () =>
