@@ -3,7 +3,8 @@
 import { keplrCurrencies } from "./currency.constants";
 // import { keplrChainNames } from "./chain.constants";
 import { KeplrChainInfo } from "./chain.types";
-import { TokenAsset } from "./currency.types";
+import { IbcTokenAsset, TokenAsset } from "./currency.types";
+import { QueryClient } from "../queries";
 
 const convertCurrencyToTokenAsset = (
   currency: TokenAsset,
@@ -58,6 +59,48 @@ export const findTokenFromDenom = (denom: string): TokenAsset | undefined => {
   const denomLowerCased = denom.toLowerCase();
   const token = keplrCurrencies[denomLowerCased];
   return token;
+};
+
+export const findIbcTokenFromHash = (() => {
+  const cache: { [hash: string]: IbcTokenAsset } = {};
+
+  return async (
+    queryClient: QueryClient,
+    ibcHash: string
+  ): Promise<IbcTokenAsset | undefined> => {
+    if (!queryClient) throw new Error("Invalid query client");
+    const hash = ibcHash.replace(/^ibc\//i, "");
+    if (cache[hash]) return cache[hash];
+    const response = await queryClient.ibc.applications.transfer.v1.denomTrace({
+      hash,
+    });
+    if (!response.denomTrace?.baseDenom) return;
+    const token = findTokenFromDenom(response.denomTrace.baseDenom);
+    const result = {
+      ibc: { ...response.denomTrace, hash },
+      token,
+    };
+    cache[hash] = result;
+    return result;
+  };
+})();
+
+export const findIbcTokensFromHashes = async (
+  queryClient: QueryClient,
+  ibcHashes: string[]
+): Promise<Array<IbcTokenAsset | undefined>> => {
+  if (!queryClient) throw new Error("Invalid query client");
+  const requests = ibcHashes.map((ibcHash: string) =>
+    findIbcTokenFromHash(queryClient, ibcHash)
+  );
+  const responses = await Promise.allSettled(requests);
+  const results: Array<IbcTokenAsset | undefined> = responses.map(
+    (response) => {
+      if (response.status !== "fulfilled") return;
+      return response.value;
+    }
+  );
+  return results;
 };
 
 /**

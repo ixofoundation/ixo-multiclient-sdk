@@ -1,6 +1,12 @@
-import { testMsg, utils } from "../helpers/common";
+import {
+  generateNewWallet,
+  sendFromFaucet,
+  testMsg,
+  utils,
+} from "../helpers/common";
 import * as Cosmos from "../modules/Cosmos";
 import * as Authz from "../modules/Authz";
+import { WalletUsers } from "../helpers/constants";
 
 export const bankBasic = () =>
   describe("Testing the cosmos bank module", () => {
@@ -79,4 +85,21 @@ export const authzBasic = () =>
     //   console.log(res);
     //   return res;
     // });
+  });
+
+export const sendTokens = () =>
+  describe("Testing the cosmos bank module: send", () => {
+    beforeAll(() => generateNewWallet(WalletUsers.random));
+
+    sendFromFaucet(WalletUsers.random);
+
+    testMsg("Test send", async () => {
+      const ixo = 9;
+      const res = await Cosmos.BankSendTrx(
+        ixo * Math.pow(10, 6),
+        WalletUsers.random,
+        WalletUsers.tester
+      );
+      return res;
+    });
   });

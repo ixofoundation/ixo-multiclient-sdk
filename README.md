@@ -264,8 +264,15 @@ const keplrChainInfo = customQueries.chain.getKeplrChainInfo(
 // get token info based on denom (coinMinimalDenom)
 const token = customQueries.currency.findTokenFromDenom("uixo");
 
+// get ibc token info based on ibc hash (and instantiated query client)
+const ibcToken = await customQueries.currency.findIbcTokenFromHash(
+  queryClient,
+  "ibc/u05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1"
+);
+// `findIbcTokensFromHashes` requires an array of hashes to fetch multiple ibc token infos
+
 // get daodao contract codes (for devnet) to instatiate
-const contractCodes = customqQueries.contract.getCnontractCodes(
+const contractCodes = customqQueries.contract.getContractCodes(
   "devnet",
   "daodao"
 ); // contractCodes = [{ name: "dao_core", code: 3 }, ...];

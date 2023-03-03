@@ -11,33 +11,31 @@ import {
 } from "../helpers/common";
 import Long from "long";
 
-export const BankSendTrx = async () => {
-  const client = await createClient();
+export const BankSendTrx = async (
+  amount = Math.pow(10, 6),
+  fromUser = WalletUsers.random,
+  toUser = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(fromUser));
 
-  const tester = getUser();
-  const account = (await tester.getAccounts())[0];
-  const myAddress = account.address;
-
-  // const alice = getUser(WalletUsers.tester, "secp");
-  // const aliceAccount = (await alice.getAccounts())[0];
-  const alice = getUser(WalletUsers.alice);
-  const aliceAccount = (await alice.getAccounts())[0];
+  const fromAddress = (await getUser(fromUser).getAccounts())[0].address;
+  const toAddress = (await getUser(toUser).getAccounts())[0].address;
 
   const message = {
     typeUrl: "/cosmos.bank.v1beta1.MsgSend",
     value: cosmos.bank.v1beta1.MsgSend.fromPartial({
-      fromAddress: myAddress,
-      toAddress: aliceAccount.address,
+      fromAddress,
+      toAddress,
       amount: [
         cosmos.base.v1beta1.Coin.fromPartial({
-          amount: "10000",
+          amount: amount.toString(),
           denom: "uixo",
         }),
       ],
     }),
   };
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  const response = await client.signAndBroadcast(fromAddress, [message], fee);
   return response;
 };
 
