@@ -5,25 +5,25 @@ import { isSet } from "../../../helpers";
 
 export interface EntityCreatedEvent {
   entity?: Entity;
-  owner: string;
+  signer: string;
 }
 /** EntityCreatedEvent is an event triggered on a Entity creation */
 
 export interface EntityCreatedEventSDKType {
   entity?: EntitySDKType;
-  owner: string;
+  signer: string;
 }
 /** EntityUpdatedEvent is an event triggered on a entity document update */
 
 export interface EntityUpdatedEvent {
   entity?: Entity;
-  owner: string;
+  signer: string;
 }
 /** EntityUpdatedEvent is an event triggered on a entity document update */
 
 export interface EntityUpdatedEventSDKType {
   entity?: EntitySDKType;
-  owner: string;
+  signer: string;
 }
 /**
  * EntityVerifiedUpdatedEvent is an event triggered on a entity verified
@@ -32,7 +32,7 @@ export interface EntityUpdatedEventSDKType {
 
 export interface EntityVerifiedUpdatedEvent {
   id: string;
-  owner: string;
+  signer: string;
   entityVerified: boolean;
 }
 /**
@@ -42,7 +42,7 @@ export interface EntityVerifiedUpdatedEvent {
 
 export interface EntityVerifiedUpdatedEventSDKType {
   id: string;
-  owner: string;
+  signer: string;
   entity_verified: boolean;
 }
 /** EntityTransferredEvent is an event triggered on a entity transfer */
@@ -63,7 +63,7 @@ export interface EntityTransferredEventSDKType {
 function createBaseEntityCreatedEvent(): EntityCreatedEvent {
   return {
     entity: undefined,
-    owner: ""
+    signer: ""
   };
 }
 
@@ -73,8 +73,8 @@ export const EntityCreatedEvent = {
       Entity.encode(message.entity, writer.uint32(10).fork()).ldelim();
     }
 
-    if (message.owner !== "") {
-      writer.uint32(18).string(message.owner);
+    if (message.signer !== "") {
+      writer.uint32(18).string(message.signer);
     }
 
     return writer;
@@ -94,7 +94,7 @@ export const EntityCreatedEvent = {
           break;
 
         case 2:
-          message.owner = reader.string();
+          message.signer = reader.string();
           break;
 
         default:
@@ -109,21 +109,21 @@ export const EntityCreatedEvent = {
   fromJSON(object: any): EntityCreatedEvent {
     return {
       entity: isSet(object.entity) ? Entity.fromJSON(object.entity) : undefined,
-      owner: isSet(object.owner) ? String(object.owner) : ""
+      signer: isSet(object.signer) ? String(object.signer) : ""
     };
   },
 
   toJSON(message: EntityCreatedEvent): unknown {
     const obj: any = {};
     message.entity !== undefined && (obj.entity = message.entity ? Entity.toJSON(message.entity) : undefined);
-    message.owner !== undefined && (obj.owner = message.owner);
+    message.signer !== undefined && (obj.signer = message.signer);
     return obj;
   },
 
   fromPartial(object: Partial<EntityCreatedEvent>): EntityCreatedEvent {
     const message = createBaseEntityCreatedEvent();
     message.entity = object.entity !== undefined && object.entity !== null ? Entity.fromPartial(object.entity) : undefined;
-    message.owner = object.owner ?? "";
+    message.signer = object.signer ?? "";
     return message;
   }
 
@@ -132,7 +132,7 @@ export const EntityCreatedEvent = {
 function createBaseEntityUpdatedEvent(): EntityUpdatedEvent {
   return {
     entity: undefined,
-    owner: ""
+    signer: ""
   };
 }
 
@@ -142,8 +142,8 @@ export const EntityUpdatedEvent = {
       Entity.encode(message.entity, writer.uint32(10).fork()).ldelim();
     }
 
-    if (message.owner !== "") {
-      writer.uint32(18).string(message.owner);
+    if (message.signer !== "") {
+      writer.uint32(18).string(message.signer);
     }
 
     return writer;
@@ -163,7 +163,7 @@ export const EntityUpdatedEvent = {
           break;
 
         case 2:
-          message.owner = reader.string();
+          message.signer = reader.string();
           break;
 
         default:
@@ -178,21 +178,21 @@ export const EntityUpdatedEvent = {
   fromJSON(object: any): EntityUpdatedEvent {
     return {
       entity: isSet(object.entity) ? Entity.fromJSON(object.entity) : undefined,
-      owner: isSet(object.owner) ? String(object.owner) : ""
+      signer: isSet(object.signer) ? String(object.signer) : ""
     };
   },
 
   toJSON(message: EntityUpdatedEvent): unknown {
     const obj: any = {};
     message.entity !== undefined && (obj.entity = message.entity ? Entity.toJSON(message.entity) : undefined);
-    message.owner !== undefined && (obj.owner = message.owner);
+    message.signer !== undefined && (obj.signer = message.signer);
     return obj;
   },
 
   fromPartial(object: Partial<EntityUpdatedEvent>): EntityUpdatedEvent {
     const message = createBaseEntityUpdatedEvent();
     message.entity = object.entity !== undefined && object.entity !== null ? Entity.fromPartial(object.entity) : undefined;
-    message.owner = object.owner ?? "";
+    message.signer = object.signer ?? "";
     return message;
   }
 
@@ -201,7 +201,7 @@ export const EntityUpdatedEvent = {
 function createBaseEntityVerifiedUpdatedEvent(): EntityVerifiedUpdatedEvent {
   return {
     id: "",
-    owner: "",
+    signer: "",
     entityVerified: false
   };
 }
@@ -212,8 +212,8 @@ export const EntityVerifiedUpdatedEvent = {
       writer.uint32(10).string(message.id);
     }
 
-    if (message.owner !== "") {
-      writer.uint32(18).string(message.owner);
+    if (message.signer !== "") {
+      writer.uint32(18).string(message.signer);
     }
 
     if (message.entityVerified === true) {
@@ -237,7 +237,7 @@ export const EntityVerifiedUpdatedEvent = {
           break;
 
         case 2:
-          message.owner = reader.string();
+          message.signer = reader.string();
           break;
 
         case 3:
@@ -256,7 +256,7 @@ export const EntityVerifiedUpdatedEvent = {
   fromJSON(object: any): EntityVerifiedUpdatedEvent {
     return {
       id: isSet(object.id) ? String(object.id) : "",
-      owner: isSet(object.owner) ? String(object.owner) : "",
+      signer: isSet(object.signer) ? String(object.signer) : "",
       entityVerified: isSet(object.entityVerified) ? Boolean(object.entityVerified) : false
     };
   },
@@ -264,7 +264,7 @@ export const EntityVerifiedUpdatedEvent = {
   toJSON(message: EntityVerifiedUpdatedEvent): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.owner !== undefined && (obj.owner = message.owner);
+    message.signer !== undefined && (obj.signer = message.signer);
     message.entityVerified !== undefined && (obj.entityVerified = message.entityVerified);
     return obj;
   },
@@ -272,7 +272,7 @@ export const EntityVerifiedUpdatedEvent = {
   fromPartial(object: Partial<EntityVerifiedUpdatedEvent>): EntityVerifiedUpdatedEvent {
     const message = createBaseEntityVerifiedUpdatedEvent();
     message.id = object.id ?? "";
-    message.owner = object.owner ?? "";
+    message.signer = object.signer ?? "";
     message.entityVerified = object.entityVerified ?? false;
     return message;
   }

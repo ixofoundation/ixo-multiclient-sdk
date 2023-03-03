@@ -187,13 +187,21 @@ export const runQry = (message: string, query: () => Promise<any>) => {
     const res = await query();
     // console.log(res);
     if (message.indexOf("ProjectDoc") !== -1) {
-      console.log("[\n {\n \"projectDoc\": {\n \"txHash\":\"" + res.projectDoc.txHash
-        + "\",\n \"projectDid\":\"" + res.projectDoc.projectDid
-        + "\",\n \"senderDid\":\"" + res.projectDoc.senderDid
-        + "\",\n \"pubKey\":\"" + res.projectDoc.pubKey
-        + "\",\n \"status\":\"" + res.projectDoc.status
-        + "\",\n \"data\": [\n " + utils.conversions.Uint8ArrayToJS(res.projectDoc.data)
-        + "\n}\n]");
+      console.log(
+        '[\n {\n "projectDoc": {\n "txHash":"' +
+          res.projectDoc.txHash +
+          '",\n "projectDid":"' +
+          res.projectDoc.projectDid +
+          '",\n "senderDid":"' +
+          res.projectDoc.senderDid +
+          '",\n "pubKey":"' +
+          res.projectDoc.pubKey +
+          '",\n "status":"' +
+          res.projectDoc.status +
+          '",\n "data": [\n ' +
+          utils.conversions.Uint8ArrayToJS(res.projectDoc.data) +
+          "\n}\n]"
+      );
     } else if (message.indexOf("AllAccounts") !== -1) {
       console.log(utils.conversions.Uint8ArrayToJS(res.accounts.value));
     } else {
@@ -236,4 +244,10 @@ export const getFileFromPath = (
   const newPath = path.resolve(__dirname, "..", "..", "assets", ...pathList);
   const fileBuffer = fs.readFileSync(newPath, encoding && { encoding });
   return fileBuffer;
+};
+
+export const addDays = (date: Date, days: number) => {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
 };

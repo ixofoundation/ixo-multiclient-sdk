@@ -12,14 +12,6 @@ definition: https://w3c.github.io/did-core/
 */
 // DidDocument represents a dencentralised identifer.
 
-message Context {
-  option (gogoproto.equal) = true;
-  option (gogoproto.goproto_getters) = false;
-
-  string key = 1;
-  string val = 2;
-}
-
 message IidDocument {
   option (gogoproto.equal) = true;
   option (gogoproto.goproto_getters) = false;
@@ -62,10 +54,19 @@ message IidDocument {
   // https://www.w3.org/TR/did-core/#capability-delegation
   repeated string capabilityDelegation = 10;
   repeated LinkedResource linkedResource = 11;
-  repeated AccordedRight accordedRight = 12;
-  repeated LinkedEntity linkedEntity = 13;
-  string alsoKnownAs = 14;
+  repeated LinkedClaim linkedClaim = 12;
+  repeated AccordedRight accordedRight = 13;
+  repeated LinkedEntity linkedEntity = 14;
+  string alsoKnownAs = 15;
   // Metadata concerning the IidDocument such as versionId, created, updated and
   // deactivated
-  IidMetadata metadata = 15;
+  IidMetadata metadata = 16;
 }
+// type entity account
+// relationship entity account
+
+// A DID document can express verification methods,
+// such as cryptographic public keys, which can be used
+// to authenticate or authorize interactions
+// with the DID subject or associated parties.
+// https://www.w3.org/TR/did-core/#verification-methods

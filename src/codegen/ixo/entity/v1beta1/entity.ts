@@ -2,14 +2,14 @@ import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp"
 import * as _m0 from "protobufjs/minimal";
 import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
 export interface Params {
-  NftContractAddress: string;
-  NftContractMinter: string;
-  CreateSequence: Long;
+  nftContractAddress: string;
+  nftContractMinter: string;
+  createSequence: Long;
 }
 export interface ParamsSDKType {
-  NftContractAddress: string;
-  NftContractMinter: string;
-  CreateSequence: Long;
+  nftContractAddress: string;
+  nftContractMinter: string;
+  createSequence: Long;
 }
 export interface Entity {
   /** id represents the id for the entity document. */
@@ -35,7 +35,7 @@ export interface Entity {
    */
 
   status: number;
-  /** DID of the operator through which the Entity was created */
+  /** Address of the operator through which the Entity was created */
 
   relayerNode: string;
   /** Credentials of the enitity to be verified */
@@ -62,28 +62,28 @@ export interface EntitySDKType {
    * Client applications
    */
 
-  startDate?: TimestampSDKType;
+  start_date?: TimestampSDKType;
   /**
    * End Date of the Entity as defined by the implementer and interpreted by
    * Client applications
    */
 
-  endDate?: TimestampSDKType;
+  end_date?: TimestampSDKType;
   /**
    * Status of the Entity as defined by the implementer and interpreted by
    * Client applications
    */
 
   status: number;
-  /** DID of the operator through which the Entity was created */
+  /** Address of the operator through which the Entity was created */
 
-  relayerNode: string;
+  relayer_node: string;
   /** Credentials of the enitity to be verified */
 
   credentials: string[];
   /** Used as check whether the credentials of entity is verified */
 
-  entityVerified: boolean;
+  entity_verified: boolean;
   /**
    * Metadata concerning the Entity such as versionId, created, updated and
    * deactivated
@@ -101,31 +101,31 @@ export interface EntityMetadata {
 /** EntityMetadata defines metadata associated to a entity */
 
 export interface EntityMetadataSDKType {
-  versionId: string;
+  version_id: string;
   created?: TimestampSDKType;
   updated?: TimestampSDKType;
 }
 
 function createBaseParams(): Params {
   return {
-    NftContractAddress: "",
-    NftContractMinter: "",
-    CreateSequence: Long.UZERO
+    nftContractAddress: "",
+    nftContractMinter: "",
+    createSequence: Long.UZERO
   };
 }
 
 export const Params = {
   encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.NftContractAddress !== "") {
-      writer.uint32(10).string(message.NftContractAddress);
+    if (message.nftContractAddress !== "") {
+      writer.uint32(10).string(message.nftContractAddress);
     }
 
-    if (message.NftContractMinter !== "") {
-      writer.uint32(18).string(message.NftContractMinter);
+    if (message.nftContractMinter !== "") {
+      writer.uint32(18).string(message.nftContractMinter);
     }
 
-    if (!message.CreateSequence.isZero()) {
-      writer.uint32(24).uint64(message.CreateSequence);
+    if (!message.createSequence.isZero()) {
+      writer.uint32(24).uint64(message.createSequence);
     }
 
     return writer;
@@ -141,15 +141,15 @@ export const Params = {
 
       switch (tag >>> 3) {
         case 1:
-          message.NftContractAddress = reader.string();
+          message.nftContractAddress = reader.string();
           break;
 
         case 2:
-          message.NftContractMinter = reader.string();
+          message.nftContractMinter = reader.string();
           break;
 
         case 3:
-          message.CreateSequence = (reader.uint64() as Long);
+          message.createSequence = (reader.uint64() as Long);
           break;
 
         default:
@@ -163,25 +163,25 @@ export const Params = {
 
   fromJSON(object: any): Params {
     return {
-      NftContractAddress: isSet(object.NftContractAddress) ? String(object.NftContractAddress) : "",
-      NftContractMinter: isSet(object.NftContractMinter) ? String(object.NftContractMinter) : "",
-      CreateSequence: isSet(object.CreateSequence) ? Long.fromValue(object.CreateSequence) : Long.UZERO
+      nftContractAddress: isSet(object.nftContractAddress) ? String(object.nftContractAddress) : "",
+      nftContractMinter: isSet(object.nftContractMinter) ? String(object.nftContractMinter) : "",
+      createSequence: isSet(object.createSequence) ? Long.fromValue(object.createSequence) : Long.UZERO
     };
   },
 
   toJSON(message: Params): unknown {
     const obj: any = {};
-    message.NftContractAddress !== undefined && (obj.NftContractAddress = message.NftContractAddress);
-    message.NftContractMinter !== undefined && (obj.NftContractMinter = message.NftContractMinter);
-    message.CreateSequence !== undefined && (obj.CreateSequence = (message.CreateSequence || Long.UZERO).toString());
+    message.nftContractAddress !== undefined && (obj.nftContractAddress = message.nftContractAddress);
+    message.nftContractMinter !== undefined && (obj.nftContractMinter = message.nftContractMinter);
+    message.createSequence !== undefined && (obj.createSequence = (message.createSequence || Long.UZERO).toString());
     return obj;
   },
 
   fromPartial(object: Partial<Params>): Params {
     const message = createBaseParams();
-    message.NftContractAddress = object.NftContractAddress ?? "";
-    message.NftContractMinter = object.NftContractMinter ?? "";
-    message.CreateSequence = object.CreateSequence !== undefined && object.CreateSequence !== null ? Long.fromValue(object.CreateSequence) : Long.UZERO;
+    message.nftContractAddress = object.nftContractAddress ?? "";
+    message.nftContractMinter = object.nftContractMinter ?? "";
+    message.createSequence = object.createSequence !== undefined && object.createSequence !== null ? Long.fromValue(object.createSequence) : Long.UZERO;
     return message;
   }
 

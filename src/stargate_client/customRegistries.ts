@@ -242,6 +242,14 @@ export const createRegistry = (): Registry => {
     ixo.iid.v1beta1.MsgDeleteLinkedResource
   );
   myRegistry.register(
+    "/ixo.iid.v1beta1.MsgAddLinkedClaim",
+    ixo.iid.v1beta1.MsgAddLinkedClaim
+  );
+  myRegistry.register(
+    "/ixo.iid.v1beta1.MsgDeleteLinkedClaim",
+    ixo.iid.v1beta1.MsgDeleteLinkedClaim
+  );
+  myRegistry.register(
     "/ixo.iid.v1beta1.MsgAddService",
     ixo.iid.v1beta1.MsgAddService
   );
@@ -401,6 +409,40 @@ export const createRegistry = (): Registry => {
   myRegistry.register(
     "/ixo.token.v1beta1.MsgStopToken",
     ixo.token.v1beta1.MsgStopToken
+  );
+
+  // Ixo Claims module
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgCreateCollection",
+    ixo.claims.v1beta1.MsgCreateCollection
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgSubmitClaim",
+    ixo.claims.v1beta1.MsgSubmitClaim
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgDisputeClaim",
+    ixo.claims.v1beta1.MsgDisputeClaim
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgEvaluateClaim",
+    ixo.claims.v1beta1.MsgEvaluateClaim
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgWithdrawPayment",
+    ixo.claims.v1beta1.MsgWithdrawPayment
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.SubmitClaimAuthorization",
+    ixo.claims.v1beta1.SubmitClaimAuthorization
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.EvaluateClaimAuthorization",
+    ixo.claims.v1beta1.EvaluateClaimAuthorization
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.WithdrawPaymentAuthorization",
+    ixo.claims.v1beta1.WithdrawPaymentAuthorization
   );
 
   // Cosmwasm

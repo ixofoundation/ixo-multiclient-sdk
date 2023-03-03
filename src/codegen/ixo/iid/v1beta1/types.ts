@@ -1,6 +1,14 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import * as _m0 from "protobufjs/minimal";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+export interface Context {
+  key: string;
+  val: string;
+}
+export interface ContextSDKType {
+  key: string;
+  val: string;
+}
 export interface AccordedRight {
   type: string;
   id: string;
@@ -30,6 +38,24 @@ export interface LinkedResourceSDKType {
   id: string;
   description: string;
   mediaType: string;
+  serviceEndpoint: string;
+  proof: string;
+  encrypted: string;
+  right: string;
+}
+export interface LinkedClaim {
+  type: string;
+  id: string;
+  description: string;
+  serviceEndpoint: string;
+  proof: string;
+  encrypted: string;
+  right: string;
+}
+export interface LinkedClaimSDKType {
+  type: string;
+  id: string;
+  description: string;
   serviceEndpoint: string;
   proof: string;
   encrypted: string;
@@ -87,6 +113,75 @@ export interface IidMetadataSDKType {
   updated?: TimestampSDKType;
   deactivated: boolean;
 }
+
+function createBaseContext(): Context {
+  return {
+    key: "",
+    val: ""
+  };
+}
+
+export const Context = {
+  encode(message: Context, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+
+    if (message.val !== "") {
+      writer.uint32(18).string(message.val);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Context {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseContext();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.key = reader.string();
+          break;
+
+        case 2:
+          message.val = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): Context {
+    return {
+      key: isSet(object.key) ? String(object.key) : "",
+      val: isSet(object.val) ? String(object.val) : ""
+    };
+  },
+
+  toJSON(message: Context): unknown {
+    const obj: any = {};
+    message.key !== undefined && (obj.key = message.key);
+    message.val !== undefined && (obj.val = message.val);
+    return obj;
+  },
+
+  fromPartial(object: Partial<Context>): Context {
+    const message = createBaseContext();
+    message.key = object.key ?? "";
+    message.val = object.val ?? "";
+    return message;
+  }
+
+};
 
 function createBaseAccordedRight(): AccordedRight {
   return {
@@ -325,6 +420,135 @@ export const LinkedResource = {
     message.id = object.id ?? "";
     message.description = object.description ?? "";
     message.mediaType = object.mediaType ?? "";
+    message.serviceEndpoint = object.serviceEndpoint ?? "";
+    message.proof = object.proof ?? "";
+    message.encrypted = object.encrypted ?? "";
+    message.right = object.right ?? "";
+    return message;
+  }
+
+};
+
+function createBaseLinkedClaim(): LinkedClaim {
+  return {
+    type: "",
+    id: "",
+    description: "",
+    serviceEndpoint: "",
+    proof: "",
+    encrypted: "",
+    right: ""
+  };
+}
+
+export const LinkedClaim = {
+  encode(message: LinkedClaim, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.type !== "") {
+      writer.uint32(10).string(message.type);
+    }
+
+    if (message.id !== "") {
+      writer.uint32(18).string(message.id);
+    }
+
+    if (message.description !== "") {
+      writer.uint32(26).string(message.description);
+    }
+
+    if (message.serviceEndpoint !== "") {
+      writer.uint32(34).string(message.serviceEndpoint);
+    }
+
+    if (message.proof !== "") {
+      writer.uint32(42).string(message.proof);
+    }
+
+    if (message.encrypted !== "") {
+      writer.uint32(50).string(message.encrypted);
+    }
+
+    if (message.right !== "") {
+      writer.uint32(58).string(message.right);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): LinkedClaim {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseLinkedClaim();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.type = reader.string();
+          break;
+
+        case 2:
+          message.id = reader.string();
+          break;
+
+        case 3:
+          message.description = reader.string();
+          break;
+
+        case 4:
+          message.serviceEndpoint = reader.string();
+          break;
+
+        case 5:
+          message.proof = reader.string();
+          break;
+
+        case 6:
+          message.encrypted = reader.string();
+          break;
+
+        case 7:
+          message.right = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): LinkedClaim {
+    return {
+      type: isSet(object.type) ? String(object.type) : "",
+      id: isSet(object.id) ? String(object.id) : "",
+      description: isSet(object.description) ? String(object.description) : "",
+      serviceEndpoint: isSet(object.serviceEndpoint) ? String(object.serviceEndpoint) : "",
+      proof: isSet(object.proof) ? String(object.proof) : "",
+      encrypted: isSet(object.encrypted) ? String(object.encrypted) : "",
+      right: isSet(object.right) ? String(object.right) : ""
+    };
+  },
+
+  toJSON(message: LinkedClaim): unknown {
+    const obj: any = {};
+    message.type !== undefined && (obj.type = message.type);
+    message.id !== undefined && (obj.id = message.id);
+    message.description !== undefined && (obj.description = message.description);
+    message.serviceEndpoint !== undefined && (obj.serviceEndpoint = message.serviceEndpoint);
+    message.proof !== undefined && (obj.proof = message.proof);
+    message.encrypted !== undefined && (obj.encrypted = message.encrypted);
+    message.right !== undefined && (obj.right = message.right);
+    return obj;
+  },
+
+  fromPartial(object: Partial<LinkedClaim>): LinkedClaim {
+    const message = createBaseLinkedClaim();
+    message.type = object.type ?? "";
+    message.id = object.id ?? "";
+    message.description = object.description ?? "";
     message.serviceEndpoint = object.serviceEndpoint ?? "";
     message.proof = object.proof ?? "";
     message.encrypted = object.encrypted ?? "";

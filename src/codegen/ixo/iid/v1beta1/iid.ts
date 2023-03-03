@@ -1,14 +1,6 @@
-import { VerificationMethod, VerificationMethodSDKType, Service, ServiceSDKType, LinkedResource, LinkedResourceSDKType, AccordedRight, AccordedRightSDKType, LinkedEntity, LinkedEntitySDKType, IidMetadata, IidMetadataSDKType } from "./types";
+import { Context, ContextSDKType, VerificationMethod, VerificationMethodSDKType, Service, ServiceSDKType, LinkedResource, LinkedResourceSDKType, LinkedClaim, LinkedClaimSDKType, AccordedRight, AccordedRightSDKType, LinkedEntity, LinkedEntitySDKType, IidMetadata, IidMetadataSDKType } from "./types";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
-export interface Context {
-  key: string;
-  val: string;
-}
-export interface ContextSDKType {
-  key: string;
-  val: string;
-}
 export interface IidDocument {
   /** @context is spec for did document. */
   context: Context[];
@@ -73,6 +65,7 @@ export interface IidDocument {
 
   capabilityDelegation: string[];
   linkedResource: LinkedResource[];
+  linkedClaim: LinkedClaim[];
   accordedRight: AccordedRight[];
   linkedEntity: LinkedEntity[];
   alsoKnownAs: string;
@@ -147,6 +140,7 @@ export interface IidDocumentSDKType {
 
   capabilityDelegation: string[];
   linkedResource: LinkedResourceSDKType[];
+  linkedClaim: LinkedClaimSDKType[];
   accordedRight: AccordedRightSDKType[];
   linkedEntity: LinkedEntitySDKType[];
   alsoKnownAs: string;
@@ -157,75 +151,6 @@ export interface IidDocumentSDKType {
 
   metadata?: IidMetadataSDKType;
 }
-
-function createBaseContext(): Context {
-  return {
-    key: "",
-    val: ""
-  };
-}
-
-export const Context = {
-  encode(message: Context, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.key !== "") {
-      writer.uint32(10).string(message.key);
-    }
-
-    if (message.val !== "") {
-      writer.uint32(18).string(message.val);
-    }
-
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): Context {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseContext();
-
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-
-      switch (tag >>> 3) {
-        case 1:
-          message.key = reader.string();
-          break;
-
-        case 2:
-          message.val = reader.string();
-          break;
-
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-
-    return message;
-  },
-
-  fromJSON(object: any): Context {
-    return {
-      key: isSet(object.key) ? String(object.key) : "",
-      val: isSet(object.val) ? String(object.val) : ""
-    };
-  },
-
-  toJSON(message: Context): unknown {
-    const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.val !== undefined && (obj.val = message.val);
-    return obj;
-  },
-
-  fromPartial(object: Partial<Context>): Context {
-    const message = createBaseContext();
-    message.key = object.key ?? "";
-    message.val = object.val ?? "";
-    return message;
-  }
-
-};
 
 function createBaseIidDocument(): IidDocument {
   return {
@@ -240,6 +165,7 @@ function createBaseIidDocument(): IidDocument {
     capabilityInvocation: [],
     capabilityDelegation: [],
     linkedResource: [],
+    linkedClaim: [],
     accordedRight: [],
     linkedEntity: [],
     alsoKnownAs: "",
@@ -293,20 +219,24 @@ export const IidDocument = {
       LinkedResource.encode(v!, writer.uint32(90).fork()).ldelim();
     }
 
+    for (const v of message.linkedClaim) {
+      LinkedClaim.encode(v!, writer.uint32(98).fork()).ldelim();
+    }
+
     for (const v of message.accordedRight) {
-      AccordedRight.encode(v!, writer.uint32(98).fork()).ldelim();
+      AccordedRight.encode(v!, writer.uint32(106).fork()).ldelim();
     }
 
     for (const v of message.linkedEntity) {
-      LinkedEntity.encode(v!, writer.uint32(106).fork()).ldelim();
+      LinkedEntity.encode(v!, writer.uint32(114).fork()).ldelim();
     }
 
     if (message.alsoKnownAs !== "") {
-      writer.uint32(114).string(message.alsoKnownAs);
+      writer.uint32(122).string(message.alsoKnownAs);
     }
 
     if (message.metadata !== undefined) {
-      IidMetadata.encode(message.metadata, writer.uint32(122).fork()).ldelim();
+      IidMetadata.encode(message.metadata, writer.uint32(130).fork()).ldelim();
     }
 
     return writer;
@@ -366,18 +296,22 @@ export const IidDocument = {
           break;
 
         case 12:
-          message.accordedRight.push(AccordedRight.decode(reader, reader.uint32()));
+          message.linkedClaim.push(LinkedClaim.decode(reader, reader.uint32()));
           break;
 
         case 13:
-          message.linkedEntity.push(LinkedEntity.decode(reader, reader.uint32()));
+          message.accordedRight.push(AccordedRight.decode(reader, reader.uint32()));
           break;
 
         case 14:
-          message.alsoKnownAs = reader.string();
+          message.linkedEntity.push(LinkedEntity.decode(reader, reader.uint32()));
           break;
 
         case 15:
+          message.alsoKnownAs = reader.string();
+          break;
+
+        case 16:
           message.metadata = IidMetadata.decode(reader, reader.uint32());
           break;
 
@@ -403,6 +337,7 @@ export const IidDocument = {
       capabilityInvocation: Array.isArray(object?.capabilityInvocation) ? object.capabilityInvocation.map((e: any) => String(e)) : [],
       capabilityDelegation: Array.isArray(object?.capabilityDelegation) ? object.capabilityDelegation.map((e: any) => String(e)) : [],
       linkedResource: Array.isArray(object?.linkedResource) ? object.linkedResource.map((e: any) => LinkedResource.fromJSON(e)) : [],
+      linkedClaim: Array.isArray(object?.linkedClaim) ? object.linkedClaim.map((e: any) => LinkedClaim.fromJSON(e)) : [],
       accordedRight: Array.isArray(object?.accordedRight) ? object.accordedRight.map((e: any) => AccordedRight.fromJSON(e)) : [],
       linkedEntity: Array.isArray(object?.linkedEntity) ? object.linkedEntity.map((e: any) => LinkedEntity.fromJSON(e)) : [],
       alsoKnownAs: isSet(object.alsoKnownAs) ? String(object.alsoKnownAs) : "",
@@ -475,6 +410,12 @@ export const IidDocument = {
       obj.linkedResource = [];
     }
 
+    if (message.linkedClaim) {
+      obj.linkedClaim = message.linkedClaim.map(e => e ? LinkedClaim.toJSON(e) : undefined);
+    } else {
+      obj.linkedClaim = [];
+    }
+
     if (message.accordedRight) {
       obj.accordedRight = message.accordedRight.map(e => e ? AccordedRight.toJSON(e) : undefined);
     } else {
@@ -505,6 +446,7 @@ export const IidDocument = {
     message.capabilityInvocation = object.capabilityInvocation?.map(e => e) || [];
     message.capabilityDelegation = object.capabilityDelegation?.map(e => e) || [];
     message.linkedResource = object.linkedResource?.map(e => LinkedResource.fromPartial(e)) || [];
+    message.linkedClaim = object.linkedClaim?.map(e => LinkedClaim.fromPartial(e)) || [];
     message.accordedRight = object.accordedRight?.map(e => AccordedRight.fromPartial(e)) || [];
     message.linkedEntity = object.linkedEntity?.map(e => LinkedEntity.fromPartial(e)) || [];
     message.alsoKnownAs = object.alsoKnownAs ?? "";

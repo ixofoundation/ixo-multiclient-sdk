@@ -88,12 +88,70 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
-    // test("query grants by grantee", async () => {
-    //   const user = (await getUser(WalletUsers.alice).getAccounts())[0].address;
-    //   const res = await queryClient.cosmos.authz.v1beta1.granteeGrants({
-    //     grantee: user,
+    test("query claim collections list", async () => {
+      const res = await queryClient.ixo.claims.v1beta1.collectionList();
+      console.log(res.collections);
+      expect(res).toBeTruthy();
+    });
+
+    test("query claims list", async () => {
+      const res = await queryClient.ixo.claims.v1beta1.claimList();
+      console.log(res.claims);
+      expect(res).toBeTruthy();
+    });
+
+    test("query dispute list", async () => {
+      const res = await queryClient.ixo.claims.v1beta1.disputeList();
+      console.log(res.disputes);
+      expect(res).toBeTruthy();
+    });
+
+    // test("query dispute list", async () => {
+    //   const res = await queryClient.ixo.claims.v1beta1.disputeList();
+    //   console.log(res.disputes);
+    //   expect(res).toBeTruthy();
+    // });
+
+    test("query grants by grantee", async () => {
+      const user = (await getUser(WalletUsers.alice).getAccounts())[0].address;
+      const res = await queryClient.cosmos.authz.v1beta1.granteeGrants({
+        grantee: user,
+      });
+      if (res.grants.length > 0)
+        console.log(
+          res.grants.map((g) => createRegistry().decode(g.authorization!))
+        );
+      expect(res).toBeTruthy();
+    });
+
+    // test("query grants by granter", async () => {
+    //   const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;
+    //   const res = await queryClient.cosmos.authz.v1beta1.granterGrants({
+    //     granter: user,
     //   });
-    //   console.log(createRegistry().decode(res.grants[0].authorization!));
+    //   console.log(res.grants);
+    //   if (res.grants.length > 0)
+    //     console.log(
+    //       res.grants.map((g) => createRegistry().decode(g.authorization!))
+    //     );
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("query grants", async () => {
+    //   const granter = (await getUser(WalletUsers.tester).getAccounts())[0]
+    //     .address;
+    //   const grantee = (await getUser(WalletUsers.alice).getAccounts())[0]
+    //     .address;
+    //   const res = await queryClient.cosmos.authz.v1beta1.grants({
+    //     granter,
+    //     grantee,
+    //     msgTypeUrl: "/ixo.claims.v1beta1.MsgSubmitClaim",
+    //   });
+    //   console.log(res.grants);
+    //   if (res.grants.length > 0)
+    //     console.log(
+    //       res.grants.map((g) => createRegistry().decode(g.authorization!))
+    //     );
     //   expect(res).toBeTruthy();
     // });
   });

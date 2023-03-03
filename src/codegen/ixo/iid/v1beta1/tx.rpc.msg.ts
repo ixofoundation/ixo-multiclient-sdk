@@ -1,6 +1,6 @@
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { MsgCreateIidDocument, MsgCreateIidDocumentResponse, MsgUpdateIidDocument, MsgUpdateIidDocumentResponse, MsgAddVerification, MsgAddVerificationResponse, MsgRevokeVerification, MsgRevokeVerificationResponse, MsgSetVerificationRelationships, MsgSetVerificationRelationshipsResponse, MsgAddService, MsgAddServiceResponse, MsgDeleteService, MsgDeleteServiceResponse, MsgAddController, MsgAddControllerResponse, MsgDeleteController, MsgDeleteControllerResponse, MsgAddLinkedResource, MsgAddLinkedResourceResponse, MsgDeleteLinkedResource, MsgDeleteLinkedResourceResponse, MsgAddLinkedEntity, MsgAddLinkedEntityResponse, MsgDeleteLinkedEntity, MsgDeleteLinkedEntityResponse, MsgAddAccordedRight, MsgAddAccordedRightResponse, MsgDeleteAccordedRight, MsgDeleteAccordedRightResponse, MsgAddIidContext, MsgAddIidContextResponse, MsgDeactivateIID, MsgDeactivateIIDResponse, MsgDeleteIidContext, MsgDeleteIidContextResponse } from "./tx";
+import { MsgCreateIidDocument, MsgCreateIidDocumentResponse, MsgUpdateIidDocument, MsgUpdateIidDocumentResponse, MsgAddVerification, MsgAddVerificationResponse, MsgRevokeVerification, MsgRevokeVerificationResponse, MsgSetVerificationRelationships, MsgSetVerificationRelationshipsResponse, MsgAddService, MsgAddServiceResponse, MsgDeleteService, MsgDeleteServiceResponse, MsgAddController, MsgAddControllerResponse, MsgDeleteController, MsgDeleteControllerResponse, MsgAddLinkedResource, MsgAddLinkedResourceResponse, MsgDeleteLinkedResource, MsgDeleteLinkedResourceResponse, MsgAddLinkedClaim, MsgAddLinkedClaimResponse, MsgDeleteLinkedClaim, MsgDeleteLinkedClaimResponse, MsgAddLinkedEntity, MsgAddLinkedEntityResponse, MsgDeleteLinkedEntity, MsgDeleteLinkedEntityResponse, MsgAddAccordedRight, MsgAddAccordedRightResponse, MsgDeleteAccordedRight, MsgDeleteAccordedRightResponse, MsgAddIidContext, MsgAddIidContextResponse, MsgDeactivateIID, MsgDeactivateIIDResponse, MsgDeleteIidContext, MsgDeleteIidContextResponse } from "./tx";
 /** Msg defines the identity Msg service. */
 
 export interface Msg {
@@ -37,6 +37,10 @@ export interface Msg {
 
   addLinkedResource(request: MsgAddLinkedResource): Promise<MsgAddLinkedResourceResponse>;
   deleteLinkedResource(request: MsgDeleteLinkedResource): Promise<MsgDeleteLinkedResourceResponse>;
+  /** Add / Delete Linked Claims */
+
+  addLinkedClaim(request: MsgAddLinkedClaim): Promise<MsgAddLinkedClaimResponse>;
+  deleteLinkedClaim(request: MsgDeleteLinkedClaim): Promise<MsgDeleteLinkedClaimResponse>;
   /** Add / Delete Linked Entity */
 
   addLinkedEntity(request: MsgAddLinkedEntity): Promise<MsgAddLinkedEntityResponse>;
@@ -67,6 +71,8 @@ export class MsgClientImpl implements Msg {
     this.deleteController = this.deleteController.bind(this);
     this.addLinkedResource = this.addLinkedResource.bind(this);
     this.deleteLinkedResource = this.deleteLinkedResource.bind(this);
+    this.addLinkedClaim = this.addLinkedClaim.bind(this);
+    this.deleteLinkedClaim = this.deleteLinkedClaim.bind(this);
     this.addLinkedEntity = this.addLinkedEntity.bind(this);
     this.deleteLinkedEntity = this.deleteLinkedEntity.bind(this);
     this.addAccordedRight = this.addAccordedRight.bind(this);
@@ -140,6 +146,18 @@ export class MsgClientImpl implements Msg {
     const data = MsgDeleteLinkedResource.encode(request).finish();
     const promise = this.rpc.request("ixo.iid.v1beta1.Msg", "DeleteLinkedResource", data);
     return promise.then(data => MsgDeleteLinkedResourceResponse.decode(new _m0.Reader(data)));
+  }
+
+  addLinkedClaim(request: MsgAddLinkedClaim): Promise<MsgAddLinkedClaimResponse> {
+    const data = MsgAddLinkedClaim.encode(request).finish();
+    const promise = this.rpc.request("ixo.iid.v1beta1.Msg", "AddLinkedClaim", data);
+    return promise.then(data => MsgAddLinkedClaimResponse.decode(new _m0.Reader(data)));
+  }
+
+  deleteLinkedClaim(request: MsgDeleteLinkedClaim): Promise<MsgDeleteLinkedClaimResponse> {
+    const data = MsgDeleteLinkedClaim.encode(request).finish();
+    const promise = this.rpc.request("ixo.iid.v1beta1.Msg", "DeleteLinkedClaim", data);
+    return promise.then(data => MsgDeleteLinkedClaimResponse.decode(new _m0.Reader(data)));
   }
 
   addLinkedEntity(request: MsgAddLinkedEntity): Promise<MsgAddLinkedEntityResponse> {

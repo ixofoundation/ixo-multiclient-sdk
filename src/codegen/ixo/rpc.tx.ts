@@ -50,6 +50,9 @@ export const createRPCMsgClient = async ({
     bonds: {
       v1beta1: new (await import("./bonds/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
     },
+    claims: {
+      v1beta1: new (await import("./claims/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
+    },
     entity: {
       v1beta1: new (await import("./entity/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
     },
