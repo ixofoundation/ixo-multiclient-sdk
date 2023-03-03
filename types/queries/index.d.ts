@@ -319,3 +319,4 @@ export declare const createQueryClient: (rpcEndpoint: string) => Promise<{
         };
     };
 }>;
+export declare type QueryClient = Awaited<ReturnType<typeof createQueryClient>>;

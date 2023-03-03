@@ -1,3 +1,5 @@
+import { DenomTrace } from "../codegen/ibc/applications/transfer/v1/transfer";
+
 export type TokenAsset = {
   coinDenom: string;
   coinMinimalDenom: string;
@@ -11,4 +13,13 @@ export type TokenAsset = {
     average: number;
     high: number;
   };
+};
+
+export type Ibc = {
+  hash: string;
+} & DenomTrace;
+
+export type IbcTokenAsset = {
+  ibc: Ibc;
+  token?: TokenAsset;
 };

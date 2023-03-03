@@ -34,3 +34,5 @@ export const createQueryClient = async (rpcEndpoint: string) => {
     },
   };
 };
+
+export type QueryClient = Awaited<ReturnType<typeof createQueryClient>>;
