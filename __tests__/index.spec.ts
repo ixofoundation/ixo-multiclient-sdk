@@ -33,6 +33,7 @@ generateBlockchainTestUsers();
 
 // sendTokens();
 // registerIids();
+// instantiateModulesProposals();
 // iidsBasic();
 // paymentsBasic();
 // projectsBasic();
@@ -45,7 +46,6 @@ generateBlockchainTestUsers();
 // claimsBasic();
 // ibcBasic();
 // bankBasic();
-// instantiateModulesProposals();
 // authzBasic();
 // wasmBasic();
 // daoCore();

@@ -25,7 +25,7 @@ export const claimsBasic = () =>
     //   return res;
     // });
 
-    let claimId = "4";
+    let claimId = "1";
     // testMsg("/ixo.claims.v1beta1.MsgSubmitClaim", async () => {
     //   const res = await Claims.SubmitClaim(claimId, collectionId);
     //   console.log(res.rawLog);
@@ -39,7 +39,7 @@ export const claimsBasic = () =>
     // });
 
     // testMsg("/ixo.claims.v1beta1.MsgDisputeClaim", () =>
-    //   Claims.DisputeClaim(claimId, "proof2")
+    //   Claims.DisputeClaim(claimId, "proof1")
     // );
 
     // testMsg("/ixo.claims.v1beta1.MsgWithdrawPayment", () =>
@@ -47,7 +47,7 @@ export const claimsBasic = () =>
     // );
 
     // testMsg("/cosmos.authz.v1beta1.MsgGrant agent submit", () =>
-    //   Claims.MsgGrantAgentSubmit("1", 10)
+    //   Claims.MsgGrantAgentSubmit(collectionId, 10)
     // );
 
     // testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", async () => {
