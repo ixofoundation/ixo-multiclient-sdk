@@ -232,7 +232,8 @@ export const MsgGrantAgentSubmit = async (
     grantee: granteeAddress,
   });
   const submitAuth = granteeGrants.grants.find(
-    (g) => g.authorization?.typeUrl == "/ixo.claims.v1beta1.MsgSubmitClaim"
+    (g) =>
+      g.authorization?.typeUrl == "/ixo.claims.v1beta1.SubmitClaimAuthorization"
   );
   const granteeCurrentAuthConstraints =
     overrideCurretGrants || submitAuth == undefined
@@ -347,7 +348,7 @@ export const MsgGrantAgentEvaluate = async (
       grantee: granteeAddress,
       grant: cosmos.authz.v1beta1.Grant.fromPartial({
         authorization: {
-          typeUrl: "/ixo.claims.v1beta1.MsgEvaluateClaim",
+          typeUrl: "/ixo.claims.v1beta1.EvaluateClaimAuthorization",
           value: ixo.claims.v1beta1.EvaluateClaimAuthorization.encode(
             ixo.claims.v1beta1.EvaluateClaimAuthorization.fromPartial({
               admin: granterAddress,

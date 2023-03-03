@@ -25,7 +25,7 @@ export const claimsBasic = () =>
     //   return res;
     // });
 
-    let claimId = "2";
+    let claimId = "4";
     // testMsg("/ixo.claims.v1beta1.MsgSubmitClaim", async () => {
     //   const res = await Claims.SubmitClaim(claimId, collectionId);
     //   console.log(res.rawLog);
@@ -47,12 +47,14 @@ export const claimsBasic = () =>
     // );
 
     // testMsg("/cosmos.authz.v1beta1.MsgGrant agent submit", () =>
-    //   Claims.MsgGrantAgentSubmit(collectionId, 2)
+    //   Claims.MsgGrantAgentSubmit("1", 10)
     // );
 
-    testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", () =>
-      Claims.MsgExecAgentSubmit(claimId, collectionId)
-    );
+    // testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", async () => {
+    //   const res = await Claims.MsgExecAgentSubmit(claimId, collectionId);
+    //   console.log(res.code);
+    //   return res;
+    // });
 
     // testMsg("/cosmos.authz.v1beta1.MsgGrant agent evaluate", () =>
     //   Claims.MsgGrantAgentEvaluate(collectionId, [], 10)

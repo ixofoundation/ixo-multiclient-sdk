@@ -106,12 +106,6 @@ export const quickQueries = () =>
       expect(res).toBeTruthy();
     });
 
-    // test("query dispute list", async () => {
-    //   const res = await queryClient.ixo.claims.v1beta1.disputeList();
-    //   console.log(res.disputes);
-    //   expect(res).toBeTruthy();
-    // });
-
     test("query grants by grantee", async () => {
       const user = (await getUser(WalletUsers.alice).getAccounts())[0].address;
       const res = await queryClient.cosmos.authz.v1beta1.granteeGrants({
@@ -119,7 +113,9 @@ export const quickQueries = () =>
       });
       if (res.grants.length > 0)
         console.log(
-          res.grants.map((g) => createRegistry().decode(g.authorization!))
+          res.grants.map(
+            (g) => createRegistry().decode(g.authorization!).constraints
+          )
         );
       expect(res).toBeTruthy();
     });

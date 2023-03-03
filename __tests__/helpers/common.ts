@@ -251,3 +251,10 @@ export const addDays = (date: Date, days: number) => {
   result.setDate(result.getDate() + days);
   return result;
 };
+
+export const timeout = async (timeoutMS = 1000) => {
+  const promise = new Promise((res) =>
+    setTimeout(() => res("Waaa"), timeoutMS)
+  );
+  return await promise;
+};
