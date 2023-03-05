@@ -20,11 +20,11 @@ export const authzBasic = () =>
       return res;
     });
 
-    // testMsg("test Exec Send", async () => {
-    //   const res = await Authz.MsgExecSend();
-    //   console.log(res);
-    //   return res;
-    // });
+    testMsg("test Exec Send", async () => {
+      const res = await Authz.MsgExecSend();
+      console.log(res);
+      return res;
+    });
   });
 
 export const sendTokens = () =>

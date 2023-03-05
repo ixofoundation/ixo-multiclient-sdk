@@ -52,7 +52,7 @@ export const claimsBasic = () =>
 
     // testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", async () => {
     //   const res = await Claims.MsgExecAgentSubmit(claimId, collectionId);
-    //   console.log(res.code);
+    //   console.log(res.rawLog);
     //   return res;
     // });
 

@@ -111,12 +111,19 @@ export const quickQueries = () =>
       const res = await queryClient.cosmos.authz.v1beta1.granteeGrants({
         grantee: user,
       });
-      if (res.grants.length > 0)
+      if (res.grants.length > 0) {
+        console.log(
+          res.grants.map((g) => {
+            g.expiration = g.expiration?.seconds as any;
+            return g;
+          })
+        );
         console.log(
           res.grants.map(
             (g) => createRegistry().decode(g.authorization!).constraints
           )
         );
+      }
       expect(res).toBeTruthy();
     });
 
