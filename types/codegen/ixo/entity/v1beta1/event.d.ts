@@ -3,22 +3,22 @@ import * as _m0 from "protobufjs/minimal";
 /** EntityCreatedEvent is an event triggered on a Entity creation */
 export interface EntityCreatedEvent {
     entity?: Entity;
-    owner: string;
+    signer: string;
 }
 /** EntityCreatedEvent is an event triggered on a Entity creation */
 export interface EntityCreatedEventSDKType {
     entity?: EntitySDKType;
-    owner: string;
+    signer: string;
 }
 /** EntityUpdatedEvent is an event triggered on a entity document update */
 export interface EntityUpdatedEvent {
     entity?: Entity;
-    owner: string;
+    signer: string;
 }
 /** EntityUpdatedEvent is an event triggered on a entity document update */
 export interface EntityUpdatedEventSDKType {
     entity?: EntitySDKType;
-    owner: string;
+    signer: string;
 }
 /**
  * EntityVerifiedUpdatedEvent is an event triggered on a entity verified
@@ -26,7 +26,7 @@ export interface EntityUpdatedEventSDKType {
  */
 export interface EntityVerifiedUpdatedEvent {
     id: string;
-    owner: string;
+    signer: string;
     entityVerified: boolean;
 }
 /**
@@ -35,7 +35,7 @@ export interface EntityVerifiedUpdatedEvent {
  */
 export interface EntityVerifiedUpdatedEventSDKType {
     id: string;
-    owner: string;
+    signer: string;
     entity_verified: boolean;
 }
 /** EntityTransferredEvent is an event triggered on a entity transfer */

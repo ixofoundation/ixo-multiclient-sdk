@@ -293,8 +293,20 @@ export declare namespace customQueries {
                         alphaMaximums(request: import("../codegen/ixo/bonds/v1beta1/query").QueryAlphaMaximumsRequest): Promise<import("../codegen/ixo/bonds/v1beta1/query").QueryAlphaMaximumsResponse>;
                     };
                 };
+                claims: {
+                    v1beta1: {
+                        params(request?: import("../codegen/ixo/claims/v1beta1/query").QueryParamsRequest): Promise<import("../codegen/ixo/claims/v1beta1/query").QueryParamsResponse>;
+                        collection(request: import("../codegen/ixo/claims/v1beta1/query").QueryCollectionRequest): Promise<import("../codegen/ixo/claims/v1beta1/query").QueryCollectionResponse>;
+                        collectionList(request?: import("../codegen/ixo/claims/v1beta1/query").QueryCollectionListRequest): Promise<import("../codegen/ixo/claims/v1beta1/query").QueryCollectionListResponse>;
+                        claim(request: import("../codegen/ixo/claims/v1beta1/query").QueryClaimRequest): Promise<import("../codegen/ixo/claims/v1beta1/query").QueryClaimResponse>;
+                        claimList(request?: import("../codegen/ixo/claims/v1beta1/query").QueryClaimListRequest): Promise<import("../codegen/ixo/claims/v1beta1/query").QueryClaimListResponse>;
+                        dispute(request: import("../codegen/ixo/claims/v1beta1/query").QueryDisputeRequest): Promise<import("../codegen/ixo/claims/v1beta1/query").QueryDisputeResponse>;
+                        disputeList(request?: import("../codegen/ixo/claims/v1beta1/query").QueryDisputeListRequest): Promise<import("../codegen/ixo/claims/v1beta1/query").QueryDisputeListResponse>;
+                    };
+                };
                 entity: {
                     v1beta1: {
+                        params(request?: import("../codegen/ixo/entity/v1beta1/query").QueryParamsRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryParamsResponse>;
                         entity(request: import("../codegen/ixo/entity/v1beta1/query").QueryEntityRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityResponse>;
                         entityMetaData(request: import("../codegen/ixo/entity/v1beta1/query").QueryEntityMetadataRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityMetadataResponse>;
                         entityIidDocument(request: import("../codegen/ixo/entity/v1beta1/query").QueryEntityIidDocumentRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityIidDocumentResponse>;
@@ -326,6 +338,7 @@ export declare namespace customQueries {
                 };
                 token: {
                     v1beta1: {
+                        params(request?: import("../codegen/ixo/token/v1beta1/query").QueryParamsRequest): Promise<import("../codegen/ixo/token/v1beta1/query").QueryParamsResponse>;
                         tokenList(request: import("../codegen/ixo/token/v1beta1/query").QueryTokenListRequest): Promise<import("../codegen/ixo/token/v1beta1/query").QueryTokenListResponse>;
                         tokenDoc(request: import("../codegen/ixo/token/v1beta1/query").QueryTokenDocRequest): Promise<import("../codegen/ixo/token/v1beta1/query").QueryTokenDocResponse>;
                         tokenMetadata(request: import("../codegen/ixo/token/v1beta1/query").QueryTokenMetadataRequest): Promise<import("../codegen/ixo/token/v1beta1/query").QueryTokenMetadataResponse>;
@@ -614,8 +627,20 @@ export declare namespace customQueries {
                         alphaMaximums(request: import("../codegen/ixo/bonds/v1beta1/query").QueryAlphaMaximumsRequest): Promise<import("../codegen/ixo/bonds/v1beta1/query").QueryAlphaMaximumsResponse>;
                     };
                 };
+                claims: {
+                    v1beta1: {
+                        params(request?: import("../codegen/ixo/claims/v1beta1/query").QueryParamsRequest): Promise<import("../codegen/ixo/claims/v1beta1/query").QueryParamsResponse>;
+                        collection(request: import("../codegen/ixo/claims/v1beta1/query").QueryCollectionRequest): Promise<import("../codegen/ixo/claims/v1beta1/query").QueryCollectionResponse>;
+                        collectionList(request?: import("../codegen/ixo/claims/v1beta1/query").QueryCollectionListRequest): Promise<import("../codegen/ixo/claims/v1beta1/query").QueryCollectionListResponse>;
+                        claim(request: import("../codegen/ixo/claims/v1beta1/query").QueryClaimRequest): Promise<import("../codegen/ixo/claims/v1beta1/query").QueryClaimResponse>;
+                        claimList(request?: import("../codegen/ixo/claims/v1beta1/query").QueryClaimListRequest): Promise<import("../codegen/ixo/claims/v1beta1/query").QueryClaimListResponse>;
+                        dispute(request: import("../codegen/ixo/claims/v1beta1/query").QueryDisputeRequest): Promise<import("../codegen/ixo/claims/v1beta1/query").QueryDisputeResponse>;
+                        disputeList(request?: import("../codegen/ixo/claims/v1beta1/query").QueryDisputeListRequest): Promise<import("../codegen/ixo/claims/v1beta1/query").QueryDisputeListResponse>;
+                    };
+                };
                 entity: {
                     v1beta1: {
+                        params(request?: import("../codegen/ixo/entity/v1beta1/query").QueryParamsRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryParamsResponse>;
                         entity(request: import("../codegen/ixo/entity/v1beta1/query").QueryEntityRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityResponse>;
                         entityMetaData(request: import("../codegen/ixo/entity/v1beta1/query").QueryEntityMetadataRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityMetadataResponse>;
                         entityIidDocument(request: import("../codegen/ixo/entity/v1beta1/query").QueryEntityIidDocumentRequest): Promise<import("../codegen/ixo/entity/v1beta1/query").QueryEntityIidDocumentResponse>;
@@ -647,6 +672,7 @@ export declare namespace customQueries {
                 };
                 token: {
                     v1beta1: {
+                        params(request?: import("../codegen/ixo/token/v1beta1/query").QueryParamsRequest): Promise<import("../codegen/ixo/token/v1beta1/query").QueryParamsResponse>;
                         tokenList(request: import("../codegen/ixo/token/v1beta1/query").QueryTokenListRequest): Promise<import("../codegen/ixo/token/v1beta1/query").QueryTokenListResponse>;
                         tokenDoc(request: import("../codegen/ixo/token/v1beta1/query").QueryTokenDocRequest): Promise<import("../codegen/ixo/token/v1beta1/query").QueryTokenDocResponse>;
                         tokenMetadata(request: import("../codegen/ixo/token/v1beta1/query").QueryTokenMetadataRequest): Promise<import("../codegen/ixo/token/v1beta1/query").QueryTokenMetadataResponse>;

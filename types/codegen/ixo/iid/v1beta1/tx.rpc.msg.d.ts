@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import { MsgCreateIidDocument, MsgCreateIidDocumentResponse, MsgUpdateIidDocument, MsgUpdateIidDocumentResponse, MsgAddVerification, MsgAddVerificationResponse, MsgRevokeVerification, MsgRevokeVerificationResponse, MsgSetVerificationRelationships, MsgSetVerificationRelationshipsResponse, MsgAddService, MsgAddServiceResponse, MsgDeleteService, MsgDeleteServiceResponse, MsgAddController, MsgAddControllerResponse, MsgDeleteController, MsgDeleteControllerResponse, MsgAddLinkedResource, MsgAddLinkedResourceResponse, MsgDeleteLinkedResource, MsgDeleteLinkedResourceResponse, MsgAddLinkedEntity, MsgAddLinkedEntityResponse, MsgDeleteLinkedEntity, MsgDeleteLinkedEntityResponse, MsgAddAccordedRight, MsgAddAccordedRightResponse, MsgDeleteAccordedRight, MsgDeleteAccordedRightResponse, MsgAddIidContext, MsgAddIidContextResponse, MsgDeactivateIID, MsgDeactivateIIDResponse, MsgDeleteIidContext, MsgDeleteIidContextResponse } from "./tx";
+import { MsgCreateIidDocument, MsgCreateIidDocumentResponse, MsgUpdateIidDocument, MsgUpdateIidDocumentResponse, MsgAddVerification, MsgAddVerificationResponse, MsgRevokeVerification, MsgRevokeVerificationResponse, MsgSetVerificationRelationships, MsgSetVerificationRelationshipsResponse, MsgAddService, MsgAddServiceResponse, MsgDeleteService, MsgDeleteServiceResponse, MsgAddController, MsgAddControllerResponse, MsgDeleteController, MsgDeleteControllerResponse, MsgAddLinkedResource, MsgAddLinkedResourceResponse, MsgDeleteLinkedResource, MsgDeleteLinkedResourceResponse, MsgAddLinkedClaim, MsgAddLinkedClaimResponse, MsgDeleteLinkedClaim, MsgDeleteLinkedClaimResponse, MsgAddLinkedEntity, MsgAddLinkedEntityResponse, MsgDeleteLinkedEntity, MsgDeleteLinkedEntityResponse, MsgAddAccordedRight, MsgAddAccordedRightResponse, MsgDeleteAccordedRight, MsgDeleteAccordedRightResponse, MsgAddIidContext, MsgAddIidContextResponse, MsgDeactivateIID, MsgDeactivateIIDResponse, MsgDeleteIidContext, MsgDeleteIidContextResponse } from "./tx";
 /** Msg defines the identity Msg service. */
 export interface Msg {
     /** CreateDidDocument defines a method for creating a new identity. */
@@ -26,6 +26,9 @@ export interface Msg {
     /** Add / Delete Linked Resource */
     addLinkedResource(request: MsgAddLinkedResource): Promise<MsgAddLinkedResourceResponse>;
     deleteLinkedResource(request: MsgDeleteLinkedResource): Promise<MsgDeleteLinkedResourceResponse>;
+    /** Add / Delete Linked Claims */
+    addLinkedClaim(request: MsgAddLinkedClaim): Promise<MsgAddLinkedClaimResponse>;
+    deleteLinkedClaim(request: MsgDeleteLinkedClaim): Promise<MsgDeleteLinkedClaimResponse>;
     /** Add / Delete Linked Entity */
     addLinkedEntity(request: MsgAddLinkedEntity): Promise<MsgAddLinkedEntityResponse>;
     deleteLinkedEntity(request: MsgDeleteLinkedEntity): Promise<MsgDeleteLinkedEntityResponse>;
@@ -51,6 +54,8 @@ export declare class MsgClientImpl implements Msg {
     deleteController(request: MsgDeleteController): Promise<MsgDeleteControllerResponse>;
     addLinkedResource(request: MsgAddLinkedResource): Promise<MsgAddLinkedResourceResponse>;
     deleteLinkedResource(request: MsgDeleteLinkedResource): Promise<MsgDeleteLinkedResourceResponse>;
+    addLinkedClaim(request: MsgAddLinkedClaim): Promise<MsgAddLinkedClaimResponse>;
+    deleteLinkedClaim(request: MsgDeleteLinkedClaim): Promise<MsgDeleteLinkedClaimResponse>;
     addLinkedEntity(request: MsgAddLinkedEntity): Promise<MsgAddLinkedEntityResponse>;
     deleteLinkedEntity(request: MsgDeleteLinkedEntity): Promise<MsgDeleteLinkedEntityResponse>;
     addAccordedRight(request: MsgAddAccordedRight): Promise<MsgAddAccordedRightResponse>;

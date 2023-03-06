@@ -41,7 +41,7 @@ export interface EvaluateClaimConstraints {
 
   claimIds: string[];
   agentQuota: Long;
-  /** if zero then no before_date validation done */
+  /** if null then no before_date validation done */
 
   beforeDate?: Timestamp;
   /**
@@ -58,7 +58,7 @@ export interface EvaluateClaimConstraintsSDKType {
 
   claim_ids: string[];
   agent_quota: Long;
-  /** if zero then no before_date validation done */
+  /** if null then no before_date validation done */
 
   before_date?: TimestampSDKType;
   /**
@@ -95,7 +95,7 @@ export interface WithdrawPaymentConstraints {
   paymentType: PaymentType;
   /**
    * date that grantee can execute authorization, calculated from created date
-   * plus the timeout on Collection payments
+   * plus the timeout on Collection payments, if null then none
    */
 
   releaseDate?: Timestamp;
@@ -117,7 +117,7 @@ export interface WithdrawPaymentConstraintsSDKType {
   payment_type: PaymentTypeSDKType;
   /**
    * date that grantee can execute authorization, calculated from created date
-   * plus the timeout on Collection payments
+   * plus the timeout on Collection payments, if null then none
    */
 
   release_date?: TimestampSDKType;

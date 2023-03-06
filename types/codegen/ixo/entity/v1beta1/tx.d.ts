@@ -1,6 +1,5 @@
-import { Context, ContextSDKType } from "../../iid/v1beta1/iid";
+import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, LinkedClaim, LinkedClaimSDKType } from "../../iid/v1beta1/types";
 import { Verification, VerificationSDKType } from "../../iid/v1beta1/tx";
-import { Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType } from "../../iid/v1beta1/types";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import * as _m0 from "protobufjs/minimal";
 export interface MsgCreateEntity {
@@ -35,7 +34,7 @@ export interface MsgCreateEntity {
      * Client applications
      */
     endDate?: Timestamp;
-    /** DID of the operator through which the Entity was created */
+    /** Address of the operator through which the Entity was created */
     relayerNode: string;
     /**
      * Content ID or Hash of public Verifiable Credentials associated with the
@@ -47,6 +46,8 @@ export interface MsgCreateEntity {
     ownerAddress: string;
     data: Uint8Array;
     alsoKnownAs: string;
+    /** Digital claims associated with the Subject */
+    linkedClaim: LinkedClaim[];
 }
 export interface MsgCreateEntitySDKType {
     /** An Entity Type as defined by the implementer */
@@ -80,7 +81,7 @@ export interface MsgCreateEntitySDKType {
      * Client applications
      */
     end_date?: TimestampSDKType;
-    /** DID of the operator through which the Entity was created */
+    /** Address of the operator through which the Entity was created */
     relayer_node: string;
     /**
      * Content ID or Hash of public Verifiable Credentials associated with the
@@ -92,6 +93,8 @@ export interface MsgCreateEntitySDKType {
     owner_address: string;
     data: Uint8Array;
     alsoKnownAs: string;
+    /** Digital claims associated with the Subject */
+    linked_claim: LinkedClaimSDKType[];
 }
 export interface MsgCreateEntityResponse {
     entityId: string;

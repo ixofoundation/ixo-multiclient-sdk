@@ -1,13 +1,5 @@
-import { VerificationMethod, VerificationMethodSDKType, Service, ServiceSDKType, LinkedResource, LinkedResourceSDKType, AccordedRight, AccordedRightSDKType, LinkedEntity, LinkedEntitySDKType, IidMetadata, IidMetadataSDKType } from "./types";
+import { Context, ContextSDKType, VerificationMethod, VerificationMethodSDKType, Service, ServiceSDKType, LinkedResource, LinkedResourceSDKType, LinkedClaim, LinkedClaimSDKType, AccordedRight, AccordedRightSDKType, LinkedEntity, LinkedEntitySDKType, IidMetadata, IidMetadataSDKType } from "./types";
 import * as _m0 from "protobufjs/minimal";
-export interface Context {
-    key: string;
-    val: string;
-}
-export interface ContextSDKType {
-    key: string;
-    val: string;
-}
 export interface IidDocument {
     /** @context is spec for did document. */
     context: Context[];
@@ -63,6 +55,7 @@ export interface IidDocument {
      */
     capabilityDelegation: string[];
     linkedResource: LinkedResource[];
+    linkedClaim: LinkedClaim[];
     accordedRight: AccordedRight[];
     linkedEntity: LinkedEntity[];
     alsoKnownAs: string;
@@ -127,6 +120,7 @@ export interface IidDocumentSDKType {
      */
     capabilityDelegation: string[];
     linkedResource: LinkedResourceSDKType[];
+    linkedClaim: LinkedClaimSDKType[];
     accordedRight: AccordedRightSDKType[];
     linkedEntity: LinkedEntitySDKType[];
     alsoKnownAs: string;
@@ -136,13 +130,6 @@ export interface IidDocumentSDKType {
      */
     metadata?: IidMetadataSDKType;
 }
-export declare const Context: {
-    encode(message: Context, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): Context;
-    fromJSON(object: any): Context;
-    toJSON(message: Context): unknown;
-    fromPartial(object: Partial<Context>): Context;
-};
 export declare const IidDocument: {
     encode(message: IidDocument, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): IidDocument;

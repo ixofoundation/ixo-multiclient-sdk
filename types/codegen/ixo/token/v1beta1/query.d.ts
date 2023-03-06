@@ -1,6 +1,18 @@
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Token, TokenSDKType, TokenData, TokenDataSDKType } from "./token";
+import { Params, ParamsSDKType, Token, TokenSDKType, TokenData, TokenDataSDKType } from "./token";
 import * as _m0 from "protobufjs/minimal";
+export interface QueryParamsRequest {
+}
+export interface QueryParamsRequestSDKType {
+}
+export interface QueryParamsResponse {
+    /** params holds all the parameters of this module. */
+    params?: Params;
+}
+export interface QueryParamsResponseSDKType {
+    /** params holds all the parameters of this module. */
+    params?: ParamsSDKType;
+}
 export interface QueryTokenListRequest {
     pagination?: PageRequest;
     /** minter address to get list for */
@@ -69,6 +81,20 @@ export interface TokenMetadataPropertiesSDKType {
     cap: string;
     linkedResources: TokenDataSDKType[];
 }
+export declare const QueryParamsRequest: {
+    encode(_: QueryParamsRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsRequest;
+    fromJSON(_: any): QueryParamsRequest;
+    toJSON(_: QueryParamsRequest): unknown;
+    fromPartial(_: Partial<QueryParamsRequest>): QueryParamsRequest;
+};
+export declare const QueryParamsResponse: {
+    encode(message: QueryParamsResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsResponse;
+    fromJSON(object: any): QueryParamsResponse;
+    toJSON(message: QueryParamsResponse): unknown;
+    fromPartial(object: Partial<QueryParamsResponse>): QueryParamsResponse;
+};
 export declare const QueryTokenListRequest: {
     encode(message: QueryTokenListRequest, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenListRequest;

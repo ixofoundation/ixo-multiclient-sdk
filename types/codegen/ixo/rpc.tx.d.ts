@@ -48,6 +48,9 @@ export declare const createRPCMsgClient: ({ rpc }: {
         bonds: {
             v1beta1: import("./bonds/v1beta1/tx.rpc.msg").MsgClientImpl;
         };
+        claims: {
+            v1beta1: import("./claims/v1beta1/tx.rpc.msg").MsgClientImpl;
+        };
         entity: {
             v1beta1: import("./entity/v1beta1/tx.rpc.msg").MsgClientImpl;
         };

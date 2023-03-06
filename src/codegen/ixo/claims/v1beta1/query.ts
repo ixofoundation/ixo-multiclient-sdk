@@ -2,20 +2,12 @@ import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } fr
 import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType } from "./claims";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
-/** QueryParamsRequest is request type for the Query/Params RPC method. */
-
 export interface QueryParamsRequest {}
-/** QueryParamsRequest is request type for the Query/Params RPC method. */
-
 export interface QueryParamsRequestSDKType {}
-/** QueryParamsResponse is response type for the Query/Params RPC method. */
-
 export interface QueryParamsResponse {
   /** params holds all the parameters of this module. */
   params?: Params;
 }
-/** QueryParamsResponse is response type for the Query/Params RPC method. */
-
 export interface QueryParamsResponseSDKType {
   /** params holds all the parameters of this module. */
   params?: ParamsSDKType;

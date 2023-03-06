@@ -2,14 +2,14 @@ import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp"
 import * as _m0 from "protobufjs/minimal";
 import { Long } from "../../../helpers";
 export interface Params {
-    NftContractAddress: string;
-    NftContractMinter: string;
-    CreateSequence: Long;
+    nftContractAddress: string;
+    nftContractMinter: string;
+    createSequence: Long;
 }
 export interface ParamsSDKType {
-    NftContractAddress: string;
-    NftContractMinter: string;
-    CreateSequence: Long;
+    nftContractAddress: string;
+    nftContractMinter: string;
+    createSequence: Long;
 }
 export interface Entity {
     /** id represents the id for the entity document. */
@@ -31,7 +31,7 @@ export interface Entity {
      * Client applications
      */
     status: number;
-    /** DID of the operator through which the Entity was created */
+    /** Address of the operator through which the Entity was created */
     relayerNode: string;
     /** Credentials of the enitity to be verified */
     credentials: string[];
@@ -52,23 +52,23 @@ export interface EntitySDKType {
      * Start Date of the Entity as defined by the implementer and interpreted by
      * Client applications
      */
-    startDate?: TimestampSDKType;
+    start_date?: TimestampSDKType;
     /**
      * End Date of the Entity as defined by the implementer and interpreted by
      * Client applications
      */
-    endDate?: TimestampSDKType;
+    end_date?: TimestampSDKType;
     /**
      * Status of the Entity as defined by the implementer and interpreted by
      * Client applications
      */
     status: number;
-    /** DID of the operator through which the Entity was created */
-    relayerNode: string;
+    /** Address of the operator through which the Entity was created */
+    relayer_node: string;
     /** Credentials of the enitity to be verified */
     credentials: string[];
     /** Used as check whether the credentials of entity is verified */
-    entityVerified: boolean;
+    entity_verified: boolean;
     /**
      * Metadata concerning the Entity such as versionId, created, updated and
      * deactivated
@@ -83,7 +83,7 @@ export interface EntityMetadata {
 }
 /** EntityMetadata defines metadata associated to a entity */
 export interface EntityMetadataSDKType {
-    versionId: string;
+    version_id: string;
     created?: TimestampSDKType;
     updated?: TimestampSDKType;
 }

@@ -12,6 +12,6 @@ export declare namespace customMessages {
         createAgentIidContext: (contexts?: [{
             key: string;
             val: string;
-        }]) => import("../codegen/ixo/iid/v1beta1/iid").Context[];
+        }]) => import("../codegen/ixo/iid/v1beta1/types").Context[];
     };
 }
