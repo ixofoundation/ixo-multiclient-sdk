@@ -1,0 +1,12 @@
+{
+  "title": "Parameter change: change wasm upload access to Nobody",
+  "description": "Change to Nobody",
+  "changes": [
+    {
+      "subspace": "wasm",
+      "key": "uploadAccess",
+      "value": { "address": "", "addresses": [], "permission": "Nobody" }
+    }
+  ],
+  "deposit": "10000000uixo"
+}

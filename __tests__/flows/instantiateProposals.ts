@@ -1,4 +1,4 @@
-import { testMsg, timeout, utils } from "../helpers/common";
+import { cosmwasm, testMsg, timeout, utils } from "../helpers/common";
 import * as Cosmos from "../modules/Cosmos";
 
 export const instantiateModulesProposals = () =>
@@ -8,7 +8,11 @@ export const instantiateModulesProposals = () =>
     testMsg(
       "/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract",
       async () => {
-        const res = await Cosmos.MsgSubmitProposalStoreCW("cw721");
+        const res = await Cosmos.MsgSubmitProposalStoreCW(
+          "cw721",
+          undefined
+          // cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_NOBODY
+        );
         proposalId = utils.common.getValueFromEvents(
           res,
           "submit_proposal",
