@@ -1,5 +1,4 @@
-import { Context, ContextSDKType } from "./iid";
-import { Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, VerificationMethod, VerificationMethodSDKType } from "./types";
+import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, LinkedClaim, LinkedClaimSDKType, VerificationMethod, VerificationMethodSDKType } from "./types";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 /**
@@ -52,6 +51,7 @@ export interface MsgCreateIidDocument {
   /** address of the account signing the message */
 
   signer: string;
+  linkedClaim: LinkedClaim[];
 }
 /** MsgCreateDidDocument defines a SDK message for creating a new did. */
 
@@ -73,6 +73,7 @@ export interface MsgCreateIidDocumentSDKType {
   /** address of the account signing the message */
 
   signer: string;
+  linkedClaim: LinkedClaimSDKType[];
 }
 export interface MsgCreateIidDocumentResponse {}
 export interface MsgCreateIidDocumentResponseSDKType {}
@@ -99,6 +100,7 @@ export interface MsgUpdateIidDocument {
   /** address of the account signing the message */
 
   signer: string;
+  linkedClaim: LinkedClaim[];
 }
 /**
  * Updates the entity with all the fields, so if field empty will be updated
@@ -123,6 +125,7 @@ export interface MsgUpdateIidDocumentSDKType {
   /** address of the account signing the message */
 
   signer: string;
+  linkedClaim: LinkedClaimSDKType[];
 }
 export interface MsgUpdateIidDocumentResponse {}
 export interface MsgUpdateIidDocumentResponseSDKType {}
@@ -326,6 +329,46 @@ export interface MsgDeleteLinkedResourceSDKType {
 
   signer: string;
 }
+export interface MsgAddLinkedClaim {
+  /** the did */
+  id: string;
+  /** the claim to add */
+
+  linkedClaim?: LinkedClaim;
+  /** address of the account signing the message */
+
+  signer: string;
+}
+export interface MsgAddLinkedClaimSDKType {
+  /** the did */
+  id: string;
+  /** the claim to add */
+
+  linkedClaim?: LinkedClaimSDKType;
+  /** address of the account signing the message */
+
+  signer: string;
+}
+export interface MsgDeleteLinkedClaim {
+  /** the did */
+  id: string;
+  /** the claim id */
+
+  claimId: string;
+  /** address of the account signing the message */
+
+  signer: string;
+}
+export interface MsgDeleteLinkedClaimSDKType {
+  /** the did */
+  id: string;
+  /** the claim id */
+
+  claim_id: string;
+  /** address of the account signing the message */
+
+  signer: string;
+}
 export interface MsgAddLinkedEntity {
   /** the iid */
   id: string;
@@ -466,6 +509,10 @@ export interface MsgAddLinkedResourceResponse {}
 export interface MsgAddLinkedResourceResponseSDKType {}
 export interface MsgDeleteLinkedResourceResponse {}
 export interface MsgDeleteLinkedResourceResponseSDKType {}
+export interface MsgAddLinkedClaimResponse {}
+export interface MsgAddLinkedClaimResponseSDKType {}
+export interface MsgDeleteLinkedClaimResponse {}
+export interface MsgDeleteLinkedClaimResponseSDKType {}
 export interface MsgAddLinkedEntityResponse {}
 export interface MsgAddLinkedEntityResponseSDKType {}
 export interface MsgDeleteLinkedEntityResponse {}
@@ -585,7 +632,8 @@ function createBaseMsgCreateIidDocument(): MsgCreateIidDocument {
     linkedResource: [],
     linkedEntity: [],
     alsoKnownAs: "",
-    signer: ""
+    signer: "",
+    linkedClaim: []
   };
 }
 
@@ -629,6 +677,10 @@ export const MsgCreateIidDocument = {
 
     if (message.signer !== "") {
       writer.uint32(82).string(message.signer);
+    }
+
+    for (const v of message.linkedClaim) {
+      LinkedClaim.encode(v!, writer.uint32(90).fork()).ldelim();
     }
 
     return writer;
@@ -683,6 +735,10 @@ export const MsgCreateIidDocument = {
           message.signer = reader.string();
           break;
 
+        case 11:
+          message.linkedClaim.push(LinkedClaim.decode(reader, reader.uint32()));
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -703,7 +759,8 @@ export const MsgCreateIidDocument = {
       linkedResource: Array.isArray(object?.linkedResource) ? object.linkedResource.map((e: any) => LinkedResource.fromJSON(e)) : [],
       linkedEntity: Array.isArray(object?.linkedEntity) ? object.linkedEntity.map((e: any) => LinkedEntity.fromJSON(e)) : [],
       alsoKnownAs: isSet(object.alsoKnownAs) ? String(object.alsoKnownAs) : "",
-      signer: isSet(object.signer) ? String(object.signer) : ""
+      signer: isSet(object.signer) ? String(object.signer) : "",
+      linkedClaim: Array.isArray(object?.linkedClaim) ? object.linkedClaim.map((e: any) => LinkedClaim.fromJSON(e)) : []
     };
   },
 
@@ -755,6 +812,13 @@ export const MsgCreateIidDocument = {
 
     message.alsoKnownAs !== undefined && (obj.alsoKnownAs = message.alsoKnownAs);
     message.signer !== undefined && (obj.signer = message.signer);
+
+    if (message.linkedClaim) {
+      obj.linkedClaim = message.linkedClaim.map(e => e ? LinkedClaim.toJSON(e) : undefined);
+    } else {
+      obj.linkedClaim = [];
+    }
+
     return obj;
   },
 
@@ -770,6 +834,7 @@ export const MsgCreateIidDocument = {
     message.linkedEntity = object.linkedEntity?.map(e => LinkedEntity.fromPartial(e)) || [];
     message.alsoKnownAs = object.alsoKnownAs ?? "";
     message.signer = object.signer ?? "";
+    message.linkedClaim = object.linkedClaim?.map(e => LinkedClaim.fromPartial(e)) || [];
     return message;
   }
 
@@ -829,7 +894,8 @@ function createBaseMsgUpdateIidDocument(): MsgUpdateIidDocument {
     linkedResource: [],
     linkedEntity: [],
     alsoKnownAs: "",
-    signer: ""
+    signer: "",
+    linkedClaim: []
   };
 }
 
@@ -873,6 +939,10 @@ export const MsgUpdateIidDocument = {
 
     if (message.signer !== "") {
       writer.uint32(82).string(message.signer);
+    }
+
+    for (const v of message.linkedClaim) {
+      LinkedClaim.encode(v!, writer.uint32(90).fork()).ldelim();
     }
 
     return writer;
@@ -927,6 +997,10 @@ export const MsgUpdateIidDocument = {
           message.signer = reader.string();
           break;
 
+        case 11:
+          message.linkedClaim.push(LinkedClaim.decode(reader, reader.uint32()));
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -947,7 +1021,8 @@ export const MsgUpdateIidDocument = {
       linkedResource: Array.isArray(object?.linkedResource) ? object.linkedResource.map((e: any) => LinkedResource.fromJSON(e)) : [],
       linkedEntity: Array.isArray(object?.linkedEntity) ? object.linkedEntity.map((e: any) => LinkedEntity.fromJSON(e)) : [],
       alsoKnownAs: isSet(object.alsoKnownAs) ? String(object.alsoKnownAs) : "",
-      signer: isSet(object.signer) ? String(object.signer) : ""
+      signer: isSet(object.signer) ? String(object.signer) : "",
+      linkedClaim: Array.isArray(object?.linkedClaim) ? object.linkedClaim.map((e: any) => LinkedClaim.fromJSON(e)) : []
     };
   },
 
@@ -999,6 +1074,13 @@ export const MsgUpdateIidDocument = {
 
     message.alsoKnownAs !== undefined && (obj.alsoKnownAs = message.alsoKnownAs);
     message.signer !== undefined && (obj.signer = message.signer);
+
+    if (message.linkedClaim) {
+      obj.linkedClaim = message.linkedClaim.map(e => e ? LinkedClaim.toJSON(e) : undefined);
+    } else {
+      obj.linkedClaim = [];
+    }
+
     return obj;
   },
 
@@ -1014,6 +1096,7 @@ export const MsgUpdateIidDocument = {
     message.linkedEntity = object.linkedEntity?.map(e => LinkedEntity.fromPartial(e)) || [];
     message.alsoKnownAs = object.alsoKnownAs ?? "";
     message.signer = object.signer ?? "";
+    message.linkedClaim = object.linkedClaim?.map(e => LinkedClaim.fromPartial(e)) || [];
     return message;
   }
 
@@ -2110,6 +2193,168 @@ export const MsgDeleteLinkedResource = {
 
 };
 
+function createBaseMsgAddLinkedClaim(): MsgAddLinkedClaim {
+  return {
+    id: "",
+    linkedClaim: undefined,
+    signer: ""
+  };
+}
+
+export const MsgAddLinkedClaim = {
+  encode(message: MsgAddLinkedClaim, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+
+    if (message.linkedClaim !== undefined) {
+      LinkedClaim.encode(message.linkedClaim, writer.uint32(18).fork()).ldelim();
+    }
+
+    if (message.signer !== "") {
+      writer.uint32(26).string(message.signer);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddLinkedClaim {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgAddLinkedClaim();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+
+        case 2:
+          message.linkedClaim = LinkedClaim.decode(reader, reader.uint32());
+          break;
+
+        case 3:
+          message.signer = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): MsgAddLinkedClaim {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      linkedClaim: isSet(object.linkedClaim) ? LinkedClaim.fromJSON(object.linkedClaim) : undefined,
+      signer: isSet(object.signer) ? String(object.signer) : ""
+    };
+  },
+
+  toJSON(message: MsgAddLinkedClaim): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.linkedClaim !== undefined && (obj.linkedClaim = message.linkedClaim ? LinkedClaim.toJSON(message.linkedClaim) : undefined);
+    message.signer !== undefined && (obj.signer = message.signer);
+    return obj;
+  },
+
+  fromPartial(object: Partial<MsgAddLinkedClaim>): MsgAddLinkedClaim {
+    const message = createBaseMsgAddLinkedClaim();
+    message.id = object.id ?? "";
+    message.linkedClaim = object.linkedClaim !== undefined && object.linkedClaim !== null ? LinkedClaim.fromPartial(object.linkedClaim) : undefined;
+    message.signer = object.signer ?? "";
+    return message;
+  }
+
+};
+
+function createBaseMsgDeleteLinkedClaim(): MsgDeleteLinkedClaim {
+  return {
+    id: "",
+    claimId: "",
+    signer: ""
+  };
+}
+
+export const MsgDeleteLinkedClaim = {
+  encode(message: MsgDeleteLinkedClaim, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+
+    if (message.claimId !== "") {
+      writer.uint32(18).string(message.claimId);
+    }
+
+    if (message.signer !== "") {
+      writer.uint32(26).string(message.signer);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeleteLinkedClaim {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgDeleteLinkedClaim();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+
+        case 2:
+          message.claimId = reader.string();
+          break;
+
+        case 3:
+          message.signer = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): MsgDeleteLinkedClaim {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      claimId: isSet(object.claimId) ? String(object.claimId) : "",
+      signer: isSet(object.signer) ? String(object.signer) : ""
+    };
+  },
+
+  toJSON(message: MsgDeleteLinkedClaim): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.claimId !== undefined && (obj.claimId = message.claimId);
+    message.signer !== undefined && (obj.signer = message.signer);
+    return obj;
+  },
+
+  fromPartial(object: Partial<MsgDeleteLinkedClaim>): MsgDeleteLinkedClaim {
+    const message = createBaseMsgDeleteLinkedClaim();
+    message.id = object.id ?? "";
+    message.claimId = object.claimId ?? "";
+    message.signer = object.signer ?? "";
+    return message;
+  }
+
+};
+
 function createBaseMsgAddLinkedEntity(): MsgAddLinkedEntity {
   return {
     id: "",
@@ -2758,6 +3003,92 @@ export const MsgDeleteLinkedResourceResponse = {
 
   fromPartial(_: Partial<MsgDeleteLinkedResourceResponse>): MsgDeleteLinkedResourceResponse {
     const message = createBaseMsgDeleteLinkedResourceResponse();
+    return message;
+  }
+
+};
+
+function createBaseMsgAddLinkedClaimResponse(): MsgAddLinkedClaimResponse {
+  return {};
+}
+
+export const MsgAddLinkedClaimResponse = {
+  encode(_: MsgAddLinkedClaimResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddLinkedClaimResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgAddLinkedClaimResponse();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(_: any): MsgAddLinkedClaimResponse {
+    return {};
+  },
+
+  toJSON(_: MsgAddLinkedClaimResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: Partial<MsgAddLinkedClaimResponse>): MsgAddLinkedClaimResponse {
+    const message = createBaseMsgAddLinkedClaimResponse();
+    return message;
+  }
+
+};
+
+function createBaseMsgDeleteLinkedClaimResponse(): MsgDeleteLinkedClaimResponse {
+  return {};
+}
+
+export const MsgDeleteLinkedClaimResponse = {
+  encode(_: MsgDeleteLinkedClaimResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeleteLinkedClaimResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgDeleteLinkedClaimResponse();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(_: any): MsgDeleteLinkedClaimResponse {
+    return {};
+  },
+
+  toJSON(_: MsgDeleteLinkedClaimResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: Partial<MsgDeleteLinkedClaimResponse>): MsgDeleteLinkedClaimResponse {
+    const message = createBaseMsgDeleteLinkedClaimResponse();
     return message;
   }
 

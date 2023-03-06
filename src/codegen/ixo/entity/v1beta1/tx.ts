@@ -1,6 +1,5 @@
-import { Context, ContextSDKType } from "../../iid/v1beta1/iid";
+import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, LinkedClaim, LinkedClaimSDKType } from "../../iid/v1beta1/types";
 import { Verification, VerificationSDKType } from "../../iid/v1beta1/tx";
-import { Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType } from "../../iid/v1beta1/types";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import * as _m0 from "protobufjs/minimal";
 import { isSet, fromJsonTimestamp, bytesFromBase64, fromTimestamp, base64FromBytes } from "../../../helpers";
@@ -45,7 +44,7 @@ export interface MsgCreateEntity {
    */
 
   endDate?: Timestamp;
-  /** DID of the operator through which the Entity was created */
+  /** Address of the operator through which the Entity was created */
 
   relayerNode: string;
   /**
@@ -60,6 +59,9 @@ export interface MsgCreateEntity {
   ownerAddress: string;
   data: Uint8Array;
   alsoKnownAs: string;
+  /** Digital claims associated with the Subject */
+
+  linkedClaim: LinkedClaim[];
 }
 export interface MsgCreateEntitySDKType {
   /** An Entity Type as defined by the implementer */
@@ -102,7 +104,7 @@ export interface MsgCreateEntitySDKType {
    */
 
   end_date?: TimestampSDKType;
-  /** DID of the operator through which the Entity was created */
+  /** Address of the operator through which the Entity was created */
 
   relayer_node: string;
   /**
@@ -117,6 +119,9 @@ export interface MsgCreateEntitySDKType {
   owner_address: string;
   data: Uint8Array;
   alsoKnownAs: string;
+  /** Digital claims associated with the Subject */
+
+  linked_claim: LinkedClaimSDKType[];
 }
 export interface MsgCreateEntityResponse {
   entityId: string;
@@ -269,7 +274,8 @@ function createBaseMsgCreateEntity(): MsgCreateEntity {
     ownerDid: "",
     ownerAddress: "",
     data: new Uint8Array(),
-    alsoKnownAs: ""
+    alsoKnownAs: "",
+    linkedClaim: []
   };
 }
 
@@ -341,6 +347,10 @@ export const MsgCreateEntity = {
 
     if (message.alsoKnownAs !== "") {
       writer.uint32(138).string(message.alsoKnownAs);
+    }
+
+    for (const v of message.linkedClaim) {
+      LinkedClaim.encode(v!, writer.uint32(146).fork()).ldelim();
     }
 
     return writer;
@@ -423,6 +433,10 @@ export const MsgCreateEntity = {
           message.alsoKnownAs = reader.string();
           break;
 
+        case 18:
+          message.linkedClaim.push(LinkedClaim.decode(reader, reader.uint32()));
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -450,7 +464,8 @@ export const MsgCreateEntity = {
       ownerDid: isSet(object.ownerDid) ? String(object.ownerDid) : "",
       ownerAddress: isSet(object.ownerAddress) ? String(object.ownerAddress) : "",
       data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array(),
-      alsoKnownAs: isSet(object.alsoKnownAs) ? String(object.alsoKnownAs) : ""
+      alsoKnownAs: isSet(object.alsoKnownAs) ? String(object.alsoKnownAs) : "",
+      linkedClaim: Array.isArray(object?.linkedClaim) ? object.linkedClaim.map((e: any) => LinkedClaim.fromJSON(e)) : []
     };
   },
 
@@ -515,6 +530,13 @@ export const MsgCreateEntity = {
     message.ownerAddress !== undefined && (obj.ownerAddress = message.ownerAddress);
     message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
     message.alsoKnownAs !== undefined && (obj.alsoKnownAs = message.alsoKnownAs);
+
+    if (message.linkedClaim) {
+      obj.linkedClaim = message.linkedClaim.map(e => e ? LinkedClaim.toJSON(e) : undefined);
+    } else {
+      obj.linkedClaim = [];
+    }
+
     return obj;
   },
 
@@ -537,6 +559,7 @@ export const MsgCreateEntity = {
     message.ownerAddress = object.ownerAddress ?? "";
     message.data = object.data ?? new Uint8Array();
     message.alsoKnownAs = object.alsoKnownAs ?? "";
+    message.linkedClaim = object.linkedClaim?.map(e => LinkedClaim.fromPartial(e)) || [];
     return message;
   }
 

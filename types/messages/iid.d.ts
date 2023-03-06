@@ -17,5 +17,5 @@ export declare const createIidVerificationMethods: ({ did, pubkey, controller, a
 export declare const createAgentIidContext: (contexts?: [{
     key: string;
     val: string;
-}]) => import("../codegen/ixo/iid/v1beta1/iid").Context[];
+}]) => import("../codegen/ixo/iid/v1beta1/types").Context[];
 export {};

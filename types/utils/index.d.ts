@@ -1,4 +1,5 @@
 import * as _3 from "./fromMm";
+import * as _6 from "./proto";
 export declare namespace utils {
     const conversions: {
         Uint8ArrayToJS(data: Uint8Array): string;
@@ -21,5 +22,12 @@ export declare namespace utils {
     const common: {
         generateId: (length?: number) => string;
         getValueFromEvents: (res: import("@cosmjs/stargate").DeliverTxResponse, event: string, attribute: string, logError?: boolean, throwError?: boolean) => any;
+    };
+    const proto: {
+        toDuration(duration: string): _6.Duration;
+        fromDuration(duration: _6.Duration): string;
+        toTimestamp(date: Date): _6.Timestamp;
+        fromTimestamp(t: _6.Timestamp): Date;
+        numberToLong(number: number): import("long");
     };
 }

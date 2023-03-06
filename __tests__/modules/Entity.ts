@@ -8,6 +8,7 @@ import { fee, keyType, WalletUsers } from "../helpers/constants";
 export const CreateEntity = async (
   entityType: string = "asset",
   context?: [{ key: string; val: string }],
+  relayerNode: WalletUsers = WalletUsers.tester,
   signer: WalletUsers = WalletUsers.tester
 ) => {
   const client = await createClient(getUser(signer));
@@ -17,6 +18,8 @@ export const CreateEntity = async (
   const myAddress = account.address;
   const myPubKey = account.pubkey;
   const did = tester.did;
+
+  const relayerNodeDid = getUser(relayerNode).did;
 
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgCreateEntity",
@@ -33,7 +36,7 @@ export const CreateEntity = async (
       controller: [did],
       ownerDid: did,
       ownerAddress: myAddress,
-      relayerNode: tester.did,
+      relayerNode: relayerNodeDid,
     }),
   };
 
@@ -383,14 +386,13 @@ export const UpdateEntityVerified = async (
   const tester = getUser(signer);
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
 
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgUpdateEntityVerified",
     value: ixo.entity.v1beta1.MsgUpdateEntityVerified.fromPartial({
       id: entityDid,
       entityVerified: true,
-      relayerNodeDid: did,
+      relayerNodeDid: tester.did,
       relayerNodeAddress: myAddress,
     }),
   };

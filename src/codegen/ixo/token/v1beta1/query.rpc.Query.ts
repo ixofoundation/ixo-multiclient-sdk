@@ -1,10 +1,11 @@
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { QueryTokenListRequest, QueryTokenListResponse, QueryTokenDocRequest, QueryTokenDocResponse, QueryTokenMetadataRequest, QueryTokenMetadataResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryTokenListRequest, QueryTokenListResponse, QueryTokenDocRequest, QueryTokenDocResponse, QueryTokenMetadataRequest, QueryTokenMetadataResponse } from "./query";
 /** Query defines the gRPC querier service. */
 
 export interface Query {
+  params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
   tokenList(request: QueryTokenListRequest): Promise<QueryTokenListResponse>;
   tokenDoc(request: QueryTokenDocRequest): Promise<QueryTokenDocResponse>;
   tokenMetadata(request: QueryTokenMetadataRequest): Promise<QueryTokenMetadataResponse>;
@@ -14,9 +15,16 @@ export class QueryClientImpl implements Query {
 
   constructor(rpc: Rpc) {
     this.rpc = rpc;
+    this.params = this.params.bind(this);
     this.tokenList = this.tokenList.bind(this);
     this.tokenDoc = this.tokenDoc.bind(this);
     this.tokenMetadata = this.tokenMetadata.bind(this);
+  }
+
+  params(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
+    const data = QueryParamsRequest.encode(request).finish();
+    const promise = this.rpc.request("ixo.token.v1beta1.Query", "Params", data);
+    return promise.then(data => QueryParamsResponse.decode(new _m0.Reader(data)));
   }
 
   tokenList(request: QueryTokenListRequest): Promise<QueryTokenListResponse> {
@@ -42,6 +50,10 @@ export const createRpcQueryExtension = (base: QueryClient) => {
   const rpc = createProtobufRpcClient(base);
   const queryService = new QueryClientImpl(rpc);
   return {
+    params(request?: QueryParamsRequest): Promise<QueryParamsResponse> {
+      return queryService.params(request);
+    },
+
     tokenList(request: QueryTokenListRequest): Promise<QueryTokenListResponse> {
       return queryService.tokenList(request);
     },

@@ -22,17 +22,17 @@ import * as _128 from "./lightclients/localhost/v1/localhost";
 import * as _129 from "./lightclients/solomachine/v1/solomachine";
 import * as _130 from "./lightclients/solomachine/v2/solomachine";
 import * as _131 from "./lightclients/tendermint/v1/tendermint";
-import * as _210 from "./applications/transfer/v1/query.rpc.Query";
-import * as _211 from "./core/channel/v1/query.rpc.Query";
-import * as _212 from "./core/client/v1/query.rpc.Query";
-import * as _213 from "./core/connection/v1/query.rpc.Query";
-import * as _214 from "./core/port/v1/query.rpc.Query";
-import * as _215 from "./applications/transfer/v1/tx.rpc.msg";
-import * as _216 from "./core/channel/v1/tx.rpc.msg";
-import * as _217 from "./core/client/v1/tx.rpc.msg";
-import * as _218 from "./core/connection/v1/tx.rpc.msg";
-import * as _235 from "./rpc.query";
-import * as _236 from "./rpc.tx";
+import * as _217 from "./applications/transfer/v1/query.rpc.Query";
+import * as _218 from "./core/channel/v1/query.rpc.Query";
+import * as _219 from "./core/client/v1/query.rpc.Query";
+import * as _220 from "./core/connection/v1/query.rpc.Query";
+import * as _221 from "./core/port/v1/query.rpc.Query";
+import * as _222 from "./applications/transfer/v1/tx.rpc.msg";
+import * as _223 from "./core/channel/v1/tx.rpc.msg";
+import * as _224 from "./core/client/v1/tx.rpc.msg";
+import * as _225 from "./core/connection/v1/tx.rpc.msg";
+import * as _244 from "./rpc.query";
+import * as _245 from "./rpc.tx";
 export namespace ibc {
   export namespace applications {
     export namespace transfer {
@@ -40,8 +40,8 @@ export namespace ibc {
         ..._109,
         ..._110,
         ..._111,
-        ..._210,
-        ..._215
+        ..._217,
+        ..._222
       };
       export const v2 = { ..._112
       };
@@ -53,8 +53,8 @@ export namespace ibc {
         ..._114,
         ..._115,
         ..._116,
-        ..._211,
-        ..._216
+        ..._218,
+        ..._223
       };
     }
     export namespace client {
@@ -62,8 +62,8 @@ export namespace ibc {
         ..._118,
         ..._119,
         ..._120,
-        ..._212,
-        ..._217
+        ..._219,
+        ..._224
       };
     }
     export namespace commitment {
@@ -75,13 +75,13 @@ export namespace ibc {
         ..._123,
         ..._124,
         ..._125,
-        ..._213,
-        ..._218
+        ..._220,
+        ..._225
       };
     }
     export namespace port {
       export const v1 = { ..._126,
-        ..._214
+        ..._221
       };
     }
     export namespace types {
@@ -105,7 +105,7 @@ export namespace ibc {
       };
     }
   }
-  export const ClientFactory = { ..._235,
-    ..._236
+  export const ClientFactory = { ..._244,
+    ..._245
   };
 }

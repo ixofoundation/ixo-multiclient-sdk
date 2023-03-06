@@ -33,8 +33,7 @@ export const supamotoFlow = () =>
     const cellNodeNetwork = "devnet";
 
     // Create top-level class dao
-    let daoDid: string;
-    daoDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
+    let daoDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset", async () => {
       const res = await Entity.CreateEntity("dao");
       daoDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
@@ -43,8 +42,7 @@ export const supamotoFlow = () =>
     });
 
     // Create dao entity which is credential issuer
-    let daoCredsIssuerDid: string;
-    daoCredsIssuerDid = "did:ixo:entity:4d94f9b6078432648a755203eed50644";
+    let daoCredsIssuerDid = "did:ixo:entity:4d94f9b6078432648a755203eed50644";
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset", async () => {
       const res = await Entity.CreateEntity("dao", [
         { key: "class", val: daoDid },
@@ -59,14 +57,11 @@ export const supamotoFlow = () =>
     });
 
     // Save related images WEB3
-    let supaLogo: string;
-    let supaNftImage: string;
-    let ecsLogo: string;
-    supaLogo =
+    let supaLogo =
       "https://bafkreifkl6w55nasgqid22d2cqyxccjktbciefzmiqvcudlq3eoer2mzhi.ipfs.w3s.link";
-    supaNftImage =
+    let supaNftImage =
       "https://bafkreideszg4fdha4tf7ldpecltxbyxbnapb663tkuksk2vcczkzkxppaa.ipfs.w3s.link";
-    ecsLogo =
+    let ecsLogo =
       "https://bafkreigkajsskkswn5jwcmfxhn3rqc7gevzgroacq7ygfz6mzkgo72ej4i.ipfs.w3s.link";
     test("Saving device creds", async () => {
       supaLogo = (
@@ -103,8 +98,7 @@ export const supamotoFlow = () =>
     });
 
     // Save supamoto credsPdf WEB3
-    let projectCertDoc: string;
-    projectCertDoc =
+    let projectCertDoc =
       "https://bafkreiefafy2u5df4l52yb7vvz32hxrxhcceyaq3z7xww2qlz2fp3ppeum.ipfs.w3s.link";
     test("Saving projectCertDoc", async () => {
       projectCertDoc = (
@@ -124,8 +118,7 @@ export const supamotoFlow = () =>
     });
 
     // Save supamoto profile WEB3
-    let profile: string;
-    profile =
+    let profile =
       "https://bafkreib5ka542u2ousereo23hr77qfaohtn2inhkr436u74rqzsktefynm.ipfs.w3s.link";
     test("Saving profile", async () => {
       const file = JSON.parse(
@@ -148,8 +141,7 @@ export const supamotoFlow = () =>
     });
 
     // Save supamoto creator CELLNODE
-    let creator: string;
-    creator = "4kavdefz12wlefltwxr";
+    let creator = "4kavdefz12wlefltwxr";
     test("Saving creator", async () => {
       const tester = getUser();
       const file = JSON.parse(
@@ -172,8 +164,7 @@ export const supamotoFlow = () =>
     });
 
     // Save supamoto administrator CELLNODE
-    let administrator: string;
-    administrator = "gm7528l8xd4lefltxcz";
+    let administrator = "gm7528l8xd4lefltxcz";
     test("Saving administrator", async () => {
       const tester = getUser();
       const file = JSON.parse(
@@ -199,8 +190,7 @@ export const supamotoFlow = () =>
     });
 
     // Save supamoto page CELLNODE
-    let page: string;
-    page = "zh211j0pb0llefltxre";
+    let page = "zh211j0pb0llefltxre";
     test("Saving page", async () => {
       page = (
         await customQueries.cellnode.uploadPublicDoc(
@@ -215,8 +205,7 @@ export const supamotoFlow = () =>
     });
 
     // Save supamoto projectCreds WEB3
-    let projectCreds: string;
-    projectCreds =
+    let projectCreds =
       "https://bafkreih2oq64xhbgp7vyarcrgw6dcofms4zdmjqms6vnfx32vzwglj6nd4.ipfs.w3s.link";
     test("Saving projectCert", async () => {
       const file = JSON.parse(
@@ -248,8 +237,7 @@ export const supamotoFlow = () =>
     });
 
     // Save supamoto tags CELLNODE
-    let tags: string;
-    tags = "klfh2wqlw9mleflu0u6";
+    let tags = "klfh2wqlw9mleflu0u6";
     test("Saving tags", async () => {
       tags = (
         await customQueries.cellnode.uploadPublicDoc(
@@ -264,8 +252,7 @@ export const supamotoFlow = () =>
     });
 
     // Save supamoto tokenMetadata WEB3
-    let tokenMetadata: string;
-    tokenMetadata =
+    let tokenMetadata =
       "https://bafkreie7kbpppoizx7anxxufblfkdfmuy27mppuz2hq4a4uouudweb2sm4.ipfs.w3s.link";
     test("Saving tokenMetadata", async () => {
       const file = JSON.parse(
@@ -291,8 +278,7 @@ export const supamotoFlow = () =>
     });
 
     // Save supamoto claims CELLNODE
-    let claims: string;
-    claims = "gf9m2u5ds6tleflu4a8";
+    let claims = "gf9m2u5ds6tleflu4a8";
     test("Saving claims", async () => {
       claims = (
         await customQueries.cellnode.uploadPublicDoc(
@@ -307,8 +293,7 @@ export const supamotoFlow = () =>
     });
 
     // Create a base Protocol entity
-    let protocolDid: string;
-    protocolDid = "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b";
+    let protocolDid = "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b";
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity protocol", async () => {
       const res = await Entity.CreateEntity("protocol");
       protocolDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
@@ -317,8 +302,7 @@ export const supamotoFlow = () =>
     });
 
     // Create a Protocol entity Asset Class
-    let protocolAssetDid: string;
-    protocolAssetDid = "did:ixo:entity:61392c571ef644d54d77e4daf611bf89";
+    let protocolAssetDid = "did:ixo:entity:61392c571ef644d54d77e4daf611bf89";
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset class", async () => {
       const res = await Entity.CreateEntityAssetSupamoto({
         inheritEntityDid: protocolDid,

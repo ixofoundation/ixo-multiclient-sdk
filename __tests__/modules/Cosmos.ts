@@ -41,7 +41,8 @@ export const BankSendTrx = async (
 
 export const MsgSubmitProposalStoreCW = async (
   contract: string = "cw721",
-  pathList?: string[]
+  pathList?: string[],
+  instantiateAccessType = cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_EVERYBODY
 ) => {
   const client = await createClient();
 
@@ -73,7 +74,12 @@ export const MsgSubmitProposalStoreCW = async (
               )
             ),
             instantiatePermission: cosmwasm.wasm.v1.AccessConfig.fromPartial({
-              permission: cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_EVERYBODY,
+              permission: instantiateAccessType,
+              addresses:
+                instantiateAccessType ==
+                cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_ANY_OF_ADDRESSES
+                  ? [myAddress]
+                  : undefined,
             }),
             unpinCode: false,
           })

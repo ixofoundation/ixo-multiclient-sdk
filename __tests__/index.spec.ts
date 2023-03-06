@@ -15,11 +15,13 @@ import {
 import { enititiesBasic, supamotoFlow } from "./flows/entities";
 import { paymentsBasic } from "./flows/payments";
 import { ibcBasic } from "./flows/ibc";
-import { bankBasic, govBasic, authzBasic, sendTokens } from "./flows/cosmos";
+import { bankBasic, authzBasic, sendTokens } from "./flows/cosmos";
+import { instantiateModulesProposals } from "./flows/instantiateProposals";
 import { tokenBasic } from "./flows/tokens";
 import { projectsBasic } from "./flows/projects";
 import { daoCore, wasmBasic } from "./flows/cosmwasm";
 import { quickQueries } from "./flows/quickQueries";
+import { claimsBasic } from "./flows/claims";
 
 beforeAll(() => {
   generateConstants();
@@ -29,8 +31,9 @@ beforeAll(() => {
 // To generate mapping of blockchain test users to sdk test users with set mnemonics
 generateBlockchainTestUsers();
 
-sendTokens();
+// sendTokens();
 // registerIids();
+// instantiateModulesProposals();
 // iidsBasic();
 // paymentsBasic();
 // projectsBasic();
@@ -40,10 +43,10 @@ sendTokens();
 // enititiesBasic();
 // supamotoFlow();
 // tokenBasic();
+// claimsBasic();
 // ibcBasic();
 // bankBasic();
-// govBasic();
 // authzBasic();
 // wasmBasic();
-daoCore();
+// daoCore();
 // quickQueries();

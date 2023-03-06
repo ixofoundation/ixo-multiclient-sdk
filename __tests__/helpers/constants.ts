@@ -16,7 +16,7 @@ export enum WalletUsers {
   project = "project",
   bond = "bond",
   oracle = "oracle",
-  random = "randy",
+  random = "random",
 }
 
 export let constants: ReturnType<typeof generateConstants>;
@@ -47,6 +47,7 @@ export const generateConstants = (setGlobal = true) => {
     accordedRightId: utils.common.generateId(10),
     linkedEntityId: utils.common.generateId(10),
     linkedResourceId: utils.common.generateId(10),
+    linkedClaimId: utils.common.generateId(10),
     serviceId: utils.common.generateId(10),
   };
   if (setGlobal) constants = newConstants;

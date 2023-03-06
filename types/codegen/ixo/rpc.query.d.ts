@@ -202,8 +202,20 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
                 alphaMaximums(request: import("./bonds/v1beta1/query").QueryAlphaMaximumsRequest): Promise<import("./bonds/v1beta1/query").QueryAlphaMaximumsResponse>;
             };
         };
+        claims: {
+            v1beta1: {
+                params(request?: import("./claims/v1beta1/query").QueryParamsRequest): Promise<import("./claims/v1beta1/query").QueryParamsResponse>;
+                collection(request: import("./claims/v1beta1/query").QueryCollectionRequest): Promise<import("./claims/v1beta1/query").QueryCollectionResponse>;
+                collectionList(request?: import("./claims/v1beta1/query").QueryCollectionListRequest): Promise<import("./claims/v1beta1/query").QueryCollectionListResponse>;
+                claim(request: import("./claims/v1beta1/query").QueryClaimRequest): Promise<import("./claims/v1beta1/query").QueryClaimResponse>;
+                claimList(request?: import("./claims/v1beta1/query").QueryClaimListRequest): Promise<import("./claims/v1beta1/query").QueryClaimListResponse>;
+                dispute(request: import("./claims/v1beta1/query").QueryDisputeRequest): Promise<import("./claims/v1beta1/query").QueryDisputeResponse>;
+                disputeList(request?: import("./claims/v1beta1/query").QueryDisputeListRequest): Promise<import("./claims/v1beta1/query").QueryDisputeListResponse>;
+            };
+        };
         entity: {
             v1beta1: {
+                params(request?: import("./entity/v1beta1/query").QueryParamsRequest): Promise<import("./entity/v1beta1/query").QueryParamsResponse>;
                 entity(request: import("./entity/v1beta1/query").QueryEntityRequest): Promise<import("./entity/v1beta1/query").QueryEntityResponse>;
                 entityMetaData(request: import("./entity/v1beta1/query").QueryEntityMetadataRequest): Promise<import("./entity/v1beta1/query").QueryEntityMetadataResponse>;
                 entityIidDocument(request: import("./entity/v1beta1/query").QueryEntityIidDocumentRequest): Promise<import("./entity/v1beta1/query").QueryEntityIidDocumentResponse>;
@@ -235,6 +247,7 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
         };
         token: {
             v1beta1: {
+                params(request?: import("./token/v1beta1/query").QueryParamsRequest): Promise<import("./token/v1beta1/query").QueryParamsResponse>;
                 tokenList(request: import("./token/v1beta1/query").QueryTokenListRequest): Promise<import("./token/v1beta1/query").QueryTokenListResponse>;
                 tokenDoc(request: import("./token/v1beta1/query").QueryTokenDocRequest): Promise<import("./token/v1beta1/query").QueryTokenDocResponse>;
                 tokenMetadata(request: import("./token/v1beta1/query").QueryTokenMetadataRequest): Promise<import("./token/v1beta1/query").QueryTokenMetadataResponse>;

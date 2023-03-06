@@ -1,5 +1,13 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import * as _m0 from "protobufjs/minimal";
+export interface Context {
+    key: string;
+    val: string;
+}
+export interface ContextSDKType {
+    key: string;
+    val: string;
+}
 export interface AccordedRight {
     type: string;
     id: string;
@@ -29,6 +37,24 @@ export interface LinkedResourceSDKType {
     id: string;
     description: string;
     mediaType: string;
+    serviceEndpoint: string;
+    proof: string;
+    encrypted: string;
+    right: string;
+}
+export interface LinkedClaim {
+    type: string;
+    id: string;
+    description: string;
+    serviceEndpoint: string;
+    proof: string;
+    encrypted: string;
+    right: string;
+}
+export interface LinkedClaimSDKType {
+    type: string;
+    id: string;
+    description: string;
     serviceEndpoint: string;
     proof: string;
     encrypted: string;
@@ -86,6 +112,13 @@ export interface IidMetadataSDKType {
     updated?: TimestampSDKType;
     deactivated: boolean;
 }
+export declare const Context: {
+    encode(message: Context, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): Context;
+    fromJSON(object: any): Context;
+    toJSON(message: Context): unknown;
+    fromPartial(object: Partial<Context>): Context;
+};
 export declare const AccordedRight: {
     encode(message: AccordedRight, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): AccordedRight;
@@ -99,6 +132,13 @@ export declare const LinkedResource: {
     fromJSON(object: any): LinkedResource;
     toJSON(message: LinkedResource): unknown;
     fromPartial(object: Partial<LinkedResource>): LinkedResource;
+};
+export declare const LinkedClaim: {
+    encode(message: LinkedClaim, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): LinkedClaim;
+    fromJSON(object: any): LinkedClaim;
+    toJSON(message: LinkedClaim): unknown;
+    fromPartial(object: Partial<LinkedClaim>): LinkedClaim;
 };
 export declare const LinkedEntity: {
     encode(message: LinkedEntity, writer?: _m0.Writer): _m0.Writer;

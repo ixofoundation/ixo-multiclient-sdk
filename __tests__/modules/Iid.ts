@@ -404,6 +404,51 @@ export const DeleteLinkedResource = async () => {
   return response;
 };
 
+export const AddLinkedClaim = async () => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+  const did = tester.did;
+
+  const message = {
+    typeUrl: "/ixo.iid.v1beta1.MsgAddLinkedClaim",
+    value: ixo.iid.v1beta1.MsgAddLinkedClaim.fromPartial({
+      id: did,
+      linkedClaim: ixo.iid.v1beta1.LinkedClaim.fromPartial({
+        id: constants.linkedClaimId,
+        description: "Description",
+      }),
+      signer: myAddress,
+    }),
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const DeleteLinkedClaim = async () => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+  const did = tester.did;
+
+  const message = {
+    typeUrl: "/ixo.iid.v1beta1.MsgDeleteLinkedClaim",
+    value: ixo.iid.v1beta1.MsgDeleteLinkedClaim.fromPartial({
+      id: did,
+      claimId: constants.linkedClaimId,
+      signer: myAddress,
+    }),
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
 export const AddService = async () => {
   const client = await createClient();
 

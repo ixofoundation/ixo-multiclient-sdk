@@ -1,5 +1,4 @@
-import { Context, ContextSDKType } from "./iid";
-import { Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, VerificationMethod, VerificationMethodSDKType } from "./types";
+import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, LinkedClaim, LinkedClaimSDKType, VerificationMethod, VerificationMethodSDKType } from "./types";
 import * as _m0 from "protobufjs/minimal";
 /**
  * Verification is a message that allows to assign a verification method
@@ -41,6 +40,7 @@ export interface MsgCreateIidDocument {
     alsoKnownAs: string;
     /** address of the account signing the message */
     signer: string;
+    linkedClaim: LinkedClaim[];
 }
 /** MsgCreateDidDocument defines a SDK message for creating a new did. */
 export interface MsgCreateIidDocumentSDKType {
@@ -58,6 +58,7 @@ export interface MsgCreateIidDocumentSDKType {
     alsoKnownAs: string;
     /** address of the account signing the message */
     signer: string;
+    linkedClaim: LinkedClaimSDKType[];
 }
 export interface MsgCreateIidDocumentResponse {
 }
@@ -82,6 +83,7 @@ export interface MsgUpdateIidDocument {
     alsoKnownAs: string;
     /** address of the account signing the message */
     signer: string;
+    linkedClaim: LinkedClaim[];
 }
 /**
  * Updates the entity with all the fields, so if field empty will be updated
@@ -102,6 +104,7 @@ export interface MsgUpdateIidDocumentSDKType {
     alsoKnownAs: string;
     /** address of the account signing the message */
     signer: string;
+    linkedClaim: LinkedClaimSDKType[];
 }
 export interface MsgUpdateIidDocumentResponse {
 }
@@ -283,6 +286,38 @@ export interface MsgDeleteLinkedResourceSDKType {
     /** address of the account signing the message */
     signer: string;
 }
+export interface MsgAddLinkedClaim {
+    /** the did */
+    id: string;
+    /** the claim to add */
+    linkedClaim?: LinkedClaim;
+    /** address of the account signing the message */
+    signer: string;
+}
+export interface MsgAddLinkedClaimSDKType {
+    /** the did */
+    id: string;
+    /** the claim to add */
+    linkedClaim?: LinkedClaimSDKType;
+    /** address of the account signing the message */
+    signer: string;
+}
+export interface MsgDeleteLinkedClaim {
+    /** the did */
+    id: string;
+    /** the claim id */
+    claimId: string;
+    /** address of the account signing the message */
+    signer: string;
+}
+export interface MsgDeleteLinkedClaimSDKType {
+    /** the did */
+    id: string;
+    /** the claim id */
+    claim_id: string;
+    /** address of the account signing the message */
+    signer: string;
+}
 export interface MsgAddLinkedEntity {
     /** the iid */
     id: string;
@@ -400,6 +435,14 @@ export interface MsgAddLinkedResourceResponseSDKType {
 export interface MsgDeleteLinkedResourceResponse {
 }
 export interface MsgDeleteLinkedResourceResponseSDKType {
+}
+export interface MsgAddLinkedClaimResponse {
+}
+export interface MsgAddLinkedClaimResponseSDKType {
+}
+export interface MsgDeleteLinkedClaimResponse {
+}
+export interface MsgDeleteLinkedClaimResponseSDKType {
 }
 export interface MsgAddLinkedEntityResponse {
 }
@@ -576,6 +619,20 @@ export declare const MsgDeleteLinkedResource: {
     toJSON(message: MsgDeleteLinkedResource): unknown;
     fromPartial(object: Partial<MsgDeleteLinkedResource>): MsgDeleteLinkedResource;
 };
+export declare const MsgAddLinkedClaim: {
+    encode(message: MsgAddLinkedClaim, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddLinkedClaim;
+    fromJSON(object: any): MsgAddLinkedClaim;
+    toJSON(message: MsgAddLinkedClaim): unknown;
+    fromPartial(object: Partial<MsgAddLinkedClaim>): MsgAddLinkedClaim;
+};
+export declare const MsgDeleteLinkedClaim: {
+    encode(message: MsgDeleteLinkedClaim, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeleteLinkedClaim;
+    fromJSON(object: any): MsgDeleteLinkedClaim;
+    toJSON(message: MsgDeleteLinkedClaim): unknown;
+    fromPartial(object: Partial<MsgDeleteLinkedClaim>): MsgDeleteLinkedClaim;
+};
 export declare const MsgAddLinkedEntity: {
     encode(message: MsgAddLinkedEntity, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddLinkedEntity;
@@ -638,6 +695,20 @@ export declare const MsgDeleteLinkedResourceResponse: {
     fromJSON(_: any): MsgDeleteLinkedResourceResponse;
     toJSON(_: MsgDeleteLinkedResourceResponse): unknown;
     fromPartial(_: Partial<MsgDeleteLinkedResourceResponse>): MsgDeleteLinkedResourceResponse;
+};
+export declare const MsgAddLinkedClaimResponse: {
+    encode(_: MsgAddLinkedClaimResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddLinkedClaimResponse;
+    fromJSON(_: any): MsgAddLinkedClaimResponse;
+    toJSON(_: MsgAddLinkedClaimResponse): unknown;
+    fromPartial(_: Partial<MsgAddLinkedClaimResponse>): MsgAddLinkedClaimResponse;
+};
+export declare const MsgDeleteLinkedClaimResponse: {
+    encode(_: MsgDeleteLinkedClaimResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeleteLinkedClaimResponse;
+    fromJSON(_: any): MsgDeleteLinkedClaimResponse;
+    toJSON(_: MsgDeleteLinkedClaimResponse): unknown;
+    fromPartial(_: Partial<MsgDeleteLinkedClaimResponse>): MsgDeleteLinkedClaimResponse;
 };
 export declare const MsgAddLinkedEntityResponse: {
     encode(_: MsgAddLinkedEntityResponse, writer?: _m0.Writer): _m0.Writer;

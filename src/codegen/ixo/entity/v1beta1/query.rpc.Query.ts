@@ -1,10 +1,11 @@
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { QueryEntityRequest, QueryEntityResponse, QueryEntityMetadataRequest, QueryEntityMetadataResponse, QueryEntityIidDocumentRequest, QueryEntityIidDocumentResponse, QueryEntityVerifiedRequest, QueryEntityVerifiedResponse, QueryEntityListRequest, QueryEntityListResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryEntityRequest, QueryEntityResponse, QueryEntityMetadataRequest, QueryEntityMetadataResponse, QueryEntityIidDocumentRequest, QueryEntityIidDocumentResponse, QueryEntityVerifiedRequest, QueryEntityVerifiedResponse, QueryEntityListRequest, QueryEntityListResponse } from "./query";
 /** Query defines the gRPC querier service. */
 
 export interface Query {
+  params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
   entity(request: QueryEntityRequest): Promise<QueryEntityResponse>;
   entityMetaData(request: QueryEntityMetadataRequest): Promise<QueryEntityMetadataResponse>;
   entityIidDocument(request: QueryEntityIidDocumentRequest): Promise<QueryEntityIidDocumentResponse>;
@@ -16,11 +17,18 @@ export class QueryClientImpl implements Query {
 
   constructor(rpc: Rpc) {
     this.rpc = rpc;
+    this.params = this.params.bind(this);
     this.entity = this.entity.bind(this);
     this.entityMetaData = this.entityMetaData.bind(this);
     this.entityIidDocument = this.entityIidDocument.bind(this);
     this.entityVerified = this.entityVerified.bind(this);
     this.entityList = this.entityList.bind(this);
+  }
+
+  params(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
+    const data = QueryParamsRequest.encode(request).finish();
+    const promise = this.rpc.request("ixo.entity.v1beta1.Query", "Params", data);
+    return promise.then(data => QueryParamsResponse.decode(new _m0.Reader(data)));
   }
 
   entity(request: QueryEntityRequest): Promise<QueryEntityResponse> {
@@ -60,6 +68,10 @@ export const createRpcQueryExtension = (base: QueryClient) => {
   const rpc = createProtobufRpcClient(base);
   const queryService = new QueryClientImpl(rpc);
   return {
+    params(request?: QueryParamsRequest): Promise<QueryParamsResponse> {
+      return queryService.params(request);
+    },
+
     entity(request: QueryEntityRequest): Promise<QueryEntityResponse> {
       return queryService.entity(request);
     },
