@@ -1,6 +1,7 @@
 import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, LinkedClaim, LinkedClaimSDKType } from "../../iid/v1beta1/types";
 import { Verification, VerificationSDKType } from "../../iid/v1beta1/tx";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
+import { Grant, GrantSDKType } from "./cosmos";
 import * as _m0 from "protobufjs/minimal";
 import { isSet, fromJsonTimestamp, bytesFromBase64, fromTimestamp, base64FromBytes } from "../../../helpers";
 export interface MsgCreateEntity {
@@ -239,6 +240,8 @@ export interface MsgUpdateEntityVerifiedResponse {}
 export interface MsgUpdateEntityVerifiedResponseSDKType {}
 export interface MsgTransferEntity {
   id: string;
+  /** The owner_did used to sign this transaction. */
+
   ownerDid: string;
   /** The owner_address used to sign this transaction. */
 
@@ -247,6 +250,8 @@ export interface MsgTransferEntity {
 }
 export interface MsgTransferEntitySDKType {
   id: string;
+  /** The owner_did used to sign this transaction. */
+
   owner_did: string;
   /** The owner_address used to sign this transaction. */
 
@@ -255,6 +260,88 @@ export interface MsgTransferEntitySDKType {
 }
 export interface MsgTransferEntityResponse {}
 export interface MsgTransferEntityResponseSDKType {}
+/**
+ * create a module account for an entity, account details will be added as a
+ * linkedEntity on entity iid doc where linkedEntity id is didfragment: did#name
+ */
+
+export interface MsgCreateEntityAccount {
+  /** entity id (did) to create account for */
+  id: string;
+  /** name of account */
+
+  name: string;
+  /** The owner_address used to sign this transaction. */
+
+  ownerAddress: string;
+}
+/**
+ * create a module account for an entity, account details will be added as a
+ * linkedEntity on entity iid doc where linkedEntity id is didfragment: did#name
+ */
+
+export interface MsgCreateEntityAccountSDKType {
+  /** entity id (did) to create account for */
+  id: string;
+  /** name of account */
+
+  name: string;
+  /** The owner_address used to sign this transaction. */
+
+  owner_address: string;
+}
+export interface MsgCreateEntityAccountResponse {
+  /** account address that was created for specific entity and account name */
+  account: string;
+}
+export interface MsgCreateEntityAccountResponseSDKType {
+  /** account address that was created for specific entity and account name */
+  account: string;
+}
+/**
+ * Create a authz grant from entity account (as grantor) to recipient in msg as
+ * grantee for the specific authorization
+ */
+
+export interface MsgGrantEntityAccountAuthz {
+  /** entity id (did) to create account for */
+  id: string;
+  /** name of account */
+
+  name: string;
+  /** the grantee address that will be able to execute the authz authorization */
+
+  granteeAddress: string;
+  /** grant to be Authorized in authz grant */
+
+  grant?: Grant;
+  /** the owner_address used to sign this transaction. */
+
+  ownerAddress: string;
+}
+/**
+ * Create a authz grant from entity account (as grantor) to recipient in msg as
+ * grantee for the specific authorization
+ */
+
+export interface MsgGrantEntityAccountAuthzSDKType {
+  /** entity id (did) to create account for */
+  id: string;
+  /** name of account */
+
+  name: string;
+  /** the grantee address that will be able to execute the authz authorization */
+
+  grantee_address: string;
+  /** grant to be Authorized in authz grant */
+
+  grant?: GrantSDKType;
+  /** the owner_address used to sign this transaction. */
+
+  owner_address: string;
+}
+export interface MsgGrantEntityAccountAuthzResponse {}
+export interface MsgGrantEntityAccountAuthzResponseSDKType {}
 
 function createBaseMsgCreateEntity(): MsgCreateEntity {
   return {
@@ -1091,6 +1178,292 @@ export const MsgTransferEntityResponse = {
 
   fromPartial(_: Partial<MsgTransferEntityResponse>): MsgTransferEntityResponse {
     const message = createBaseMsgTransferEntityResponse();
+    return message;
+  }
+
+};
+
+function createBaseMsgCreateEntityAccount(): MsgCreateEntityAccount {
+  return {
+    id: "",
+    name: "",
+    ownerAddress: ""
+  };
+}
+
+export const MsgCreateEntityAccount = {
+  encode(message: MsgCreateEntityAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+
+    if (message.ownerAddress !== "") {
+      writer.uint32(26).string(message.ownerAddress);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateEntityAccount {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgCreateEntityAccount();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+
+        case 2:
+          message.name = reader.string();
+          break;
+
+        case 3:
+          message.ownerAddress = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreateEntityAccount {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      name: isSet(object.name) ? String(object.name) : "",
+      ownerAddress: isSet(object.ownerAddress) ? String(object.ownerAddress) : ""
+    };
+  },
+
+  toJSON(message: MsgCreateEntityAccount): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.name !== undefined && (obj.name = message.name);
+    message.ownerAddress !== undefined && (obj.ownerAddress = message.ownerAddress);
+    return obj;
+  },
+
+  fromPartial(object: Partial<MsgCreateEntityAccount>): MsgCreateEntityAccount {
+    const message = createBaseMsgCreateEntityAccount();
+    message.id = object.id ?? "";
+    message.name = object.name ?? "";
+    message.ownerAddress = object.ownerAddress ?? "";
+    return message;
+  }
+
+};
+
+function createBaseMsgCreateEntityAccountResponse(): MsgCreateEntityAccountResponse {
+  return {
+    account: ""
+  };
+}
+
+export const MsgCreateEntityAccountResponse = {
+  encode(message: MsgCreateEntityAccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.account !== "") {
+      writer.uint32(10).string(message.account);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateEntityAccountResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgCreateEntityAccountResponse();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.account = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreateEntityAccountResponse {
+    return {
+      account: isSet(object.account) ? String(object.account) : ""
+    };
+  },
+
+  toJSON(message: MsgCreateEntityAccountResponse): unknown {
+    const obj: any = {};
+    message.account !== undefined && (obj.account = message.account);
+    return obj;
+  },
+
+  fromPartial(object: Partial<MsgCreateEntityAccountResponse>): MsgCreateEntityAccountResponse {
+    const message = createBaseMsgCreateEntityAccountResponse();
+    message.account = object.account ?? "";
+    return message;
+  }
+
+};
+
+function createBaseMsgGrantEntityAccountAuthz(): MsgGrantEntityAccountAuthz {
+  return {
+    id: "",
+    name: "",
+    granteeAddress: "",
+    grant: undefined,
+    ownerAddress: ""
+  };
+}
+
+export const MsgGrantEntityAccountAuthz = {
+  encode(message: MsgGrantEntityAccountAuthz, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+
+    if (message.granteeAddress !== "") {
+      writer.uint32(26).string(message.granteeAddress);
+    }
+
+    if (message.grant !== undefined) {
+      Grant.encode(message.grant, writer.uint32(34).fork()).ldelim();
+    }
+
+    if (message.ownerAddress !== "") {
+      writer.uint32(42).string(message.ownerAddress);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgGrantEntityAccountAuthz {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgGrantEntityAccountAuthz();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+
+        case 2:
+          message.name = reader.string();
+          break;
+
+        case 3:
+          message.granteeAddress = reader.string();
+          break;
+
+        case 4:
+          message.grant = Grant.decode(reader, reader.uint32());
+          break;
+
+        case 5:
+          message.ownerAddress = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): MsgGrantEntityAccountAuthz {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      name: isSet(object.name) ? String(object.name) : "",
+      granteeAddress: isSet(object.granteeAddress) ? String(object.granteeAddress) : "",
+      grant: isSet(object.grant) ? Grant.fromJSON(object.grant) : undefined,
+      ownerAddress: isSet(object.ownerAddress) ? String(object.ownerAddress) : ""
+    };
+  },
+
+  toJSON(message: MsgGrantEntityAccountAuthz): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.name !== undefined && (obj.name = message.name);
+    message.granteeAddress !== undefined && (obj.granteeAddress = message.granteeAddress);
+    message.grant !== undefined && (obj.grant = message.grant ? Grant.toJSON(message.grant) : undefined);
+    message.ownerAddress !== undefined && (obj.ownerAddress = message.ownerAddress);
+    return obj;
+  },
+
+  fromPartial(object: Partial<MsgGrantEntityAccountAuthz>): MsgGrantEntityAccountAuthz {
+    const message = createBaseMsgGrantEntityAccountAuthz();
+    message.id = object.id ?? "";
+    message.name = object.name ?? "";
+    message.granteeAddress = object.granteeAddress ?? "";
+    message.grant = object.grant !== undefined && object.grant !== null ? Grant.fromPartial(object.grant) : undefined;
+    message.ownerAddress = object.ownerAddress ?? "";
+    return message;
+  }
+
+};
+
+function createBaseMsgGrantEntityAccountAuthzResponse(): MsgGrantEntityAccountAuthzResponse {
+  return {};
+}
+
+export const MsgGrantEntityAccountAuthzResponse = {
+  encode(_: MsgGrantEntityAccountAuthzResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgGrantEntityAccountAuthzResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgGrantEntityAccountAuthzResponse();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(_: any): MsgGrantEntityAccountAuthzResponse {
+    return {};
+  },
+
+  toJSON(_: MsgGrantEntityAccountAuthzResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: Partial<MsgGrantEntityAccountAuthzResponse>): MsgGrantEntityAccountAuthzResponse {
+    const message = createBaseMsgGrantEntityAccountAuthzResponse();
     return message;
   }
 

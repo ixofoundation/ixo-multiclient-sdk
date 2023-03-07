@@ -88,44 +88,52 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
-    test("query claim collections list", async () => {
-      const res = await queryClient.ixo.claims.v1beta1.collectionList();
-      console.log(res.collections);
-      expect(res).toBeTruthy();
-    });
+    // test("query claim collections list", async () => {
+    //   const res = await queryClient.ixo.claims.v1beta1.collectionList();
+    //   console.log(res.collections);
+    //   expect(res).toBeTruthy();
+    // });
 
-    test("query claims list", async () => {
-      const res = await queryClient.ixo.claims.v1beta1.claimList();
-      console.log(res.claims);
-      expect(res).toBeTruthy();
-    });
+    // test("query claims list", async () => {
+    //   const res = await queryClient.ixo.claims.v1beta1.claimList();
+    //   console.log(res.claims);
+    //   expect(res).toBeTruthy();
+    // });
 
-    test("query dispute list", async () => {
-      const res = await queryClient.ixo.claims.v1beta1.disputeList();
-      console.log(res.disputes);
-      expect(res).toBeTruthy();
-    });
+    // test("query dispute list", async () => {
+    //   const res = await queryClient.ixo.claims.v1beta1.disputeList();
+    //   console.log(res.disputes);
+    //   expect(res).toBeTruthy();
+    // });
 
-    test("query grants by grantee", async () => {
-      const user = (await getUser(WalletUsers.alice).getAccounts())[0].address;
-      const res = await queryClient.cosmos.authz.v1beta1.granteeGrants({
-        grantee: user,
-      });
-      if (res.grants.length > 0) {
-        console.log(
-          res.grants.map((g) => {
-            g.expiration = g.expiration?.seconds as any;
-            return g;
-          })
-        );
-        console.log(
-          res.grants.map(
-            (g) => createRegistry().decode(g.authorization!).constraints
-          )
-        );
-      }
-      expect(res).toBeTruthy();
-    });
+    // test("query entity list", async () => {
+    //   const res = await queryClient.ixo.entity.v1beta1.entityList();
+    //   console.log(res.entities);
+    //   console.log(res.entities.map((e) => e.accounts));
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("query grants by grantee", async () => {
+    //   const user = (await getUser(WalletUsers.alice).getAccounts())[0].address;
+    //   const res = await queryClient.cosmos.authz.v1beta1.granteeGrants({
+    //     grantee: user,
+    //   });
+    //   if (res.grants.length > 0) {
+    //     console.log(
+    //       res.grants.map((g) => {
+    //         g.expiration = g.expiration?.seconds as any;
+    //         return g;
+    //       })
+    //     );
+    //     console.log(
+    //       res.grants.map((g) => {
+    //         const auth = createRegistry().decode(g.authorization!);
+    //         return auth.constraints || auth;
+    //       })
+    //     );
+    //   }
+    //   expect(res).toBeTruthy();
+    // });
 
     // test("query grants by granter", async () => {
     //   const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;
@@ -134,9 +142,12 @@ export const quickQueries = () =>
     //   });
     //   console.log(res.grants);
     //   if (res.grants.length > 0)
-    //     console.log(
-    //       res.grants.map((g) => createRegistry().decode(g.authorization!))
-    //     );
+    // console.log(
+    //   res.grants.map((g) => {
+    //     const auth = createRegistry().decode(g.authorization!);
+    //     return auth.constraints || auth;
+    //   })
+    // );
     //   expect(res).toBeTruthy();
     // });
 
@@ -155,6 +166,23 @@ export const quickQueries = () =>
     //     console.log(
     //       res.grants.map((g) => createRegistry().decode(g.authorization!))
     //     );
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("query iid doc", async () => {
+    //   const did: string =
+    //     "did:x:zQ3shUQYdonbR4CaaWBmfYMHND7KEXY3tEStFndNGWp4njQ54";
+    //   // const did = getUser(WalletUsers.tester).did;
+    //   const res = await queryClient.ixo.iid.v1beta1.iidDocument({
+    //     id: did,
+    //   });
+    //   console.log(res.iidDocument);
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query module params", async () => {
+    //   const res = await queryClient.ixo.entity.v1beta1.params();
+    //   console.log(res.params);
     //   expect(res).toBeTruthy();
     // });
   });

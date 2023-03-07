@@ -20,8 +20,23 @@ export const authzBasic = () =>
       return res;
     });
 
+    // quick helper to send funds to an address
+    // testMsg("test Bank Send", async () => {
+    //   const res = await Cosmos.BankSendTrx(
+    //     1000000000,
+    //     WalletUsers.tester,
+    //     undefined,
+    //     "ixo1syjk0qh59vxz3zk776m5vrzvyv4nwpvh57yps2"
+    //   );
+    //   console.log(res);
+    //   return res;
+    // });
+
     testMsg("test Exec Send", async () => {
-      const res = await Authz.MsgExecSend();
+      const res = await Authz.MsgExecSend(
+        1000000,
+        "ixo1syjk0qh59vxz3zk776m5vrzvyv4nwpvh57yps2"
+      );
       console.log(res);
       return res;
     });

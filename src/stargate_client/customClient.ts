@@ -55,19 +55,6 @@ function createDefaultRegistry(): Registry {
   return new Registry(defaultRegistryTypes);
 }
 
-// function createDefaultTypes(prefix: string) {
-//   return {
-//     ...createAuthzAminoConverters(),
-//     ...createBankAminoConverters(),
-//     ...createDistributionAminoConverters(),
-//     ...createGovAminoConverters(),
-//     ...createStakingAminoConverters(prefix),
-//     ...createIbcAminoConverters(),
-//     ...createFreegrantAminoConverters(),
-//     ...createVestingAminoConverters(),
-//   };
-// }
-
 export class SigningStargateClient extends StargateClient {
   public readonly registry: Registry;
   public readonly broadcastTimeoutMs: number | undefined;

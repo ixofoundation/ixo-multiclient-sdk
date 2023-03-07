@@ -50,6 +50,9 @@ export interface Entity {
    */
 
   metadata?: EntityMetadata;
+  /** module accounts created for entity */
+
+  accounts: EntityAccount[];
 }
 export interface EntitySDKType {
   /** id represents the id for the entity document. */
@@ -90,6 +93,17 @@ export interface EntitySDKType {
    */
 
   metadata?: EntityMetadataSDKType;
+  /** module accounts created for entity */
+
+  accounts: EntityAccountSDKType[];
+}
+export interface EntityAccount {
+  name: string;
+  address: string;
+}
+export interface EntityAccountSDKType {
+  name: string;
+  address: string;
 }
 /** EntityMetadata defines metadata associated to a entity */
 
@@ -197,7 +211,8 @@ function createBaseEntity(): Entity {
     relayerNode: "",
     credentials: [],
     entityVerified: false,
-    metadata: undefined
+    metadata: undefined,
+    accounts: []
   };
 }
 
@@ -237,6 +252,10 @@ export const Entity = {
 
     if (message.metadata !== undefined) {
       EntityMetadata.encode(message.metadata, writer.uint32(74).fork()).ldelim();
+    }
+
+    for (const v of message.accounts) {
+      EntityAccount.encode(v!, writer.uint32(82).fork()).ldelim();
     }
 
     return writer;
@@ -287,6 +306,10 @@ export const Entity = {
           message.metadata = EntityMetadata.decode(reader, reader.uint32());
           break;
 
+        case 10:
+          message.accounts.push(EntityAccount.decode(reader, reader.uint32()));
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -306,7 +329,8 @@ export const Entity = {
       relayerNode: isSet(object.relayerNode) ? String(object.relayerNode) : "",
       credentials: Array.isArray(object?.credentials) ? object.credentials.map((e: any) => String(e)) : [],
       entityVerified: isSet(object.entityVerified) ? Boolean(object.entityVerified) : false,
-      metadata: isSet(object.metadata) ? EntityMetadata.fromJSON(object.metadata) : undefined
+      metadata: isSet(object.metadata) ? EntityMetadata.fromJSON(object.metadata) : undefined,
+      accounts: Array.isArray(object?.accounts) ? object.accounts.map((e: any) => EntityAccount.fromJSON(e)) : []
     };
   },
 
@@ -327,6 +351,13 @@ export const Entity = {
 
     message.entityVerified !== undefined && (obj.entityVerified = message.entityVerified);
     message.metadata !== undefined && (obj.metadata = message.metadata ? EntityMetadata.toJSON(message.metadata) : undefined);
+
+    if (message.accounts) {
+      obj.accounts = message.accounts.map(e => e ? EntityAccount.toJSON(e) : undefined);
+    } else {
+      obj.accounts = [];
+    }
+
     return obj;
   },
 
@@ -341,6 +372,76 @@ export const Entity = {
     message.credentials = object.credentials?.map(e => e) || [];
     message.entityVerified = object.entityVerified ?? false;
     message.metadata = object.metadata !== undefined && object.metadata !== null ? EntityMetadata.fromPartial(object.metadata) : undefined;
+    message.accounts = object.accounts?.map(e => EntityAccount.fromPartial(e)) || [];
+    return message;
+  }
+
+};
+
+function createBaseEntityAccount(): EntityAccount {
+  return {
+    name: "",
+    address: ""
+  };
+}
+
+export const EntityAccount = {
+  encode(message: EntityAccount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+
+    if (message.address !== "") {
+      writer.uint32(18).string(message.address);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): EntityAccount {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEntityAccount();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.name = reader.string();
+          break;
+
+        case 2:
+          message.address = reader.string();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): EntityAccount {
+    return {
+      name: isSet(object.name) ? String(object.name) : "",
+      address: isSet(object.address) ? String(object.address) : ""
+    };
+  },
+
+  toJSON(message: EntityAccount): unknown {
+    const obj: any = {};
+    message.name !== undefined && (obj.name = message.name);
+    message.address !== undefined && (obj.address = message.address);
+    return obj;
+  },
+
+  fromPartial(object: Partial<EntityAccount>): EntityAccount {
+    const message = createBaseEntityAccount();
+    message.name = object.name ?? "";
+    message.address = object.address ?? "";
     return message;
   }
 
