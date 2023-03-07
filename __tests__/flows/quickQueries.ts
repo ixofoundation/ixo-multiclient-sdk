@@ -179,4 +179,10 @@ export const quickQueries = () =>
     //   console.log(res.iidDocument);
     //   expect(res).toBeTruthy();
     // });
+
+    // test("Query module params", async () => {
+    //   const res = await queryClient.ixo.entity.v1beta1.params();
+    //   console.log(res.params);
+    //   expect(res).toBeTruthy();
+    // });
   });
