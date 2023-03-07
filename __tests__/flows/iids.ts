@@ -34,7 +34,7 @@ export const registerIids = () =>
     );
 
     users.forEach((user) => {
-      // sendFromFaucet(user);
+      sendFromFaucet(user);
       testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () =>
         Iid.CreateIidDoc(user)
       );

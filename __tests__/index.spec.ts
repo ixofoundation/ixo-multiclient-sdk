@@ -12,12 +12,12 @@ import {
   registerIids,
   generateBlockchainTestUsers,
 } from "./flows/iids";
-import { enititiesBasic, supamotoFlow } from "./flows/entities";
+import { enititiesBasic, supamotoEntitiesFlow } from "./flows/entities";
 import { paymentsBasic } from "./flows/payments";
 import { ibcBasic } from "./flows/ibc";
 import { bankBasic, authzBasic, sendTokens } from "./flows/cosmos";
 import { instantiateModulesProposals } from "./flows/instantiateProposals";
-import { tokenBasic } from "./flows/tokens";
+import { tokenBasic, supamotoTokensFlow } from "./flows/tokens";
 import { projectsBasic } from "./flows/projects";
 import { daoCore, wasmBasic } from "./flows/cosmwasm";
 import { quickQueries } from "./flows/quickQueries";
@@ -41,7 +41,6 @@ generateBlockchainTestUsers();
 // bondsSellsDisabled();
 // bondsSellsEnabled();
 // enititiesBasic();
-// supamotoFlow();
 // tokenBasic();
 // claimsBasic();
 // ibcBasic();
@@ -49,4 +48,9 @@ generateBlockchainTestUsers();
 // authzBasic();
 // wasmBasic();
 // daoCore();
-quickQueries();
+// quickQueries();
+
+// Run the below after a devnet reset
+// registerIids();
+// supamotoEntitiesFlow();
+// supamotoTokensFlow();

@@ -1,4 +1,3 @@
-import { CellnodeWeb3Resource } from "../../src/custom_queries/cellnode";
 import {
   customQueries,
   getFileFromPath,
@@ -50,7 +49,8 @@ export const enititiesBasic = () =>
     });
   });
 
-export const supamotoFlow = () =>
+// flow to run after devnet was reset, please dont change as using constants
+export const supamotoEntitiesFlow = () =>
   describe("Testing the Supamoto nfts flow", () => {
     const cellNodeNetwork = "devnet";
 
