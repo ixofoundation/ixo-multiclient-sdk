@@ -50,7 +50,7 @@ export const enititiesBasic = () =>
   });
 
 // flow to run after devnet was reset, please dont change as using constants
-export const supamotoEntitiesFlow = () =>
+export const supamotoEntities = () =>
   describe("Testing the Supamoto nfts flow", () => {
     const cellNodeNetwork = "devnet";
 

@@ -124,7 +124,7 @@ export const tokenBasic = () =>
   });
 
 // flow to run after devnet was reset, please dont change as using constants
-export const supamotoTokensFlow = () =>
+export const supamotoTokens = () =>
   describe("Testing the Supamoto Tokens flow", () => {
     let name = "CARBON";
     let description = "Carbon credits";

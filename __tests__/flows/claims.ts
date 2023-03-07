@@ -19,28 +19,28 @@ export const claimsBasic = () =>
     // });
 
     let collectionId = "1";
-    // testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
-    //   const res = await Claims.CreateCollection(protocol, protocol);
-    //   console.log(res.rawLog);
-    //   return res;
-    // });
+    testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
+      const res = await Claims.CreateCollection(protocol, protocol);
+      console.log(res.rawLog);
+      return res;
+    });
 
     let claimId = "1";
-    // testMsg("/ixo.claims.v1beta1.MsgSubmitClaim", async () => {
-    //   const res = await Claims.SubmitClaim(claimId, collectionId);
-    //   console.log(res.rawLog);
-    //   return res;
-    // });
+    testMsg("/ixo.claims.v1beta1.MsgSubmitClaim", async () => {
+      const res = await Claims.SubmitClaim(claimId, collectionId);
+      console.log(res.rawLog);
+      return res;
+    });
 
-    // testMsg("/ixo.claims.v1beta1.MsgEvaluateClaim", async () => {
-    //   const res = await Claims.EvaluateClaim(claimId, collectionId);
-    //   console.log(res.rawLog);
-    //   return res;
-    // });
+    testMsg("/ixo.claims.v1beta1.MsgEvaluateClaim", async () => {
+      const res = await Claims.EvaluateClaim(claimId, collectionId);
+      console.log(res.rawLog);
+      return res;
+    });
 
-    // testMsg("/ixo.claims.v1beta1.MsgDisputeClaim", () =>
-    //   Claims.DisputeClaim(claimId, "proof1")
-    // );
+    testMsg("/ixo.claims.v1beta1.MsgDisputeClaim", () =>
+      Claims.DisputeClaim(claimId, "proof1")
+    );
 
     // testMsg("/ixo.claims.v1beta1.MsgWithdrawPayment", () =>
     //   Claims.WithdrawPayment(claimId)
@@ -67,4 +67,45 @@ export const claimsBasic = () =>
     // testMsg("/cosmos.authz.v1beta1.MsgExec withdraw payment", () =>
     //   Claims.MsgExecWithdrawal(claimId)
     // );
+  });
+
+// flow to run after devnet was reset, please dont change
+export const claimsDev = () =>
+  describe("Testing the Claims module", () => {
+    // Create protocol
+    let protocol = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
+    testMsg("/ixo.entity.v1beta1.MsgCreateEntity protocol", async () => {
+      const res = await Entity.CreateEntity(
+        "protocol",
+        undefined,
+        WalletUsers.charlie
+      );
+      protocol = utils.common.getValueFromEvents(res, "wasm", "token_id");
+      console.log({ protocol });
+      return res;
+    });
+
+    let collectionId = "1";
+    testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
+      const res = await Claims.CreateCollection(protocol, protocol);
+      console.log(res.rawLog);
+      return res;
+    });
+
+    let claimId = "1";
+    testMsg("/ixo.claims.v1beta1.MsgSubmitClaim", async () => {
+      const res = await Claims.SubmitClaim(claimId, collectionId);
+      console.log(res.rawLog);
+      return res;
+    });
+
+    testMsg("/ixo.claims.v1beta1.MsgEvaluateClaim", async () => {
+      const res = await Claims.EvaluateClaim(claimId, collectionId);
+      console.log(res.rawLog);
+      return res;
+    });
+
+    testMsg("/ixo.claims.v1beta1.MsgDisputeClaim", () =>
+      Claims.DisputeClaim(claimId, "proof1")
+    );
   });

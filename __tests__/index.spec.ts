@@ -10,18 +10,19 @@ import {
 import {
   iidsBasic,
   registerIids,
+  registerIidsDev,
   generateBlockchainTestUsers,
 } from "./flows/iids";
-import { enititiesBasic, supamotoEntitiesFlow } from "./flows/entities";
+import { enititiesBasic, supamotoEntities } from "./flows/entities";
 import { paymentsBasic } from "./flows/payments";
 import { ibcBasic } from "./flows/ibc";
 import { bankBasic, authzBasic, sendTokens } from "./flows/cosmos";
 import { instantiateModulesProposals } from "./flows/instantiateProposals";
-import { tokenBasic, supamotoTokensFlow } from "./flows/tokens";
+import { tokenBasic, supamotoTokens } from "./flows/tokens";
 import { projectsBasic } from "./flows/projects";
 import { daoCore, wasmBasic } from "./flows/cosmwasm";
 import { quickQueries } from "./flows/quickQueries";
-import { claimsBasic } from "./flows/claims";
+import { claimsBasic, claimsDev } from "./flows/claims";
 
 beforeAll(() => {
   generateConstants();
@@ -51,6 +52,7 @@ generateBlockchainTestUsers();
 // quickQueries();
 
 // Run the below after a devnet reset
-// registerIids();
-// supamotoEntitiesFlow();
-// supamotoTokensFlow();
+// registerIidsDev();
+// supamotoEntities();
+// supamotoTokens();
+// claimsDev();

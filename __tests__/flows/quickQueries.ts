@@ -181,7 +181,7 @@ export const quickQueries = () =>
     // });
 
     // test("Query module params", async () => {
-    //   const res = await queryClient.ixo.entity.v1beta1.params();
+    //   const res = await queryClient.ixo.claims.v1beta1.params();
     //   console.log(res.params);
     //   expect(res).toBeTruthy();
     // });

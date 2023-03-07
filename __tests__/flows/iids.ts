@@ -49,6 +49,21 @@ export const registerIids = () =>
     // );
   });
 
+// flow to run after devnet was reset, please dont change as using constants
+export const registerIidsDev = () =>
+  describe("Testing the faucet and creation of Iids for dev", () => {
+    const users = Object.values(WalletUsers).filter(
+      (user) => !["project", "bond", "oracle", "random"].includes(user)
+    );
+
+    users.forEach((user) => {
+      sendFromFaucet(user);
+      testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () =>
+        Iid.CreateIidDoc(user)
+      );
+    });
+  });
+
 export const iidsBasic = () =>
   describe("Testing the Iid module", () => {
     // testMsg("/ixo.iid.v1beta1.MsgUpdateIidDocument", () => Iid.UpdateIidDoc());
