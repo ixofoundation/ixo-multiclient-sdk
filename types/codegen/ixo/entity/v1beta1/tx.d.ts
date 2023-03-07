@@ -1,6 +1,7 @@
 import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, LinkedClaim, LinkedClaimSDKType } from "../../iid/v1beta1/types";
 import { Verification, VerificationSDKType } from "../../iid/v1beta1/tx";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
+import { Grant, GrantSDKType } from "./cosmos";
 import * as _m0 from "protobufjs/minimal";
 export interface MsgCreateEntity {
     /** An Entity Type as defined by the implementer */
@@ -198,6 +199,7 @@ export interface MsgUpdateEntityVerifiedResponseSDKType {
 }
 export interface MsgTransferEntity {
     id: string;
+    /** The owner_did used to sign this transaction. */
     ownerDid: string;
     /** The owner_address used to sign this transaction. */
     ownerAddress: string;
@@ -205,6 +207,7 @@ export interface MsgTransferEntity {
 }
 export interface MsgTransferEntitySDKType {
     id: string;
+    /** The owner_did used to sign this transaction. */
     owner_did: string;
     /** The owner_address used to sign this transaction. */
     owner_address: string;
@@ -213,6 +216,74 @@ export interface MsgTransferEntitySDKType {
 export interface MsgTransferEntityResponse {
 }
 export interface MsgTransferEntityResponseSDKType {
+}
+/**
+ * create a module account for an entity, account details will be added as a
+ * linkedEntity on entity iid doc where linkedEntity id is didfragment: did#name
+ */
+export interface MsgCreateEntityAccount {
+    /** entity id (did) to create account for */
+    id: string;
+    /** name of account */
+    name: string;
+    /** The owner_address used to sign this transaction. */
+    ownerAddress: string;
+}
+/**
+ * create a module account for an entity, account details will be added as a
+ * linkedEntity on entity iid doc where linkedEntity id is didfragment: did#name
+ */
+export interface MsgCreateEntityAccountSDKType {
+    /** entity id (did) to create account for */
+    id: string;
+    /** name of account */
+    name: string;
+    /** The owner_address used to sign this transaction. */
+    owner_address: string;
+}
+export interface MsgCreateEntityAccountResponse {
+    /** account address that was created for specific entity and account name */
+    account: string;
+}
+export interface MsgCreateEntityAccountResponseSDKType {
+    /** account address that was created for specific entity and account name */
+    account: string;
+}
+/**
+ * Create a authz grant from entity account (as grantor) to recipient in msg as
+ * grantee for the specific authorization
+ */
+export interface MsgGrantEntityAccountAuthz {
+    /** entity id (did) to create account for */
+    id: string;
+    /** name of account */
+    name: string;
+    /** the grantee address that will be able to execute the authz authorization */
+    granteeAddress: string;
+    /** grant to be Authorized in authz grant */
+    grant?: Grant;
+    /** the owner_address used to sign this transaction. */
+    ownerAddress: string;
+}
+/**
+ * Create a authz grant from entity account (as grantor) to recipient in msg as
+ * grantee for the specific authorization
+ */
+export interface MsgGrantEntityAccountAuthzSDKType {
+    /** entity id (did) to create account for */
+    id: string;
+    /** name of account */
+    name: string;
+    /** the grantee address that will be able to execute the authz authorization */
+    grantee_address: string;
+    /** grant to be Authorized in authz grant */
+    grant?: GrantSDKType;
+    /** the owner_address used to sign this transaction. */
+    owner_address: string;
+}
+export interface MsgGrantEntityAccountAuthzResponse {
+}
+export interface MsgGrantEntityAccountAuthzResponseSDKType {
 }
 export declare const MsgCreateEntity: {
     encode(message: MsgCreateEntity, writer?: _m0.Writer): _m0.Writer;
@@ -269,4 +340,32 @@ export declare const MsgTransferEntityResponse: {
     fromJSON(_: any): MsgTransferEntityResponse;
     toJSON(_: MsgTransferEntityResponse): unknown;
     fromPartial(_: Partial<MsgTransferEntityResponse>): MsgTransferEntityResponse;
+};
+export declare const MsgCreateEntityAccount: {
+    encode(message: MsgCreateEntityAccount, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateEntityAccount;
+    fromJSON(object: any): MsgCreateEntityAccount;
+    toJSON(message: MsgCreateEntityAccount): unknown;
+    fromPartial(object: Partial<MsgCreateEntityAccount>): MsgCreateEntityAccount;
+};
+export declare const MsgCreateEntityAccountResponse: {
+    encode(message: MsgCreateEntityAccountResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateEntityAccountResponse;
+    fromJSON(object: any): MsgCreateEntityAccountResponse;
+    toJSON(message: MsgCreateEntityAccountResponse): unknown;
+    fromPartial(object: Partial<MsgCreateEntityAccountResponse>): MsgCreateEntityAccountResponse;
+};
+export declare const MsgGrantEntityAccountAuthz: {
+    encode(message: MsgGrantEntityAccountAuthz, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgGrantEntityAccountAuthz;
+    fromJSON(object: any): MsgGrantEntityAccountAuthz;
+    toJSON(message: MsgGrantEntityAccountAuthz): unknown;
+    fromPartial(object: Partial<MsgGrantEntityAccountAuthz>): MsgGrantEntityAccountAuthz;
+};
+export declare const MsgGrantEntityAccountAuthzResponse: {
+    encode(_: MsgGrantEntityAccountAuthzResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgGrantEntityAccountAuthzResponse;
+    fromJSON(_: any): MsgGrantEntityAccountAuthzResponse;
+    toJSON(_: MsgGrantEntityAccountAuthzResponse): unknown;
+    fromPartial(_: Partial<MsgGrantEntityAccountAuthzResponse>): MsgGrantEntityAccountAuthzResponse;
 };

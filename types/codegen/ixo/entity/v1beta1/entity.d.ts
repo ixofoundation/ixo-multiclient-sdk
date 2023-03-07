@@ -42,6 +42,8 @@ export interface Entity {
      * deactivated
      */
     metadata?: EntityMetadata;
+    /** module accounts created for entity */
+    accounts: EntityAccount[];
 }
 export interface EntitySDKType {
     /** id represents the id for the entity document. */
@@ -74,6 +76,16 @@ export interface EntitySDKType {
      * deactivated
      */
     metadata?: EntityMetadataSDKType;
+    /** module accounts created for entity */
+    accounts: EntityAccountSDKType[];
+}
+export interface EntityAccount {
+    name: string;
+    address: string;
+}
+export interface EntityAccountSDKType {
+    name: string;
+    address: string;
 }
 /** EntityMetadata defines metadata associated to a entity */
 export interface EntityMetadata {
@@ -100,6 +112,13 @@ export declare const Entity: {
     fromJSON(object: any): Entity;
     toJSON(message: Entity): unknown;
     fromPartial(object: Partial<Entity>): Entity;
+};
+export declare const EntityAccount: {
+    encode(message: EntityAccount, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): EntityAccount;
+    fromJSON(object: any): EntityAccount;
+    toJSON(message: EntityAccount): unknown;
+    fromPartial(object: Partial<EntityAccount>): EntityAccount;
 };
 export declare const EntityMetadata: {
     encode(message: EntityMetadata, writer?: _m0.Writer): _m0.Writer;

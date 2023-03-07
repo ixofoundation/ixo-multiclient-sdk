@@ -50,13 +50,15 @@ export const MsgGrantSend = async (
 };
 
 export const MsgExecSend = async (
-  amount = "1000",
+  amount = 1000,
+  granterAddress?: string,
   granter = WalletUsers.tester,
   grantee = WalletUsers.alice
 ) => {
   const client = await createClient(getUser(grantee));
 
-  const granterAddress = (await getUser(granter).getAccounts())[0].address;
+  const granterrAddress =
+    granterAddress || (await getUser(granter).getAccounts())[0].address;
   const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
 
   const message = {
@@ -70,11 +72,11 @@ export const MsgExecSend = async (
             cosmos.bank.v1beta1.MsgSend.fromPartial({
               amount: [
                 cosmos.base.v1beta1.Coin.fromPartial({
-                  amount,
+                  amount: amount.toString(),
                   denom: "uixo",
                 }),
               ],
-              fromAddress: granterAddress,
+              fromAddress: granterrAddress,
               toAddress: granteeAddress,
             })
           ).finish(),

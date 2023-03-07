@@ -14,12 +14,14 @@ import Long from "long";
 export const BankSendTrx = async (
   amount = Math.pow(10, 6),
   fromUser = WalletUsers.random,
-  toUser = WalletUsers.tester
+  toUser = WalletUsers.tester,
+  toAddresss?: string
 ) => {
   const client = await createClient(getUser(fromUser));
 
   const fromAddress = (await getUser(fromUser).getAccounts())[0].address;
-  const toAddress = (await getUser(toUser).getAccounts())[0].address;
+  const toAddress =
+    toAddresss || (await getUser(toUser).getAccounts())[0].address;
 
   const message = {
     typeUrl: "/cosmos.bank.v1beta1.MsgSend",

@@ -49,4 +49,4 @@ generateBlockchainTestUsers();
 // authzBasic();
 // wasmBasic();
 // daoCore();
-// quickQueries();
+quickQueries();

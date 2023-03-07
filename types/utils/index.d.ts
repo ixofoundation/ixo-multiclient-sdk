@@ -9,7 +9,7 @@ export declare namespace utils {
         jsonToBase64: (json: unknown) => string;
     };
     const did: {
-        generateSecpDid(pubkey: string, prefix?: string): string;
+        generateSecpDid(pubkey: string | Uint8Array, prefix?: string): string;
     };
     const mnemonic: {
         Bip39: typeof _3.Bip39;

@@ -1,6 +1,6 @@
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { MsgCreateEntity, MsgCreateEntityResponse, MsgUpdateEntity, MsgUpdateEntityResponse, MsgUpdateEntityVerified, MsgUpdateEntityVerifiedResponse, MsgTransferEntity, MsgTransferEntityResponse } from "./tx";
+import { MsgCreateEntity, MsgCreateEntityResponse, MsgUpdateEntity, MsgUpdateEntityResponse, MsgUpdateEntityVerified, MsgUpdateEntityVerifiedResponse, MsgTransferEntity, MsgTransferEntityResponse, MsgCreateEntityAccount, MsgCreateEntityAccountResponse, MsgGrantEntityAccountAuthz, MsgGrantEntityAccountAuthzResponse } from "./tx";
 /** Msg defines the project Msg service. */
 
 export interface Msg {
@@ -15,6 +15,12 @@ export interface Msg {
   /** Transfers an entity and its nft to the recipient */
 
   transferEntity(request: MsgTransferEntity): Promise<MsgTransferEntityResponse>;
+  /** Create a module account for an entity, */
+
+  createEntityAccount(request: MsgCreateEntityAccount): Promise<MsgCreateEntityAccountResponse>;
+  /** Create a authz grant from entity account */
+
+  grantEntityAccountAuthz(request: MsgGrantEntityAccountAuthz): Promise<MsgGrantEntityAccountAuthzResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -25,6 +31,8 @@ export class MsgClientImpl implements Msg {
     this.updateEntity = this.updateEntity.bind(this);
     this.updateEntityVerified = this.updateEntityVerified.bind(this);
     this.transferEntity = this.transferEntity.bind(this);
+    this.createEntityAccount = this.createEntityAccount.bind(this);
+    this.grantEntityAccountAuthz = this.grantEntityAccountAuthz.bind(this);
   }
 
   createEntity(request: MsgCreateEntity): Promise<MsgCreateEntityResponse> {
@@ -49,6 +57,18 @@ export class MsgClientImpl implements Msg {
     const data = MsgTransferEntity.encode(request).finish();
     const promise = this.rpc.request("ixo.entity.v1beta1.Msg", "TransferEntity", data);
     return promise.then(data => MsgTransferEntityResponse.decode(new _m0.Reader(data)));
+  }
+
+  createEntityAccount(request: MsgCreateEntityAccount): Promise<MsgCreateEntityAccountResponse> {
+    const data = MsgCreateEntityAccount.encode(request).finish();
+    const promise = this.rpc.request("ixo.entity.v1beta1.Msg", "CreateEntityAccount", data);
+    return promise.then(data => MsgCreateEntityAccountResponse.decode(new _m0.Reader(data)));
+  }
+
+  grantEntityAccountAuthz(request: MsgGrantEntityAccountAuthz): Promise<MsgGrantEntityAccountAuthzResponse> {
+    const data = MsgGrantEntityAccountAuthz.encode(request).finish();
+    const promise = this.rpc.request("ixo.entity.v1beta1.Msg", "GrantEntityAccountAuthz", data);
+    return promise.then(data => MsgGrantEntityAccountAuthzResponse.decode(new _m0.Reader(data)));
   }
 
 }

@@ -4,7 +4,7 @@ import { concatArrayBuffers } from "./conversions";
 /**
  * @param pubkey Uint8Array or base58 encoded string
  */
-export function generateSecpDid(pubkey: string, prefix?: string) {
+export function generateSecpDid(pubkey: string | Uint8Array, prefix?: string) {
   const base58btcCode = "z";
   const secp256k1PubCode = new Uint8Array([0xe7, 0x01]);
   const pubKeyBz = typeof pubkey === "string" ? base58.decode(pubkey) : pubkey;

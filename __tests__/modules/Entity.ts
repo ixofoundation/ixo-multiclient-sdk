@@ -2,7 +2,15 @@ import {
   createAgentIidContext,
   createIidVerificationMethods,
 } from "../../src/messages/iid";
-import { createClient, getUser, ixo, queryClient } from "../helpers/common";
+import {
+  addDays,
+  cosmos,
+  createClient,
+  getUser,
+  ixo,
+  queryClient,
+  utils,
+} from "../helpers/common";
 import { fee, keyType, WalletUsers } from "../helpers/constants";
 
 export const CreateEntity = async (
@@ -398,5 +406,76 @@ export const UpdateEntityVerified = async (
   };
 
   const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const CreateEntityAccount = async (
+  entityDid: string,
+  name = "name",
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = (await getUser(signer).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/ixo.entity.v1beta1.MsgCreateEntityAccount",
+    value: ixo.entity.v1beta1.MsgCreateEntityAccount.fromPartial({
+      id: entityDid,
+      ownerAddress: tester,
+      name,
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
+export const GrantEntityAccountAuthz = async (
+  entityDid: string,
+  name = "name",
+  grantee: WalletUsers = WalletUsers.alice,
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = (await getUser(signer).getAccounts())[0].address;
+  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
+    value: ixo.entity.v1beta1.MsgGrantEntityAccountAuthz.fromPartial({
+      id: entityDid,
+      ownerAddress: tester,
+      name,
+      granteeAddress,
+      grant: cosmos.authz.v1beta1.Grant.fromPartial({
+        authorization: {
+          typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
+          value: cosmos.authz.v1beta1.GenericAuthorization.encode(
+            cosmos.authz.v1beta1.GenericAuthorization.fromPartial({
+              msg: "/cosmos.gov.v1beta1.MsgVote",
+            })
+          ).finish(),
+        },
+        // authorization: {
+        //   typeUrl: "/cosmos.bank.v1beta1.SendAuthorization",
+        //   value: cosmos.bank.v1beta1.SendAuthorization.encode(
+        //     cosmos.bank.v1beta1.SendAuthorization.fromPartial({
+        //       spendLimit: [
+        //         cosmos.base.v1beta1.Coin.fromPartial({
+        //           amount: "10000000",
+        //           denom: "uixo",
+        //         }),
+        //       ],
+        //     })
+        //   ).finish(),
+        // },
+        expiration: utils.proto.toTimestamp(addDays(new Date(), 365)),
+      }),
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
   return response;
 };

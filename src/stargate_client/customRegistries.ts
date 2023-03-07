@@ -9,6 +9,10 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
   ["/cosmos.authz.v1beta1.MsgExec", cosmos.authz.v1beta1.MsgExec],
   ["/cosmos.authz.v1beta1.MsgGrant", cosmos.authz.v1beta1.MsgGrant],
   ["/cosmos.authz.v1beta1.MsgRevoke", cosmos.authz.v1beta1.MsgRevoke],
+  [
+    "/cosmos.authz.v1beta1.GenericAuthorization",
+    cosmos.authz.v1beta1.GenericAuthorization,
+  ],
 
   // bank
   ["/cosmos.bank.v1beta1.MsgMultiSend", cosmos.bank.v1beta1.MsgMultiSend],
@@ -278,6 +282,14 @@ export const createRegistry = (): Registry => {
   myRegistry.register(
     "/ixo.entity.v1beta1.MsgUpdateEntityVerified",
     ixo.entity.v1beta1.MsgUpdateEntityVerified
+  );
+  myRegistry.register(
+    "/ixo.entity.v1beta1.MsgCreateEntityAccount",
+    ixo.entity.v1beta1.MsgCreateEntityAccount
+  );
+  myRegistry.register(
+    "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
+    ixo.entity.v1beta1.MsgGrantEntityAccountAuthz
   );
 
   // Ixo Payments module
