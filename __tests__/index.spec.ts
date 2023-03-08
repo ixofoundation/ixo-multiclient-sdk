@@ -22,7 +22,7 @@ import { tokenBasic, supamotoTokens } from "./flows/tokens";
 import { projectsBasic } from "./flows/projects";
 import { daoCore, wasmBasic } from "./flows/cosmwasm";
 import { quickQueries } from "./flows/quickQueries";
-import { claimsBasic, claimsDev } from "./flows/claims";
+import { claimsBasic } from "./flows/claims";
 
 beforeAll(() => {
   generateConstants();
@@ -43,7 +43,7 @@ generateBlockchainTestUsers();
 // bondsSellsEnabled();
 // enititiesBasic();
 // tokenBasic();
-// claimsBasic();
+claimsBasic();
 // ibcBasic();
 // bankBasic();
 // authzBasic();
@@ -56,4 +56,3 @@ quickQueries();
 // registerIidsDev();
 // supamotoEntities();
 // supamotoTokens();
-// claimsDev();

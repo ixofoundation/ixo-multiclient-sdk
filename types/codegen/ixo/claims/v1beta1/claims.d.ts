@@ -133,6 +133,8 @@ export interface Collection {
      * rejection
      */
     payments?: Payments;
+    /** signer address */
+    signer: string;
 }
 export interface CollectionSDKType {
     /** collection id is the incremented internal id for the collection of claims */
@@ -184,6 +186,8 @@ export interface CollectionSDKType {
      * rejection
      */
     payments?: PaymentsSDKType;
+    /** signer address */
+    signer: string;
 }
 export interface Payments {
     submission?: Payment;

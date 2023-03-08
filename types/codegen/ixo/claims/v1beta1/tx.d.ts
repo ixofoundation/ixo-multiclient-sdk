@@ -7,11 +7,8 @@ import { Long } from "../../../helpers";
 export interface MsgCreateCollection {
     /** entity is the DID of the entity for which the claims are being created */
     entity: string;
-    /**
-     * admin is the account address that will authorize or revoke agents and
-     * payments (the grantor), signer for tx
-     */
-    admin: string;
+    /** signer address */
+    signer: string;
     /** protocol is the DID of the claim protocol */
     protocol: string;
     /** startDate is the date after which claims may be submitted */
@@ -34,11 +31,8 @@ export interface MsgCreateCollection {
 export interface MsgCreateCollectionSDKType {
     /** entity is the DID of the entity for which the claims are being created */
     entity: string;
-    /**
-     * admin is the account address that will authorize or revoke agents and
-     * payments (the grantor), signer for tx
-     */
-    admin: string;
+    /** signer address */
+    signer: string;
     /** protocol is the DID of the claim protocol */
     protocol: string;
     /** startDate is the date after which claims may be submitted */

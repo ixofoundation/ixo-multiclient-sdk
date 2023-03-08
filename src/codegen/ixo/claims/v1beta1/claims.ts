@@ -324,6 +324,9 @@ export interface Collection {
    */
 
   payments?: Payments;
+  /** signer address */
+
+  signer: string;
 }
 export interface CollectionSDKType {
   /** collection id is the incremented internal id for the collection of claims */
@@ -388,6 +391,9 @@ export interface CollectionSDKType {
    */
 
   payments?: PaymentsSDKType;
+  /** signer address */
+
+  signer: string;
 }
 export interface Payments {
   submission?: Payment;
@@ -712,7 +718,8 @@ function createBaseCollection(): Collection {
     rejected: Long.UZERO,
     disputed: Long.UZERO,
     state: 0,
-    payments: undefined
+    payments: undefined,
+    signer: ""
   };
 }
 
@@ -772,6 +779,10 @@ export const Collection = {
 
     if (message.payments !== undefined) {
       Payments.encode(message.payments, writer.uint32(114).fork()).ldelim();
+    }
+
+    if (message.signer !== "") {
+      writer.uint32(122).string(message.signer);
     }
 
     return writer;
@@ -842,6 +853,10 @@ export const Collection = {
           message.payments = Payments.decode(reader, reader.uint32());
           break;
 
+        case 15:
+          message.signer = reader.string();
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -866,7 +881,8 @@ export const Collection = {
       rejected: isSet(object.rejected) ? Long.fromValue(object.rejected) : Long.UZERO,
       disputed: isSet(object.disputed) ? Long.fromValue(object.disputed) : Long.UZERO,
       state: isSet(object.state) ? collectionStateFromJSON(object.state) : 0,
-      payments: isSet(object.payments) ? Payments.fromJSON(object.payments) : undefined
+      payments: isSet(object.payments) ? Payments.fromJSON(object.payments) : undefined,
+      signer: isSet(object.signer) ? String(object.signer) : ""
     };
   },
 
@@ -886,6 +902,7 @@ export const Collection = {
     message.disputed !== undefined && (obj.disputed = (message.disputed || Long.UZERO).toString());
     message.state !== undefined && (obj.state = collectionStateToJSON(message.state));
     message.payments !== undefined && (obj.payments = message.payments ? Payments.toJSON(message.payments) : undefined);
+    message.signer !== undefined && (obj.signer = message.signer);
     return obj;
   },
 
@@ -905,6 +922,7 @@ export const Collection = {
     message.disputed = object.disputed !== undefined && object.disputed !== null ? Long.fromValue(object.disputed) : Long.UZERO;
     message.state = object.state ?? 0;
     message.payments = object.payments !== undefined && object.payments !== null ? Payments.fromPartial(object.payments) : undefined;
+    message.signer = object.signer ?? "";
     return message;
   }
 

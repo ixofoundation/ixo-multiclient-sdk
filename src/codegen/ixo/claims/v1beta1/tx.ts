@@ -7,12 +7,9 @@ import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers"
 export interface MsgCreateCollection {
   /** entity is the DID of the entity for which the claims are being created */
   entity: string;
-  /**
-   * admin is the account address that will authorize or revoke agents and
-   * payments (the grantor), signer for tx
-   */
+  /** signer address */
 
-  admin: string;
+  signer: string;
   /** protocol is the DID of the claim protocol */
 
   protocol: string;
@@ -41,12 +38,9 @@ export interface MsgCreateCollection {
 export interface MsgCreateCollectionSDKType {
   /** entity is the DID of the entity for which the claims are being created */
   entity: string;
-  /**
-   * admin is the account address that will authorize or revoke agents and
-   * payments (the grantor), signer for tx
-   */
+  /** signer address */
 
-  admin: string;
+  signer: string;
   /** protocol is the DID of the claim protocol */
 
   protocol: string;
@@ -304,7 +298,7 @@ export interface MsgWithdrawPaymentResponseSDKType {}
 function createBaseMsgCreateCollection(): MsgCreateCollection {
   return {
     entity: "",
-    admin: "",
+    signer: "",
     protocol: "",
     startDate: undefined,
     endDate: undefined,
@@ -320,8 +314,8 @@ export const MsgCreateCollection = {
       writer.uint32(10).string(message.entity);
     }
 
-    if (message.admin !== "") {
-      writer.uint32(18).string(message.admin);
+    if (message.signer !== "") {
+      writer.uint32(18).string(message.signer);
     }
 
     if (message.protocol !== "") {
@@ -365,7 +359,7 @@ export const MsgCreateCollection = {
           break;
 
         case 2:
-          message.admin = reader.string();
+          message.signer = reader.string();
           break;
 
         case 3:
@@ -404,7 +398,7 @@ export const MsgCreateCollection = {
   fromJSON(object: any): MsgCreateCollection {
     return {
       entity: isSet(object.entity) ? String(object.entity) : "",
-      admin: isSet(object.admin) ? String(object.admin) : "",
+      signer: isSet(object.signer) ? String(object.signer) : "",
       protocol: isSet(object.protocol) ? String(object.protocol) : "",
       startDate: isSet(object.startDate) ? fromJsonTimestamp(object.startDate) : undefined,
       endDate: isSet(object.endDate) ? fromJsonTimestamp(object.endDate) : undefined,
@@ -417,7 +411,7 @@ export const MsgCreateCollection = {
   toJSON(message: MsgCreateCollection): unknown {
     const obj: any = {};
     message.entity !== undefined && (obj.entity = message.entity);
-    message.admin !== undefined && (obj.admin = message.admin);
+    message.signer !== undefined && (obj.signer = message.signer);
     message.protocol !== undefined && (obj.protocol = message.protocol);
     message.startDate !== undefined && (obj.startDate = fromTimestamp(message.startDate).toISOString());
     message.endDate !== undefined && (obj.endDate = fromTimestamp(message.endDate).toISOString());
@@ -430,7 +424,7 @@ export const MsgCreateCollection = {
   fromPartial(object: Partial<MsgCreateCollection>): MsgCreateCollection {
     const message = createBaseMsgCreateCollection();
     message.entity = object.entity ?? "";
-    message.admin = object.admin ?? "";
+    message.signer = object.signer ?? "";
     message.protocol = object.protocol ?? "";
     message.startDate = object.startDate !== undefined && object.startDate !== null ? Timestamp.fromPartial(object.startDate) : undefined;
     message.endDate = object.endDate !== undefined && object.endDate !== null ? Timestamp.fromPartial(object.endDate) : undefined;
