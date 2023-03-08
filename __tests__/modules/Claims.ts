@@ -41,6 +41,13 @@ export const CreateCollection = async (
             }),
           ],
           timeoutNs: utils.proto.toDuration((1000000000 * 60 * 0).toString()), // ns * seconds * minutes
+          // contract_1155Payment:
+          //   ixo.claims.v1beta1.Contract1155Payment.fromPartial({
+          //     address:
+          //       "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c",
+          //     tokenId: "db03fa33c1e2ca35794adbb14aebb153",
+          //     amount: 1,
+          //   }),
         }),
         submission: ixo.claims.v1beta1.Payment.fromPartial({
           account: tester,
@@ -51,6 +58,13 @@ export const CreateCollection = async (
             }),
           ],
           timeoutNs: utils.proto.toDuration((1000000000 * 60 * 5).toString()), // ns * seconds * minutes
+          // contract_1155Payment:
+          //   ixo.claims.v1beta1.Contract1155Payment.fromPartial({
+          //     address:
+          //       "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c",
+          //     tokenId: "db03fa33c1e2ca35794adbb14aebb153",
+          //     amount: 1,
+          //   }),
         }),
         evaluation: ixo.claims.v1beta1.Payment.fromPartial({
           account: tester,
@@ -143,7 +157,7 @@ export const EvaluateClaim = async (
 export const DisputeClaim = async (
   subjectId: string,
   disputeProof: string, // must be unique
-  signer: WalletUsers = WalletUsers.alice
+  signer: WalletUsers = WalletUsers.tester
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -210,6 +224,14 @@ export const WithdrawPayment = async (
         }),
       ],
       paymentType: ixo.claims.v1beta1.PaymentType.EVALUATION,
+      fromAddress: agentAddress,
+      toAddress: agentAddress,
+      // contract_1155Payment: ixo.claims.v1beta1.Contract1155Payment.fromPartial({
+      //   address:
+      //     "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c",
+      //   tokenId: "db03fa33c1e2ca35794adbb14aebb153",
+      //   amount: 1,
+      // }),
     }),
   };
 
@@ -500,7 +522,16 @@ export const MsgGrantWithdrawal = async (
                       ],
                     }),
                   ],
+                  fromAddress: granterAddress,
+                  toAddress: granteeAddress,
                   // beforeDate: utils.proto.toTimestamp(addDays(new Date(), 365)),
+                  // contract_1155Payment:
+                  //   ixo.claims.v1beta1.Contract1155Payment.fromPartial({
+                  //     address:
+                  //       "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c",
+                  //     tokenId: "db03fa33c1e2ca35794adbb14aebb153",
+                  //     amount: 1,
+                  //   }),
                 }),
                 ...granteeCurrentAuthConstraints,
               ],
@@ -522,7 +553,7 @@ export const MsgGrantWithdrawal = async (
 
 export const MsgExecWithdrawal = async (
   claimId: string,
-  paymentType = ixo.claims.v1beta1.PaymentType.EVALUATION,
+  paymentType = ixo.claims.v1beta1.PaymentType.SUBMISSION,
   granter = WalletUsers.tester,
   grantee = WalletUsers.alice
 ) => {
@@ -561,6 +592,8 @@ export const MsgExecWithdrawal = async (
           value: ixo.claims.v1beta1.MsgWithdrawPayment.encode(
             ixo.claims.v1beta1.MsgWithdrawPayment.fromPartial({
               adminAddress: granterAddress,
+              fromAddress: granterAddress,
+              toAddress: granteeAddress,
               claimId,
               inputs: granteeCurrentAuthConstraints?.inputs ?? [
                 ixo.claims.v1beta1.Input.fromPartial({
@@ -585,6 +618,13 @@ export const MsgExecWithdrawal = async (
                 }),
               ],
               paymentType,
+              // contract_1155Payment:
+              //   ixo.claims.v1beta1.Contract1155Payment.fromPartial({
+              //     address:
+              //       "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c",
+              //     tokenId: "db03fa33c1e2ca35794adbb14aebb153",
+              //     amount: 1,
+              //   }),
             })
           ).finish(),
         },

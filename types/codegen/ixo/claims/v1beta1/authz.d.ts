@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Input, InputSDKType, Output, OutputSDKType } from "./cosmos";
-import { PaymentType, PaymentTypeSDKType } from "./claims";
+import { PaymentType, PaymentTypeSDKType, Contract1155Payment, Contract1155PaymentSDKType } from "./claims";
 import * as _m0 from "protobufjs/minimal";
 import { Long } from "../../../helpers";
 export interface SubmitClaimAuthorization {
@@ -84,6 +84,12 @@ export interface WithdrawPaymentConstraints {
      * accordingly
      */
     paymentType: PaymentType;
+    /** if empty(nil) then no contract payment */
+    contract_1155Payment?: Contract1155Payment;
+    /** for contract payment */
+    toAddress: string;
+    /** for contract payment */
+    fromAddress: string;
     /**
      * date that grantee can execute authorization, calculated from created date
      * plus the timeout on Collection payments, if null then none
@@ -102,6 +108,12 @@ export interface WithdrawPaymentConstraintsSDKType {
      * accordingly
      */
     payment_type: PaymentTypeSDKType;
+    /** if empty(nil) then no contract payment */
+    contract_1155_payment?: Contract1155PaymentSDKType;
+    /** for contract payment */
+    toAddress: string;
+    /** for contract payment */
+    fromAddress: string;
     /**
      * date that grantee can execute authorization, calculated from created date
      * plus the timeout on Collection payments, if null then none

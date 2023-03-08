@@ -18,29 +18,26 @@ export const claimsBasic = () =>
     //   return res;
     // });
 
+    // check the rawLog from below test to get collectionId
     let collectionId = "1";
-    testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
-      const res = await Claims.CreateCollection(protocol, protocol);
-      console.log(res.rawLog);
-      return res;
-    });
+    testMsg(
+      "/ixo.claims.v1beta1.MsgCreateCollection",
+      () => Claims.CreateCollection(protocol, protocol),
+      true
+    );
 
     let claimId = "1";
-    testMsg("/ixo.claims.v1beta1.MsgSubmitClaim", async () => {
-      const res = await Claims.SubmitClaim(claimId, collectionId);
-      console.log(res.rawLog);
-      return res;
-    });
-
-    testMsg("/ixo.claims.v1beta1.MsgEvaluateClaim", async () => {
-      const res = await Claims.EvaluateClaim(claimId, collectionId);
-      console.log(res.rawLog);
-      return res;
-    });
-
-    testMsg("/ixo.claims.v1beta1.MsgDisputeClaim", () =>
-      Claims.DisputeClaim(claimId, "proof1")
+    testMsg("/ixo.claims.v1beta1.MsgSubmitClaim", () =>
+      Claims.SubmitClaim(claimId, collectionId)
     );
+
+    // testMsg("/ixo.claims.v1beta1.MsgEvaluateClaim", () =>
+    //   Claims.EvaluateClaim(claimId, collectionId)
+    // );
+
+    // testMsg("/ixo.claims.v1beta1.MsgDisputeClaim", () =>
+    //   Claims.DisputeClaim(claimId, "proof1")
+    // );
 
     // testMsg("/ixo.claims.v1beta1.MsgWithdrawPayment", () =>
     //   Claims.WithdrawPayment(claimId)
@@ -50,18 +47,18 @@ export const claimsBasic = () =>
     //   Claims.MsgGrantAgentSubmit(collectionId, 10)
     // );
 
-    // testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", async () => {
-    //   const res = await Claims.MsgExecAgentSubmit(claimId, collectionId);
-    //   console.log(res.rawLog);
-    //   return res;
-    // });
+    // testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", () =>
+    //   Claims.MsgExecAgentSubmit(claimId, collectionId)
+    // );
 
     // testMsg("/cosmos.authz.v1beta1.MsgGrant agent evaluate", () =>
     //   Claims.MsgGrantAgentEvaluate(collectionId, [], 10)
     // );
 
-    // testMsg("/cosmos.authz.v1beta1.MsgExec agent evaluate", () =>
-    //   Claims.MsgExecAgentEvaluate(claimId, collectionId)
+    // testMsg(
+    //   "/cosmos.authz.v1beta1.MsgExec agent evaluate",
+    //   () => Claims.MsgExecAgentEvaluate(claimId, collectionId),
+    //   true
     // );
 
     // testMsg("/cosmos.authz.v1beta1.MsgExec withdraw payment", () =>
@@ -69,7 +66,9 @@ export const claimsBasic = () =>
     // );
   });
 
+// ------------------------------------------------------------
 // flow to run after devnet was reset, please dont change
+// ------------------------------------------------------------
 export const claimsDev = () =>
   describe("Testing the Claims module", () => {
     // Create protocol
@@ -86,26 +85,20 @@ export const claimsDev = () =>
     });
 
     let collectionId = "1";
-    testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
-      const res = await Claims.CreateCollection(protocol, protocol);
-      console.log(res.rawLog);
-      return res;
-    });
+    testMsg("/ixo.claims.v1beta1.MsgCreateCollection", () =>
+      Claims.CreateCollection(protocol, protocol)
+    );
 
     let claimId = "1";
-    testMsg("/ixo.claims.v1beta1.MsgSubmitClaim", async () => {
-      const res = await Claims.SubmitClaim(claimId, collectionId);
-      console.log(res.rawLog);
-      return res;
-    });
+    testMsg("/ixo.claims.v1beta1.MsgSubmitClaim", () =>
+      Claims.SubmitClaim(claimId, collectionId)
+    );
 
-    testMsg("/ixo.claims.v1beta1.MsgEvaluateClaim", async () => {
-      const res = await Claims.EvaluateClaim(claimId, collectionId);
-      console.log(res.rawLog);
-      return res;
-    });
+    testMsg("/ixo.claims.v1beta1.MsgEvaluateClaim", () =>
+      Claims.EvaluateClaim(claimId, collectionId)
+    );
 
     testMsg("/ixo.claims.v1beta1.MsgDisputeClaim", () =>
-      Claims.DisputeClaim(claimId, "proof1")
+      Claims.DisputeClaim(claimId, "proof1", WalletUsers.tester)
     );
   });

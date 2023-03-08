@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Input, InputSDKType, Output, OutputSDKType } from "./cosmos";
-import { PaymentType, PaymentTypeSDKType, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
+import { PaymentType, PaymentTypeSDKType, Contract1155Payment, Contract1155PaymentSDKType, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
 import * as _m0 from "protobufjs/minimal";
 import { isSet, Long, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
 export interface SubmitClaimAuthorization {
@@ -93,6 +93,15 @@ export interface WithdrawPaymentConstraints {
    */
 
   paymentType: PaymentType;
+  /** if empty(nil) then no contract payment */
+
+  contract_1155Payment?: Contract1155Payment;
+  /** for contract payment */
+
+  toAddress: string;
+  /** for contract payment */
+
+  fromAddress: string;
   /**
    * date that grantee can execute authorization, calculated from created date
    * plus the timeout on Collection payments, if null then none
@@ -115,6 +124,15 @@ export interface WithdrawPaymentConstraintsSDKType {
    */
 
   payment_type: PaymentTypeSDKType;
+  /** if empty(nil) then no contract payment */
+
+  contract_1155_payment?: Contract1155PaymentSDKType;
+  /** for contract payment */
+
+  toAddress: string;
+  /** for contract payment */
+
+  fromAddress: string;
   /**
    * date that grantee can execute authorization, calculated from created date
    * plus the timeout on Collection payments, if null then none
@@ -540,6 +558,9 @@ function createBaseWithdrawPaymentConstraints(): WithdrawPaymentConstraints {
     inputs: [],
     outputs: [],
     paymentType: 0,
+    contract_1155Payment: undefined,
+    toAddress: "",
+    fromAddress: "",
     releaseDate: undefined
   };
 }
@@ -562,8 +583,20 @@ export const WithdrawPaymentConstraints = {
       writer.uint32(32).int32(message.paymentType);
     }
 
+    if (message.contract_1155Payment !== undefined) {
+      Contract1155Payment.encode(message.contract_1155Payment, writer.uint32(42).fork()).ldelim();
+    }
+
+    if (message.toAddress !== "") {
+      writer.uint32(50).string(message.toAddress);
+    }
+
+    if (message.fromAddress !== "") {
+      writer.uint32(58).string(message.fromAddress);
+    }
+
     if (message.releaseDate !== undefined) {
-      Timestamp.encode(message.releaseDate, writer.uint32(42).fork()).ldelim();
+      Timestamp.encode(message.releaseDate, writer.uint32(66).fork()).ldelim();
     }
 
     return writer;
@@ -595,6 +628,18 @@ export const WithdrawPaymentConstraints = {
           break;
 
         case 5:
+          message.contract_1155Payment = Contract1155Payment.decode(reader, reader.uint32());
+          break;
+
+        case 6:
+          message.toAddress = reader.string();
+          break;
+
+        case 7:
+          message.fromAddress = reader.string();
+          break;
+
+        case 8:
           message.releaseDate = Timestamp.decode(reader, reader.uint32());
           break;
 
@@ -613,6 +658,9 @@ export const WithdrawPaymentConstraints = {
       inputs: Array.isArray(object?.inputs) ? object.inputs.map((e: any) => Input.fromJSON(e)) : [],
       outputs: Array.isArray(object?.outputs) ? object.outputs.map((e: any) => Output.fromJSON(e)) : [],
       paymentType: isSet(object.paymentType) ? paymentTypeFromJSON(object.paymentType) : 0,
+      contract_1155Payment: isSet(object.contract_1155Payment) ? Contract1155Payment.fromJSON(object.contract_1155Payment) : undefined,
+      toAddress: isSet(object.toAddress) ? String(object.toAddress) : "",
+      fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
       releaseDate: isSet(object.releaseDate) ? fromJsonTimestamp(object.releaseDate) : undefined
     };
   },
@@ -634,6 +682,9 @@ export const WithdrawPaymentConstraints = {
     }
 
     message.paymentType !== undefined && (obj.paymentType = paymentTypeToJSON(message.paymentType));
+    message.contract_1155Payment !== undefined && (obj.contract_1155Payment = message.contract_1155Payment ? Contract1155Payment.toJSON(message.contract_1155Payment) : undefined);
+    message.toAddress !== undefined && (obj.toAddress = message.toAddress);
+    message.fromAddress !== undefined && (obj.fromAddress = message.fromAddress);
     message.releaseDate !== undefined && (obj.releaseDate = fromTimestamp(message.releaseDate).toISOString());
     return obj;
   },
@@ -644,6 +695,9 @@ export const WithdrawPaymentConstraints = {
     message.inputs = object.inputs?.map(e => Input.fromPartial(e)) || [];
     message.outputs = object.outputs?.map(e => Output.fromPartial(e)) || [];
     message.paymentType = object.paymentType ?? 0;
+    message.contract_1155Payment = object.contract_1155Payment !== undefined && object.contract_1155Payment !== null ? Contract1155Payment.fromPartial(object.contract_1155Payment) : undefined;
+    message.toAddress = object.toAddress ?? "";
+    message.fromAddress = object.fromAddress ?? "";
     message.releaseDate = object.releaseDate !== undefined && object.releaseDate !== null ? Timestamp.fromPartial(object.releaseDate) : undefined;
     return message;
   }

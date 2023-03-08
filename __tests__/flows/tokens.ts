@@ -33,7 +33,7 @@ export const tokenBasic = () =>
     });
 
     let index = "1";
-    let amount = 10;
+    let amount = 50;
     let collectionDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14"; // Did of collection
     let nftDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14"; // Did of entity to map token to
     let tokenData = [
@@ -46,7 +46,7 @@ export const tokenBasic = () =>
       },
     ];
 
-    let tokenId = "d89fc11cef9424891fdf9ae173f88a6e";
+    let tokenId = "db03fa33c1e2ca35794adbb14aebb153";
     testMsg("/ixo.token.v1beta1.MsgMintToken", async () => {
       const res = await Token.MintToken(contractAddress1155, [
         {
@@ -80,14 +80,14 @@ export const tokenBasic = () =>
     //   ])
     // );
 
-    testMsg("/ixo.token.v1beta1.MsgRetireToken", () =>
-      Token.RetireToken([
-        {
-          id: tokenId,
-          amount: 3,
-        },
-      ])
-    );
+    // testMsg("/ixo.token.v1beta1.MsgRetireToken", () =>
+    //   Token.RetireToken([
+    //     {
+    //       id: tokenId,
+    //       amount: 3,
+    //     },
+    //   ])
+    // );
 
     // testMsg("/ixo.token.v1beta1.MsgPauseToken", () =>
     //   Token.PauseToken(contractAddress1155, false)
@@ -123,7 +123,9 @@ export const tokenBasic = () =>
     // testMsg("/cosmos.authz.v1beta1.MsgRevoke mint token", () => Token.MsgRevokeContract());
   });
 
-// flow to run after devnet was reset, please dont change as using constants
+// ------------------------------------------------------------
+// flow to run after devnet was reset, please dont change
+// ------------------------------------------------------------
 export const supamotoTokens = () =>
   describe("Testing the Supamoto Tokens flow", () => {
     let name = "CARBON";

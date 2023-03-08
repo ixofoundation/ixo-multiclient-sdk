@@ -782,6 +782,13 @@ export declare namespace ixo {
                 toJSON(message: _137.Payment): unknown;
                 fromPartial(object: Partial<_137.Payment>): _137.Payment;
             };
+            Contract1155Payment: {
+                encode(message: _137.Contract1155Payment, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _137.Contract1155Payment;
+                fromJSON(object: any): _137.Contract1155Payment;
+                toJSON(message: _137.Contract1155Payment): unknown;
+                fromPartial(object: Partial<_137.Contract1155Payment>): _137.Contract1155Payment;
+            };
             Claim: {
                 encode(message: _137.Claim, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _137.Claim;

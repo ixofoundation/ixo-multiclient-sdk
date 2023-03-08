@@ -126,7 +126,12 @@ export const createQueryClient = async (
   return newQueryClient;
 };
 
-export const checkSuccessMsg = (res: DeliverTxResponse, succeed: boolean) => {
+export const checkSuccessMsg = (
+  res: DeliverTxResponse,
+  logRawlog = false,
+  succeed: boolean
+) => {
+  if (logRawlog) console.log(res.rawLog);
   let isSuccess = true;
   try {
     assertIsDeliverTxSuccess(res);
@@ -162,11 +167,13 @@ export const checkSuccessQry = (res: any, equal: IObjectKeys) => {
 export const testMsg = (
   message: string,
   action: () => Promise<DeliverTxResponse>,
+  logRawlog = false,
+  // must test succeed? If false then expect trx to fail and test will pass
   succeed: boolean = true
 ) => {
   return test(message, async () => {
     console.log("Testing message " + message);
-    checkSuccessMsg(await action(), succeed);
+    checkSuccessMsg(await action(), logRawlog, succeed);
   });
 };
 

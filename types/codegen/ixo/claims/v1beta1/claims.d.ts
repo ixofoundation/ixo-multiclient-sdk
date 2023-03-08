@@ -201,6 +201,8 @@ export interface Payment {
     /** account is the entity account address from which the payment will be made */
     account: string;
     amount: Coin[];
+    /** if empty(nil) then no contract payment, not allowed for Evaluation Payment */
+    contract_1155Payment?: Contract1155Payment;
     /**
      * timeout after claim/evaluation to create authZ for payment, if 0 then
      * immidiate direct payment
@@ -211,11 +213,23 @@ export interface PaymentSDKType {
     /** account is the entity account address from which the payment will be made */
     account: string;
     amount: CoinSDKType[];
+    /** if empty(nil) then no contract payment, not allowed for Evaluation Payment */
+    contract_1155_payment?: Contract1155PaymentSDKType;
     /**
      * timeout after claim/evaluation to create authZ for payment, if 0 then
      * immidiate direct payment
      */
     timeout_ns?: DurationSDKType;
+}
+export interface Contract1155Payment {
+    address: string;
+    tokenId: string;
+    amount: number;
+}
+export interface Contract1155PaymentSDKType {
+    address: string;
+    token_id: string;
+    amount: number;
 }
 export interface Claim {
     /** collection_id indicates to which Collection this claim belongs */
@@ -382,6 +396,13 @@ export declare const Payment: {
     fromJSON(object: any): Payment;
     toJSON(message: Payment): unknown;
     fromPartial(object: Partial<Payment>): Payment;
+};
+export declare const Contract1155Payment: {
+    encode(message: Contract1155Payment, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): Contract1155Payment;
+    fromJSON(object: any): Contract1155Payment;
+    toJSON(message: Contract1155Payment): unknown;
+    fromPartial(object: Partial<Contract1155Payment>): Contract1155Payment;
 };
 export declare const Claim: {
     encode(message: Claim, writer?: _m0.Writer): _m0.Writer;

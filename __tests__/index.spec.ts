@@ -49,9 +49,10 @@ generateBlockchainTestUsers();
 // authzBasic();
 // wasmBasic();
 // daoCore();
-// quickQueries();
+quickQueries();
 
 // Run the below after a devnet reset
+// ------------------------------------------
 // registerIidsDev();
 // supamotoEntities();
 // supamotoTokens();

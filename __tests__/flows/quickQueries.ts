@@ -37,10 +37,7 @@ export const quickQueries = () =>
     //   const user = (await getUser(WalletUsers.alice).getAccounts())[0].address;
     //   const contractAddress =
     //     "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
-    //   const tokens = [
-    //     "80e3ff80e4a804364749709e100d358f",
-    //     "d89fc11cef9424891fdf9ae173f88a6e",
-    //   ];
+    //   const tokens = ["db03fa33c1e2ca35794adbb14aebb153"];
     //   const msg = {
     //     // balance: {
     //     //   owner: user,
@@ -140,14 +137,20 @@ export const quickQueries = () =>
     //   const res = await queryClient.cosmos.authz.v1beta1.granterGrants({
     //     granter: user,
     //   });
-    //   console.log(res.grants);
-    //   if (res.grants.length > 0)
-    // console.log(
-    //   res.grants.map((g) => {
-    //     const auth = createRegistry().decode(g.authorization!);
-    //     return auth.constraints || auth;
-    //   })
-    // );
+    //   if (res.grants.length > 0) {
+    //     console.log(
+    //       res.grants.map((g) => {
+    //         g.expiration = g.expiration?.seconds as any;
+    //         return g;
+    //       })
+    //     );
+    //     console.log(
+    //       res.grants.map((g) => {
+    //         const auth = createRegistry().decode(g.authorization!);
+    //         return auth.constraints || auth;
+    //       })
+    //     );
+    //   }
     //   expect(res).toBeTruthy();
     // });
 
