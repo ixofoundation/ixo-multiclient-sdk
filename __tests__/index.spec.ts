@@ -16,7 +16,10 @@ import {
 import { enititiesBasic, supamotoEntities } from "./flows/entities";
 import { ibcBasic } from "./flows/ibc";
 import { bankBasic, authzBasic, sendTokens } from "./flows/cosmos";
-import { instantiateModulesProposals } from "./flows/instantiateProposals";
+import {
+  instantiateModulesProposals,
+  devnetProposals,
+} from "./flows/instantiateProposals";
 import { tokenBasic, supamotoTokens } from "./flows/tokens";
 import { daoCore, wasmBasic } from "./flows/cosmwasm";
 import { quickQueries } from "./flows/quickQueries";
@@ -49,6 +52,9 @@ generateBlockchainTestUsers();
 
 // Run the below after a devnet reset
 // ------------------------------------------
+// devnetProposals();
+// first run devnetProposals, the run initcontracts.sh on dev server
+// immidiately, and wait for all proposals to pass then run below
 // registerIidsDev();
 // supamotoEntities();
 // supamotoTokens();

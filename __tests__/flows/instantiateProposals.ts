@@ -1,4 +1,7 @@
+import { DeliverTxResponse } from "@cosmjs/stargate";
+import { contracts } from "../../src/custom_queries/contract.constants";
 import { cosmwasm, testMsg, timeout, utils } from "../helpers/common";
+import { WalletUsers } from "../helpers/constants";
 import * as Cosmos from "../modules/Cosmos";
 
 export const instantiateModulesProposals = () =>
@@ -92,4 +95,59 @@ export const instantiateModulesProposals = () =>
       console.log("Entity and Token modules initiated, continue hacking away");
       expect(true).toBeTruthy();
     });
+  });
+
+// ------------------------------------------------------------
+// flow to run after devnet was reset, please dont change
+// ------------------------------------------------------------
+export const devnetProposals = () =>
+  describe("Testing the gov module", () => {
+    const contractPaths = contracts.map((c) => ({
+      name: c.name,
+      path: c.path,
+    }));
+
+    testMsg(
+      "/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract",
+      async () => {
+        const groups = [
+          contractPaths.slice(0, 4),
+          contractPaths.slice(4, 8),
+          contractPaths.slice(8, 12),
+          contractPaths.slice(12, 16),
+          contractPaths.slice(16, 20),
+          contractPaths.slice(20, 24),
+          contractPaths.slice(24),
+        ];
+
+        let i: number;
+        let j = groups.length;
+        let res: DeliverTxResponse[];
+        for (i = 0; i < j; i++) {
+          console.log(`running group ${i + 1} of ${j}`);
+          console.log(groups[i]);
+          res = await Promise.all(
+            groups[i].map((c, ii) => {
+              const signer =
+                ii == 0
+                  ? WalletUsers.tester
+                  : ii == 1
+                  ? WalletUsers.alice
+                  : ii == 2
+                  ? WalletUsers.bob
+                  : WalletUsers.charlie;
+              return Cosmos.MsgSubmitProposalStoreCW(
+                c.name,
+                c.path,
+                signer,
+                ii * 0.5
+              );
+            })
+          );
+          console.log(res!.map((r) => r.rawLog));
+        }
+
+        return res![0];
+      }
+    );
   });

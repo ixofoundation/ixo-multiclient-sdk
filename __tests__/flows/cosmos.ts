@@ -5,7 +5,9 @@ import { WalletUsers } from "../helpers/constants";
 
 export const bankBasic = () =>
   describe("Testing the cosmos bank module", () => {
-    testMsg("/cosmos.bank.v1beta1.MsgSend", () => Cosmos.BankSendTrx());
+    testMsg("/cosmos.bank.v1beta1.MsgSend", () =>
+      Cosmos.BankSendTrx(undefined, WalletUsers.tester, WalletUsers.oracle)
+    );
   });
 
 export const authzBasic = () =>

@@ -8,6 +8,7 @@ import {
   utils,
   ixo,
   getFileFromPath,
+  timeout,
 } from "../helpers/common";
 import Long from "long";
 
@@ -44,11 +45,13 @@ export const BankSendTrx = async (
 export const MsgSubmitProposalStoreCW = async (
   contract: string = "cw721",
   pathList?: string[],
+  signer = WalletUsers.tester,
+  timeoutSeconds = 0,
   instantiateAccessType = cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_EVERYBODY
 ) => {
-  const client = await createClient();
+  const client = await createClient(getUser(signer));
 
-  const tester = getUser();
+  const tester = getUser(signer);
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
 
@@ -57,7 +60,7 @@ export const MsgSubmitProposalStoreCW = async (
     value: cosmos.gov.v1beta1.MsgSubmitProposal.fromPartial({
       initialDeposit: [
         cosmos.base.v1beta1.Coin.fromPartial({
-          amount: "10000000000",
+          amount: "10000000",
           denom: "uixo",
         }),
       ],
@@ -90,14 +93,71 @@ export const MsgSubmitProposalStoreCW = async (
     }),
   };
 
+  await timeout(timeoutSeconds * 1000);
+
   const response = await client.signAndBroadcast(myAddress, [message], {
     amount: [
       {
         denom: "uixo",
-        amount: "10000000",
+        amount: "1000000",
       },
     ],
-    gas: "100000000",
+    gas: "10000000",
+  });
+  return response;
+};
+
+export const MsgSubmitProposalStoreCWMultiple = async (
+  contracts: { name: string; path: string[] }[],
+  instantiateAccessType = cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_EVERYBODY
+) => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const messages = contracts.map((c) => ({
+    typeUrl: "/cosmos.gov.v1beta1.MsgSubmitProposal",
+    value: cosmos.gov.v1beta1.MsgSubmitProposal.fromPartial({
+      initialDeposit: [
+        cosmos.base.v1beta1.Coin.fromPartial({
+          amount: "10000000",
+          denom: "uixo",
+        }),
+      ],
+      proposer: myAddress,
+      content: {
+        typeUrl: "/cosmwasm.wasm.v1.StoreCodeProposal",
+        value: cosmwasm.wasm.v1.StoreCodeProposal.encode(
+          cosmwasm.wasm.v1.StoreCodeProposal.fromPartial({
+            title: `Upload ${c.name} smart contract`,
+            description: "Description",
+            runAs: myAddress,
+            wasmByteCode: new Uint8Array(getFileFromPath(c.path, "")),
+            instantiatePermission: cosmwasm.wasm.v1.AccessConfig.fromPartial({
+              permission: instantiateAccessType,
+              addresses:
+                instantiateAccessType ==
+                cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_ANY_OF_ADDRESSES
+                  ? [myAddress]
+                  : undefined,
+            }),
+            unpinCode: false,
+          })
+        ).finish(),
+      },
+    }),
+  }));
+
+  const response = await client.signAndBroadcast(myAddress, messages, {
+    amount: [
+      {
+        denom: "uixo",
+        amount: (contracts.length * 1000000).toString(),
+      },
+    ],
+    gas: (contracts.length * 10000000).toString(),
   });
   return response;
 };
