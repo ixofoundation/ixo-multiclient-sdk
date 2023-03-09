@@ -19,9 +19,9 @@ export const enititiesBasic = () =>
       return res;
     });
 
-    // testMsg("/ixo.entity.v1beta1.MsgUpdateEntityVerified", () =>
-    //   Entity.UpdateEntityVerified(undefined, entityDid)
-    // );
+    testMsg("/ixo.entity.v1beta1.MsgUpdateEntityVerified", () =>
+      Entity.UpdateEntityVerified(undefined, entityDid)
+    );
 
     // testMsg("/ixo.entity.v1beta1.MsgTransferEntity", () =>
     //   Entity.TransferEntity(undefined, entityDid)

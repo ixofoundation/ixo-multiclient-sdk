@@ -68,6 +68,12 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
+    test("query wasm store codes", async () => {
+      const res = await queryClient.cosmwasm.wasm.v1.codes();
+      console.log(res.codeInfos);
+      expect(res).toBeTruthy();
+    });
+
     // test("query tokens list by did", async () => {
     //   const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;
     //   const res = await queryClient.ixo.token.v1beta1.tokenList({

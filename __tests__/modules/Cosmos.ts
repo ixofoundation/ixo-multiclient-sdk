@@ -13,7 +13,7 @@ import Long from "long";
 
 export const BankSendTrx = async (
   amount = Math.pow(10, 6),
-  fromUser = WalletUsers.random,
+  fromUser = WalletUsers.alice,
   toUser = WalletUsers.tester,
   toAddresss?: string
 ) => {
