@@ -57,12 +57,6 @@ export declare const createRPCMsgClient: ({ rpc }: {
         iid: {
             v1beta1: import("./iid/v1beta1/tx.rpc.msg").MsgClientImpl;
         };
-        payments: {
-            v1: import("./payments/v1/tx.rpc.msg").MsgClientImpl;
-        };
-        project: {
-            v1: import("./project/v1/tx.rpc.msg").MsgClientImpl;
-        };
         token: {
             v1beta1: import("./token/v1beta1/tx.rpc.msg").MsgClientImpl;
         };

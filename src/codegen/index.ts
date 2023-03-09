@@ -12,6 +12,5 @@ export * from "./gogoproto/bundle";
 export * from "./google/bundle";
 export * from "./ibc/bundle";
 export * from "./ixo/bundle";
-export * from "./legacydid/bundle";
 export * from "./tendermint/bundle";
 export * from "./contracts";

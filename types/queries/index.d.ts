@@ -306,22 +306,6 @@ export declare const createQueryClient: (rpcEndpoint: string) => Promise<{
                 iidDocument(request: import("../codegen/ixo/iid/v1beta1/query").QueryIidDocumentRequest): Promise<import("../codegen/ixo/iid/v1beta1/query").QueryIidDocumentResponse>;
             };
         };
-        payments: {
-            v1: {
-                paymentTemplate(request: import("../codegen/ixo/payments/v1/query").QueryPaymentTemplateRequest): Promise<import("../codegen/ixo/payments/v1/query").QueryPaymentTemplateResponse>;
-                paymentContract(request: import("../codegen/ixo/payments/v1/query").QueryPaymentContractRequest): Promise<import("../codegen/ixo/payments/v1/query").QueryPaymentContractResponse>;
-                paymentContractsByIdPrefix(request: import("../codegen/ixo/payments/v1/query").QueryPaymentContractsByIdPrefixRequest): Promise<import("../codegen/ixo/payments/v1/query").QueryPaymentContractsByIdPrefixResponse>;
-                subscription(request: import("../codegen/ixo/payments/v1/query").QuerySubscriptionRequest): Promise<import("../codegen/ixo/payments/v1/query").QuerySubscriptionResponse>;
-            };
-        };
-        project: {
-            v1: {
-                projectDoc(request: import("../codegen/ixo/project/v1/query").QueryProjectDocRequest): Promise<import("../codegen/ixo/project/v1/query").QueryProjectDocResponse>;
-                projectAccounts(request: import("../codegen/ixo/project/v1/query").QueryProjectAccountsRequest): Promise<import("../codegen/ixo/project/v1/query").QueryProjectAccountsResponse>;
-                projectTx(request: import("../codegen/ixo/project/v1/query").QueryProjectTxRequest): Promise<import("../codegen/ixo/project/v1/query").QueryProjectTxResponse>;
-                params(request?: import("../codegen/ixo/project/v1/query").QueryParamsRequest): Promise<import("../codegen/ixo/project/v1/query").QueryParamsResponse>;
-            };
-        };
         token: {
             v1beta1: {
                 params(request?: import("../codegen/ixo/token/v1beta1/query").QueryParamsRequest): Promise<import("../codegen/ixo/token/v1beta1/query").QueryParamsResponse>;

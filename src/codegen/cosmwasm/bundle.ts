@@ -4,10 +4,10 @@ import * as _96 from "./wasm/v1/proposal";
 import * as _97 from "./wasm/v1/query";
 import * as _98 from "./wasm/v1/tx";
 import * as _99 from "./wasm/v1/types";
-import * as _216 from "./wasm/v1/query.rpc.Query";
-import * as _217 from "./wasm/v1/tx.rpc.msg";
-import * as _243 from "./rpc.query";
-import * as _244 from "./rpc.tx";
+import * as _206 from "./wasm/v1/query.rpc.Query";
+import * as _207 from "./wasm/v1/tx.rpc.msg";
+import * as _229 from "./rpc.query";
+import * as _230 from "./rpc.tx";
 export namespace cosmwasm {
   export namespace wasm {
     export const v1 = { ..._94,
@@ -16,11 +16,11 @@ export namespace cosmwasm {
       ..._97,
       ..._98,
       ..._99,
-      ..._216,
-      ..._217
+      ..._206,
+      ..._207
     };
   }
-  export const ClientFactory = { ..._243,
-    ..._244
+  export const ClientFactory = { ..._229,
+    ..._230
   };
 }
