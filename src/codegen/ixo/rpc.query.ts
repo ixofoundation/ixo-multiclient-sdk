@@ -77,12 +77,6 @@ export const createRPCQueryClient = async ({
       iid: {
         v1beta1: (await import("./iid/v1beta1/query.rpc.Query")).createRpcQueryExtension(client)
       },
-      payments: {
-        v1: (await import("./payments/v1/query.rpc.Query")).createRpcQueryExtension(client)
-      },
-      project: {
-        v1: (await import("./project/v1/query.rpc.Query")).createRpcQueryExtension(client)
-      },
       token: {
         v1beta1: (await import("./token/v1beta1/query.rpc.Query")).createRpcQueryExtension(client)
       }

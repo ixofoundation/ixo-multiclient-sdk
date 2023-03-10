@@ -10,15 +10,17 @@ import {
 import {
   iidsBasic,
   registerIids,
+  registerIidsDev,
   generateBlockchainTestUsers,
 } from "./flows/iids";
-import { enititiesBasic, supamotoFlow } from "./flows/entities";
-import { paymentsBasic } from "./flows/payments";
+import { enititiesBasic, supamotoEntities } from "./flows/entities";
 import { ibcBasic } from "./flows/ibc";
 import { bankBasic, authzBasic, sendTokens } from "./flows/cosmos";
-import { instantiateModulesProposals } from "./flows/instantiateProposals";
-import { tokenBasic } from "./flows/tokens";
-import { projectsBasic } from "./flows/projects";
+import {
+  instantiateModulesProposals,
+  devnetProposals,
+} from "./flows/instantiateProposals";
+import { tokenBasic, supamotoTokens } from "./flows/tokens";
 import { daoCore, wasmBasic } from "./flows/cosmwasm";
 import { quickQueries } from "./flows/quickQueries";
 import { claimsBasic } from "./flows/claims";
@@ -35,13 +37,10 @@ generateBlockchainTestUsers();
 // registerIids();
 // instantiateModulesProposals();
 // iidsBasic();
-// paymentsBasic();
-// projectsBasic();
 // bondsBasic();
 // bondsSellsDisabled();
 // bondsSellsEnabled();
 // enititiesBasic();
-// supamotoFlow();
 // tokenBasic();
 // claimsBasic();
 // ibcBasic();
@@ -49,4 +48,13 @@ generateBlockchainTestUsers();
 // authzBasic();
 // wasmBasic();
 // daoCore();
-quickQueries();
+// quickQueries();
+
+// Run the below after a devnet reset
+// ------------------------------------------
+// devnetProposals();
+// first run devnetProposals, the run initcontracts.sh on dev server
+// immidiately, and wait for all proposals to pass then run below
+// registerIidsDev();
+// supamotoEntities();
+// supamotoTokens();

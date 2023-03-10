@@ -1,5 +1,5 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
-import { CollectionState, CollectionStateSDKType, Payments, PaymentsSDKType, EvaluationStatus, EvaluationStatusSDKType, DisputeData, DisputeDataSDKType, PaymentType, PaymentTypeSDKType, collectionStateFromJSON, collectionStateToJSON, evaluationStatusFromJSON, evaluationStatusToJSON, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
+import { CollectionState, CollectionStateSDKType, Payments, PaymentsSDKType, EvaluationStatus, EvaluationStatusSDKType, DisputeData, DisputeDataSDKType, PaymentType, PaymentTypeSDKType, Contract1155Payment, Contract1155PaymentSDKType, collectionStateFromJSON, collectionStateToJSON, evaluationStatusFromJSON, evaluationStatusToJSON, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Input, InputSDKType, Output, OutputSDKType } from "./cosmos";
 import * as _m0 from "protobufjs/minimal";
@@ -7,12 +7,9 @@ import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers"
 export interface MsgCreateCollection {
   /** entity is the DID of the entity for which the claims are being created */
   entity: string;
-  /**
-   * admin is the account address that will authorize or revoke agents and
-   * payments (the grantor), signer for tx
-   */
+  /** signer address */
 
-  admin: string;
+  signer: string;
   /** protocol is the DID of the claim protocol */
 
   protocol: string;
@@ -41,12 +38,9 @@ export interface MsgCreateCollection {
 export interface MsgCreateCollectionSDKType {
   /** entity is the DID of the entity for which the claims are being created */
   entity: string;
-  /**
-   * admin is the account address that will authorize or revoke agents and
-   * payments (the grantor), signer for tx
-   */
+  /** signer address */
 
-  admin: string;
+  signer: string;
   /** protocol is the DID of the claim protocol */
 
   protocol: string;
@@ -245,6 +239,15 @@ export interface MsgWithdrawPayment {
    */
 
   paymentType: PaymentType;
+  /** if empty(nil) then no contract payment */
+
+  contract_1155Payment?: Contract1155Payment;
+  /** for contract payment */
+
+  toAddress: string;
+  /** for contract payment */
+
+  fromAddress: string;
   /**
    * date that grantee can execute authorization, calculated from created date
    * plus the timeout on Collection payments
@@ -270,6 +273,15 @@ export interface MsgWithdrawPaymentSDKType {
    */
 
   payment_type: PaymentTypeSDKType;
+  /** if empty(nil) then no contract payment */
+
+  contract_1155_payment?: Contract1155PaymentSDKType;
+  /** for contract payment */
+
+  toAddress: string;
+  /** for contract payment */
+
+  fromAddress: string;
   /**
    * date that grantee can execute authorization, calculated from created date
    * plus the timeout on Collection payments
@@ -286,7 +298,7 @@ export interface MsgWithdrawPaymentResponseSDKType {}
 function createBaseMsgCreateCollection(): MsgCreateCollection {
   return {
     entity: "",
-    admin: "",
+    signer: "",
     protocol: "",
     startDate: undefined,
     endDate: undefined,
@@ -302,8 +314,8 @@ export const MsgCreateCollection = {
       writer.uint32(10).string(message.entity);
     }
 
-    if (message.admin !== "") {
-      writer.uint32(18).string(message.admin);
+    if (message.signer !== "") {
+      writer.uint32(18).string(message.signer);
     }
 
     if (message.protocol !== "") {
@@ -347,7 +359,7 @@ export const MsgCreateCollection = {
           break;
 
         case 2:
-          message.admin = reader.string();
+          message.signer = reader.string();
           break;
 
         case 3:
@@ -386,7 +398,7 @@ export const MsgCreateCollection = {
   fromJSON(object: any): MsgCreateCollection {
     return {
       entity: isSet(object.entity) ? String(object.entity) : "",
-      admin: isSet(object.admin) ? String(object.admin) : "",
+      signer: isSet(object.signer) ? String(object.signer) : "",
       protocol: isSet(object.protocol) ? String(object.protocol) : "",
       startDate: isSet(object.startDate) ? fromJsonTimestamp(object.startDate) : undefined,
       endDate: isSet(object.endDate) ? fromJsonTimestamp(object.endDate) : undefined,
@@ -399,7 +411,7 @@ export const MsgCreateCollection = {
   toJSON(message: MsgCreateCollection): unknown {
     const obj: any = {};
     message.entity !== undefined && (obj.entity = message.entity);
-    message.admin !== undefined && (obj.admin = message.admin);
+    message.signer !== undefined && (obj.signer = message.signer);
     message.protocol !== undefined && (obj.protocol = message.protocol);
     message.startDate !== undefined && (obj.startDate = fromTimestamp(message.startDate).toISOString());
     message.endDate !== undefined && (obj.endDate = fromTimestamp(message.endDate).toISOString());
@@ -412,7 +424,7 @@ export const MsgCreateCollection = {
   fromPartial(object: Partial<MsgCreateCollection>): MsgCreateCollection {
     const message = createBaseMsgCreateCollection();
     message.entity = object.entity ?? "";
-    message.admin = object.admin ?? "";
+    message.signer = object.signer ?? "";
     message.protocol = object.protocol ?? "";
     message.startDate = object.startDate !== undefined && object.startDate !== null ? Timestamp.fromPartial(object.startDate) : undefined;
     message.endDate = object.endDate !== undefined && object.endDate !== null ? Timestamp.fromPartial(object.endDate) : undefined;
@@ -983,6 +995,9 @@ function createBaseMsgWithdrawPayment(): MsgWithdrawPayment {
     inputs: [],
     outputs: [],
     paymentType: 0,
+    contract_1155Payment: undefined,
+    toAddress: "",
+    fromAddress: "",
     releaseDate: undefined,
     adminAddress: ""
   };
@@ -1006,12 +1021,24 @@ export const MsgWithdrawPayment = {
       writer.uint32(32).int32(message.paymentType);
     }
 
+    if (message.contract_1155Payment !== undefined) {
+      Contract1155Payment.encode(message.contract_1155Payment, writer.uint32(42).fork()).ldelim();
+    }
+
+    if (message.toAddress !== "") {
+      writer.uint32(50).string(message.toAddress);
+    }
+
+    if (message.fromAddress !== "") {
+      writer.uint32(58).string(message.fromAddress);
+    }
+
     if (message.releaseDate !== undefined) {
-      Timestamp.encode(message.releaseDate, writer.uint32(42).fork()).ldelim();
+      Timestamp.encode(message.releaseDate, writer.uint32(66).fork()).ldelim();
     }
 
     if (message.adminAddress !== "") {
-      writer.uint32(50).string(message.adminAddress);
+      writer.uint32(74).string(message.adminAddress);
     }
 
     return writer;
@@ -1043,10 +1070,22 @@ export const MsgWithdrawPayment = {
           break;
 
         case 5:
-          message.releaseDate = Timestamp.decode(reader, reader.uint32());
+          message.contract_1155Payment = Contract1155Payment.decode(reader, reader.uint32());
           break;
 
         case 6:
+          message.toAddress = reader.string();
+          break;
+
+        case 7:
+          message.fromAddress = reader.string();
+          break;
+
+        case 8:
+          message.releaseDate = Timestamp.decode(reader, reader.uint32());
+          break;
+
+        case 9:
           message.adminAddress = reader.string();
           break;
 
@@ -1065,6 +1104,9 @@ export const MsgWithdrawPayment = {
       inputs: Array.isArray(object?.inputs) ? object.inputs.map((e: any) => Input.fromJSON(e)) : [],
       outputs: Array.isArray(object?.outputs) ? object.outputs.map((e: any) => Output.fromJSON(e)) : [],
       paymentType: isSet(object.paymentType) ? paymentTypeFromJSON(object.paymentType) : 0,
+      contract_1155Payment: isSet(object.contract_1155Payment) ? Contract1155Payment.fromJSON(object.contract_1155Payment) : undefined,
+      toAddress: isSet(object.toAddress) ? String(object.toAddress) : "",
+      fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
       releaseDate: isSet(object.releaseDate) ? fromJsonTimestamp(object.releaseDate) : undefined,
       adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : ""
     };
@@ -1087,6 +1129,9 @@ export const MsgWithdrawPayment = {
     }
 
     message.paymentType !== undefined && (obj.paymentType = paymentTypeToJSON(message.paymentType));
+    message.contract_1155Payment !== undefined && (obj.contract_1155Payment = message.contract_1155Payment ? Contract1155Payment.toJSON(message.contract_1155Payment) : undefined);
+    message.toAddress !== undefined && (obj.toAddress = message.toAddress);
+    message.fromAddress !== undefined && (obj.fromAddress = message.fromAddress);
     message.releaseDate !== undefined && (obj.releaseDate = fromTimestamp(message.releaseDate).toISOString());
     message.adminAddress !== undefined && (obj.adminAddress = message.adminAddress);
     return obj;
@@ -1098,6 +1143,9 @@ export const MsgWithdrawPayment = {
     message.inputs = object.inputs?.map(e => Input.fromPartial(e)) || [];
     message.outputs = object.outputs?.map(e => Output.fromPartial(e)) || [];
     message.paymentType = object.paymentType ?? 0;
+    message.contract_1155Payment = object.contract_1155Payment !== undefined && object.contract_1155Payment !== null ? Contract1155Payment.fromPartial(object.contract_1155Payment) : undefined;
+    message.toAddress = object.toAddress ?? "";
+    message.fromAddress = object.fromAddress ?? "";
     message.releaseDate = object.releaseDate !== undefined && object.releaseDate !== null ? Timestamp.fromPartial(object.releaseDate) : undefined;
     message.adminAddress = object.adminAddress ?? "";
     return message;

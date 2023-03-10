@@ -324,6 +324,9 @@ export interface Collection {
    */
 
   payments?: Payments;
+  /** signer address */
+
+  signer: string;
 }
 export interface CollectionSDKType {
   /** collection id is the incremented internal id for the collection of claims */
@@ -388,6 +391,9 @@ export interface CollectionSDKType {
    */
 
   payments?: PaymentsSDKType;
+  /** signer address */
+
+  signer: string;
 }
 export interface Payments {
   submission?: Payment;
@@ -405,6 +411,9 @@ export interface Payment {
   /** account is the entity account address from which the payment will be made */
   account: string;
   amount: Coin[];
+  /** if empty(nil) then no contract payment, not allowed for Evaluation Payment */
+
+  contract_1155Payment?: Contract1155Payment;
   /**
    * timeout after claim/evaluation to create authZ for payment, if 0 then
    * immidiate direct payment
@@ -416,12 +425,25 @@ export interface PaymentSDKType {
   /** account is the entity account address from which the payment will be made */
   account: string;
   amount: CoinSDKType[];
+  /** if empty(nil) then no contract payment, not allowed for Evaluation Payment */
+
+  contract_1155_payment?: Contract1155PaymentSDKType;
   /**
    * timeout after claim/evaluation to create authZ for payment, if 0 then
    * immidiate direct payment
    */
 
   timeout_ns?: DurationSDKType;
+}
+export interface Contract1155Payment {
+  address: string;
+  tokenId: string;
+  amount: number;
+}
+export interface Contract1155PaymentSDKType {
+  address: string;
+  token_id: string;
+  amount: number;
 }
 export interface Claim {
   /** collection_id indicates to which Collection this claim belongs */
@@ -696,7 +718,8 @@ function createBaseCollection(): Collection {
     rejected: Long.UZERO,
     disputed: Long.UZERO,
     state: 0,
-    payments: undefined
+    payments: undefined,
+    signer: ""
   };
 }
 
@@ -756,6 +779,10 @@ export const Collection = {
 
     if (message.payments !== undefined) {
       Payments.encode(message.payments, writer.uint32(114).fork()).ldelim();
+    }
+
+    if (message.signer !== "") {
+      writer.uint32(122).string(message.signer);
     }
 
     return writer;
@@ -826,6 +853,10 @@ export const Collection = {
           message.payments = Payments.decode(reader, reader.uint32());
           break;
 
+        case 15:
+          message.signer = reader.string();
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -850,7 +881,8 @@ export const Collection = {
       rejected: isSet(object.rejected) ? Long.fromValue(object.rejected) : Long.UZERO,
       disputed: isSet(object.disputed) ? Long.fromValue(object.disputed) : Long.UZERO,
       state: isSet(object.state) ? collectionStateFromJSON(object.state) : 0,
-      payments: isSet(object.payments) ? Payments.fromJSON(object.payments) : undefined
+      payments: isSet(object.payments) ? Payments.fromJSON(object.payments) : undefined,
+      signer: isSet(object.signer) ? String(object.signer) : ""
     };
   },
 
@@ -870,6 +902,7 @@ export const Collection = {
     message.disputed !== undefined && (obj.disputed = (message.disputed || Long.UZERO).toString());
     message.state !== undefined && (obj.state = collectionStateToJSON(message.state));
     message.payments !== undefined && (obj.payments = message.payments ? Payments.toJSON(message.payments) : undefined);
+    message.signer !== undefined && (obj.signer = message.signer);
     return obj;
   },
 
@@ -889,6 +922,7 @@ export const Collection = {
     message.disputed = object.disputed !== undefined && object.disputed !== null ? Long.fromValue(object.disputed) : Long.UZERO;
     message.state = object.state ?? 0;
     message.payments = object.payments !== undefined && object.payments !== null ? Payments.fromPartial(object.payments) : undefined;
+    message.signer = object.signer ?? "";
     return message;
   }
 
@@ -991,6 +1025,7 @@ function createBasePayment(): Payment {
   return {
     account: "",
     amount: [],
+    contract_1155Payment: undefined,
     timeoutNs: undefined
   };
 }
@@ -1005,8 +1040,12 @@ export const Payment = {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
     }
 
+    if (message.contract_1155Payment !== undefined) {
+      Contract1155Payment.encode(message.contract_1155Payment, writer.uint32(26).fork()).ldelim();
+    }
+
     if (message.timeoutNs !== undefined) {
-      Duration.encode(message.timeoutNs, writer.uint32(26).fork()).ldelim();
+      Duration.encode(message.timeoutNs, writer.uint32(34).fork()).ldelim();
     }
 
     return writer;
@@ -1030,6 +1069,10 @@ export const Payment = {
           break;
 
         case 3:
+          message.contract_1155Payment = Contract1155Payment.decode(reader, reader.uint32());
+          break;
+
+        case 4:
           message.timeoutNs = Duration.decode(reader, reader.uint32());
           break;
 
@@ -1046,6 +1089,7 @@ export const Payment = {
     return {
       account: isSet(object.account) ? String(object.account) : "",
       amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
+      contract_1155Payment: isSet(object.contract_1155Payment) ? Contract1155Payment.fromJSON(object.contract_1155Payment) : undefined,
       timeoutNs: isSet(object.timeoutNs) ? Duration.fromJSON(object.timeoutNs) : undefined
     };
   },
@@ -1060,6 +1104,7 @@ export const Payment = {
       obj.amount = [];
     }
 
+    message.contract_1155Payment !== undefined && (obj.contract_1155Payment = message.contract_1155Payment ? Contract1155Payment.toJSON(message.contract_1155Payment) : undefined);
     message.timeoutNs !== undefined && (obj.timeoutNs = message.timeoutNs ? Duration.toJSON(message.timeoutNs) : undefined);
     return obj;
   },
@@ -1068,7 +1113,89 @@ export const Payment = {
     const message = createBasePayment();
     message.account = object.account ?? "";
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
+    message.contract_1155Payment = object.contract_1155Payment !== undefined && object.contract_1155Payment !== null ? Contract1155Payment.fromPartial(object.contract_1155Payment) : undefined;
     message.timeoutNs = object.timeoutNs !== undefined && object.timeoutNs !== null ? Duration.fromPartial(object.timeoutNs) : undefined;
+    return message;
+  }
+
+};
+
+function createBaseContract1155Payment(): Contract1155Payment {
+  return {
+    address: "",
+    tokenId: "",
+    amount: 0
+  };
+}
+
+export const Contract1155Payment = {
+  encode(message: Contract1155Payment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+
+    if (message.tokenId !== "") {
+      writer.uint32(18).string(message.tokenId);
+    }
+
+    if (message.amount !== 0) {
+      writer.uint32(24).uint32(message.amount);
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Contract1155Payment {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseContract1155Payment();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+
+        case 2:
+          message.tokenId = reader.string();
+          break;
+
+        case 3:
+          message.amount = reader.uint32();
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): Contract1155Payment {
+    return {
+      address: isSet(object.address) ? String(object.address) : "",
+      tokenId: isSet(object.tokenId) ? String(object.tokenId) : "",
+      amount: isSet(object.amount) ? Number(object.amount) : 0
+    };
+  },
+
+  toJSON(message: Contract1155Payment): unknown {
+    const obj: any = {};
+    message.address !== undefined && (obj.address = message.address);
+    message.tokenId !== undefined && (obj.tokenId = message.tokenId);
+    message.amount !== undefined && (obj.amount = Math.round(message.amount));
+    return obj;
+  },
+
+  fromPartial(object: Partial<Contract1155Payment>): Contract1155Payment {
+    const message = createBaseContract1155Payment();
+    message.address = object.address ?? "";
+    message.tokenId = object.tokenId ?? "";
+    message.amount = object.amount ?? 0;
     return message;
   }
 

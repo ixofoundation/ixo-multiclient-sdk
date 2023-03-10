@@ -1,4 +1,3 @@
-import { MintConstraints } from "../../src/codegen/ixo/token/v1beta1/authz";
 import { TokenData } from "../../src/codegen/ixo/token/v1beta1/token";
 import {
   addDays,

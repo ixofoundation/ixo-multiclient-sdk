@@ -1,4 +1,3 @@
-import { CellnodeWeb3Resource } from "../../src/custom_queries/cellnode";
 import {
   customQueries,
   getFileFromPath,
@@ -20,9 +19,9 @@ export const enititiesBasic = () =>
       return res;
     });
 
-    // testMsg("/ixo.entity.v1beta1.MsgUpdateEntityVerified", () =>
-    //   Entity.UpdateEntityVerified(undefined, entityDid)
-    // );
+    testMsg("/ixo.entity.v1beta1.MsgUpdateEntityVerified", () =>
+      Entity.UpdateEntityVerified(undefined, entityDid)
+    );
 
     // testMsg("/ixo.entity.v1beta1.MsgTransferEntity", () =>
     //   Entity.TransferEntity(undefined, entityDid)
@@ -43,14 +42,17 @@ export const enititiesBasic = () =>
       return res;
     });
 
-    testMsg("/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz", async () => {
-      const res = await Entity.GrantEntityAccountAuthz(entityDid, name);
-      console.log(res);
-      return res;
-    });
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
+      () => Entity.GrantEntityAccountAuthz(entityDid, name),
+      true
+    );
   });
 
-export const supamotoFlow = () =>
+// ------------------------------------------------------------
+// flow to run after devnet was reset, please dont change
+// ------------------------------------------------------------
+export const supamotoEntities = () =>
   describe("Testing the Supamoto nfts flow", () => {
     const cellNodeNetwork = "devnet";
 

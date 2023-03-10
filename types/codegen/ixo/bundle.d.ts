@@ -22,40 +22,28 @@ import * as _152 from "./iid/v1beta1/iid";
 import * as _153 from "./iid/v1beta1/query";
 import * as _154 from "./iid/v1beta1/tx";
 import * as _155 from "./iid/v1beta1/types";
-import * as _156 from "./payments/v1/genesis";
-import * as _157 from "./payments/v1/payments";
-import * as _158 from "./payments/v1/query";
-import * as _159 from "./payments/v1/tx";
-import * as _160 from "./project/v1/genesis";
-import * as _161 from "./project/v1/project";
-import * as _162 from "./project/v1/query";
-import * as _163 from "./project/v1/tx";
-import * as _164 from "./token/v1beta1/authz";
-import * as _165 from "./token/v1beta1/event";
-import * as _166 from "./token/v1beta1/genesis";
-import * as _167 from "./token/v1beta1/proposal";
-import * as _168 from "./token/v1beta1/query";
-import * as _169 from "./token/v1beta1/token";
-import * as _170 from "./token/v1beta1/tx";
-import * as _227 from "./bonds/v1beta1/query.rpc.Query";
-import * as _228 from "./claims/v1beta1/query.rpc.Query";
-import * as _229 from "./entity/v1beta1/query.rpc.Query";
-import * as _230 from "./iid/v1beta1/query.rpc.Query";
-import * as _231 from "./payments/v1/query.rpc.Query";
-import * as _232 from "./project/v1/query.rpc.Query";
-import * as _233 from "./token/v1beta1/query.rpc.Query";
-import * as _234 from "./bonds/v1beta1/tx.rpc.msg";
-import * as _235 from "./claims/v1beta1/tx.rpc.msg";
-import * as _236 from "./entity/v1beta1/tx.rpc.msg";
-import * as _237 from "./iid/v1beta1/tx.rpc.msg";
-import * as _238 from "./payments/v1/tx.rpc.msg";
-import * as _239 from "./project/v1/tx.rpc.msg";
-import * as _240 from "./token/v1beta1/tx.rpc.msg";
+import * as _156 from "./token/v1beta1/authz";
+import * as _157 from "./token/v1beta1/event";
+import * as _158 from "./token/v1beta1/genesis";
+import * as _159 from "./token/v1beta1/proposal";
+import * as _160 from "./token/v1beta1/query";
+import * as _161 from "./token/v1beta1/token";
+import * as _162 from "./token/v1beta1/tx";
+import * as _217 from "./bonds/v1beta1/query.rpc.Query";
+import * as _218 from "./claims/v1beta1/query.rpc.Query";
+import * as _219 from "./entity/v1beta1/query.rpc.Query";
+import * as _220 from "./iid/v1beta1/query.rpc.Query";
+import * as _221 from "./token/v1beta1/query.rpc.Query";
+import * as _222 from "./bonds/v1beta1/tx.rpc.msg";
+import * as _223 from "./claims/v1beta1/tx.rpc.msg";
+import * as _224 from "./entity/v1beta1/tx.rpc.msg";
+import * as _225 from "./iid/v1beta1/tx.rpc.msg";
+import * as _226 from "./token/v1beta1/tx.rpc.msg";
 export declare namespace ixo {
     namespace bonds {
         const v1beta1: {
-            MsgClientImpl: typeof _234.MsgClientImpl;
-            QueryClientImpl: typeof _227.QueryClientImpl;
+            MsgClientImpl: typeof _222.MsgClientImpl;
+            QueryClientImpl: typeof _217.QueryClientImpl;
             createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                 bonds(request?: _134.QueryBondsRequest): Promise<_134.QueryBondsResponse>;
                 bondsDetailed(request?: _134.QueryBondsDetailedRequest): Promise<_134.QueryBondsDetailedResponse>;
@@ -482,8 +470,8 @@ export declare namespace ixo {
     }
     namespace claims {
         const v1beta1: {
-            MsgClientImpl: typeof _235.MsgClientImpl;
-            QueryClientImpl: typeof _228.QueryClientImpl;
+            MsgClientImpl: typeof _223.MsgClientImpl;
+            QueryClientImpl: typeof _218.QueryClientImpl;
             createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                 params(request?: _141.QueryParamsRequest): Promise<_141.QueryParamsResponse>;
                 collection(request: _141.QueryCollectionRequest): Promise<_141.QueryCollectionResponse>;
@@ -782,6 +770,13 @@ export declare namespace ixo {
                 toJSON(message: _137.Payment): unknown;
                 fromPartial(object: Partial<_137.Payment>): _137.Payment;
             };
+            Contract1155Payment: {
+                encode(message: _137.Contract1155Payment, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _137.Contract1155Payment;
+                fromJSON(object: any): _137.Contract1155Payment;
+                toJSON(message: _137.Contract1155Payment): unknown;
+                fromPartial(object: Partial<_137.Contract1155Payment>): _137.Contract1155Payment;
+            };
             Claim: {
                 encode(message: _137.Claim, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _137.Claim;
@@ -863,8 +858,8 @@ export declare namespace ixo {
     }
     namespace entity {
         const v1beta1: {
-            MsgClientImpl: typeof _236.MsgClientImpl;
-            QueryClientImpl: typeof _229.QueryClientImpl;
+            MsgClientImpl: typeof _224.MsgClientImpl;
+            QueryClientImpl: typeof _219.QueryClientImpl;
             createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                 params(request?: _148.QueryParamsRequest): Promise<_148.QueryParamsResponse>;
                 entity(request: _148.QueryEntityRequest): Promise<_148.QueryEntityResponse>;
@@ -1136,8 +1131,8 @@ export declare namespace ixo {
     }
     namespace iid {
         const v1beta1: {
-            MsgClientImpl: typeof _237.MsgClientImpl;
-            QueryClientImpl: typeof _230.QueryClientImpl;
+            MsgClientImpl: typeof _225.MsgClientImpl;
+            QueryClientImpl: typeof _220.QueryClientImpl;
             createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                 iidDocuments(request?: _153.QueryIidDocumentsRequest): Promise<_153.QueryIidDocumentsResponse>;
                 iidDocument(request: _153.QueryIidDocumentRequest): Promise<_153.QueryIidDocumentResponse>;
@@ -1543,468 +1538,127 @@ export declare namespace ixo {
             };
         };
     }
-    namespace payments {
-        const v1: {
-            MsgClientImpl: typeof _238.MsgClientImpl;
-            QueryClientImpl: typeof _231.QueryClientImpl;
+    namespace token {
+        const v1beta1: {
+            MsgClientImpl: typeof _226.MsgClientImpl;
+            QueryClientImpl: typeof _221.QueryClientImpl;
             createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
-                paymentTemplate(request: _158.QueryPaymentTemplateRequest): Promise<_158.QueryPaymentTemplateResponse>;
-                paymentContract(request: _158.QueryPaymentContractRequest): Promise<_158.QueryPaymentContractResponse>;
-                paymentContractsByIdPrefix(request: _158.QueryPaymentContractsByIdPrefixRequest): Promise<_158.QueryPaymentContractsByIdPrefixResponse>;
-                subscription(request: _158.QuerySubscriptionRequest): Promise<_158.QuerySubscriptionResponse>;
-            };
-            MsgSetPaymentContractAuthorisation: {
-                encode(message: _159.MsgSetPaymentContractAuthorisation, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _159.MsgSetPaymentContractAuthorisation;
-                fromJSON(object: any): _159.MsgSetPaymentContractAuthorisation;
-                toJSON(message: _159.MsgSetPaymentContractAuthorisation): unknown;
-                fromPartial(object: Partial<_159.MsgSetPaymentContractAuthorisation>): _159.MsgSetPaymentContractAuthorisation;
-            };
-            MsgSetPaymentContractAuthorisationResponse: {
-                encode(_: _159.MsgSetPaymentContractAuthorisationResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _159.MsgSetPaymentContractAuthorisationResponse;
-                fromJSON(_: any): _159.MsgSetPaymentContractAuthorisationResponse;
-                toJSON(_: _159.MsgSetPaymentContractAuthorisationResponse): unknown;
-                fromPartial(_: Partial<_159.MsgSetPaymentContractAuthorisationResponse>): _159.MsgSetPaymentContractAuthorisationResponse;
-            };
-            MsgCreatePaymentTemplate: {
-                encode(message: _159.MsgCreatePaymentTemplate, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _159.MsgCreatePaymentTemplate;
-                fromJSON(object: any): _159.MsgCreatePaymentTemplate;
-                toJSON(message: _159.MsgCreatePaymentTemplate): unknown;
-                fromPartial(object: Partial<_159.MsgCreatePaymentTemplate>): _159.MsgCreatePaymentTemplate;
-            };
-            MsgCreatePaymentTemplateResponse: {
-                encode(_: _159.MsgCreatePaymentTemplateResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _159.MsgCreatePaymentTemplateResponse;
-                fromJSON(_: any): _159.MsgCreatePaymentTemplateResponse;
-                toJSON(_: _159.MsgCreatePaymentTemplateResponse): unknown;
-                fromPartial(_: Partial<_159.MsgCreatePaymentTemplateResponse>): _159.MsgCreatePaymentTemplateResponse;
-            };
-            MsgCreatePaymentContract: {
-                encode(message: _159.MsgCreatePaymentContract, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _159.MsgCreatePaymentContract;
-                fromJSON(object: any): _159.MsgCreatePaymentContract;
-                toJSON(message: _159.MsgCreatePaymentContract): unknown;
-                fromPartial(object: Partial<_159.MsgCreatePaymentContract>): _159.MsgCreatePaymentContract;
-            };
-            MsgCreatePaymentContractResponse: {
-                encode(_: _159.MsgCreatePaymentContractResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _159.MsgCreatePaymentContractResponse;
-                fromJSON(_: any): _159.MsgCreatePaymentContractResponse;
-                toJSON(_: _159.MsgCreatePaymentContractResponse): unknown;
-                fromPartial(_: Partial<_159.MsgCreatePaymentContractResponse>): _159.MsgCreatePaymentContractResponse;
-            };
-            MsgCreateSubscription: {
-                encode(message: _159.MsgCreateSubscription, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _159.MsgCreateSubscription;
-                fromJSON(object: any): _159.MsgCreateSubscription;
-                toJSON(message: _159.MsgCreateSubscription): unknown;
-                fromPartial(object: Partial<_159.MsgCreateSubscription>): _159.MsgCreateSubscription;
-            };
-            MsgCreateSubscriptionResponse: {
-                encode(_: _159.MsgCreateSubscriptionResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _159.MsgCreateSubscriptionResponse;
-                fromJSON(_: any): _159.MsgCreateSubscriptionResponse;
-                toJSON(_: _159.MsgCreateSubscriptionResponse): unknown;
-                fromPartial(_: Partial<_159.MsgCreateSubscriptionResponse>): _159.MsgCreateSubscriptionResponse;
-            };
-            MsgGrantDiscount: {
-                encode(message: _159.MsgGrantDiscount, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _159.MsgGrantDiscount;
-                fromJSON(object: any): _159.MsgGrantDiscount;
-                toJSON(message: _159.MsgGrantDiscount): unknown;
-                fromPartial(object: Partial<_159.MsgGrantDiscount>): _159.MsgGrantDiscount;
-            };
-            MsgGrantDiscountResponse: {
-                encode(_: _159.MsgGrantDiscountResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _159.MsgGrantDiscountResponse;
-                fromJSON(_: any): _159.MsgGrantDiscountResponse;
-                toJSON(_: _159.MsgGrantDiscountResponse): unknown;
-                fromPartial(_: Partial<_159.MsgGrantDiscountResponse>): _159.MsgGrantDiscountResponse;
-            };
-            MsgRevokeDiscount: {
-                encode(message: _159.MsgRevokeDiscount, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _159.MsgRevokeDiscount;
-                fromJSON(object: any): _159.MsgRevokeDiscount;
-                toJSON(message: _159.MsgRevokeDiscount): unknown;
-                fromPartial(object: Partial<_159.MsgRevokeDiscount>): _159.MsgRevokeDiscount;
-            };
-            MsgRevokeDiscountResponse: {
-                encode(_: _159.MsgRevokeDiscountResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _159.MsgRevokeDiscountResponse;
-                fromJSON(_: any): _159.MsgRevokeDiscountResponse;
-                toJSON(_: _159.MsgRevokeDiscountResponse): unknown;
-                fromPartial(_: Partial<_159.MsgRevokeDiscountResponse>): _159.MsgRevokeDiscountResponse;
-            };
-            MsgEffectPayment: {
-                encode(message: _159.MsgEffectPayment, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _159.MsgEffectPayment;
-                fromJSON(object: any): _159.MsgEffectPayment;
-                toJSON(message: _159.MsgEffectPayment): unknown;
-                fromPartial(object: Partial<_159.MsgEffectPayment>): _159.MsgEffectPayment;
-            };
-            MsgEffectPaymentResponse: {
-                encode(_: _159.MsgEffectPaymentResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _159.MsgEffectPaymentResponse;
-                fromJSON(_: any): _159.MsgEffectPaymentResponse;
-                toJSON(_: _159.MsgEffectPaymentResponse): unknown;
-                fromPartial(_: Partial<_159.MsgEffectPaymentResponse>): _159.MsgEffectPaymentResponse;
-            };
-            QueryPaymentTemplateRequest: {
-                encode(message: _158.QueryPaymentTemplateRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _158.QueryPaymentTemplateRequest;
-                fromJSON(object: any): _158.QueryPaymentTemplateRequest;
-                toJSON(message: _158.QueryPaymentTemplateRequest): unknown;
-                fromPartial(object: Partial<_158.QueryPaymentTemplateRequest>): _158.QueryPaymentTemplateRequest;
-            };
-            QueryPaymentTemplateResponse: {
-                encode(message: _158.QueryPaymentTemplateResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _158.QueryPaymentTemplateResponse;
-                fromJSON(object: any): _158.QueryPaymentTemplateResponse;
-                toJSON(message: _158.QueryPaymentTemplateResponse): unknown;
-                fromPartial(object: Partial<_158.QueryPaymentTemplateResponse>): _158.QueryPaymentTemplateResponse;
-            };
-            QueryPaymentContractRequest: {
-                encode(message: _158.QueryPaymentContractRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _158.QueryPaymentContractRequest;
-                fromJSON(object: any): _158.QueryPaymentContractRequest;
-                toJSON(message: _158.QueryPaymentContractRequest): unknown;
-                fromPartial(object: Partial<_158.QueryPaymentContractRequest>): _158.QueryPaymentContractRequest;
-            };
-            QueryPaymentContractResponse: {
-                encode(message: _158.QueryPaymentContractResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _158.QueryPaymentContractResponse;
-                fromJSON(object: any): _158.QueryPaymentContractResponse;
-                toJSON(message: _158.QueryPaymentContractResponse): unknown;
-                fromPartial(object: Partial<_158.QueryPaymentContractResponse>): _158.QueryPaymentContractResponse;
-            };
-            QueryPaymentContractsByIdPrefixRequest: {
-                encode(message: _158.QueryPaymentContractsByIdPrefixRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _158.QueryPaymentContractsByIdPrefixRequest;
-                fromJSON(object: any): _158.QueryPaymentContractsByIdPrefixRequest;
-                toJSON(message: _158.QueryPaymentContractsByIdPrefixRequest): unknown;
-                fromPartial(object: Partial<_158.QueryPaymentContractsByIdPrefixRequest>): _158.QueryPaymentContractsByIdPrefixRequest;
-            };
-            QueryPaymentContractsByIdPrefixResponse: {
-                encode(message: _158.QueryPaymentContractsByIdPrefixResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _158.QueryPaymentContractsByIdPrefixResponse;
-                fromJSON(object: any): _158.QueryPaymentContractsByIdPrefixResponse;
-                toJSON(message: _158.QueryPaymentContractsByIdPrefixResponse): unknown;
-                fromPartial(object: Partial<_158.QueryPaymentContractsByIdPrefixResponse>): _158.QueryPaymentContractsByIdPrefixResponse;
-            };
-            QuerySubscriptionRequest: {
-                encode(message: _158.QuerySubscriptionRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _158.QuerySubscriptionRequest;
-                fromJSON(object: any): _158.QuerySubscriptionRequest;
-                toJSON(message: _158.QuerySubscriptionRequest): unknown;
-                fromPartial(object: Partial<_158.QuerySubscriptionRequest>): _158.QuerySubscriptionRequest;
-            };
-            QuerySubscriptionResponse: {
-                encode(message: _158.QuerySubscriptionResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _158.QuerySubscriptionResponse;
-                fromJSON(object: any): _158.QuerySubscriptionResponse;
-                toJSON(message: _158.QuerySubscriptionResponse): unknown;
-                fromPartial(object: Partial<_158.QuerySubscriptionResponse>): _158.QuerySubscriptionResponse;
-            };
-            PaymentTemplate: {
-                encode(message: _157.PaymentTemplate, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.PaymentTemplate;
-                fromJSON(object: any): _157.PaymentTemplate;
-                toJSON(message: _157.PaymentTemplate): unknown;
-                fromPartial(object: Partial<_157.PaymentTemplate>): _157.PaymentTemplate;
-            };
-            Discount: {
-                encode(message: _157.Discount, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.Discount;
-                fromJSON(object: any): _157.Discount;
-                toJSON(message: _157.Discount): unknown;
-                fromPartial(object: Partial<_157.Discount>): _157.Discount;
-            };
-            DistributionShare: {
-                encode(message: _157.DistributionShare, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.DistributionShare;
-                fromJSON(object: any): _157.DistributionShare;
-                toJSON(message: _157.DistributionShare): unknown;
-                fromPartial(object: Partial<_157.DistributionShare>): _157.DistributionShare;
-            };
-            PaymentContract: {
-                encode(message: _157.PaymentContract, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.PaymentContract;
-                fromJSON(object: any): _157.PaymentContract;
-                toJSON(message: _157.PaymentContract): unknown;
-                fromPartial(object: Partial<_157.PaymentContract>): _157.PaymentContract;
-            };
-            Subscription: {
-                encode(message: _157.Subscription, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.Subscription;
-                fromJSON(object: any): _157.Subscription;
-                toJSON(message: _157.Subscription): unknown;
-                fromPartial(object: Partial<_157.Subscription>): _157.Subscription;
-            };
-            BlockPeriod: {
-                encode(message: _157.BlockPeriod, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.BlockPeriod;
-                fromJSON(object: any): _157.BlockPeriod;
-                toJSON(message: _157.BlockPeriod): unknown;
-                fromPartial(object: Partial<_157.BlockPeriod>): _157.BlockPeriod;
-            };
-            TimePeriod: {
-                encode(message: _157.TimePeriod, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.TimePeriod;
-                fromJSON(object: any): _157.TimePeriod;
-                toJSON(message: _157.TimePeriod): unknown;
-                fromPartial(object: Partial<_157.TimePeriod>): _157.TimePeriod;
-            };
-            TestPeriod: {
-                encode(message: _157.TestPeriod, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.TestPeriod;
-                fromJSON(object: any): _157.TestPeriod;
-                toJSON(message: _157.TestPeriod): unknown;
-                fromPartial(object: Partial<_157.TestPeriod>): _157.TestPeriod;
-            };
-            GenesisState: {
-                encode(message: _156.GenesisState, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _156.GenesisState;
-                fromJSON(object: any): _156.GenesisState;
-                toJSON(message: _156.GenesisState): unknown;
-                fromPartial(object: Partial<_156.GenesisState>): _156.GenesisState;
-            };
-        };
-    }
-    namespace project {
-        const v1: {
-            MsgClientImpl: typeof _239.MsgClientImpl;
-            QueryClientImpl: typeof _232.QueryClientImpl;
-            createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
-                projectDoc(request: _162.QueryProjectDocRequest): Promise<_162.QueryProjectDocResponse>;
-                projectAccounts(request: _162.QueryProjectAccountsRequest): Promise<_162.QueryProjectAccountsResponse>;
-                projectTx(request: _162.QueryProjectTxRequest): Promise<_162.QueryProjectTxResponse>;
-                params(request?: _162.QueryParamsRequest): Promise<_162.QueryParamsResponse>;
-            };
-            MsgCreateProject: {
-                encode(message: _163.MsgCreateProject, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgCreateProject;
-                fromJSON(object: any): _163.MsgCreateProject;
-                toJSON(message: _163.MsgCreateProject): unknown;
-                fromPartial(object: Partial<_163.MsgCreateProject>): _163.MsgCreateProject;
-            };
-            MsgCreateProjectResponse: {
-                encode(_: _163.MsgCreateProjectResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgCreateProjectResponse;
-                fromJSON(_: any): _163.MsgCreateProjectResponse;
-                toJSON(_: _163.MsgCreateProjectResponse): unknown;
-                fromPartial(_: Partial<_163.MsgCreateProjectResponse>): _163.MsgCreateProjectResponse;
-            };
-            MsgUpdateProjectStatus: {
-                encode(message: _163.MsgUpdateProjectStatus, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgUpdateProjectStatus;
-                fromJSON(object: any): _163.MsgUpdateProjectStatus;
-                toJSON(message: _163.MsgUpdateProjectStatus): unknown;
-                fromPartial(object: Partial<_163.MsgUpdateProjectStatus>): _163.MsgUpdateProjectStatus;
-            };
-            MsgUpdateProjectStatusResponse: {
-                encode(_: _163.MsgUpdateProjectStatusResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgUpdateProjectStatusResponse;
-                fromJSON(_: any): _163.MsgUpdateProjectStatusResponse;
-                toJSON(_: _163.MsgUpdateProjectStatusResponse): unknown;
-                fromPartial(_: Partial<_163.MsgUpdateProjectStatusResponse>): _163.MsgUpdateProjectStatusResponse;
-            };
-            MsgCreateAgent: {
-                encode(message: _163.MsgCreateAgent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgCreateAgent;
-                fromJSON(object: any): _163.MsgCreateAgent;
-                toJSON(message: _163.MsgCreateAgent): unknown;
-                fromPartial(object: Partial<_163.MsgCreateAgent>): _163.MsgCreateAgent;
-            };
-            MsgCreateAgentResponse: {
-                encode(_: _163.MsgCreateAgentResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgCreateAgentResponse;
-                fromJSON(_: any): _163.MsgCreateAgentResponse;
-                toJSON(_: _163.MsgCreateAgentResponse): unknown;
-                fromPartial(_: Partial<_163.MsgCreateAgentResponse>): _163.MsgCreateAgentResponse;
-            };
-            MsgUpdateAgent: {
-                encode(message: _163.MsgUpdateAgent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgUpdateAgent;
-                fromJSON(object: any): _163.MsgUpdateAgent;
-                toJSON(message: _163.MsgUpdateAgent): unknown;
-                fromPartial(object: Partial<_163.MsgUpdateAgent>): _163.MsgUpdateAgent;
-            };
-            MsgUpdateAgentResponse: {
-                encode(_: _163.MsgUpdateAgentResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgUpdateAgentResponse;
-                fromJSON(_: any): _163.MsgUpdateAgentResponse;
-                toJSON(_: _163.MsgUpdateAgentResponse): unknown;
-                fromPartial(_: Partial<_163.MsgUpdateAgentResponse>): _163.MsgUpdateAgentResponse;
-            };
-            MsgCreateClaim: {
-                encode(message: _163.MsgCreateClaim, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgCreateClaim;
-                fromJSON(object: any): _163.MsgCreateClaim;
-                toJSON(message: _163.MsgCreateClaim): unknown;
-                fromPartial(object: Partial<_163.MsgCreateClaim>): _163.MsgCreateClaim;
-            };
-            MsgCreateClaimResponse: {
-                encode(_: _163.MsgCreateClaimResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgCreateClaimResponse;
-                fromJSON(_: any): _163.MsgCreateClaimResponse;
-                toJSON(_: _163.MsgCreateClaimResponse): unknown;
-                fromPartial(_: Partial<_163.MsgCreateClaimResponse>): _163.MsgCreateClaimResponse;
-            };
-            MsgCreateEvaluation: {
-                encode(message: _163.MsgCreateEvaluation, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgCreateEvaluation;
-                fromJSON(object: any): _163.MsgCreateEvaluation;
-                toJSON(message: _163.MsgCreateEvaluation): unknown;
-                fromPartial(object: Partial<_163.MsgCreateEvaluation>): _163.MsgCreateEvaluation;
-            };
-            MsgCreateEvaluationResponse: {
-                encode(_: _163.MsgCreateEvaluationResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgCreateEvaluationResponse;
-                fromJSON(_: any): _163.MsgCreateEvaluationResponse;
-                toJSON(_: _163.MsgCreateEvaluationResponse): unknown;
-                fromPartial(_: Partial<_163.MsgCreateEvaluationResponse>): _163.MsgCreateEvaluationResponse;
-            };
-            MsgWithdrawFunds: {
-                encode(message: _163.MsgWithdrawFunds, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgWithdrawFunds;
-                fromJSON(object: any): _163.MsgWithdrawFunds;
-                toJSON(message: _163.MsgWithdrawFunds): unknown;
-                fromPartial(object: Partial<_163.MsgWithdrawFunds>): _163.MsgWithdrawFunds;
-            };
-            MsgWithdrawFundsResponse: {
-                encode(_: _163.MsgWithdrawFundsResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgWithdrawFundsResponse;
-                fromJSON(_: any): _163.MsgWithdrawFundsResponse;
-                toJSON(_: _163.MsgWithdrawFundsResponse): unknown;
-                fromPartial(_: Partial<_163.MsgWithdrawFundsResponse>): _163.MsgWithdrawFundsResponse;
-            };
-            MsgUpdateProjectDoc: {
-                encode(message: _163.MsgUpdateProjectDoc, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgUpdateProjectDoc;
-                fromJSON(object: any): _163.MsgUpdateProjectDoc;
-                toJSON(message: _163.MsgUpdateProjectDoc): unknown;
-                fromPartial(object: Partial<_163.MsgUpdateProjectDoc>): _163.MsgUpdateProjectDoc;
-            };
-            MsgUpdateProjectDocResponse: {
-                encode(_: _163.MsgUpdateProjectDocResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _163.MsgUpdateProjectDocResponse;
-                fromJSON(_: any): _163.MsgUpdateProjectDocResponse;
-                toJSON(_: _163.MsgUpdateProjectDocResponse): unknown;
-                fromPartial(_: Partial<_163.MsgUpdateProjectDocResponse>): _163.MsgUpdateProjectDocResponse;
-            };
-            QueryProjectDocRequest: {
-                encode(message: _162.QueryProjectDocRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.QueryProjectDocRequest;
-                fromJSON(object: any): _162.QueryProjectDocRequest;
-                toJSON(message: _162.QueryProjectDocRequest): unknown;
-                fromPartial(object: Partial<_162.QueryProjectDocRequest>): _162.QueryProjectDocRequest;
-            };
-            QueryProjectDocResponse: {
-                encode(message: _162.QueryProjectDocResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.QueryProjectDocResponse;
-                fromJSON(object: any): _162.QueryProjectDocResponse;
-                toJSON(message: _162.QueryProjectDocResponse): unknown;
-                fromPartial(object: Partial<_162.QueryProjectDocResponse>): _162.QueryProjectDocResponse;
-            };
-            QueryProjectAccountsRequest: {
-                encode(message: _162.QueryProjectAccountsRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.QueryProjectAccountsRequest;
-                fromJSON(object: any): _162.QueryProjectAccountsRequest;
-                toJSON(message: _162.QueryProjectAccountsRequest): unknown;
-                fromPartial(object: Partial<_162.QueryProjectAccountsRequest>): _162.QueryProjectAccountsRequest;
-            };
-            QueryProjectAccountsResponse: {
-                encode(message: _162.QueryProjectAccountsResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.QueryProjectAccountsResponse;
-                fromJSON(object: any): _162.QueryProjectAccountsResponse;
-                toJSON(message: _162.QueryProjectAccountsResponse): unknown;
-                fromPartial(object: Partial<_162.QueryProjectAccountsResponse>): _162.QueryProjectAccountsResponse;
-            };
-            QueryProjectTxRequest: {
-                encode(message: _162.QueryProjectTxRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.QueryProjectTxRequest;
-                fromJSON(object: any): _162.QueryProjectTxRequest;
-                toJSON(message: _162.QueryProjectTxRequest): unknown;
-                fromPartial(object: Partial<_162.QueryProjectTxRequest>): _162.QueryProjectTxRequest;
-            };
-            QueryProjectTxResponse: {
-                encode(message: _162.QueryProjectTxResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.QueryProjectTxResponse;
-                fromJSON(object: any): _162.QueryProjectTxResponse;
-                toJSON(message: _162.QueryProjectTxResponse): unknown;
-                fromPartial(object: Partial<_162.QueryProjectTxResponse>): _162.QueryProjectTxResponse;
-            };
-            QueryParamsRequest: {
-                encode(_: _162.QueryParamsRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.QueryParamsRequest;
-                fromJSON(_: any): _162.QueryParamsRequest;
-                toJSON(_: _162.QueryParamsRequest): unknown;
-                fromPartial(_: Partial<_162.QueryParamsRequest>): _162.QueryParamsRequest;
-            };
-            QueryParamsResponse: {
-                encode(message: _162.QueryParamsResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.QueryParamsResponse;
-                fromJSON(object: any): _162.QueryParamsResponse;
-                toJSON(message: _162.QueryParamsResponse): unknown;
-                fromPartial(object: Partial<_162.QueryParamsResponse>): _162.QueryParamsResponse;
-            };
-            UpdateProjectStatusDoc: {
-                encode(message: _161.UpdateProjectStatusDoc, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.UpdateProjectStatusDoc;
-                fromJSON(object: any): _161.UpdateProjectStatusDoc;
-                toJSON(message: _161.UpdateProjectStatusDoc): unknown;
-                fromPartial(object: Partial<_161.UpdateProjectStatusDoc>): _161.UpdateProjectStatusDoc;
-            };
-            CreateAgentDoc: {
-                encode(message: _161.CreateAgentDoc, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.CreateAgentDoc;
-                fromJSON(object: any): _161.CreateAgentDoc;
-                toJSON(message: _161.CreateAgentDoc): unknown;
-                fromPartial(object: Partial<_161.CreateAgentDoc>): _161.CreateAgentDoc;
-            };
-            UpdateAgentDoc: {
-                encode(message: _161.UpdateAgentDoc, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.UpdateAgentDoc;
-                fromJSON(object: any): _161.UpdateAgentDoc;
-                toJSON(message: _161.UpdateAgentDoc): unknown;
-                fromPartial(object: Partial<_161.UpdateAgentDoc>): _161.UpdateAgentDoc;
-            };
-            CreateClaimDoc: {
-                encode(message: _161.CreateClaimDoc, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.CreateClaimDoc;
-                fromJSON(object: any): _161.CreateClaimDoc;
-                toJSON(message: _161.CreateClaimDoc): unknown;
-                fromPartial(object: Partial<_161.CreateClaimDoc>): _161.CreateClaimDoc;
-            };
-            CreateEvaluationDoc: {
-                encode(message: _161.CreateEvaluationDoc, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.CreateEvaluationDoc;
-                fromJSON(object: any): _161.CreateEvaluationDoc;
-                toJSON(message: _161.CreateEvaluationDoc): unknown;
-                fromPartial(object: Partial<_161.CreateEvaluationDoc>): _161.CreateEvaluationDoc;
-            };
-            WithdrawFundsDoc: {
-                encode(message: _161.WithdrawFundsDoc, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.WithdrawFundsDoc;
-                fromJSON(object: any): _161.WithdrawFundsDoc;
-                toJSON(message: _161.WithdrawFundsDoc): unknown;
-                fromPartial(object: Partial<_161.WithdrawFundsDoc>): _161.WithdrawFundsDoc;
-            };
-            ProjectDoc: {
-                encode(message: _161.ProjectDoc, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.ProjectDoc;
-                fromJSON(object: any): _161.ProjectDoc;
-                toJSON(message: _161.ProjectDoc): unknown;
-                fromPartial(object: Partial<_161.ProjectDoc>): _161.ProjectDoc;
-            };
-            WithdrawalInfoDoc: {
-                encode(message: _161.WithdrawalInfoDoc, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.WithdrawalInfoDoc;
-                fromJSON(object: any): _161.WithdrawalInfoDoc;
-                toJSON(message: _161.WithdrawalInfoDoc): unknown;
-                fromPartial(object: Partial<_161.WithdrawalInfoDoc>): _161.WithdrawalInfoDoc;
+                params(request?: _160.QueryParamsRequest): Promise<_160.QueryParamsResponse>;
+                tokenList(request: _160.QueryTokenListRequest): Promise<_160.QueryTokenListResponse>;
+                tokenDoc(request: _160.QueryTokenDocRequest): Promise<_160.QueryTokenDocResponse>;
+                tokenMetadata(request: _160.QueryTokenMetadataRequest): Promise<_160.QueryTokenMetadataResponse>;
+            };
+            MsgCreateToken: {
+                encode(message: _162.MsgCreateToken, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.MsgCreateToken;
+                fromJSON(object: any): _162.MsgCreateToken;
+                toJSON(message: _162.MsgCreateToken): unknown;
+                fromPartial(object: Partial<_162.MsgCreateToken>): _162.MsgCreateToken;
+            };
+            MsgCreateTokenResponse: {
+                encode(_: _162.MsgCreateTokenResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.MsgCreateTokenResponse;
+                fromJSON(_: any): _162.MsgCreateTokenResponse;
+                toJSON(_: _162.MsgCreateTokenResponse): unknown;
+                fromPartial(_: Partial<_162.MsgCreateTokenResponse>): _162.MsgCreateTokenResponse;
+            };
+            MsgMintToken: {
+                encode(message: _162.MsgMintToken, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.MsgMintToken;
+                fromJSON(object: any): _162.MsgMintToken;
+                toJSON(message: _162.MsgMintToken): unknown;
+                fromPartial(object: Partial<_162.MsgMintToken>): _162.MsgMintToken;
+            };
+            MintBatch: {
+                encode(message: _162.MintBatch, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.MintBatch;
+                fromJSON(object: any): _162.MintBatch;
+                toJSON(message: _162.MintBatch): unknown;
+                fromPartial(object: Partial<_162.MintBatch>): _162.MintBatch;
+            };
+            MsgMintTokenResponse: {
+                encode(_: _162.MsgMintTokenResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.MsgMintTokenResponse;
+                fromJSON(_: any): _162.MsgMintTokenResponse;
+                toJSON(_: _162.MsgMintTokenResponse): unknown;
+                fromPartial(_: Partial<_162.MsgMintTokenResponse>): _162.MsgMintTokenResponse;
+            };
+            MsgTransferToken: {
+                encode(message: _162.MsgTransferToken, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.MsgTransferToken;
+                fromJSON(object: any): _162.MsgTransferToken;
+                toJSON(message: _162.MsgTransferToken): unknown;
+                fromPartial(object: Partial<_162.MsgTransferToken>): _162.MsgTransferToken;
+            };
+            MsgTransferTokenResponse: {
+                encode(_: _162.MsgTransferTokenResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.MsgTransferTokenResponse;
+                fromJSON(_: any): _162.MsgTransferTokenResponse;
+                toJSON(_: _162.MsgTransferTokenResponse): unknown;
+                fromPartial(_: Partial<_162.MsgTransferTokenResponse>): _162.MsgTransferTokenResponse;
+            };
+            TokenBatch: {
+                encode(message: _162.TokenBatch, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.TokenBatch;
+                fromJSON(object: any): _162.TokenBatch;
+                toJSON(message: _162.TokenBatch): unknown;
+                fromPartial(object: Partial<_162.TokenBatch>): _162.TokenBatch;
+            };
+            MsgRetireToken: {
+                encode(message: _162.MsgRetireToken, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.MsgRetireToken;
+                fromJSON(object: any): _162.MsgRetireToken;
+                toJSON(message: _162.MsgRetireToken): unknown;
+                fromPartial(object: Partial<_162.MsgRetireToken>): _162.MsgRetireToken;
+            };
+            MsgRetireTokenResponse: {
+                encode(_: _162.MsgRetireTokenResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.MsgRetireTokenResponse;
+                fromJSON(_: any): _162.MsgRetireTokenResponse;
+                toJSON(_: _162.MsgRetireTokenResponse): unknown;
+                fromPartial(_: Partial<_162.MsgRetireTokenResponse>): _162.MsgRetireTokenResponse;
+            };
+            MsgCancelToken: {
+                encode(message: _162.MsgCancelToken, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.MsgCancelToken;
+                fromJSON(object: any): _162.MsgCancelToken;
+                toJSON(message: _162.MsgCancelToken): unknown;
+                fromPartial(object: Partial<_162.MsgCancelToken>): _162.MsgCancelToken;
+            };
+            MsgCancelTokenResponse: {
+                encode(_: _162.MsgCancelTokenResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.MsgCancelTokenResponse;
+                fromJSON(_: any): _162.MsgCancelTokenResponse;
+                toJSON(_: _162.MsgCancelTokenResponse): unknown;
+                fromPartial(_: Partial<_162.MsgCancelTokenResponse>): _162.MsgCancelTokenResponse;
+            };
+            MsgPauseToken: {
+                encode(message: _162.MsgPauseToken, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.MsgPauseToken;
+                fromJSON(object: any): _162.MsgPauseToken;
+                toJSON(message: _162.MsgPauseToken): unknown;
+                fromPartial(object: Partial<_162.MsgPauseToken>): _162.MsgPauseToken;
+            };
+            MsgPauseTokenResponse: {
+                encode(_: _162.MsgPauseTokenResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.MsgPauseTokenResponse;
+                fromJSON(_: any): _162.MsgPauseTokenResponse;
+                toJSON(_: _162.MsgPauseTokenResponse): unknown;
+                fromPartial(_: Partial<_162.MsgPauseTokenResponse>): _162.MsgPauseTokenResponse;
+            };
+            MsgStopToken: {
+                encode(message: _162.MsgStopToken, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.MsgStopToken;
+                fromJSON(object: any): _162.MsgStopToken;
+                toJSON(message: _162.MsgStopToken): unknown;
+                fromPartial(object: Partial<_162.MsgStopToken>): _162.MsgStopToken;
+            };
+            MsgStopTokenResponse: {
+                encode(_: _162.MsgStopTokenResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _162.MsgStopTokenResponse;
+                fromJSON(_: any): _162.MsgStopTokenResponse;
+                toJSON(_: _162.MsgStopTokenResponse): unknown;
+                fromPartial(_: Partial<_162.MsgStopTokenResponse>): _162.MsgStopTokenResponse;
             };
             Params: {
                 encode(message: _161.Params, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
@@ -2013,374 +1667,187 @@ export declare namespace ixo {
                 toJSON(message: _161.Params): unknown;
                 fromPartial(object: Partial<_161.Params>): _161.Params;
             };
-            Claim: {
-                encode(message: _161.Claim, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.Claim;
-                fromJSON(object: any): _161.Claim;
-                toJSON(message: _161.Claim): unknown;
-                fromPartial(object: Partial<_161.Claim>): _161.Claim;
-            };
-            GenesisAccountMap_MapEntry: {
-                encode(message: _161.GenesisAccountMap_MapEntry, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.GenesisAccountMap_MapEntry;
-                fromJSON(object: any): _161.GenesisAccountMap_MapEntry;
-                toJSON(message: _161.GenesisAccountMap_MapEntry): unknown;
-                fromPartial(object: Partial<_161.GenesisAccountMap_MapEntry>): _161.GenesisAccountMap_MapEntry;
-            };
-            GenesisAccountMap: {
-                encode(message: _161.GenesisAccountMap, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.GenesisAccountMap;
-                fromJSON(object: any): _161.GenesisAccountMap;
-                toJSON(message: _161.GenesisAccountMap): unknown;
-                fromPartial(object: Partial<_161.GenesisAccountMap>): _161.GenesisAccountMap;
-            };
-            AccountMap_MapEntry: {
-                encode(message: _161.AccountMap_MapEntry, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.AccountMap_MapEntry;
-                fromJSON(object: any): _161.AccountMap_MapEntry;
-                toJSON(message: _161.AccountMap_MapEntry): unknown;
-                fromPartial(object: Partial<_161.AccountMap_MapEntry>): _161.AccountMap_MapEntry;
-            };
-            AccountMap: {
-                encode(message: _161.AccountMap, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.AccountMap;
-                fromJSON(object: any): _161.AccountMap;
-                toJSON(message: _161.AccountMap): unknown;
-                fromPartial(object: Partial<_161.AccountMap>): _161.AccountMap;
-            };
-            WithdrawalInfoDocs: {
-                encode(message: _161.WithdrawalInfoDocs, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.WithdrawalInfoDocs;
-                fromJSON(object: any): _161.WithdrawalInfoDocs;
-                toJSON(message: _161.WithdrawalInfoDocs): unknown;
-                fromPartial(object: Partial<_161.WithdrawalInfoDocs>): _161.WithdrawalInfoDocs;
-            };
-            Claims: {
-                encode(message: _161.Claims, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.Claims;
-                fromJSON(object: any): _161.Claims;
-                toJSON(message: _161.Claims): unknown;
-                fromPartial(object: Partial<_161.Claims>): _161.Claims;
-            };
-            GenesisState: {
-                encode(message: _160.GenesisState, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _160.GenesisState;
-                fromJSON(object: any): _160.GenesisState;
-                toJSON(message: _160.GenesisState): unknown;
-                fromPartial(object: Partial<_160.GenesisState>): _160.GenesisState;
-            };
-        };
-    }
-    namespace token {
-        const v1beta1: {
-            MsgClientImpl: typeof _240.MsgClientImpl;
-            QueryClientImpl: typeof _233.QueryClientImpl;
-            createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
-                params(request?: _168.QueryParamsRequest): Promise<_168.QueryParamsResponse>;
-                tokenList(request: _168.QueryTokenListRequest): Promise<_168.QueryTokenListResponse>;
-                tokenDoc(request: _168.QueryTokenDocRequest): Promise<_168.QueryTokenDocResponse>;
-                tokenMetadata(request: _168.QueryTokenMetadataRequest): Promise<_168.QueryTokenMetadataResponse>;
-            };
-            MsgCreateToken: {
-                encode(message: _170.MsgCreateToken, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.MsgCreateToken;
-                fromJSON(object: any): _170.MsgCreateToken;
-                toJSON(message: _170.MsgCreateToken): unknown;
-                fromPartial(object: Partial<_170.MsgCreateToken>): _170.MsgCreateToken;
-            };
-            MsgCreateTokenResponse: {
-                encode(_: _170.MsgCreateTokenResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.MsgCreateTokenResponse;
-                fromJSON(_: any): _170.MsgCreateTokenResponse;
-                toJSON(_: _170.MsgCreateTokenResponse): unknown;
-                fromPartial(_: Partial<_170.MsgCreateTokenResponse>): _170.MsgCreateTokenResponse;
-            };
-            MsgMintToken: {
-                encode(message: _170.MsgMintToken, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.MsgMintToken;
-                fromJSON(object: any): _170.MsgMintToken;
-                toJSON(message: _170.MsgMintToken): unknown;
-                fromPartial(object: Partial<_170.MsgMintToken>): _170.MsgMintToken;
-            };
-            MintBatch: {
-                encode(message: _170.MintBatch, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.MintBatch;
-                fromJSON(object: any): _170.MintBatch;
-                toJSON(message: _170.MintBatch): unknown;
-                fromPartial(object: Partial<_170.MintBatch>): _170.MintBatch;
-            };
-            MsgMintTokenResponse: {
-                encode(_: _170.MsgMintTokenResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.MsgMintTokenResponse;
-                fromJSON(_: any): _170.MsgMintTokenResponse;
-                toJSON(_: _170.MsgMintTokenResponse): unknown;
-                fromPartial(_: Partial<_170.MsgMintTokenResponse>): _170.MsgMintTokenResponse;
-            };
-            MsgTransferToken: {
-                encode(message: _170.MsgTransferToken, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.MsgTransferToken;
-                fromJSON(object: any): _170.MsgTransferToken;
-                toJSON(message: _170.MsgTransferToken): unknown;
-                fromPartial(object: Partial<_170.MsgTransferToken>): _170.MsgTransferToken;
-            };
-            MsgTransferTokenResponse: {
-                encode(_: _170.MsgTransferTokenResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.MsgTransferTokenResponse;
-                fromJSON(_: any): _170.MsgTransferTokenResponse;
-                toJSON(_: _170.MsgTransferTokenResponse): unknown;
-                fromPartial(_: Partial<_170.MsgTransferTokenResponse>): _170.MsgTransferTokenResponse;
-            };
-            TokenBatch: {
-                encode(message: _170.TokenBatch, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.TokenBatch;
-                fromJSON(object: any): _170.TokenBatch;
-                toJSON(message: _170.TokenBatch): unknown;
-                fromPartial(object: Partial<_170.TokenBatch>): _170.TokenBatch;
-            };
-            MsgRetireToken: {
-                encode(message: _170.MsgRetireToken, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.MsgRetireToken;
-                fromJSON(object: any): _170.MsgRetireToken;
-                toJSON(message: _170.MsgRetireToken): unknown;
-                fromPartial(object: Partial<_170.MsgRetireToken>): _170.MsgRetireToken;
-            };
-            MsgRetireTokenResponse: {
-                encode(_: _170.MsgRetireTokenResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.MsgRetireTokenResponse;
-                fromJSON(_: any): _170.MsgRetireTokenResponse;
-                toJSON(_: _170.MsgRetireTokenResponse): unknown;
-                fromPartial(_: Partial<_170.MsgRetireTokenResponse>): _170.MsgRetireTokenResponse;
-            };
-            MsgCancelToken: {
-                encode(message: _170.MsgCancelToken, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.MsgCancelToken;
-                fromJSON(object: any): _170.MsgCancelToken;
-                toJSON(message: _170.MsgCancelToken): unknown;
-                fromPartial(object: Partial<_170.MsgCancelToken>): _170.MsgCancelToken;
-            };
-            MsgCancelTokenResponse: {
-                encode(_: _170.MsgCancelTokenResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.MsgCancelTokenResponse;
-                fromJSON(_: any): _170.MsgCancelTokenResponse;
-                toJSON(_: _170.MsgCancelTokenResponse): unknown;
-                fromPartial(_: Partial<_170.MsgCancelTokenResponse>): _170.MsgCancelTokenResponse;
-            };
-            MsgPauseToken: {
-                encode(message: _170.MsgPauseToken, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.MsgPauseToken;
-                fromJSON(object: any): _170.MsgPauseToken;
-                toJSON(message: _170.MsgPauseToken): unknown;
-                fromPartial(object: Partial<_170.MsgPauseToken>): _170.MsgPauseToken;
-            };
-            MsgPauseTokenResponse: {
-                encode(_: _170.MsgPauseTokenResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.MsgPauseTokenResponse;
-                fromJSON(_: any): _170.MsgPauseTokenResponse;
-                toJSON(_: _170.MsgPauseTokenResponse): unknown;
-                fromPartial(_: Partial<_170.MsgPauseTokenResponse>): _170.MsgPauseTokenResponse;
-            };
-            MsgStopToken: {
-                encode(message: _170.MsgStopToken, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.MsgStopToken;
-                fromJSON(object: any): _170.MsgStopToken;
-                toJSON(message: _170.MsgStopToken): unknown;
-                fromPartial(object: Partial<_170.MsgStopToken>): _170.MsgStopToken;
-            };
-            MsgStopTokenResponse: {
-                encode(_: _170.MsgStopTokenResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _170.MsgStopTokenResponse;
-                fromJSON(_: any): _170.MsgStopTokenResponse;
-                toJSON(_: _170.MsgStopTokenResponse): unknown;
-                fromPartial(_: Partial<_170.MsgStopTokenResponse>): _170.MsgStopTokenResponse;
-            };
-            Params: {
-                encode(message: _169.Params, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _169.Params;
-                fromJSON(object: any): _169.Params;
-                toJSON(message: _169.Params): unknown;
-                fromPartial(object: Partial<_169.Params>): _169.Params;
-            };
             Token: {
-                encode(message: _169.Token, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _169.Token;
-                fromJSON(object: any): _169.Token;
-                toJSON(message: _169.Token): unknown;
-                fromPartial(object: Partial<_169.Token>): _169.Token;
+                encode(message: _161.Token, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.Token;
+                fromJSON(object: any): _161.Token;
+                toJSON(message: _161.Token): unknown;
+                fromPartial(object: Partial<_161.Token>): _161.Token;
             };
             TokensRetired: {
-                encode(message: _169.TokensRetired, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _169.TokensRetired;
-                fromJSON(object: any): _169.TokensRetired;
-                toJSON(message: _169.TokensRetired): unknown;
-                fromPartial(object: Partial<_169.TokensRetired>): _169.TokensRetired;
+                encode(message: _161.TokensRetired, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.TokensRetired;
+                fromJSON(object: any): _161.TokensRetired;
+                toJSON(message: _161.TokensRetired): unknown;
+                fromPartial(object: Partial<_161.TokensRetired>): _161.TokensRetired;
             };
             TokensCancelled: {
-                encode(message: _169.TokensCancelled, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _169.TokensCancelled;
-                fromJSON(object: any): _169.TokensCancelled;
-                toJSON(message: _169.TokensCancelled): unknown;
-                fromPartial(object: Partial<_169.TokensCancelled>): _169.TokensCancelled;
+                encode(message: _161.TokensCancelled, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.TokensCancelled;
+                fromJSON(object: any): _161.TokensCancelled;
+                toJSON(message: _161.TokensCancelled): unknown;
+                fromPartial(object: Partial<_161.TokensCancelled>): _161.TokensCancelled;
             };
             TokenProperties: {
-                encode(message: _169.TokenProperties, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _169.TokenProperties;
-                fromJSON(object: any): _169.TokenProperties;
-                toJSON(message: _169.TokenProperties): unknown;
-                fromPartial(object: Partial<_169.TokenProperties>): _169.TokenProperties;
+                encode(message: _161.TokenProperties, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.TokenProperties;
+                fromJSON(object: any): _161.TokenProperties;
+                toJSON(message: _161.TokenProperties): unknown;
+                fromPartial(object: Partial<_161.TokenProperties>): _161.TokenProperties;
             };
             TokenData: {
-                encode(message: _169.TokenData, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _169.TokenData;
-                fromJSON(object: any): _169.TokenData;
-                toJSON(message: _169.TokenData): unknown;
-                fromPartial(object: Partial<_169.TokenData>): _169.TokenData;
+                encode(message: _161.TokenData, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _161.TokenData;
+                fromJSON(object: any): _161.TokenData;
+                toJSON(message: _161.TokenData): unknown;
+                fromPartial(object: Partial<_161.TokenData>): _161.TokenData;
             };
             QueryParamsRequest: {
-                encode(_: _168.QueryParamsRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _168.QueryParamsRequest;
-                fromJSON(_: any): _168.QueryParamsRequest;
-                toJSON(_: _168.QueryParamsRequest): unknown;
-                fromPartial(_: Partial<_168.QueryParamsRequest>): _168.QueryParamsRequest;
+                encode(_: _160.QueryParamsRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _160.QueryParamsRequest;
+                fromJSON(_: any): _160.QueryParamsRequest;
+                toJSON(_: _160.QueryParamsRequest): unknown;
+                fromPartial(_: Partial<_160.QueryParamsRequest>): _160.QueryParamsRequest;
             };
             QueryParamsResponse: {
-                encode(message: _168.QueryParamsResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _168.QueryParamsResponse;
-                fromJSON(object: any): _168.QueryParamsResponse;
-                toJSON(message: _168.QueryParamsResponse): unknown;
-                fromPartial(object: Partial<_168.QueryParamsResponse>): _168.QueryParamsResponse;
+                encode(message: _160.QueryParamsResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _160.QueryParamsResponse;
+                fromJSON(object: any): _160.QueryParamsResponse;
+                toJSON(message: _160.QueryParamsResponse): unknown;
+                fromPartial(object: Partial<_160.QueryParamsResponse>): _160.QueryParamsResponse;
             };
             QueryTokenListRequest: {
-                encode(message: _168.QueryTokenListRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _168.QueryTokenListRequest;
-                fromJSON(object: any): _168.QueryTokenListRequest;
-                toJSON(message: _168.QueryTokenListRequest): unknown;
-                fromPartial(object: Partial<_168.QueryTokenListRequest>): _168.QueryTokenListRequest;
+                encode(message: _160.QueryTokenListRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _160.QueryTokenListRequest;
+                fromJSON(object: any): _160.QueryTokenListRequest;
+                toJSON(message: _160.QueryTokenListRequest): unknown;
+                fromPartial(object: Partial<_160.QueryTokenListRequest>): _160.QueryTokenListRequest;
             };
             QueryTokenListResponse: {
-                encode(message: _168.QueryTokenListResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _168.QueryTokenListResponse;
-                fromJSON(object: any): _168.QueryTokenListResponse;
-                toJSON(message: _168.QueryTokenListResponse): unknown;
-                fromPartial(object: Partial<_168.QueryTokenListResponse>): _168.QueryTokenListResponse;
+                encode(message: _160.QueryTokenListResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _160.QueryTokenListResponse;
+                fromJSON(object: any): _160.QueryTokenListResponse;
+                toJSON(message: _160.QueryTokenListResponse): unknown;
+                fromPartial(object: Partial<_160.QueryTokenListResponse>): _160.QueryTokenListResponse;
             };
             QueryTokenDocRequest: {
-                encode(message: _168.QueryTokenDocRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _168.QueryTokenDocRequest;
-                fromJSON(object: any): _168.QueryTokenDocRequest;
-                toJSON(message: _168.QueryTokenDocRequest): unknown;
-                fromPartial(object: Partial<_168.QueryTokenDocRequest>): _168.QueryTokenDocRequest;
+                encode(message: _160.QueryTokenDocRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _160.QueryTokenDocRequest;
+                fromJSON(object: any): _160.QueryTokenDocRequest;
+                toJSON(message: _160.QueryTokenDocRequest): unknown;
+                fromPartial(object: Partial<_160.QueryTokenDocRequest>): _160.QueryTokenDocRequest;
             };
             QueryTokenDocResponse: {
-                encode(message: _168.QueryTokenDocResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _168.QueryTokenDocResponse;
-                fromJSON(object: any): _168.QueryTokenDocResponse;
-                toJSON(message: _168.QueryTokenDocResponse): unknown;
-                fromPartial(object: Partial<_168.QueryTokenDocResponse>): _168.QueryTokenDocResponse;
+                encode(message: _160.QueryTokenDocResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _160.QueryTokenDocResponse;
+                fromJSON(object: any): _160.QueryTokenDocResponse;
+                toJSON(message: _160.QueryTokenDocResponse): unknown;
+                fromPartial(object: Partial<_160.QueryTokenDocResponse>): _160.QueryTokenDocResponse;
             };
             QueryTokenMetadataRequest: {
-                encode(message: _168.QueryTokenMetadataRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _168.QueryTokenMetadataRequest;
-                fromJSON(object: any): _168.QueryTokenMetadataRequest;
-                toJSON(message: _168.QueryTokenMetadataRequest): unknown;
-                fromPartial(object: Partial<_168.QueryTokenMetadataRequest>): _168.QueryTokenMetadataRequest;
+                encode(message: _160.QueryTokenMetadataRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _160.QueryTokenMetadataRequest;
+                fromJSON(object: any): _160.QueryTokenMetadataRequest;
+                toJSON(message: _160.QueryTokenMetadataRequest): unknown;
+                fromPartial(object: Partial<_160.QueryTokenMetadataRequest>): _160.QueryTokenMetadataRequest;
             };
             QueryTokenMetadataResponse: {
-                encode(message: _168.QueryTokenMetadataResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _168.QueryTokenMetadataResponse;
-                fromJSON(object: any): _168.QueryTokenMetadataResponse;
-                toJSON(message: _168.QueryTokenMetadataResponse): unknown;
-                fromPartial(object: Partial<_168.QueryTokenMetadataResponse>): _168.QueryTokenMetadataResponse;
+                encode(message: _160.QueryTokenMetadataResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _160.QueryTokenMetadataResponse;
+                fromJSON(object: any): _160.QueryTokenMetadataResponse;
+                toJSON(message: _160.QueryTokenMetadataResponse): unknown;
+                fromPartial(object: Partial<_160.QueryTokenMetadataResponse>): _160.QueryTokenMetadataResponse;
             };
             TokenMetadataProperties: {
-                encode(message: _168.TokenMetadataProperties, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _168.TokenMetadataProperties;
-                fromJSON(object: any): _168.TokenMetadataProperties;
-                toJSON(message: _168.TokenMetadataProperties): unknown;
-                fromPartial(object: Partial<_168.TokenMetadataProperties>): _168.TokenMetadataProperties;
+                encode(message: _160.TokenMetadataProperties, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _160.TokenMetadataProperties;
+                fromJSON(object: any): _160.TokenMetadataProperties;
+                toJSON(message: _160.TokenMetadataProperties): unknown;
+                fromPartial(object: Partial<_160.TokenMetadataProperties>): _160.TokenMetadataProperties;
             };
             SetTokenContractCodes: {
-                encode(message: _167.SetTokenContractCodes, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _167.SetTokenContractCodes;
-                fromJSON(object: any): _167.SetTokenContractCodes;
-                toJSON(message: _167.SetTokenContractCodes): unknown;
-                fromPartial(object: Partial<_167.SetTokenContractCodes>): _167.SetTokenContractCodes;
+                encode(message: _159.SetTokenContractCodes, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _159.SetTokenContractCodes;
+                fromJSON(object: any): _159.SetTokenContractCodes;
+                toJSON(message: _159.SetTokenContractCodes): unknown;
+                fromPartial(object: Partial<_159.SetTokenContractCodes>): _159.SetTokenContractCodes;
             };
             GenesisState: {
-                encode(message: _166.GenesisState, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _166.GenesisState;
-                fromJSON(object: any): _166.GenesisState;
-                toJSON(message: _166.GenesisState): unknown;
-                fromPartial(object: Partial<_166.GenesisState>): _166.GenesisState;
+                encode(message: _158.GenesisState, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _158.GenesisState;
+                fromJSON(object: any): _158.GenesisState;
+                toJSON(message: _158.GenesisState): unknown;
+                fromPartial(object: Partial<_158.GenesisState>): _158.GenesisState;
             };
             TokenCreatedEvent: {
-                encode(message: _165.TokenCreatedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _165.TokenCreatedEvent;
-                fromJSON(object: any): _165.TokenCreatedEvent;
-                toJSON(message: _165.TokenCreatedEvent): unknown;
-                fromPartial(object: Partial<_165.TokenCreatedEvent>): _165.TokenCreatedEvent;
+                encode(message: _157.TokenCreatedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.TokenCreatedEvent;
+                fromJSON(object: any): _157.TokenCreatedEvent;
+                toJSON(message: _157.TokenCreatedEvent): unknown;
+                fromPartial(object: Partial<_157.TokenCreatedEvent>): _157.TokenCreatedEvent;
             };
             TokenUpdatedEvent: {
-                encode(message: _165.TokenUpdatedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _165.TokenUpdatedEvent;
-                fromJSON(object: any): _165.TokenUpdatedEvent;
-                toJSON(message: _165.TokenUpdatedEvent): unknown;
-                fromPartial(object: Partial<_165.TokenUpdatedEvent>): _165.TokenUpdatedEvent;
+                encode(message: _157.TokenUpdatedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.TokenUpdatedEvent;
+                fromJSON(object: any): _157.TokenUpdatedEvent;
+                toJSON(message: _157.TokenUpdatedEvent): unknown;
+                fromPartial(object: Partial<_157.TokenUpdatedEvent>): _157.TokenUpdatedEvent;
             };
             TokenMintedEvent: {
-                encode(message: _165.TokenMintedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _165.TokenMintedEvent;
-                fromJSON(object: any): _165.TokenMintedEvent;
-                toJSON(message: _165.TokenMintedEvent): unknown;
-                fromPartial(object: Partial<_165.TokenMintedEvent>): _165.TokenMintedEvent;
+                encode(message: _157.TokenMintedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.TokenMintedEvent;
+                fromJSON(object: any): _157.TokenMintedEvent;
+                toJSON(message: _157.TokenMintedEvent): unknown;
+                fromPartial(object: Partial<_157.TokenMintedEvent>): _157.TokenMintedEvent;
             };
             TokenTransferredEvent: {
-                encode(message: _165.TokenTransferredEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _165.TokenTransferredEvent;
-                fromJSON(object: any): _165.TokenTransferredEvent;
-                toJSON(message: _165.TokenTransferredEvent): unknown;
-                fromPartial(object: Partial<_165.TokenTransferredEvent>): _165.TokenTransferredEvent;
+                encode(message: _157.TokenTransferredEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.TokenTransferredEvent;
+                fromJSON(object: any): _157.TokenTransferredEvent;
+                toJSON(message: _157.TokenTransferredEvent): unknown;
+                fromPartial(object: Partial<_157.TokenTransferredEvent>): _157.TokenTransferredEvent;
             };
             TokenCancelledEvent: {
-                encode(message: _165.TokenCancelledEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _165.TokenCancelledEvent;
-                fromJSON(object: any): _165.TokenCancelledEvent;
-                toJSON(message: _165.TokenCancelledEvent): unknown;
-                fromPartial(object: Partial<_165.TokenCancelledEvent>): _165.TokenCancelledEvent;
+                encode(message: _157.TokenCancelledEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.TokenCancelledEvent;
+                fromJSON(object: any): _157.TokenCancelledEvent;
+                toJSON(message: _157.TokenCancelledEvent): unknown;
+                fromPartial(object: Partial<_157.TokenCancelledEvent>): _157.TokenCancelledEvent;
             };
             TokenRetiredEvent: {
-                encode(message: _165.TokenRetiredEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _165.TokenRetiredEvent;
-                fromJSON(object: any): _165.TokenRetiredEvent;
-                toJSON(message: _165.TokenRetiredEvent): unknown;
-                fromPartial(object: Partial<_165.TokenRetiredEvent>): _165.TokenRetiredEvent;
+                encode(message: _157.TokenRetiredEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.TokenRetiredEvent;
+                fromJSON(object: any): _157.TokenRetiredEvent;
+                toJSON(message: _157.TokenRetiredEvent): unknown;
+                fromPartial(object: Partial<_157.TokenRetiredEvent>): _157.TokenRetiredEvent;
             };
             TokenPausedEvent: {
-                encode(message: _165.TokenPausedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _165.TokenPausedEvent;
-                fromJSON(object: any): _165.TokenPausedEvent;
-                toJSON(message: _165.TokenPausedEvent): unknown;
-                fromPartial(object: Partial<_165.TokenPausedEvent>): _165.TokenPausedEvent;
+                encode(message: _157.TokenPausedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.TokenPausedEvent;
+                fromJSON(object: any): _157.TokenPausedEvent;
+                toJSON(message: _157.TokenPausedEvent): unknown;
+                fromPartial(object: Partial<_157.TokenPausedEvent>): _157.TokenPausedEvent;
             };
             TokenStoppedEvent: {
-                encode(message: _165.TokenStoppedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _165.TokenStoppedEvent;
-                fromJSON(object: any): _165.TokenStoppedEvent;
-                toJSON(message: _165.TokenStoppedEvent): unknown;
-                fromPartial(object: Partial<_165.TokenStoppedEvent>): _165.TokenStoppedEvent;
+                encode(message: _157.TokenStoppedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _157.TokenStoppedEvent;
+                fromJSON(object: any): _157.TokenStoppedEvent;
+                toJSON(message: _157.TokenStoppedEvent): unknown;
+                fromPartial(object: Partial<_157.TokenStoppedEvent>): _157.TokenStoppedEvent;
             };
             MintAuthorization: {
-                encode(message: _164.MintAuthorization, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _164.MintAuthorization;
-                fromJSON(object: any): _164.MintAuthorization;
-                toJSON(message: _164.MintAuthorization): unknown;
-                fromPartial(object: Partial<_164.MintAuthorization>): _164.MintAuthorization;
+                encode(message: _156.MintAuthorization, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _156.MintAuthorization;
+                fromJSON(object: any): _156.MintAuthorization;
+                toJSON(message: _156.MintAuthorization): unknown;
+                fromPartial(object: Partial<_156.MintAuthorization>): _156.MintAuthorization;
             };
             MintConstraints: {
-                encode(message: _164.MintConstraints, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _164.MintConstraints;
-                fromJSON(object: any): _164.MintConstraints;
-                toJSON(message: _164.MintConstraints): unknown;
-                fromPartial(object: Partial<_164.MintConstraints>): _164.MintConstraints;
+                encode(message: _156.MintConstraints, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _156.MintConstraints;
+                fromJSON(object: any): _156.MintConstraints;
+                toJSON(message: _156.MintConstraints): unknown;
+                fromPartial(object: Partial<_156.MintConstraints>): _156.MintConstraints;
             };
         };
     }
@@ -2432,25 +1899,19 @@ export declare namespace ixo {
             };
             ixo: {
                 bonds: {
-                    v1beta1: _234.MsgClientImpl;
+                    v1beta1: _222.MsgClientImpl;
                 };
                 claims: {
-                    v1beta1: _235.MsgClientImpl;
+                    v1beta1: _223.MsgClientImpl;
                 };
                 entity: {
-                    v1beta1: _236.MsgClientImpl;
+                    v1beta1: _224.MsgClientImpl;
                 };
                 iid: {
-                    v1beta1: _237.MsgClientImpl;
-                };
-                payments: {
-                    v1: _238.MsgClientImpl;
-                };
-                project: {
-                    v1: _239.MsgClientImpl;
+                    v1beta1: _225.MsgClientImpl;
                 };
                 token: {
-                    v1beta1: _240.MsgClientImpl;
+                    v1beta1: _226.MsgClientImpl;
                 };
             };
         }>;
@@ -2685,28 +2146,12 @@ export declare namespace ixo {
                         iidDocument(request: _153.QueryIidDocumentRequest): Promise<_153.QueryIidDocumentResponse>;
                     };
                 };
-                payments: {
-                    v1: {
-                        paymentTemplate(request: _158.QueryPaymentTemplateRequest): Promise<_158.QueryPaymentTemplateResponse>;
-                        paymentContract(request: _158.QueryPaymentContractRequest): Promise<_158.QueryPaymentContractResponse>;
-                        paymentContractsByIdPrefix(request: _158.QueryPaymentContractsByIdPrefixRequest): Promise<_158.QueryPaymentContractsByIdPrefixResponse>;
-                        subscription(request: _158.QuerySubscriptionRequest): Promise<_158.QuerySubscriptionResponse>;
-                    };
-                };
-                project: {
-                    v1: {
-                        projectDoc(request: _162.QueryProjectDocRequest): Promise<_162.QueryProjectDocResponse>;
-                        projectAccounts(request: _162.QueryProjectAccountsRequest): Promise<_162.QueryProjectAccountsResponse>;
-                        projectTx(request: _162.QueryProjectTxRequest): Promise<_162.QueryProjectTxResponse>;
-                        params(request?: _162.QueryParamsRequest): Promise<_162.QueryParamsResponse>;
-                    };
-                };
                 token: {
                     v1beta1: {
-                        params(request?: _168.QueryParamsRequest): Promise<_168.QueryParamsResponse>;
-                        tokenList(request: _168.QueryTokenListRequest): Promise<_168.QueryTokenListResponse>;
-                        tokenDoc(request: _168.QueryTokenDocRequest): Promise<_168.QueryTokenDocResponse>;
-                        tokenMetadata(request: _168.QueryTokenMetadataRequest): Promise<_168.QueryTokenMetadataResponse>;
+                        params(request?: _160.QueryParamsRequest): Promise<_160.QueryParamsResponse>;
+                        tokenList(request: _160.QueryTokenListRequest): Promise<_160.QueryTokenListResponse>;
+                        tokenDoc(request: _160.QueryTokenDocRequest): Promise<_160.QueryTokenDocResponse>;
+                        tokenMetadata(request: _160.QueryTokenMetadataRequest): Promise<_160.QueryTokenMetadataResponse>;
                     };
                 };
             };

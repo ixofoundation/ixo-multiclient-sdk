@@ -1,6 +1,5 @@
 import Long from "long";
 import { WithdrawPaymentConstraints } from "../../src/codegen/ixo/claims/v1beta1/authz";
-import { EvaluationStatus } from "../../src/codegen/ixo/claims/v1beta1/claims";
 import {
   addDays,
   createClient,
@@ -15,6 +14,7 @@ import { fee, WalletUsers } from "../helpers/constants";
 export const CreateCollection = async (
   entityDid: string,
   protocolDid: string,
+  paymentsAccount: string,
   signer: WalletUsers = WalletUsers.tester
 ) => {
   const client = await createClient(getUser(signer));
@@ -24,7 +24,7 @@ export const CreateCollection = async (
   const message = {
     typeUrl: "/ixo.claims.v1beta1.MsgCreateCollection",
     value: ixo.claims.v1beta1.MsgCreateCollection.fromPartial({
-      admin: tester,
+      signer: tester,
       entity: entityDid,
       protocol: protocolDid,
       startDate: utils.proto.toTimestamp(new Date()),
@@ -33,7 +33,7 @@ export const CreateCollection = async (
       state: ixo.claims.v1beta1.CollectionState.OPEN,
       payments: ixo.claims.v1beta1.Payments.fromPartial({
         approval: ixo.claims.v1beta1.Payment.fromPartial({
-          account: tester,
+          account: paymentsAccount,
           amount: [
             cosmos.base.v1beta1.Coin.fromPartial({
               amount: "1000000",
@@ -41,9 +41,16 @@ export const CreateCollection = async (
             }),
           ],
           timeoutNs: utils.proto.toDuration((1000000000 * 60 * 0).toString()), // ns * seconds * minutes
+          // contract_1155Payment:
+          //   ixo.claims.v1beta1.Contract1155Payment.fromPartial({
+          //     address:
+          //       "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c",
+          //     tokenId: "db03fa33c1e2ca35794adbb14aebb153",
+          //     amount: 1,
+          //   }),
         }),
         submission: ixo.claims.v1beta1.Payment.fromPartial({
-          account: tester,
+          account: paymentsAccount,
           amount: [
             cosmos.base.v1beta1.Coin.fromPartial({
               amount: "1000000",
@@ -51,9 +58,16 @@ export const CreateCollection = async (
             }),
           ],
           timeoutNs: utils.proto.toDuration((1000000000 * 60 * 5).toString()), // ns * seconds * minutes
+          // contract_1155Payment:
+          //   ixo.claims.v1beta1.Contract1155Payment.fromPartial({
+          //     address:
+          //       "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c",
+          //     tokenId: "db03fa33c1e2ca35794adbb14aebb153",
+          //     amount: 1,
+          //   }),
         }),
         evaluation: ixo.claims.v1beta1.Payment.fromPartial({
-          account: tester,
+          account: paymentsAccount,
           amount: [
             cosmos.base.v1beta1.Coin.fromPartial({
               amount: "1000000",
@@ -63,7 +77,7 @@ export const CreateCollection = async (
           timeoutNs: utils.proto.toDuration((1000000000 * 60 * 5).toString()), // ns * seconds * minutes
         }),
         rejection: ixo.claims.v1beta1.Payment.fromPartial({
-          account: tester,
+          account: paymentsAccount,
           amount: [],
           timeoutNs: utils.proto.toDuration((1000000000 * 60 * 5).toString()), // ns * seconds * minutes
         }),
@@ -75,75 +89,10 @@ export const CreateCollection = async (
   return response;
 };
 
-export const SubmitClaim = async (
-  claimId: string,
-  collectionId: string,
-  signer: WalletUsers = WalletUsers.tester,
-  admin: WalletUsers = WalletUsers.tester
-) => {
-  const client = await createClient(getUser(signer));
-
-  const adminUser = (await getUser(admin).getAccounts())[0].address;
-  const agent = getUser(signer);
-  const agentAddress = (await agent.getAccounts())[0].address;
-
-  const message = {
-    typeUrl: "/ixo.claims.v1beta1.MsgSubmitClaim",
-    value: ixo.claims.v1beta1.MsgSubmitClaim.fromPartial({
-      adminAddress: adminUser,
-      agentAddress: agentAddress,
-      agentDid: agent.did,
-      claimId,
-      collectionId,
-    }),
-  };
-
-  const response = await client.signAndBroadcast(agentAddress, [message], fee);
-  return response;
-};
-
-export const EvaluateClaim = async (
-  claimId: string,
-  collectionId: string,
-  signer: WalletUsers = WalletUsers.tester,
-  admin: WalletUsers = WalletUsers.tester
-) => {
-  const client = await createClient(getUser(signer));
-
-  const adminUser = (await getUser(admin).getAccounts())[0].address;
-  const agent = getUser(signer);
-  const agentAddress = (await agent.getAccounts())[0].address;
-
-  const message = {
-    typeUrl: "/ixo.claims.v1beta1.MsgEvaluateClaim",
-    value: ixo.claims.v1beta1.MsgEvaluateClaim.fromPartial({
-      adminAddress: adminUser,
-      agentAddress: agentAddress,
-      agentDid: agent.did,
-      oracle: agent.did,
-      claimId,
-      collectionId,
-      status: ixo.claims.v1beta1.EvaluationStatus.APPROVED,
-      reason: 1,
-      verificationProof: "cid of verificationProof",
-      // if want to do custom amount, must be within allowed authz if through authz
-      // amount: [
-      //   cosmos.base.v1beta1.Coin.fromPartial({
-      //     amount: "1000000",
-      //     denom: "uixo",
-      //   }),
-      // ],
-    }),
-  };
-
-  const response = await client.signAndBroadcast(agentAddress, [message], fee);
-  return response;
-};
-
 export const DisputeClaim = async (
   subjectId: string,
   disputeProof: string, // must be unique
-  signer: WalletUsers = WalletUsers.alice
+  signer: WalletUsers = WalletUsers.tester
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -170,63 +119,19 @@ export const DisputeClaim = async (
   return response;
 };
 
-export const WithdrawPayment = async (
-  claimId: string,
-  signer: WalletUsers = WalletUsers.tester,
-  receiver: WalletUsers = WalletUsers.tester
-) => {
-  const client = await createClient(getUser(signer));
-
-  const agent = getUser(signer);
-  const agentAddress = (await agent.getAccounts())[0].address;
-  const receiverr = getUser(receiver);
-  const receiverAddress = (await receiverr.getAccounts())[0].address;
-
-  const message = {
-    typeUrl: "/ixo.claims.v1beta1.MsgWithdrawPayment",
-    value: ixo.claims.v1beta1.MsgWithdrawPayment.fromPartial({
-      claimId,
-      adminAddress: agentAddress,
-      inputs: [
-        ixo.claims.v1beta1.Input.fromPartial({
-          address: agentAddress,
-          coins: [
-            cosmos.base.v1beta1.Coin.fromPartial({
-              amount: "1000000",
-              denom: "uixo",
-            }),
-          ],
-        }),
-      ],
-      outputs: [
-        ixo.claims.v1beta1.Input.fromPartial({
-          address: receiverAddress,
-          coins: [
-            cosmos.base.v1beta1.Coin.fromPartial({
-              amount: "1000000",
-              denom: "uixo",
-            }),
-          ],
-        }),
-      ],
-      paymentType: ixo.claims.v1beta1.PaymentType.EVALUATION,
-    }),
-  };
-
-  const response = await client.signAndBroadcast(agentAddress, [message], fee);
-  return response;
-};
-
-export const MsgGrantAgentSubmit = async (
+export const GrantEntityAccountClaimsSubmitAuthz = async (
+  entityDid: string,
+  name: string,
+  adminAddress: string,
   collectionId: string,
   agentQuota = 100,
   overrideCurretGrants = false,
-  granter = WalletUsers.tester,
-  grantee = WalletUsers.alice
+  grantee: WalletUsers = WalletUsers.alice,
+  signer: WalletUsers = WalletUsers.tester
 ) => {
-  const client = await createClient(getUser(granter));
+  const client = await createClient(getUser(signer));
 
-  const granterAddress = (await getUser(granter).getAccounts())[0].address;
+  const tester = (await getUser(signer).getAccounts())[0].address;
   const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
 
   const granteeGrants = await queryClient.cosmos.authz.v1beta1.granteeGrants({
@@ -234,7 +139,9 @@ export const MsgGrantAgentSubmit = async (
   });
   const submitAuth = granteeGrants.grants.find(
     (g) =>
-      g.authorization?.typeUrl == "/ixo.claims.v1beta1.SubmitClaimAuthorization"
+      g.authorization?.typeUrl ==
+        "/ixo.claims.v1beta1.SubmitClaimAuthorization" &&
+      g.granter == adminAddress
   );
   const granteeCurrentAuthConstraints =
     overrideCurretGrants || submitAuth == undefined
@@ -242,16 +149,18 @@ export const MsgGrantAgentSubmit = async (
       : client.registry.decode(submitAuth!.authorization!).constraints;
 
   const message = {
-    typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
-    value: cosmos.authz.v1beta1.MsgGrant.fromPartial({
-      granter: granterAddress,
-      grantee: granteeAddress,
+    typeUrl: "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
+    value: ixo.entity.v1beta1.MsgGrantEntityAccountAuthz.fromPartial({
+      id: entityDid,
+      ownerAddress: tester,
+      name,
+      granteeAddress,
       grant: cosmos.authz.v1beta1.Grant.fromPartial({
         authorization: {
           typeUrl: "/ixo.claims.v1beta1.SubmitClaimAuthorization",
           value: ixo.claims.v1beta1.SubmitClaimAuthorization.encode(
             ixo.claims.v1beta1.SubmitClaimAuthorization.fromPartial({
-              admin: granterAddress,
+              admin: adminAddress,
               constraints: [
                 ixo.claims.v1beta1.SubmitClaimConstraints.fromPartial({
                   collectionId,
@@ -267,23 +176,18 @@ export const MsgGrantAgentSubmit = async (
     }),
   };
 
-  const response = await client.signAndBroadcast(
-    granterAddress,
-    [message],
-    fee
-  );
+  const response = await client.signAndBroadcast(tester, [message], fee);
   return response;
 };
 
 export const MsgExecAgentSubmit = async (
   claimId: string,
   collectionId: string,
-  granter = WalletUsers.tester,
+  adminAddress: string,
   grantee = WalletUsers.alice
 ) => {
   const client = await createClient(getUser(grantee));
 
-  const granterAddress = (await getUser(granter).getAccounts())[0].address;
   const granteee = getUser(grantee);
   const granteeAddress = (await granteee.getAccounts())[0].address;
 
@@ -296,7 +200,7 @@ export const MsgExecAgentSubmit = async (
           typeUrl: "/ixo.claims.v1beta1.MsgSubmitClaim",
           value: ixo.claims.v1beta1.MsgSubmitClaim.encode(
             ixo.claims.v1beta1.MsgSubmitClaim.fromPartial({
-              adminAddress: granterAddress,
+              adminAddress: adminAddress,
               agentAddress: granteeAddress,
               agentDid: granteee.did,
               claimId,
@@ -316,17 +220,20 @@ export const MsgExecAgentSubmit = async (
   return response;
 };
 
-export const MsgGrantAgentEvaluate = async (
+export const GrantEntityAccountClaimsEvaluateAuthz = async (
+  entityDid: string,
+  name: string,
+  adminAddress: string,
   collectionId: string,
   claimIds: string[] = [],
   agentQuota = 100,
   overrideCurretGrants = false,
-  granter = WalletUsers.tester,
-  grantee = WalletUsers.alice
+  grantee: WalletUsers = WalletUsers.alice,
+  signer: WalletUsers = WalletUsers.tester
 ) => {
-  const client = await createClient(getUser(granter));
+  const client = await createClient(getUser(signer));
 
-  const granterAddress = (await getUser(granter).getAccounts())[0].address;
+  const tester = (await getUser(signer).getAccounts())[0].address;
   const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
 
   const granteeGrants = await queryClient.cosmos.authz.v1beta1.granteeGrants({
@@ -335,7 +242,8 @@ export const MsgGrantAgentEvaluate = async (
   const evaluateAuth = granteeGrants.grants.find(
     (g) =>
       g.authorization?.typeUrl ==
-      "/ixo.claims.v1beta1.EvaluateClaimAuthorization"
+        "/ixo.claims.v1beta1.EvaluateClaimAuthorization" &&
+      g.granter == adminAddress
   );
   const granteeCurrentAuthConstraints =
     overrideCurretGrants || evaluateAuth == undefined
@@ -343,16 +251,18 @@ export const MsgGrantAgentEvaluate = async (
       : client.registry.decode(evaluateAuth!.authorization!).constraints;
 
   const message = {
-    typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
-    value: cosmos.authz.v1beta1.MsgGrant.fromPartial({
-      granter: granterAddress,
-      grantee: granteeAddress,
+    typeUrl: "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
+    value: ixo.entity.v1beta1.MsgGrantEntityAccountAuthz.fromPartial({
+      id: entityDid,
+      ownerAddress: tester,
+      name,
+      granteeAddress,
       grant: cosmos.authz.v1beta1.Grant.fromPartial({
         authorization: {
           typeUrl: "/ixo.claims.v1beta1.EvaluateClaimAuthorization",
           value: ixo.claims.v1beta1.EvaluateClaimAuthorization.encode(
             ixo.claims.v1beta1.EvaluateClaimAuthorization.fromPartial({
-              admin: granterAddress,
+              admin: adminAddress,
               constraints: [
                 ixo.claims.v1beta1.EvaluateClaimConstraints.fromPartial({
                   collectionId,
@@ -377,24 +287,19 @@ export const MsgGrantAgentEvaluate = async (
     }),
   };
 
-  const response = await client.signAndBroadcast(
-    granterAddress,
-    [message],
-    fee
-  );
+  const response = await client.signAndBroadcast(tester, [message], fee);
   return response;
 };
 
 export const MsgExecAgentEvaluate = async (
   claimId: string,
   collectionId: string,
+  adminAddress: string,
   status = ixo.claims.v1beta1.EvaluationStatus.APPROVED,
-  granter = WalletUsers.tester,
   grantee = WalletUsers.alice
 ) => {
   const client = await createClient(getUser(grantee));
 
-  const granterAddress = (await getUser(granter).getAccounts())[0].address;
   const granteee = getUser(grantee);
   const granteeAddress = (await granteee.getAccounts())[0].address;
 
@@ -407,7 +312,7 @@ export const MsgExecAgentEvaluate = async (
           typeUrl: "/ixo.claims.v1beta1.MsgEvaluateClaim",
           value: ixo.claims.v1beta1.MsgEvaluateClaim.encode(
             ixo.claims.v1beta1.MsgEvaluateClaim.fromPartial({
-              adminAddress: granterAddress,
+              adminAddress: adminAddress,
               agentAddress: granteeAddress,
               agentDid: granteee.did,
               oracle: granteee.did,
@@ -419,7 +324,7 @@ export const MsgExecAgentEvaluate = async (
               // if want to do custom amount, must be within allowed authz if through authz
               // amount: [
               //   cosmos.base.v1beta1.Coin.fromPartial({
-              //     amount: "2000000",
+              //     amount: "1500000",
               //     denom: "uixo",
               //   }),
               // ],
@@ -438,97 +343,14 @@ export const MsgExecAgentEvaluate = async (
   return response;
 };
 
-export const MsgGrantWithdrawal = async (
-  claimId: string,
-  paymentType = ixo.claims.v1beta1.PaymentType.APPROVAL,
-  overrideCurretGrants = false,
-  granter = WalletUsers.tester,
-  grantee = WalletUsers.alice
-) => {
-  const client = await createClient(getUser(granter));
-
-  const granterAddress = (await getUser(granter).getAccounts())[0].address;
-  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
-
-  const granteeGrants = await queryClient.cosmos.authz.v1beta1.granteeGrants({
-    grantee: granteeAddress,
-  });
-  const evaluateAuth = granteeGrants.grants.find(
-    (g) =>
-      g.authorization?.typeUrl ==
-      "/ixo.claims.v1beta1.WithdrawPaymentAuthorization"
-  );
-  const granteeCurrentAuthConstraints =
-    overrideCurretGrants || evaluateAuth == undefined
-      ? []
-      : client.registry.decode(evaluateAuth!.authorization!).constraints;
-
-  const message = {
-    typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
-    value: cosmos.authz.v1beta1.MsgGrant.fromPartial({
-      granter: granterAddress,
-      grantee: granteeAddress,
-      grant: cosmos.authz.v1beta1.Grant.fromPartial({
-        authorization: {
-          typeUrl: "/ixo.claims.v1beta1.WithdrawPaymentAuthorization",
-          value: ixo.claims.v1beta1.WithdrawPaymentAuthorization.encode(
-            ixo.claims.v1beta1.WithdrawPaymentAuthorization.fromPartial({
-              admin: granterAddress,
-              constraints: [
-                ixo.claims.v1beta1.WithdrawPaymentConstraints.fromPartial({
-                  claimId,
-                  paymentType,
-                  inputs: [
-                    ixo.claims.v1beta1.Input.fromPartial({
-                      address: granterAddress,
-                      coins: [
-                        cosmos.base.v1beta1.Coin.fromPartial({
-                          amount: "1000000",
-                          denom: "uixo",
-                        }),
-                      ],
-                    }),
-                  ],
-                  outputs: [
-                    ixo.claims.v1beta1.Input.fromPartial({
-                      address: granteeAddress,
-                      coins: [
-                        cosmos.base.v1beta1.Coin.fromPartial({
-                          amount: "1000000",
-                          denom: "uixo",
-                        }),
-                      ],
-                    }),
-                  ],
-                  // beforeDate: utils.proto.toTimestamp(addDays(new Date(), 365)),
-                }),
-                ...granteeCurrentAuthConstraints,
-              ],
-            })
-          ).finish(),
-        },
-        expiration: utils.proto.toTimestamp(addDays(new Date(), 365)),
-      }),
-    }),
-  };
-
-  const response = await client.signAndBroadcast(
-    granterAddress,
-    [message],
-    fee
-  );
-  return response;
-};
-
 export const MsgExecWithdrawal = async (
   claimId: string,
+  adminAddress: string,
   paymentType = ixo.claims.v1beta1.PaymentType.EVALUATION,
-  granter = WalletUsers.tester,
   grantee = WalletUsers.alice
 ) => {
   const client = await createClient(getUser(grantee));
 
-  const granterAddress = (await getUser(granter).getAccounts())[0].address;
   const granteee = getUser(grantee);
   const granteeAddress = (await granteee.getAccounts())[0].address;
 
@@ -538,18 +360,20 @@ export const MsgExecWithdrawal = async (
   const evaluateAuth = granteeGrants.grants.find(
     (g) =>
       g.authorization?.typeUrl ==
-      "/ixo.claims.v1beta1.WithdrawPaymentAuthorization"
+        "/ixo.claims.v1beta1.WithdrawPaymentAuthorization" &&
+      g.granter == adminAddress
   );
-  const granteeCurrentAuthConstraints: WithdrawPaymentConstraints | undefined =
-    paymentType != ixo.claims.v1beta1.PaymentType.EVALUATION ||
-    evaluateAuth == undefined
-      ? undefined
-      : (
-          client.registry.decode(evaluateAuth!.authorization!)
-            .constraints as WithdrawPaymentConstraints[]
-        ).find(
-          (c) => c.paymentType == ixo.claims.v1beta1.PaymentType.EVALUATION
-        );
+  if (evaluateAuth == undefined)
+    throw Error("no current withdrawal authorizations");
+
+  const withdrawContraints = (
+    client.registry.decode(evaluateAuth!.authorization!)
+      .constraints as WithdrawPaymentConstraints[]
+  ).find((c) => c.paymentType == paymentType && c.claimId == claimId);
+  if (withdrawContraints == undefined)
+    throw Error(
+      "wiithdrawal constraints for claimId and paymentType not found"
+    );
 
   const message = {
     typeUrl: "/cosmos.authz.v1beta1.MsgExec",
@@ -560,31 +384,14 @@ export const MsgExecWithdrawal = async (
           typeUrl: "/ixo.claims.v1beta1.MsgWithdrawPayment",
           value: ixo.claims.v1beta1.MsgWithdrawPayment.encode(
             ixo.claims.v1beta1.MsgWithdrawPayment.fromPartial({
-              adminAddress: granterAddress,
+              adminAddress: adminAddress,
+              fromAddress: withdrawContraints.fromAddress,
+              toAddress: withdrawContraints.toAddress,
               claimId,
-              inputs: granteeCurrentAuthConstraints?.inputs ?? [
-                ixo.claims.v1beta1.Input.fromPartial({
-                  address: granterAddress,
-                  coins: [
-                    cosmos.base.v1beta1.Coin.fromPartial({
-                      amount: "1000000",
-                      denom: "uixo",
-                    }),
-                  ],
-                }),
-              ],
-              outputs: granteeCurrentAuthConstraints?.outputs ?? [
-                ixo.claims.v1beta1.Input.fromPartial({
-                  address: granteeAddress,
-                  coins: [
-                    cosmos.base.v1beta1.Coin.fromPartial({
-                      amount: "1000000",
-                      denom: "uixo",
-                    }),
-                  ],
-                }),
-              ],
+              inputs: withdrawContraints.inputs,
+              outputs: withdrawContraints.outputs,
               paymentType,
+              contract_1155Payment: withdrawContraints.contract_1155Payment,
             })
           ).finish(),
         },

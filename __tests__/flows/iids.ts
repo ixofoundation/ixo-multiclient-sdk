@@ -22,7 +22,6 @@ export const registerIids = () =>
     const users = Object.values(WalletUsers).filter(
       (user) =>
         ![
-          "project",
           "bond",
           "oracle",
           "random",
@@ -49,52 +48,63 @@ export const registerIids = () =>
     // );
   });
 
+// ------------------------------------------------------------
+// flow to run after devnet was reset, please dont change
+// ------------------------------------------------------------
+export const registerIidsDev = () =>
+  describe("Testing the faucet and creation of Iids for dev", () => {
+    const users = Object.values(WalletUsers).filter(
+      (user) => !["bond", "oracle", "random"].includes(user)
+    );
+
+    users.forEach((user) => {
+      sendFromFaucet(user);
+      testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () =>
+        Iid.CreateIidDoc(user)
+      );
+    });
+  });
+
 export const iidsBasic = () =>
   describe("Testing the Iid module", () => {
     // testMsg("/ixo.iid.v1beta1.MsgUpdateIidDocument", () => Iid.UpdateIidDoc());
-    testMsg("/ixo.iid.v1beta1.MsgAddIidContext", async () => {
-      const res = await Iid.AddIidContext();
-      console.log(res);
-      return res;
-    });
-    // testMsg("/ixo.iid.v1beta1.MsgDeleteIidContext", () =>
-    //   Iid.DeleteIidContext()
-    // );
-    // testMsg("/ixo.iid.v1beta1.MsgAddVerification", () => Iid.AddVerification());
-    // testMsg("/ixo.iid.v1beta1.MsgSetVerificationRelationships", () =>
-    //   Iid.SetVerificationRelationships()
-    // );
-    // testMsg("/ixo.iid.v1beta1.MsgRevokeVerification", () =>
-    //   Iid.RevokeVerification()
-    // );
-    // testMsg("/ixo.iid.v1beta1.MsgAddAccordedRight", () =>
-    //   Iid.AddAccordedRight()
-    // );
-    // testMsg("/ixo.iid.v1beta1.MsgDeleteAccordedRight", () =>
-    //   Iid.DeleteAccordedRight()
-    // );
-    // testMsg("/ixo.iid.v1beta1.MsgAddController", () => Iid.AddController());
-    // testMsg("/ixo.iid.v1beta1.MsgDeleteController", () =>
-    //   Iid.DeleteController()
-    // );
-    // testMsg("/ixo.iid.v1beta1.MsgAddLinkedEntity", () => Iid.AddLinkedEntity());
-    // testMsg("/ixo.iid.v1beta1.MsgDeleteLinkedEntity", () =>
-    //   Iid.DeleteLinkedEntity()
-    // );
-    // testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", () =>
-    //   Iid.AddLinkedResource()
-    // );
-    // testMsg("/ixo.iid.v1beta1.MsgDeleteLinkedResource", () =>
-    //   Iid.DeleteLinkedResource()
-    // );
-    // testMsg("/ixo.iid.v1beta1.MsgAddLinkedClaim", () =>
-    //   Iid.AddLinkedClaim()
-    // );
-    // testMsg("/ixo.iid.v1beta1.MsgDeleteLinkedClaim", () =>
-    //   Iid.DeleteLinkedClaim()
-    // );
-    // testMsg("/ixo.iid.v1beta1.MsgAddService", () => Iid.AddService());
-    // testMsg("/ixo.iid.v1beta1.MsgDeleteService", () => Iid.DeleteService());
+    testMsg("/ixo.iid.v1beta1.MsgAddIidContext", () => Iid.AddIidContext());
+    testMsg("/ixo.iid.v1beta1.MsgDeleteIidContext", () =>
+      Iid.DeleteIidContext()
+    );
+    testMsg("/ixo.iid.v1beta1.MsgAddVerification", () => Iid.AddVerification());
+    testMsg("/ixo.iid.v1beta1.MsgSetVerificationRelationships", () =>
+      Iid.SetVerificationRelationships()
+    );
+    testMsg("/ixo.iid.v1beta1.MsgRevokeVerification", () =>
+      Iid.RevokeVerification()
+    );
+    testMsg("/ixo.iid.v1beta1.MsgAddAccordedRight", () =>
+      Iid.AddAccordedRight()
+    );
+    testMsg("/ixo.iid.v1beta1.MsgDeleteAccordedRight", () =>
+      Iid.DeleteAccordedRight()
+    );
+    testMsg("/ixo.iid.v1beta1.MsgAddController", () => Iid.AddController());
+    testMsg("/ixo.iid.v1beta1.MsgDeleteController", () =>
+      Iid.DeleteController()
+    );
+    testMsg("/ixo.iid.v1beta1.MsgAddLinkedEntity", () => Iid.AddLinkedEntity());
+    testMsg("/ixo.iid.v1beta1.MsgDeleteLinkedEntity", () =>
+      Iid.DeleteLinkedEntity()
+    );
+    testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", () =>
+      Iid.AddLinkedResource()
+    );
+    testMsg("/ixo.iid.v1beta1.MsgDeleteLinkedResource", () =>
+      Iid.DeleteLinkedResource()
+    );
+    testMsg("/ixo.iid.v1beta1.MsgAddLinkedClaim", () => Iid.AddLinkedClaim());
+    testMsg("/ixo.iid.v1beta1.MsgDeleteLinkedClaim", () =>
+      Iid.DeleteLinkedClaim()
+    );
+    testMsg("/ixo.iid.v1beta1.MsgAddService", () => Iid.AddService());
+    testMsg("/ixo.iid.v1beta1.MsgDeleteService", () => Iid.DeleteService());
   });
 
 export const generateBlockchainTestUsers = () => {

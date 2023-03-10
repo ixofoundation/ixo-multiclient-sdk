@@ -229,22 +229,6 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
                 iidDocument(request: import("./iid/v1beta1/query").QueryIidDocumentRequest): Promise<import("./iid/v1beta1/query").QueryIidDocumentResponse>;
             };
         };
-        payments: {
-            v1: {
-                paymentTemplate(request: import("./payments/v1/query").QueryPaymentTemplateRequest): Promise<import("./payments/v1/query").QueryPaymentTemplateResponse>;
-                paymentContract(request: import("./payments/v1/query").QueryPaymentContractRequest): Promise<import("./payments/v1/query").QueryPaymentContractResponse>;
-                paymentContractsByIdPrefix(request: import("./payments/v1/query").QueryPaymentContractsByIdPrefixRequest): Promise<import("./payments/v1/query").QueryPaymentContractsByIdPrefixResponse>;
-                subscription(request: import("./payments/v1/query").QuerySubscriptionRequest): Promise<import("./payments/v1/query").QuerySubscriptionResponse>;
-            };
-        };
-        project: {
-            v1: {
-                projectDoc(request: import("./project/v1/query").QueryProjectDocRequest): Promise<import("./project/v1/query").QueryProjectDocResponse>;
-                projectAccounts(request: import("./project/v1/query").QueryProjectAccountsRequest): Promise<import("./project/v1/query").QueryProjectAccountsResponse>;
-                projectTx(request: import("./project/v1/query").QueryProjectTxRequest): Promise<import("./project/v1/query").QueryProjectTxResponse>;
-                params(request?: import("./project/v1/query").QueryParamsRequest): Promise<import("./project/v1/query").QueryParamsResponse>;
-            };
-        };
         token: {
             v1beta1: {
                 params(request?: import("./token/v1beta1/query").QueryParamsRequest): Promise<import("./token/v1beta1/query").QueryParamsResponse>;

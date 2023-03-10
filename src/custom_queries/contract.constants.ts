@@ -55,7 +55,7 @@ export const contracts = [
   },
   {
     name: "dao_pre_propose_approval_single",
-    path: ['contracts", "daodao", "dao_pre_propose_approval_singl.wasme'],
+    path: ["contracts", "daodao", "dao_pre_propose_approval_single.wasm"],
     category: "daodao",
     code: { devnet: 10 },
   },
@@ -109,7 +109,7 @@ export const contracts = [
   },
   {
     name: "cw20_stake_reward_distributor",
-    path: ['contracts", "daodao", "cw20_stake_reward_distributor.wasm'],
+    path: ["contracts", "daodao", "cw20_stake_reward_distributor.wasm"],
     category: "daodao",
     code: { devnet: 19 },
   },

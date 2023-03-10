@@ -21,7 +21,6 @@ export const wasmBasic = () =>
       const msg = { minter: tester };
 
       const res = await Wasm.WasmInstantiateTrx(2, JSON.stringify(msg));
-      console.log({ res });
       contractAddress = utils.common.getValueFromEvents(
         res,
         "instantiate",
@@ -72,10 +71,9 @@ export const wasmBasic = () =>
         JSON.stringify(msg),
         WalletUsers.tester
       );
-      console.log(res);
-      console.log(JSON.parse(res.rawLog!)[0].events);
       return res;
-    });
+    }),
+      true;
 
     test("query wasm state", async () => {
       const tester = (await getUser().getAccounts())[0].address;
@@ -107,9 +105,8 @@ export const wasmBasic = () =>
     //   const msg = { minter: tester };
 
     //   const res = await Wasm.WasmStoreTrx();
-    //   console.log({ res });
     //   return res;
-    // });
+    // }, true );
   });
 
 export const daoDaoContracts = () =>

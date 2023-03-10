@@ -13,7 +13,6 @@ export enum WalletUsers {
   alice = "alice",
   bob = "bob",
   charlie = "charlie",
-  project = "project",
   bond = "bond",
   oracle = "oracle",
   random = "random",
@@ -23,21 +22,6 @@ export let constants: ReturnType<typeof generateConstants>;
 
 export const generateConstants = (setGlobal = true) => {
   const newConstants = {
-    // payments
-    paymentTemplateId: `payment:template:${utils.common.generateId(10)}`,
-    paymentContractId: `payment:contract:${utils.common.generateId(10)}`,
-    paymentSubscripionId: `payment:subscription:${utils.common.generateId(10)}`,
-    paymentContractRecipient: {
-      address: "ixo107pmtx9wyndup8f9lgj6d7dnfq5kuf3sapg0vx",
-      percentage: "100",
-    },
-    paymentDiscountId: "1",
-
-    // projects
-    projectClaimId: utils.common.generateId(),
-    projectTemplateId: utils.common.generateId(),
-    projectWalletType: "ed",
-
     // bonds
     bondToken: utils.common.generateId(3),
     bondReserveToken: "uixo",
