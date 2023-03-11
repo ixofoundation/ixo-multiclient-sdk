@@ -245,6 +245,14 @@ export const keplrCurrencies = {
     isStakeCurrency: false,
     isFeeCurrency: true,
   },
+  bneo: {
+    coinDenom: "bNEO",
+    coinMinimalDenom: "bneo",
+    coinDecimals: 8,
+    coinGeckoId: "neo",
+    isStakeCurrency: false,
+    isFeeCurrency: true,
+  },
   "bneo.1.14.e2e5f6": {
     coinDenom: "bNEO",
     coinMinimalDenom: "bneo.1.14.e2e5f6",
@@ -258,6 +266,14 @@ export const keplrCurrencies = {
     coinMinimalDenom: "busd.1.6.754a80",
     coinDecimals: 18,
     coinGeckoId: "binance-usd",
+    isStakeCurrency: false,
+    isFeeCurrency: true,
+  },
+  eth: {
+    coinDenom: "ETH",
+    coinMinimalDenom: "eth",
+    coinDecimals: 18,
+    coinGeckoId: "ethereum",
     isStakeCurrency: false,
     isFeeCurrency: true,
   },
@@ -285,6 +301,14 @@ export const keplrCurrencies = {
     isStakeCurrency: false,
     isFeeCurrency: true,
   },
+  usdc: {
+    coinDenom: "USDC",
+    coinMinimalDenom: "usdc",
+    coinDecimals: 6,
+    coinGeckoId: "usd-coin",
+    isStakeCurrency: false,
+    isFeeCurrency: true,
+  },
   "usdc.1.2.343151": {
     coinDenom: "USDC",
     coinMinimalDenom: "usdc.1.2.343151",
@@ -296,6 +320,14 @@ export const keplrCurrencies = {
   "usdc.1.6.53ff75": {
     coinDenom: "USDC",
     coinMinimalDenom: "usdc.1.6.53ff75",
+    coinDecimals: 18,
+    coinGeckoId: "usd-coin",
+    isStakeCurrency: false,
+    isFeeCurrency: true,
+  },
+  "cgt/1": {
+    coinDenom: "USD",
+    coinMinimalDenom: "cgt/1",
     coinDecimals: 18,
     coinGeckoId: "usd-coin",
     isStakeCurrency: false,
@@ -453,6 +485,7 @@ export const keplrCurrencies = {
     coinDenom: "GRAV",
     coinMinimalDenom: "ugraviton",
     coinDecimals: 6,
+    coinGeckoId: "graviton",
     isStakeCurrency: true,
     isFeeCurrency: true,
     coinImageUrl:
@@ -600,6 +633,7 @@ export const keplrCurrencies = {
     coinDenom: "MARS",
     coinMinimalDenom: "umars",
     coinDecimals: 6,
+    coinGeckoId: "mars-protocol-a7fcbcfb-fd61-4017-92f0-7ee9f9cc6da3",
     isStakeCurrency: true,
     isFeeCurrency: true,
     coinImageUrl:
@@ -636,8 +670,11 @@ export const keplrCurrencies = {
     coinDenom: "NYX",
     coinMinimalDenom: "unyx",
     coinDecimals: 6,
+    coinGeckoId: "nyx",
     isStakeCurrency: true,
-    isFeeCurrency: false,
+    isFeeCurrency: true,
+    coinImageUrl:
+      "https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/nyx/chain.png",
   },
   uflix: {
     coinDenom: "FLIX",
@@ -706,6 +743,20 @@ export const keplrCurrencies = {
   uqstars: {
     coinDenom: "qSTARS",
     coinMinimalDenom: "uqstars",
+    coinDecimals: 6,
+    isStakeCurrency: false,
+    isFeeCurrency: false,
+  },
+  uqatom: {
+    coinDenom: "qATOM",
+    coinMinimalDenom: "uqatom",
+    coinDecimals: 6,
+    isStakeCurrency: false,
+    isFeeCurrency: false,
+  },
+  uqregen: {
+    coinDenom: "qREGEN",
+    coinMinimalDenom: "uqregen",
     coinDecimals: 6,
     isStakeCurrency: false,
     isFeeCurrency: false,
@@ -1443,6 +1494,20 @@ export const keplrCurrencies = {
   stustars: {
     coinDenom: "stSTARS",
     coinMinimalDenom: "stustars",
+    coinDecimals: 6,
+    isStakeCurrency: false,
+    isFeeCurrency: false,
+  },
+  staevmos: {
+    coinDenom: "stEVMOS",
+    coinMinimalDenom: "staevmos",
+    coinDecimals: 18,
+    isStakeCurrency: false,
+    isFeeCurrency: false,
+  },
+  stuluna: {
+    coinDenom: "stLUNA",
+    coinMinimalDenom: "stuluna",
     coinDecimals: 6,
     isStakeCurrency: false,
     isFeeCurrency: false,
