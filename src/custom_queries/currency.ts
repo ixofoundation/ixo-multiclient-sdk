@@ -58,7 +58,12 @@ export const prepareKeplrChainInfoTokenAssets = (
 export const findTokenFromDenom = (denom: string): TokenAsset | undefined => {
   const denomLowerCased = denom.toLowerCase();
   const token = keplrCurrencies[denomLowerCased];
-  return token;
+  if (token) return token;
+  const possibleToken = Object.values(keplrCurrencies).find(
+    (currency) =>
+      currency.coinMinimalDenom === denom || currency.coinDenom === denom
+  );
+  return possibleToken;
 };
 
 export const findIbcTokenFromHash = (() => {
