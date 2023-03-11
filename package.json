@@ -1,6 +1,6 @@
 {
   "name": "@ixo/impactxclient-sdk",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them",
   "author": "Ixo <ixo>",
   "homepage": "https://github.com/ixofoundation/ixo-MultiClient-SDK#readme",
