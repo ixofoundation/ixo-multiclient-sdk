@@ -239,6 +239,14 @@ export declare const keplrCurrencies: {
         isStakeCurrency: boolean;
         isFeeCurrency: boolean;
     };
+    bneo: {
+        coinDenom: string;
+        coinMinimalDenom: string;
+        coinDecimals: number;
+        coinGeckoId: string;
+        isStakeCurrency: boolean;
+        isFeeCurrency: boolean;
+    };
     "bneo.1.14.e2e5f6": {
         coinDenom: string;
         coinMinimalDenom: string;
@@ -248,6 +256,14 @@ export declare const keplrCurrencies: {
         isFeeCurrency: boolean;
     };
     "busd.1.6.754a80": {
+        coinDenom: string;
+        coinMinimalDenom: string;
+        coinDecimals: number;
+        coinGeckoId: string;
+        isStakeCurrency: boolean;
+        isFeeCurrency: boolean;
+    };
+    eth: {
         coinDenom: string;
         coinMinimalDenom: string;
         coinDecimals: number;
@@ -279,6 +295,14 @@ export declare const keplrCurrencies: {
         isStakeCurrency: boolean;
         isFeeCurrency: boolean;
     };
+    usdc: {
+        coinDenom: string;
+        coinMinimalDenom: string;
+        coinDecimals: number;
+        coinGeckoId: string;
+        isStakeCurrency: boolean;
+        isFeeCurrency: boolean;
+    };
     "usdc.1.2.343151": {
         coinDenom: string;
         coinMinimalDenom: string;
@@ -288,6 +312,14 @@ export declare const keplrCurrencies: {
         isFeeCurrency: boolean;
     };
     "usdc.1.6.53ff75": {
+        coinDenom: string;
+        coinMinimalDenom: string;
+        coinDecimals: number;
+        coinGeckoId: string;
+        isStakeCurrency: boolean;
+        isFeeCurrency: boolean;
+    };
+    "cgt/1": {
         coinDenom: string;
         coinMinimalDenom: string;
         coinDecimals: number;
@@ -438,6 +470,7 @@ export declare const keplrCurrencies: {
         coinDenom: string;
         coinMinimalDenom: string;
         coinDecimals: number;
+        coinGeckoId: string;
         isStakeCurrency: boolean;
         isFeeCurrency: boolean;
         coinImageUrl: string;
@@ -576,6 +609,7 @@ export declare const keplrCurrencies: {
         coinDenom: string;
         coinMinimalDenom: string;
         coinDecimals: number;
+        coinGeckoId: string;
         isStakeCurrency: boolean;
         isFeeCurrency: boolean;
         coinImageUrl: string;
@@ -609,8 +643,10 @@ export declare const keplrCurrencies: {
         coinDenom: string;
         coinMinimalDenom: string;
         coinDecimals: number;
+        coinGeckoId: string;
         isStakeCurrency: boolean;
         isFeeCurrency: boolean;
+        coinImageUrl: string;
     };
     uflix: {
         coinDenom: string;
@@ -672,6 +708,20 @@ export declare const keplrCurrencies: {
         coinImageUrl: string;
     };
     uqstars: {
+        coinDenom: string;
+        coinMinimalDenom: string;
+        coinDecimals: number;
+        isStakeCurrency: boolean;
+        isFeeCurrency: boolean;
+    };
+    uqatom: {
+        coinDenom: string;
+        coinMinimalDenom: string;
+        coinDecimals: number;
+        isStakeCurrency: boolean;
+        isFeeCurrency: boolean;
+    };
+    uqregen: {
         coinDenom: string;
         coinMinimalDenom: string;
         coinDecimals: number;
@@ -1399,6 +1449,20 @@ export declare const keplrCurrencies: {
         isFeeCurrency: boolean;
     };
     stustars: {
+        coinDenom: string;
+        coinMinimalDenom: string;
+        coinDecimals: number;
+        isStakeCurrency: boolean;
+        isFeeCurrency: boolean;
+    };
+    staevmos: {
+        coinDenom: string;
+        coinMinimalDenom: string;
+        coinDecimals: number;
+        isStakeCurrency: boolean;
+        isFeeCurrency: boolean;
+    };
+    stuluna: {
         coinDenom: string;
         coinMinimalDenom: string;
         coinDecimals: number;

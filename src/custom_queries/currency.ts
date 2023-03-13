@@ -3,8 +3,14 @@
 import { keplrCurrencies } from "./currency.constants";
 // import { keplrChainNames } from "./chain.constants";
 import { KeplrChainInfo } from "./chain.types";
-import { IbcTokenAsset, TokenAsset } from "./currency.types";
+import {
+  CoincodexResponse,
+  IbcTokenAsset,
+  TokenAsset,
+  TokenAssetInfo,
+} from "./currency.types";
 import { QueryClient } from "../queries";
+import axios from "axios";
 
 const convertCurrencyToTokenAsset = (
   currency: TokenAsset,
@@ -144,3 +150,77 @@ export const findIbcTokensFromHashes = async (
 //     };
 //   }, {});
 // };
+
+const coincodexGetCoinUrl = "https://coincodex.com/api/coincodex/get_coin/";
+
+const fetchTokenInfo = async (
+  denom: string
+): Promise<CoincodexResponse | undefined> => {
+  try {
+    const url = coincodexGetCoinUrl + denom;
+    const response = await axios.get(url);
+    if (response) return response.data as CoincodexResponse;
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+export const findTokenInfoFromDenom = (() => {
+  const cache: { [denom: string]: TokenAssetInfo } = {};
+
+  return async (denom: string): Promise<TokenAssetInfo | undefined> => {
+    const token = findTokenFromDenom(denom);
+    if (
+      cache[token.coinGeckoId] ||
+      cache[token.coinDenom] ||
+      cache[token.coinMinimalDenom]
+    )
+      return (
+        cache[token.coinDenom] ??
+        cache[token.coinGeckoId] ??
+        cache[token.coinMinimalDenom]
+      );
+    let coincodexTokenInfo = await fetchTokenInfo(token.coinGeckoId);
+    if (!coincodexTokenInfo)
+      coincodexTokenInfo = await fetchTokenInfo(token.coinDenom);
+    if (!coincodexTokenInfo)
+      coincodexTokenInfo = await fetchTokenInfo(token.coinMinimalDenom);
+    if (!coincodexTokenInfo) return;
+    const result = {
+      symbol: coincodexTokenInfo.symbol,
+      coinName: coincodexTokenInfo.coin_name,
+      shortname: coincodexTokenInfo.shortname,
+      slug: coincodexTokenInfo.slug,
+      displaySymbol: coincodexTokenInfo.display_symbol,
+      todayOpen: coincodexTokenInfo.today_open,
+      lastPriceUsd: coincodexTokenInfo.last_price_usd,
+      priceChangePercent: {
+        "1H": coincodexTokenInfo.price_change_1H_percent,
+        "1D": coincodexTokenInfo.price_change_1D_percent,
+        "7D": coincodexTokenInfo.price_change_7D_percent,
+        "30D": coincodexTokenInfo.price_change_30D_percent,
+        "90D": coincodexTokenInfo.price_change_90D_percent,
+      },
+      lastUpdate: coincodexTokenInfo.last_update,
+      social: coincodexTokenInfo.social,
+    };
+    cache[denom] = result;
+    return result;
+  };
+})();
+
+export const findTokensInfoFromDenoms = async (
+  denoms: string[]
+): Promise<Array<TokenAssetInfo | undefined>> => {
+  const requests = denoms.map(findTokenInfoFromDenom);
+  const responses = await Promise.allSettled(requests);
+  const results: Array<TokenAssetInfo | undefined> = responses.map(
+    (response) => {
+      if (response.status !== "fulfilled") return;
+      return response.value;
+    }
+  );
+
+  return results;
+};
