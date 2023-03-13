@@ -648,6 +648,8 @@ export declare namespace customQueries {
                 };
             };
         }, ibcHashes: string[]) => Promise<import("./currency.types").IbcTokenAsset[]>;
+        findTokenInfoFromDenom: (denom: string) => Promise<import("./currency.types").TokenAssetInfo>;
+        findTokensInfoFromDenoms: (denoms: string[]) => Promise<import("./currency.types").TokenAssetInfo[]>;
     };
     const cellnode: {
         cellNodeChainMapping: {
