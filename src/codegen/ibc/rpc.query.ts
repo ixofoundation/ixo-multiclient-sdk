@@ -66,6 +66,17 @@ export const createRPCQueryClient = async ({
     },
     ibc: {
       applications: {
+        fee: {
+          v1: (await import("./applications/fee/v1/query.rpc.Query")).createRpcQueryExtension(client)
+        },
+        interchain_accounts: {
+          controller: {
+            v1: (await import("./applications/interchain_accounts/controller/v1/query.rpc.Query")).createRpcQueryExtension(client)
+          },
+          host: {
+            v1: (await import("./applications/interchain_accounts/host/v1/query.rpc.Query")).createRpcQueryExtension(client)
+          }
+        },
         transfer: {
           v1: (await import("./applications/transfer/v1/query.rpc.Query")).createRpcQueryExtension(client)
         }
@@ -79,9 +90,6 @@ export const createRPCQueryClient = async ({
         },
         connection: {
           v1: (await import("./core/connection/v1/query.rpc.Query")).createRpcQueryExtension(client)
-        },
-        port: {
-          v1: (await import("./core/port/v1/query.rpc.Query")).createRpcQueryExtension(client)
         }
       }
     }

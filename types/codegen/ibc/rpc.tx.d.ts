@@ -46,6 +46,9 @@ export declare const createRPCMsgClient: ({ rpc }: {
     };
     ibc: {
         applications: {
+            fee: {
+                v1: import("./applications/fee/v1/tx.rpc.msg").MsgClientImpl;
+            };
             transfer: {
                 v1: import("./applications/transfer/v1/tx.rpc.msg").MsgClientImpl;
             };

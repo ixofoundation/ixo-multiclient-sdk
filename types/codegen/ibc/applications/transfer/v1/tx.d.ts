@@ -24,10 +24,12 @@ export interface MsgTransfer {
      */
     timeoutHeight?: Height;
     /**
-     * Timeout timestamp (in nanoseconds) relative to the current block timestamp.
+     * Timeout timestamp in absolute nanoseconds since unix epoch.
      * The timeout is disabled when set to 0.
      */
     timeoutTimestamp: Long;
+    /** optional memo */
+    memo: string;
 }
 /**
  * MsgTransfer defines a msg to transfer fungible tokens (i.e Coins) between
@@ -51,16 +53,22 @@ export interface MsgTransferSDKType {
      */
     timeout_height?: HeightSDKType;
     /**
-     * Timeout timestamp (in nanoseconds) relative to the current block timestamp.
+     * Timeout timestamp in absolute nanoseconds since unix epoch.
      * The timeout is disabled when set to 0.
      */
     timeout_timestamp: Long;
+    /** optional memo */
+    memo: string;
 }
 /** MsgTransferResponse defines the Msg/Transfer response type. */
 export interface MsgTransferResponse {
+    /** sequence number of the transfer packet sent */
+    sequence: Long;
 }
 /** MsgTransferResponse defines the Msg/Transfer response type. */
 export interface MsgTransferResponseSDKType {
+    /** sequence number of the transfer packet sent */
+    sequence: Long;
 }
 export declare const MsgTransfer: {
     encode(message: MsgTransfer, writer?: _m0.Writer): _m0.Writer;
@@ -70,9 +78,9 @@ export declare const MsgTransfer: {
     fromPartial(object: Partial<MsgTransfer>): MsgTransfer;
 };
 export declare const MsgTransferResponse: {
-    encode(_: MsgTransferResponse, writer?: _m0.Writer): _m0.Writer;
+    encode(message: MsgTransferResponse, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): MsgTransferResponse;
-    fromJSON(_: any): MsgTransferResponse;
-    toJSON(_: MsgTransferResponse): unknown;
-    fromPartial(_: Partial<MsgTransferResponse>): MsgTransferResponse;
+    fromJSON(object: any): MsgTransferResponse;
+    toJSON(message: MsgTransferResponse): unknown;
+    fromPartial(object: Partial<MsgTransferResponse>): MsgTransferResponse;
 };

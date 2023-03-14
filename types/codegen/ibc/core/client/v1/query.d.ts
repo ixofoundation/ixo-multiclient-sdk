@@ -182,6 +182,46 @@ export interface QueryConsensusStatesResponseSDKType {
     pagination?: PageResponseSDKType;
 }
 /**
+ * QueryConsensusStateHeightsRequest is the request type for Query/ConsensusStateHeights
+ * RPC method.
+ */
+export interface QueryConsensusStateHeightsRequest {
+    /** client identifier */
+    clientId: string;
+    /** pagination request */
+    pagination?: PageRequest;
+}
+/**
+ * QueryConsensusStateHeightsRequest is the request type for Query/ConsensusStateHeights
+ * RPC method.
+ */
+export interface QueryConsensusStateHeightsRequestSDKType {
+    /** client identifier */
+    client_id: string;
+    /** pagination request */
+    pagination?: PageRequestSDKType;
+}
+/**
+ * QueryConsensusStateHeightsResponse is the response type for the
+ * Query/ConsensusStateHeights RPC method
+ */
+export interface QueryConsensusStateHeightsResponse {
+    /** consensus state heights */
+    consensusStateHeights: Height[];
+    /** pagination response */
+    pagination?: PageResponse;
+}
+/**
+ * QueryConsensusStateHeightsResponse is the response type for the
+ * Query/ConsensusStateHeights RPC method
+ */
+export interface QueryConsensusStateHeightsResponseSDKType {
+    /** consensus state heights */
+    consensus_state_heights: HeightSDKType[];
+    /** pagination response */
+    pagination?: PageResponseSDKType;
+}
+/**
  * QueryClientStatusRequest is the request type for the Query/ClientStatus RPC
  * method
  */
@@ -350,6 +390,20 @@ export declare const QueryConsensusStatesResponse: {
     fromJSON(object: any): QueryConsensusStatesResponse;
     toJSON(message: QueryConsensusStatesResponse): unknown;
     fromPartial(object: Partial<QueryConsensusStatesResponse>): QueryConsensusStatesResponse;
+};
+export declare const QueryConsensusStateHeightsRequest: {
+    encode(message: QueryConsensusStateHeightsRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryConsensusStateHeightsRequest;
+    fromJSON(object: any): QueryConsensusStateHeightsRequest;
+    toJSON(message: QueryConsensusStateHeightsRequest): unknown;
+    fromPartial(object: Partial<QueryConsensusStateHeightsRequest>): QueryConsensusStateHeightsRequest;
+};
+export declare const QueryConsensusStateHeightsResponse: {
+    encode(message: QueryConsensusStateHeightsResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryConsensusStateHeightsResponse;
+    fromJSON(object: any): QueryConsensusStateHeightsResponse;
+    toJSON(message: QueryConsensusStateHeightsResponse): unknown;
+    fromPartial(object: Partial<QueryConsensusStateHeightsResponse>): QueryConsensusStateHeightsResponse;
 };
 export declare const QueryClientStatusRequest: {
     encode(message: QueryClientStatusRequest, writer?: _m0.Writer): _m0.Writer;

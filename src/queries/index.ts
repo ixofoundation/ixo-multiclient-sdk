@@ -19,6 +19,11 @@ export const createQueryClient = async (rpcEndpoint: string) => {
   ).cosmwasm.ClientFactory.createRPCQueryClient({
     rpcEndpoint,
   });
+  const queryIca = await (
+    await import("../codegen")
+  ).ica.ClientFactory.createRPCQueryClient({
+    rpcEndpoint,
+  });
   const queryEntity = await (
     await import("./entity")
   ).createRpcQueryExtension(rpcEndpoint);
@@ -26,9 +31,10 @@ export const createQueryClient = async (rpcEndpoint: string) => {
   return {
     // add queryIxo and queryIbc first as it has base cosmos module and cosmos namespace needs to be overridden by queryCosmos
     ...queryIxo,
+    ...queryIca,
     ...queryIbc,
-    ...queryCosmos,
     ...queryCosmWasm,
+    ...queryCosmos,
     custom: {
       ...queryEntity,
     },

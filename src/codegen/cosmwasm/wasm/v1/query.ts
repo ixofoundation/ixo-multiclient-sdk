@@ -388,6 +388,54 @@ export interface QueryParamsResponseSDKType {
   /** params defines the parameters of the module. */
   params?: ParamsSDKType;
 }
+/**
+ * QueryContractsByCreatorRequest is the request type for the
+ * Query/ContractsByCreator RPC method.
+ */
+
+export interface QueryContractsByCreatorRequest {
+  /** CreatorAddress is the address of contract creator */
+  creatorAddress: string;
+  /** Pagination defines an optional pagination for the request. */
+
+  pagination?: PageRequest;
+}
+/**
+ * QueryContractsByCreatorRequest is the request type for the
+ * Query/ContractsByCreator RPC method.
+ */
+
+export interface QueryContractsByCreatorRequestSDKType {
+  /** CreatorAddress is the address of contract creator */
+  creator_address: string;
+  /** Pagination defines an optional pagination for the request. */
+
+  pagination?: PageRequestSDKType;
+}
+/**
+ * QueryContractsByCreatorResponse is the response type for the
+ * Query/ContractsByCreator RPC method.
+ */
+
+export interface QueryContractsByCreatorResponse {
+  /** ContractAddresses result set */
+  contractAddresses: string[];
+  /** Pagination defines the pagination in the response. */
+
+  pagination?: PageResponse;
+}
+/**
+ * QueryContractsByCreatorResponse is the response type for the
+ * Query/ContractsByCreator RPC method.
+ */
+
+export interface QueryContractsByCreatorResponseSDKType {
+  /** ContractAddresses result set */
+  contract_addresses: string[];
+  /** Pagination defines the pagination in the response. */
+
+  pagination?: PageResponseSDKType;
+}
 
 function createBaseQueryContractInfoRequest(): QueryContractInfoRequest {
   return {
@@ -1790,6 +1838,150 @@ export const QueryParamsResponse = {
   fromPartial(object: Partial<QueryParamsResponse>): QueryParamsResponse {
     const message = createBaseQueryParamsResponse();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    return message;
+  }
+
+};
+
+function createBaseQueryContractsByCreatorRequest(): QueryContractsByCreatorRequest {
+  return {
+    creatorAddress: "",
+    pagination: undefined
+  };
+}
+
+export const QueryContractsByCreatorRequest = {
+  encode(message: QueryContractsByCreatorRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creatorAddress !== "") {
+      writer.uint32(10).string(message.creatorAddress);
+    }
+
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryContractsByCreatorRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryContractsByCreatorRequest();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.creatorAddress = reader.string();
+          break;
+
+        case 2:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): QueryContractsByCreatorRequest {
+    return {
+      creatorAddress: isSet(object.creatorAddress) ? String(object.creatorAddress) : "",
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+
+  toJSON(message: QueryContractsByCreatorRequest): unknown {
+    const obj: any = {};
+    message.creatorAddress !== undefined && (obj.creatorAddress = message.creatorAddress);
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial(object: Partial<QueryContractsByCreatorRequest>): QueryContractsByCreatorRequest {
+    const message = createBaseQueryContractsByCreatorRequest();
+    message.creatorAddress = object.creatorAddress ?? "";
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+
+};
+
+function createBaseQueryContractsByCreatorResponse(): QueryContractsByCreatorResponse {
+  return {
+    contractAddresses: [],
+    pagination: undefined
+  };
+}
+
+export const QueryContractsByCreatorResponse = {
+  encode(message: QueryContractsByCreatorResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.contractAddresses) {
+      writer.uint32(10).string(v!);
+    }
+
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryContractsByCreatorResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryContractsByCreatorResponse();
+
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+
+      switch (tag >>> 3) {
+        case 1:
+          message.contractAddresses.push(reader.string());
+          break;
+
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+
+    return message;
+  },
+
+  fromJSON(object: any): QueryContractsByCreatorResponse {
+    return {
+      contractAddresses: Array.isArray(object?.contractAddresses) ? object.contractAddresses.map((e: any) => String(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+
+  toJSON(message: QueryContractsByCreatorResponse): unknown {
+    const obj: any = {};
+
+    if (message.contractAddresses) {
+      obj.contractAddresses = message.contractAddresses.map(e => e);
+    } else {
+      obj.contractAddresses = [];
+    }
+
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial(object: Partial<QueryContractsByCreatorResponse>): QueryContractsByCreatorResponse {
+    const message = createBaseQueryContractsByCreatorResponse();
+    message.contractAddresses = object.contractAddresses?.map(e => e) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   }
 

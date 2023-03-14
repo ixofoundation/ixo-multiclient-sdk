@@ -13,6 +13,8 @@ export interface FungibleTokenPacketData {
     sender: string;
     /** the recipient address on the destination chain */
     receiver: string;
+    /** optional memo */
+    memo: string;
 }
 /**
  * FungibleTokenPacketData defines a struct for the packet payload
@@ -28,6 +30,8 @@ export interface FungibleTokenPacketDataSDKType {
     sender: string;
     /** the recipient address on the destination chain */
     receiver: string;
+    /** optional memo */
+    memo: string;
 }
 export declare const FungibleTokenPacketData: {
     encode(message: FungibleTokenPacketData, writer?: _m0.Writer): _m0.Writer;

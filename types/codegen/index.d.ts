@@ -10,6 +10,7 @@ export * from "./cosmwasm/bundle";
 export * from "./gogoproto/bundle";
 export * from "./google/bundle";
 export * from "./ibc/bundle";
+export * from "./ica/bundle";
 export * from "./ixo/bundle";
 export * from "./tendermint/bundle";
 export * from "./contracts";
