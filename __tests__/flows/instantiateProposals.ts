@@ -12,8 +12,7 @@ export const instantiateModulesProposals = () =>
       "/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract",
       async () => {
         const res = await Cosmos.MsgSubmitProposalStoreCW(
-          "cw721",
-          undefined
+          "cw721"
           // cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_NOBODY
         );
         proposalId = utils.common.getValueFromEvents(

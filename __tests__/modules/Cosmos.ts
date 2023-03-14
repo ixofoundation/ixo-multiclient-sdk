@@ -188,11 +188,12 @@ export const MsgVote = async (proposalId: number) => {
 };
 
 export const MsgSubmitProposalUpdateEntityParams = async (
-  nftContractCodeId: number
+  nftContractCodeId: number,
+  signer = WalletUsers.tester
 ) => {
-  const client = await createClient();
+  const client = await createClient(getUser(signer));
 
-  const tester = getUser();
+  const tester = getUser(signer);
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
 
