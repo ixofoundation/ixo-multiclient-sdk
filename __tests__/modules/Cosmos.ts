@@ -1,4 +1,4 @@
-import { fee, WalletUsers } from "../helpers/constants";
+import { fee, KeyTypes, WalletUsers } from "../helpers/constants";
 import {
   createClient,
   getUser,
@@ -16,13 +16,18 @@ export const BankSendTrx = async (
   amount = Math.pow(10, 6),
   fromUser = WalletUsers.alice,
   toUser = WalletUsers.tester,
+  fromWalletKeyType: KeyTypes = "secp",
+  toWalletKeyType: KeyTypes = "secp",
   toAddresss?: string
 ) => {
-  const client = await createClient(getUser(fromUser));
+  const client = await createClient(getUser(fromUser, fromWalletKeyType));
 
-  const fromAddress = (await getUser(fromUser).getAccounts())[0].address;
+  const fromAddress = (
+    await getUser(fromUser, fromWalletKeyType).getAccounts()
+  )[0].address;
   const toAddress =
-    toAddresss || (await getUser(toUser).getAccounts())[0].address;
+    toAddresss ||
+    (await getUser(toUser, toWalletKeyType).getAccounts())[0].address;
 
   const message = {
     typeUrl: "/cosmos.bank.v1beta1.MsgSend",
