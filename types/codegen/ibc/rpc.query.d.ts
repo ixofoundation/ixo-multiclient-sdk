@@ -185,11 +185,40 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
     };
     ibc: {
         applications: {
+            fee: {
+                v1: {
+                    incentivizedPackets(request: import("./applications/fee/v1/query").QueryIncentivizedPacketsRequest): Promise<import("./applications/fee/v1/query").QueryIncentivizedPacketsResponse>;
+                    incentivizedPacket(request: import("./applications/fee/v1/query").QueryIncentivizedPacketRequest): Promise<import("./applications/fee/v1/query").QueryIncentivizedPacketResponse>;
+                    incentivizedPacketsForChannel(request: import("./applications/fee/v1/query").QueryIncentivizedPacketsForChannelRequest): Promise<import("./applications/fee/v1/query").QueryIncentivizedPacketsForChannelResponse>;
+                    totalRecvFees(request: import("./applications/fee/v1/query").QueryTotalRecvFeesRequest): Promise<import("./applications/fee/v1/query").QueryTotalRecvFeesResponse>;
+                    totalAckFees(request: import("./applications/fee/v1/query").QueryTotalAckFeesRequest): Promise<import("./applications/fee/v1/query").QueryTotalAckFeesResponse>;
+                    totalTimeoutFees(request: import("./applications/fee/v1/query").QueryTotalTimeoutFeesRequest): Promise<import("./applications/fee/v1/query").QueryTotalTimeoutFeesResponse>;
+                    payee(request: import("./applications/fee/v1/query").QueryPayeeRequest): Promise<import("./applications/fee/v1/query").QueryPayeeResponse>;
+                    counterpartyPayee(request: import("./applications/fee/v1/query").QueryCounterpartyPayeeRequest): Promise<import("./applications/fee/v1/query").QueryCounterpartyPayeeResponse>;
+                    feeEnabledChannels(request: import("./applications/fee/v1/query").QueryFeeEnabledChannelsRequest): Promise<import("./applications/fee/v1/query").QueryFeeEnabledChannelsResponse>;
+                    feeEnabledChannel(request: import("./applications/fee/v1/query").QueryFeeEnabledChannelRequest): Promise<import("./applications/fee/v1/query").QueryFeeEnabledChannelResponse>;
+                };
+            };
+            interchain_accounts: {
+                controller: {
+                    v1: {
+                        interchainAccount(request: import("./applications/interchain_accounts/controller/v1/query").QueryInterchainAccountRequest): Promise<import("./applications/interchain_accounts/controller/v1/query").QueryInterchainAccountResponse>;
+                        params(request?: import("./applications/interchain_accounts/controller/v1/query").QueryParamsRequest): Promise<import("./applications/interchain_accounts/controller/v1/query").QueryParamsResponse>;
+                    };
+                };
+                host: {
+                    v1: {
+                        params(request?: import("./applications/interchain_accounts/host/v1/query").QueryParamsRequest): Promise<import("./applications/interchain_accounts/host/v1/query").QueryParamsResponse>;
+                    };
+                };
+            };
             transfer: {
                 v1: {
                     denomTrace(request: import("./applications/transfer/v1/query").QueryDenomTraceRequest): Promise<import("./applications/transfer/v1/query").QueryDenomTraceResponse>;
                     denomTraces(request?: import("./applications/transfer/v1/query").QueryDenomTracesRequest): Promise<import("./applications/transfer/v1/query").QueryDenomTracesResponse>;
                     params(request?: import("./applications/transfer/v1/query").QueryParamsRequest): Promise<import("./applications/transfer/v1/query").QueryParamsResponse>;
+                    denomHash(request: import("./applications/transfer/v1/query").QueryDenomHashRequest): Promise<import("./applications/transfer/v1/query").QueryDenomHashResponse>;
+                    escrowAddress(request: import("./applications/transfer/v1/query").QueryEscrowAddressRequest): Promise<import("./applications/transfer/v1/query").QueryEscrowAddressResponse>;
                 };
             };
         };
@@ -217,6 +246,7 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
                     clientStates(request?: import("./core/client/v1/query").QueryClientStatesRequest): Promise<import("./core/client/v1/query").QueryClientStatesResponse>;
                     consensusState(request: import("./core/client/v1/query").QueryConsensusStateRequest): Promise<import("./core/client/v1/query").QueryConsensusStateResponse>;
                     consensusStates(request: import("./core/client/v1/query").QueryConsensusStatesRequest): Promise<import("./core/client/v1/query").QueryConsensusStatesResponse>;
+                    consensusStateHeights(request: import("./core/client/v1/query").QueryConsensusStateHeightsRequest): Promise<import("./core/client/v1/query").QueryConsensusStateHeightsResponse>;
                     clientStatus(request: import("./core/client/v1/query").QueryClientStatusRequest): Promise<import("./core/client/v1/query").QueryClientStatusResponse>;
                     clientParams(request?: import("./core/client/v1/query").QueryClientParamsRequest): Promise<import("./core/client/v1/query").QueryClientParamsResponse>;
                     upgradedClientState(request?: import("./core/client/v1/query").QueryUpgradedClientStateRequest): Promise<import("./core/client/v1/query").QueryUpgradedClientStateResponse>;
@@ -230,11 +260,6 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
                     clientConnections(request: import("./core/connection/v1/query").QueryClientConnectionsRequest): Promise<import("./core/connection/v1/query").QueryClientConnectionsResponse>;
                     connectionClientState(request: import("./core/connection/v1/query").QueryConnectionClientStateRequest): Promise<import("./core/connection/v1/query").QueryConnectionClientStateResponse>;
                     connectionConsensusState(request: import("./core/connection/v1/query").QueryConnectionConsensusStateRequest): Promise<import("./core/connection/v1/query").QueryConnectionConsensusStateResponse>;
-                };
-            };
-            port: {
-                v1: {
-                    appVersion(request: import("./core/port/v1/query").QueryAppVersionRequest): Promise<import("./core/port/v1/query").QueryAppVersionResponse>;
                 };
             };
         };

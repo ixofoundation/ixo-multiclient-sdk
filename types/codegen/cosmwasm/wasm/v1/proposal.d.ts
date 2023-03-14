@@ -16,6 +16,18 @@ export interface StoreCodeProposal {
     instantiatePermission?: AccessConfig;
     /** UnpinCode code on upload, optional */
     unpinCode: boolean;
+    /** Source is the URL where the code is hosted */
+    source: string;
+    /**
+     * Builder is the docker image used to build the code deterministically, used
+     * for smart contract verification
+     */
+    builder: string;
+    /**
+     * CodeHash is the SHA256 sum of the code outputted by builder, used for smart
+     * contract verification
+     */
+    codeHash: Uint8Array;
 }
 /** StoreCodeProposal gov proposal content type to submit WASM code to the system */
 export interface StoreCodeProposalSDKType {
@@ -31,6 +43,18 @@ export interface StoreCodeProposalSDKType {
     instantiate_permission?: AccessConfigSDKType;
     /** UnpinCode code on upload, optional */
     unpin_code: boolean;
+    /** Source is the URL where the code is hosted */
+    source: string;
+    /**
+     * Builder is the docker image used to build the code deterministically, used
+     * for smart contract verification
+     */
+    builder: string;
+    /**
+     * CodeHash is the SHA256 sum of the code outputted by builder, used for smart
+     * contract verification
+     */
+    code_hash: Uint8Array;
 }
 /**
  * InstantiateContractProposal gov proposal content type to instantiate a
@@ -304,6 +328,82 @@ export interface UpdateInstantiateConfigProposalSDKType {
      */
     access_config_updates: AccessConfigUpdateSDKType[];
 }
+/**
+ * StoreAndInstantiateContractProposal gov proposal content type to store
+ * and instantiate the contract.
+ */
+export interface StoreAndInstantiateContractProposal {
+    /** Title is a short summary */
+    title: string;
+    /** Description is a human readable text */
+    description: string;
+    /** RunAs is the address that is passed to the contract's environment as sender */
+    runAs: string;
+    /** WASMByteCode can be raw or gzip compressed */
+    wasmByteCode: Uint8Array;
+    /** InstantiatePermission to apply on contract creation, optional */
+    instantiatePermission?: AccessConfig;
+    /** UnpinCode code on upload, optional */
+    unpinCode: boolean;
+    /** Admin is an optional address that can execute migrations */
+    admin: string;
+    /** Label is optional metadata to be stored with a constract instance. */
+    label: string;
+    /** Msg json encoded message to be passed to the contract on instantiation */
+    msg: Uint8Array;
+    /** Funds coins that are transferred to the contract on instantiation */
+    funds: Coin[];
+    /** Source is the URL where the code is hosted */
+    source: string;
+    /**
+     * Builder is the docker image used to build the code deterministically, used
+     * for smart contract verification
+     */
+    builder: string;
+    /**
+     * CodeHash is the SHA256 sum of the code outputted by builder, used for smart
+     * contract verification
+     */
+    codeHash: Uint8Array;
+}
+/**
+ * StoreAndInstantiateContractProposal gov proposal content type to store
+ * and instantiate the contract.
+ */
+export interface StoreAndInstantiateContractProposalSDKType {
+    /** Title is a short summary */
+    title: string;
+    /** Description is a human readable text */
+    description: string;
+    /** RunAs is the address that is passed to the contract's environment as sender */
+    run_as: string;
+    /** WASMByteCode can be raw or gzip compressed */
+    wasm_byte_code: Uint8Array;
+    /** InstantiatePermission to apply on contract creation, optional */
+    instantiate_permission?: AccessConfigSDKType;
+    /** UnpinCode code on upload, optional */
+    unpin_code: boolean;
+    /** Admin is an optional address that can execute migrations */
+    admin: string;
+    /** Label is optional metadata to be stored with a constract instance. */
+    label: string;
+    /** Msg json encoded message to be passed to the contract on instantiation */
+    msg: Uint8Array;
+    /** Funds coins that are transferred to the contract on instantiation */
+    funds: CoinSDKType[];
+    /** Source is the URL where the code is hosted */
+    source: string;
+    /**
+     * Builder is the docker image used to build the code deterministically, used
+     * for smart contract verification
+     */
+    builder: string;
+    /**
+     * CodeHash is the SHA256 sum of the code outputted by builder, used for smart
+     * contract verification
+     */
+    code_hash: Uint8Array;
+}
 export declare const StoreCodeProposal: {
     encode(message: StoreCodeProposal, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): StoreCodeProposal;
@@ -380,4 +480,11 @@ export declare const UpdateInstantiateConfigProposal: {
     fromJSON(object: any): UpdateInstantiateConfigProposal;
     toJSON(message: UpdateInstantiateConfigProposal): unknown;
     fromPartial(object: Partial<UpdateInstantiateConfigProposal>): UpdateInstantiateConfigProposal;
+};
+export declare const StoreAndInstantiateContractProposal: {
+    encode(message: StoreAndInstantiateContractProposal, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): StoreAndInstantiateContractProposal;
+    fromJSON(object: any): StoreAndInstantiateContractProposal;
+    toJSON(message: StoreAndInstantiateContractProposal): unknown;
+    fromPartial(object: Partial<StoreAndInstantiateContractProposal>): StoreAndInstantiateContractProposal;
 };

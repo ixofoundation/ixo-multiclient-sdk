@@ -1,11 +1,11 @@
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { ixo, cosmwasm, cosmos, ibc } from "../codegen";
+import { ixo, cosmwasm, cosmos, ibc, ica } from "../codegen";
 
 export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
   // base
   ["/cosmos.base.v1beta1.Coin", cosmos.base.v1beta1.Coin],
 
-  // auth
+  // authz
   ["/cosmos.authz.v1beta1.MsgExec", cosmos.authz.v1beta1.MsgExec],
   ["/cosmos.authz.v1beta1.MsgGrant", cosmos.authz.v1beta1.MsgGrant],
   ["/cosmos.authz.v1beta1.MsgRevoke", cosmos.authz.v1beta1.MsgRevoke],
@@ -122,40 +122,6 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
     "/ibc.applications.transfer.v1.MsgTransfer",
     ibc.applications.transfer.v1.MsgTransfer,
   ],
-  [
-    "/ibc.core.channel.v1.MsgAcknowledgement",
-    ibc.core.channel.v1.MsgAcknowledgement,
-  ],
-  [
-    "/ibc.core.channel.v1.MsgChannelCloseConfirm",
-    ibc.core.channel.v1.MsgChannelCloseConfirm,
-  ],
-  [
-    "/ibc.core.channel.v1.MsgChannelCloseInit",
-    ibc.core.channel.v1.MsgChannelCloseInit,
-  ],
-  [
-    "/ibc.core.channel.v1.MsgChannelOpenAck",
-    ibc.core.channel.v1.MsgChannelOpenAck,
-  ],
-  [
-    "/ibc.core.channel.v1.MsgChannelOpenConfirm",
-    ibc.core.channel.v1.MsgChannelOpenConfirm,
-  ],
-  [
-    "/ibc.core.channel.v1.MsgChannelOpenInit",
-    ibc.core.channel.v1.MsgChannelOpenInit,
-  ],
-  [
-    "/ibc.core.channel.v1.MsgChannelOpenTry",
-    ibc.core.channel.v1.MsgChannelOpenTry,
-  ],
-  ["/ibc.core.channel.v1.MsgRecvPacket", ibc.core.channel.v1.MsgRecvPacket],
-  ["/ibc.core.channel.v1.MsgTimeout", ibc.core.channel.v1.MsgTimeout],
-  [
-    "/ibc.core.channel.v1.MsgTimeoutOnClose",
-    ibc.core.channel.v1.MsgTimeoutOnClose,
-  ],
   ["/ibc.core.client.v1.MsgCreateClient", ibc.core.client.v1.MsgCreateClient],
   [
     "/ibc.core.client.v1.MsgSubmitMisbehaviour",
@@ -163,22 +129,25 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
   ],
   ["/ibc.core.client.v1.MsgUpdateClient", ibc.core.client.v1.MsgUpdateClient],
   ["/ibc.core.client.v1.MsgUpgradeClient", ibc.core.client.v1.MsgUpgradeClient],
+
+  // cosmwasm
+  ["/cosmwasm.wasm.v1.MsgStoreCode", cosmwasm.wasm.v1.MsgStoreCode],
   [
-    "/ibc.core.connection.v1.MsgConnectionOpenAck",
-    ibc.core.connection.v1.MsgConnectionOpenAck,
+    "/cosmwasm.wasm.v1.MsgInstantiateContract",
+    cosmwasm.wasm.v1.MsgInstantiateContract,
   ],
   [
-    "/ibc.core.connection.v1.MsgConnectionOpenConfirm",
-    ibc.core.connection.v1.MsgConnectionOpenConfirm,
+    "/cosmwasm.wasm.v1.MsgInstantiateContract2",
+    cosmwasm.wasm.v1.MsgInstantiateContract2,
   ],
-  [
-    "/ibc.core.connection.v1.MsgConnectionOpenInit",
-    ibc.core.connection.v1.MsgConnectionOpenInit,
-  ],
-  [
-    "/ibc.core.connection.v1.MsgConnectionOpenTry",
-    ibc.core.connection.v1.MsgConnectionOpenTry,
-  ],
+  ["/cosmwasm.wasm.v1.MsgExecuteContract", cosmwasm.wasm.v1.MsgExecuteContract],
+  ["/cosmwasm.wasm.v1.MsgMigrateContract", cosmwasm.wasm.v1.MsgMigrateContract],
+  ["/cosmwasm.wasm.v1.MsgUpdateAdmin", cosmwasm.wasm.v1.MsgUpdateAdmin],
+  ["/cosmwasm.wasm.v1.MsgClearAdmin", cosmwasm.wasm.v1.MsgClearAdmin],
+
+  // intertx (interchain accounts)
+  ["/ica.intertx.MsgRegisterAccount", ica.intertx.MsgRegisterAccount],
+  ["/ica.intertx.MsgSubmitTx", ica.intertx.MsgSubmitTx],
 ];
 
 export const createRegistry = (): Registry => {
@@ -391,32 +360,6 @@ export const createRegistry = (): Registry => {
   myRegistry.register(
     "/ixo.claims.v1beta1.WithdrawPaymentAuthorization",
     ixo.claims.v1beta1.WithdrawPaymentAuthorization
-  );
-
-  // Cosmwasm
-  myRegistry.register(
-    "/cosmwasm.wasm.v1.MsgStoreCode",
-    cosmwasm.wasm.v1.MsgStoreCode
-  );
-  myRegistry.register(
-    "/cosmwasm.wasm.v1.MsgInstantiateContract",
-    cosmwasm.wasm.v1.MsgInstantiateContract
-  );
-  myRegistry.register(
-    "/cosmwasm.wasm.v1.MsgExecuteContract",
-    cosmwasm.wasm.v1.MsgExecuteContract
-  );
-  myRegistry.register(
-    "/cosmwasm.wasm.v1.MsgMigrateContract",
-    cosmwasm.wasm.v1.MsgMigrateContract
-  );
-  myRegistry.register(
-    "/cosmwasm.wasm.v1.MsgUpdateAdmin",
-    cosmwasm.wasm.v1.MsgUpdateAdmin
-  );
-  myRegistry.register(
-    "/cosmwasm.wasm.v1.MsgClearAdmin",
-    cosmwasm.wasm.v1.MsgClearAdmin
   );
 
   return myRegistry;

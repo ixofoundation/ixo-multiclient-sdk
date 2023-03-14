@@ -129,11 +129,7 @@ export interface ContractInfo {
     admin: string;
     /** Label is optional metadata to be stored with a contract instance. */
     label: string;
-    /**
-     * Created Tx position when the contract was instantiated.
-     * This data should kept internal and not be exposed via query results. Just
-     * use for sorting
-     */
+    /** Created Tx position when the contract was instantiated. */
     created?: AbsoluteTxPosition;
     ibcPortId: string;
     /**
@@ -152,11 +148,7 @@ export interface ContractInfoSDKType {
     admin: string;
     /** Label is optional metadata to be stored with a contract instance. */
     label: string;
-    /**
-     * Created Tx position when the contract was instantiated.
-     * This data should kept internal and not be exposed via query results. Just
-     * use for sorting
-     */
+    /** Created Tx position when the contract was instantiated. */
     created?: AbsoluteTxPositionSDKType;
     ibc_port_id: string;
     /**

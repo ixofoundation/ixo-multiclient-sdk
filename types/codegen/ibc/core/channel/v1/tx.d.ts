@@ -2,6 +2,28 @@ import { Channel, ChannelSDKType, Packet, PacketSDKType } from "./channel";
 import { Height, HeightSDKType } from "../../client/v1/client";
 import * as _m0 from "protobufjs/minimal";
 import { Long } from "../../../../helpers";
+/** ResponseResultType defines the possible outcomes of the execution of a message */
+export declare enum ResponseResultType {
+    /** RESPONSE_RESULT_TYPE_UNSPECIFIED - Default zero value enumeration */
+    RESPONSE_RESULT_TYPE_UNSPECIFIED = 0,
+    /** RESPONSE_RESULT_TYPE_NOOP - The message did not call the IBC application callbacks (because, for example, the packet had already been relayed) */
+    RESPONSE_RESULT_TYPE_NOOP = 1,
+    /** RESPONSE_RESULT_TYPE_SUCCESS - The message was executed successfully */
+    RESPONSE_RESULT_TYPE_SUCCESS = 2,
+    UNRECOGNIZED = -1
+}
+/** ResponseResultType defines the possible outcomes of the execution of a message */
+export declare enum ResponseResultTypeSDKType {
+    /** RESPONSE_RESULT_TYPE_UNSPECIFIED - Default zero value enumeration */
+    RESPONSE_RESULT_TYPE_UNSPECIFIED = 0,
+    /** RESPONSE_RESULT_TYPE_NOOP - The message did not call the IBC application callbacks (because, for example, the packet had already been relayed) */
+    RESPONSE_RESULT_TYPE_NOOP = 1,
+    /** RESPONSE_RESULT_TYPE_SUCCESS - The message was executed successfully */
+    RESPONSE_RESULT_TYPE_SUCCESS = 2,
+    UNRECOGNIZED = -1
+}
+export declare function responseResultTypeFromJSON(object: any): ResponseResultType;
+export declare function responseResultTypeToJSON(object: ResponseResultType): string;
 /**
  * MsgChannelOpenInit defines an sdk.Msg to initialize a channel handshake. It
  * is called by a relayer on Chain A.
@@ -22,21 +44,25 @@ export interface MsgChannelOpenInitSDKType {
 }
 /** MsgChannelOpenInitResponse defines the Msg/ChannelOpenInit response type. */
 export interface MsgChannelOpenInitResponse {
+    channelId: string;
+    version: string;
 }
 /** MsgChannelOpenInitResponse defines the Msg/ChannelOpenInit response type. */
 export interface MsgChannelOpenInitResponseSDKType {
+    channel_id: string;
+    version: string;
 }
 /**
  * MsgChannelOpenInit defines a msg sent by a Relayer to try to open a channel
- * on Chain B.
+ * on Chain B. The version field within the Channel field has been deprecated. Its
+ * value will be ignored by core IBC.
  */
 export interface MsgChannelOpenTry {
     portId: string;
-    /**
-     * in the case of crossing hello's, when both chains call OpenInit, we need
-     * the channel identifier of the previous channel in state INIT
-     */
+    /** Deprecated: this field is unused. Crossing hello's are no longer supported in core IBC. */
+    /** @deprecated */
     previousChannelId: string;
+    /** NOTE: the version field within the channel has been deprecated. Its value will be ignored by core IBC. */
     channel?: Channel;
     counterpartyVersion: string;
     proofInit: Uint8Array;
@@ -45,15 +71,15 @@ export interface MsgChannelOpenTry {
 }
 /**
  * MsgChannelOpenInit defines a msg sent by a Relayer to try to open a channel
- * on Chain B.
+ * on Chain B. The version field within the Channel field has been deprecated. Its
+ * value will be ignored by core IBC.
  */
 export interface MsgChannelOpenTrySDKType {
     port_id: string;
-    /**
-     * in the case of crossing hello's, when both chains call OpenInit, we need
-     * the channel identifier of the previous channel in state INIT
-     */
+    /** Deprecated: this field is unused. Crossing hello's are no longer supported in core IBC. */
+    /** @deprecated */
     previous_channel_id: string;
+    /** NOTE: the version field within the channel has been deprecated. Its value will be ignored by core IBC. */
     channel?: ChannelSDKType;
     counterparty_version: string;
     proof_init: Uint8Array;
@@ -62,9 +88,11 @@ export interface MsgChannelOpenTrySDKType {
 }
 /** MsgChannelOpenTryResponse defines the Msg/ChannelOpenTry response type. */
 export interface MsgChannelOpenTryResponse {
+    version: string;
 }
 /** MsgChannelOpenTryResponse defines the Msg/ChannelOpenTry response type. */
 export interface MsgChannelOpenTryResponseSDKType {
+    version: string;
 }
 /**
  * MsgChannelOpenAck defines a msg sent by a Relayer to Chain A to acknowledge
@@ -206,9 +234,11 @@ export interface MsgRecvPacketSDKType {
 }
 /** MsgRecvPacketResponse defines the Msg/RecvPacket response type. */
 export interface MsgRecvPacketResponse {
+    result: ResponseResultType;
 }
 /** MsgRecvPacketResponse defines the Msg/RecvPacket response type. */
 export interface MsgRecvPacketResponseSDKType {
+    result: ResponseResultTypeSDKType;
 }
 /** MsgTimeout receives timed-out packet */
 export interface MsgTimeout {
@@ -228,9 +258,11 @@ export interface MsgTimeoutSDKType {
 }
 /** MsgTimeoutResponse defines the Msg/Timeout response type. */
 export interface MsgTimeoutResponse {
+    result: ResponseResultType;
 }
 /** MsgTimeoutResponse defines the Msg/Timeout response type. */
 export interface MsgTimeoutResponseSDKType {
+    result: ResponseResultTypeSDKType;
 }
 /** MsgTimeoutOnClose timed-out packet upon counterparty channel closure. */
 export interface MsgTimeoutOnClose {
@@ -252,9 +284,11 @@ export interface MsgTimeoutOnCloseSDKType {
 }
 /** MsgTimeoutOnCloseResponse defines the Msg/TimeoutOnClose response type. */
 export interface MsgTimeoutOnCloseResponse {
+    result: ResponseResultType;
 }
 /** MsgTimeoutOnCloseResponse defines the Msg/TimeoutOnClose response type. */
 export interface MsgTimeoutOnCloseResponseSDKType {
+    result: ResponseResultTypeSDKType;
 }
 /** MsgAcknowledgement receives incoming IBC acknowledgement */
 export interface MsgAcknowledgement {
@@ -274,9 +308,11 @@ export interface MsgAcknowledgementSDKType {
 }
 /** MsgAcknowledgementResponse defines the Msg/Acknowledgement response type. */
 export interface MsgAcknowledgementResponse {
+    result: ResponseResultType;
 }
 /** MsgAcknowledgementResponse defines the Msg/Acknowledgement response type. */
 export interface MsgAcknowledgementResponseSDKType {
+    result: ResponseResultTypeSDKType;
 }
 export declare const MsgChannelOpenInit: {
     encode(message: MsgChannelOpenInit, writer?: _m0.Writer): _m0.Writer;
@@ -286,11 +322,11 @@ export declare const MsgChannelOpenInit: {
     fromPartial(object: Partial<MsgChannelOpenInit>): MsgChannelOpenInit;
 };
 export declare const MsgChannelOpenInitResponse: {
-    encode(_: MsgChannelOpenInitResponse, writer?: _m0.Writer): _m0.Writer;
+    encode(message: MsgChannelOpenInitResponse, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelOpenInitResponse;
-    fromJSON(_: any): MsgChannelOpenInitResponse;
-    toJSON(_: MsgChannelOpenInitResponse): unknown;
-    fromPartial(_: Partial<MsgChannelOpenInitResponse>): MsgChannelOpenInitResponse;
+    fromJSON(object: any): MsgChannelOpenInitResponse;
+    toJSON(message: MsgChannelOpenInitResponse): unknown;
+    fromPartial(object: Partial<MsgChannelOpenInitResponse>): MsgChannelOpenInitResponse;
 };
 export declare const MsgChannelOpenTry: {
     encode(message: MsgChannelOpenTry, writer?: _m0.Writer): _m0.Writer;
@@ -300,11 +336,11 @@ export declare const MsgChannelOpenTry: {
     fromPartial(object: Partial<MsgChannelOpenTry>): MsgChannelOpenTry;
 };
 export declare const MsgChannelOpenTryResponse: {
-    encode(_: MsgChannelOpenTryResponse, writer?: _m0.Writer): _m0.Writer;
+    encode(message: MsgChannelOpenTryResponse, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelOpenTryResponse;
-    fromJSON(_: any): MsgChannelOpenTryResponse;
-    toJSON(_: MsgChannelOpenTryResponse): unknown;
-    fromPartial(_: Partial<MsgChannelOpenTryResponse>): MsgChannelOpenTryResponse;
+    fromJSON(object: any): MsgChannelOpenTryResponse;
+    toJSON(message: MsgChannelOpenTryResponse): unknown;
+    fromPartial(object: Partial<MsgChannelOpenTryResponse>): MsgChannelOpenTryResponse;
 };
 export declare const MsgChannelOpenAck: {
     encode(message: MsgChannelOpenAck, writer?: _m0.Writer): _m0.Writer;
@@ -370,11 +406,11 @@ export declare const MsgRecvPacket: {
     fromPartial(object: Partial<MsgRecvPacket>): MsgRecvPacket;
 };
 export declare const MsgRecvPacketResponse: {
-    encode(_: MsgRecvPacketResponse, writer?: _m0.Writer): _m0.Writer;
+    encode(message: MsgRecvPacketResponse, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): MsgRecvPacketResponse;
-    fromJSON(_: any): MsgRecvPacketResponse;
-    toJSON(_: MsgRecvPacketResponse): unknown;
-    fromPartial(_: Partial<MsgRecvPacketResponse>): MsgRecvPacketResponse;
+    fromJSON(object: any): MsgRecvPacketResponse;
+    toJSON(message: MsgRecvPacketResponse): unknown;
+    fromPartial(object: Partial<MsgRecvPacketResponse>): MsgRecvPacketResponse;
 };
 export declare const MsgTimeout: {
     encode(message: MsgTimeout, writer?: _m0.Writer): _m0.Writer;
@@ -384,11 +420,11 @@ export declare const MsgTimeout: {
     fromPartial(object: Partial<MsgTimeout>): MsgTimeout;
 };
 export declare const MsgTimeoutResponse: {
-    encode(_: MsgTimeoutResponse, writer?: _m0.Writer): _m0.Writer;
+    encode(message: MsgTimeoutResponse, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): MsgTimeoutResponse;
-    fromJSON(_: any): MsgTimeoutResponse;
-    toJSON(_: MsgTimeoutResponse): unknown;
-    fromPartial(_: Partial<MsgTimeoutResponse>): MsgTimeoutResponse;
+    fromJSON(object: any): MsgTimeoutResponse;
+    toJSON(message: MsgTimeoutResponse): unknown;
+    fromPartial(object: Partial<MsgTimeoutResponse>): MsgTimeoutResponse;
 };
 export declare const MsgTimeoutOnClose: {
     encode(message: MsgTimeoutOnClose, writer?: _m0.Writer): _m0.Writer;
@@ -398,11 +434,11 @@ export declare const MsgTimeoutOnClose: {
     fromPartial(object: Partial<MsgTimeoutOnClose>): MsgTimeoutOnClose;
 };
 export declare const MsgTimeoutOnCloseResponse: {
-    encode(_: MsgTimeoutOnCloseResponse, writer?: _m0.Writer): _m0.Writer;
+    encode(message: MsgTimeoutOnCloseResponse, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): MsgTimeoutOnCloseResponse;
-    fromJSON(_: any): MsgTimeoutOnCloseResponse;
-    toJSON(_: MsgTimeoutOnCloseResponse): unknown;
-    fromPartial(_: Partial<MsgTimeoutOnCloseResponse>): MsgTimeoutOnCloseResponse;
+    fromJSON(object: any): MsgTimeoutOnCloseResponse;
+    toJSON(message: MsgTimeoutOnCloseResponse): unknown;
+    fromPartial(object: Partial<MsgTimeoutOnCloseResponse>): MsgTimeoutOnCloseResponse;
 };
 export declare const MsgAcknowledgement: {
     encode(message: MsgAcknowledgement, writer?: _m0.Writer): _m0.Writer;
@@ -412,9 +448,9 @@ export declare const MsgAcknowledgement: {
     fromPartial(object: Partial<MsgAcknowledgement>): MsgAcknowledgement;
 };
 export declare const MsgAcknowledgementResponse: {
-    encode(_: MsgAcknowledgementResponse, writer?: _m0.Writer): _m0.Writer;
+    encode(message: MsgAcknowledgementResponse, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): MsgAcknowledgementResponse;
-    fromJSON(_: any): MsgAcknowledgementResponse;
-    toJSON(_: MsgAcknowledgementResponse): unknown;
-    fromPartial(_: Partial<MsgAcknowledgementResponse>): MsgAcknowledgementResponse;
+    fromJSON(object: any): MsgAcknowledgementResponse;
+    toJSON(message: MsgAcknowledgementResponse): unknown;
+    fromPartial(object: Partial<MsgAcknowledgementResponse>): MsgAcknowledgementResponse;
 };

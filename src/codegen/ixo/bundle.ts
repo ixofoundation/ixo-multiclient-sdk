@@ -1,104 +1,104 @@
-import * as _132 from "./bonds/v1beta1/bonds";
-import * as _133 from "./bonds/v1beta1/genesis";
-import * as _134 from "./bonds/v1beta1/query";
-import * as _135 from "./bonds/v1beta1/tx";
-import * as _136 from "./claims/v1beta1/authz";
-import * as _137 from "./claims/v1beta1/claims";
-import * as _138 from "./claims/v1beta1/cosmos";
-import * as _139 from "./claims/v1beta1/event";
-import * as _140 from "./claims/v1beta1/genesis";
-import * as _141 from "./claims/v1beta1/query";
-import * as _142 from "./claims/v1beta1/tx";
-import * as _143 from "./entity/v1beta1/cosmos";
-import * as _144 from "./entity/v1beta1/entity";
-import * as _145 from "./entity/v1beta1/event";
-import * as _146 from "./entity/v1beta1/genesis";
-import * as _147 from "./entity/v1beta1/proposal";
-import * as _148 from "./entity/v1beta1/query";
-import * as _149 from "./entity/v1beta1/tx";
-import * as _150 from "./iid/v1beta1/event";
-import * as _151 from "./iid/v1beta1/genesis";
-import * as _152 from "./iid/v1beta1/iid";
-import * as _153 from "./iid/v1beta1/query";
-import * as _154 from "./iid/v1beta1/tx";
-import * as _155 from "./iid/v1beta1/types";
-import * as _156 from "./token/v1beta1/authz";
-import * as _157 from "./token/v1beta1/event";
-import * as _158 from "./token/v1beta1/genesis";
-import * as _159 from "./token/v1beta1/proposal";
-import * as _160 from "./token/v1beta1/query";
-import * as _161 from "./token/v1beta1/token";
-import * as _162 from "./token/v1beta1/tx";
-import * as _217 from "./bonds/v1beta1/query.rpc.Query";
-import * as _218 from "./claims/v1beta1/query.rpc.Query";
-import * as _219 from "./entity/v1beta1/query.rpc.Query";
-import * as _220 from "./iid/v1beta1/query.rpc.Query";
-import * as _221 from "./token/v1beta1/query.rpc.Query";
-import * as _222 from "./bonds/v1beta1/tx.rpc.msg";
-import * as _223 from "./claims/v1beta1/tx.rpc.msg";
-import * as _224 from "./entity/v1beta1/tx.rpc.msg";
-import * as _225 from "./iid/v1beta1/tx.rpc.msg";
-import * as _226 from "./token/v1beta1/tx.rpc.msg";
-import * as _233 from "./rpc.query";
-import * as _234 from "./rpc.tx";
+import * as _144 from "./bonds/v1beta1/bonds";
+import * as _145 from "./bonds/v1beta1/genesis";
+import * as _146 from "./bonds/v1beta1/query";
+import * as _147 from "./bonds/v1beta1/tx";
+import * as _148 from "./claims/v1beta1/authz";
+import * as _149 from "./claims/v1beta1/claims";
+import * as _150 from "./claims/v1beta1/cosmos";
+import * as _151 from "./claims/v1beta1/event";
+import * as _152 from "./claims/v1beta1/genesis";
+import * as _153 from "./claims/v1beta1/query";
+import * as _154 from "./claims/v1beta1/tx";
+import * as _155 from "./entity/v1beta1/cosmos";
+import * as _156 from "./entity/v1beta1/entity";
+import * as _157 from "./entity/v1beta1/event";
+import * as _158 from "./entity/v1beta1/genesis";
+import * as _159 from "./entity/v1beta1/proposal";
+import * as _160 from "./entity/v1beta1/query";
+import * as _161 from "./entity/v1beta1/tx";
+import * as _162 from "./iid/v1beta1/event";
+import * as _163 from "./iid/v1beta1/genesis";
+import * as _164 from "./iid/v1beta1/iid";
+import * as _165 from "./iid/v1beta1/query";
+import * as _166 from "./iid/v1beta1/tx";
+import * as _167 from "./iid/v1beta1/types";
+import * as _168 from "./token/v1beta1/authz";
+import * as _169 from "./token/v1beta1/event";
+import * as _170 from "./token/v1beta1/genesis";
+import * as _171 from "./token/v1beta1/proposal";
+import * as _172 from "./token/v1beta1/query";
+import * as _173 from "./token/v1beta1/token";
+import * as _174 from "./token/v1beta1/tx";
+import * as _234 from "./bonds/v1beta1/query.rpc.Query";
+import * as _235 from "./claims/v1beta1/query.rpc.Query";
+import * as _236 from "./entity/v1beta1/query.rpc.Query";
+import * as _237 from "./iid/v1beta1/query.rpc.Query";
+import * as _238 from "./token/v1beta1/query.rpc.Query";
+import * as _239 from "./bonds/v1beta1/tx.rpc.msg";
+import * as _240 from "./claims/v1beta1/tx.rpc.msg";
+import * as _241 from "./entity/v1beta1/tx.rpc.msg";
+import * as _242 from "./iid/v1beta1/tx.rpc.msg";
+import * as _243 from "./token/v1beta1/tx.rpc.msg";
+import * as _252 from "./rpc.query";
+import * as _253 from "./rpc.tx";
 export namespace ixo {
   export namespace bonds {
-    export const v1beta1 = { ..._132,
-      ..._133,
-      ..._134,
-      ..._135,
-      ..._217,
-      ..._222
-    };
-  }
-  export namespace claims {
-    export const v1beta1 = { ..._136,
-      ..._137,
-      ..._138,
-      ..._139,
-      ..._140,
-      ..._141,
-      ..._142,
-      ..._218,
-      ..._223
-    };
-  }
-  export namespace entity {
-    export const v1beta1 = { ..._143,
-      ..._144,
+    export const v1beta1 = { ..._144,
       ..._145,
       ..._146,
       ..._147,
-      ..._148,
-      ..._149,
-      ..._219,
-      ..._224
+      ..._234,
+      ..._239
     };
   }
-  export namespace iid {
-    export const v1beta1 = { ..._150,
+  export namespace claims {
+    export const v1beta1 = { ..._148,
+      ..._149,
+      ..._150,
       ..._151,
       ..._152,
       ..._153,
       ..._154,
-      ..._155,
-      ..._220,
-      ..._225
+      ..._235,
+      ..._240
     };
   }
-  export namespace token {
-    export const v1beta1 = { ..._156,
+  export namespace entity {
+    export const v1beta1 = { ..._155,
+      ..._156,
       ..._157,
       ..._158,
       ..._159,
       ..._160,
       ..._161,
-      ..._162,
-      ..._221,
-      ..._226
+      ..._236,
+      ..._241
     };
   }
-  export const ClientFactory = { ..._233,
-    ..._234
+  export namespace iid {
+    export const v1beta1 = { ..._162,
+      ..._163,
+      ..._164,
+      ..._165,
+      ..._166,
+      ..._167,
+      ..._237,
+      ..._242
+    };
+  }
+  export namespace token {
+    export const v1beta1 = { ..._168,
+      ..._169,
+      ..._170,
+      ..._171,
+      ..._172,
+      ..._173,
+      ..._174,
+      ..._238,
+      ..._243
+    };
+  }
+  export const ClientFactory = { ..._252,
+    ..._253
   };
 }

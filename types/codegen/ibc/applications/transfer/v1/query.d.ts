@@ -6,7 +6,7 @@ import * as _m0 from "protobufjs/minimal";
  * method
  */
 export interface QueryDenomTraceRequest {
-    /** hash (in hex format) of the denomination trace information. */
+    /** hash (in hex format) or denom (full denom with ibc prefix) of the denomination trace information. */
     hash: string;
 }
 /**
@@ -14,7 +14,7 @@ export interface QueryDenomTraceRequest {
  * method
  */
 export interface QueryDenomTraceRequestSDKType {
-    /** hash (in hex format) of the denomination trace information. */
+    /** hash (in hex format) or denom (full denom with ibc prefix) of the denomination trace information. */
     hash: string;
 }
 /**
@@ -85,6 +85,62 @@ export interface QueryParamsResponseSDKType {
     /** params defines the parameters of the module. */
     params?: ParamsSDKType;
 }
+/**
+ * QueryDenomHashRequest is the request type for the Query/DenomHash RPC
+ * method
+ */
+export interface QueryDenomHashRequest {
+    /** The denomination trace ([port_id]/[channel_id])+/[denom] */
+    trace: string;
+}
+/**
+ * QueryDenomHashRequest is the request type for the Query/DenomHash RPC
+ * method
+ */
+export interface QueryDenomHashRequestSDKType {
+    /** The denomination trace ([port_id]/[channel_id])+/[denom] */
+    trace: string;
+}
+/**
+ * QueryDenomHashResponse is the response type for the Query/DenomHash RPC
+ * method.
+ */
+export interface QueryDenomHashResponse {
+    /** hash (in hex format) of the denomination trace information. */
+    hash: string;
+}
+/**
+ * QueryDenomHashResponse is the response type for the Query/DenomHash RPC
+ * method.
+ */
+export interface QueryDenomHashResponseSDKType {
+    /** hash (in hex format) of the denomination trace information. */
+    hash: string;
+}
+/** QueryEscrowAddressRequest is the request type for the EscrowAddress RPC method. */
+export interface QueryEscrowAddressRequest {
+    /** unique port identifier */
+    portId: string;
+    /** unique channel identifier */
+    channelId: string;
+}
+/** QueryEscrowAddressRequest is the request type for the EscrowAddress RPC method. */
+export interface QueryEscrowAddressRequestSDKType {
+    /** unique port identifier */
+    port_id: string;
+    /** unique channel identifier */
+    channel_id: string;
+}
+/** QueryEscrowAddressResponse is the response type of the EscrowAddress RPC method. */
+export interface QueryEscrowAddressResponse {
+    /** the escrow account address */
+    escrowAddress: string;
+}
+/** QueryEscrowAddressResponse is the response type of the EscrowAddress RPC method. */
+export interface QueryEscrowAddressResponseSDKType {
+    /** the escrow account address */
+    escrow_address: string;
+}
 export declare const QueryDenomTraceRequest: {
     encode(message: QueryDenomTraceRequest, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): QueryDenomTraceRequest;
@@ -126,4 +182,32 @@ export declare const QueryParamsResponse: {
     fromJSON(object: any): QueryParamsResponse;
     toJSON(message: QueryParamsResponse): unknown;
     fromPartial(object: Partial<QueryParamsResponse>): QueryParamsResponse;
+};
+export declare const QueryDenomHashRequest: {
+    encode(message: QueryDenomHashRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryDenomHashRequest;
+    fromJSON(object: any): QueryDenomHashRequest;
+    toJSON(message: QueryDenomHashRequest): unknown;
+    fromPartial(object: Partial<QueryDenomHashRequest>): QueryDenomHashRequest;
+};
+export declare const QueryDenomHashResponse: {
+    encode(message: QueryDenomHashResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryDenomHashResponse;
+    fromJSON(object: any): QueryDenomHashResponse;
+    toJSON(message: QueryDenomHashResponse): unknown;
+    fromPartial(object: Partial<QueryDenomHashResponse>): QueryDenomHashResponse;
+};
+export declare const QueryEscrowAddressRequest: {
+    encode(message: QueryEscrowAddressRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryEscrowAddressRequest;
+    fromJSON(object: any): QueryEscrowAddressRequest;
+    toJSON(message: QueryEscrowAddressRequest): unknown;
+    fromPartial(object: Partial<QueryEscrowAddressRequest>): QueryEscrowAddressRequest;
+};
+export declare const QueryEscrowAddressResponse: {
+    encode(message: QueryEscrowAddressResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryEscrowAddressResponse;
+    fromJSON(object: any): QueryEscrowAddressResponse;
+    toJSON(message: QueryEscrowAddressResponse): unknown;
+    fromPartial(object: Partial<QueryEscrowAddressResponse>): QueryEscrowAddressResponse;
 };

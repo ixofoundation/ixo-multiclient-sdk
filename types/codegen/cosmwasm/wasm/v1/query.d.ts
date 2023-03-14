@@ -332,6 +332,46 @@ export interface QueryParamsResponseSDKType {
     /** params defines the parameters of the module. */
     params?: ParamsSDKType;
 }
+/**
+ * QueryContractsByCreatorRequest is the request type for the
+ * Query/ContractsByCreator RPC method.
+ */
+export interface QueryContractsByCreatorRequest {
+    /** CreatorAddress is the address of contract creator */
+    creatorAddress: string;
+    /** Pagination defines an optional pagination for the request. */
+    pagination?: PageRequest;
+}
+/**
+ * QueryContractsByCreatorRequest is the request type for the
+ * Query/ContractsByCreator RPC method.
+ */
+export interface QueryContractsByCreatorRequestSDKType {
+    /** CreatorAddress is the address of contract creator */
+    creator_address: string;
+    /** Pagination defines an optional pagination for the request. */
+    pagination?: PageRequestSDKType;
+}
+/**
+ * QueryContractsByCreatorResponse is the response type for the
+ * Query/ContractsByCreator RPC method.
+ */
+export interface QueryContractsByCreatorResponse {
+    /** ContractAddresses result set */
+    contractAddresses: string[];
+    /** Pagination defines the pagination in the response. */
+    pagination?: PageResponse;
+}
+/**
+ * QueryContractsByCreatorResponse is the response type for the
+ * Query/ContractsByCreator RPC method.
+ */
+export interface QueryContractsByCreatorResponseSDKType {
+    /** ContractAddresses result set */
+    contract_addresses: string[];
+    /** Pagination defines the pagination in the response. */
+    pagination?: PageResponseSDKType;
+}
 export declare const QueryContractInfoRequest: {
     encode(message: QueryContractInfoRequest, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): QueryContractInfoRequest;
@@ -478,4 +518,18 @@ export declare const QueryParamsResponse: {
     fromJSON(object: any): QueryParamsResponse;
     toJSON(message: QueryParamsResponse): unknown;
     fromPartial(object: Partial<QueryParamsResponse>): QueryParamsResponse;
+};
+export declare const QueryContractsByCreatorRequest: {
+    encode(message: QueryContractsByCreatorRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryContractsByCreatorRequest;
+    fromJSON(object: any): QueryContractsByCreatorRequest;
+    toJSON(message: QueryContractsByCreatorRequest): unknown;
+    fromPartial(object: Partial<QueryContractsByCreatorRequest>): QueryContractsByCreatorRequest;
+};
+export declare const QueryContractsByCreatorResponse: {
+    encode(message: QueryContractsByCreatorResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryContractsByCreatorResponse;
+    fromJSON(object: any): QueryContractsByCreatorResponse;
+    toJSON(message: QueryContractsByCreatorResponse): unknown;
+    fromPartial(object: Partial<QueryContractsByCreatorResponse>): QueryContractsByCreatorResponse;
 };

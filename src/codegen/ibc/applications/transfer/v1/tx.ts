@@ -30,11 +30,14 @@ export interface MsgTransfer {
 
   timeoutHeight?: Height;
   /**
-   * Timeout timestamp (in nanoseconds) relative to the current block timestamp.
+   * Timeout timestamp in absolute nanoseconds since unix epoch.
    * The timeout is disabled when set to 0.
    */
 
   timeoutTimestamp: Long;
+  /** optional memo */
+
+  memo: string;
 }
 /**
  * MsgTransfer defines a msg to transfer fungible tokens (i.e Coins) between
@@ -64,18 +67,27 @@ export interface MsgTransferSDKType {
 
   timeout_height?: HeightSDKType;
   /**
-   * Timeout timestamp (in nanoseconds) relative to the current block timestamp.
+   * Timeout timestamp in absolute nanoseconds since unix epoch.
    * The timeout is disabled when set to 0.
    */
 
   timeout_timestamp: Long;
+  /** optional memo */
+
+  memo: string;
 }
 /** MsgTransferResponse defines the Msg/Transfer response type. */
 
-export interface MsgTransferResponse {}
+export interface MsgTransferResponse {
+  /** sequence number of the transfer packet sent */
+  sequence: Long;
+}
 /** MsgTransferResponse defines the Msg/Transfer response type. */
 
-export interface MsgTransferResponseSDKType {}
+export interface MsgTransferResponseSDKType {
+  /** sequence number of the transfer packet sent */
+  sequence: Long;
+}
 
 function createBaseMsgTransfer(): MsgTransfer {
   return {
@@ -85,7 +97,8 @@ function createBaseMsgTransfer(): MsgTransfer {
     sender: "",
     receiver: "",
     timeoutHeight: undefined,
-    timeoutTimestamp: Long.UZERO
+    timeoutTimestamp: Long.UZERO,
+    memo: ""
   };
 }
 
@@ -117,6 +130,10 @@ export const MsgTransfer = {
 
     if (!message.timeoutTimestamp.isZero()) {
       writer.uint32(56).uint64(message.timeoutTimestamp);
+    }
+
+    if (message.memo !== "") {
+      writer.uint32(66).string(message.memo);
     }
 
     return writer;
@@ -159,6 +176,10 @@ export const MsgTransfer = {
           message.timeoutTimestamp = (reader.uint64() as Long);
           break;
 
+        case 8:
+          message.memo = reader.string();
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -176,7 +197,8 @@ export const MsgTransfer = {
       sender: isSet(object.sender) ? String(object.sender) : "",
       receiver: isSet(object.receiver) ? String(object.receiver) : "",
       timeoutHeight: isSet(object.timeoutHeight) ? Height.fromJSON(object.timeoutHeight) : undefined,
-      timeoutTimestamp: isSet(object.timeoutTimestamp) ? Long.fromValue(object.timeoutTimestamp) : Long.UZERO
+      timeoutTimestamp: isSet(object.timeoutTimestamp) ? Long.fromValue(object.timeoutTimestamp) : Long.UZERO,
+      memo: isSet(object.memo) ? String(object.memo) : ""
     };
   },
 
@@ -189,6 +211,7 @@ export const MsgTransfer = {
     message.receiver !== undefined && (obj.receiver = message.receiver);
     message.timeoutHeight !== undefined && (obj.timeoutHeight = message.timeoutHeight ? Height.toJSON(message.timeoutHeight) : undefined);
     message.timeoutTimestamp !== undefined && (obj.timeoutTimestamp = (message.timeoutTimestamp || Long.UZERO).toString());
+    message.memo !== undefined && (obj.memo = message.memo);
     return obj;
   },
 
@@ -201,17 +224,24 @@ export const MsgTransfer = {
     message.receiver = object.receiver ?? "";
     message.timeoutHeight = object.timeoutHeight !== undefined && object.timeoutHeight !== null ? Height.fromPartial(object.timeoutHeight) : undefined;
     message.timeoutTimestamp = object.timeoutTimestamp !== undefined && object.timeoutTimestamp !== null ? Long.fromValue(object.timeoutTimestamp) : Long.UZERO;
+    message.memo = object.memo ?? "";
     return message;
   }
 
 };
 
 function createBaseMsgTransferResponse(): MsgTransferResponse {
-  return {};
+  return {
+    sequence: Long.UZERO
+  };
 }
 
 export const MsgTransferResponse = {
-  encode(_: MsgTransferResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgTransferResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (!message.sequence.isZero()) {
+      writer.uint32(8).uint64(message.sequence);
+    }
+
     return writer;
   },
 
@@ -224,6 +254,10 @@ export const MsgTransferResponse = {
       const tag = reader.uint32();
 
       switch (tag >>> 3) {
+        case 1:
+          message.sequence = (reader.uint64() as Long);
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -233,17 +267,21 @@ export const MsgTransferResponse = {
     return message;
   },
 
-  fromJSON(_: any): MsgTransferResponse {
-    return {};
+  fromJSON(object: any): MsgTransferResponse {
+    return {
+      sequence: isSet(object.sequence) ? Long.fromValue(object.sequence) : Long.UZERO
+    };
   },
 
-  toJSON(_: MsgTransferResponse): unknown {
+  toJSON(message: MsgTransferResponse): unknown {
     const obj: any = {};
+    message.sequence !== undefined && (obj.sequence = (message.sequence || Long.UZERO).toString());
     return obj;
   },
 
-  fromPartial(_: Partial<MsgTransferResponse>): MsgTransferResponse {
+  fromPartial(object: Partial<MsgTransferResponse>): MsgTransferResponse {
     const message = createBaseMsgTransferResponse();
+    message.sequence = object.sequence !== undefined && object.sequence !== null ? Long.fromValue(object.sequence) : Long.UZERO;
     return message;
   }
 
