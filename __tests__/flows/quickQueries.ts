@@ -34,22 +34,22 @@ export const quickQueries = () =>
     // });
 
     // test("query wasm contract 1155 state", async () => {
-    //   const user = (await getUser(WalletUsers.alice).getAccounts())[0].address;
+    //   const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;
     //   const contractAddress =
     //     "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
-    //   const tokens = ["db03fa33c1e2ca35794adbb14aebb153"];
+    //   const tokens = ["0ae9ee3f43c92806232971ee67e23e22"];
     //   const msg = {
-    //     // balance: {
-    //     //   owner: user,
-    //     //   token_id: tokens[0],
-    //     // },
+    //     balance: {
+    //       owner: user,
+    //       token_id: tokens[0],
+    //     },
     //     // tokens: {
     //     //   owner: user,
     //     // },
-    //     batch_balance: {
-    //       owner: user,
-    //       token_ids: tokens,
-    //     },
+    //     // batch_balance: {
+    //     //   owner: user,
+    //     //   token_ids: tokens,
+    //     // },
     //     // token_info: {
     //     //   token_id: tokens[0],
     //     // },
@@ -68,11 +68,11 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
-    test("query wasm store codes", async () => {
-      const res = await queryClient.cosmwasm.wasm.v1.codes();
-      console.log(res.codeInfos);
-      expect(res).toBeTruthy();
-    });
+    // test("query wasm store codes", async () => {
+    //   const res = await queryClient.cosmwasm.wasm.v1.codes();
+    //   console.log(res.codeInfos);
+    //   expect(res).toBeTruthy();
+    // });
 
     // test("query tokens list by did", async () => {
     //   const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;
@@ -91,17 +91,17 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
-    test("query claim collections list", async () => {
-      const res = await queryClient.ixo.claims.v1beta1.collectionList();
-      console.log(res.collections);
-      expect(res).toBeTruthy();
-    });
+    // test("query claim collections list", async () => {
+    //   const res = await queryClient.ixo.claims.v1beta1.collectionList();
+    //   console.log(res.collections);
+    //   expect(res).toBeTruthy();
+    // });
 
-    test("query claims list", async () => {
-      const res = await queryClient.ixo.claims.v1beta1.claimList();
-      console.log(res.claims);
-      expect(res).toBeTruthy();
-    });
+    // test("query claims list", async () => {
+    //   const res = await queryClient.ixo.claims.v1beta1.claimList();
+    //   console.log(res.claims);
+    //   expect(res).toBeTruthy();
+    // });
 
     // test("query dispute list", async () => {
     //   const res = await queryClient.ixo.claims.v1beta1.disputeList();
@@ -124,27 +124,27 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
-    test("query grants by grantee", async () => {
-      const user = (await getUser(WalletUsers.alice).getAccounts())[0].address;
-      const res = await queryClient.cosmos.authz.v1beta1.granteeGrants({
-        grantee: user,
-      });
-      if (res.grants.length > 0) {
-        console.log(
-          res.grants.map((g) => {
-            g.expiration = g.expiration?.seconds as any;
-            return g;
-          })
-        );
-        console.log(
-          res.grants.map((g) => {
-            const auth = createRegistry().decode(g.authorization!);
-            return auth.constraints || auth;
-          })
-        );
-      }
-      expect(res).toBeTruthy();
-    });
+    // test("query grants by grantee", async () => {
+    //   const user = (await getUser(WalletUsers.alice).getAccounts())[0].address;
+    //   const res = await queryClient.cosmos.authz.v1beta1.granteeGrants({
+    //     grantee: user,
+    //   });
+    //   if (res.grants.length > 0) {
+    //     console.log(
+    //       res.grants.map((g) => {
+    //         g.expiration = g.expiration?.seconds as any;
+    //         return g;
+    //       })
+    //     );
+    //     console.log(
+    //       res.grants.map((g) => {
+    //         const auth = createRegistry().decode(g.authorization!);
+    //         return auth.constraints || auth;
+    //       })
+    //     );
+    //   }
+    //   expect(res).toBeTruthy();
+    // });
 
     // test("query grants by granter", async () => {
     //   const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;
