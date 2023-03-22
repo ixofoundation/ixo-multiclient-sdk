@@ -57,7 +57,7 @@ export const CreateCollection = async (
               denom: "uixo",
             }),
           ],
-          timeoutNs: utils.proto.toDuration((1000000000 * 60 * 5).toString()), // ns * seconds * minutes
+          timeoutNs: utils.proto.toDuration((1000000000 * 60 * 0.5).toString()), // ns * seconds * minutes
           // contract_1155Payment:
           //   ixo.claims.v1beta1.Contract1155Payment.fromPartial({
           //     address:

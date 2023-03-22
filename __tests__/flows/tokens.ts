@@ -8,7 +8,7 @@ export const tokenBasic = () =>
   describe("Testing the Token module", () => {
     let name = "TEST";
     let description = "Test credits";
-    let cap = 200;
+    let cap = 2000000;
 
     // Create token class
     let tokenClass = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
@@ -130,7 +130,7 @@ export const supamotoTokens = () =>
   describe("Testing the Supamoto Tokens flow", () => {
     let name = "CARBON";
     let description = "Carbon credits";
-    let cap = 200;
+    let cap = 200000000000;
 
     // Create token class
     let tokenClass = "did:ixo:entity:4e32697c7c2c74f4fac48e4d1d5628cd";
@@ -214,7 +214,7 @@ export const supamotoTokens = () =>
       "did:ixo:entity:7b40f2500d4c89997f8389c5f2318cdb",
     ];
 
-    nfts.map((nft, i) =>
+    nfts.map((nft, i) => [
       testMsg("/ixo.token.v1beta1.MsgMintToken", () =>
         Token.MintToken(contractAddress1155, [
           {
@@ -225,6 +225,16 @@ export const supamotoTokens = () =>
             tokenData: getTokenData(nft),
           },
         ])
-      )
-    );
+      ),
+      testMsg("/cosmos.authz.v1beta1.MsgGrant mint token", () =>
+        Token.MsgGrantContract(
+          contractAddress1155,
+          name,
+          (i + 20).toString(),
+          collectionDid,
+          amount,
+          getTokenData(nft)
+        )
+      ),
+    ]);
   });

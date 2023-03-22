@@ -23,7 +23,7 @@ import {
 import { tokenBasic, supamotoTokens } from "./flows/tokens";
 import { daoCore, wasmBasic } from "./flows/cosmwasm";
 import { quickQueries } from "./flows/quickQueries";
-import { claimsBasic } from "./flows/claims";
+import { claimsBasic, devnetClaims } from "./flows/claims";
 
 beforeAll(() => {
   generateConstants();
@@ -58,3 +58,4 @@ generateBlockchainTestUsers();
 // registerIidsDev();
 // supamotoEntities();
 // supamotoTokens();
+// devnetClaims();
