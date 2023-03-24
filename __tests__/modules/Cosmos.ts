@@ -256,3 +256,31 @@ export const MsgSubmitProposalUpdateTokenParams = async (
   const response = await client.signAndBroadcast(myAddress, [message], fee);
   return response;
 };
+
+export const MsgDeposit = async (
+  proposalId: number,
+  amount = "10000000000"
+) => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const message = {
+    typeUrl: "/cosmos.gov.v1beta1.MsgDeposit",
+    value: cosmos.gov.v1beta1.MsgDeposit.fromPartial({
+      proposalId: Long.fromNumber(proposalId),
+      depositor: myAddress,
+      amount: [
+        cosmos.base.v1beta1.Coin.fromPartial({
+          amount,
+          denom: "uixo",
+        }),
+      ],
+    }),
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};

@@ -53,3 +53,8 @@ export const sendTokens = () =>
       return res;
     });
   });
+
+export const govDeposit = () =>
+  describe("/cosmos.gov.v1beta1.MsgDeposit", () => {
+    testMsg("/cosmos.bank.v1beta1.MsgSend", () => Cosmos.MsgDeposit(404));
+  });

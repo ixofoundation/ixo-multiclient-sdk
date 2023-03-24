@@ -15,7 +15,7 @@ import {
 } from "./flows/iids";
 import { enititiesBasic, supamotoEntities } from "./flows/entities";
 import { ibcBasic } from "./flows/ibc";
-import { bankBasic, authzBasic, sendTokens } from "./flows/cosmos";
+import { bankBasic, authzBasic, sendTokens, govDeposit } from "./flows/cosmos";
 import {
   instantiateModulesProposals,
   devnetProposals,
@@ -45,6 +45,7 @@ generateBlockchainTestUsers();
 // claimsBasic();
 // ibcBasic();
 // bankBasic();
+// govDeposit();
 // authzBasic();
 // wasmBasic();
 // daoCore();
