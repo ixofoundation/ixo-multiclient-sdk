@@ -16,7 +16,7 @@
 <br />
 
 <h2 align="center">
-    The ultimate utility client for the IXO Blockchain for impact.
+    The ultimate utility client for the ixo Blockchain.
 </h2>
 
 <br />
