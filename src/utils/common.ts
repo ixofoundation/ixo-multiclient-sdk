@@ -14,15 +14,22 @@ export const getValueFromEvents = (
   res: DeliverTxResponse,
   event: string,
   attribute: string,
+  filterFunc = (s: any): any => s,
   logError?: boolean,
   throwError?: boolean
 ) => {
   try {
     const value = JSON.parse(res.rawLog!)[0]
       ["events"].find((e: any) => e.type === event)
-      ["attributes"].find((e: any) => e.key === attribute)
-      ["value"].replaceAll('"', "");
-    return value;
+      ["attributes"].find((e: any) => e.key === attribute)["value"];
+    // ["value"].replaceAll('"', "");
+    let filteredValue;
+    try {
+      filteredValue = filterFunc(JSON.parse(value));
+    } catch (error) {
+      filteredValue = filterFunc(value);
+    }
+    return filteredValue;
   } catch (error) {
     if (logError) console.log({ error, res });
     if (throwError) throw error;

@@ -9,15 +9,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18.10.0
-      - run: yarn install --frozen-lockfile
-      # - run: yarn test
+  # build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18.10.0
+  # - run: yarn test
 
   # versioning:
   #   needs: build
@@ -38,7 +37,6 @@ jobs:
 
   publish-npm:
     # needs: [build, versioning]
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

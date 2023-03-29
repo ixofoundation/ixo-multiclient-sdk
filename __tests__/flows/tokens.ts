@@ -8,7 +8,7 @@ export const tokenBasic = () =>
   describe("Testing the Token module", () => {
     let name = "TEST";
     let description = "Test credits";
-    let cap = 200;
+    let cap = 2000000;
 
     // Create token class
     let tokenClass = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
@@ -62,32 +62,32 @@ export const tokenBasic = () =>
       return res;
     });
 
-    // testMsg("/ixo.token.v1beta1.MsgTransferToken", () =>
-    //   Token.TransferToken([
-    //     {
-    //       id: "39d57f760c58ff91c1407925bdcbe0da",
-    //       amount: 1,
-    //     },
-    //   ])
-    // );
+    testMsg("/ixo.token.v1beta1.MsgTransferToken", () =>
+      Token.TransferToken([
+        {
+          id: tokenId,
+          amount: 1,
+        },
+      ])
+    );
 
-    // testMsg("/ixo.token.v1beta1.MsgCancelToken", () =>
-    //   Token.CancelToken([
-    //     {
-    //       id: "39d57f760c58ff91c1407925bdcbe0da",
-    //       amount: 1,
-    //     },
-    //   ])
-    // );
+    testMsg("/ixo.token.v1beta1.MsgCancelToken", () =>
+      Token.CancelToken([
+        {
+          id: tokenId,
+          amount: 1,
+        },
+      ])
+    );
 
-    // testMsg("/ixo.token.v1beta1.MsgRetireToken", () =>
-    //   Token.RetireToken([
-    //     {
-    //       id: tokenId,
-    //       amount: 3,
-    //     },
-    //   ])
-    // );
+    testMsg("/ixo.token.v1beta1.MsgRetireToken", () =>
+      Token.RetireToken([
+        {
+          id: tokenId,
+          amount: 1,
+        },
+      ])
+    );
 
     // testMsg("/ixo.token.v1beta1.MsgPauseToken", () =>
     //   Token.PauseToken(contractAddress1155, false)
@@ -130,7 +130,7 @@ export const supamotoTokens = () =>
   describe("Testing the Supamoto Tokens flow", () => {
     let name = "CARBON";
     let description = "Carbon credits";
-    let cap = 200;
+    let cap = 200000000000;
 
     // Create token class
     let tokenClass = "did:ixo:entity:4e32697c7c2c74f4fac48e4d1d5628cd";
@@ -160,13 +160,13 @@ export const supamotoTokens = () =>
     let collectionDid = "did:ixo:entity:61392c571ef644d54d77e4daf611bf89";
     // Did of entity to map token to (supamotoEntitiesFlow first nft created)
     let nftDid = "did:ixo:entity:2f22535f8b179a51d77a0e302e68d35d";
-    let tokenData = [
+    const getTokenData = (nftDidId: string) => [
       {
         uri: "https://media.makeameme.org/created/haha-you-were-a3866a4349.jpg",
         encrypted: false,
         proof: "proof",
         type: "application/json", //media type value should always be "application/json"
-        id: nftDid,
+        id: nftDidId,
       },
     ];
 
@@ -178,7 +178,7 @@ export const supamotoTokens = () =>
           index,
           amount,
           collection: collectionDid,
-          tokenData,
+          tokenData: getTokenData(nftDid),
         },
       ]);
       tokenId = utils.common.getValueFromEvents(res, "wasm", "token_id");
@@ -203,4 +203,38 @@ export const supamotoTokens = () =>
         },
       ])
     );
+
+    // few more mint tokens
+    const nfts = [
+      "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
+      "did:ixo:entity:75d738bbf9a61ec05acc16625d70a82c",
+      "did:ixo:entity:237cb945b1368ed450ec67c7c4ac56ac",
+      "did:ixo:entity:72a27013b1d2f9c3561145e4a424778a",
+      "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
+      "did:ixo:entity:7b40f2500d4c89997f8389c5f2318cdb",
+    ];
+
+    nfts.map((nft, i) => [
+      testMsg("/ixo.token.v1beta1.MsgMintToken", () =>
+        Token.MintToken(contractAddress1155, [
+          {
+            name,
+            index: (i + 3).toString(),
+            amount,
+            collection: collectionDid,
+            tokenData: getTokenData(nft),
+          },
+        ])
+      ),
+      testMsg("/cosmos.authz.v1beta1.MsgGrant mint token", () =>
+        Token.MsgGrantContract(
+          contractAddress1155,
+          name,
+          (i + 20).toString(),
+          collectionDid,
+          amount,
+          getTokenData(nft)
+        )
+      ),
+    ]);
   });

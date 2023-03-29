@@ -15,7 +15,7 @@ import {
 } from "./flows/iids";
 import { enititiesBasic, supamotoEntities } from "./flows/entities";
 import { ibcBasic } from "./flows/ibc";
-import { bankBasic, authzBasic, sendTokens } from "./flows/cosmos";
+import { bankBasic, authzBasic, sendTokens, govDeposit } from "./flows/cosmos";
 import {
   instantiateModulesProposals,
   devnetProposals,
@@ -23,7 +23,7 @@ import {
 import { tokenBasic, supamotoTokens } from "./flows/tokens";
 import { daoCore, wasmBasic } from "./flows/cosmwasm";
 import { quickQueries } from "./flows/quickQueries";
-import { claimsBasic } from "./flows/claims";
+import { claimsBasic, devnetClaims } from "./flows/claims";
 
 beforeAll(() => {
   generateConstants();
@@ -45,6 +45,7 @@ generateBlockchainTestUsers();
 // claimsBasic();
 // ibcBasic();
 // bankBasic();
+// govDeposit();
 // authzBasic();
 // wasmBasic();
 // daoCore();
@@ -58,3 +59,4 @@ generateBlockchainTestUsers();
 // registerIidsDev();
 // supamotoEntities();
 // supamotoTokens();
+// devnetClaims();

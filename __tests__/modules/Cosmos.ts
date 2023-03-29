@@ -1,4 +1,4 @@
-import { fee, WalletUsers } from "../helpers/constants";
+import { fee, KeyTypes, WalletUsers } from "../helpers/constants";
 import {
   createClient,
   getUser,
@@ -16,13 +16,18 @@ export const BankSendTrx = async (
   amount = Math.pow(10, 6),
   fromUser = WalletUsers.alice,
   toUser = WalletUsers.tester,
+  fromWalletKeyType: KeyTypes = "secp",
+  toWalletKeyType: KeyTypes = "secp",
   toAddresss?: string
 ) => {
-  const client = await createClient(getUser(fromUser));
+  const client = await createClient(getUser(fromUser, fromWalletKeyType));
 
-  const fromAddress = (await getUser(fromUser).getAccounts())[0].address;
+  const fromAddress = (
+    await getUser(fromUser, fromWalletKeyType).getAccounts()
+  )[0].address;
   const toAddress =
-    toAddresss || (await getUser(toUser).getAccounts())[0].address;
+    toAddresss ||
+    (await getUser(toUser, toWalletKeyType).getAccounts())[0].address;
 
   const message = {
     typeUrl: "/cosmos.bank.v1beta1.MsgSend",
@@ -183,11 +188,12 @@ export const MsgVote = async (proposalId: number) => {
 };
 
 export const MsgSubmitProposalUpdateEntityParams = async (
-  nftContractCodeId: number
+  nftContractCodeId: number,
+  signer = WalletUsers.tester
 ) => {
-  const client = await createClient();
+  const client = await createClient(getUser(signer));
 
-  const tester = getUser();
+  const tester = getUser(signer);
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
 
@@ -244,6 +250,34 @@ export const MsgSubmitProposalUpdateTokenParams = async (
           })
         ).finish(),
       },
+    }),
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const MsgDeposit = async (
+  proposalId: number,
+  amount = "10000000000"
+) => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const message = {
+    typeUrl: "/cosmos.gov.v1beta1.MsgDeposit",
+    value: cosmos.gov.v1beta1.MsgDeposit.fromPartial({
+      proposalId: Long.fromNumber(proposalId),
+      depositor: myAddress,
+      amount: [
+        cosmos.base.v1beta1.Coin.fromPartial({
+          amount,
+          denom: "uixo",
+        }),
+      ],
     }),
   };
 

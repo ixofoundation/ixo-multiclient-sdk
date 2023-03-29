@@ -1,65 +1,13 @@
-// import axios from "axios";
+import axios from "axios";
 
 import { keplrCurrencies } from "./currency.constants";
-// import { keplrChainNames } from "./chain.constants";
-import { KeplrChainInfo } from "./chain.types";
+import { QueryClient } from "../queries";
 import {
   CoincodexResponse,
   IbcTokenAsset,
   TokenAsset,
   TokenAssetInfo,
 } from "./currency.types";
-import { QueryClient } from "../queries";
-import axios from "axios";
-
-const convertCurrencyToTokenAsset = (
-  currency: TokenAsset,
-  stakeCurrency: TokenAsset,
-  feeCurrencies: TokenAsset[] = [],
-  coinImageUrl?: string
-): TokenAsset => {
-  const denomLowerCased = currency.coinMinimalDenom.toLowerCase() ?? "";
-  const isStakeCurrency =
-    stakeCurrency.coinMinimalDenom.toLowerCase() === denomLowerCased;
-  const isFeeCurrency = !!feeCurrencies?.find(
-    (feeCur: TokenAsset) =>
-      feeCur.coinMinimalDenom.toLowerCase() === denomLowerCased
-  );
-  const result = { ...currency, isStakeCurrency, isFeeCurrency };
-  if (isStakeCurrency && isFeeCurrency && coinImageUrl?.length)
-    result.coinImageUrl = coinImageUrl;
-  return result;
-};
-
-export const prepareKeplrChainInfoTokenAssets = (
-  chainInfo: KeplrChainInfo
-): KeplrChainInfo => ({
-  ...chainInfo,
-  currencies:
-    chainInfo.currencies?.map((cur) =>
-      convertCurrencyToTokenAsset(
-        cur,
-        chainInfo.stakeCurrency,
-        chainInfo.feeCurrencies,
-        chainInfo.chainSymbolImageUrl
-      )
-    ) ?? [],
-  stakeCurrency: convertCurrencyToTokenAsset(
-    chainInfo.stakeCurrency,
-    chainInfo.stakeCurrency,
-    chainInfo.feeCurrencies,
-    chainInfo.chainSymbolImageUrl
-  ),
-  feeCurrencies:
-    chainInfo.feeCurrencies?.map((cur) =>
-      convertCurrencyToTokenAsset(
-        cur,
-        chainInfo.stakeCurrency,
-        chainInfo.feeCurrencies,
-        chainInfo.chainSymbolImageUrl
-      )
-    ) ?? [],
-});
 
 export const findTokenFromDenom = (denom: string): TokenAsset | undefined => {
   const denomLowerCased = denom.toLowerCase();

@@ -1,16 +1,6 @@
-import * as _3 from "./cellnode";
+import * as _2 from "./cellnode";
 export declare namespace customQueries {
-    const chain: {
-        getRegistryChainInfo: (chainName: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<import("./chain.types").RegistryChainInfo>;
-        getActiveRpcFromRegistryChainInfo: (chainInfo: import("./chain.types").RegistryChainInfo) => Promise<string>;
-        getActiveRpcFromChainName: (chainName: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<string>;
-        getChainExplorer: (chainName: string, chainNetwork: import("./chain.types").ChainNetwork, chainExplorers?: import("./chain.types").ChainExplorer[]) => import("./chain.types").KeplrChainExplorer;
-        getChainExplorerAsync: (chainName: string, chainNetwork: import("./chain.types").ChainNetwork) => Promise<import("./chain.types").KeplrChainExplorer>;
-        getKeplrChainInfoFromRegistryChainInfo: (chainInfo: import("./chain.types").RegistryChainInfo) => Promise<import("./chain.types").KeplrChainInfo>;
-        getKeplrChainInfo: (chainName: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<import("./chain.types").KeplrChainInfo>;
-    };
     const currency: {
-        prepareKeplrChainInfoTokenAssets: (chainInfo: import("./chain.types").KeplrChainInfo) => import("./chain.types").KeplrChainInfo;
         findTokenFromDenom: (denom: string) => import("./currency.types").TokenAsset;
         findIbcTokenFromHash: (queryClient: {
             custom: {
@@ -715,14 +705,14 @@ export declare namespace customQueries {
     };
     const cellnode: {
         cellNodeChainMapping: {
+            mainnet: string;
             testnet: string;
             devnet: string;
-            mainnet: string;
         };
         getPublicDoc: (cid: string, cellnodeUrl?: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<any>;
-        uploadPublicDoc: (contentType: string, data: string, cellnodeUrl?: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<_3.CellnodePublicResource>;
+        uploadPublicDoc: (contentType: string, data: string, cellnodeUrl?: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<_2.CellnodePublicResource>;
         getWeb3Doc: (cid: string, cellnodeUrl?: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<any>;
-        uploadWeb3Doc: (name: string, contentType: string, data: string, cellnodeUrl?: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<_3.CellnodeWeb3Resource>;
+        uploadWeb3Doc: (name: string, contentType: string, data: string, cellnodeUrl?: string, chainNetwork?: import("./chain.types").ChainNetwork) => Promise<_2.CellnodeWeb3Resource>;
     };
     const contract: {
         getContractCodes: (chainNetwork: import("./chain.types").ChainNetwork, category?: "ixo" | "daodao") => {

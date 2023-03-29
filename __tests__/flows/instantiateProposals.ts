@@ -12,8 +12,7 @@ export const instantiateModulesProposals = () =>
       "/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract",
       async () => {
         const res = await Cosmos.MsgSubmitProposalStoreCW(
-          "cw721",
-          undefined
+          "cw721"
           // cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_NOBODY
         );
         proposalId = utils.common.getValueFromEvents(
@@ -95,6 +94,26 @@ export const instantiateModulesProposals = () =>
       console.log("Entity and Token modules initiated, continue hacking away");
       expect(true).toBeTruthy();
     });
+
+    // to run all contracts proposals synchronously
+    // contracts.map((c, i) => [
+    //   testMsg(
+    //     `/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract ${
+    //       i + 1
+    //     } of ${contracts.length}`,
+    //     async () => {
+    //       const res = await Cosmos.MsgSubmitProposalStoreCW(c.name, c.path);
+    //       proposalId = utils.common.getValueFromEvents(
+    //         res,
+    //         "submit_proposal",
+    //         "proposal_id"
+    //       );
+    //       console.log({ proposalId });
+    //       return res;
+    //     }
+    //   ),
+    //   testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(proposalId)),
+    // ]);
   });
 
 // ------------------------------------------------------------

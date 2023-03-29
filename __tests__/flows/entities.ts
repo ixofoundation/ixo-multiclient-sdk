@@ -11,7 +11,7 @@ import * as Entity from "../modules/Entity";
 
 export const enititiesBasic = () =>
   describe("Testing the entities module", () => {
-    let entityDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
+    let entityDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14"; // admin account ixo1kqmtxkggcqa9u34lnr6shy0euvclgatw4f9zz5
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset", async () => {
       const res = await Entity.CreateEntity();
       entityDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
