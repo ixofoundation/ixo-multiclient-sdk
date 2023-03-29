@@ -4,5 +4,6 @@ export declare const contracts: {
     category: string;
     code: {
         devnet: number;
+        testnet: number;
     };
 }[];

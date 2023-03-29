@@ -236,32 +236,10 @@ const addressUtils = utils.address;
 ### Custom Queries
 
 Import the `customQueries` object from `@ixo/impactxclient-sdk`.
-From that you can destructure `chain` functions that will fetch the latest chain info from the cosmos chain registry or request an active RPC endpoint. You can also use the `currency` functions that will allow you to get the token info based on the provided denom or the `contract` functions that will provide ixo or daodao contract codes for instatiation.
+From that you can destructure `currency` functions that will allow you to get the token info based on the provided denom or the `contract` functions that will provide ixo or daodao contract codes for instantiation.
 
 ```js
 import { customQueries } from "@ixo/impactxclient-sdk";
-
-// fetch chain info based on chain name and chain network (default mainnet)
-const registryChainInfo = customQueries.chain.getRegistryChainInfo(
-  "impacthub",
-  "testnet"
-);
-// request an active RPC endpoint based on registry chain info
-const activeRpc =
-  customQueries.chain.getActiveRpcFromRegistryChainInfo(chainInfo);
-// or request an active RPC endpoint based on chain name and chain network (default mainnet)
-const activeRpc = customQueries.chain.getActiveRpcFromChainName(
-  "impacthub",
-  "testnet"
-);
-// fetch chain info based on Keplr's preferred format using registry chain info
-const keplrChainInfo =
-  customQueries.chain.getKeplrChainInfoFromRegistryChainInfo(chainInfo);
-// or fetch Keplr chain info using chain name and chain network (default mainnet)
-const keplrChainInfo = customQueries.chain.getKeplrChainInfo(
-  "impacthub",
-  "testnet"
-);
 
 // get token info based on denom (coinMinimalDenom)
 const token = customQueries.currency.findTokenFromDenom("uixo");
@@ -273,12 +251,25 @@ const ibcToken = await customQueries.currency.findIbcTokenFromHash(
 );
 // `findIbcTokensFromHashes` requires an array of hashes to fetch multiple ibc token infos
 
+// get coincodex info for a coin
+const coinCodexInfo = customQueries.currency.findTokenInfoFromDenom("ixo");
+// `findTokensInfoFromDenoms` requires an array of denoms to fetch multiple coinCodex infos
+```
+
+```js
 // get daodao contract codes (for devnet) to instatiate
-const contractCodes = customqQueries.contract.getContractCodes(
+const contractCodes = customQueries.contract.getContractCodes(
   "devnet",
   "daodao"
 ); // contractCodes = [{ name: "dao_core", code: 3 }, ...];
 const { code } = contractCodes.find((contract) => contract.name === "dao_core");
+
+// get specific contract code (for testnet) to instantiate
+const daoCoreContractCode = customQueries.contract.getContractCode(
+  "testnet",
+  "dao_core"
+);
+// daoCoreContractCode = 3
 ```
 
 ## Connecting with Wallets and Signing Messages

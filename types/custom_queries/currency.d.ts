@@ -1,7 +1,5 @@
-import { KeplrChainInfo } from "./chain.types";
-import { IbcTokenAsset, TokenAsset, TokenAssetInfo } from "./currency.types";
 import { QueryClient } from "../queries";
-export declare const prepareKeplrChainInfoTokenAssets: (chainInfo: KeplrChainInfo) => KeplrChainInfo;
+import { IbcTokenAsset, TokenAsset, TokenAssetInfo } from "./currency.types";
 export declare const findTokenFromDenom: (denom: string) => TokenAsset | undefined;
 export declare const findIbcTokenFromHash: (queryClient: QueryClient, ibcHash: string) => Promise<IbcTokenAsset | undefined>;
 export declare const findIbcTokensFromHashes: (queryClient: QueryClient, ibcHashes: string[]) => Promise<Array<IbcTokenAsset | undefined>>;

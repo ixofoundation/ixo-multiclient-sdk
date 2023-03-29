@@ -21,7 +21,7 @@ export declare namespace utils {
     };
     const common: {
         generateId: (length?: number) => string;
-        getValueFromEvents: (res: import("@cosmjs/stargate").DeliverTxResponse, event: string, attribute: string, logError?: boolean, throwError?: boolean) => any;
+        getValueFromEvents: (res: import("@cosmjs/stargate").DeliverTxResponse, event: string, attribute: string, filterFunc?: (s: any) => any, logError?: boolean, throwError?: boolean) => any;
     };
     const proto: {
         toDuration(duration: string): _6.Duration;
