@@ -109,6 +109,12 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
+    // test("query entity params", async () => {
+    //   const res = await queryClient.ixo.entity.v1beta1.params();
+    //   console.log(res.params);
+    //   expect(res).toBeTruthy();
+    // });
+
     // test("query entity by id", async () => {
     //   const res = await queryClient.ixo.entity.v1beta1.entity({
     //     id: "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14",

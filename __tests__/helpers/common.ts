@@ -38,7 +38,7 @@ export type wallet = {
 
 export let wallets: { [key in WalletUsers]: wallet };
 
-export const generateWallets = async () => {
+export const generateWallets = async (log = true) => {
   let generatedWallets = {};
   for (const user of Object.values(WalletUsers)) {
     const mnemonics = utils.mnemonic.generateMnemonic(24);
@@ -49,25 +49,27 @@ export const generateWallets = async () => {
   }
   wallets = generatedWallets as any;
 
-  // Logs wallet for tester to see account details for wallets
-  let walletLog = {};
-  for (const [user, wallet] of Object.entries(wallets)) {
-    const edAccount = (await wallet.ed.getAccounts())[0];
-    const secpAccount = (await wallet.secp.getAccounts())[0];
-    walletLog[user] = {
-      ed: {
-        did: wallet.ed.did,
-        address: edAccount.address,
-        publicKey: base58.encode(edAccount.pubkey),
-      },
-      secp: {
-        did: wallet.secp.did,
-        address: secpAccount.address,
-        publicKey: base58.encode(secpAccount.pubkey),
-      },
-    };
+  if (log) {
+    // Logs wallet for tester to see account details for wallets
+    let walletLog = {};
+    for (const [user, wallet] of Object.entries(wallets)) {
+      const edAccount = (await wallet.ed.getAccounts())[0];
+      const secpAccount = (await wallet.secp.getAccounts())[0];
+      walletLog[user] = {
+        ed: {
+          did: wallet.ed.did,
+          address: edAccount.address,
+          publicKey: base58.encode(edAccount.pubkey),
+        },
+        secp: {
+          did: wallet.secp.did,
+          address: secpAccount.address,
+          publicKey: base58.encode(secpAccount.pubkey),
+        },
+      };
+    }
+    console.log(walletLog);
   }
-  console.log(walletLog);
 };
 
 export const generateNewWallet = async (

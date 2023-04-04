@@ -123,7 +123,7 @@ export const supamotoEntities = () =>
 
     // Save supamoto credsPdf WEB3
     let projectCertDoc =
-      "https://bafkreiefafy2u5df4l52yb7vvz32hxrxhcceyaq3z7xww2qlz2fp3ppeum.ipfs.w3s.link";
+      "bafkreiefafy2u5df4l52yb7vvz32hxrxhcceyaq3z7xww2qlz2fp3ppeum";
     test("Saving projectCertDoc", async () => {
       projectCertDoc = (
         await customQueries.cellnode.uploadWeb3Doc(
@@ -136,14 +136,13 @@ export const supamotoEntities = () =>
           undefined,
           cellNodeNetwork
         )
-      ).url;
+      ).cid;
       console.log({ projectCertDoc });
       expect(projectCertDoc).toBeTruthy();
     });
 
     // Save supamoto profile WEB3
-    let profile =
-      "https://bafkreib5ka542u2ousereo23hr77qfaohtn2inhkr436u74rqzsktefynm.ipfs.w3s.link";
+    let profile = "4kavdefz12wlefltwxr";
     test("Saving profile", async () => {
       const file = JSON.parse(
         getFileFromPath(["documents", "test-supamoto-profile.jsonld"], "ascii")
@@ -152,85 +151,84 @@ export const supamotoEntities = () =>
       file["logo"] = supaLogo;
       let buff = Buffer.from(JSON.stringify(file));
       profile = (
-        await customQueries.cellnode.uploadWeb3Doc(
-          utils.common.generateId(12),
+        await customQueries.cellnode.uploadPublicDoc(
           "application/ld+json",
           buff.toString("base64"),
           undefined,
           cellNodeNetwork
         )
-      ).url;
+      ).key;
       console.log({ profile });
       expect(profile).toBeTruthy();
     });
 
-    // Save supamoto creator CELLNODE
-    let creator = "4kavdefz12wlefltwxr";
-    test("Saving creator", async () => {
-      const tester = getUser();
-      const file = JSON.parse(
-        getFileFromPath(["documents", "test-supamoto-creator.jsonld"], "ascii")
-      );
-      file["issuer"] = tester.did;
-      file["credentialSubject"]["id"] = daoCredsIssuerDid;
-      file["credentialSubject"]["logo"] = ecsLogo;
-      let buff = Buffer.from(JSON.stringify(file));
-      creator = (
-        await customQueries.cellnode.uploadPublicDoc(
-          "application/ld+json",
-          buff.toString("base64"),
-          undefined,
-          cellNodeNetwork
-        )
-      ).key;
-      console.log({ creator });
-      expect(creator).toBeTruthy();
-    });
+    // Save supamoto creator CELLNODE emerging cellnode
+    // let creator = "4kavdefz12wlefltwxr";
+    // test("Saving creator", async () => {
+    //   const tester = getUser();
+    //   const file = JSON.parse(
+    //     getFileFromPath(["documents", "test-supamoto-creator.jsonld"], "ascii")
+    //   );
+    //   file["issuer"] = tester.did;
+    //   file["credentialSubject"]["id"] = daoCredsIssuerDid;
+    //   file["credentialSubject"]["logo"] = ecsLogo;
+    //   let buff = Buffer.from(JSON.stringify(file));
+    //   creator = (
+    //     await customQueries.cellnode.uploadPublicDoc(
+    //       "application/ld+json",
+    //       buff.toString("base64"),
+    //       undefined,
+    //       cellNodeNetwork
+    //     )
+    //   ).key;
+    //   console.log({ creator });
+    //   expect(creator).toBeTruthy();
+    // });
 
     // Save supamoto administrator CELLNODE
-    let administrator = "gm7528l8xd4lefltxcz";
-    test("Saving administrator", async () => {
-      const tester = getUser();
-      const file = JSON.parse(
-        getFileFromPath(
-          ["documents", "test-supamoto-administrator.jsonld"],
-          "ascii"
-        )
-      );
-      file["issuer"] = tester.did;
-      file["credentialSubject"]["id"] = daoCredsIssuerDid;
-      file["credentialSubject"]["logo"] = ecsLogo;
-      let buff = Buffer.from(JSON.stringify(file));
-      administrator = (
-        await customQueries.cellnode.uploadPublicDoc(
-          "application/ld+json",
-          buff.toString("base64"),
-          undefined,
-          cellNodeNetwork
-        )
-      ).key;
-      console.log({ administrator });
-      expect(administrator).toBeTruthy();
-    });
+    // let administrator = "gm7528l8xd4lefltxcz";
+    // test("Saving administrator", async () => {
+    //   const tester = getUser();
+    //   const file = JSON.parse(
+    //     getFileFromPath(
+    //       ["documents", "test-supamoto-administrator.jsonld"],
+    //       "ascii"
+    //     )
+    //   );
+    //   file["issuer"] = tester.did;
+    //   file["credentialSubject"]["id"] = daoCredsIssuerDid;
+    //   file["credentialSubject"]["logo"] = ecsLogo;
+    //   let buff = Buffer.from(JSON.stringify(file));
+    //   administrator = (
+    //     await customQueries.cellnode.uploadPublicDoc(
+    //       "application/ld+json",
+    //       buff.toString("base64"),
+    //       undefined,
+    //       cellNodeNetwork
+    //     )
+    //   ).key;
+    //   console.log({ administrator });
+    //   expect(administrator).toBeTruthy();
+    // });
 
     // Save supamoto page CELLNODE
-    let page = "zh211j0pb0llefltxre";
-    test("Saving page", async () => {
-      page = (
-        await customQueries.cellnode.uploadPublicDoc(
-          "application/json",
-          getFileFromPath(["documents", "test-supamoto-page.json"]),
-          undefined,
-          cellNodeNetwork
-        )
-      ).key;
-      console.log({ page });
-      expect(page).toBeTruthy();
-    });
+    // let page = "zh211j0pb0llefltxre";
+    // test("Saving page", async () => {
+    //   page = (
+    //     await customQueries.cellnode.uploadPublicDoc(
+    //       "application/json",
+    //       getFileFromPath(["documents", "test-supamoto-page.json"]),
+    //       undefined,
+    //       cellNodeNetwork
+    //     )
+    //   ).key;
+    //   console.log({ page });
+    //   expect(page).toBeTruthy();
+    // });
 
     // Save supamoto projectCreds WEB3
     let projectCreds =
-      "https://bafkreih2oq64xhbgp7vyarcrgw6dcofms4zdmjqms6vnfx32vzwglj6nd4.ipfs.w3s.link";
+      "bafkreih2oq64xhbgp7vyarcrgw6dcofms4zdmjqms6vnfx32vzwglj6nd4";
     test("Saving projectCert", async () => {
       const file = JSON.parse(
         getFileFromPath(
@@ -243,8 +241,8 @@ export const supamotoEntities = () =>
         "credentialSubject"
       ]["project"]["linkedResources"].map((lr: any) => ({
         ...lr,
-        id: projectCertDoc,
-        proof: projectCertDoc.split(".")[0].split("/")[2],
+        id: `https://ipfs.io/ipfs/${projectCertDoc}`,
+        proof: projectCertDoc,
       }));
       let buff = Buffer.from(JSON.stringify(file));
       projectCreds = (
@@ -255,7 +253,7 @@ export const supamotoEntities = () =>
           undefined,
           cellNodeNetwork
         )
-      ).url;
+      ).cid;
       console.log({ projectCreds });
       expect(projectCreds).toBeTruthy();
     });
@@ -275,9 +273,9 @@ export const supamotoEntities = () =>
       expect(tags).toBeTruthy();
     });
 
-    // Save supamoto tokenMetadata WEB3
+    // Save supamoto tokenMetadata WEB3 emerging account
     let tokenMetadata =
-      "https://bafkreie7kbpppoizx7anxxufblfkdfmuy27mppuz2hq4a4uouudweb2sm4.ipfs.w3s.link";
+      "bafkreie7kbpppoizx7anxxufblfkdfmuy27mppuz2hq4a4uouudweb2sm4";
     test("Saving tokenMetadata", async () => {
       const file = JSON.parse(
         getFileFromPath(
@@ -296,11 +294,12 @@ export const supamotoEntities = () =>
           undefined,
           cellNodeNetwork
         )
-      ).url;
+      ).cid;
       console.log({ tokenMetadata });
       expect(tokenMetadata).toBeTruthy();
     });
 
+    // TODO need protocol to add as template id
     // Save supamoto claims CELLNODE
     let claims = "gf9m2u5ds6tleflu4a8";
     test("Saving claims", async () => {
@@ -316,6 +315,7 @@ export const supamotoEntities = () =>
       expect(claims).toBeTruthy();
     });
 
+    // TODO cookstove-asset-protocol
     // Create a base Protocol entity
     let protocolDid = "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b";
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity protocol", async () => {
@@ -331,9 +331,9 @@ export const supamotoEntities = () =>
       const res = await Entity.CreateEntityAssetSupamoto({
         inheritEntityDid: protocolDid,
         profile,
-        page,
-        creator,
-        administrator,
+        // page,
+        // creator,
+        // administrator,
         tags,
         claims,
         tokenMetadata,
@@ -388,7 +388,9 @@ export const supamotoEntities = () =>
           file["credentialSubject"]["id"] = (
             file["credentialSubject"]["id"] as string
           ).replace("deviceId", id);
-          file["credentialSubject"]["certification"]["id"] = projectCertDoc;
+          file["credentialSubject"]["certification"][
+            "id"
+          ] = `https://ipfs.io/ipfs/${projectCertDoc}`;
           let buff = Buffer.from(JSON.stringify(file));
           deviceCreds = (
             await customQueries.cellnode.uploadWeb3Doc(
@@ -398,7 +400,7 @@ export const supamotoEntities = () =>
               undefined,
               cellNodeNetwork
             )
-          ).url;
+          ).cid;
 
           console.log({ deviceCreds });
           if (!deviceCreds) throw new Error("error saving device creds file");

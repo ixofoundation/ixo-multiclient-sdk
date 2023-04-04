@@ -1,14 +1,14 @@
 {
   "id": "{id}#1",
   "type": "ImpactToken",
-  "name": "SupaMoto",
+  "name": "SupaMoto Genesis",
   "tokenName": "SupaMoto NFT",
   "decimals": 1,
-  "description": "SupaMoto NFT Malawi Collection",
+  "description": "SupaMoto Genesis Collection",
   "image": "imageLink",
   "properties": {
-    "denom": "SUPAMOTO",
+    "denom": "SUPAMOTO1",
     "icon": "iconLink",
-    "maxSupply": "1600"
+    "maxSupply": "600"
   }
 }

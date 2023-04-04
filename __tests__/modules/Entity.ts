@@ -1,3 +1,4 @@
+import { cellNodeChainMapping } from "../../src/custom_queries/cellnode";
 import {
   createAgentIidContext,
   createIidVerificationMethods,
@@ -55,9 +56,9 @@ export const CreateEntity = async (
 type CreateEntityAssetSupamotoParams = {
   inheritEntityDid: string;
   profile: string;
-  page: string;
-  creator: string;
-  administrator: string;
+  // page: string;
+  // creator: string;
+  // administrator: string;
   tags: string;
   claims: string;
   tokenMetadata: string;
@@ -68,6 +69,8 @@ export const CreateEntityAssetSupamoto = async (
   p: CreateEntityAssetSupamotoParams
 ) => {
   const client = await createClient();
+
+  const chainNetwork = "devnet";
 
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
@@ -82,6 +85,7 @@ export const CreateEntityAssetSupamoto = async (
       entityStatus: 0,
       controller: [did],
       context: createAgentIidContext([
+        // cookstove-asset-protocol
         { key: "class", val: p.inheritEntityDid },
       ]),
       verification: createIidVerificationMethods({
@@ -93,9 +97,9 @@ export const CreateEntityAssetSupamoto = async (
       }),
       service: [
         ixo.iid.v1beta1.Service.fromPartial({
-          id: "{id}#cellnode-pandora",
+          id: "{id}#cellnode",
           type: "cellnode",
-          serviceEndpoint: "https://devnet-cellnode.ixo.earth/",
+          serviceEndpoint: cellNodeChainMapping[chainNetwork],
         }),
         ixo.iid.v1beta1.Service.fromPartial({
           id: "{id}#ixo",
@@ -104,14 +108,21 @@ export const CreateEntityAssetSupamoto = async (
             "https://github.com/cosmos/chain-registry/blob/master/ixo/chain.json?rpc/",
         }),
         ixo.iid.v1beta1.Service.fromPartial({
-          id: "{id}#supamoto",
+          // TODO check reference from supamoto to emerging
+          id: "{id}#emerging",
           type: "linkedDomains",
           serviceEndpoint: "https://app.emerging.eco/collection/?id=",
         }),
+        // TODO remove and check references
         ixo.iid.v1beta1.Service.fromPartial({
           id: "{id}#dashboard",
           type: "linkedDomains",
           serviceEndpoint: "https://supamoto.jambo.earth/?id=",
+        }),
+        ixo.iid.v1beta1.Service.fromPartial({
+          id: "{id}#ipfs",
+          type: "Ipfs",
+          serviceEndpoint: "https://ipfs.io/ipfs/",
         }),
       ],
       linkedResource: [
@@ -120,47 +131,47 @@ export const CreateEntityAssetSupamoto = async (
           type: "Settings",
           description: "Profile",
           mediaType: "application/ld+json",
-          serviceEndpoint: p.profile,
-          proof: p.profile.split(".")[0].split("/")[2],
+          serviceEndpoint: `cellnode:/public/${p.profile}`,
+          proof: p.profile,
           encrypted: "false",
           right: "",
         }),
-        ixo.iid.v1beta1.LinkedResource.fromPartial({
-          id: "{id}#page",
-          type: "Settings",
-          description: "Page",
-          mediaType: "application/ld+json",
-          serviceEndpoint: `#cellnode-pandora/public/${p.page}`,
-          proof: p.page,
-          encrypted: "false",
-          right: "",
-        }),
-        ixo.iid.v1beta1.LinkedResource.fromPartial({
-          id: "{id}#creator",
-          type: "verifiableCredential",
-          description: "Creator",
-          mediaType: "application/ld+json",
-          serviceEndpoint: `#cellnode-pandora/public/${p.creator}`,
-          proof: p.creator,
-          encrypted: "false",
-          right: "",
-        }),
-        ixo.iid.v1beta1.LinkedResource.fromPartial({
-          id: "{id}#administrator",
-          type: "VerifiableCredential",
-          description: "Administrator",
-          mediaType: "application/ld+json",
-          serviceEndpoint: `#cellnode-pandora/public/${p.administrator}`,
-          proof: p.administrator,
-          encrypted: "false",
-          right: "",
-        }),
+        // ixo.iid.v1beta1.LinkedResource.fromPartial({
+        //   id: "{id}#page",
+        //   type: "Settings",
+        //   description: "Page",
+        //   mediaType: "application/ld+json",
+        //   serviceEndpoint: `cellnode:/public/${p.page}`,
+        //   proof: p.page,
+        //   encrypted: "false",
+        //   right: "",
+        // }),
+        // ixo.iid.v1beta1.LinkedResource.fromPartial({
+        //   id: "{id}#creator",
+        //   type: "verifiableCredential",
+        //   description: "Creator",
+        //   mediaType: "application/ld+json",
+        //   serviceEndpoint: `cellnode:/public/${p.creator}`,
+        //   proof: p.creator,
+        //   encrypted: "false",
+        //   right: "",
+        // }),
+        // ixo.iid.v1beta1.LinkedResource.fromPartial({
+        //   id: "{id}#administrator",
+        //   type: "VerifiableCredential",
+        //   description: "Administrator",
+        //   mediaType: "application/ld+json",
+        //   serviceEndpoint: `cellnode:/public/${p.administrator}`,
+        //   proof: p.administrator,
+        //   encrypted: "false",
+        //   right: "",
+        // }),
         ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "{id}#tags",
           type: "Settings",
           description: "Tags",
           mediaType: "application/ld+json",
-          serviceEndpoint: `#cellnode-pandora/public/${p.tags}`,
+          serviceEndpoint: `cellnode:/public/${p.tags}`,
           proof: p.tags,
           encrypted: "false",
           right: "",
@@ -170,7 +181,7 @@ export const CreateEntityAssetSupamoto = async (
           type: "Settings",
           description: "Claims",
           mediaType: "application/ld+json",
-          serviceEndpoint: `#cellnode-pandora/public/${p.claims}`,
+          serviceEndpoint: `cellnode:/public/${p.claims}`,
           proof: p.claims,
           encrypted: "false",
           right: "",
@@ -180,8 +191,8 @@ export const CreateEntityAssetSupamoto = async (
           type: "TokenMetadata",
           description: "Impact Token",
           mediaType: "application/json",
-          serviceEndpoint: p.tokenMetadata,
-          proof: p.tokenMetadata.split(".")[0].split("/")[2],
+          serviceEndpoint: `ipfs:${p.tokenMetadata}`,
+          proof: p.tokenMetadata,
           encrypted: "false",
           right: "",
         }),
@@ -190,8 +201,8 @@ export const CreateEntityAssetSupamoto = async (
           type: "VerifiableCredential",
           description: "Project Certificate",
           mediaType: "application/ld+json",
-          serviceEndpoint: p.projectCert,
-          proof: p.projectCert.split(".")[0].split("/")[2],
+          serviceEndpoint: `ipfs:${p.projectCert}`,
+          proof: p.projectCert,
           encrypted: "false",
           right: "",
         }),
@@ -219,17 +230,17 @@ export const CreateEntityAssetSupamoto = async (
       accordedRight: [
         ixo.iid.v1beta1.AccordedRight.fromPartial({
           id: "{id}#mintNFT",
-          type: "capability/mint",
-          mechanism: "cw721",
-          message: "msgMintNFT",
+          type: "capability/createEntity",
+          mechanism: "x/entity",
+          message: "MsgCreateEntity",
           service: "#ixo",
         }),
         ixo.iid.v1beta1.AccordedRight.fromPartial({
           id: "{id}#carbon-claim",
           type: "capability/attest",
           mechanism: "x/claims",
-          message: "msgSubmitClaim",
-          service: "#cellnode",
+          message: "MsgSubmitClaim",
+          service: "#ixo",
         }),
         ixo.iid.v1beta1.AccordedRight.fromPartial({
           id: "{id}#legal",
@@ -241,14 +252,34 @@ export const CreateEntityAssetSupamoto = async (
           type: "AccessToken",
           mechanism: "authentication",
         }),
+        ixo.iid.v1beta1.AccordedRight.fromPartial({
+          id: "{id}#view",
+          type: "capability/access",
+          mechanism: "zcap",
+          service: "emerging",
+        }),
+        ixo.iid.v1beta1.AccordedRight.fromPartial({
+          id: "{id}#mintCARBON",
+          type: "capability/mintToken",
+          mechanism: "x/token",
+          message: "MsgMintToken",
+          service: "ixo",
+        }),
       ],
       linkedEntity: [
+        // TODO include prospect and scalnyx oracle dids
         ixo.iid.v1beta1.LinkedEntity.fromPartial({
           id: p.oracle,
           type: "oracle",
           relationship: "verifies",
-          service: "",
+          service: "ixo",
         }),
+        // ixo.iid.v1beta1.LinkedEntity.fromPartial({
+        //   id: p.oracle,
+        //   type: "oracle",
+        //   relationship: "verifies",
+        //   service: "ixo",
+        // }),
       ],
       ownerDid: did,
       ownerAddress: myAddress,
@@ -292,12 +323,12 @@ export const CreateEntityAssetSupamotoInstance = async (
       alsoKnownAs: `{id}#${index}`,
       linkedResource: [
         ixo.iid.v1beta1.LinkedResource.fromPartial({
-          id: "{entity}#device-credential",
+          id: "{id}#device-credential",
           type: "VerifiableCredential",
           description: "Certificate of Manufacture",
           mediaType: "application/ld+json",
-          serviceEndpoint: deviceCreds,
-          proof: deviceCreds.split(".")[0].split("/")[2],
+          serviceEndpoint: `ipfs:${deviceCreds}`,
+          proof: deviceCreds,
           encrypted: "false",
           right: "",
         }),
@@ -311,20 +342,24 @@ export const CreateEntityAssetSupamotoInstance = async (
           encrypted: "false",
           right: "#apitoken",
         }),
+        // ixo.iid.v1beta1.LinkedResource.fromPartial({
+        //   id: "{id}#customer-credential",
+        //   type: "VerifiableCredential",
+        //   description: "Customer Credential",
+        //   mediaType: "application/ld+json",
+        //   serviceEndpoint: `cellnode:${cid}`,
+        //   proof: "",
+        //   encrypted: "false",
+        //   right: "",
+        // }),
       ],
-      accordedRight: [
-        ixo.iid.v1beta1.AccordedRight.fromPartial({
-          id: "{did}#view",
-          type: "capability/access",
-          mechanism: "zcap",
-          service: "",
-        }),
-      ],
+      accordedRight: [],
       linkedEntity: [
         ixo.iid.v1beta1.LinkedEntity.fromPartial({
-          id: "",
-          type: "",
-          relationship: "",
+          id: inheritEntityDid,
+          type: "asset/collection",
+          relationship: "affordance",
+          service: "ixo",
         }),
       ],
       ownerDid: did,

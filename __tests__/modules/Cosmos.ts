@@ -43,8 +43,9 @@ export const BankSendTrx = async (
     }),
   };
 
+  // const response = await client.simulate(fromAddress, [message], undefined);
   const response = await client.signAndBroadcast(fromAddress, [message], fee);
-  return response;
+  return response as any;
 };
 
 export const MsgSubmitProposalStoreCW = async (

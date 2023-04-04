@@ -9,15 +9,15 @@
   "ddoTags": [
     {
       "category": "Asset Type",
-      "tags": "Rights",
-      "color": "A11C43",
-      "image": "rights.svg"
+      "tags": [
+        "Rights"
+      ]
     },
     {
       "category": "Token Type",
-      "tags": "Carbon",
-      "color": "ED9526",
-      "image": "carbon.svg"
+      "tags": [
+        "Carbon"
+      ]
     }
   ]
 }

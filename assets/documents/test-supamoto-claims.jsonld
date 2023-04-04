@@ -14,11 +14,10 @@
         "description": "Amount of Carbon Emissions reduced through the use of an energy-efficient clean cookstove."
       },
       "submissions": {
-        "maximum": 100,
-        "startDate": "20-Jan-2023",
-        "endDate": "22-Feb-2026"
+        "maximum": null,
+        "startDate": "",
+        "endDate": ""
       }
     }
-  ],
-  "headlineMetric": "did:ixo:entity:abc123"
+  ]
 }
