@@ -14,3 +14,13 @@ export function generateSecpDid(pubkey: string | Uint8Array, prefix?: string) {
   const did = base58btcCode + encodedpubKey;
   return "did:" + (prefix || "x") + ":" + did;
 }
+
+/**
+ * Return a did with ixo method did and cosmwasm namespace, for the purpose
+ * to have iid docs onchain for corresponding cosmwasm addresses
+ *
+ * @param address bech32 encoded address, eg: ixo1r3us73z564xxxcessqmc4h0dwh8j4z6sxn2730ag09mq87hlrkzqrg8clc
+ */
+export function generateCosmwasmDid(address: string) {
+  return `did:ixo:cosmwasm:${address}`;
+}

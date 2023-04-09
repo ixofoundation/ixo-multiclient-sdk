@@ -5,15 +5,17 @@ import { WalletUsers } from "../helpers/constants";
 
 export const bankBasic = () =>
   describe("Testing the cosmos bank module", () => {
-    testMsg("/cosmos.bank.v1beta1.MsgSend", () =>
-      Cosmos.BankSendTrx(
+    testMsg("/cosmos.bank.v1beta1.MsgSend", async () => {
+      const res = await Cosmos.BankSendTrx(
         undefined,
         WalletUsers.tester,
         WalletUsers.tester,
         "secp",
         "ed"
-      )
-    );
+      );
+      console.log(res);
+      return res;
+    });
   });
 
 export const authzBasic = () =>
@@ -55,6 +57,6 @@ export const sendTokens = () =>
   });
 
 export const govDeposit = () =>
-  describe("/cosmos.gov.v1beta1.MsgDeposit", () => {
-    testMsg("/cosmos.bank.v1beta1.MsgSend", () => Cosmos.MsgDeposit(404));
+  describe("Testing deposit funds into proposals", () => {
+    testMsg("/cosmos.bank.v1beta1.MsgDeposit", () => Cosmos.MsgDeposit(434));
   });

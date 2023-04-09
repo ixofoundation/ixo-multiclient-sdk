@@ -2,6 +2,9 @@ import { GeneratedType, Registry } from "@cosmjs/proto-signing";
 import { ixo, cosmwasm, cosmos, ibc, ica } from "../codegen";
 
 export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
+  // tx
+  ["/cosmos.tx.v1beta1.Tx", cosmos.tx.v1beta1.Tx],
+
   // base
   ["/cosmos.base.v1beta1.Coin", cosmos.base.v1beta1.Coin],
 

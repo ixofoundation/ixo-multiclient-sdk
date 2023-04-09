@@ -12,6 +12,7 @@ import {
   registerIids,
   registerIidsDev,
   generateBlockchainTestUsers,
+  iidAddEdKeys,
 } from "./flows/iids";
 import { enititiesBasic, supamotoEntities } from "./flows/entities";
 import { ibcBasic } from "./flows/ibc";
@@ -37,6 +38,7 @@ generateBlockchainTestUsers();
 // registerIids();
 // instantiateModulesProposals();
 // iidsBasic();
+// iidAddEdKeys();
 // bondsBasic();
 // bondsSellsDisabled();
 // bondsSellsEnabled();

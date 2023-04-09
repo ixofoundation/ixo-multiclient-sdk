@@ -1,65 +1,136 @@
 import {
   customQueries,
+  generateNewWallet,
   getFileFromPath,
-  getUser,
-  queryClient,
+  sendFromFaucet,
   testMsg,
   utils,
-} from "../helpers/common";
-import { WalletUsers } from "../helpers/constants";
-import * as Entity from "../modules/Entity";
+} from "../../helpers/common";
+import { WalletUsers } from "../../helpers/constants";
+import * as IidMain from "../../modules/Iid";
+import { cookstoveIds, setup_dao_constants } from "./constants";
+import * as Entity from "../Entity";
+import * as Entity1 from "../../modules/Entity";
+import { chainNetwork } from "../index.setup.spec";
+import { LinkedResourcesUploaded, dids } from "../constants";
 
-export const enititiesBasic = () =>
-  describe("Testing the entities module", () => {
-    let entityDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14"; // admin account ixo1kqmtxkggcqa9u34lnr6shy0euvclgatw4f9zz5
-    testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset", async () => {
-      const res = await Entity.CreateEntity();
-      entityDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
-      console.log({ entityDid });
-      return res;
-    });
+export const supamotoFlow = () =>
+  describe("Flow for creating a Entity (dao/protocol/oracle)", () => {
+    // ===============================================================
+    // Set Testers mnemonic to env variable and ledger root user did
+    // ===============================================================
 
-    testMsg("/ixo.entity.v1beta1.MsgUpdateEntityVerified", () =>
-      Entity.UpdateEntityVerified(undefined, entityDid)
+    // below test can fail as user might already be ledgered, that is ok
+    beforeAll(() =>
+      generateNewWallet(WalletUsers.tester, process.env.TESTER_MNEMONIC)
     );
 
-    // testMsg("/ixo.entity.v1beta1.MsgTransferEntity", () =>
-    //   Entity.TransferEntity(undefined, entityDid)
-    // );
+    // @ts-ignore
+    if (chainNetwork != "mainnet") {
+      // Send from faucet for devnet/testnet
+      sendFromFaucet(WalletUsers.tester);
+    }
+    testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () =>
+      IidMain.CreateIidDoc(WalletUsers.tester)
+    );
 
-    // testMsg("/ixo.entity.v1beta1.MsgUpdateEntity", () => Entity.UpdateEntity());
+    // ===============================================================
+    // Create Entities
+    // ===============================================================
+    // You can create all your entities below, you can just copy a whole entity creation and make
+    // as many as you want, just ensure you have all the groups needed that will be used and that for each
+    // entity there is a corresponding exported setup_{name}_constants that you can use for the entity
 
-    let accountAddress = "ixo1syjk0qh59vxz3zk776m5vrzvyv4nwpvh57yps2";
-    let name = "name";
-    testMsg("/ixo.entity.v1beta1.MsgCreateEntityAccount", async () => {
-      const res = await Entity.CreateEntityAccount(entityDid, name);
-      accountAddress = utils.common.getValueFromEvents(
-        res,
-        "ixo.entity.v1beta1.EntityAccountCreatedEvent",
-        "account_address"
+    // =============================== START
+    let daoDid: string;
+    let adminAccount: string;
+    let linkedResourcesUploaded: LinkedResourcesUploaded = [];
+    testMsg("/ixo.entity.v1beta1.MsgCreateEntity dao", async () => {
+      const daoConst = setup_dao_constants();
+
+      // Uploading linkedResources
+      for (const { name, type, storage, json } of daoConst.linkedResources) {
+        if (storage === "cellnode") {
+          const cellnode = await customQueries.cellnode.uploadPublicDoc(
+            "application/ld+json",
+            Buffer.from(JSON.stringify(json)).toString("base64"),
+            undefined,
+            chainNetwork
+          );
+          linkedResourcesUploaded.push({
+            name,
+            cid: cellnode.key,
+            type,
+            storage,
+          });
+        } else if (storage === "ipfs") {
+          const web3 = await customQueries.cellnode.uploadWeb3Doc(
+            utils.common.generateId(12),
+            "application/ld+json",
+            Buffer.from(JSON.stringify(json)).toString("base64"),
+            undefined,
+            chainNetwork
+          );
+          linkedResourcesUploaded.push({
+            name,
+            cid: web3.cid,
+            type,
+            storage,
+          });
+        }
+      }
+      console.log({ linkedResourcesUploaded });
+
+      // Create the Entity
+      const res = await Entity.CreateEntity(
+        daoConst.entity,
+        linkedResourcesUploaded
       );
-      console.log({ accountAddress });
+      daoDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
+      adminAccount = utils.common.getValueFromEvents(
+        res,
+        "ixo.entity.v1beta1.EntityCreatedEvent",
+        "entity",
+        (s) => s.accounts.find((a) => a.name === "admin").address
+      );
+      console.log({ daoDid, adminAccount });
+
       return res;
     });
-
-    testMsg(
-      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
-      () => Entity.GrantEntityAccountAuthz(entityDid, name),
-      true
-    );
+    // =============================== END
   });
 
-// ------------------------------------------------------------
-// flow to run after devnet was reset, please dont change
-// ------------------------------------------------------------
-export const supamotoEntities = () =>
+export const cookstovesFlow = () =>
   describe("Testing the Supamoto nfts flow", () => {
-    const cellNodeNetwork = "devnet";
+    // ===============================================================
+    // Set Testers mnemonic to env variable and ledger root user did
+    // ===============================================================
+
+    // below test can fail as user might already be ledgered, that is ok
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(WalletUsers.tester, process.env.TESTER_MNEMONIC),
+        generateNewWallet(WalletUsers.alice, process.env.ED_KEYS_MNEMONIC),
+      ])
+    );
+
+    // @ts-ignore
+    if (chainNetwork != "mainnet") {
+      // Send from faucet for devnet/testnet
+      sendFromFaucet(WalletUsers.tester);
+    }
+    testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () =>
+      IidMain.CreateIidDoc(WalletUsers.tester)
+    );
+
+    // ===============================================================
+    // Create all assets
+    // ===============================================================
 
     // Create top-level class dao
     let daoDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset", async () => {
-      const res = await Entity.CreateEntity("dao");
+      const res = await Entity1.CreateEntity("dao");
       daoDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
       console.log({ daoDid });
       return res;
@@ -68,7 +139,7 @@ export const supamotoEntities = () =>
     // Create dao entity which is credential issuer
     let daoCredsIssuerDid = "did:ixo:entity:4d94f9b6078432648a755203eed50644";
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset", async () => {
-      const res = await Entity.CreateEntity("dao", [
+      const res = await Entity1.CreateEntity("dao", [
         { key: "class", val: daoDid },
       ]);
       daoCredsIssuerDid = utils.common.getValueFromEvents(
@@ -94,7 +165,7 @@ export const supamotoEntities = () =>
           "image/png",
           getFileFromPath(["documents", "supamoto_logo.png"]),
           undefined,
-          cellNodeNetwork
+          chainNetwork
         )
       ).url;
       console.log({ supaLogo });
@@ -104,7 +175,7 @@ export const supamotoEntities = () =>
           "image/png",
           getFileFromPath(["documents", "supamoto-nft-image.png"]),
           undefined,
-          cellNodeNetwork
+          chainNetwork
         )
       ).url;
       console.log({ supaNftImage });
@@ -114,7 +185,7 @@ export const supamotoEntities = () =>
           "image/png",
           getFileFromPath(["documents", "ecs_logo_flame only.png"]),
           undefined,
-          cellNodeNetwork
+          chainNetwork
         )
       ).url;
       console.log({ ecsLogo });
@@ -134,7 +205,7 @@ export const supamotoEntities = () =>
             "MimiMoto report Aprovecho Research Center March 2017.pdf",
           ]),
           undefined,
-          cellNodeNetwork
+          chainNetwork
         )
       ).cid;
       console.log({ projectCertDoc });
@@ -155,75 +226,11 @@ export const supamotoEntities = () =>
           "application/ld+json",
           buff.toString("base64"),
           undefined,
-          cellNodeNetwork
+          chainNetwork
         )
       ).key;
       console.log({ profile });
       expect(profile).toBeTruthy();
-    });
-
-    // Save supamoto creator CELLNODE emerging cellnode
-    let creator = "4kavdefz12wlefltwxr";
-    test("Saving creator", async () => {
-      const tester = getUser();
-      const file = JSON.parse(
-        getFileFromPath(["documents", "test-supamoto-creator.jsonld"], "ascii")
-      );
-      file["issuer"] = tester.did;
-      file["credentialSubject"]["id"] = daoCredsIssuerDid;
-      file["credentialSubject"]["logo"] = ecsLogo;
-      let buff = Buffer.from(JSON.stringify(file));
-      creator = (
-        await customQueries.cellnode.uploadPublicDoc(
-          "application/ld+json",
-          buff.toString("base64"),
-          undefined,
-          cellNodeNetwork
-        )
-      ).key;
-      console.log({ creator });
-      expect(creator).toBeTruthy();
-    });
-
-    // Save supamoto administrator CELLNODE
-    let administrator = "gm7528l8xd4lefltxcz";
-    test("Saving administrator", async () => {
-      const tester = getUser();
-      const file = JSON.parse(
-        getFileFromPath(
-          ["documents", "test-supamoto-administrator.jsonld"],
-          "ascii"
-        )
-      );
-      file["issuer"] = tester.did;
-      file["credentialSubject"]["id"] = daoCredsIssuerDid;
-      file["credentialSubject"]["logo"] = ecsLogo;
-      let buff = Buffer.from(JSON.stringify(file));
-      administrator = (
-        await customQueries.cellnode.uploadPublicDoc(
-          "application/ld+json",
-          buff.toString("base64"),
-          undefined,
-          cellNodeNetwork
-        )
-      ).key;
-      console.log({ administrator });
-      expect(administrator).toBeTruthy();
-    });
-
-    // Save supamoto page CELLNODE
-    let page = "zh211j0pb0llefltxre";
-    test("Saving page", async () => {
-      page = (
-        await customQueries.cellnode.uploadPublicDoc(
-          "application/json",
-          getFileFromPath(["documents", "test-supamoto-page.json"]),
-          undefined,
-          cellNodeNetwork
-        )
-      ).key;
-      console.log({ page });
-      expect(page).toBeTruthy();
     });
 
     // Save supamoto projectCreds WEB3
@@ -251,7 +258,7 @@ export const supamotoEntities = () =>
           "application/ld+json",
           buff.toString("base64"),
           undefined,
-          cellNodeNetwork
+          chainNetwork
         )
       ).cid;
       console.log({ projectCreds });
@@ -266,7 +273,7 @@ export const supamotoEntities = () =>
           "application/ld+json",
           getFileFromPath(["documents", "test-supamoto-tags.jsonld"]),
           undefined,
-          cellNodeNetwork
+          chainNetwork
         )
       ).key;
       console.log({ tags });
@@ -292,13 +299,14 @@ export const supamotoEntities = () =>
           "application/ld+json",
           buff.toString("base64"),
           undefined,
-          cellNodeNetwork
+          chainNetwork
         )
       ).cid;
       console.log({ tokenMetadata });
       expect(tokenMetadata).toBeTruthy();
     });
 
+    // TODO need protocol to add as template id
     // Save supamoto claims CELLNODE
     let claims = "gf9m2u5ds6tleflu4a8";
     test("Saving claims", async () => {
@@ -307,27 +315,18 @@ export const supamotoEntities = () =>
           "application/ld+json",
           getFileFromPath(["documents", "test-supamoto-claims.jsonld"]),
           undefined,
-          cellNodeNetwork
+          chainNetwork
         )
       ).key;
       console.log({ claims });
       expect(claims).toBeTruthy();
     });
 
-    // Create a base Protocol entity
-    let protocolDid = "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b";
-    testMsg("/ixo.entity.v1beta1.MsgCreateEntity protocol", async () => {
-      const res = await Entity.CreateEntity("protocol/asset");
-      protocolDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
-      console.log({ protocolDid });
-      return res;
-    });
-
-    // Create a Protocol entity Asset Class
-    let protocolAssetDid = "did:ixo:entity:61392c571ef644d54d77e4daf611bf89";
+    // supamoto-asset-collection
+    let assetCollectionDid: string;
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset class", async () => {
-      const res = await Entity.CreateEntityAssetSupamoto({
-        inheritEntityDid: protocolDid,
+      const res = await Entity1.CreateEntityAssetSupamoto({
+        inheritEntityDid: dids.cookstoveAssetProtocol,
         profile,
         // page,
         // creator,
@@ -336,37 +335,19 @@ export const supamotoEntities = () =>
         claims,
         tokenMetadata,
         projectCert: projectCreds,
-        oracles: [daoCredsIssuerDid],
+        oracles: [dids.prospectOracle, dids.scalnyxOracle],
+        relayerDid: dids.emergingDao,
       });
-      protocolAssetDid = utils.common.getValueFromEvents(
+      assetCollectionDid = utils.common.getValueFromEvents(
         res,
         "wasm",
         "token_id"
       );
-      console.log({ protocolAssetDid });
+      console.log({ assetCollectionDid });
       return res;
     });
 
     // Create a batch of Asset entities for the individual Supamoto assets
-    const cookstoveIds = [
-      "310034782",
-      "310034788",
-      "310034791",
-      "310034792",
-      "310034800",
-      "310034801",
-      "310034812",
-      "310034819",
-      "310034820",
-      "310034821",
-      "310034823",
-      "310034835",
-      "310034836",
-      "310034837",
-      "310034838",
-      "310034839",
-      "310034840",
-    ];
     let assetInstanceDids: string[] = [];
 
     cookstoveIds.map((id, i) =>
@@ -385,7 +366,7 @@ export const supamotoEntities = () =>
           file["issuer"] = daoCredsIssuerDid;
           file["credentialSubject"]["id"] = (
             file["credentialSubject"]["id"] as string
-          ).replace("deviceId", id);
+          ).replace("deviceId", id.toString());
           file["credentialSubject"]["certification"][
             "id"
           ] = `https://ipfs.io/ipfs/${projectCertDoc}`;
@@ -396,18 +377,19 @@ export const supamotoEntities = () =>
               "application/ld+json",
               buff.toString("base64"),
               undefined,
-              cellNodeNetwork
+              chainNetwork
             )
           ).cid;
 
           console.log({ deviceCreds });
           if (!deviceCreds) throw new Error("error saving device creds file");
 
-          const res = await Entity.CreateEntityAssetSupamotoInstance(
-            protocolAssetDid,
+          const res = await Entity1.CreateEntityAssetSupamotoInstance(
+            assetCollectionDid,
             id,
             i + 1,
-            deviceCreds
+            deviceCreds,
+            dids.emergingDao
           );
           const nftAssetDid = utils.common.getValueFromEvents(
             res,

@@ -40,7 +40,11 @@ export const WasmStoreTrx = async (
   return response;
 };
 
-export const WasmInstantiateTrx = async (codeId: number, msg: string) => {
+export const WasmInstantiateTrx = async (
+  codeId: number,
+  msg: string,
+  funds = 1
+) => {
   const client = await createClient();
 
   const tester = getUser();
@@ -54,7 +58,7 @@ export const WasmInstantiateTrx = async (codeId: number, msg: string) => {
       codeId: Long.fromNumber(codeId),
       funds: [
         cosmos.base.v1beta1.Coin.fromPartial({
-          amount: "1",
+          amount: String(funds),
           denom: "uixo",
         }),
       ],

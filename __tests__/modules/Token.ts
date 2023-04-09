@@ -216,7 +216,7 @@ export const MsgGrantContract = async (
     grantee: granteeAddress,
   });
   const mintAuth = granteeGrants.grants.find(
-    (g) => g.authorization?.typeUrl == "/ixo.token.v1beta1.MsgMintToken"
+    (g) => g.authorization?.typeUrl == "/ixo.token.v1beta1.MintAuthorization"
   );
   const granteeCurrentAuthConstraints =
     overrideCurretGrants || mintAuth == undefined
