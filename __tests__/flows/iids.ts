@@ -38,14 +38,6 @@ export const registerIids = () =>
         Iid.CreateIidDoc(user)
       );
     });
-
-    // testQry(
-    //   "test query",
-    //   () => queryClient.ixo.bonds.v1beta1.bond({ bondDid: "adsf" }),
-    //   {
-    //     bonds: [],
-    //   }
-    // );
   });
 
 // ------------------------------------------------------------
@@ -105,6 +97,14 @@ export const iidsBasic = () =>
     );
     testMsg("/ixo.iid.v1beta1.MsgAddService", () => Iid.AddService());
     testMsg("/ixo.iid.v1beta1.MsgDeleteService", () => Iid.DeleteService());
+  });
+
+export const iidAddEdKeys = () =>
+  describe("Testing the Iid module adding ED keys to iid doc", () => {
+    testMsg("/ixo.iid.v1beta1.MsgAddVerification", () => Iid.AddVerification());
+    // testMsg("/ixo.iid.v1beta1.MsgRevokeVerification", () =>
+    //   Iid.RevokeVerification()
+    // );
   });
 
 export const generateBlockchainTestUsers = () => {

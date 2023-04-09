@@ -14,8 +14,9 @@ import {
   setup_protocol_ver_claims_constants,
 } from "./constants";
 import * as Entity from "../Entity";
+import * as Entity1 from "../../modules/Entity";
 import { chainNetwork } from "../index.setup.spec";
-import { LinkedResourcesUploaded } from "../constants";
+import { LinkedResourcesUploaded, dids } from "../constants";
 
 export const emergingDaoFlow = () =>
   describe("Flow for creating a Entity (dao/protocol/oracle)", () => {
@@ -111,7 +112,10 @@ export const emergingProtocolsFlow = () =>
 
     // below test can fail as user might already be ledgered, that is ok
     beforeAll(() =>
-      generateNewWallet(WalletUsers.tester, process.env.TESTER_MNEMONIC)
+      Promise.all([
+        generateNewWallet(WalletUsers.tester, process.env.TESTER_MNEMONIC),
+        generateNewWallet(WalletUsers.alice, process.env.ED_KEYS_MNEMONIC),
+      ])
     );
 
     // @ts-ignore
@@ -307,4 +311,22 @@ export const emergingProtocolsFlow = () =>
       return res;
     });
     // =============================== END
+
+    // Create cookstove-asset-protocol
+    // =========================================
+    let cookstoveAssetProtocolDid: string;
+    testMsg("/ixo.entity.v1beta1.MsgCreateEntity protocol", async () => {
+      const res = await Entity1.CreateEntity(
+        "protocol/asset",
+        [{ key: "class", val: dids.protocolClass }],
+        dids.emergingDao
+      );
+      cookstoveAssetProtocolDid = utils.common.getValueFromEvents(
+        res,
+        "wasm",
+        "token_id"
+      );
+      console.log({ cookstoveAssetProtocolDid });
+      return res;
+    });
   });

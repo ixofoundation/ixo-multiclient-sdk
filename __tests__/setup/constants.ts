@@ -5,6 +5,9 @@ export const dids = {
   assetClass: "",
   impactsDao: "",
   emergingDao: "",
+  cookstoveAssetProtocol: "",
+  prospectOracle: "",
+  scalnyxOracle: "",
 };
 
 export type LinkedResourcesUploaded = {

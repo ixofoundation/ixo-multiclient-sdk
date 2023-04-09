@@ -6,14 +6,15 @@ export const setup_dao_constants = () => ({
   entity: {
     // type of entity eg dao/protocol/asset/oracle
     entityType: "dao",
+    // TODO DAO itself, determine deterministically
     // please use Impact DAO's did as relayerNode eg dids.impactsDao
     relayerNode: "",
-    // TODO create classes first as need dao class
     // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass
     contextClass: dids.daoClass,
     // can add a also know ass if want
     alsoKnownAs: "",
     // you can remove/add more services
+    // TODO need own impacts cellnode
     service: [
       {
         id: "{id}#cellnode",
@@ -60,7 +61,7 @@ export const setup_dao_constants = () => ({
           id: "IrCcJ8hl8t",
           type: "paragraph",
           data: {
-            text: "The Impact DAO cooperative makes outcomes-based investments into innovations, projects and ventures that can dleiver Internet of Impact solutions. Members of the DAO are pioneering innovators, investors, builders, and implementors who contribute capital, work, open-source software, and market access opportunities. The DAO treasury provides financing for the ecosystem by growing a portfolio of assets and by generating revenues from its investments. The DAO Tokens represent each member's participation share in the treasury that can be exchanged after the DAO breaks even. More recent investors recive a liquidation preference.",
+            text: "The Impact DAO cooperative makes outcomes-based investments into innovations, projects and ventures that can deliver Internet of Impact solutions. Members of the DAO are pioneering innovators, investors, builders, and implementors who contribute capital, work, open-source software, and market access opportunities. The DAO treasury provides financing for the ecosystem by growing a portfolio of assets and by generating revenues from its investments. The DAO Tokens represent each member's participation share in the treasury that can be exchanged after the DAO breaks even. More recent investors receive a liquidation preference.",
           },
         },
       },
@@ -80,7 +81,7 @@ export const setup_dao_constants = () => ({
         ddoTags: [
           {
             category: "dao",
-            tags: ["Market Relayer", "Rights"],
+            tags: ["Cooperative"],
           },
         ],
       },

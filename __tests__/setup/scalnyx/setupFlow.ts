@@ -20,7 +20,12 @@ export const scalnyxFlow = () =>
 
     // below test can fail as user might already be ledgered, that is ok
     beforeAll(() =>
-      generateNewWallet(WalletUsers.tester, process.env.TESTER_MNEMONIC)
+      beforeAll(() =>
+        Promise.all([
+          generateNewWallet(WalletUsers.tester, process.env.TESTER_MNEMONIC),
+          generateNewWallet(WalletUsers.alice, process.env.ED_KEYS_MNEMONIC),
+        ])
+      )
     );
 
     // @ts-ignore

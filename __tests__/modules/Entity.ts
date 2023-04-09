@@ -17,6 +17,7 @@ import { fee, keyType, WalletUsers } from "../helpers/constants";
 export const CreateEntity = async (
   entityType: string = "asset",
   context?: [{ key: string; val: string }],
+  relayerNodeDid = "",
   relayerNode: WalletUsers = WalletUsers.tester,
   signer: WalletUsers = WalletUsers.tester
 ) => {
@@ -28,7 +29,7 @@ export const CreateEntity = async (
   const myPubKey = account.pubkey;
   const did = tester.did;
 
-  const relayerNodeDid = getUser(relayerNode).did;
+  const relayerNodeDidLocal = relayerNodeDid || getUser(relayerNode).did;
 
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgCreateEntity",
@@ -45,7 +46,7 @@ export const CreateEntity = async (
       controller: [did],
       ownerDid: did,
       ownerAddress: myAddress,
-      relayerNode: relayerNodeDid,
+      relayerNode: relayerNodeDidLocal,
     }),
   };
 
@@ -63,7 +64,8 @@ type CreateEntityAssetSupamotoParams = {
   claims: string;
   tokenMetadata: string;
   projectCert: string;
-  oracle: string;
+  oracles: string[];
+  relayerDid?: string;
 };
 export const CreateEntityAssetSupamoto = async (
   p: CreateEntityAssetSupamotoParams
@@ -85,7 +87,6 @@ export const CreateEntityAssetSupamoto = async (
       entityStatus: 0,
       controller: [did],
       context: createAgentIidContext([
-        // cookstove-asset-protocol
         { key: "class", val: p.inheritEntityDid },
       ]),
       verification: createIidVerificationMethods({
@@ -108,16 +109,9 @@ export const CreateEntityAssetSupamoto = async (
             "https://github.com/cosmos/chain-registry/blob/master/ixo/chain.json?rpc/",
         }),
         ixo.iid.v1beta1.Service.fromPartial({
-          // TODO check reference from supamoto to emerging
           id: "{id}#emerging",
           type: "linkedDomains",
-          serviceEndpoint: "https://app.emerging.eco/collection/?id=",
-        }),
-        // TODO remove and check references
-        ixo.iid.v1beta1.Service.fromPartial({
-          id: "{id}#dashboard",
-          type: "linkedDomains",
-          serviceEndpoint: "https://supamoto.jambo.earth/?id=",
+          serviceEndpoint: "https://app.emerging.eco",
         }),
         ixo.iid.v1beta1.Service.fromPartial({
           id: "{id}#ipfs",
@@ -211,17 +205,7 @@ export const CreateEntityAssetSupamoto = async (
           type: "WebDashboard",
           description: "Collection Dashboard",
           mediaType: "application/html",
-          serviceEndpoint: "#dashboard-collection",
-          proof: "",
-          encrypted: "false",
-          right: "#apitoken",
-        }),
-        ixo.iid.v1beta1.LinkedResource.fromPartial({
-          id: "{id}#asset-dashboard",
-          type: "WebDashboard",
-          description: "SupaMoto Dashboard",
-          mediaType: "application/html",
-          serviceEndpoint: "#dashboard-supamoto",
+          serviceEndpoint: "emerging",
           proof: "",
           encrypted: "false",
           right: "#apitoken",
@@ -266,24 +250,17 @@ export const CreateEntityAssetSupamoto = async (
           service: "ixo",
         }),
       ],
-      linkedEntity: [
-        // TODO include prospect and scalnyx oracle dids
+      linkedEntity: p.oracles.map((o) =>
         ixo.iid.v1beta1.LinkedEntity.fromPartial({
-          id: p.oracle,
+          id: o,
           type: "oracle",
           relationship: "verifies",
           service: "ixo",
-        }),
-        // ixo.iid.v1beta1.LinkedEntity.fromPartial({
-        //   id: p.oracle,
-        //   type: "oracle",
-        //   relationship: "verifies",
-        //   service: "ixo",
-        // }),
-      ],
+        })
+      ),
       ownerDid: did,
       ownerAddress: myAddress,
-      relayerNode: did,
+      relayerNode: p.relayerDid || did,
     }),
   };
 
@@ -293,9 +270,10 @@ export const CreateEntityAssetSupamoto = async (
 
 export const CreateEntityAssetSupamotoInstance = async (
   inheritEntityDid: string,
-  deviceId: string,
+  deviceId: string | number,
   index: number,
-  deviceCreds: string
+  deviceCreds: string,
+  relayerDid?: string
 ) => {
   const client = await createClient();
 
@@ -308,7 +286,7 @@ export const CreateEntityAssetSupamotoInstance = async (
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgCreateEntity",
     value: ixo.entity.v1beta1.MsgCreateEntity.fromPartial({
-      entityType: "asset",
+      entityType: "asset/device",
       entityStatus: 0,
       context: createAgentIidContext([{ key: "class", val: inheritEntityDid }]),
       controller: [did],
@@ -337,21 +315,11 @@ export const CreateEntityAssetSupamotoInstance = async (
           type: "WebDashboard",
           description: "SupaMoto Dashboard",
           mediaType: "application/html",
-          serviceEndpoint: `dashboard-supamoto:${deviceId}`,
+          serviceEndpoint: `emerging:/collection/?id=${deviceId}`,
           proof: "",
           encrypted: "false",
           right: "#apitoken",
         }),
-        // ixo.iid.v1beta1.LinkedResource.fromPartial({
-        //   id: "{id}#customer-credential",
-        //   type: "VerifiableCredential",
-        //   description: "Customer Credential",
-        //   mediaType: "application/ld+json",
-        //   serviceEndpoint: `cellnode:${cid}`,
-        //   proof: "",
-        //   encrypted: "false",
-        //   right: "",
-        // }),
       ],
       accordedRight: [],
       linkedEntity: [
@@ -364,7 +332,7 @@ export const CreateEntityAssetSupamotoInstance = async (
       ],
       ownerDid: did,
       ownerAddress: myAddress,
-      relayerNode: did,
+      relayerNode: relayerDid || did,
     }),
   };
 

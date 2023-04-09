@@ -141,7 +141,7 @@ export const setup_dao_constants = () => ({
 export const setup_protocol_ver_claims_constants = () => ({
   entity: {
     // type of entity eg dao/protocol/asset/oracle
-    entityType: "protocol",
+    entityType: "protocol/claims",
     // please use Impact DAO's did as relayerNode eg dids.impactsDao
     relayerNode: dids.emergingDao,
     // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass
@@ -277,7 +277,7 @@ export const setup_protocol_ver_claims_constants = () => ({
 export const setup_protocol_cooking_constants = () => ({
   entity: {
     // type of entity eg dao/protocol/asset/oracle
-    entityType: "protocol",
+    entityType: "protocol/claims",
     // please use Impact DAO's did as relayerNode eg dids.impactsDao
     relayerNode: dids.emergingDao,
     // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass
@@ -413,7 +413,7 @@ export const setup_protocol_cooking_constants = () => ({
 export const setup_protocol_fuel_constants = () => ({
   entity: {
     // type of entity eg dao/protocol/asset/oracle
-    entityType: "protocol",
+    entityType: "protocol/claims",
     // please use Impact DAO's did as relayerNode eg dids.impactsDao
     relayerNode: dids.emergingDao,
     // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass

@@ -134,7 +134,7 @@ export const DeleteIidContext = async () => {
  * @param relationships list with values: 'authentication' | 'assertionMethod' | 'keyAgreement' | 'capabilityInvocation' | 'capabilityDelegation'
  */
 export const AddVerification = async (
-  relationships: string[] = ["authentication"]
+  relationships: string[] = ["authentication", "assertionMethod"]
 ) => {
   const client = await createClient();
 
@@ -143,8 +143,8 @@ export const AddVerification = async (
   const myAddress = account.address;
   const did = tester.did;
 
-  const alice = getUser(WalletUsers.alice);
-  const aliceAccount = (await alice.getAccounts())[0];
+  const accountEd = (await getUser(WalletUsers.tester, "ed").getAccounts())[0];
+  const myPubkey = accountEd.pubkey;
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgAddVerification",
@@ -153,10 +153,10 @@ export const AddVerification = async (
       verification: ixo.iid.v1beta1.Verification.fromPartial({
         relationships: relationships,
         method: customMessages.iid.createVerificationMethod(
-          alice.did,
-          aliceAccount.pubkey,
-          alice.did,
-          keyType
+          did,
+          myPubkey,
+          did,
+          "ed"
         ),
       }),
       signer: myAddress,
@@ -171,7 +171,7 @@ export const AddVerification = async (
  * @param relationships list with values: 'authentication' | 'assertionMethod' | 'keyAgreement' | 'capabilityInvocation' | 'capabilityDelegation'
  */
 export const SetVerificationRelationships = async (
-  relationships: string[] = ["authentication"]
+  relationships: string[] = ["assertionMethod"]
 ) => {
   const client = await createClient();
 

@@ -76,7 +76,7 @@ export const MsgSubmitProposalStoreCW = async (
         value: cosmwasm.wasm.v1.StoreCodeProposal.encode(
           cosmwasm.wasm.v1.StoreCodeProposal.fromPartial({
             title: `Upload ${contract} smart contract`,
-            description: "Description",
+            description: "A cosmwasm smart contract",
             runAs: myAddress,
             wasmByteCode: new Uint8Array(
               getFileFromPath(

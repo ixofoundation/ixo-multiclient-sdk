@@ -13,6 +13,7 @@ export const claimsBasic = () =>
       const res = await Entity.CreateEntity(
         "protocol",
         undefined,
+        "",
         WalletUsers.charlie
       );
       protocol = utils.common.getValueFromEvents(res, "wasm", "token_id");
@@ -130,6 +131,7 @@ export const devnetClaims = () =>
       const res = await Entity.CreateEntity(
         "protocol",
         undefined,
+        "",
         WalletUsers.charlie
       );
       protocol = utils.common.getValueFromEvents(res, "wasm", "token_id");

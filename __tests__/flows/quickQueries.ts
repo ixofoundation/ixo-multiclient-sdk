@@ -7,11 +7,29 @@ export const quickQueries = () =>
   describe("Quick queries to see states", () => {
     test("Quick queries to see states filler", () => expect(true).toBeTruthy());
 
-    // test("Query cosmos.tx.v1beta1.getBlockWithTxs", async () => {
-    //   const res = await queryClient.cosmos.tx.v1beta1.getTx({
-    //     hash: "C35404333376CD5FC1AFD57903061394F0333CF6B8047E9A693E0E59350AE695",
+    // test("Query ixo.bonds.v1beta1", async () => {
+    //   const res = await queryClient.ixo.bonds.v1beta1.bondsDetailed();
+    //   console.log(res.bondsDetailed);
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query cosmos.tx.v1beta1.getTxsEvent", async () => {
+    //   const res = await queryClient.cosmos.tx.v1beta1.getTxsEvent({
+    //     events: [`tx.height=${15955}`],
+    //     orderBy: 1,
     //   });
-    //   console.log(res.txResponse?.events);
+    //   // console.log(res);
+    //   console.log(res.txResponses[0]);
+    //   console.log(createRegistry().decode(res.txResponses[0].tx!));
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query cosmos.tx.v1beta1.getBlockByHeight", async () => {
+    //   const res =
+    //     await queryClient.cosmos.base.tendermint.v1beta1.getBlockByHeight({
+    //       height: Long.fromNumber(15955),
+    //     });
+    //   console.log(res);
     //   expect(res).toBeTruthy();
     // });
 
@@ -59,12 +77,6 @@ export const quickQueries = () =>
     //     queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
     //   });
     //   console.log(utils.conversions.Uint8ArrayToJS(res.data));
-    //   expect(res).toBeTruthy();
-    // });
-
-    // test("query wasm store codes", async () => {
-    //   const res = await queryClient.cosmwasm.wasm.v1.codes();
-    //   console.log(res.codeInfos);
     //   expect(res).toBeTruthy();
     // });
 

@@ -145,7 +145,7 @@ export const setup_dao_constants = () => ({
 export const setup_oracle_constants = () => ({
   entity: {
     // type of entity eg dao/protocol/asset/oracle
-    entityType: "oracle",
+    entityType: "oracle/evaluation",
     // please use Impact DAO's did as relayerNode eg dids.impactsDao
     relayerNode: dids.emergingDao,
     // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass

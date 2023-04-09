@@ -26,9 +26,13 @@ impactsFlow();
 // next create emerging dao to save did to ./constants.ts
 emergingDaoFlow();
 
-// next can create the other daos etc
+// next create emerging protocols and save cookstoveAssetProtocol to ./constants.ts
 emergingProtocolsFlow();
-ecsFlow();
+
+// next create daos and oracles and save oracles dids to ./constants.ts
 propectFlow();
 scalnyxFlow();
+
+// next can create the other daos etc
+ecsFlow();
 supamotoFlow();
