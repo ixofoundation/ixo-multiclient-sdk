@@ -13,12 +13,20 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
+    // test("Query cosmos.tx.v1beta1.getTx", async () => {
+    //   const res = await queryClient.cosmos.tx.v1beta1.getTx({
+    //     hash: "059CE93CA191E3E097247A23537A3B326128BF0101A44B5B23F9CD93A9AA68F5",
+    //   });
+    //   console.log(res.tx);
+    //   expect(res).toBeTruthy();
+    // });
+
     // test("Query cosmos.tx.v1beta1.getTxsEvent", async () => {
     //   const res = await queryClient.cosmos.tx.v1beta1.getTxsEvent({
     //     events: [`tx.height=${15955}`],
     //     orderBy: 1,
     //   });
-    //   // console.log(res);
+    //   console.log(res.txs[0]!.body!.messages[0]);
     //   console.log(res.txResponses[0]);
     //   console.log(createRegistry().decode(res.txResponses[0].tx!));
     //   expect(res).toBeTruthy();
@@ -206,13 +214,18 @@ export const quickQueries = () =>
 
     // test("query iid doc", async () => {
     //   const did: string =
-    //     "did:x:zQ3shUQYdonbR4CaaWBmfYMHND7KEXY3tEStFndNGWp4njQ54";
+    //     "did:x:zQ3shUQYdonbR4CaafBmfYMHND7KEXY3tEStFndNGWp4njQ54";
     //   // const did = getUser(WalletUsers.tester).did;
-    //   const res = await queryClient.ixo.iid.v1beta1.iidDocument({
-    //     id: did,
-    //   });
-    //   console.log(res.iidDocument);
-    //   expect(res).toBeTruthy();
+    //   try {
+    //     const res = await queryClient.ixo.iid.v1beta1.iidDocument({
+    //       id: did,
+    //     });
+    //     console.log(res);
+    //     console.log(res.iidDocument);
+    //   } catch (error) {
+    //     console.log(error.message);
+    //   }
+    //   expect(true).toBeTruthy();
     // });
 
     // test("Query module params", async () => {
