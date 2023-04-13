@@ -5,5 +5,6 @@ export declare const contracts: {
     code: {
         devnet: number;
         testnet: number;
+        mainnet: number;
     };
 }[];

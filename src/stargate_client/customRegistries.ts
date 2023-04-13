@@ -52,6 +52,14 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
     "/cosmos.feegrant.v1beta1.MsgRevokeAllowance",
     cosmos.feegrant.v1beta1.MsgRevokeAllowance,
   ],
+  [
+    "/cosmos.feegrant.v1beta1.BasicAllowance",
+    cosmos.feegrant.v1beta1.BasicAllowance,
+  ],
+  [
+    "/cosmos.feegrant.v1beta1.PeriodicAllowance",
+    cosmos.feegrant.v1beta1.PeriodicAllowance,
+  ],
 
   // gov
   ["/cosmos.gov.v1beta1.MsgDeposit", cosmos.gov.v1beta1.MsgDeposit],
