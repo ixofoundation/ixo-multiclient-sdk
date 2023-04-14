@@ -9,9 +9,7 @@ export interface QueryParamsRequest {
 }
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequestSDKType {
-    /** subspace defines the module to query the parameter for. */
     subspace: string;
-    /** key defines the key of the parameter in the subspace. */
     key: string;
 }
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
@@ -21,7 +19,6 @@ export interface QueryParamsResponse {
 }
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
 export interface QueryParamsResponseSDKType {
-    /** param defines the queried parameter. */
     param?: ParamChangeSDKType;
 }
 /**

@@ -2,7 +2,6 @@ import { StdFee } from "@cosmjs/amino";
 import { EncodeObject, OfflineSigner, Registry } from "@cosmjs/proto-signing";
 import { AminoTypes, DeliverTxResponse, SignerData, GasPrice } from "@cosmjs/stargate";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
-import { Coin } from "cosmjs-types/cosmos/base/v1beta1/coin";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { StargateClient, StargateClientOptions } from "./customStargateClient";
 export interface SigningStargateClientOptions extends StargateClientOptions {
@@ -35,10 +34,6 @@ export declare class SigningStargateClient extends StargateClient {
     static offline(signer: OfflineSigner, options?: SigningStargateClientOptions, ignoreGetSequence?: boolean): Promise<SigningStargateClient>;
     protected constructor(tmClient: Tendermint34Client | undefined, signer: OfflineSigner, options: SigningStargateClientOptions, ignoreGetSequence?: boolean);
     simulate(signerAddress: string, messages: readonly EncodeObject[], memo: string | undefined): Promise<number>;
-    sendTokens(senderAddress: string, recipientAddress: string, amount: readonly Coin[], fee: StdFee | "auto" | number, memo?: string): Promise<DeliverTxResponse>;
-    delegateTokens(delegatorAddress: string, validatorAddress: string, amount: Coin, fee: StdFee | "auto" | number, memo?: string): Promise<DeliverTxResponse>;
-    undelegateTokens(delegatorAddress: string, validatorAddress: string, amount: Coin, fee: StdFee | "auto" | number, memo?: string): Promise<DeliverTxResponse>;
-    withdrawRewards(delegatorAddress: string, validatorAddress: string, fee: StdFee | "auto" | number, memo?: string): Promise<DeliverTxResponse>;
     signAndBroadcast(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee | "auto" | number, memo?: string): Promise<DeliverTxResponse>;
     /**
      * Gets account number and sequence from the API, creates a sign doc,

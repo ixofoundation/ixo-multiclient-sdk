@@ -8,7 +8,6 @@ export interface CollectionCreatedEvent {
 }
 /** CollectionCreatedEvent is an event triggered on a Collection creation */
 export interface CollectionCreatedEventSDKType {
-    /** CollectionCreatedEvent is an event triggered on a Collection creation */
     collection?: CollectionSDKType;
 }
 /** CollectionUpdatedEvent is an event triggered on a Collection update */
@@ -18,7 +17,6 @@ export interface CollectionUpdatedEvent {
 }
 /** CollectionUpdatedEvent is an event triggered on a Collection update */
 export interface CollectionUpdatedEventSDKType {
-    /** CollectionUpdatedEvent is an event triggered on a Collection update */
     collection?: CollectionSDKType;
 }
 /** CollectionCreatedEvent is an event triggered on a Claim submission */
@@ -28,7 +26,6 @@ export interface ClaimSubmittedEvent {
 }
 /** CollectionCreatedEvent is an event triggered on a Claim submission */
 export interface ClaimSubmittedEventSDKType {
-    /** CollectionCreatedEvent is an event triggered on a Claim submission */
     claim?: ClaimSDKType;
 }
 /** ClaimUpdatedEvent is an event triggered on a Claim update */
@@ -38,7 +35,6 @@ export interface ClaimUpdatedEvent {
 }
 /** ClaimUpdatedEvent is an event triggered on a Claim update */
 export interface ClaimUpdatedEventSDKType {
-    /** ClaimUpdatedEvent is an event triggered on a Claim update */
     claim?: ClaimSDKType;
 }
 /** ClaimEvaluatedEvent is an event triggered on a Claim evaluation */
@@ -48,7 +44,6 @@ export interface ClaimEvaluatedEvent {
 }
 /** ClaimEvaluatedEvent is an event triggered on a Claim evaluation */
 export interface ClaimEvaluatedEventSDKType {
-    /** ClaimEvaluatedEvent is an event triggered on a Claim evaluation */
     evaluation?: EvaluationSDKType;
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
@@ -58,7 +53,6 @@ export interface ClaimDisputedEvent {
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface ClaimDisputedEventSDKType {
-    /** ClaimDisputedEvent is an event triggered on a Claim dispute */
     dispute?: DisputeSDKType;
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
@@ -68,7 +62,6 @@ export interface PaymentWithdrawnEvent {
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface PaymentWithdrawnEventSDKType {
-    /** ClaimDisputedEvent is an event triggered on a Claim dispute */
     withdraw?: WithdrawPaymentConstraintsSDKType;
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
@@ -78,7 +71,6 @@ export interface PaymentWithdrawCreatedEvent {
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface PaymentWithdrawCreatedEventSDKType {
-    /** ClaimDisputedEvent is an event triggered on a Claim dispute */
     withdraw?: WithdrawPaymentConstraintsSDKType;
 }
 export declare const CollectionCreatedEvent: {

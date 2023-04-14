@@ -14,13 +14,9 @@ export interface MsgRegisterPayee {
 }
 /** MsgRegisterPayee defines the request type for the RegisterPayee rpc */
 export interface MsgRegisterPayeeSDKType {
-    /** unique port identifier */
     port_id: string;
-    /** unique channel identifier */
     channel_id: string;
-    /** the relayer address */
     relayer: string;
-    /** the payee address */
     payee: string;
 }
 /** MsgRegisterPayeeResponse defines the response type for the RegisterPayee rpc */
@@ -42,13 +38,9 @@ export interface MsgRegisterCounterpartyPayee {
 }
 /** MsgRegisterCounterpartyPayee defines the request type for the RegisterCounterpartyPayee rpc */
 export interface MsgRegisterCounterpartyPayeeSDKType {
-    /** unique port identifier */
     port_id: string;
-    /** unique channel identifier */
     channel_id: string;
-    /** the relayer address */
     relayer: string;
-    /** the counterparty payee address */
     counterparty_payee: string;
 }
 /** MsgRegisterCounterpartyPayeeResponse defines the response type for the RegisterCounterpartyPayee rpc */
@@ -80,15 +72,10 @@ export interface MsgPayPacketFee {
  * paid for
  */
 export interface MsgPayPacketFeeSDKType {
-    /** fee encapsulates the recv, ack and timeout fees associated with an IBC packet */
     fee?: FeeSDKType;
-    /** the source port unique identifier */
     source_port_id: string;
-    /** the source channel unique identifer */
     source_channel_id: string;
-    /** account address to refund fee if necessary */
     signer: string;
-    /** optional list of relayers permitted to the receive packet fees */
     relayers: string[];
 }
 /** MsgPayPacketFeeResponse defines the response type for the PayPacketFee rpc */
@@ -112,9 +99,7 @@ export interface MsgPayPacketFeeAsync {
  * This Msg can be used to pay for a packet at a specified sequence (instead of the next sequence send)
  */
 export interface MsgPayPacketFeeAsyncSDKType {
-    /** unique packet identifier comprised of the channel ID, port ID and sequence */
     packet_id?: PacketIdSDKType;
-    /** the packet fee associated with a particular IBC packet */
     packet_fee?: PacketFeeSDKType;
 }
 /** MsgPayPacketFeeAsyncResponse defines the response type for the PayPacketFeeAsync rpc */

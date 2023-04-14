@@ -1,7 +1,7 @@
 import { MsgStoreCode, MsgStoreCodeSDKType, MsgInstantiateContract, MsgInstantiateContractSDKType, MsgExecuteContract, MsgExecuteContractSDKType } from "./tx";
 import { Params, ParamsSDKType, CodeInfo, CodeInfoSDKType, ContractInfo, ContractInfoSDKType, Model, ModelSDKType, ContractCodeHistoryEntry, ContractCodeHistoryEntrySDKType } from "./types";
+import { Long, isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { isSet, Long, bytesFromBase64, base64FromBytes } from "../../../helpers";
 /** GenesisState - genesis state of x/wasm */
 
 export interface GenesisState {
@@ -56,8 +56,6 @@ export interface CodeSDKType {
   code_id: Long;
   code_info?: CodeInfoSDKType;
   code_bytes: Uint8Array;
-  /** Pinned to wasmvm cache */
-
   pinned: boolean;
 }
 /** Contract struct encompasses ContractAddress, ContractInfo, and ContractState */

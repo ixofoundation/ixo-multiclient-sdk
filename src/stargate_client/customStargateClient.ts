@@ -5,13 +5,11 @@ import {
   BankExtension,
   Coin,
   IndexedTx,
-  QueryClient,
   SearchTxQuery,
   SequenceResponse,
   setupAuthExtension,
   setupBankExtension,
   setupStakingExtension,
-  setupTxExtension,
   StakingExtension,
   TxExtension,
   SearchTxFilter,
@@ -20,6 +18,7 @@ import {
   isSearchByTagsQuery,
   DeliverTxResponse,
   TimeoutError,
+  QueryClient,
 } from "@cosmjs/stargate";
 import { sleep } from "@cosmjs/utils";
 import { Uint53 } from "@cosmjs/math";
@@ -29,6 +28,7 @@ import {
 } from "@cosmjs/tendermint-rpc";
 import { AccountParser } from "./edAccountHandler";
 import { toHex } from "@cosmjs/encoding";
+import { setupTxExtension } from "./customTxQueries";
 
 export interface StargateClientOptions {
   readonly accountParser?: AccountParser;
@@ -140,9 +140,11 @@ export class StargateClient {
       txs: response.block.txs,
     };
   }
+
   async getBalance(address: string, searchDenom: string): Promise<Coin> {
     return this.forceGetQueryClient().bank.balance(address, searchDenom);
   }
+
   /**
    * Queries all balances for all denoms that belong to this address.
    *
@@ -152,61 +154,13 @@ export class StargateClient {
   async getAllBalances(address: string): Promise<readonly Coin[]> {
     return this.forceGetQueryClient().bank.allBalances(address);
   }
-  // async getBalanceStaked(address) {
-  //   const allDelegations = [];
-  //   let startAtKey = undefined;
-  //   do {
-  //     const { delegationResponses, pagination } =
-  //       await this.forceGetQueryClient().staking.delegatorDelegations(
-  //         address,
-  //         startAtKey
-  //       );
-  //     const loadedDelegations = delegationResponses || [];
-  //     allDelegations.push(...loadedDelegations);
-  //     startAtKey =
-  //       pagination === null || pagination === void 0
-  //         ? void 0
-  //         : pagination.nextKey;
-  //   } while (startAtKey !== undefined && startAtKey.length !== 0);
-  //   const sumValues = allDelegations.reduce((previousValue, currentValue) => {
-  //     // Safe because field is set to non-nullable (https://github.com/cosmos/cosmos-sdk/blob/v0.45.3/proto/cosmos/staking/v1beta1/staking.proto#L295)
-  //     (0, utils_1.assert)(currentValue.balance);
-  //     return previousValue !== null
-  //       ? (0, amino_1.addCoins)(previousValue, currentValue.balance)
-  //       : currentValue.balance;
-  //   }, null);
-  //   return sumValues;
-  // }
-  async getDelegation(
-    delegatorAddress: string,
-    validatorAddress: string
-  ): Promise<Coin | null> {
-    var _a;
-    let delegatedAmount;
-    try {
-      delegatedAmount =
-        (_a = (
-          await this.forceGetQueryClient().staking.delegation(
-            delegatorAddress,
-            validatorAddress
-          )
-        ).delegationResponse) === null || _a === void 0
-          ? void 0
-          : _a.balance;
-    } catch (e) {
-      if (e.toString().includes("key not found")) {
-        // ignore, `delegatedAmount` remains undefined
-      } else {
-        throw e;
-      }
-    }
-    return delegatedAmount || null;
-  }
+
   async getTx(id: string): Promise<IndexedTx | null> {
     var _a;
     const results = await this.txsQuery(`tx.hash='${id}'`);
     return (_a = results[0]) !== null && _a !== void 0 ? _a : null;
   }
+
   async searchTx(
     query: SearchTxQuery,
     filter?: SearchTxFilter
@@ -248,9 +202,11 @@ export class StargateClient {
     );
     return filtered;
   }
+
   disconnect() {
     if (this.tmClient) this.tmClient.disconnect();
   }
+
   /**
    * Broadcasts a signed transaction to the network and monitors its inclusion in a block.
    *
@@ -297,7 +253,7 @@ export class StargateClient {
     if (broadcasted.code) {
       return Promise.reject(
         new Error(
-          `Broadcasting transaction failed with code ${broadcasted.code} (codespace: ${broadcasted.codeSpace}). Log: ${broadcasted.log}`
+          `Broadcasting transaction failed with code ${broadcasted.code} (codespace: ${broadcasted.codespace}). Log: ${broadcasted.log}`
         )
       );
     }
@@ -315,6 +271,7 @@ export class StargateClient {
       )
     );
   }
+
   private async txsQuery(query) {
     const results = await this.forceGetTmClient().txSearchAll({ query: query });
     return results.txs.map((tx) => {

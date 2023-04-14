@@ -1,7 +1,7 @@
 import { Channel, ChannelSDKType, Packet, PacketSDKType } from "./channel";
 import { Height, HeightSDKType } from "../../client/v1/client";
+import { Long, isSet, bytesFromBase64, base64FromBytes } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { isSet, bytesFromBase64, base64FromBytes, Long } from "../../../../helpers";
 /** ResponseResultType defines the possible outcomes of the execution of a message */
 
 export enum ResponseResultType {
@@ -15,19 +15,7 @@ export enum ResponseResultType {
   RESPONSE_RESULT_TYPE_SUCCESS = 2,
   UNRECOGNIZED = -1,
 }
-/** ResponseResultType defines the possible outcomes of the execution of a message */
-
-export enum ResponseResultTypeSDKType {
-  /** RESPONSE_RESULT_TYPE_UNSPECIFIED - Default zero value enumeration */
-  RESPONSE_RESULT_TYPE_UNSPECIFIED = 0,
-
-  /** RESPONSE_RESULT_TYPE_NOOP - The message did not call the IBC application callbacks (because, for example, the packet had already been relayed) */
-  RESPONSE_RESULT_TYPE_NOOP = 1,
-
-  /** RESPONSE_RESULT_TYPE_SUCCESS - The message was executed successfully */
-  RESPONSE_RESULT_TYPE_SUCCESS = 2,
-  UNRECOGNIZED = -1,
-}
+export const ResponseResultTypeSDKType = ResponseResultType;
 export function responseResultTypeFromJSON(object: any): ResponseResultType {
   switch (object) {
     case 0:
@@ -125,13 +113,9 @@ export interface MsgChannelOpenTry {
 
 export interface MsgChannelOpenTrySDKType {
   port_id: string;
-  /** Deprecated: this field is unused. Crossing hello's are no longer supported in core IBC. */
-
   /** @deprecated */
 
   previous_channel_id: string;
-  /** NOTE: the version field within the channel has been deprecated. Its value will be ignored by core IBC. */
-
   channel?: ChannelSDKType;
   counterparty_version: string;
   proof_init: Uint8Array;
@@ -304,7 +288,7 @@ export interface MsgRecvPacketResponse {
 /** MsgRecvPacketResponse defines the Msg/RecvPacket response type. */
 
 export interface MsgRecvPacketResponseSDKType {
-  result: ResponseResultTypeSDKType;
+  result: ResponseResultType;
 }
 /** MsgTimeout receives timed-out packet */
 
@@ -332,7 +316,7 @@ export interface MsgTimeoutResponse {
 /** MsgTimeoutResponse defines the Msg/Timeout response type. */
 
 export interface MsgTimeoutResponseSDKType {
-  result: ResponseResultTypeSDKType;
+  result: ResponseResultType;
 }
 /** MsgTimeoutOnClose timed-out packet upon counterparty channel closure. */
 
@@ -362,7 +346,7 @@ export interface MsgTimeoutOnCloseResponse {
 /** MsgTimeoutOnCloseResponse defines the Msg/TimeoutOnClose response type. */
 
 export interface MsgTimeoutOnCloseResponseSDKType {
-  result: ResponseResultTypeSDKType;
+  result: ResponseResultType;
 }
 /** MsgAcknowledgement receives incoming IBC acknowledgement */
 
@@ -390,7 +374,7 @@ export interface MsgAcknowledgementResponse {
 /** MsgAcknowledgementResponse defines the Msg/Acknowledgement response type. */
 
 export interface MsgAcknowledgementResponseSDKType {
-  result: ResponseResultTypeSDKType;
+  result: ResponseResultType;
 }
 
 function createBaseMsgChannelOpenInit(): MsgChannelOpenInit {

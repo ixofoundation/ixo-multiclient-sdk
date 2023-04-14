@@ -1,6 +1,6 @@
 import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
-import * as _m0 from "protobufjs/minimal";
 import { Long, isSet, bytesFromBase64, base64FromBytes, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import * as _m0 from "protobufjs/minimal";
 export interface ProtocolVersion {
   p2p: Long;
   block: Long;

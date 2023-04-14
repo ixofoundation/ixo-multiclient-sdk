@@ -7,7 +7,6 @@ export interface QueryIidDocumentsRequest {
   pagination?: PageRequest;
 }
 export interface QueryIidDocumentsRequestSDKType {
-  /** pagination defines an optional pagination for the request. */
   pagination?: PageRequestSDKType;
 }
 export interface QueryIidDocumentsResponse {
@@ -18,8 +17,6 @@ export interface QueryIidDocumentsResponse {
 }
 export interface QueryIidDocumentsResponseSDKType {
   iidDocuments: IidDocumentSDKType[];
-  /** pagination defines the pagination in the response. */
-
   pagination?: PageResponseSDKType;
 }
 export interface QueryIidDocumentRequest {
@@ -27,7 +24,6 @@ export interface QueryIidDocumentRequest {
   id: string;
 }
 export interface QueryIidDocumentRequestSDKType {
-  /** did id of iid document querying */
   id: string;
 }
 export interface QueryIidDocumentResponse {

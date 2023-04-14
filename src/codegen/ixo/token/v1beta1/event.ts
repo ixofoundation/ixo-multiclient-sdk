@@ -11,7 +11,6 @@ export interface TokenCreatedEvent {
 /** TokenCreatedEvent is an event triggered on a Token creation */
 
 export interface TokenCreatedEventSDKType {
-  /** TokenCreatedEvent is an event triggered on a Token creation */
   token?: TokenSDKType;
 }
 /** TokenUpdatedEvent is an event triggered on a Token update */
@@ -23,7 +22,6 @@ export interface TokenUpdatedEvent {
 /** TokenUpdatedEvent is an event triggered on a Token update */
 
 export interface TokenUpdatedEventSDKType {
-  /** TokenUpdatedEvent is an event triggered on a Token update */
   token?: TokenSDKType;
 }
 /** TokenMintedEvent is an event triggered on a Token mint execution */
@@ -43,13 +41,8 @@ export interface TokenMintedEvent {
 /** TokenMintedEvent is an event triggered on a Token mint execution */
 
 export interface TokenMintedEventSDKType {
-  /** the contract address of token contract being initialized */
   contract_address: string;
-  /** the token minter */
-
   minter: string;
-  /** the new tokens owner */
-
   owner: string;
   amount: string;
   tokenProperties?: TokenPropertiesSDKType;
@@ -67,10 +60,7 @@ export interface TokenTransferredEvent {
 /** TokenTransferedEvent is an event triggered on a Token transfer execution */
 
 export interface TokenTransferredEventSDKType {
-  /** the old token owner */
   owner: string;
-  /** the new tokens owner */
-
   recipient: string;
   tokens: TokenBatchSDKType[];
 }
@@ -84,7 +74,6 @@ export interface TokenCancelledEvent {
 /** TokenCancelledEvent is an event triggered on a Token cancel execution */
 
 export interface TokenCancelledEventSDKType {
-  /** the token owner */
   owner: string;
   tokens: TokenBatchSDKType[];
 }
@@ -98,7 +87,6 @@ export interface TokenRetiredEvent {
 /** TokenRetiredEvent is an event triggered on a Token retire execution */
 
 export interface TokenRetiredEventSDKType {
-  /** the token owner */
   owner: string;
   tokens: TokenBatchSDKType[];
 }
@@ -113,7 +101,6 @@ export interface TokenPausedEvent {
 /** TokenPausedEvent is an event triggered on a Token pause/unpause execution */
 
 export interface TokenPausedEventSDKType {
-  /** the minter address */
   minter: string;
   contract_address: string;
   paused: boolean;
@@ -129,7 +116,6 @@ export interface TokenStoppedEvent {
 /** TokenStoppedEvent is an event triggered on a Token stopped execution */
 
 export interface TokenStoppedEventSDKType {
-  /** the minter address */
   minter: string;
   contract_address: string;
   stopped: boolean;

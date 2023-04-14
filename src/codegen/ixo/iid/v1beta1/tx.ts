@@ -22,13 +22,8 @@ export interface Verification {
  */
 
 export interface VerificationSDKType {
-  /** relationships that the method is allowed into. */
   relationships: string[];
-  /** public key associated with the did document. */
-
   method?: VerificationMethodSDKType;
-  /** additional contexts (json ld schemas) */
-
   context: string[];
 }
 /** MsgCreateDidDocument defines a SDK message for creating a new did. */
@@ -56,22 +51,15 @@ export interface MsgCreateIidDocument {
 /** MsgCreateDidDocument defines a SDK message for creating a new did. */
 
 export interface MsgCreateIidDocumentSDKType {
-  /** the did */
   id: string;
-  /** the list of controller DIDs */
-
   controllers: string[];
   context: ContextSDKType[];
-  /** the list of verification methods and relationships */
-
   verifications: VerificationSDKType[];
   services: ServiceSDKType[];
   accordedRight: AccordedRightSDKType[];
   linkedResource: LinkedResourceSDKType[];
   linkedEntity: LinkedEntitySDKType[];
   alsoKnownAs: string;
-  /** address of the account signing the message */
-
   signer: string;
   linkedClaim: LinkedClaimSDKType[];
 }
@@ -108,22 +96,15 @@ export interface MsgUpdateIidDocument {
  */
 
 export interface MsgUpdateIidDocumentSDKType {
-  /** the did */
   id: string;
-  /** the list of controller DIDs */
-
   controllers: string[];
   context: ContextSDKType[];
-  /** the list of verification methods and relationships */
-
   verifications: VerificationSDKType[];
   services: ServiceSDKType[];
   accordedRight: AccordedRightSDKType[];
   linkedResource: LinkedResourceSDKType[];
   linkedEntity: LinkedEntitySDKType[];
   alsoKnownAs: string;
-  /** address of the account signing the message */
-
   signer: string;
   linkedClaim: LinkedClaimSDKType[];
 }
@@ -140,13 +121,8 @@ export interface MsgAddVerification {
   signer: string;
 }
 export interface MsgAddVerificationSDKType {
-  /** the did */
   id: string;
-  /** the verification to add */
-
   verification?: VerificationSDKType;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgAddVerificationResponse {}
@@ -165,16 +141,9 @@ export interface MsgSetVerificationRelationships {
   signer: string;
 }
 export interface MsgSetVerificationRelationshipsSDKType {
-  /** the did */
   id: string;
-  /** the verification method id */
-
   method_id: string;
-  /** the list of relationships to set */
-
   relationships: string[];
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgSetVerificationRelationshipsResponse {}
@@ -190,13 +159,8 @@ export interface MsgRevokeVerification {
   signer: string;
 }
 export interface MsgRevokeVerificationSDKType {
-  /** the did */
   id: string;
-  /** the verification method id */
-
   method_id: string;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgRevokeVerificationResponse {}
@@ -212,13 +176,8 @@ export interface MsgAddService {
   signer: string;
 }
 export interface MsgAddServiceSDKType {
-  /** the did */
   id: string;
-  /** the service data to add */
-
   service_data?: ServiceSDKType;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgAddServiceResponse {}
@@ -234,13 +193,8 @@ export interface MsgDeleteService {
   signer: string;
 }
 export interface MsgDeleteServiceSDKType {
-  /** the did */
   id: string;
-  /** the service id */
-
   service_id: string;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgDeleteServiceResponse {}
@@ -256,13 +210,8 @@ export interface MsgAddController {
   signer: string;
 }
 export interface MsgAddControllerSDKType {
-  /** the did of the document */
   id: string;
-  /** the did to add as a controller of the did document */
-
   controller_did: string;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgAddControllerResponse {}
@@ -278,13 +227,8 @@ export interface MsgDeleteController {
   signer: string;
 }
 export interface MsgDeleteControllerSDKType {
-  /** the did of the document */
   id: string;
-  /** the did to remove from the list of controllers of the did document */
-
   controller_did: string;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgDeleteControllerResponse {}
@@ -300,13 +244,8 @@ export interface MsgAddLinkedResource {
   signer: string;
 }
 export interface MsgAddLinkedResourceSDKType {
-  /** the did */
   id: string;
-  /** the verification to add */
-
   linkedResource?: LinkedResourceSDKType;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgDeleteLinkedResource {
@@ -320,13 +259,8 @@ export interface MsgDeleteLinkedResource {
   signer: string;
 }
 export interface MsgDeleteLinkedResourceSDKType {
-  /** the did */
   id: string;
-  /** the service id */
-
   resource_id: string;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgAddLinkedClaim {
@@ -340,13 +274,8 @@ export interface MsgAddLinkedClaim {
   signer: string;
 }
 export interface MsgAddLinkedClaimSDKType {
-  /** the did */
   id: string;
-  /** the claim to add */
-
   linkedClaim?: LinkedClaimSDKType;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgDeleteLinkedClaim {
@@ -360,13 +289,8 @@ export interface MsgDeleteLinkedClaim {
   signer: string;
 }
 export interface MsgDeleteLinkedClaimSDKType {
-  /** the did */
   id: string;
-  /** the claim id */
-
   claim_id: string;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgAddLinkedEntity {
@@ -380,13 +304,8 @@ export interface MsgAddLinkedEntity {
   signer: string;
 }
 export interface MsgAddLinkedEntitySDKType {
-  /** the iid */
   id: string;
-  /** the entity to add */
-
   linkedEntity?: LinkedEntitySDKType;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgDeleteLinkedEntity {
@@ -400,13 +319,8 @@ export interface MsgDeleteLinkedEntity {
   signer: string;
 }
 export interface MsgDeleteLinkedEntitySDKType {
-  /** the iid */
   id: string;
-  /** the entity id */
-
   entity_id: string;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgAddAccordedRight {
@@ -420,13 +334,8 @@ export interface MsgAddAccordedRight {
   signer: string;
 }
 export interface MsgAddAccordedRightSDKType {
-  /** the did */
   id: string;
-  /** the Accorded right to add */
-
   accordedRight?: AccordedRightSDKType;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgDeleteAccordedRight {
@@ -440,13 +349,8 @@ export interface MsgDeleteAccordedRight {
   signer: string;
 }
 export interface MsgDeleteAccordedRightSDKType {
-  /** the did */
   id: string;
-  /** the Accorded right id */
-
   right_id: string;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgAddIidContext {
@@ -460,13 +364,8 @@ export interface MsgAddIidContext {
   signer: string;
 }
 export interface MsgAddIidContextSDKType {
-  /** the did */
   id: string;
-  /** the context to add */
-
   context?: ContextSDKType;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgDeactivateIID {
@@ -478,11 +377,8 @@ export interface MsgDeactivateIID {
   signer: string;
 }
 export interface MsgDeactivateIIDSDKType {
-  /** the did */
   id: string;
   state: boolean;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgDeleteIidContext {
@@ -496,13 +392,8 @@ export interface MsgDeleteIidContext {
   signer: string;
 }
 export interface MsgDeleteIidContextSDKType {
-  /** the did */
   id: string;
-  /** the context key */
-
   contextKey: string;
-  /** address of the account signing the message */
-
   signer: string;
 }
 export interface MsgAddLinkedResourceResponse {}

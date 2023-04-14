@@ -20,13 +20,13 @@ export declare namespace tendermint {
         evidenceTypeFromJSON(object: any): _175.EvidenceType;
         evidenceTypeToJSON(object: _175.EvidenceType): string;
         CheckTxType: typeof _175.CheckTxType;
-        CheckTxTypeSDKType: typeof _175.CheckTxTypeSDKType;
+        CheckTxTypeSDKType: typeof _175.CheckTxType;
         ResponseOfferSnapshot_Result: typeof _175.ResponseOfferSnapshot_Result;
-        ResponseOfferSnapshot_ResultSDKType: typeof _175.ResponseOfferSnapshot_ResultSDKType;
+        ResponseOfferSnapshot_ResultSDKType: typeof _175.ResponseOfferSnapshot_Result;
         ResponseApplySnapshotChunk_Result: typeof _175.ResponseApplySnapshotChunk_Result;
-        ResponseApplySnapshotChunk_ResultSDKType: typeof _175.ResponseApplySnapshotChunk_ResultSDKType;
+        ResponseApplySnapshotChunk_ResultSDKType: typeof _175.ResponseApplySnapshotChunk_Result;
         EvidenceType: typeof _175.EvidenceType;
-        EvidenceTypeSDKType: typeof _175.EvidenceTypeSDKType;
+        EvidenceTypeSDKType: typeof _175.EvidenceType;
         Request: {
             encode(message: _175.Request, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
             decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _175.Request;
@@ -455,9 +455,9 @@ export declare namespace tendermint {
         signedMsgTypeFromJSON(object: any): _183.SignedMsgType;
         signedMsgTypeToJSON(object: _183.SignedMsgType): string;
         BlockIDFlag: typeof _183.BlockIDFlag;
-        BlockIDFlagSDKType: typeof _183.BlockIDFlagSDKType;
+        BlockIDFlagSDKType: typeof _183.BlockIDFlag;
         SignedMsgType: typeof _183.SignedMsgType;
-        SignedMsgTypeSDKType: typeof _183.SignedMsgTypeSDKType;
+        SignedMsgTypeSDKType: typeof _183.SignedMsgType;
         PartSetHeader: {
             encode(message: _183.PartSetHeader, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
             decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _183.PartSetHeader;

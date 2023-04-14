@@ -1,6 +1,6 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
-import * as _m0 from "protobufjs/minimal";
 import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import * as _m0 from "protobufjs/minimal";
 /**
  * Equivocation implements the Evidence interface and defines evidence of double
  * signing misbehavior.

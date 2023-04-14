@@ -51,50 +51,23 @@ export interface MsgCreateEntity {
     linkedClaim: LinkedClaim[];
 }
 export interface MsgCreateEntitySDKType {
-    /** An Entity Type as defined by the implementer */
     entity_type: string;
-    /**
-     * Status of the Entity as defined by the implementer and interpreted by
-     * Client applications
-     */
     entity_status: number;
-    /** the list of controller DIDs */
     controller: string[];
-    /** JSON-LD contexts */
     context: ContextSDKType[];
-    /** Verification Methods and Verification Relationships */
     verification: VerificationSDKType[];
-    /** Service endpoints */
     service: ServiceSDKType[];
-    /** Legal or Electronic Rights and associated Object Capabilities */
     accorded_right: AccordedRightSDKType[];
-    /** Digital resources associated with the Subject */
     linked_resource: LinkedResourceSDKType[];
-    /**
-     * DID of a linked Entity and its relationship with the Subject
-     * Start Date of the Entity as defined by the implementer and interpreted by
-     * Client applications
-     */
     linked_entity: LinkedEntitySDKType[];
     start_date?: TimestampSDKType;
-    /**
-     * End Date of the Entity as defined by the implementer and interpreted by
-     * Client applications
-     */
     end_date?: TimestampSDKType;
-    /** Address of the operator through which the Entity was created */
     relayer_node: string;
-    /**
-     * Content ID or Hash of public Verifiable Credentials associated with the
-     * subject
-     */
     credentials: string[];
     owner_did: string;
-    /** The ownersdid address used to sign this transaction. */
     owner_address: string;
     data: Uint8Array;
     alsoKnownAs: string;
-    /** Digital claims associated with the Subject */
     linked_claim: LinkedClaimSDKType[];
 }
 export interface MsgCreateEntityResponse {
@@ -143,30 +116,12 @@ export interface MsgUpdateEntity {
  * with default go type, aka never null
  */
 export interface MsgUpdateEntitySDKType {
-    /** Id of entity to be updated */
     id: string;
-    /**
-     * Status of the Entity as defined by the implementer and interpreted by
-     * Client applications
-     */
     entity_status: number;
-    /**
-     * Start Date of the Entity as defined by the implementer and interpreted by
-     * Client applications
-     */
     start_date?: TimestampSDKType;
-    /**
-     * End Date of the Entity as defined by the implementer and interpreted by
-     * Client applications
-     */
     end_date?: TimestampSDKType;
-    /**
-     * Content ID or Hash of public Verifiable Credentials associated with the
-     * subject
-     */
     credentials: string[];
     controller_did: string;
-    /** The controllerAddress used to sign this transaction. */
     controller_address: string;
 }
 export interface MsgUpdateEntityResponse {
@@ -185,12 +140,9 @@ export interface MsgUpdateEntityVerified {
 }
 /** Only relayer nodes can update entity field 'entityVerified' */
 export interface MsgUpdateEntityVerifiedSDKType {
-    /** Id of entity to be updated */
     id: string;
-    /** Whether entity is verified or not based on credentials */
     entity_verified: boolean;
     relayer_node_did: string;
-    /** The relayer node's address used to sign this transaction. */
     relayer_node_address: string;
 }
 export interface MsgUpdateEntityVerifiedResponse {
@@ -207,9 +159,7 @@ export interface MsgTransferEntity {
 }
 export interface MsgTransferEntitySDKType {
     id: string;
-    /** The owner_did used to sign this transaction. */
     owner_did: string;
-    /** The owner_address used to sign this transaction. */
     owner_address: string;
     recipient_did: string;
 }
@@ -234,11 +184,8 @@ export interface MsgCreateEntityAccount {
  * linkedEntity on entity iid doc where linkedEntity id is didfragment: did#name
  */
 export interface MsgCreateEntityAccountSDKType {
-    /** entity id (did) to create account for */
     id: string;
-    /** name of account */
     name: string;
-    /** The owner_address used to sign this transaction. */
     owner_address: string;
 }
 export interface MsgCreateEntityAccountResponse {
@@ -246,7 +193,6 @@ export interface MsgCreateEntityAccountResponse {
     account: string;
 }
 export interface MsgCreateEntityAccountResponseSDKType {
-    /** account address that was created for specific entity and account name */
     account: string;
 }
 /**
@@ -270,15 +216,10 @@ export interface MsgGrantEntityAccountAuthz {
  * grantee for the specific authorization
  */
 export interface MsgGrantEntityAccountAuthzSDKType {
-    /** entity id (did) to create account for */
     id: string;
-    /** name of account */
     name: string;
-    /** the grantee address that will be able to execute the authz authorization */
     grantee_address: string;
-    /** grant to be Authorized in authz grant */
     grant?: GrantSDKType;
-    /** the owner_address used to sign this transaction. */
     owner_address: string;
 }
 export interface MsgGrantEntityAccountAuthzResponse {

@@ -735,13 +735,13 @@ export declare namespace ixo {
             paymentStatusFromJSON(object: any): _149.PaymentStatus;
             paymentStatusToJSON(object: _149.PaymentStatus): string;
             CollectionState: typeof _149.CollectionState;
-            CollectionStateSDKType: typeof _149.CollectionStateSDKType;
+            CollectionStateSDKType: typeof _149.CollectionState;
             EvaluationStatus: typeof _149.EvaluationStatus;
-            EvaluationStatusSDKType: typeof _149.EvaluationStatusSDKType;
+            EvaluationStatusSDKType: typeof _149.EvaluationStatus;
             PaymentType: typeof _149.PaymentType;
-            PaymentTypeSDKType: typeof _149.PaymentTypeSDKType;
+            PaymentTypeSDKType: typeof _149.PaymentType;
             PaymentStatus: typeof _149.PaymentStatus;
-            PaymentStatusSDKType: typeof _149.PaymentStatusSDKType;
+            PaymentStatusSDKType: typeof _149.PaymentStatus;
             Params: {
                 encode(message: _149.Params, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _149.Params;
@@ -1916,7 +1916,7 @@ export declare namespace ixo {
             };
         }>;
         createRPCQueryClient: ({ rpcEndpoint }: {
-            rpcEndpoint: string;
+            rpcEndpoint: string | import("@cosmjs/tendermint-rpc").HttpEndpoint;
         }) => Promise<{
             cosmos: {
                 app: {

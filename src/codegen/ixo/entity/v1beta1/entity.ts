@@ -1,6 +1,6 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
-import * as _m0 from "protobufjs/minimal";
 import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
+import * as _m0 from "protobufjs/minimal";
 export interface Params {
   nftContractAddress: string;
   nftContractMinter: string;
@@ -55,46 +55,15 @@ export interface Entity {
   accounts: EntityAccount[];
 }
 export interface EntitySDKType {
-  /** id represents the id for the entity document. */
   id: string;
-  /** Type of entity, eg protocol or asset */
-
   type: string;
-  /**
-   * Start Date of the Entity as defined by the implementer and interpreted by
-   * Client applications
-   */
-
   start_date?: TimestampSDKType;
-  /**
-   * End Date of the Entity as defined by the implementer and interpreted by
-   * Client applications
-   */
-
   end_date?: TimestampSDKType;
-  /**
-   * Status of the Entity as defined by the implementer and interpreted by
-   * Client applications
-   */
-
   status: number;
-  /** Address of the operator through which the Entity was created */
-
   relayer_node: string;
-  /** Credentials of the enitity to be verified */
-
   credentials: string[];
-  /** Used as check whether the credentials of entity is verified */
-
   entity_verified: boolean;
-  /**
-   * Metadata concerning the Entity such as versionId, created, updated and
-   * deactivated
-   */
-
   metadata?: EntityMetadataSDKType;
-  /** module accounts created for entity */
-
   accounts: EntityAccountSDKType[];
 }
 export interface EntityAccount {

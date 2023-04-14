@@ -1,7 +1,7 @@
 import { Any, AnySDKType } from "../../../google/protobuf/any";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { Long, isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { isSet, Long, bytesFromBase64, base64FromBytes } from "../../../helpers";
 /**
  * ContractExecutionAuthorization defines authorization for wasm execute.
  * Since: wasmd 0.30
@@ -17,7 +17,6 @@ export interface ContractExecutionAuthorization {
  */
 
 export interface ContractExecutionAuthorizationSDKType {
-  /** Grants for contract executions */
   grants: ContractGrantSDKType[];
 }
 /**
@@ -35,7 +34,6 @@ export interface ContractMigrationAuthorization {
  */
 
 export interface ContractMigrationAuthorizationSDKType {
-  /** Grants for contract migrations */
   grants: ContractGrantSDKType[];
 }
 /**
@@ -66,20 +64,8 @@ export interface ContractGrant {
  */
 
 export interface ContractGrantSDKType {
-  /** Contract is the bech32 address of the smart contract */
   contract: string;
-  /**
-   * Limit defines execution limits that are enforced and updated when the grant
-   * is applied. When the limit lapsed the grant is removed.
-   */
-
   limit?: AnySDKType;
-  /**
-   * Filter define more fine-grained control on the message payload passed
-   * to the contract in the operation. When no filter applies on execution, the
-   * operation is prohibited.
-   */
-
   filter?: AnySDKType;
 }
 /**
@@ -97,7 +83,6 @@ export interface MaxCallsLimit {
  */
 
 export interface MaxCallsLimitSDKType {
-  /** Remaining number that is decremented on each execution */
   remaining: Long;
 }
 /**
@@ -115,7 +100,6 @@ export interface MaxFundsLimit {
  */
 
 export interface MaxFundsLimitSDKType {
-  /** Amounts is the maximal amount of tokens transferable to the contract. */
   amounts: CoinSDKType[];
 }
 /**
@@ -138,10 +122,7 @@ export interface CombinedLimit {
  */
 
 export interface CombinedLimitSDKType {
-  /** Remaining number that is decremented on each execution */
   calls_remaining: Long;
-  /** Amounts is the maximal amount of tokens transferable to the contract. */
-
   amounts: CoinSDKType[];
 }
 /**
@@ -175,7 +156,6 @@ export interface AcceptedMessageKeysFilter {
  */
 
 export interface AcceptedMessageKeysFilterSDKType {
-  /** Messages is the list of unique keys */
   keys: string[];
 }
 /**
@@ -195,7 +175,6 @@ export interface AcceptedMessagesFilter {
  */
 
 export interface AcceptedMessagesFilterSDKType {
-  /** Messages is the list of raw contract messages */
   messages: Uint8Array[];
 }
 

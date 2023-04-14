@@ -12,11 +12,8 @@ export interface Fee {
 }
 /** Fee defines the ICS29 receive, acknowledgement and timeout fees */
 export interface FeeSDKType {
-    /** the packet receive fee */
     recv_fee: CoinSDKType[];
-    /** the packet acknowledgement fee */
     ack_fee: CoinSDKType[];
-    /** the packet timeout fee */
     timeout_fee: CoinSDKType[];
 }
 /** PacketFee contains ICS29 relayer fees, refund address and optional list of permitted relayers */
@@ -30,11 +27,8 @@ export interface PacketFee {
 }
 /** PacketFee contains ICS29 relayer fees, refund address and optional list of permitted relayers */
 export interface PacketFeeSDKType {
-    /** fee encapsulates the recv, ack and timeout fees associated with an IBC packet */
     fee?: FeeSDKType;
-    /** the refund address for unspent fees */
     refund_address: string;
-    /** optional list of relayers permitted to receive fees */
     relayers: string[];
 }
 /** PacketFees contains a list of type PacketFee */
@@ -44,7 +38,6 @@ export interface PacketFees {
 }
 /** PacketFees contains a list of type PacketFee */
 export interface PacketFeesSDKType {
-    /** list of packet fees */
     packet_fees: PacketFeeSDKType[];
 }
 /** IdentifiedPacketFees contains a list of type PacketFee and associated PacketId */
@@ -56,9 +49,7 @@ export interface IdentifiedPacketFees {
 }
 /** IdentifiedPacketFees contains a list of type PacketFee and associated PacketId */
 export interface IdentifiedPacketFeesSDKType {
-    /** unique packet identifier comprised of the channel ID, port ID and sequence */
     packet_id?: PacketIdSDKType;
-    /** list of packet fees */
     packet_fees: PacketFeeSDKType[];
 }
 export declare const Fee: {
