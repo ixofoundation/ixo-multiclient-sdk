@@ -12,7 +12,6 @@ export interface ListAllInterfacesResponse {
 }
 /** ListAllInterfacesResponse is the response type of the ListAllInterfaces RPC. */
 export interface ListAllInterfacesResponseSDKType {
-    /** interface_names is an array of all the registered interfaces. */
     interface_names: string[];
 }
 /**
@@ -28,7 +27,6 @@ export interface ListImplementationsRequest {
  * RPC.
  */
 export interface ListImplementationsRequestSDKType {
-    /** interface_name defines the interface to query the implementations for. */
     interface_name: string;
 }
 /**

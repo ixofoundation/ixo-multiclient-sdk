@@ -1,5 +1,5 @@
-import * as _m0 from "protobufjs/minimal";
 import { Long } from "../../../helpers";
+import * as _m0 from "protobufjs/minimal";
 export interface Params {
     ixo1155ContractCode: Long;
 }
@@ -44,40 +44,18 @@ export interface Token {
     cancelled: TokensCancelled[];
 }
 export interface TokenSDKType {
-    /** address of minter */
     minter: string;
-    /** generated on token intiation through MsgSetupMinter */
     contract_address: string;
-    /** class is the token protocol entity DID (validated) */
     class: string;
-    /** name is the token name, which must be unique (namespace) */
     name: string;
-    /** description is any arbitrary description */
     description: string;
-    /** image is the image url for the token */
     image: string;
-    /** type is the token type (eg ixo1155) */
     type: string;
-    /**
-     * cap is the maximum number of tokens with this name that can be minted, 0 is
-     * unlimited
-     */
     cap: string;
-    /** how much has already been minted for this Token type, aka the supply */
     supply: string;
-    /** stop allowance of token minter temporarily */
     paused: boolean;
-    /** stop allowance of token minter permanently */
     stopped: boolean;
-    /**
-     * tokens that has been retired for this Token with specific name and contract
-     * address
-     */
     retired: TokensRetiredSDKType[];
-    /**
-     * tokens that has been cancelled for this Token with specific name and
-     * contract address
-     */
     cancelled: TokensCancelledSDKType[];
 }
 export interface TokensRetired {
@@ -122,16 +100,9 @@ export interface TokenProperties {
 }
 export interface TokenPropertiesSDKType {
     id: string;
-    /** index is the unique identifier hexstring that identifies the token */
     index: string;
-    /** index is the unique identifier hexstring that identifies the token */
     name: string;
-    /** did of collection (eg Supamoto Malawi) */
     collection: string;
-    /**
-     * tokenData is the linkedResources added to tokenMetadata when queried eg
-     * (credential link ***.ipfs)
-     */
     tokenData: TokenDataSDKType[];
 }
 export interface TokenData {
@@ -144,12 +115,10 @@ export interface TokenData {
     id: string;
 }
 export interface TokenDataSDKType {
-    /** media type value should always be "application/json" */
     uri: string;
     encrypted: boolean;
     proof: string;
     type: string;
-    /** did of entity to map token to */
     id: string;
 }
 export declare const Params: {

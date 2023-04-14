@@ -23,19 +23,10 @@ export interface GenesisState {
 /** GenesisState defines the ICS29 fee middleware genesis state */
 
 export interface GenesisStateSDKType {
-  /** list of identified packet fees */
   identified_fees: IdentifiedPacketFeesSDKType[];
-  /** list of fee enabled channels */
-
   fee_enabled_channels: FeeEnabledChannelSDKType[];
-  /** list of registered payees */
-
   registered_payees: RegisteredPayeeSDKType[];
-  /** list of registered counterparty payees */
-
   registered_counterparty_payees: RegisteredCounterpartyPayeeSDKType[];
-  /** list of forward relayer addresses */
-
   forward_relayers: ForwardRelayerAddressSDKType[];
 }
 /** FeeEnabledChannel contains the PortID & ChannelID for a fee enabled channel */
@@ -50,10 +41,7 @@ export interface FeeEnabledChannel {
 /** FeeEnabledChannel contains the PortID & ChannelID for a fee enabled channel */
 
 export interface FeeEnabledChannelSDKType {
-  /** unique port identifier */
   port_id: string;
-  /** unique channel identifier */
-
   channel_id: string;
 }
 /** RegisteredPayee contains the relayer address and payee address for a specific channel */
@@ -71,13 +59,8 @@ export interface RegisteredPayee {
 /** RegisteredPayee contains the relayer address and payee address for a specific channel */
 
 export interface RegisteredPayeeSDKType {
-  /** unique channel identifier */
   channel_id: string;
-  /** the relayer address */
-
   relayer: string;
-  /** the payee address */
-
   payee: string;
 }
 /**
@@ -101,13 +84,8 @@ export interface RegisteredCounterpartyPayee {
  */
 
 export interface RegisteredCounterpartyPayeeSDKType {
-  /** unique channel identifier */
   channel_id: string;
-  /** the relayer address */
-
   relayer: string;
-  /** the counterparty payee address */
-
   counterparty_payee: string;
 }
 /** ForwardRelayerAddress contains the forward relayer address and PacketId used for async acknowledgements */
@@ -122,10 +100,7 @@ export interface ForwardRelayerAddress {
 /** ForwardRelayerAddress contains the forward relayer address and PacketId used for async acknowledgements */
 
 export interface ForwardRelayerAddressSDKType {
-  /** the forward relayer address */
   address: string;
-  /** unique packet identifer comprised of the channel ID, port ID and sequence */
-
   packet_id?: PacketIdSDKType;
 }
 

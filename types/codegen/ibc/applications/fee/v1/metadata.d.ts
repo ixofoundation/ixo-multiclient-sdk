@@ -14,9 +14,7 @@ export interface Metadata {
  * See ICS004: https://github.com/cosmos/ibc/tree/master/spec/core/ics-004-channel-and-packet-semantics#Versioning
  */
 export interface MetadataSDKType {
-    /** fee_version defines the ICS29 fee version */
     fee_version: string;
-    /** app_version defines the underlying application version, which may or may not be a JSON encoded bytestring */
     app_version: string;
 }
 export declare const Metadata: {

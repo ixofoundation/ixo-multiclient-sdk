@@ -9,7 +9,6 @@ export interface QueryParamsResponse {
   params?: Params;
 }
 export interface QueryParamsResponseSDKType {
-  /** params holds all the parameters of this module. */
   params?: ParamsSDKType;
 }
 export interface QueryTokenListRequest {
@@ -20,8 +19,6 @@ export interface QueryTokenListRequest {
 }
 export interface QueryTokenListRequestSDKType {
   pagination?: PageRequestSDKType;
-  /** minter address to get list for */
-
   minter: string;
 }
 export interface QueryTokenListResponse {
@@ -38,7 +35,6 @@ export interface QueryTokenDocRequest {
   contractAddress: string;
 }
 export interface QueryTokenDocRequestSDKType {
-  /** minter address to get Token Doc for */
   minter: string;
   contract_address: string;
 }

@@ -1,6 +1,6 @@
 import { PublicKey, PublicKeySDKType } from "../crypto/keys";
-import * as _m0 from "protobufjs/minimal";
 import { Long, isSet, bytesFromBase64, base64FromBytes } from "../../helpers";
+import * as _m0 from "protobufjs/minimal";
 export interface ValidatorSet {
   validators: Validator[];
   proposer?: Validator;

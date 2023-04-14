@@ -1,16 +1,15 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Input, InputSDKType, Output, OutputSDKType } from "./cosmos";
-import { PaymentType, PaymentTypeSDKType, Contract1155Payment, Contract1155PaymentSDKType, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
+import { PaymentType, Contract1155Payment, Contract1155PaymentSDKType, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
+import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { isSet, Long, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
 export interface SubmitClaimAuthorization {
   /** address of admin */
   admin: string;
   constraints: SubmitClaimConstraints[];
 }
 export interface SubmitClaimAuthorizationSDKType {
-  /** address of admin */
   admin: string;
   constraints: SubmitClaimConstraintsSDKType[];
 }
@@ -20,7 +19,6 @@ export interface SubmitClaimConstraints {
   agentQuota: Long;
 }
 export interface SubmitClaimConstraintsSDKType {
-  /** collection_id indicates to which Collection this claim belongs */
   collection_id: string;
   agent_quota: Long;
 }
@@ -30,7 +28,6 @@ export interface EvaluateClaimAuthorization {
   constraints: EvaluateClaimConstraints[];
 }
 export interface EvaluateClaimAuthorizationSDKType {
-  /** address of admin */
   admin: string;
   constraints: EvaluateClaimConstraintsSDKType[];
 }
@@ -52,20 +49,10 @@ export interface EvaluateClaimConstraints {
   maxCustomAmount: Coin[];
 }
 export interface EvaluateClaimConstraintsSDKType {
-  /** collection_id indicates to which Collection this claim belongs */
   collection_id: string;
-  /** either collection_id or claim_ids is needed */
-
   claim_ids: string[];
   agent_quota: Long;
-  /** if null then no before_date validation done */
-
   before_date?: TimestampSDKType;
-  /**
-   * max custom amount evaluator can change, if empty list must use amount
-   * defined in Token payments
-   */
-
   max_custom_amount: CoinSDKType[];
 }
 export interface WithdrawPaymentAuthorization {
@@ -74,7 +61,6 @@ export interface WithdrawPaymentAuthorization {
   constraints: WithdrawPaymentConstraints[];
 }
 export interface WithdrawPaymentAuthorizationSDKType {
-  /** address of admin */
   admin: string;
   constraints: WithdrawPaymentConstraintsSDKType[];
 }
@@ -110,34 +96,13 @@ export interface WithdrawPaymentConstraints {
   releaseDate?: Timestamp;
 }
 export interface WithdrawPaymentConstraintsSDKType {
-  /** claim_id the withdrawal is for */
   claim_id: string;
-  /** Inputs to the multisend tx to run to withdraw payment */
-
   inputs: InputSDKType[];
-  /** Outputs for the multisend tx to run to withdraw payment */
-
   outputs: OutputSDKType[];
-  /**
-   * payment type to keep track what payment is for and mark claim payment
-   * accordingly
-   */
-
-  payment_type: PaymentTypeSDKType;
-  /** if empty(nil) then no contract payment */
-
+  payment_type: PaymentType;
   contract_1155_payment?: Contract1155PaymentSDKType;
-  /** for contract payment */
-
   toAddress: string;
-  /** for contract payment */
-
   fromAddress: string;
-  /**
-   * date that grantee can execute authorization, calculated from created date
-   * plus the timeout on Collection payments, if null then none
-   */
-
   release_date?: TimestampSDKType;
 }
 

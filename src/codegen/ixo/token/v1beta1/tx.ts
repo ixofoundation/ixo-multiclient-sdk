@@ -27,28 +27,12 @@ export interface MsgCreateToken {
   cap: string;
 }
 export interface MsgCreateTokenSDKType {
-  /** address of minter */
   minter: string;
-  /** class is the token protocol entity DID (validated) */
-
   class: string;
-  /** name is the token name, which must be unique (namespace) */
-
   name: string;
-  /** description is any arbitrary description */
-
   description: string;
-  /** image is the image url for the token */
-
   image: string;
-  /** type is the token type (eg ixo1155) */
-
   token_type: string;
-  /**
-   * cap is the maximum number of tokens with this name that can be minted, 0 is
-   * unlimited
-   */
-
   cap: string;
 }
 export interface MsgCreateTokenResponse {}
@@ -63,11 +47,8 @@ export interface MsgMintToken {
   mintBatch: MintBatch[];
 }
 export interface MsgMintTokenSDKType {
-  /** address of minter */
   minter: string;
   contract_address: string;
-  /** address of owner to mint for */
-
   owner: string;
   mint_batch: MintBatchSDKType[];
 }
@@ -94,25 +75,10 @@ export interface MintBatch {
   tokenData: TokenData[];
 }
 export interface MintBatchSDKType {
-  /**
-   * name is the token name, which must be unique (namespace), will be verified
-   * against Token name provided on msgCreateToken
-   */
   name: string;
-  /** index is the unique identifier hexstring that identifies the token */
-
   index: string;
-  /** amount is the number of tokens to mint */
-
   amount: string;
-  /** did of collection (eg Supamoto Malawi) */
-
   collection: string;
-  /**
-   * tokenData is the linkedResources added to tokenMetadata when queried eg
-   * (credential link ***.ipfs)
-   */
-
   token_data: TokenDataSDKType[];
 }
 export interface MsgMintTokenResponse {}
@@ -128,13 +94,8 @@ export interface MsgTransferToken {
   tokens: TokenBatch[];
 }
 export interface MsgTransferTokenSDKType {
-  /** address of owner */
   owner: string;
-  /** address of receiver */
-
   recipient: string;
-  /** all tokens must be in same smart contract */
-
   tokens: TokenBatchSDKType[];
 }
 export interface MsgTransferTokenResponse {}
@@ -147,10 +108,7 @@ export interface TokenBatch {
   amount: string;
 }
 export interface TokenBatchSDKType {
-  /** id that identifies the token */
   id: string;
-  /** amount is the number of tokens to transfer */
-
   amount: string;
 }
 export interface MsgRetireToken {
@@ -178,27 +136,9 @@ export interface MsgRetireToken {
   reason: string;
 }
 export interface MsgRetireTokenSDKType {
-  /** address of owner */
   owner: string;
-  /** tokens to retire, all tokens must be in same smart contract */
-
   tokens: TokenBatchSDKType[];
-  /**
-   * jurisdiction is the jurisdiction of the token owner. A jurisdiction has
-   * the format: <country-code>[-<sub-national-code>[ <postal-code>]]
-   * The country-code must be 2 alphabetic characters, the sub-national-code
-   * can be 1-3 alphanumeric characters, and the postal-code can be up to 64
-   * alphanumeric characters. Only the country-code is required, while the
-   * sub-national-code and postal-code are optional and can be added for
-   * increased precision. See the valid format for this below.
-   */
-
   jurisdiction: string;
-  /**
-   * reason is any arbitrary string that specifies the reason for retiring
-   * tokens.
-   */
-
   reason: string;
 }
 export interface MsgRetireTokenResponse {}
@@ -217,16 +157,8 @@ export interface MsgCancelToken {
   reason: string;
 }
 export interface MsgCancelTokenSDKType {
-  /** address of owner */
   owner: string;
-  /** tokens to retire, all tokens must be in same smart contract */
-
   tokens: TokenBatchSDKType[];
-  /**
-   * reason is any arbitrary string that specifies the reason for retiring
-   * tokens.
-   */
-
   reason: string;
 }
 export interface MsgCancelTokenResponse {}
@@ -240,11 +172,8 @@ export interface MsgPauseToken {
   paused: boolean;
 }
 export interface MsgPauseTokenSDKType {
-  /** address of minter */
   minter: string;
   contract_address: string;
-  /** pause or unpause Token Minting allowance */
-
   paused: boolean;
 }
 export interface MsgPauseTokenResponse {}
@@ -255,7 +184,6 @@ export interface MsgStopToken {
   contractAddress: string;
 }
 export interface MsgStopTokenSDKType {
-  /** address of minter */
   minter: string;
   contract_address: string;
 }

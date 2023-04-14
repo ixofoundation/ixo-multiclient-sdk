@@ -9,7 +9,6 @@ export interface QueryParamsResponse {
   params?: Params;
 }
 export interface QueryParamsResponseSDKType {
-  /** params holds all the parameters of this module. */
   params?: ParamsSDKType;
 }
 export interface QueryCollectionRequest {

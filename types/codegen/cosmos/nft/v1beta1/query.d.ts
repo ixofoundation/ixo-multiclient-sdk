@@ -1,7 +1,7 @@
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../base/query/v1beta1/pagination";
 import { NFT, NFTSDKType, Class, ClassSDKType } from "./nft";
-import * as _m0 from "protobufjs/minimal";
 import { Long } from "../../../helpers";
+import * as _m0 from "protobufjs/minimal";
 /** QueryBalanceRequest is the request type for the Query/Balance RPC method */
 export interface QueryBalanceRequest {
     classId: string;
@@ -117,7 +117,6 @@ export interface QueryClassesRequest {
 }
 /** QueryClassesRequest is the request type for the Query/Classes RPC method */
 export interface QueryClassesRequestSDKType {
-    /** pagination defines an optional pagination for the request. */
     pagination?: PageRequestSDKType;
 }
 /** QueryClassesResponse is the response type for the Query/Classes RPC method */

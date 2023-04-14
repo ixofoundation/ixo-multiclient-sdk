@@ -1,9 +1,9 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
-import { CollectionState, CollectionStateSDKType, Payments, PaymentsSDKType, EvaluationStatus, EvaluationStatusSDKType, DisputeData, DisputeDataSDKType, PaymentType, PaymentTypeSDKType, Contract1155Payment, Contract1155PaymentSDKType } from "./claims";
+import { CollectionState, Payments, PaymentsSDKType, EvaluationStatus, DisputeData, DisputeDataSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType } from "./claims";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Input, InputSDKType, Output, OutputSDKType } from "./cosmos";
-import * as _m0 from "protobufjs/minimal";
 import { Long } from "../../../helpers";
+import * as _m0 from "protobufjs/minimal";
 export interface MsgCreateCollection {
     /** entity is the DID of the entity for which the claims are being created */
     entity: string;
@@ -29,27 +29,13 @@ export interface MsgCreateCollection {
     payments?: Payments;
 }
 export interface MsgCreateCollectionSDKType {
-    /** entity is the DID of the entity for which the claims are being created */
     entity: string;
-    /** signer address */
     signer: string;
-    /** protocol is the DID of the claim protocol */
     protocol: string;
-    /** startDate is the date after which claims may be submitted */
     start_date?: TimestampSDKType;
-    /**
-     * endDate is the date after which no more claims may be submitted (no endDate
-     * is allowed)
-     */
     end_date?: TimestampSDKType;
-    /** quota is the maximum number of claims that may be submitted, 0 is unlimited */
     quota: Long;
-    /** state is the current state of this Collection (open, paused, closed) */
-    state: CollectionStateSDKType;
-    /**
-     * payments is the amount paid for claim submission, evaluation, approval, or
-     * rejection
-     */
+    state: CollectionState;
     payments?: PaymentsSDKType;
 }
 export interface MsgCreateCollectionResponse {
@@ -68,14 +54,10 @@ export interface MsgSubmitClaim {
     adminAddress: string;
 }
 export interface MsgSubmitClaimSDKType {
-    /** collection_id indicates to which Collection this claim belongs */
     collection_id: string;
-    /** claimID is the unique identifier of the claim in the cid hash format */
     claim_id: string;
-    /** agent is the DID of the agent submitting the claim */
     agent_did: string;
     agent_address: string;
-    /** admin address used to sign this message, validated against Collection Admin */
     admin_address: string;
 }
 export interface MsgSubmitClaimResponse {
@@ -113,33 +95,15 @@ export interface MsgEvaluateClaim {
     amount: Coin[];
 }
 export interface MsgEvaluateClaimSDKType {
-    /** claimID is the unique identifier of the claim to make evaluation against */
     claim_id: string;
-    /** claimID is the unique identifier of the claim to make evaluation against */
     collection_id: string;
-    /** oracle is the DID of the Oracle entity that evaluates the claim */
     oracle: string;
-    /** agent is the DID of the agent that submits the evaluation */
     agent_did: string;
     agent_address: string;
-    /** admin address used to sign this message, validated against Collection Admin */
     admin_address: string;
-    /**
-     * status is the evaluation status expressed as an integer (2=approved,
-     * 3=rejected, ...)
-     */
-    status: EvaluationStatusSDKType;
-    /**
-     * reason is the code expressed as an integer, for why the evaluation result
-     * was given (codes defined by evaluator)
-     */
+    status: EvaluationStatus;
     reason: number;
-    /** verificationProof is the cid of the evaluation Verfiable Credential */
     verification_proof: string;
-    /**
-     * custom amount specified by evaluator for claim approval, if empty list then
-     * use default by Collection
-     */
     amount: CoinSDKType[];
 }
 export interface MsgEvaluateClaimResponse {
@@ -171,18 +135,9 @@ export interface MsgDisputeClaim {
  * Collection entity, or have authz cap, aka is agent
  */
 export interface MsgDisputeClaimSDKType {
-    /**
-     * subject_id for which this dispute is against, for now can only lay disputes
-     * against claims
-     */
     subject_id: string;
-    /**
-     * agent is the DID of the agent disputing the claim, agent detials wont be
-     * saved in kvStore
-     */
     agent_did: string;
     agent_address: string;
-    /** type is expressed as an integer, interpreted by the client */
     dispute_type: number;
     data?: DisputeDataSDKType;
 }
@@ -217,29 +172,14 @@ export interface MsgWithdrawPayment {
     adminAddress: string;
 }
 export interface MsgWithdrawPaymentSDKType {
-    /** claim_id the withdrawal is for */
     claim_id: string;
-    /** Inputs to the multisend tx to run to withdraw payment */
     inputs: InputSDKType[];
-    /** Outputs for the multisend tx to run to withdraw payment */
     outputs: OutputSDKType[];
-    /**
-     * payment type to keep track what payment is for and mark claim payment
-     * accordingly
-     */
-    payment_type: PaymentTypeSDKType;
-    /** if empty(nil) then no contract payment */
+    payment_type: PaymentType;
     contract_1155_payment?: Contract1155PaymentSDKType;
-    /** for contract payment */
     toAddress: string;
-    /** for contract payment */
     fromAddress: string;
-    /**
-     * date that grantee can execute authorization, calculated from created date
-     * plus the timeout on Collection payments
-     */
     release_date?: TimestampSDKType;
-    /** admin address used to sign this message, validated against Collection Admin */
     admin_address: string;
 }
 export interface MsgWithdrawPaymentResponse {

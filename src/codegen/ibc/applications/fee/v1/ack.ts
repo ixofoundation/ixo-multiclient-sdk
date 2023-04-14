@@ -15,13 +15,8 @@ export interface IncentivizedAcknowledgement {
 /** IncentivizedAcknowledgement is the acknowledgement format to be used by applications wrapped in the fee middleware */
 
 export interface IncentivizedAcknowledgementSDKType {
-  /** the underlying app acknowledgement bytes */
   app_acknowledgement: Uint8Array;
-  /** the relayer address which submits the recv packet message */
-
   forward_relayer_address: string;
-  /** success flag of the base application callback */
-
   underlying_app_success: boolean;
 }
 

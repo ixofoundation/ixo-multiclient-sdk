@@ -31,12 +31,15 @@ export const sendFaucet = async (address: string) => {
   return await axios.get(faucetUrl);
 };
 
-export type wallet = {
-  ed: ReturnType<typeof getEdClient>;
-  secp: ReturnType<typeof getEdClient>;
+export type EdClient = ReturnType<typeof getEdClient>;
+export type SecpClient = Awaited<ReturnType<typeof getSecpClient>>;
+
+export type Wallet = {
+  ed: EdClient;
+  secp: SecpClient;
 };
 
-export let wallets: { [key in WalletUsers]: wallet };
+export let wallets: { [key in WalletUsers]: Wallet };
 
 export const generateWallets = async (log = true) => {
   let generatedWallets = {};
@@ -107,7 +110,7 @@ export const getUser = (
 ) => wallets[user][walletKeyType];
 
 export const createClient = async (
-  offlineWallet: ReturnType<typeof getEdClient> = getUser(),
+  offlineWallet: SecpClient | EdClient = getUser(),
   ignoreGetSequence?: boolean
 ) => {
   return createSigningClient(

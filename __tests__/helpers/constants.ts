@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+import { StdFee } from "@cosmjs/stargate";
 import { utils } from "./common";
 
 export const RPC_URL = process.env.RPC_URL || "https://devnet.ixo.earth/rpc/";
@@ -49,7 +50,7 @@ export const generateNewConstant = async (constant: keyof typeof constants) => {
   return newConstant;
 };
 
-export const fee = {
+export const fee: StdFee = {
   amount: [
     {
       denom: "uixo",
@@ -57,4 +58,6 @@ export const fee = {
     },
   ],
   gas: "4000000",
+  // if wana do transactions using feegrant granter address
+  // granter: "ixo1n8yrmeatsk74dw0zs95ess9sgzptd6thgjgcj2",
 };

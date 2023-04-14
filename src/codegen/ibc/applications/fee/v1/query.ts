@@ -3,8 +3,8 @@ import { PacketId, PacketIdSDKType } from "../../../core/channel/v1/channel";
 import { IdentifiedPacketFees, IdentifiedPacketFeesSDKType } from "./fee";
 import { Coin, CoinSDKType } from "../../../../cosmos/base/v1beta1/coin";
 import { FeeEnabledChannel, FeeEnabledChannelSDKType } from "./genesis";
-import * as _m0 from "protobufjs/minimal";
 import { Long, isSet } from "../../../../helpers";
+import * as _m0 from "protobufjs/minimal";
 /** QueryIncentivizedPacketsRequest defines the request type for the IncentivizedPackets rpc */
 
 export interface QueryIncentivizedPacketsRequest {
@@ -17,10 +17,7 @@ export interface QueryIncentivizedPacketsRequest {
 /** QueryIncentivizedPacketsRequest defines the request type for the IncentivizedPackets rpc */
 
 export interface QueryIncentivizedPacketsRequestSDKType {
-  /** pagination defines an optional pagination for the request. */
   pagination?: PageRequestSDKType;
-  /** block height at which to query */
-
   query_height: Long;
 }
 /** QueryIncentivizedPacketsResponse defines the response type for the IncentivizedPackets rpc */
@@ -32,7 +29,6 @@ export interface QueryIncentivizedPacketsResponse {
 /** QueryIncentivizedPacketsResponse defines the response type for the IncentivizedPackets rpc */
 
 export interface QueryIncentivizedPacketsResponseSDKType {
-  /** list of identified fees for incentivized packets */
   incentivized_packets: IdentifiedPacketFeesSDKType[];
 }
 /** QueryIncentivizedPacketRequest defines the request type for the IncentivizedPacket rpc */
@@ -47,10 +43,7 @@ export interface QueryIncentivizedPacketRequest {
 /** QueryIncentivizedPacketRequest defines the request type for the IncentivizedPacket rpc */
 
 export interface QueryIncentivizedPacketRequestSDKType {
-  /** unique packet identifier comprised of channel ID, port ID and sequence */
   packet_id?: PacketIdSDKType;
-  /** block height at which to query */
-
   query_height: Long;
 }
 /** QueryIncentivizedPacketsResponse defines the response type for the IncentivizedPacket rpc */
@@ -62,7 +55,6 @@ export interface QueryIncentivizedPacketResponse {
 /** QueryIncentivizedPacketsResponse defines the response type for the IncentivizedPacket rpc */
 
 export interface QueryIncentivizedPacketResponseSDKType {
-  /** the identified fees for the incentivized packet */
   incentivized_packet?: IdentifiedPacketFeesSDKType;
 }
 /**
@@ -85,12 +77,9 @@ export interface QueryIncentivizedPacketsForChannelRequest {
  */
 
 export interface QueryIncentivizedPacketsForChannelRequestSDKType {
-  /** pagination defines an optional pagination for the request. */
   pagination?: PageRequestSDKType;
   port_id: string;
   channel_id: string;
-  /** Height to query at */
-
   query_height: Long;
 }
 /** QueryIncentivizedPacketsResponse defines the response type for the incentivized packets RPC */
@@ -102,7 +91,6 @@ export interface QueryIncentivizedPacketsForChannelResponse {
 /** QueryIncentivizedPacketsResponse defines the response type for the incentivized packets RPC */
 
 export interface QueryIncentivizedPacketsForChannelResponseSDKType {
-  /** Map of all incentivized_packets */
   incentivized_packets: IdentifiedPacketFeesSDKType[];
 }
 /** QueryTotalRecvFeesRequest defines the request type for the TotalRecvFees rpc */
@@ -114,7 +102,6 @@ export interface QueryTotalRecvFeesRequest {
 /** QueryTotalRecvFeesRequest defines the request type for the TotalRecvFees rpc */
 
 export interface QueryTotalRecvFeesRequestSDKType {
-  /** the packet identifier for the associated fees */
   packet_id?: PacketIdSDKType;
 }
 /** QueryTotalRecvFeesResponse defines the response type for the TotalRecvFees rpc */
@@ -126,7 +113,6 @@ export interface QueryTotalRecvFeesResponse {
 /** QueryTotalRecvFeesResponse defines the response type for the TotalRecvFees rpc */
 
 export interface QueryTotalRecvFeesResponseSDKType {
-  /** the total packet receive fees */
   recv_fees: CoinSDKType[];
 }
 /** QueryTotalAckFeesRequest defines the request type for the TotalAckFees rpc */
@@ -138,7 +124,6 @@ export interface QueryTotalAckFeesRequest {
 /** QueryTotalAckFeesRequest defines the request type for the TotalAckFees rpc */
 
 export interface QueryTotalAckFeesRequestSDKType {
-  /** the packet identifier for the associated fees */
   packet_id?: PacketIdSDKType;
 }
 /** QueryTotalAckFeesResponse defines the response type for the TotalAckFees rpc */
@@ -150,7 +135,6 @@ export interface QueryTotalAckFeesResponse {
 /** QueryTotalAckFeesResponse defines the response type for the TotalAckFees rpc */
 
 export interface QueryTotalAckFeesResponseSDKType {
-  /** the total packet acknowledgement fees */
   ack_fees: CoinSDKType[];
 }
 /** QueryTotalTimeoutFeesRequest defines the request type for the TotalTimeoutFees rpc */
@@ -162,7 +146,6 @@ export interface QueryTotalTimeoutFeesRequest {
 /** QueryTotalTimeoutFeesRequest defines the request type for the TotalTimeoutFees rpc */
 
 export interface QueryTotalTimeoutFeesRequestSDKType {
-  /** the packet identifier for the associated fees */
   packet_id?: PacketIdSDKType;
 }
 /** QueryTotalTimeoutFeesResponse defines the response type for the TotalTimeoutFees rpc */
@@ -174,7 +157,6 @@ export interface QueryTotalTimeoutFeesResponse {
 /** QueryTotalTimeoutFeesResponse defines the response type for the TotalTimeoutFees rpc */
 
 export interface QueryTotalTimeoutFeesResponseSDKType {
-  /** the total packet timeout fees */
   timeout_fees: CoinSDKType[];
 }
 /** QueryPayeeRequest defines the request type for the Payee rpc */
@@ -189,10 +171,7 @@ export interface QueryPayeeRequest {
 /** QueryPayeeRequest defines the request type for the Payee rpc */
 
 export interface QueryPayeeRequestSDKType {
-  /** unique channel identifier */
   channel_id: string;
-  /** the relayer address to which the distribution address is registered */
-
   relayer: string;
 }
 /** QueryPayeeResponse defines the response type for the Payee rpc */
@@ -204,7 +183,6 @@ export interface QueryPayeeResponse {
 /** QueryPayeeResponse defines the response type for the Payee rpc */
 
 export interface QueryPayeeResponseSDKType {
-  /** the payee address to which packet fees are paid out */
   payee_address: string;
 }
 /** QueryCounterpartyPayeeRequest defines the request type for the CounterpartyPayee rpc */
@@ -219,10 +197,7 @@ export interface QueryCounterpartyPayeeRequest {
 /** QueryCounterpartyPayeeRequest defines the request type for the CounterpartyPayee rpc */
 
 export interface QueryCounterpartyPayeeRequestSDKType {
-  /** unique channel identifier */
   channel_id: string;
-  /** the relayer address to which the counterparty is registered */
-
   relayer: string;
 }
 /** QueryCounterpartyPayeeResponse defines the response type for the CounterpartyPayee rpc */
@@ -234,7 +209,6 @@ export interface QueryCounterpartyPayeeResponse {
 /** QueryCounterpartyPayeeResponse defines the response type for the CounterpartyPayee rpc */
 
 export interface QueryCounterpartyPayeeResponseSDKType {
-  /** the counterparty payee address used to compensate forward relaying */
   counterparty_payee: string;
 }
 /** QueryFeeEnabledChannelsRequest defines the request type for the FeeEnabledChannels rpc */
@@ -249,10 +223,7 @@ export interface QueryFeeEnabledChannelsRequest {
 /** QueryFeeEnabledChannelsRequest defines the request type for the FeeEnabledChannels rpc */
 
 export interface QueryFeeEnabledChannelsRequestSDKType {
-  /** pagination defines an optional pagination for the request. */
   pagination?: PageRequestSDKType;
-  /** block height at which to query */
-
   query_height: Long;
 }
 /** QueryFeeEnabledChannelsResponse defines the response type for the FeeEnabledChannels rpc */
@@ -264,7 +235,6 @@ export interface QueryFeeEnabledChannelsResponse {
 /** QueryFeeEnabledChannelsResponse defines the response type for the FeeEnabledChannels rpc */
 
 export interface QueryFeeEnabledChannelsResponseSDKType {
-  /** list of fee enabled channels */
   fee_enabled_channels: FeeEnabledChannelSDKType[];
 }
 /** QueryFeeEnabledChannelRequest defines the request type for the FeeEnabledChannel rpc */
@@ -279,10 +249,7 @@ export interface QueryFeeEnabledChannelRequest {
 /** QueryFeeEnabledChannelRequest defines the request type for the FeeEnabledChannel rpc */
 
 export interface QueryFeeEnabledChannelRequestSDKType {
-  /** unique port identifier */
   port_id: string;
-  /** unique channel identifier */
-
   channel_id: string;
 }
 /** QueryFeeEnabledChannelResponse defines the response type for the FeeEnabledChannel rpc */
@@ -294,7 +261,6 @@ export interface QueryFeeEnabledChannelResponse {
 /** QueryFeeEnabledChannelResponse defines the response type for the FeeEnabledChannel rpc */
 
 export interface QueryFeeEnabledChannelResponseSDKType {
-  /** boolean flag representing the fee enabled channel status */
   fee_enabled: boolean;
 }
 

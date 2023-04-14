@@ -414,7 +414,7 @@ export declare namespace ibc {
                 typeFromJSON(object: any): _122.Type;
                 typeToJSON(object: _122.Type): string;
                 Type: typeof _122.Type;
-                TypeSDKType: typeof _122.TypeSDKType;
+                TypeSDKType: typeof _122.Type;
                 InterchainAccountPacketData: {
                     encode(message: _122.InterchainAccountPacketData, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                     decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _122.InterchainAccountPacketData;
@@ -631,7 +631,7 @@ export declare namespace ibc {
                 responseResultTypeFromJSON(object: any): _131.ResponseResultType;
                 responseResultTypeToJSON(object: _131.ResponseResultType): string;
                 ResponseResultType: typeof _131.ResponseResultType;
-                ResponseResultTypeSDKType: typeof _131.ResponseResultTypeSDKType;
+                ResponseResultTypeSDKType: typeof _131.ResponseResultType;
                 MsgChannelOpenInit: {
                     encode(message: _131.MsgChannelOpenInit, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                     decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _131.MsgChannelOpenInit;
@@ -973,9 +973,9 @@ export declare namespace ibc {
                 orderFromJSON(object: any): _128.Order;
                 orderToJSON(object: _128.Order): string;
                 State: typeof _128.State;
-                StateSDKType: typeof _128.StateSDKType;
+                StateSDKType: typeof _128.State;
                 Order: typeof _128.Order;
-                OrderSDKType: typeof _128.OrderSDKType;
+                OrderSDKType: typeof _128.Order;
                 Channel: {
                     encode(message: _128.Channel, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                     decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _128.Channel;
@@ -1475,7 +1475,7 @@ export declare namespace ibc {
                 stateFromJSON(object: any): _137.State;
                 stateToJSON(object: _137.State): string;
                 State: typeof _137.State;
-                StateSDKType: typeof _137.StateSDKType;
+                StateSDKType: typeof _137.State;
                 ConnectionEnd: {
                     encode(message: _137.ConnectionEnd, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                     decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _137.ConnectionEnd;
@@ -1608,7 +1608,7 @@ export declare namespace ibc {
             };
         }>;
         createRPCQueryClient: ({ rpcEndpoint }: {
-            rpcEndpoint: string;
+            rpcEndpoint: string | import("@cosmjs/tendermint-rpc").HttpEndpoint;
         }) => Promise<{
             cosmos: {
                 app: {

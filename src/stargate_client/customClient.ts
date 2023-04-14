@@ -20,25 +20,13 @@ import {
   SignerData,
   GasPrice,
   calculateFee,
-  QueryClient,
-  MsgDelegateEncodeObject,
-  MsgSendEncodeObject,
-  MsgUndelegateEncodeObject,
-  MsgWithdrawDelegatorRewardEncodeObject,
 } from "@cosmjs/stargate";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { assert, assertDefined } from "@cosmjs/utils";
-import { Coin } from "cosmjs-types/cosmos/base/v1beta1/coin";
-import { MsgWithdrawDelegatorReward } from "cosmjs-types/cosmos/distribution/v1beta1/tx";
-import {
-  MsgDelegate,
-  MsgUndelegate,
-} from "cosmjs-types/cosmos/staking/v1beta1/tx";
 import { SignMode } from "cosmjs-types/cosmos/tx/signing/v1beta1/signing";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { encodePubkey } from "./customPubkey";
 import { accountFromAny } from "./edAccountHandler";
-import { setupTxExtension } from "./customTxQueries";
 import { StargateClient, StargateClientOptions } from "./customStargateClient";
 import { createRegistry, defaultRegistryTypes } from "./customRegistries";
 
@@ -151,12 +139,7 @@ export class SigningStargateClient extends StargateClient {
       ? { sequence: 0 }
       : await this.getSequence(signerAddress);
 
-    const queryClient = QueryClient.withExtensions(
-      this.tendermintClient,
-      setupTxExtension
-    );
-
-    const { gasInfo } = await queryClient.tx.simulate(
+    const { gasInfo } = await this.forceGetQueryClient().tx.simulate(
       anyMsgs,
       memo,
       pubkey as any,
@@ -165,76 +148,6 @@ export class SigningStargateClient extends StargateClient {
 
     assertDefined(gasInfo);
     return Uint53.fromString(gasInfo.gasUsed.toString()).toNumber();
-  }
-
-  public async sendTokens(
-    senderAddress: string,
-    recipientAddress: string,
-    amount: readonly Coin[],
-    fee: StdFee | "auto" | number,
-    memo = ""
-  ): Promise<DeliverTxResponse> {
-    const sendMsg: MsgSendEncodeObject = {
-      typeUrl: "/cosmos.bank.v1beta1.MsgSend",
-      value: {
-        fromAddress: senderAddress,
-        toAddress: recipientAddress,
-        amount: [...amount],
-      },
-    };
-    return this.signAndBroadcast(senderAddress, [sendMsg], fee, memo);
-  }
-
-  public async delegateTokens(
-    delegatorAddress: string,
-    validatorAddress: string,
-    amount: Coin,
-    fee: StdFee | "auto" | number,
-    memo = ""
-  ): Promise<DeliverTxResponse> {
-    const delegateMsg: MsgDelegateEncodeObject = {
-      typeUrl: "/cosmos.staking.v1beta1.MsgDelegate",
-      value: MsgDelegate.fromPartial({
-        delegatorAddress: delegatorAddress,
-        validatorAddress: validatorAddress,
-        amount: amount,
-      }),
-    };
-    return this.signAndBroadcast(delegatorAddress, [delegateMsg], fee, memo);
-  }
-
-  public async undelegateTokens(
-    delegatorAddress: string,
-    validatorAddress: string,
-    amount: Coin,
-    fee: StdFee | "auto" | number,
-    memo = ""
-  ): Promise<DeliverTxResponse> {
-    const undelegateMsg: MsgUndelegateEncodeObject = {
-      typeUrl: "/cosmos.staking.v1beta1.MsgUndelegate",
-      value: MsgUndelegate.fromPartial({
-        delegatorAddress: delegatorAddress,
-        validatorAddress: validatorAddress,
-        amount: amount,
-      }),
-    };
-    return this.signAndBroadcast(delegatorAddress, [undelegateMsg], fee, memo);
-  }
-
-  public async withdrawRewards(
-    delegatorAddress: string,
-    validatorAddress: string,
-    fee: StdFee | "auto" | number,
-    memo = ""
-  ): Promise<DeliverTxResponse> {
-    const withdrawMsg: MsgWithdrawDelegatorRewardEncodeObject = {
-      typeUrl: "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward",
-      value: MsgWithdrawDelegatorReward.fromPartial({
-        delegatorAddress: delegatorAddress,
-        validatorAddress: validatorAddress,
-      }),
-    };
-    return this.signAndBroadcast(delegatorAddress, [withdrawMsg], fee, memo);
   }
 
   public async signAndBroadcast(
@@ -354,6 +267,8 @@ export class SigningStargateClient extends StargateClient {
       [{ pubkey, sequence: signedSequence }],
       signed.fee.amount,
       signedGasLimit,
+      signed.fee.granter,
+      signed.fee.payer,
       signMode
     );
     return TxRaw.fromPartial({
@@ -396,7 +311,9 @@ export class SigningStargateClient extends StargateClient {
     const authInfoBytes = makeAuthInfoBytes(
       [{ pubkey, sequence }],
       fee.amount,
-      gasLimit
+      gasLimit,
+      fee.granter,
+      fee.payer
     );
     const signDoc = makeSignDoc(
       txBodyBytes,

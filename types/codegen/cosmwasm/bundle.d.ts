@@ -30,9 +30,9 @@ export declare namespace cosmwasm {
             contractCodeHistoryOperationTypeFromJSON(object: any): _100.ContractCodeHistoryOperationType;
             contractCodeHistoryOperationTypeToJSON(object: _100.ContractCodeHistoryOperationType): string;
             AccessType: typeof _100.AccessType;
-            AccessTypeSDKType: typeof _100.AccessTypeSDKType;
+            AccessTypeSDKType: typeof _100.AccessType;
             ContractCodeHistoryOperationType: typeof _100.ContractCodeHistoryOperationType;
-            ContractCodeHistoryOperationTypeSDKType: typeof _100.ContractCodeHistoryOperationTypeSDKType;
+            ContractCodeHistoryOperationTypeSDKType: typeof _100.ContractCodeHistoryOperationType;
             AccessTypeParam: {
                 encode(message: _100.AccessTypeParam, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _100.AccessTypeParam;
@@ -599,7 +599,7 @@ export declare namespace cosmwasm {
             };
         }>;
         createRPCQueryClient: ({ rpcEndpoint }: {
-            rpcEndpoint: string;
+            rpcEndpoint: string | import("@cosmjs/tendermint-rpc").HttpEndpoint;
         }) => Promise<{
             cosmos: {
                 app: {

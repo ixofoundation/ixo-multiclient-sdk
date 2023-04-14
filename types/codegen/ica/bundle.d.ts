@@ -103,7 +103,7 @@ export declare namespace ica {
             };
         }>;
         createRPCQueryClient: ({ rpcEndpoint }: {
-            rpcEndpoint: string;
+            rpcEndpoint: string | import("@cosmjs/tendermint-rpc").HttpEndpoint;
         }) => Promise<{
             cosmos: {
                 app: {

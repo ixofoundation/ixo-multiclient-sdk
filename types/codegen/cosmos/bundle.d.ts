@@ -2193,9 +2193,9 @@ export declare namespace cosmos {
             proposalStatusFromJSON(object: any): _52.ProposalStatus;
             proposalStatusToJSON(object: _52.ProposalStatus): string;
             VoteOption: typeof _52.VoteOption;
-            VoteOptionSDKType: typeof _52.VoteOptionSDKType;
+            VoteOptionSDKType: typeof _52.VoteOption;
             ProposalStatus: typeof _52.ProposalStatus;
-            ProposalStatusSDKType: typeof _52.ProposalStatusSDKType;
+            ProposalStatusSDKType: typeof _52.ProposalStatus;
             WeightedVoteOption: {
                 encode(message: _52.WeightedVoteOption, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _52.WeightedVoteOption;
@@ -2446,9 +2446,9 @@ export declare namespace cosmos {
             proposalStatusFromJSON(object: any): _56.ProposalStatus;
             proposalStatusToJSON(object: _56.ProposalStatus): string;
             VoteOption: typeof _56.VoteOption;
-            VoteOptionSDKType: typeof _56.VoteOptionSDKType;
+            VoteOptionSDKType: typeof _56.VoteOption;
             ProposalStatus: typeof _56.ProposalStatus;
-            ProposalStatusSDKType: typeof _56.ProposalStatusSDKType;
+            ProposalStatusSDKType: typeof _56.ProposalStatus;
             WeightedVoteOption: {
                 encode(message: _56.WeightedVoteOption, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _56.WeightedVoteOption;
@@ -2549,13 +2549,13 @@ export declare namespace cosmos {
             proposalExecutorResultFromJSON(object: any): _63.ProposalExecutorResult;
             proposalExecutorResultToJSON(object: _63.ProposalExecutorResult): string;
             VoteOption: typeof _63.VoteOption;
-            VoteOptionSDKType: typeof _63.VoteOptionSDKType;
+            VoteOptionSDKType: typeof _63.VoteOption;
             ProposalStatus: typeof _63.ProposalStatus;
-            ProposalStatusSDKType: typeof _63.ProposalStatusSDKType;
+            ProposalStatusSDKType: typeof _63.ProposalStatus;
             ProposalResult: typeof _63.ProposalResult;
-            ProposalResultSDKType: typeof _63.ProposalResultSDKType;
+            ProposalResultSDKType: typeof _63.ProposalResult;
             ProposalExecutorResult: typeof _63.ProposalExecutorResult;
-            ProposalExecutorResultSDKType: typeof _63.ProposalExecutorResultSDKType;
+            ProposalExecutorResultSDKType: typeof _63.ProposalExecutorResult;
             Member: {
                 encode(message: _63.Member, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _63.Member;
@@ -2636,7 +2636,7 @@ export declare namespace cosmos {
             execFromJSON(object: any): _62.Exec;
             execToJSON(object: _62.Exec): string;
             Exec: typeof _62.Exec;
-            ExecSDKType: typeof _62.ExecSDKType;
+            ExecSDKType: typeof _62.Exec;
             MsgCreateGroup: {
                 encode(message: _62.MsgCreateGroup, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _62.MsgCreateGroup;
@@ -3374,7 +3374,7 @@ export declare namespace cosmos {
             storageTypeFromJSON(object: any): _74.StorageType;
             storageTypeToJSON(object: _74.StorageType): string;
             StorageType: typeof _74.StorageType;
-            StorageTypeSDKType: typeof _74.StorageTypeSDKType;
+            StorageTypeSDKType: typeof _74.StorageType;
             ModuleSchemaDescriptor: {
                 encode(message: _74.ModuleSchemaDescriptor, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _74.ModuleSchemaDescriptor;
@@ -3651,7 +3651,7 @@ export declare namespace cosmos {
             bondStatusFromJSON(object: any): _84.BondStatus;
             bondStatusToJSON(object: _84.BondStatus): string;
             BondStatus: typeof _84.BondStatus;
-            BondStatusSDKType: typeof _84.BondStatusSDKType;
+            BondStatusSDKType: typeof _84.BondStatus;
             HistoricalInfo: {
                 encode(message: _84.HistoricalInfo, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _84.HistoricalInfo;
@@ -4005,7 +4005,7 @@ export declare namespace cosmos {
             authorizationTypeFromJSON(object: any): _81.AuthorizationType;
             authorizationTypeToJSON(object: _81.AuthorizationType): string;
             AuthorizationType: typeof _81.AuthorizationType;
-            AuthorizationTypeSDKType: typeof _81.AuthorizationTypeSDKType;
+            AuthorizationTypeSDKType: typeof _81.AuthorizationType;
             StakeAuthorization: {
                 encode(message: _81.StakeAuthorization, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _81.StakeAuthorization;
@@ -4028,7 +4028,7 @@ export declare namespace cosmos {
                 signModeFromJSON(object: any): _86.SignMode;
                 signModeToJSON(object: _86.SignMode): string;
                 SignMode: typeof _86.SignMode;
-                SignModeSDKType: typeof _86.SignModeSDKType;
+                SignModeSDKType: typeof _86.SignMode;
                 SignatureDescriptors: {
                     encode(message: _86.SignatureDescriptors, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                     decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _86.SignatureDescriptors;
@@ -4171,9 +4171,9 @@ export declare namespace cosmos {
             broadcastModeFromJSON(object: any): _87.BroadcastMode;
             broadcastModeToJSON(object: _87.BroadcastMode): string;
             OrderBy: typeof _87.OrderBy;
-            OrderBySDKType: typeof _87.OrderBySDKType;
+            OrderBySDKType: typeof _87.OrderBy;
             BroadcastMode: typeof _87.BroadcastMode;
-            BroadcastModeSDKType: typeof _87.BroadcastModeSDKType;
+            BroadcastModeSDKType: typeof _87.BroadcastMode;
             GetTxsEventRequest: {
                 encode(message: _87.GetTxsEventRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _87.GetTxsEventRequest;
@@ -4522,7 +4522,7 @@ export declare namespace cosmos {
             };
         }>;
         createRPCQueryClient: ({ rpcEndpoint }: {
-            rpcEndpoint: string;
+            rpcEndpoint: string | import("@cosmjs/tendermint-rpc").HttpEndpoint;
         }) => Promise<{
             cosmos: {
                 app: {

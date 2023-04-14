@@ -1,4 +1,4 @@
-import { Account, AuthExtension, BankExtension, Coin, IndexedTx, QueryClient, SearchTxQuery, SequenceResponse, StakingExtension, TxExtension, SearchTxFilter, DeliverTxResponse } from "@cosmjs/stargate";
+import { Account, AuthExtension, BankExtension, Coin, IndexedTx, SearchTxQuery, SequenceResponse, StakingExtension, TxExtension, SearchTxFilter, DeliverTxResponse, QueryClient } from "@cosmjs/stargate";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { AccountParser } from "./edAccountHandler";
 export interface StargateClientOptions {
@@ -40,7 +40,6 @@ export declare class StargateClient {
      * proofs from such a method.
      */
     getAllBalances(address: string): Promise<readonly Coin[]>;
-    getDelegation(delegatorAddress: string, validatorAddress: string): Promise<Coin | null>;
     getTx(id: string): Promise<IndexedTx | null>;
     searchTx(query: SearchTxQuery, filter?: SearchTxFilter): Promise<readonly IndexedTx[]>;
     disconnect(): void;

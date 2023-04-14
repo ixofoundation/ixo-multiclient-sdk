@@ -1,8 +1,8 @@
 import { Counterparty, CounterpartySDKType, Version, VersionSDKType } from "./connection";
 import { Any, AnySDKType } from "../../../../google/protobuf/any";
 import { Height, HeightSDKType } from "../../client/v1/client";
-import * as _m0 from "protobufjs/minimal";
 import { Long, isSet, bytesFromBase64, base64FromBytes } from "../../../../helpers";
+import * as _m0 from "protobufjs/minimal";
 /**
  * MsgConnectionOpenInit defines the msg sent by an account on Chain A to
  * initialize a connection with Chain B.
@@ -78,8 +78,6 @@ export interface MsgConnectionOpenTry {
 
 export interface MsgConnectionOpenTrySDKType {
   client_id: string;
-  /** Deprecated: this field is unused. Crossing hellos are no longer supported in core IBC. */
-
   /** @deprecated */
 
   previous_connection_id: string;
@@ -88,17 +86,8 @@ export interface MsgConnectionOpenTrySDKType {
   delay_period: Long;
   counterparty_versions: VersionSDKType[];
   proof_height?: HeightSDKType;
-  /**
-   * proof of the initialization the connection on Chain A: `UNITIALIZED ->
-   * INIT`
-   */
-
   proof_init: Uint8Array;
-  /** proof of client state included in message */
-
   proof_client: Uint8Array;
-  /** proof of client consensus state */
-
   proof_consensus: Uint8Array;
   consensus_height?: HeightSDKType;
   signer: string;
@@ -146,17 +135,8 @@ export interface MsgConnectionOpenAckSDKType {
   version?: VersionSDKType;
   client_state?: AnySDKType;
   proof_height?: HeightSDKType;
-  /**
-   * proof of the initialization the connection on Chain B: `UNITIALIZED ->
-   * TRYOPEN`
-   */
-
   proof_try: Uint8Array;
-  /** proof of client state included in message */
-
   proof_client: Uint8Array;
-  /** proof of client consensus state */
-
   proof_consensus: Uint8Array;
   consensus_height?: HeightSDKType;
   signer: string;
@@ -187,8 +167,6 @@ export interface MsgConnectionOpenConfirm {
 
 export interface MsgConnectionOpenConfirmSDKType {
   connection_id: string;
-  /** proof for the change of the connection state on Chain A: `INIT -> OPEN` */
-
   proof_ack: Uint8Array;
   proof_height?: HeightSDKType;
   signer: string;

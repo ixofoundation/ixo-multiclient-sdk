@@ -7,7 +7,6 @@ export interface MintAuthorization {
   constraints: MintConstraints[];
 }
 export interface MintAuthorizationSDKType {
-  /** address of minter */
   minter: string;
   constraints: MintConstraintsSDKType[];
 }
@@ -36,23 +35,9 @@ export interface MintConstraints {
 export interface MintConstraintsSDKType {
   contract_address: string;
   amount: string;
-  /**
-   * name is the token name, which must be unique (namespace), will be verified
-   * against Token name provided on msgCreateToken
-   */
-
   name: string;
-  /** index is the unique identifier hexstring that identifies the token */
-
   index: string;
-  /** did of collection (eg Supamoto Malawi) */
-
   collection: string;
-  /**
-   * tokenData is the linkedResources added to tokenMetadata when queried eg
-   * (credential link ***.ipfs)
-   */
-
   tokenData: TokenDataSDKType[];
 }
 

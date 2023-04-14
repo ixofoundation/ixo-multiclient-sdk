@@ -59,6 +59,16 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
+    // test("Query user feegrant", async () => {
+    //   const address = (await getUser(WalletUsers.alice).getAccounts())[0]
+    //     .address;
+    //   const res = await queryClient.cosmos.feegrant.v1beta1.allowances({
+    //     grantee: address,
+    //   });
+    //   console.log(res.allowances);
+    //   expect(res).toBeTruthy();
+    // });
+
     // test("query wasm contract 1155 state", async () => {
     //   const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;
     //   const contractAddress =

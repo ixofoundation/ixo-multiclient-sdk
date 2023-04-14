@@ -1,20 +1,15 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
-import * as _m0 from "protobufjs/minimal";
 import { Long } from "../../../helpers";
+import * as _m0 from "protobufjs/minimal";
 export declare enum CollectionState {
     OPEN = 0,
     PAUSED = 1,
     CLOSED = 2,
     UNRECOGNIZED = -1
 }
-export declare enum CollectionStateSDKType {
-    OPEN = 0,
-    PAUSED = 1,
-    CLOSED = 2,
-    UNRECOGNIZED = -1
-}
+export declare const CollectionStateSDKType: typeof CollectionState;
 export declare function collectionStateFromJSON(object: any): CollectionState;
 export declare function collectionStateToJSON(object: CollectionState): string;
 export declare enum EvaluationStatus {
@@ -24,13 +19,7 @@ export declare enum EvaluationStatus {
     DISPUTED = 3,
     UNRECOGNIZED = -1
 }
-export declare enum EvaluationStatusSDKType {
-    PENDING = 0,
-    APPROVED = 1,
-    REJECTED = 2,
-    DISPUTED = 3,
-    UNRECOGNIZED = -1
-}
+export declare const EvaluationStatusSDKType: typeof EvaluationStatus;
 export declare function evaluationStatusFromJSON(object: any): EvaluationStatus;
 export declare function evaluationStatusToJSON(object: EvaluationStatus): string;
 export declare enum PaymentType {
@@ -40,13 +29,7 @@ export declare enum PaymentType {
     REJECTION = 3,
     UNRECOGNIZED = -1
 }
-export declare enum PaymentTypeSDKType {
-    SUBMISSION = 0,
-    APPROVAL = 1,
-    EVALUATION = 2,
-    REJECTION = 3,
-    UNRECOGNIZED = -1
-}
+export declare const PaymentTypeSDKType: typeof PaymentType;
 export declare function paymentTypeFromJSON(object: any): PaymentType;
 export declare function paymentTypeToJSON(object: PaymentType): string;
 export declare enum PaymentStatus {
@@ -59,16 +42,7 @@ export declare enum PaymentStatus {
     DISPUTED = 6,
     UNRECOGNIZED = -1
 }
-export declare enum PaymentStatusSDKType {
-    NO_PAYMENT = 0,
-    PROMISED = 1,
-    AUTHORIZED = 2,
-    GAURANTEED = 3,
-    PAID = 4,
-    FAILED = 5,
-    DISPUTED = 6,
-    UNRECOGNIZED = -1
-}
+export declare const PaymentStatusSDKType: typeof PaymentStatus;
 export declare function paymentStatusFromJSON(object: any): PaymentStatus;
 export declare function paymentStatusToJSON(object: PaymentStatus): string;
 export interface Params {
@@ -137,56 +111,20 @@ export interface Collection {
     signer: string;
 }
 export interface CollectionSDKType {
-    /** collection id is the incremented internal id for the collection of claims */
     id: string;
-    /** entity is the DID of the entity for which the claims are being created */
     entity: string;
-    /**
-     * admin is the account address that will authorize or revoke agents and
-     * payments (the grantor)
-     */
     admin: string;
-    /** protocol is the DID of the claim protocol */
     protocol: string;
-    /** startDate is the date after which claims may be submitted */
     start_date?: TimestampSDKType;
-    /**
-     * endDate is the date after which no more claims may be submitted (no endDate
-     * is allowed)
-     */
     end_date?: TimestampSDKType;
-    /** quota is the maximum number of claims that may be submitted, 0 is unlimited */
     quota: Long;
-    /** count is the number of claims already submitted (internally calculated) */
     count: Long;
-    /**
-     * evaluated is the number of claims that have been evaluated (internally
-     * calculated)
-     */
     evaluated: Long;
-    /**
-     * approved is the number of claims that have been evaluated and approved
-     * (internally calculated)
-     */
     approved: Long;
-    /**
-     * rejected is the number of claims that have been evaluated and rejected
-     * (internally calculated)
-     */
     rejected: Long;
-    /**
-     * disputed is the number of claims that have disputed status (internally
-     * calculated)
-     */
     disputed: Long;
-    /** state is the current state of this Collection (open, paused, closed) */
-    state: CollectionStateSDKType;
-    /**
-     * payments is the amount paid for claim submission, evaluation, approval, or
-     * rejection
-     */
+    state: CollectionState;
     payments?: PaymentsSDKType;
-    /** signer address */
     signer: string;
 }
 export interface Payments {
@@ -214,15 +152,9 @@ export interface Payment {
     timeoutNs?: Duration;
 }
 export interface PaymentSDKType {
-    /** account is the entity account address from which the payment will be made */
     account: string;
     amount: CoinSDKType[];
-    /** if empty(nil) then no contract payment, not allowed for Evaluation Payment */
     contract_1155_payment?: Contract1155PaymentSDKType;
-    /**
-     * timeout after claim/evaluation to create authZ for payment, if 0 then
-     * immidiate direct payment
-     */
     timeout_ns?: DurationSDKType;
 }
 export interface Contract1155Payment {
@@ -250,16 +182,11 @@ export interface Claim {
     paymentsStatus?: ClaimPayments;
 }
 export interface ClaimSDKType {
-    /** collection_id indicates to which Collection this claim belongs */
     collection_id: string;
-    /** agent is the DID of the agent submitting the claim */
     agent_did: string;
     agent_address: string;
-    /** submissionDate is the date and time that the claim was submitted on-chain */
     submission_date?: TimestampSDKType;
-    /** claimID is the unique identifier of the claim in the cid hash format */
     claim_id: string;
-    /** evaluation is the result of one or more claim evaluations */
     evaluation?: EvaluationSDKType;
     payments_status?: ClaimPaymentsSDKType;
 }
@@ -270,10 +197,10 @@ export interface ClaimPayments {
     rejection: PaymentStatus;
 }
 export interface ClaimPaymentsSDKType {
-    submission: PaymentStatusSDKType;
-    evaluation: PaymentStatusSDKType;
-    approval: PaymentStatusSDKType;
-    rejection: PaymentStatusSDKType;
+    submission: PaymentStatus;
+    evaluation: PaymentStatus;
+    approval: PaymentStatus;
+    rejection: PaymentStatus;
 }
 export interface Evaluation {
     /** claim_id indicates which Claim this evaluation is for */
@@ -312,39 +239,15 @@ export interface Evaluation {
     amount: Coin[];
 }
 export interface EvaluationSDKType {
-    /** claim_id indicates which Claim this evaluation is for */
     claim_id: string;
-    /**
-     * collection_id indicates to which Collection the claim being evaluated
-     * belongs to
-     */
     collection_id: string;
-    /** oracle is the DID of the Oracle entity that evaluates the claim */
     oracle: string;
-    /** agent is the DID of the agent that submits the evaluation */
     agent_did: string;
     agent_address: string;
-    /**
-     * status is the evaluation status expressed as an integer (2=approved,
-     * 3=rejected, ...)
-     */
-    status: EvaluationStatusSDKType;
-    /**
-     * reason is the code expressed as an integer, for why the evaluation result
-     * was given (codes defined by evaluator)
-     */
+    status: EvaluationStatus;
     reason: number;
-    /** verificationProof is the cid of the evaluation Verfiable Credential */
     verification_proof: string;
-    /**
-     * evaluationDate is the date and time that the claim evaluation was submitted
-     * on-chain
-     */
     evaluation_date?: TimestampSDKType;
-    /**
-     * custom amount specified by evaluator for claim approval, if empty list then
-     * use default by Collection
-     */
     amount: CoinSDKType[];
 }
 export interface Dispute {
@@ -355,7 +258,6 @@ export interface Dispute {
 }
 export interface DisputeSDKType {
     subject_id: string;
-    /** type is expressed as an integer, interpreted by the client */
     type: number;
     data?: DisputeDataSDKType;
 }
@@ -367,7 +269,6 @@ export interface DisputeData {
     encrypted: boolean;
 }
 export interface DisputeDataSDKType {
-    /** dispute link ***.ipfs */
     uri: string;
     type: string;
     proof: string;
