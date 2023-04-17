@@ -154,7 +154,8 @@ export class SigningStargateClient extends StargateClient {
     signerAddress: string,
     messages: readonly EncodeObject[],
     fee: StdFee | "auto" | number,
-    memo = ""
+    memo = "",
+    explicitSignerData?: SignerData
   ): Promise<DeliverTxResponse> {
     let usedFee: StdFee;
     if (fee == "auto" || typeof fee === "number") {
@@ -171,7 +172,13 @@ export class SigningStargateClient extends StargateClient {
     } else {
       usedFee = fee;
     }
-    const txRaw = await this.sign(signerAddress, messages, usedFee, memo);
+    const txRaw = await this.sign(
+      signerAddress,
+      messages,
+      usedFee,
+      memo,
+      explicitSignerData
+    );
     const txBytes = TxRaw.encode(txRaw).finish();
     return this.broadcastTx(
       txBytes,
