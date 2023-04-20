@@ -160,6 +160,28 @@ export const CreateEntityAssetSupamoto = async (
         //   encrypted: "false",
         //   right: "",
         // }),
+        // TODO get cid from Shaun
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
+          id: "{id}#terms-conditions",
+          type: "LegalAgreement",
+          description: "Terms and Conditions",
+          mediaType: "application/pdf",
+          serviceEndpoint: "ipfs:<cid>",
+          proof: "<cid>",
+          encrypted: "false",
+          right: "#legal",
+        }),
+        // TODO get cid from Shaun
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
+          id: "{id}#zlottie",
+          type: "VerifiableMark",
+          description: "zLottie",
+          mediaType: "application/ld+json",
+          serviceEndpoint: "ipfs:<cid>",
+          proof: "<cid>", // credential signature value
+          encrypted: "false",
+          right: "verify", // we will add something in the AccordedRights prop in future
+        }),
         ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "{id}#tags",
           type: "Settings",
