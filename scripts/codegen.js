@@ -13,10 +13,7 @@ telescope({
   outPath,
   options: {
     tsDisable: {
-      files: [
-        'cosmos/authz/v1beta1/tx.amino.ts',
-        'cosmos/staking/v1beta1/tx.amino.ts'
-      ]
+      files: ['cosmos/authz/v1beta1/tx.amino.ts', 'cosmos/staking/v1beta1/tx.amino.ts']
     },
     prototypes: {
       includePackageVar: false,
@@ -77,24 +74,15 @@ telescope({
         // DAO DAO PRE PROPOSE
         {
           name: 'dao-pre-propose-approval-single',
-          dir: join(
-            contractsDir,
-            '/daodao/pre-propose/dao-pre-propose-approval-single'
-          )
+          dir: join(contractsDir, '/daodao/pre-propose/dao-pre-propose-approval-single')
         },
         {
           name: 'dao-pre-propose-approver',
-          dir: join(
-            contractsDir,
-            '/daodao/pre-propose/dao-pre-propose-approver'
-          )
+          dir: join(contractsDir, '/daodao/pre-propose/dao-pre-propose-approver')
         },
         {
           name: 'dao-pre-propose-multiple',
-          dir: join(
-            contractsDir,
-            '/daodao/pre-propose/dao-pre-propose-multiple'
-          )
+          dir: join(contractsDir, '/daodao/pre-propose/dao-pre-propose-multiple')
         },
         {
           name: 'dao-pre-propose-single',
@@ -124,10 +112,7 @@ telescope({
         },
         {
           name: 'cw20-stake-reward-distributor',
-          dir: join(
-            contractsDir,
-            '/daodao/staking/cw20-stake-reward-distributor'
-          )
+          dir: join(contractsDir, '/daodao/staking/cw20-stake-reward-distributor')
         },
         // DAO DAO VOTING
         {
@@ -186,9 +171,7 @@ telescope({
 })
   .then(() => {
     console.log('✨ all done!');
-    console.log(
-      "IMPORTANT: add '// @ts-nocheck' to the top of Cw721Base.client.ts file to prevent type conflicts"
-    );
+    console.log("IMPORTANT: add '// @ts-nocheck' to the top of Cw721Base.client.ts file to prevent type conflicts");
   })
   .catch((e) => {
     console.error(e);

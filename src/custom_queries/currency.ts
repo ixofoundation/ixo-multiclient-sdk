@@ -10,12 +10,16 @@ import {
 } from "./currency.types";
 
 export const findTokenFromDenom = (denom: string): TokenAsset | undefined => {
-  const denomLowerCased = denom.toLowerCase();
+  if (!denom?.length) return;
+  const denomLowerCased = denom?.toLowerCase();
   const token = keplrCurrencies[denomLowerCased];
   if (token) return token;
   const possibleToken = Object.values(keplrCurrencies).find(
     (currency) =>
-      currency.coinMinimalDenom === denom || currency.coinDenom === denom
+      currency.coinMinimalDenom === denom ||
+      currency.coinDenom === denom ||
+      currency.coinMinimalDenom === denomLowerCased ||
+      currency.coinDenom === denomLowerCased
   );
   return possibleToken;
 };
@@ -118,22 +122,23 @@ export const findTokenInfoFromDenom = (() => {
   const cache: { [denom: string]: TokenAssetInfo } = {};
 
   return async (denom: string): Promise<TokenAssetInfo | undefined> => {
+    if (!denom) return;
     const token = findTokenFromDenom(denom);
     if (
-      cache[token.coinGeckoId] ||
-      cache[token.coinDenom] ||
-      cache[token.coinMinimalDenom]
+      cache[token?.coinGeckoId] ||
+      cache[token?.coinDenom] ||
+      cache[token?.coinMinimalDenom]
     )
       return (
-        cache[token.coinDenom] ??
-        cache[token.coinGeckoId] ??
-        cache[token.coinMinimalDenom]
+        cache[token?.coinDenom] ??
+        cache[token?.coinGeckoId] ??
+        cache[token?.coinMinimalDenom]
       );
-    let coincodexTokenInfo = await fetchTokenInfo(token.coinGeckoId);
+    let coincodexTokenInfo = await fetchTokenInfo(token?.coinGeckoId);
     if (!coincodexTokenInfo)
-      coincodexTokenInfo = await fetchTokenInfo(token.coinDenom);
+      coincodexTokenInfo = await fetchTokenInfo(token?.coinDenom);
     if (!coincodexTokenInfo)
-      coincodexTokenInfo = await fetchTokenInfo(token.coinMinimalDenom);
+      coincodexTokenInfo = await fetchTokenInfo(token?.coinMinimalDenom);
     if (!coincodexTokenInfo) return;
     const result = {
       symbol: coincodexTokenInfo.symbol,
