@@ -34,7 +34,7 @@ export declare class SigningStargateClient extends StargateClient {
     static offline(signer: OfflineSigner, options?: SigningStargateClientOptions, ignoreGetSequence?: boolean): Promise<SigningStargateClient>;
     protected constructor(tmClient: Tendermint34Client | undefined, signer: OfflineSigner, options: SigningStargateClientOptions, ignoreGetSequence?: boolean);
     simulate(signerAddress: string, messages: readonly EncodeObject[], memo: string | undefined): Promise<number>;
-    signAndBroadcast(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee | "auto" | number, memo?: string): Promise<DeliverTxResponse>;
+    signAndBroadcast(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee | "auto" | number, memo?: string, explicitSignerData?: SignerData): Promise<DeliverTxResponse>;
     /**
      * Gets account number and sequence from the API, creates a sign doc,
      * creates a single signature and assembles the signed transaction.
