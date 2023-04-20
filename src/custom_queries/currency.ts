@@ -118,16 +118,17 @@ export const findTokenInfoFromDenom = (() => {
   const cache: { [denom: string]: TokenAssetInfo } = {};
 
   return async (denom: string): Promise<TokenAssetInfo | undefined> => {
+    if (!denom) return;
     const token = findTokenFromDenom(denom);
     if (
-      cache[token.coinGeckoId] ||
-      cache[token.coinDenom] ||
-      cache[token.coinMinimalDenom]
+      cache[token?.coinGeckoId] ||
+      cache[token?.coinDenom] ||
+      cache[token?.coinMinimalDenom]
     )
       return (
-        cache[token.coinDenom] ??
-        cache[token.coinGeckoId] ??
-        cache[token.coinMinimalDenom]
+        cache[token?.coinDenom] ??
+        cache[token?.coinGeckoId] ??
+        cache[token?.coinMinimalDenom]
       );
     let coincodexTokenInfo = await fetchTokenInfo(token.coinGeckoId);
     if (!coincodexTokenInfo)
