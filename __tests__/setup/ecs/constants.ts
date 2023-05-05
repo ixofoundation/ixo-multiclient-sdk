@@ -28,16 +28,17 @@ export const setup_dao_constants = () => ({
     // if you have any other linked resources other than the ones below that will automatically
     // be uploaded to cellnode/w3s, you can pass them here
     linkedResources: [
-      // {
-      //   id: `{id}#id`,
-      //   type: "type",
-      //   description: "name",
-      //   mediaType: "application/ld+json",
-      //   serviceEndpoint: `cellnode:/public/${cid}`,
-      //   proof: cid,
-      //   encrypted: "false",
-      //   right: "",
-      // },
+      {
+        id: `{id}#profile`,
+        type: "Settings",
+        description: "Profile",
+        mediaType: "application/ld+json",
+        serviceEndpoint:
+          "ipfs:bafkreie4lmu5whsqsj24c4u6xwcoqevnyjyngqzmc4pwce7sdhjt7ti2rm",
+        proof: "bafkreie4lmu5whsqsj24c4u6xwcoqevnyjyngqzmc4pwce7sdhjt7ti2rm",
+        encrypted: "false",
+        right: "",
+      },
     ],
   },
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
@@ -48,20 +49,68 @@ export const setup_dao_constants = () => ({
       type: "Settings",
       storage: "cellnode",
       json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        type: "ixo:entity#page",
-        page: {
-          id: "IrCcJ8hl8t",
-          type: "paragraph",
-          data: {
-            text: "The Impact DAO cooperative makes outcomes-based investments into innovations, projects and ventures that can dleiver Internet of Impact solutions. Members of the DAO are pioneering innovators, investors, builders, and implementors who contribute capital, work, open-source software, and market access opportunities. The DAO treasury provides financing for the ecosystem by growing a portfolio of assets and by generating revenues from its investments. The DAO Tokens represent each member's participation share in the treasury that can be exchanged after the DAO breaks even. More recent investors recive a liquidation preference.",
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
           },
-        },
+        ],
+        id: "{id}#page",
+        type: "ixo:Page",
+        page: [
+          {
+            id: "DFibzXTpCH",
+            type: "paragraph",
+            data: {
+              text: "Emerging Cooking Solutions (ECS) is a pioneering climate technology company empowering the transition to clean cooking and green household energy in emerging markets where we are significantly reducing deforestation, carbon emissions, and the harmful inhalants produced by traditional cooking fuels that have serious environmental and health impacts.&nbsp;",
+            },
+          },
+          {
+            id: "_9vyvov_tG",
+            type: "paragraph",
+            data: {
+              text: "The flagship of our innovation portfolio is a modern gasifying biomass cookstove that is the most energy-efficient and lowest-emission device in the market.",
+            },
+          },
+          {
+            id: "T7wWZQQy54",
+            type: "paragraph",
+            data: {
+              text: "Our smart cookstove devices are embedded with a proprietary IoT sensor technology that records usage of the stove and enables us to implement a subscription-based Energy Utility business model. Customers make monthly payments using mobile money, to receive deliveries of renewable biomass pellets that we manufacture through our factory in Zambia. This saves families up to 50% of their monthly energy bill, compared to charcoal.",
+            },
+          },
+          {
+            id: "MK_Z8NDz0Y",
+            type: "paragraph",
+            data: {
+              text: "The only real constraint to scaling this utility model has been the capital costs of the hardware device. Together with ixo, we have innovated a world-first digital measurement, verification and reporting (dMRV) mechanism using AI and blockchain technology, to certify emission reductions in accordance with the Gold Standard Methodology, and directly issue digital carbon credits that can generate immediate cash-flows.",
+            },
+          },
+          {
+            id: "hpFizTi2bc",
+            type: "paragraph",
+            data: {
+              text: "Our Emerging Eco digital platform is now available through a SaaS model to any distributor of Clean Cooking devices, eMobility solutions, or other metered energy-saving devices.&nbsp;",
+            },
+          },
+          {
+            id: "vEoUM94GQu",
+            type: "paragraph",
+            data: {
+              text: "ECS has a proven track record of growing market access and our products already making a positive impact across five African countries. Our strategic partnerships with local organizations, NGOs, and governments will enable us to scale our distribution networks and reach millions of households. We have been awarded a significant grant through the Modern Cooking Facility for Africa (MCFA) financing program, to distribute more than 70,000 of our cookstoves in Zambia.",
+            },
+          },
+          {
+            id: "29XTMr6qNO",
+            type: "paragraph",
+            data: {
+              text: "As the demand for sustainable energy solutions continues to grow, ECS is well-positioned to capture a significant share of the clean household energy supply in emerging markets.",
+            },
+          },
+        ],
       },
     },
     {
@@ -69,72 +118,32 @@ export const setup_dao_constants = () => ({
       type: "Settings",
       storage: "cellnode",
       json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        type: "ixo:entity#tags",
-        ddoTags: [
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
           {
-            category: "dao",
-            tags: ["Market Relayer"],
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            web3: "https://ipfs.io/ipfs/",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
           },
         ],
-      },
-    },
-    {
-      name: "profile",
-      type: "Settings",
-      storage: "ipfs",
-      json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        id: "ixo:entity#profile",
-        type: "profile",
-        name: "Impact DAO 1",
-        image:
-          "https://thumbs.dreamstime.com/b/environment-earth-day-hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-gra-130247647.jpg",
-        logo: "logoLink",
-        brand: "Impact DAO",
-        location: "Global",
-        description:
-          "The Impact DAO cooperative consists of participants who are building the Internet of Impact to address sustainable development, human security, energy transitions, and ecological regeneration..",
-        attributes: [
+        id: "{id}#tags",
+        type: "ixo:Tags",
+        settings:
+          "https://github.com/emerging-eco/configs/blob/main/settings/config.json",
+        entityTags: [
           {
-            key: "Model",
-            value: "MimiMoto",
+            category: "DAO Type",
+            tags: ["Enterprise"],
           },
           {
-            key: "Location",
-            value: "Global",
-          },
-          {
-            key: "Usage",
-            value: "Global",
-          },
-          {
-            key: "Product",
-            value: "Impact DAO tokens",
-          },
-        ],
-        metrics: [
-          {
-            prefix: "$IMPACT",
-            metric: "Token Price",
-            suffix: "",
-            source: "https://example.com/dfdfcv",
-          },
-          {
-            prefix: "Performance",
-            metric: "Alpha",
-            suffix: "",
-            source: "https://example.com/dfdfcv",
+            category: "SDGs",
+            tags: [
+              "SDG13 – Climate Action",
+              "SDG7 – Affordable and Clean Energy",
+              "SDG9 – Industry, Innovation and Infrastructure",
+            ],
           },
         ],
       },

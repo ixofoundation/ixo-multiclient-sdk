@@ -28,16 +28,242 @@ export const setup_dao_constants = () => ({
     // if you have any other linked resources other than the ones below that will automatically
     // be uploaded to cellnode/w3s, you can pass them here
     linkedResources: [
-      // {
-      //   id: `{id}#id`,
-      //   type: "type",
-      //   description: "name",
-      //   mediaType: "application/ld+json",
-      //   serviceEndpoint: `cellnode:/public/${cid}`,
-      //   proof: cid,
-      //   encrypted: "false",
-      //   right: "",
-      // },
+      {
+        id: `{id}#profile`,
+        type: "Settings",
+        description: "Profile",
+        mediaType: "application/ld+json",
+        serviceEndpoint:
+          "ipfs:bafkreia2s4e6yjsbk544nymfxri7lopjmbea3vvg3arykbbvpuq65ukthq",
+        proof: "bafkreia2s4e6yjsbk544nymfxri7lopjmbea3vvg3arykbbvpuq65ukthq",
+        encrypted: "false",
+        right: "",
+      },
+    ],
+  },
+  // you can create linked resources that will be uploaded to the specified storage and resource will be saved
+  // on entity linked resources with the cid as proof and service endpoint of provided storage.
+  linkedResources: [
+    // TODO NEED!!!!
+    {
+      name: "page",
+      type: "Settings",
+      storage: "cellnode",
+      json: {
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
+        id: "{id}#page",
+        type: "ixo:Page",
+        page: [],
+      },
+    },
+    {
+      name: "tags",
+      type: "Settings",
+      storage: "cellnode",
+      json: {
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            web3: "https://ipfs.io/ipfs/",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
+        id: "{id}#tags",
+        type: "ixo#Tags",
+        settings:
+          "https://github.com/emerging-eco/configs/blob/main/settings/config.json",
+        entityTags: [
+          {
+            category: "DAO Type",
+            tags: ["Enterprise"],
+          },
+          {
+            category: "SDGs",
+            tags: [
+              "SDG13 – Climate Action",
+              "SDG7 – Affordable and Clean Energy",
+              "SDG9 – Industry, Innovation and Infrastructure",
+            ],
+          },
+        ],
+      },
+    },
+  ],
+});
+
+export const setup_oracle_carbon_constants = () => ({
+  entity: {
+    // type of entity eg dao/protocol/asset/oracle
+    entityType: "oracle/evaluation",
+    // please use Impact DAO's did as relayerNode eg dids.impactsDao
+    relayerNode: dids.emergingDao,
+    // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass
+    contextClass: dids.oracleClass,
+    // can add a also know ass if want
+    alsoKnownAs: "",
+    // you can remove/add more services
+    service: [
+      {
+        id: "{id}#cellnode",
+        type: "Cellnode",
+        serviceEndpoint: cellNodeChainMapping[chainNetwork],
+      },
+      {
+        id: "{id}#ipfs",
+        type: "Ipfs",
+        serviceEndpoint: "https://ipfs.io/ipfs/",
+      },
+    ],
+    // if you have any other linked resources other than the ones below that will automatically
+    // be uploaded to cellnode/w3s, you can pass them here
+    linkedResources: [
+      {
+        id: `{id}#profile`,
+        type: "Settings",
+        description: "Profile",
+        mediaType: "application/ld+json",
+        serviceEndpoint:
+          "ipfs:bafkreig4bm53r3wujghdesnscpwcr7rucsigsqbr7f4ix7p7aebsumpnpy",
+        proof: "bafkreig4bm53r3wujghdesnscpwcr7rucsigsqbr7f4ix7p7aebsumpnpy",
+        encrypted: "false",
+        right: "",
+      },
+    ],
+  },
+  // you can create linked resources that will be uploaded to the specified storage and resource will be saved
+  // on entity linked resources with the cid as proof and service endpoint of provided storage.
+  linkedResources: [
+    // TODO NEED!!!!
+    {
+      name: "page",
+      type: "Settings",
+      storage: "cellnode",
+      json: {
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
+        id: "{id}#page",
+        type: "ixo:Page",
+        page: [],
+      },
+    },
+    {
+      name: "tags",
+      type: "Settings",
+      storage: "cellnode",
+      json: {
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            web3: "https://ipfs.io/ipfs/",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
+        id: "{id}#tags",
+        type: "ixo#Tags",
+        settings:
+          "https://github.com/emerging-eco/configs/blob/main/settings/config.json",
+        entityTags: [
+          {
+            category: "Function",
+            tags: "Proofing",
+          },
+        ],
+      },
+    },
+  ],
+});
+
+export const setup_protocol_clean_cooking_constants = () => ({
+  entity: {
+    // type of entity eg dao/protocol/asset/oracle
+    entityType: "protocol/impact",
+    // please use Impact DAO's did as relayerNode eg dids.impactsDao
+    relayerNode: dids.emergingDao,
+    // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass
+    contextClass: dids.protocolClass,
+    // can add a also know ass if want
+    alsoKnownAs: "",
+    // you can remove/add more services
+    service: [
+      {
+        id: "{id}#cellnode",
+        type: "Cellnode",
+        serviceEndpoint: cellNodeChainMapping[chainNetwork],
+      },
+      {
+        id: "{id}#ipfs",
+        type: "Ipfs",
+        serviceEndpoint: "https://ipfs.io/ipfs/",
+      },
+    ],
+    // if you have any other linked resources other than the ones below that will automatically
+    // be uploaded to cellnode/w3s, you can pass them here
+    linkedResources: [
+      {
+        id: `{id}#profile`,
+        type: "Settings",
+        description: "Profile",
+        mediaType: "application/ld+json",
+        serviceEndpoint:
+          "ipfs:bafkreif6oxgq3gpf4l3vvxvw6m6u6g4vobd7at6ruuimh4goqyqilqossq",
+        proof: "bafkreif6oxgq3gpf4l3vvxvw6m6u6g4vobd7at6ruuimh4goqyqilqossq",
+        encrypted: "false",
+        right: "",
+      },
+      {
+        id: `{id}#FuelPurchase`,
+        type: "ClaimSchema",
+        description: "Fuel purchase claim schema",
+        mediaType: "application/json",
+        serviceEndpoint:
+          "ipfs:bafkreic7iuz4e23h6ek757xx2q3eoso42aejdvtoxub2jgklnwodcotsyu",
+        proof: "bafkreic7iuz4e23h6ek757xx2q3eoso42aejdvtoxub2jgklnwodcotsyu",
+        encrypted: "false",
+        right: "",
+      },
+      {
+        id: `{id}#CER`,
+        type: "ClaimSchema",
+        description: "GHG emission reduction claim schema",
+        mediaType: "application/json",
+        serviceEndpoint:
+          "ipfs:bafkreiamfnw477o7jg7xrtm73ov6kiqfwibrlrjzpvugntpxndagyhi64y",
+        proof: "bafkreiamfnw477o7jg7xrtm73ov6kiqfwibrlrjzpvugntpxndagyhi64y",
+        encrypted: "false",
+        right: "",
+      },
+      {
+        id: `{id}#VER`,
+        type: "CredentialSchema",
+        description: "Verified emission reduction credential schema",
+        mediaType: "application/json",
+        serviceEndpoint:
+          "ipfs:bafkreibtxsx76gw3m4lrb552jyklo4zszt2ul5mvk34tlgssg5twcf7ive",
+        proof: "bafkreibtxsx76gw3m4lrb552jyklo4zszt2ul5mvk34tlgssg5twcf7ive",
+        encrypted: "false",
+        right: "",
+      },
     ],
   },
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
@@ -48,20 +274,61 @@ export const setup_dao_constants = () => ({
       type: "Settings",
       storage: "cellnode",
       json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        type: "ixo:entity#page",
-        page: {
-          id: "IrCcJ8hl8t",
-          type: "paragraph",
-          data: {
-            text: "The Emerging Eco DAO constitutes of stakeholders who are particpating in the transition to IoT-integrated clean cook stoves, and who are supporting regenerative household transitions.",
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
           },
-        },
+        ],
+        id: "{id}#page",
+        type: "ixo:Page",
+        page: [
+          {
+            id: "DFibzXTpCH",
+            type: "paragraph",
+            data: {
+              text: "The Digital Measurement, Reporting, and Verification (dMRV) Protocol for Clean Cooking defines a standardized framework for tracking and evaluating the reduction in greenhouse gas (GHG) emissions from modern energy cooking devices.",
+            },
+          },
+          {
+            id: "_9vyvov_tG",
+            type: "paragraph",
+            data: {
+              text: "This transparent and reliable system promotes data integrity, accountability, and stakeholder collaboration, while facilitating progress towards climate goals and sustainable development.",
+            },
+          },
+          {
+            id: "T7wWZQQy54",
+            type: "paragraph",
+            data: {
+              text: "The dMRV protocol not only encourages innovation and resource allocation in clean cooking technologies but also fosters trust among all involved parties. It enables digital Impact Credits to be issued that account for and derive economic value from the climate impacts of using modern fuels and efficient cooking devices.",
+            },
+          },
+          {
+            id: "MK_Z8NDz0Y",
+            type: "paragraph",
+            data: {
+              text: "The dMRV protocol builds upon the Gold Standard Foundation's Methodology for Metered and Measured Energy Cooking Devices. It outlines data models and procedures for claims involving Cooking Fuel Purchases, Cooking Device Usage, and GHG Emission Reductions.",
+            },
+          },
+          {
+            id: "hpFizTi2bc",
+            type: "paragraph",
+            data: {
+              text: "The protocol also details the evaluation methodology for these claims, calculating emission reductions according to fuel types and quantities burned compared to baseline measures.",
+            },
+          },
+          {
+            id: "vEoUM94GQu",
+            type: "paragraph",
+            data: {
+              text: "It establishes a standard data format for issuing Verified Emission Reduction digital Impact Certificates in the format of Verifiable Credentials.",
+            },
+          },
+        ],
       },
     },
     {
@@ -69,68 +336,35 @@ export const setup_dao_constants = () => ({
       type: "Settings",
       storage: "cellnode",
       json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        type: "ixo:entity#tags",
-        ddoTags: [
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
           {
-            category: "dao",
-            tags: ["Market Relayer", "Rights"],
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            web3: "https://ipfs.io/ipfs/",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
           },
         ],
-      },
-    },
-    {
-      name: "profile",
-      type: "Settings",
-      storage: "ipfs",
-      json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        id: "ixo:entity#profile",
-        type: "profile",
-        name: "Emerging Eco",
-        image: "imageLink",
-        logo: "logoLink",
-        brand: "Emerging Eco",
-        location: "Zambia",
-        description: ".",
-        attributes: [
+        id: "{id}#tags",
+        type: "ixo#Tags",
+        settings:
+          "https://github.com/emerging-eco/configs/blob/main/settings/config.json",
+        entityTags: [
           {
-            key: "Usage",
-            value: "Domestic",
+            category: "Asset Type",
+            tags: ["Inventory", "Carbon Rights"],
           },
           {
-            key: "Product",
-            value: "SupaMoto credit tokens",
-          },
-        ],
-        metrics: [
-          {
-            prefix: "USD",
-            metric: "Token Price",
-            suffix: "Average/NFT",
-            source: "https://example.com/dfdfcv",
+            category: "Token Class",
+            tags: ["NFT"],
           },
           {
-            prefix: "Credits",
-            metric: "CARBON",
-            suffix: "/month (moving average)",
-            source: "https://example.com/dfdfcv",
-          },
-          {
-            prefix: "Performance",
-            metric: "Alpha",
-            suffix: "",
-            source: "https://example.com/dfdfcv",
+            category: "SDG",
+            tags: [
+              "SDG13 – Climate Action",
+              "SDG7 – Affordable and Clean Energy",
+            ],
           },
         ],
       },
@@ -138,10 +372,11 @@ export const setup_dao_constants = () => ({
   ],
 });
 
-export const setup_protocol_ver_claims_constants = () => ({
+// created by emerging
+export const setup_carbon_asset_constants = () => ({
   entity: {
     // type of entity eg dao/protocol/asset/oracle
-    entityType: "protocol/claims",
+    entityType: "asset/impacttoken",
     // please use Impact DAO's did as relayerNode eg dids.impactsDao
     relayerNode: dids.emergingDao,
     // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass
@@ -165,12 +400,13 @@ export const setup_protocol_ver_claims_constants = () => ({
     // be uploaded to cellnode/w3s, you can pass them here
     linkedResources: [
       // {
-      //   id: `{id}#id`,
-      //   type: "type",
-      //   description: "name",
+      //   id: `{id}#profile`,
+      //   type: "Settings",
+      //   description: "Profile",
       //   mediaType: "application/ld+json",
-      //   serviceEndpoint: `cellnode:/public/${cid}`,
-      //   proof: cid,
+      //   serviceEndpoint:
+      //     "ipfs:bafkreig4bm53r3wujghdesnscpwcr7rucsigsqbr7f4ix7p7aebsumpnpy",
+      //   proof: "bafkreig4bm53r3wujghdesnscpwcr7rucsigsqbr7f4ix7p7aebsumpnpy",
       //   encrypted: "false",
       //   right: "",
       // },
@@ -184,20 +420,61 @@ export const setup_protocol_ver_claims_constants = () => ({
       type: "Settings",
       storage: "cellnode",
       json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        type: "ixo:entity#page",
-        page: {
-          id: "IrCcJ8hl8t",
-          type: "paragraph",
-          data: {
-            text: "The Emerging Eco DAO constitutes of stakeholders who are particpating in the transition to IoT-integrated clean cook stoves, and who are supporting regenerative household transitions.",
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
           },
-        },
+        ],
+        id: "{id}#page",
+        type: "ixo:Page",
+        page: [
+          {
+            id: "DFibzXTpCH",
+            type: "paragraph",
+            data: {
+              text: "The Digital Measurement, Reporting, and Verification (dMRV) Protocol for Clean Cooking defines a standardized framework for tracking and evaluating the reduction in greenhouse gas (GHG) emissions from modern energy cooking devices.",
+            },
+          },
+          {
+            id: "_9vyvov_tG",
+            type: "paragraph",
+            data: {
+              text: "This transparent and reliable system promotes data integrity, accountability, and stakeholder collaboration, while facilitating progress towards climate goals and sustainable development.",
+            },
+          },
+          {
+            id: "T7wWZQQy54",
+            type: "paragraph",
+            data: {
+              text: "The dMRV protocol not only encourages innovation and resource allocation in clean cooking technologies but also fosters trust among all involved parties. It enables digital Impact Credits to be issued that account for and derive economic value from the climate impacts of using modern fuels and efficient cooking devices.",
+            },
+          },
+          {
+            id: "MK_Z8NDz0Y",
+            type: "paragraph",
+            data: {
+              text: "The dMRV protocol builds upon the Gold Standard Foundation's Methodology for Metered and Measured Energy Cooking Devices. It outlines data models and procedures for claims involving Cooking Fuel Purchases, Cooking Device Usage, and GHG Emission Reductions.",
+            },
+          },
+          {
+            id: "hpFizTi2bc",
+            type: "paragraph",
+            data: {
+              text: "The protocol also details the evaluation methodology for these claims, calculating emission reductions according to fuel types and quantities burned compared to baseline measures.",
+            },
+          },
+          {
+            id: "vEoUM94GQu",
+            type: "paragraph",
+            data: {
+              text: "It establishes a standard data format for issuing Verified Emission Reduction digital Impact Certificates in the format of Verifiable Credentials.",
+            },
+          },
+        ],
       },
     },
     {
@@ -205,340 +482,35 @@ export const setup_protocol_ver_claims_constants = () => ({
       type: "Settings",
       storage: "cellnode",
       json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        type: "ixo:entity#tags",
-        ddoTags: [
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
           {
-            category: "dao",
-            tags: ["Market Relayer", "Rights"],
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            web3: "https://ipfs.io/ipfs/",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
           },
         ],
-      },
-    },
-    {
-      name: "profile",
-      type: "Settings",
-      storage: "ipfs",
-      json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        id: "ixo:entity#profile",
-        type: "profile",
-        name: "Emerging Eco",
-        image: "imageLink",
-        logo: "logoLink",
-        brand: "Emerging Eco",
-        location: "Zambia",
-        description: ".",
-        attributes: [
+        id: "{id}#tags",
+        type: "ixo#Tags",
+        settings:
+          "https://github.com/emerging-eco/configs/blob/main/settings/config.json",
+        entityTags: [
           {
-            key: "Usage",
-            value: "Domestic",
+            category: "Asset Type",
+            tags: ["Inventory", "Carbon Rights"],
           },
           {
-            key: "Product",
-            value: "SupaMoto credit tokens",
-          },
-        ],
-        metrics: [
-          {
-            prefix: "USD",
-            metric: "Token Price",
-            suffix: "Average/NFT",
-            source: "https://example.com/dfdfcv",
+            category: "Token Class",
+            tags: ["NFT"],
           },
           {
-            prefix: "Credits",
-            metric: "CARBON",
-            suffix: "/month (moving average)",
-            source: "https://example.com/dfdfcv",
-          },
-          {
-            prefix: "Performance",
-            metric: "Alpha",
-            suffix: "",
-            source: "https://example.com/dfdfcv",
-          },
-        ],
-      },
-    },
-  ],
-});
-
-export const setup_protocol_cooking_constants = () => ({
-  entity: {
-    // type of entity eg dao/protocol/asset/oracle
-    entityType: "protocol/claims",
-    // please use Impact DAO's did as relayerNode eg dids.impactsDao
-    relayerNode: dids.emergingDao,
-    // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass
-    contextClass: dids.protocolClass,
-    // can add a also know ass if want
-    alsoKnownAs: "",
-    // you can remove/add more services
-    service: [
-      {
-        id: "{id}#cellnode",
-        type: "Cellnode",
-        serviceEndpoint: cellNodeChainMapping[chainNetwork],
-      },
-      {
-        id: "{id}#ipfs",
-        type: "Ipfs",
-        serviceEndpoint: "https://ipfs.io/ipfs/",
-      },
-    ],
-    // if you have any other linked resources other than the ones below that will automatically
-    // be uploaded to cellnode/w3s, you can pass them here
-    linkedResources: [
-      // {
-      //   id: `{id}#id`,
-      //   type: "type",
-      //   description: "name",
-      //   mediaType: "application/ld+json",
-      //   serviceEndpoint: `cellnode:/public/${cid}`,
-      //   proof: cid,
-      //   encrypted: "false",
-      //   right: "",
-      // },
-    ],
-  },
-  // you can create linked resources that will be uploaded to the specified storage and resource will be saved
-  // on entity linked resources with the cid as proof and service endpoint of provided storage.
-  linkedResources: [
-    {
-      name: "page",
-      type: "Settings",
-      storage: "cellnode",
-      json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        type: "ixo:entity#page",
-        page: {
-          id: "IrCcJ8hl8t",
-          type: "paragraph",
-          data: {
-            text: "The Emerging Eco DAO constitutes of stakeholders who are particpating in the transition to IoT-integrated clean cook stoves, and who are supporting regenerative household transitions.",
-          },
-        },
-      },
-    },
-    {
-      name: "tags",
-      type: "Settings",
-      storage: "cellnode",
-      json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        type: "ixo:entity#tags",
-        ddoTags: [
-          {
-            category: "dao",
-            tags: ["Market Relayer", "Rights"],
-          },
-        ],
-      },
-    },
-    {
-      name: "profile",
-      type: "Settings",
-      storage: "ipfs",
-      json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        id: "ixo:entity#profile",
-        type: "profile",
-        name: "Emerging Eco",
-        image: "imageLink",
-        logo: "logoLink",
-        brand: "Emerging Eco",
-        location: "Zambia",
-        description: ".",
-        attributes: [
-          {
-            key: "Usage",
-            value: "Domestic",
-          },
-          {
-            key: "Product",
-            value: "SupaMoto credit tokens",
-          },
-        ],
-        metrics: [
-          {
-            prefix: "USD",
-            metric: "Token Price",
-            suffix: "Average/NFT",
-            source: "https://example.com/dfdfcv",
-          },
-          {
-            prefix: "Credits",
-            metric: "CARBON",
-            suffix: "/month (moving average)",
-            source: "https://example.com/dfdfcv",
-          },
-          {
-            prefix: "Performance",
-            metric: "Alpha",
-            suffix: "",
-            source: "https://example.com/dfdfcv",
-          },
-        ],
-      },
-    },
-  ],
-});
-
-export const setup_protocol_fuel_constants = () => ({
-  entity: {
-    // type of entity eg dao/protocol/asset/oracle
-    entityType: "protocol/claims",
-    // please use Impact DAO's did as relayerNode eg dids.impactsDao
-    relayerNode: dids.emergingDao,
-    // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass
-    contextClass: dids.protocolClass,
-    // can add a also know ass if want
-    alsoKnownAs: "",
-    // you can remove/add more services
-    service: [
-      {
-        id: "{id}#cellnode",
-        type: "Cellnode",
-        serviceEndpoint: cellNodeChainMapping[chainNetwork],
-      },
-      {
-        id: "{id}#ipfs",
-        type: "Ipfs",
-        serviceEndpoint: "https://ipfs.io/ipfs/",
-      },
-    ],
-    // if you have any other linked resources other than the ones below that will automatically
-    // be uploaded to cellnode/w3s, you can pass them here
-    linkedResources: [
-      // {
-      //   id: `{id}#id`,
-      //   type: "type",
-      //   description: "name",
-      //   mediaType: "application/ld+json",
-      //   serviceEndpoint: `cellnode:/public/${cid}`,
-      //   proof: cid,
-      //   encrypted: "false",
-      //   right: "",
-      // },
-    ],
-  },
-  // you can create linked resources that will be uploaded to the specified storage and resource will be saved
-  // on entity linked resources with the cid as proof and service endpoint of provided storage.
-  linkedResources: [
-    {
-      name: "page",
-      type: "Settings",
-      storage: "cellnode",
-      json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        type: "ixo:entity#page",
-        page: {
-          id: "IrCcJ8hl8t",
-          type: "paragraph",
-          data: {
-            text: "The Emerging Eco DAO constitutes of stakeholders who are particpating in the transition to IoT-integrated clean cook stoves, and who are supporting regenerative household transitions.",
-          },
-        },
-      },
-    },
-    {
-      name: "tags",
-      type: "Settings",
-      storage: "cellnode",
-      json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        type: "ixo:entity#tags",
-        ddoTags: [
-          {
-            category: "dao",
-            tags: ["Market Relayer", "Rights"],
-          },
-        ],
-      },
-    },
-    {
-      name: "profile",
-      type: "Settings",
-      storage: "ipfs",
-      json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        id: "ixo:entity#profile",
-        type: "profile",
-        name: "Emerging Eco",
-        image: "imageLink",
-        logo: "logoLink",
-        brand: "Emerging Eco",
-        location: "Zambia",
-        description: ".",
-        attributes: [
-          {
-            key: "Usage",
-            value: "Domestic",
-          },
-          {
-            key: "Product",
-            value: "SupaMoto credit tokens",
-          },
-        ],
-        metrics: [
-          {
-            prefix: "USD",
-            metric: "Token Price",
-            suffix: "Average/NFT",
-            source: "https://example.com/dfdfcv",
-          },
-          {
-            prefix: "Credits",
-            metric: "CARBON",
-            suffix: "/month (moving average)",
-            source: "https://example.com/dfdfcv",
-          },
-          {
-            prefix: "Performance",
-            metric: "Alpha",
-            suffix: "",
-            source: "https://example.com/dfdfcv",
+            category: "SDG",
+            tags: [
+              "SDG13 – Climate Action",
+              "SDG7 – Affordable and Clean Energy",
+            ],
           },
         ],
       },

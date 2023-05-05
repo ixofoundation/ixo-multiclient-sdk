@@ -5,6 +5,7 @@ export type TokenAsset = {
   coinMinimalDenom: string;
   coinDecimals: number;
   coinGeckoId?: string;
+  coinCodexId?: string;
   coinImageUrl?: string;
   isStakeCurrency?: boolean;
   isFeeCurrency?: boolean;
@@ -43,7 +44,13 @@ export type TokenAssetInfo = {
   social: Social;
 };
 
-export type CoincodexResponse = {
+export type TokenAssetHistory = {
+  timestamp: number;
+  usdPrice: number;
+  usdVolume24H: number;
+}[];
+
+export type CoinCodexCoinResponse = {
   symbol?: string;
   coin_name?: string;
   shortname?: string;
@@ -104,6 +111,8 @@ export type CoincodexResponse = {
   social?: Social;
   socials?: SocialDetail[];
 };
+
+export type CoinCodexHistoryResponse = { [denom: string]: number[][] };
 
 export type Social = {
   [social: string]: string;

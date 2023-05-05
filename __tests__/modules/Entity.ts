@@ -67,6 +67,7 @@ type CreateEntityAssetSupamotoParams = {
   oracles: string[];
   relayerDid?: string;
 };
+
 export const CreateEntityAssetSupamoto = async (
   p: CreateEntityAssetSupamotoParams
 ) => {
@@ -160,6 +161,28 @@ export const CreateEntityAssetSupamoto = async (
         //   encrypted: "false",
         //   right: "",
         // }),
+        // TODO get cid from Shaun
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
+          id: "{id}#terms-conditions",
+          type: "LegalAgreement",
+          description: "Terms and Conditions",
+          mediaType: "application/pdf",
+          serviceEndpoint: "ipfs:<cid>",
+          proof: "<cid>",
+          encrypted: "false",
+          right: "#legal",
+        }),
+        // TODO get cid from Shaun
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
+          id: "{id}#zlottie",
+          type: "VerifiableMark",
+          description: "zLottie",
+          mediaType: "application/ld+json",
+          serviceEndpoint: "ipfs:<cid>",
+          proof: "<cid>", // credential signature value
+          encrypted: "false",
+          right: "verify", // we will add something in the AccordedRights prop in future
+        }),
         ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "{id}#tags",
           type: "Settings",
@@ -291,6 +314,7 @@ export const CreateEntityAssetSupamotoInstance = async (
       context: createAgentIidContext([{ key: "class", val: inheritEntityDid }]),
       controller: [did],
       service: [],
+      startDate: utils.proto.toTimestamp(new Date()),
       verification: createIidVerificationMethods({
         did,
         pubkey: myPubKey,
@@ -320,16 +344,20 @@ export const CreateEntityAssetSupamotoInstance = async (
           encrypted: "false",
           right: "#apitoken",
         }),
+        {
+          id: `{id}#token`,
+          type: "TokenMetadata",
+          description: "Impact Token",
+          mediaType: "application/json",
+          serviceEndpoint:
+            "ipfs:bafkreid2shatt7tw7hs2b7j3eip7l52xa24xwtvnc2doj22g67fosvfize",
+          proof: "bafkreid2shatt7tw7hs2b7j3eip7l52xa24xwtvnc2doj22g67fosvfize",
+          encrypted: "false",
+          right: "",
+        },
       ],
       accordedRight: [],
-      linkedEntity: [
-        ixo.iid.v1beta1.LinkedEntity.fromPartial({
-          id: inheritEntityDid,
-          type: "asset/collection",
-          relationship: "affordance",
-          service: "ixo",
-        }),
-      ],
+      linkedEntity: [],
       ownerDid: did,
       ownerAddress: myAddress,
       relayerNode: relayerDid || did,

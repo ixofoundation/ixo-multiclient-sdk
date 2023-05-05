@@ -2,6 +2,8 @@ import Long from "long";
 import { createRegistry, utils } from "../../src";
 import { getUser, queryClient } from "../helpers/common";
 import { WalletUsers } from "../helpers/constants";
+import { AuthInfo, TxBody } from "../../src/codegen/cosmos/tx/v1beta1/tx";
+import { fromHex } from "@cosmjs/encoding";
 
 export const quickQueries = () =>
   describe("Quick queries to see states", () => {
@@ -56,6 +58,30 @@ export const quickQueries = () =>
     //     address,
     //   });
     //   console.log(res.balances);
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query user tokens (entities)", async () => {
+    //   const address = (await getUser(WalletUsers.tester).getAccounts())[0]
+    //     .address;
+    //   const entityParams = await queryClient.ixo.entity.v1beta1.params();
+
+    //   const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //     address: entityParams.params!.nftContractAddress,
+    //     queryData: utils.conversions.JsonToArray(
+    //       JSON.stringify({
+    //         tokens: {
+    //           owner: address,
+    //           limit: 99999999,
+    //         },
+    //       })
+    //     ),
+    //   });
+    //   const tokens = JSON.parse(
+    //     utils.conversions.Uint8ArrayToJS(res.data)
+    //   ).tokens;
+    //   console.log({ tokens });
+
     //   expect(res).toBeTruthy();
     // });
 
@@ -222,9 +248,21 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
+    // test("decode", async () => {
+    //   const authInfoBytes =
+    //     "0a2b0a210a1f2f636f736d6f732e63727970746f2e736563703235366b312e5075624b657912040a020801180112130a0d0a047569786f1205313235303310a0c21e";
+    //   const bodyBytes =
+    //     "0a89010a1c2f636f736d6f732e62616e6b2e763162657461312e4d736753656e6412690a2a69786f3179306437773578666a3961307037796770783075777679726e6d6d716a336664347376613774122a69786f313968336c716a353075687a647276386d6b61666e7035356e716d7a34676863327364336d34381a0f0a047569786f120731303030303030";
+
+    //   const auth = AuthInfo.decode(fromHex(authInfoBytes));
+    //   const body = TxBody.decode(fromHex(bodyBytes));
+    //   console.log(auth.signerInfos[0]);
+    //   console.log(body);
+    //   expect(true).toBeTruthy();
+    // });
+
     // test("query iid doc", async () => {
-    //   const did: string =
-    //     "did:x:zQ3shUQYdonbR4CaafBmfYMHND7KEXY3tEStFndNGWp4njQ54";
+    //   const did: string = "did:ixo:entity:f2235630689d4b54a561ca3de57494f6";
     //   // const did = getUser(WalletUsers.tester).did;
     //   try {
     //     const res = await queryClient.ixo.iid.v1beta1.iidDocument({

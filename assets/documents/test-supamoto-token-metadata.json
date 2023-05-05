@@ -5,10 +5,10 @@
   "tokenName": "SupaMoto NFT",
   "decimals": 1,
   "description": "SupaMoto Genesis Collection",
-  "image": "imageLink",
+  "image": "bafkreifkl6w55nasgqid22d2cqyxccjktbciefzmiqvcudlq3eoer2mzhi",
   "properties": {
     "denom": "SUPAMOTO1",
-    "icon": "iconLink",
+    "icon": "bafkreifkl6w55nasgqid22d2cqyxccjktbciefzmiqvcudlq3eoer2mzhi",
     "maxSupply": "600"
   }
 }

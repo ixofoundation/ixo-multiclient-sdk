@@ -1,13 +1,5 @@
-import {
-  customQueries,
-  generateNewWallet,
-  sendFromFaucet,
-  testMsg,
-  utils,
-} from "../../helpers/common";
-import { WalletUsers } from "../../helpers/constants";
+import { customQueries, testMsg, utils } from "../../helpers/common";
 import * as Iid from "../Iid";
-import * as IidMain from "../../modules/Iid";
 import * as Wasm from "../../modules/CosmWasm";
 import { createGroupMsg } from "../Groups";
 import {
@@ -17,26 +9,11 @@ import {
   setup_dao_constants,
 } from "./constants";
 import * as Entity from "../Entity";
+import { setAndLedgerUser } from "../helpers";
 
 export const impactsFlow = () =>
   describe("Flow for creating a Entity (dao/protocol/oracle)", () => {
-    // ===============================================================
-    // Set Testers mnemonic to env variable and ledger root user did
-    // ===============================================================
-
-    // below test can fail as user might already be ledgered, that is ok
-    beforeAll(() =>
-      generateNewWallet(WalletUsers.tester, process.env.TESTER_MNEMONIC)
-    );
-
-    // @ts-ignore
-    if (chainNetwork != "mainnet") {
-      // Send from faucet for devnet/testnet
-      sendFromFaucet(WalletUsers.tester);
-    }
-    testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () =>
-      IidMain.CreateIidDoc(WalletUsers.tester)
-    );
+    setAndLedgerUser();
 
     // ===============================================================
     // Create dao dao groups

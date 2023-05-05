@@ -1,88 +1,24 @@
-import {
-  customQueries,
-  generateNewWallet,
-  sendFromFaucet,
-  testMsg,
-  utils,
-} from "../../helpers/common";
-import { WalletUsers } from "../../helpers/constants";
-import * as IidMain from "../../modules/Iid";
+import { testMsg, utils } from "../../helpers/common";
 import {
   setup_dao_constants,
-  setup_protocol_cooking_constants,
-  setup_protocol_fuel_constants,
-  setup_protocol_ver_claims_constants,
+  setup_oracle_carbon_constants,
+  setup_protocol_clean_cooking_constants,
 } from "./constants";
 import * as Entity from "../Entity";
-import * as Entity1 from "../../modules/Entity";
-import { chainNetwork } from "../index.setup.spec";
-import { LinkedResourcesUploaded, dids } from "../constants";
+import { setAndLedgerUser, uploadAllToCellnodeWeb3 } from "../helpers";
 
 export const emergingDaoFlow = () =>
   describe("Flow for creating a Entity (dao/protocol/oracle)", () => {
-    // ===============================================================
-    // Set Testers mnemonic to env variable and ledger root user did
-    // ===============================================================
-
-    // below test can fail as user might already be ledgered, that is ok
-    beforeAll(() =>
-      generateNewWallet(WalletUsers.tester, process.env.TESTER_MNEMONIC)
-    );
-
-    // @ts-ignore
-    if (chainNetwork != "mainnet") {
-      // Send from faucet for devnet/testnet
-      sendFromFaucet(WalletUsers.tester);
-    }
-    testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () =>
-      IidMain.CreateIidDoc(WalletUsers.tester)
-    );
-
-    // ===============================================================
-    // Create Entities
-    // ===============================================================
-    // You can create all your entities below, you can just copy a whole entity creation and make
-    // as many as you want, just ensure you have all the groups needed that will be used and that for each
-    // entity there is a corresponding exported setup_{name}_constants that you can use for the entity
+    setAndLedgerUser(process.env.ROOT_EMERGING!);
 
     // =============================== START
     let daoDid: string;
-    let adminAccount: string;
-    let linkedResourcesUploaded: LinkedResourcesUploaded = [];
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity dao", async () => {
       const daoConst = setup_dao_constants();
 
-      // Uploading linkedResources
-      for (const { name, type, storage, json } of daoConst.linkedResources) {
-        if (storage === "cellnode") {
-          const cellnode = await customQueries.cellnode.uploadPublicDoc(
-            "application/ld+json",
-            Buffer.from(JSON.stringify(json)).toString("base64"),
-            undefined,
-            chainNetwork
-          );
-          linkedResourcesUploaded.push({
-            name,
-            cid: cellnode.key,
-            type,
-            storage,
-          });
-        } else if (storage === "ipfs") {
-          const web3 = await customQueries.cellnode.uploadWeb3Doc(
-            utils.common.generateId(12),
-            "application/ld+json",
-            Buffer.from(JSON.stringify(json)).toString("base64"),
-            undefined,
-            chainNetwork
-          );
-          linkedResourcesUploaded.push({
-            name,
-            cid: web3.cid,
-            type,
-            storage,
-          });
-        }
-      }
+      let linkedResourcesUploaded = await uploadAllToCellnodeWeb3(
+        daoConst.linkedResources
+      );
       console.log({ linkedResourcesUploaded });
 
       // Create the Entity
@@ -91,13 +27,35 @@ export const emergingDaoFlow = () =>
         linkedResourcesUploaded
       );
       daoDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
-      adminAccount = utils.common.getValueFromEvents(
-        res,
-        "ixo.entity.v1beta1.EntityCreatedEvent",
-        "entity",
-        (s) => s.accounts.find((a) => a.name === "admin").address
+      console.log({ daoDid });
+
+      return res;
+    });
+    // =============================== END
+  });
+
+export const emergingOraclesFlow = () =>
+  describe("Flow for creating a Entity (dao/protocol/oracle)", () => {
+    setAndLedgerUser(process.env.ROOT_EMERGING!, process.env.ROOT_ED_EMERGING!);
+
+    // =============================== START
+    let oracleDid: string;
+    testMsg("/ixo.entity.v1beta1.MsgCreateEntity dao", async () => {
+      const daoConst = setup_oracle_carbon_constants();
+
+      let oracleLinkedResourcesUploaded = await uploadAllToCellnodeWeb3(
+        daoConst.linkedResources
       );
-      console.log({ daoDid, adminAccount });
+      console.log({ oracleLinkedResourcesUploaded });
+
+      // Create the Entity
+      const res = await Entity.CreateEntity(
+        daoConst.entity,
+        oracleLinkedResourcesUploaded,
+        true
+      );
+      oracleDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
+      console.log({ oracleDid });
 
       return res;
     });
@@ -106,227 +64,31 @@ export const emergingDaoFlow = () =>
 
 export const emergingProtocolsFlow = () =>
   describe("Flow for creating a Entity (dao/protocol/oracle)", () => {
-    // ===============================================================
-    // Set Testers mnemonic to env variable and ledger root user did
-    // ===============================================================
-
-    // below test can fail as user might already be ledgered, that is ok
-    beforeAll(() =>
-      Promise.all([
-        generateNewWallet(WalletUsers.tester, process.env.TESTER_MNEMONIC),
-        generateNewWallet(WalletUsers.alice, process.env.ED_KEYS_MNEMONIC),
-      ])
-    );
-
-    // @ts-ignore
-    if (chainNetwork != "mainnet") {
-      // Send from faucet for devnet/testnet
-      sendFromFaucet(WalletUsers.tester);
-    }
-    testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () =>
-      IidMain.CreateIidDoc(WalletUsers.tester)
-    );
-
-    // ===============================================================
-    // Create Entities
-    // ===============================================================
-    // You can create all your entities below, you can just copy a whole entity creation and make
-    // as many as you want, just ensure you have all the groups needed that will be used and that for each
-    // entity there is a corresponding exported setup_{name}_constants that you can use for the entity
+    setAndLedgerUser(process.env.ROOT_EMERGING!, process.env.ROOT_ED_EMERGING!);
 
     // =============================== START
-    let protVerClaimsDid: string;
-    let protVerClaimsAdminAccount: string;
-    let protVerClaimsLinkedResourcesUploaded: LinkedResourcesUploaded = [];
+    let protCleanCookingDid: string;
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity dao", async () => {
-      const daoConst = setup_protocol_ver_claims_constants();
+      const daoConst = setup_protocol_clean_cooking_constants();
 
-      // Uploading linkedResources
-      for (const { name, type, storage, json } of daoConst.linkedResources) {
-        if (storage === "cellnode") {
-          const cellnode = await customQueries.cellnode.uploadPublicDoc(
-            "application/ld+json",
-            Buffer.from(JSON.stringify(json)).toString("base64"),
-            undefined,
-            chainNetwork
-          );
-          protVerClaimsLinkedResourcesUploaded.push({
-            name,
-            cid: cellnode.key,
-            type,
-            storage,
-          });
-        } else if (storage === "ipfs") {
-          const web3 = await customQueries.cellnode.uploadWeb3Doc(
-            utils.common.generateId(12),
-            "application/ld+json",
-            Buffer.from(JSON.stringify(json)).toString("base64"),
-            undefined,
-            chainNetwork
-          );
-          protVerClaimsLinkedResourcesUploaded.push({
-            name,
-            cid: web3.cid,
-            type,
-            storage,
-          });
-        }
-      }
-      console.log({ protVerClaimsLinkedResourcesUploaded });
+      let protCleanCookingLinkedResourcesUploaded =
+        await uploadAllToCellnodeWeb3(daoConst.linkedResources);
+      console.log({ protCleanCookingLinkedResourcesUploaded });
 
       // Create the Entity
       const res = await Entity.CreateEntity(
         daoConst.entity,
-        protVerClaimsLinkedResourcesUploaded
+        protCleanCookingLinkedResourcesUploaded,
+        true
       );
-      protVerClaimsDid = utils.common.getValueFromEvents(
+      protCleanCookingDid = utils.common.getValueFromEvents(
         res,
         "wasm",
         "token_id"
       );
-      protVerClaimsAdminAccount = utils.common.getValueFromEvents(
-        res,
-        "ixo.entity.v1beta1.EntityCreatedEvent",
-        "entity",
-        (s) => s.accounts.find((a) => a.name === "admin").address
-      );
-      console.log({ protVerClaimsDid, protVerClaimsAdminAccount });
+      console.log({ protCleanCookingDid });
 
       return res;
     });
     // =============================== END
-
-    // =============================== START
-    let protCookingDid: string;
-    let protCookingAdminAccount: string;
-    let protCookingLinkedResourcesUploaded: LinkedResourcesUploaded = [];
-    testMsg("/ixo.entity.v1beta1.MsgCreateEntity dao", async () => {
-      const daoConst = setup_protocol_cooking_constants();
-
-      // Uploading linkedResources
-      for (const { name, type, storage, json } of daoConst.linkedResources) {
-        if (storage === "cellnode") {
-          const cellnode = await customQueries.cellnode.uploadPublicDoc(
-            "application/ld+json",
-            Buffer.from(JSON.stringify(json)).toString("base64"),
-            undefined,
-            chainNetwork
-          );
-          protCookingLinkedResourcesUploaded.push({
-            name,
-            cid: cellnode.key,
-            type,
-            storage,
-          });
-        } else if (storage === "ipfs") {
-          const web3 = await customQueries.cellnode.uploadWeb3Doc(
-            utils.common.generateId(12),
-            "application/ld+json",
-            Buffer.from(JSON.stringify(json)).toString("base64"),
-            undefined,
-            chainNetwork
-          );
-          protCookingLinkedResourcesUploaded.push({
-            name,
-            cid: web3.cid,
-            type,
-            storage,
-          });
-        }
-      }
-      console.log({ protCookingLinkedResourcesUploaded });
-
-      // Create the Entity
-      const res = await Entity.CreateEntity(
-        daoConst.entity,
-        protCookingLinkedResourcesUploaded
-      );
-      protCookingDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
-      protCookingAdminAccount = utils.common.getValueFromEvents(
-        res,
-        "ixo.entity.v1beta1.EntityCreatedEvent",
-        "entity",
-        (s) => s.accounts.find((a) => a.name === "admin").address
-      );
-      console.log({ protCookingDid, protCookingAdminAccount });
-
-      return res;
-    });
-    // =============================== END
-
-    // =============================== START
-    let protFuelDid: string;
-    let protFuelAdminAccount: string;
-    let protFuelLinkedResourcesUploaded: LinkedResourcesUploaded = [];
-    testMsg("/ixo.entity.v1beta1.MsgCreateEntity dao", async () => {
-      const daoConst = setup_protocol_fuel_constants();
-
-      // Uploading linkedResources
-      for (const { name, type, storage, json } of daoConst.linkedResources) {
-        if (storage === "cellnode") {
-          const cellnode = await customQueries.cellnode.uploadPublicDoc(
-            "application/ld+json",
-            Buffer.from(JSON.stringify(json)).toString("base64"),
-            undefined,
-            chainNetwork
-          );
-          protFuelLinkedResourcesUploaded.push({
-            name,
-            cid: cellnode.key,
-            type,
-            storage,
-          });
-        } else if (storage === "ipfs") {
-          const web3 = await customQueries.cellnode.uploadWeb3Doc(
-            utils.common.generateId(12),
-            "application/ld+json",
-            Buffer.from(JSON.stringify(json)).toString("base64"),
-            undefined,
-            chainNetwork
-          );
-          protFuelLinkedResourcesUploaded.push({
-            name,
-            cid: web3.cid,
-            type,
-            storage,
-          });
-        }
-      }
-      console.log({ protFuelLinkedResourcesUploaded });
-
-      // Create the Entity
-      const res = await Entity.CreateEntity(
-        daoConst.entity,
-        protFuelLinkedResourcesUploaded
-      );
-      protFuelDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
-      protFuelAdminAccount = utils.common.getValueFromEvents(
-        res,
-        "ixo.entity.v1beta1.EntityCreatedEvent",
-        "entity",
-        (s) => s.accounts.find((a) => a.name === "admin").address
-      );
-      console.log({ protFuelDid, protFuelAdminAccount });
-
-      return res;
-    });
-    // =============================== END
-
-    // Create cookstove-asset-protocol
-    // =========================================
-    let cookstoveAssetProtocolDid: string;
-    testMsg("/ixo.entity.v1beta1.MsgCreateEntity protocol", async () => {
-      const res = await Entity1.CreateEntity(
-        "protocol/asset",
-        [{ key: "class", val: dids.protocolClass }],
-        dids.emergingDao
-      );
-      cookstoveAssetProtocolDid = utils.common.getValueFromEvents(
-        res,
-        "wasm",
-        "token_id"
-      );
-      console.log({ cookstoveAssetProtocolDid });
-      return res;
-    });
   });
