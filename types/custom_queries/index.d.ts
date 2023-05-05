@@ -700,8 +700,10 @@ export declare namespace customQueries {
                 };
             };
         }, ibcHashes: string[]) => Promise<import("./currency.types").IbcTokenAsset[]>;
-        findTokenInfoFromDenom: (denom: string) => Promise<import("./currency.types").TokenAssetInfo>;
+        findTokenInfoFromDenom: (denom: string, cacheResult?: boolean) => Promise<import("./currency.types").TokenAssetInfo>;
         findTokensInfoFromDenoms: (denoms: string[]) => Promise<import("./currency.types").TokenAssetInfo[]>;
+        findTokenHistoryFromDenom: (denom: string, startDate: string, endDate: string, cacheResult?: boolean) => Promise<import("./currency.types").TokenAssetHistory>;
+        findTokensHistoryFromDenoms: (denoms: string[], startDate: string, endDate: string, cacheResult?: boolean) => Promise<import("./currency.types").TokenAssetHistory[]>;
     };
     const cellnode: {
         cellNodeChainMapping: {

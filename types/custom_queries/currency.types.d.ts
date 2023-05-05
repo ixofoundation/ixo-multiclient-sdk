@@ -4,6 +4,7 @@ export declare type TokenAsset = {
     coinMinimalDenom: string;
     coinDecimals: number;
     coinGeckoId?: string;
+    coinCodexId?: string;
     coinImageUrl?: string;
     isStakeCurrency?: boolean;
     isFeeCurrency?: boolean;
@@ -38,7 +39,12 @@ export declare type TokenAssetInfo = {
     lastUpdate: Date;
     social: Social;
 };
-export declare type CoincodexResponse = {
+export declare type TokenAssetHistory = {
+    timestamp: number;
+    usdPrice: number;
+    usdVolume24H: number;
+}[];
+export declare type CoinCodexCoinResponse = {
     symbol?: string;
     coin_name?: string;
     shortname?: string;
@@ -98,6 +104,9 @@ export declare type CoincodexResponse = {
     atl_data?: unknown;
     social?: Social;
     socials?: SocialDetail[];
+};
+export declare type CoinCodexHistoryResponse = {
+    [denom: string]: number[][];
 };
 export declare type Social = {
     [social: string]: string;
