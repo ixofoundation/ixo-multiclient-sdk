@@ -102,7 +102,8 @@ export const createAgentIidContext = (
 ) => [
   ixo.iid.v1beta1.Context.fromPartial({
     key: "ixo",
-    val: "https://w3id.org/ixo/ns/context/v1",
+    val: "https://w3id.org/ixo/context/v1",
+    // val: "https://w3id.org/ixo/ns/context/v1",
   }),
   ...(contexts
     ? contexts.map(({ key, val }) =>

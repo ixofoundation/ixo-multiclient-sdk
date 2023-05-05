@@ -14,7 +14,7 @@ import {
   generateBlockchainTestUsers,
   iidAddEdKeys,
 } from "./flows/iids";
-import { enititiesBasic, supamotoEntities } from "./flows/entities";
+import { enititiesBasic } from "./flows/entities";
 import { ibcBasic } from "./flows/ibc";
 import { bankBasic, authzBasic, sendTokens, govDeposit } from "./flows/cosmos";
 import {
@@ -53,12 +53,18 @@ generateBlockchainTestUsers();
 // daoCore();
 // quickQueries();
 
+// ------------------------------------------
 // Run the below after a devnet reset
 // ------------------------------------------
 // devnetProposals();
 // first run devnetProposals, the run initcontracts.sh on dev server
 // immidiately, and wait for all proposals to pass then run below
+//
+// After all proposals have passed, run `yarn test:setup` to create all base daos and entities,
+// please ensure to have the env vars set for dao root users and ed key users. For devnet restart
+// you dont have to save did constants after dao creation, it deterministic so preset to devnet dids
+//
+// After daos is on devnet you can run the below
 // registerIidsDev();
-// supamotoEntities();
 // supamotoTokens();
 // devnetClaims();

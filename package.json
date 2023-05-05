@@ -80,7 +80,8 @@
     "sovrin-did": "1.4.0",
     "ts-jest": "29.0.3",
     "typedoc": "0.23.20",
-    "typescript": "4.8.4"
+    "typescript": "4.8.4",
+    "web3.storage": "4.5.4"
   },
   "dependencies": {
     "@babel/runtime": "7.19.4",

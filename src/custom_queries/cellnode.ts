@@ -32,7 +32,7 @@ export type CellnodeWeb3Resource = {
 };
 
 export const cellNodeChainMapping: { [network in ChainNetwork]: string } = {
-  mainnet: "https://cellnode.ixo.earth",
+  mainnet: "https://cellnode.ixo.world",
   testnet: "https://cellnode-pandora.ixo.earth",
   devnet: "https://devnet-cellnode.ixo.earth",
 };

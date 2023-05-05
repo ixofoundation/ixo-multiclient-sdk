@@ -2,11 +2,15 @@ import {
   createAgentIidContext,
   createIidVerificationMethods,
 } from "../../src/messages/iid";
-import { createClient, getUser, ixo } from "../helpers/common";
+import { createClient, getUser, ixo, utils } from "../helpers/common";
 import { fee, keyType, WalletUsers } from "../helpers/constants";
 import { SetupDaoConstantFields } from "./impacts/constants";
 import { SetupClassConstants } from "./classes/constants";
-import { LinkedResourcesUploaded } from "./constants";
+import {
+  LinkedClaimUploaded,
+  LinkedResourcesUploaded,
+  dids,
+} from "./constants";
 import base58 from "bs58";
 
 export const CreateEntityBasic = async (
@@ -30,6 +34,7 @@ export const CreateEntityBasic = async (
     value: ixo.entity.v1beta1.MsgCreateEntity.fromPartial({
       entityType: entity.entityType,
       context: context,
+      startDate: utils.proto.toTimestamp(new Date()),
       verification: createIidVerificationMethods({
         did,
         pubkey: myPubKey,
@@ -90,14 +95,15 @@ export const CreateEntity = async (
 
   // Add ed keys user to verification method for verification of credentials
   if (addEdKeys) {
-    const edPubKey = (await getUser(WalletUsers.alice).getAccounts())[0].pubkey;
+    const edPubKey = (await getUser(WalletUsers.alice, "ed").getAccounts())[0]
+      .pubkey;
     const pubkeyBase58 = base58.encode(edPubKey);
 
     verification.push(
       ixo.iid.v1beta1.Verification.fromPartial({
-        relationships: ["attestation"],
+        relationships: ["assertionMethod"],
         method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
-          id: did + "#" + pubkeyBase58,
+          id: "{id}#" + pubkeyBase58,
           type: "Ed25519VerificationKey2018",
           publicKeyBase58: pubkeyBase58,
           controller: "{id}",
@@ -141,6 +147,168 @@ export const CreateEntity = async (
       // ),
       // since no groups at time of run no linkedEntities
       linkedEntity: [],
+      ownerDid: did,
+      startDate: utils.proto.toTimestamp(new Date()),
+      ownerAddress: myAddress,
+      relayerNode: entity.relayerNode || did,
+    }),
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const CreateSupamotoAssetCollection = async (
+  entity: SetupDaoConstantFields["entity"],
+  linkedResourcesUploaded: LinkedResourcesUploaded,
+  linkedClaimsUploaded: LinkedClaimUploaded,
+  addEdKeys = false
+) => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myPubKey = account.pubkey;
+  const myAddress = account.address;
+  const did = tester.did;
+
+  const linkedResources = linkedResourcesUploaded.map(
+    ({ name, cid, type, storage }) =>
+      ixo.iid.v1beta1.LinkedResource.fromPartial({
+        id: `{id}#${name}`,
+        type,
+        description: name.slice(0, 1).toLocaleUpperCase() + name.slice(1),
+        mediaType: "application/ld+json",
+        serviceEndpoint:
+          storage === "cellnode" ? `cellnode:/public/${cid}` : `ipfs:${cid}`,
+        proof: cid,
+        encrypted: "false",
+        right: "",
+      })
+  );
+
+  const linkedClaims = linkedClaimsUploaded.map(
+    ({ name, cid, type, description, storage }) =>
+      ixo.iid.v1beta1.LinkedClaim.fromPartial({
+        id: `{id}#${name}`,
+        type,
+        description,
+        serviceEndpoint:
+          storage === "cellnode" ? `cellnode:/public/${cid}` : `ipfs:${cid}`,
+        proof: cid,
+        encrypted: "false",
+        right: "",
+      })
+  );
+
+  const context = !entity.contextClass
+    ? createAgentIidContext()
+    : createAgentIidContext([{ key: "class", val: entity.contextClass }]);
+
+  const verification = createIidVerificationMethods({
+    did,
+    pubkey: myPubKey,
+    address: myAddress,
+    controller: did,
+    type: keyType,
+  });
+
+  // Add ed keys user to verification method for verification of credentials
+  if (addEdKeys) {
+    const edPubKey = (await getUser(WalletUsers.alice).getAccounts())[0].pubkey;
+    const pubkeyBase58 = base58.encode(edPubKey);
+
+    verification.push(
+      ixo.iid.v1beta1.Verification.fromPartial({
+        relationships: ["attestation"],
+        method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
+          id: did + "#" + pubkeyBase58,
+          type: "Ed25519VerificationKey2018",
+          publicKeyBase58: pubkeyBase58,
+          controller: "{id}",
+        }),
+      })
+    );
+  }
+
+  const message = {
+    typeUrl: "/ixo.entity.v1beta1.MsgCreateEntity",
+    value: ixo.entity.v1beta1.MsgCreateEntity.fromPartial({
+      entityType: entity.entityType,
+      entityStatus: 0,
+      controller: [did],
+      context,
+      alsoKnownAs: entity.alsoKnownAs,
+      startDate: utils.proto.toTimestamp(new Date()),
+      service: entity.service.map((s) =>
+        ixo.iid.v1beta1.Service.fromPartial(s)
+      ),
+      verification: verification,
+      linkedResource: linkedResources.concat(
+        entity.linkedResources.map((r) =>
+          ixo.iid.v1beta1.LinkedResource.fromPartial(r)
+        )
+      ),
+      accordedRight: [
+        ixo.iid.v1beta1.AccordedRight.fromPartial({
+          id: "{id}#mintNFT",
+          type: "capability/createEntity",
+          mechanism: "x/entity",
+          message: "MsgCreateEntity",
+          service: "#ixo",
+        }),
+        ixo.iid.v1beta1.AccordedRight.fromPartial({
+          id: "{id}#carbon-claim",
+          type: "capability/attest",
+          mechanism: "x/claims",
+          message: "MsgSubmitClaim",
+          service: "#ixo",
+        }),
+        ixo.iid.v1beta1.AccordedRight.fromPartial({
+          id: "{id}#legal",
+          type: "legal",
+          mechanism: "judicial",
+        }),
+        ixo.iid.v1beta1.AccordedRight.fromPartial({
+          id: "{id}#apitoken",
+          type: "AccessToken",
+          mechanism: "authentication",
+        }),
+        ixo.iid.v1beta1.AccordedRight.fromPartial({
+          id: "{id}#view",
+          type: "capability/access",
+          mechanism: "zcap",
+          service: "emerging",
+        }),
+        ixo.iid.v1beta1.AccordedRight.fromPartial({
+          id: "{id}#mintCARBON",
+          type: "capability/mintToken",
+          mechanism: "x/token",
+          message: "MsgMintToken",
+          service: "ixo",
+        }),
+      ],
+      linkedEntity: [
+        ixo.iid.v1beta1.LinkedEntity.fromPartial({
+          id: dids.prospectOracle,
+          type: "oracle",
+          relationship: "verifies",
+          service: "ixo",
+        }),
+        ixo.iid.v1beta1.LinkedEntity.fromPartial({
+          id: dids.carbonOracle,
+          type: "oracle",
+          relationship: "verifies",
+          service: "ixo",
+        }),
+        ixo.iid.v1beta1.LinkedEntity.fromPartial({
+          id: dids.ecsDao,
+          type: "dao",
+          relationship: "mints",
+          service: "ixo",
+        }),
+      ],
+      linkedClaim: linkedClaims,
       ownerDid: did,
       ownerAddress: myAddress,
       relayerNode: entity.relayerNode || did,

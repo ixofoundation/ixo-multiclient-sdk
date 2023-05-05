@@ -57,7 +57,7 @@ export const fee: StdFee = {
       amount: "100000",
     },
   ],
-  gas: "4000000",
+  gas: "500000",
   // if wana do transactions using feegrant granter address
   // granter: "ixo1n8yrmeatsk74dw0zs95ess9sgzptd6thgjgcj2",
 };

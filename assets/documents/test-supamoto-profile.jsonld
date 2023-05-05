@@ -1,15 +1,19 @@
 {
-  "@context": {
-    "ixo": "https://w3id.org/ixo/ns/protocol/",
-    "@id": "@type",
-    "type": "@type",
-    "@protected": true
-  },
-  "id": "ixo:entity#profile",
-  "type": "profile",
+  "@context": [
+    "https://w3id.org/ixo/context/v1",
+    {
+      "ixo": "https://w3id.org/ixo/vocab/v1",
+      "web3": "https://ipfs.io/ipfs/",
+      "id": "@id",
+      "type": "@type",
+      "@protected": true
+    }
+  ],
+  "id": "{id}#profile",
+  "type": "ixo:Profile",
   "name": "SupaMoto Malawi",
-  "image": "imageLink",
-  "logo": "logoLink",
+  "image": "web3:bafkreideszg4fdha4tf7ldpecltxbyxbnapb663tkuksk2vcczkzkxppaa",
+  "logo": "web3:bafkreifkl6w55nasgqid22d2cqyxccjktbciefzmiqvcudlq3eoer2mzhi",
   "brand": "SupaMoto",
   "location": "MW",
   "description": "The SupaMoto clean cookstove is a smart, IoT-connected device that helps households cut carbon emissions while cooking with affordable and renewable biomass fuel. This convenient solution offers a more cost-effective, healthy, and time-saving alternative to traditional cooking methods.",
@@ -39,24 +43,5 @@
       "value": "CARBON credit tokens"
     }
   ],
-  "metrics": [
-    {
-      "prefix": "USD",
-      "metric": "Token Price",
-      "suffix": "Average/NFT",
-      "source": "https://example.com/dfdfcv"
-    },
-    {
-      "prefix": "Credits",
-      "metric": "CARBON",
-      "suffix": "/month (moving average)",
-      "source": "https://example.com/dfdfcv"
-    },
-    {
-      "prefix": "Performance",
-      "metric": "Alpha",
-      "suffix": "",
-      "source": "https://example.com/dfdfcv"
-    }
-  ]
+  "metrics": []
 }

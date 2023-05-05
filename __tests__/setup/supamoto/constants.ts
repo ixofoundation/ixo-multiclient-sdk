@@ -2,14 +2,14 @@ import { cellNodeChainMapping } from "../../../src/custom_queries/cellnode";
 import { dids } from "../constants";
 import { chainNetwork } from "../index.setup.spec";
 
-export const setup_dao_constants = () => ({
+export const setup_asset_collection_constants = () => ({
   entity: {
     // type of entity eg dao/protocol/asset/oracle
-    entityType: "dao",
+    entityType: "asset/collection",
     // please use Impact DAO's did as relayerNode eg dids.impactsDao
-    relayerNode: dids.impactsDao,
+    relayerNode: dids.emergingDao,
     // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass
-    contextClass: dids.daoClass,
+    contextClass: dids.assetClass,
     // can add a also know ass if want
     alsoKnownAs: "",
     // you can remove/add more services
@@ -24,44 +24,109 @@ export const setup_dao_constants = () => ({
         type: "Ipfs",
         serviceEndpoint: "https://ipfs.io/ipfs/",
       },
+      {
+        id: "{id}#ixo",
+        type: "chainService",
+        serviceEndpoint:
+          "https://github.com/cosmos/chain-registry/blob/master/ixo/chain.json?rpc/",
+      },
+      {
+        id: "{id}#emerging",
+        type: "linkedDomains",
+        serviceEndpoint: "https://app.emerging.eco",
+      },
     ],
     // if you have any other linked resources other than the ones below that will automatically
     // be uploaded to cellnode/w3s, you can pass them here
     linkedResources: [
+      {
+        id: `{id}#profile`,
+        type: "Settings",
+        description: "Profile",
+        mediaType: "application/ld+json",
+        serviceEndpoint:
+          "ipfs:bafkreieogbdlk7xdho6kwd2xtz7mvt6g6obwhvblnrjpfrc43pedleemb4",
+        proof: "bafkreieogbdlk7xdho6kwd2xtz7mvt6g6obwhvblnrjpfrc43pedleemb4",
+        encrypted: "false",
+        right: "",
+      },
+      {
+        id: `{id}#token`,
+        type: "TokenMetadata",
+        description: "Impact Token",
+        mediaType: "application/json",
+        serviceEndpoint:
+          "ipfs:bafkreibvo2vsgbxbxuwxakd7gdq7a35t7krab67b5tkxjkbpxlm4mlri2e",
+        proof: "bafkreibvo2vsgbxbxuwxakd7gdq7a35t7krab67b5tkxjkbpxlm4mlri2e",
+        encrypted: "false",
+        right: "",
+      },
+      {
+        id: "{id}#zlottie",
+        type: "Lottie",
+        description: "zLottie",
+        mediaType: "application/json",
+        serviceEndpoint:
+          "ipfs:bafkreiadrjh2pbl2vbutyfhjzuj5ylnsvexlkammulosu6s43atoyejz6u",
+        proof: "bafkreiadrjh2pbl2vbutyfhjzuj5ylnsvexlkammulosu6s43atoyejz6u",
+        encrypted: "false",
+        right: "",
+      },
+      // // TODO get cid from Shaun as Matias
       // {
-      //   id: `{id}#id`,
-      //   type: "type",
-      //   description: "name",
-      //   mediaType: "application/ld+json",
-      //   serviceEndpoint: `cellnode:/public/${cid}`,
-      //   proof: cid,
+      //   id: "{id}#terms-conditions",
+      //   type: "LegalAgreement",
+      //   description: "Terms and Conditions",
+      //   mediaType: "application/pdf",
+      //   serviceEndpoint: "ipfs:<cid>",
+      //   proof: "<cid>",
       //   encrypted: "false",
-      //   right: "",
+      //   right: "#legal",
       // },
+      // TODO get cid and Project Doc from Matias
+      {
+        id: "{id}#project-credential",
+        type: "ProjectCredential",
+        description: "Project Document",
+        mediaType: "application/pdf",
+        serviceEndpoint: `ipfs:<cid>`,
+        proof: "<cid>",
+        encrypted: "false",
+        right: "",
+      },
+      {
+        id: "{id}#collection-dashboard",
+        type: "WebDashboard",
+        description: "Collection Dashboard",
+        mediaType: "application/html",
+        serviceEndpoint: "emerging",
+        proof: "",
+        encrypted: "false",
+        right: "#apitoken",
+      },
     ],
   },
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.
   linkedResources: [
+    // TODO
     {
       name: "page",
       type: "Settings",
       storage: "cellnode",
       json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        type: "ixo:entity#page",
-        page: {
-          id: "IrCcJ8hl8t",
-          type: "paragraph",
-          data: {
-            text: "A SupaMoto NFT owner has the right to continuously claim the carbon emission reductions produced by a household using a SupaMoto smart cookstove. The household receives a cookstove device at no cost and only pays for renewable biomass pellets. This saves households up to 50% on their monthly cooking energy expenditure, compared to purchasing polluting fuels such as charcoal. When carbon emission reductions are verified CARBON credit tokens get generated to your account. The CARBON balance in your account can be used to offset your own footprint, shared with others, or swapped for digital cash. Climate Impacts and Socio-economic benefits: Clean cooking provides environmental, economic and societal benefits. It reduces greenhouse gas emissions and mitigates environmental degradation. Emerging economy households save on fuel costs and this improves their financial stability. Clean cooking can improve health by reducing indoor air pollution and the risks of fires, particularly for women and children who are most exposed to toxic smoke inhalation. Clean cooking has the potential to empower women and promote gender equality by improving their health, reducing their workload, and increasing their financial independence and decision-making power. Scaling access to clean cooking in communities stimulates the local economy by creating new job opportunities in the promotion, distribution, and maintenance of clean cookstoves. How it works:",
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
           },
-        },
+        ],
+        id: "{id}#page",
+        type: "ixo:Page",
+        page: [],
       },
     },
     {
@@ -69,94 +134,115 @@ export const setup_dao_constants = () => ({
       type: "Settings",
       storage: "cellnode",
       json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        type: "ixo:entity#tags",
-        ddoTags: [
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
           {
-            category: "dao",
-            tags: ["Market Relayer"],
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            web3: "https://ipfs.io/ipfs/",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
+        id: "{id}#tags",
+        type: "ixo:Tags",
+        settings:
+          "https://github.com/emerging-eco/configs/blob/main/settings/config.json",
+        entityTags: [
+          {
+            category: "Asset Type",
+            tags: ["Inventory", "Carbon Rights"],
+          },
+          {
+            category: "Token Class",
+            tags: ["NFT"],
+          },
+          {
+            category: "SDG",
+            tags: [
+              "SDG13 – Climate Action",
+              "SDG7 – Affordable and Clean Energy",
+            ],
+          },
+        ],
+      },
+    },
+  ],
+  // you can create linked claims that will be uploaded to the specified storage and resource will be saved
+  // on entity linked claims with the cid as proof and service endpoint of provided storage.
+  linkedClaims: [
+    {
+      name: "FuelPurchases",
+      description: "Fuel Purchase Claim",
+      type: "Procurement",
+      storage: "cellnode",
+      json: {
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            web3: "https://ipfs.io/ipfs/",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
+        id: "{id}#claims",
+        type: "ixo:Claims",
+        entityClaims: [
+          {
+            template: {
+              id: dids.cleanCookingProtocol + "#FuelPurchase",
+              title: "Fuel Purchase Claim",
+              description:
+                "Renewable biomass pellet fuel purchase claim based on transaction data.",
+            },
+            submissions: {
+              maximum: null,
+              startDate: "",
+              endDate: "",
+            },
           },
         ],
       },
     },
     {
-      name: "profile",
-      type: "Settings",
-      storage: "ipfs",
+      name: "CER",
+      description: "GHG Emission Reduction",
+      type: "Impact",
+      storage: "cellnode",
       json: {
-        "@context": {
-          ixo: "https://w3id.org/ixo/ns/protocol/",
-          "@id": "@type",
-          type: "@type",
-          "@protected": true,
-        },
-        id: "ixo:entity#profile",
-        type: "profile",
-        name: "SupaMoto Malawi",
-        image: "imageLink",
-        logo: "logoLink",
-        brand: "SupaMoto",
-        location: "MW",
-        description:
-          "The SupaMoto clean cookstove is a smart, IoT-connected device that helps households cut carbon emissions while cooking with affordable and renewable biomass fuel. This convenient solution offers a more cost-effective, healthy, and time-saving alternative to traditional cooking methods.",
-        attributes: [
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
           {
-            key: "Model",
-            value: "MimiMoto",
-          },
-          {
-            key: "Location",
-            value: "Malawi",
-          },
-          {
-            key: "Fuel",
-            value: "Renewable Biomass Pellets",
-          },
-          {
-            key: "Usage",
-            value: "Domestic",
-          },
-          {
-            key: "Conversion",
-            value: "1kg = 0.01 credits",
-          },
-          {
-            key: "Product",
-            value: "CARBON credit tokens",
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            web3: "https://ipfs.io/ipfs/",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
           },
         ],
-        metrics: [
+        id: "{id}#claims",
+        type: "ixo:Claims",
+        entityClaims: [
           {
-            prefix: "USD",
-            metric: "Token Price",
-            suffix: "Average/NFT",
-            source: "https://example.com/dfdfcv",
-          },
-          {
-            prefix: "Credits",
-            metric: "CARBON",
-            suffix: "/month (moving average)",
-            source: "https://example.com/dfdfcv",
-          },
-          {
-            prefix: "Performance",
-            metric: "Alpha",
-            suffix: "",
-            source: "https://example.com/dfdfcv",
+            template: {
+              id: dids.cleanCookingProtocol + "#CER",
+              title: "Carbon Emission Reduction",
+              description:
+                "Claimed Amount of Carbon Emissions reduced through the use of an energy-efficient clean cookstove.",
+            },
+            submissions: {
+              maximum: null,
+              startDate: "",
+              endDate: "",
+            },
           },
         ],
       },
     },
   ],
 });
-
-// Types for typescript strict type checking, please ignore
-export type SetupDaoConstantFields = ReturnType<typeof setup_dao_constants>;
 
 export const cookstoveIds = [
   202200001, 202200005, 202200007, 202200009, 202200010, 202200011, 202200012,
