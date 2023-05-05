@@ -66,5 +66,7 @@ generateBlockchainTestUsers();
 //
 // After daos is on devnet you can run the below
 // registerIidsDev();
+
+// Dont run below on devnet restart yet
 // supamotoTokens();
 // devnetClaims();

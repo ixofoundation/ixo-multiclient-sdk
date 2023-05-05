@@ -61,3 +61,15 @@ export const fee: StdFee = {
   // if wana do transactions using feegrant granter address
   // granter: "ixo1n8yrmeatsk74dw0zs95ess9sgzptd6thgjgcj2",
 };
+
+export const getFee = (trxLength = 1): StdFee => ({
+  amount: [
+    {
+      denom: "uixo",
+      amount: (trxLength * 10000).toString(),
+    },
+  ],
+  gas: (trxLength * 50000).toString(),
+  // if wana do transactions using feegrant granter address
+  // granter: "ixo1n8yrmeatsk74dw0zs95ess9sgzptd6thgjgcj2",
+});

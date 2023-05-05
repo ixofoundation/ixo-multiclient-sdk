@@ -12,7 +12,7 @@ import {
 } from "./emerging/setupFlow";
 import { impactsFlow } from "./impacts/setupFlow";
 import { propectFlow } from "./prospect/setupFlow";
-import { cookstovesFlow } from "./supamoto/setupFlow";
+import { cookstovesFlow, cookstovesFlowDevnet } from "./supamoto/setupFlow";
 import { web3Storage } from "./web3";
 
 export const chainNetwork: ChainNetwork = "devnet";
@@ -44,11 +44,9 @@ ecsFlow(); //ecs user
 // Will issue device creds and claims etc
 
 // first send extra tokens to ecs user to have enough for gas fees to create all entities
-sendTokens();
-sendTokens();
-sendTokens();
+sendTokens(5);
 // TODO
-cookstovesFlow(); //ecs user
+cookstovesFlowDevnet(); //ecs user
 
 // custom test for web3 storage uploading
 // web3Storage();
