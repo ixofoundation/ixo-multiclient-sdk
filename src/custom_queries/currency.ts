@@ -3,9 +3,11 @@ import axios from "axios";
 import { keplrCurrencies } from "./currency.constants";
 import { QueryClient } from "../queries";
 import {
-  CoincodexResponse,
+  CoinCodexCoinResponse,
+  CoinCodexHistoryResponse,
   IbcTokenAsset,
   TokenAsset,
+  TokenAssetHistory,
   TokenAssetInfo,
 } from "./currency.types";
 
@@ -14,12 +16,15 @@ export const findTokenFromDenom = (denom: string): TokenAsset | undefined => {
   const denomLowerCased = denom?.toLowerCase();
   const token = keplrCurrencies[denomLowerCased];
   if (token) return token;
+  const denomUpperCased = denom?.toUpperCase();
   const possibleToken = Object.values(keplrCurrencies).find(
     (currency) =>
       currency.coinMinimalDenom === denom ||
       currency.coinDenom === denom ||
       currency.coinMinimalDenom === denomLowerCased ||
-      currency.coinDenom === denomLowerCased
+      currency.coinDenom === denomLowerCased ||
+      currency.coinMinimalDenom === denomUpperCased ||
+      currency.coinDenom === denomUpperCased
   );
   return possibleToken;
 };
@@ -103,15 +108,17 @@ export const findIbcTokensFromHashes = async (
 //   }, {});
 // };
 
-const coincodexGetCoinUrl = "https://coincodex.com/api/coincodex/get_coin/";
+const coinCodexBaseUrl = "https://coincodex.com/api/coincodex";
+const coinCodexGetCoinUrl = coinCodexBaseUrl + "/get_coin";
+const coinCodexGetCoinHistoryUrl = coinCodexBaseUrl + "/get_coin_history";
 
 const fetchTokenInfo = async (
   denom: string
-): Promise<CoincodexResponse | undefined> => {
+): Promise<CoinCodexCoinResponse | undefined> => {
   try {
-    const url = coincodexGetCoinUrl + denom;
+    const url = `${coinCodexGetCoinUrl}/${denom}`;
     const response = await axios.get(url);
-    if (response) return response.data as CoincodexResponse;
+    if (response) return response.data as CoinCodexCoinResponse;
     return undefined;
   } catch (error) {
     return undefined;
@@ -121,44 +128,35 @@ const fetchTokenInfo = async (
 export const findTokenInfoFromDenom = (() => {
   const cache: { [denom: string]: TokenAssetInfo } = {};
 
-  return async (denom: string): Promise<TokenAssetInfo | undefined> => {
+  return async (
+    denom: string,
+    cacheResult: boolean = true
+  ): Promise<TokenAssetInfo | undefined> => {
     if (!denom) return;
     const token = findTokenFromDenom(denom);
-    if (
-      cache[token?.coinGeckoId] ||
-      cache[token?.coinDenom] ||
-      cache[token?.coinMinimalDenom]
-    )
-      return (
-        cache[token?.coinDenom] ??
-        cache[token?.coinGeckoId] ??
-        cache[token?.coinMinimalDenom]
-      );
-    let coincodexTokenInfo = await fetchTokenInfo(token?.coinGeckoId);
-    if (!coincodexTokenInfo)
-      coincodexTokenInfo = await fetchTokenInfo(token?.coinDenom);
-    if (!coincodexTokenInfo)
-      coincodexTokenInfo = await fetchTokenInfo(token?.coinMinimalDenom);
-    if (!coincodexTokenInfo) return;
+    if (cacheResult && (cache[denom] || cache[token?.coinCodexId]))
+      return cache[denom] ?? cache[token?.coinCodexId];
+    let coinCodexTokenInfo = await fetchTokenInfo(token?.coinCodexId ?? denom);
+    if (!coinCodexTokenInfo) return;
     const result = {
-      symbol: coincodexTokenInfo.symbol,
-      coinName: coincodexTokenInfo.coin_name,
-      shortname: coincodexTokenInfo.shortname,
-      slug: coincodexTokenInfo.slug,
-      displaySymbol: coincodexTokenInfo.display_symbol,
-      todayOpen: coincodexTokenInfo.today_open,
-      lastPriceUsd: coincodexTokenInfo.last_price_usd,
+      symbol: coinCodexTokenInfo.symbol,
+      coinName: coinCodexTokenInfo.coin_name,
+      shortname: coinCodexTokenInfo.shortname,
+      slug: coinCodexTokenInfo.slug,
+      displaySymbol: coinCodexTokenInfo.display_symbol,
+      todayOpen: coinCodexTokenInfo.today_open,
+      lastPriceUsd: coinCodexTokenInfo.last_price_usd,
       priceChangePercent: {
-        "1H": coincodexTokenInfo.price_change_1H_percent,
-        "1D": coincodexTokenInfo.price_change_1D_percent,
-        "7D": coincodexTokenInfo.price_change_7D_percent,
-        "30D": coincodexTokenInfo.price_change_30D_percent,
-        "90D": coincodexTokenInfo.price_change_90D_percent,
+        "1H": coinCodexTokenInfo.price_change_1H_percent,
+        "1D": coinCodexTokenInfo.price_change_1D_percent,
+        "7D": coinCodexTokenInfo.price_change_7D_percent,
+        "30D": coinCodexTokenInfo.price_change_30D_percent,
+        "90D": coinCodexTokenInfo.price_change_90D_percent,
       },
-      lastUpdate: coincodexTokenInfo.last_update,
-      social: coincodexTokenInfo.social,
+      lastUpdate: coinCodexTokenInfo.last_update,
+      social: coinCodexTokenInfo.social,
     };
-    cache[denom] = result;
+    if (cacheResult) cache[denom] = result;
     return result;
   };
 })();
@@ -166,7 +164,7 @@ export const findTokenInfoFromDenom = (() => {
 export const findTokensInfoFromDenoms = async (
   denoms: string[]
 ): Promise<Array<TokenAssetInfo | undefined>> => {
-  const requests = denoms.map(findTokenInfoFromDenom);
+  const requests = denoms.map((d) => findTokenInfoFromDenom(d));
   const responses = await Promise.allSettled(requests);
   const results: Array<TokenAssetInfo | undefined> = responses.map(
     (response) => {
@@ -175,5 +173,66 @@ export const findTokensInfoFromDenoms = async (
     }
   );
 
+  return results;
+};
+
+const fetchTokenHistory = async (
+  denom: string,
+  startDate: string,
+  endDate: string
+): Promise<CoinCodexHistoryResponse | undefined> => {
+  try {
+    const url = `${coinCodexGetCoinHistoryUrl}/${denom}/${startDate}/${endDate}`;
+    const response = await axios.get(url);
+    if (response) return response.data as CoinCodexHistoryResponse;
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+export const findTokenHistoryFromDenom = (() => {
+  const cache: { [denom: string]: TokenAssetHistory } = {};
+
+  return async (
+    denom: string,
+    startDate: string,
+    endDate: string,
+    cacheResult: boolean = true
+  ): Promise<TokenAssetHistory | undefined> => {
+    if (!denom) return;
+    const token = findTokenFromDenom(denom);
+    if (cacheResult && (cache[denom] || cache[token?.coinCodexId]))
+      return cache[denom] ?? cache[token?.coinCodexId];
+    let coinCodexTokenHistory = await fetchTokenHistory(
+      token?.coinCodexId ?? denom,
+      startDate,
+      endDate
+    );
+    if (!coinCodexTokenHistory) return;
+    const result = (Object.values(coinCodexTokenHistory) ?? [[]])[0]?.map(
+      (v) => ({ timestamp: v[0], usdPrice: v[1], usdVolume24H: v[2] })
+    );
+    if (cacheResult) cache[denom] = result;
+    return result;
+  };
+})();
+
+export const findTokensHistoryFromDenoms = async (
+  denoms: string[],
+  startDate: string,
+  endDate: string,
+  cacheResult: boolean = true
+): Promise<Array<TokenAssetHistory | undefined>> => {
+  const requests = denoms.map((d) =>
+    findTokenHistoryFromDenom(d, startDate, endDate, cacheResult)
+  );
+  const responses = await Promise.allSettled(requests);
+  const results: Array<TokenAssetHistory | undefined> = responses.map(
+    (response) => {
+      if (response.status !== "fulfilled") return;
+      return response.value;
+    }
+  );
   return results;
 };
