@@ -1,4 +1,5 @@
 import {
+  chunkArray,
   customQueries,
   getFileFromPath,
   testMsg,
@@ -52,9 +53,7 @@ export const cookstovesFlow = () =>
 
             const res = await Entity1.CreateEntityAssetSupamotoInstance(
               dids.assetCollection,
-              id,
-              index,
-              deviceCreds,
+              [{ deviceId: id, index, deviceCreds }],
               dids.emergingDao
             );
             const nftAssetDid = utils.common.getValueFromEvents(
@@ -78,6 +77,56 @@ export const cookstovesFlow = () =>
     test("Logging all nft assets created", async () => {
       console.log("Logging assetInstanceDids that was successfully created:");
       console.log(assetInstanceDids);
+      console.log("Logging cookstove ids that failed upload:");
+      console.log(assetsFailed);
+      expect(true).toBeTruthy();
+    });
+  });
+
+export const cookstovesFlowDevnet = () =>
+  describe("Testing the Supamoto nfts flow devnet", () => {
+    setAndLedgerUser(process.env.ROOT_ECS!);
+
+    // Create a batch of Asset entities for the individual Supamoto assets
+    let assetsFailed: number[] = [];
+    let index = 1;
+
+    const chunkSize = 100;
+    chunkArray(cookstoveIds, chunkSize).map((ids) =>
+      testMsg(
+        `/ixo.entity.v1beta1.MsgCreateEntity asset instance`,
+        async () => {
+          console.log(
+            `/ixo.entity.v1beta1.MsgCreateEntity asset instance index:${index}-${
+              index + chunkSize - 1
+            }`
+          );
+          console.log({ ids });
+          try {
+            let deviceCreds =
+              "bafkreiab2wqh4x76tgh4v24ahkcw5nfddoug7df3ybnnl7t7v5s6skzqdi";
+
+            const res = await Entity1.CreateEntityAssetSupamotoInstance(
+              dids.assetCollection,
+              ids.map((id, ind) => ({
+                deviceId: id,
+                index: index + ind,
+                deviceCreds,
+              })),
+              dids.emergingDao
+            );
+
+            index = index + chunkSize;
+            return res;
+          } catch (error) {
+            assetsFailed = assetsFailed.concat(ids);
+            throw new Error(error);
+          }
+        }
+      )
+    );
+
+    test("Logging all nft assets created", async () => {
       console.log("Logging cookstove ids that failed upload:");
       console.log(assetsFailed);
       expect(true).toBeTruthy();

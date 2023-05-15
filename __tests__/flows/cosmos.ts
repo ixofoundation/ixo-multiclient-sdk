@@ -39,22 +39,24 @@ export const authzBasic = () =>
     testMsg("test Exec Send", () => Authz.MsgExecSend(1000000));
   });
 
-export const sendTokens = () =>
-  describe("Testing the cosmos bank module: send", () => {
-    beforeAll(() => generateNewWallet(WalletUsers.random));
+export const sendTokens = (rounds = 1) =>
+  new Array(rounds).fill(0).map(() =>
+    describe("Testing the cosmos bank module: send", () => {
+      beforeAll(() => generateNewWallet(WalletUsers.random));
 
-    sendFromFaucet(WalletUsers.random);
+      sendFromFaucet(WalletUsers.random);
 
-    testMsg("Test send", async () => {
-      const ixo = 9;
-      const res = await Cosmos.BankSendTrx(
-        ixo * Math.pow(10, 6),
-        WalletUsers.random,
-        WalletUsers.tester
-      );
-      return res;
-    });
-  });
+      testMsg("Test send", async () => {
+        const ixo = 9;
+        const res = await Cosmos.BankSendTrx(
+          ixo * Math.pow(10, 6),
+          WalletUsers.random,
+          WalletUsers.tester
+        );
+        return res;
+      });
+    })
+  );
 
 export const govDeposit = () =>
   describe("Testing deposit funds into proposals", () => {
