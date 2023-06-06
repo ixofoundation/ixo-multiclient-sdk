@@ -159,6 +159,14 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
+    // test("query claims byId", async () => {
+    //   const res = await queryClient.ixo.claims.v1beta1.claim({
+    //     id: "bafkreifvvkgaah2rr7ixwr7xyy3dbhccsgb3mpuxelrhzjp3shfmnbuobm",
+    //   });
+    //   console.dir(res.claim, { depth: null });
+    //   expect(res).toBeTruthy();
+    // });
+
     // test("query dispute list", async () => {
     //   const res = await queryClient.ixo.claims.v1beta1.disputeList();
     //   console.log(res.disputes);

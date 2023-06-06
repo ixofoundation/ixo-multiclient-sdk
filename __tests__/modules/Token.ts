@@ -24,11 +24,11 @@ export const CreateToken = async (
   const message = {
     typeUrl: "/ixo.token.v1beta1.MsgCreateToken",
     value: ixo.token.v1beta1.MsgCreateToken.fromPartial({
-      minter: tester,
+      minter: tester, // carbon oracle
       name,
       description,
       image:
-        "https://static.javatpoint.com/business/images/carbon-credits-and-how-they-can-offset-your-carbon-footprint.jpg",
+        "https://ipfs.io/ipfs/bafkreidw5lg6mn2q33vj6gokazbl6yepsh3s32xf5z3evqu43s2ccqg3xy",
       tokenType: "ixo1155",
       cap: cap.toString(),
       class: tokenClass,

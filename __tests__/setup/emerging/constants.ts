@@ -40,6 +40,7 @@ export const setup_dao_constants = () => ({
         right: "",
       },
     ],
+    linkedEntity: [],
   },
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.
@@ -140,6 +141,7 @@ export const setup_oracle_carbon_constants = () => ({
         right: "",
       },
     ],
+    linkedEntity: [],
   },
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.
@@ -232,13 +234,13 @@ export const setup_protocol_clean_cooking_constants = () => ({
         right: "",
       },
       {
-        id: `{id}#FuelPurchase`,
+        id: `{id}#fuelPurchase`,
         type: "ClaimSchema",
         description: "Fuel purchase claim schema",
         mediaType: "application/json",
         serviceEndpoint:
-          "ipfs:bafkreic7iuz4e23h6ek757xx2q3eoso42aejdvtoxub2jgklnwodcotsyu",
-        proof: "bafkreic7iuz4e23h6ek757xx2q3eoso42aejdvtoxub2jgklnwodcotsyu",
+          "ipfs:bafkreihydcnqrpe3ptrxiivgnwsbpvpfuwzjahsqk3bfp6pwimfklqbbxy",
+        proof: "bafkreihydcnqrpe3ptrxiivgnwsbpvpfuwzjahsqk3bfp6pwimfklqbbxy",
         encrypted: "false",
         right: "",
       },
@@ -248,8 +250,8 @@ export const setup_protocol_clean_cooking_constants = () => ({
         description: "GHG emission reduction claim schema",
         mediaType: "application/json",
         serviceEndpoint:
-          "ipfs:bafkreiamfnw477o7jg7xrtm73ov6kiqfwibrlrjzpvugntpxndagyhi64y",
-        proof: "bafkreiamfnw477o7jg7xrtm73ov6kiqfwibrlrjzpvugntpxndagyhi64y",
+          "ipfs:bafkreihcwa5pdwdw5po7etqru6pymhhqtbhu7yazbypcowkr76tn7vh3tu",
+        proof: "bafkreihcwa5pdwdw5po7etqru6pymhhqtbhu7yazbypcowkr76tn7vh3tu",
         encrypted: "false",
         right: "",
       },
@@ -259,12 +261,13 @@ export const setup_protocol_clean_cooking_constants = () => ({
         description: "Verified emission reduction credential schema",
         mediaType: "application/json",
         serviceEndpoint:
-          "ipfs:bafkreibtxsx76gw3m4lrb552jyklo4zszt2ul5mvk34tlgssg5twcf7ive",
-        proof: "bafkreibtxsx76gw3m4lrb552jyklo4zszt2ul5mvk34tlgssg5twcf7ive",
+          "ipfs:bafkreifsg3gnrlibwwn2k3imlvrxxcx4x4ouef5xba2lpr6sbc4yqf5caq",
+        proof: "bafkreifsg3gnrlibwwn2k3imlvrxxcx4x4ouef5xba2lpr6sbc4yqf5caq",
         encrypted: "false",
         right: "",
       },
     ],
+    linkedEntity: [],
   },
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.
@@ -372,15 +375,14 @@ export const setup_protocol_clean_cooking_constants = () => ({
   ],
 });
 
-// created by emerging
 export const setup_carbon_asset_constants = () => ({
   entity: {
     // type of entity eg dao/protocol/asset/oracle
-    entityType: "asset/impacttoken",
+    entityType: "asset/impactcredit",
     // please use Impact DAO's did as relayerNode eg dids.impactsDao
     relayerNode: dids.emergingDao,
     // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass
-    contextClass: dids.protocolClass,
+    contextClass: dids.assetClass,
     // can add a also know ass if want
     alsoKnownAs: "",
     // you can remove/add more services
@@ -411,6 +413,7 @@ export const setup_carbon_asset_constants = () => ({
       //   right: "",
       // },
     ],
+    linkedEntity: [],
   },
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.
@@ -431,50 +434,7 @@ export const setup_carbon_asset_constants = () => ({
         ],
         id: "{id}#page",
         type: "ixo:Page",
-        page: [
-          {
-            id: "DFibzXTpCH",
-            type: "paragraph",
-            data: {
-              text: "The Digital Measurement, Reporting, and Verification (dMRV) Protocol for Clean Cooking defines a standardized framework for tracking and evaluating the reduction in greenhouse gas (GHG) emissions from modern energy cooking devices.",
-            },
-          },
-          {
-            id: "_9vyvov_tG",
-            type: "paragraph",
-            data: {
-              text: "This transparent and reliable system promotes data integrity, accountability, and stakeholder collaboration, while facilitating progress towards climate goals and sustainable development.",
-            },
-          },
-          {
-            id: "T7wWZQQy54",
-            type: "paragraph",
-            data: {
-              text: "The dMRV protocol not only encourages innovation and resource allocation in clean cooking technologies but also fosters trust among all involved parties. It enables digital Impact Credits to be issued that account for and derive economic value from the climate impacts of using modern fuels and efficient cooking devices.",
-            },
-          },
-          {
-            id: "MK_Z8NDz0Y",
-            type: "paragraph",
-            data: {
-              text: "The dMRV protocol builds upon the Gold Standard Foundation's Methodology for Metered and Measured Energy Cooking Devices. It outlines data models and procedures for claims involving Cooking Fuel Purchases, Cooking Device Usage, and GHG Emission Reductions.",
-            },
-          },
-          {
-            id: "hpFizTi2bc",
-            type: "paragraph",
-            data: {
-              text: "The protocol also details the evaluation methodology for these claims, calculating emission reductions according to fuel types and quantities burned compared to baseline measures.",
-            },
-          },
-          {
-            id: "vEoUM94GQu",
-            type: "paragraph",
-            data: {
-              text: "It establishes a standard data format for issuing Verified Emission Reduction digital Impact Certificates in the format of Verifiable Credentials.",
-            },
-          },
-        ],
+        page: [],
       },
     },
     {
@@ -496,23 +456,7 @@ export const setup_carbon_asset_constants = () => ({
         type: "ixo#Tags",
         settings:
           "https://github.com/emerging-eco/configs/blob/main/settings/config.json",
-        entityTags: [
-          {
-            category: "Asset Type",
-            tags: ["Inventory", "Carbon Rights"],
-          },
-          {
-            category: "Token Class",
-            tags: ["NFT"],
-          },
-          {
-            category: "SDG",
-            tags: [
-              "SDG13 – Climate Action",
-              "SDG7 – Affordable and Clean Energy",
-            ],
-          },
-        ],
+        entityTags: [],
       },
     },
   ],

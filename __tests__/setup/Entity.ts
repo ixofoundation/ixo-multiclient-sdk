@@ -2,16 +2,19 @@ import {
   createAgentIidContext,
   createIidVerificationMethods,
 } from "../../src/messages/iid";
-import { createClient, getUser, ixo, utils } from "../helpers/common";
+import {
+  createClient,
+  customMessages,
+  getUser,
+  ixo,
+  utils,
+} from "../helpers/common";
 import { fee, keyType, WalletUsers } from "../helpers/constants";
 import { SetupDaoConstantFields } from "./impacts/constants";
 import { SetupClassConstants } from "./classes/constants";
-import {
-  LinkedClaimUploaded,
-  LinkedResourcesUploaded,
-  dids,
-} from "./constants";
+import { dids } from "./constants";
 import base58 from "bs58";
+import { LinkedClaimUploaded, LinkedResourcesUploaded } from "./helpers";
 
 export const CreateEntityBasic = async (
   entity: SetupClassConstants["dao"],
@@ -146,7 +149,11 @@ export const CreateEntity = async (
       //   })
       // ),
       // since no groups at time of run no linkedEntities
-      linkedEntity: [],
+      linkedEntity: entity.linkedEntity
+        ? entity.linkedEntity.map((le) =>
+            ixo.iid.v1beta1.LinkedEntity.fromPartial(le)
+          )
+        : undefined,
       ownerDid: did,
       startDate: utils.proto.toTimestamp(new Date()),
       ownerAddress: myAddress,
@@ -338,6 +345,74 @@ export const TransferEntity = async (
       ownerDid: did,
       ownerAddress: myAddress,
       recipientDid,
+    }),
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const CreateEntityAccount = async (
+  entityDid: string,
+  name = "name",
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = (await getUser(signer).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/ixo.entity.v1beta1.MsgCreateEntityAccount",
+    value: ixo.entity.v1beta1.MsgCreateEntityAccount.fromPartial({
+      id: entityDid,
+      ownerAddress: tester,
+      name,
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
+export const AddVerification = async (
+  entityId: string,
+  address: string,
+  accountUser?: WalletUsers,
+  relationships: string[] = ["assertionMethod"]
+) => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  let accountUserUser;
+  let accountUserAccount;
+  let accountUserAddress;
+  let accountUserDid;
+  if (accountUser) {
+    accountUserUser = getUser(accountUser);
+    accountUserAccount = (await accountUserUser.getAccounts())[0];
+    accountUserAddress = accountUserAccount.address;
+    accountUserDid = accountUserUser.did;
+  }
+
+  const message = {
+    typeUrl: "/ixo.iid.v1beta1.MsgAddVerification",
+    value: ixo.iid.v1beta1.MsgAddVerification.fromPartial({
+      id: entityId,
+      verification: ixo.iid.v1beta1.Verification.fromPartial({
+        relationships: relationships,
+        method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
+          id: accountUserAddress
+            ? `${entityId}#${accountUserAddress}`
+            : entityId,
+          type: "CosmosAccountAddress",
+          blockchainAccountID: accountUserAddress || address,
+          controller: accountUserDid || entityId,
+        }),
+      }),
+      signer: myAddress,
     }),
   };
 

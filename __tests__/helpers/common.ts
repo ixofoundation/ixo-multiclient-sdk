@@ -258,6 +258,12 @@ export const getFileFromPath = (
   return fileBuffer;
 };
 
+// Helper to save file to assets folder in root
+export const saveFileToPath = (pathList: string[], data: any) => {
+  const newPath = path.resolve(__dirname, "..", "..", "assets", ...pathList);
+  fs.writeFileSync(newPath, data);
+};
+
 export const addDays = (date: Date, days: number) => {
   var result = new Date(date);
   result.setDate(result.getDate() + days);

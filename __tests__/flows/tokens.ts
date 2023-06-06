@@ -1,8 +1,9 @@
-import { testMsg, utils } from "../helpers/common";
+import { generateNewWallet, testMsg, utils } from "../helpers/common";
 import * as Token from "../modules/Token";
 import * as Entity from "../modules/Entity";
 import { WalletUsers } from "../helpers/constants";
 import { TokenData } from "../../src/codegen/ixo/token/v1beta1/token";
+import { dids } from "../setup/constants";
 
 export const tokenBasic = () =>
   describe("Testing the Token module", () => {
@@ -128,23 +129,29 @@ export const tokenBasic = () =>
 // ------------------------------------------------------------
 export const supamotoTokens = () =>
   describe("Testing the Supamoto Tokens flow", () => {
-    let name = "CARBON";
-    let description = "Carbon credits";
-    let cap = 200000000000;
+    // Set tester as root ecs user
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(
+          WalletUsers.tester,
+          process.env.ASSERT_USER_CARBON_ORACLE
+        ),
+      ])
+    );
 
-    // Create token class
-    let tokenClass = "did:ixo:entity:4e32697c7c2c74f4fac48e4d1d5628cd";
-    testMsg("/ixo.entity.v1beta1.MsgCreateEntity token class", async () => {
-      const res = await Entity.CreateEntity("protocol");
-      tokenClass = utils.common.getValueFromEvents(res, "wasm", "token_id");
-      console.log({ tokenClass });
-      return res;
-    });
+    let name = "CARBON";
+    let description = "Carbon Credit";
+    let cap = 0; // no cap
 
     let contractAddress1155 =
       "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
     testMsg("/ixo.token.v1beta1.MsgCreateToken", async () => {
-      const res = await Token.CreateToken(name, description, cap, tokenClass);
+      const res = await Token.CreateToken(
+        name,
+        description,
+        cap,
+        dids.carbonAsset
+      );
       contractAddress1155 = utils.common.getValueFromEvents(
         res,
         "instantiate",
@@ -154,87 +161,87 @@ export const supamotoTokens = () =>
       return res;
     });
 
-    let index = "1";
-    let amount = 10;
-    // Did of collection (supamotoEntitiesFlow protocolAssetDid)
-    let collectionDid = "did:ixo:entity:61392c571ef644d54d77e4daf611bf89";
-    // Did of entity to map token to (supamotoEntitiesFlow first nft created)
-    let nftDid = "did:ixo:entity:2f22535f8b179a51d77a0e302e68d35d";
-    const getTokenData = (nftDidId: string) => [
-      {
-        uri: "https://media.makeameme.org/created/haha-you-were-a3866a4349.jpg",
-        encrypted: false,
-        proof: "proof",
-        type: "application/json", //media type value should always be "application/json"
-        id: nftDidId,
-      },
-    ];
+    // let index = "1";
+    // let amount = 2;
+    // // Did of collection (supamotoEntitiesFlow protocolAssetDid)
+    // let collectionDid = "did:ixo:entity:61392c571ef644d54d77e4daf611bf89";
+    // // Did of entity to map token to (supamotoEntitiesFlow first nft created)
+    // let nftDid = "did:ixo:entity:2f22535f8b179a51d77a0e302e68d35d"; //Cookstove
+    // const getTokenData = (nftDidId: string) => [
+    //   {
+    //     uri: "https://media.makeameme.org/created/haha-you-were-a3866a4349.jpg",
+    //     encrypted: false,
+    //     proof: "proof",
+    //     type: "application/json", //media type value should always be "application/json"
+    //     id: nftDidId,
+    //   },
+    // ];
 
-    let tokenId = "d89fc11cef9424891fdf9ae173f88a6e";
-    testMsg("/ixo.token.v1beta1.MsgMintToken", async () => {
-      const res = await Token.MintToken(contractAddress1155, [
-        {
-          name,
-          index,
-          amount,
-          collection: collectionDid,
-          tokenData: getTokenData(nftDid),
-        },
-      ]);
-      tokenId = utils.common.getValueFromEvents(res, "wasm", "token_id");
-      console.log({ tokenId });
-      return res;
-    });
+    // let tokenId = "d89fc11cef9424891fdf9ae173f88a6e";
+    // testMsg("/ixo.token.v1beta1.MsgMintToken", async () => {
+    //   const res = await Token.MintToken(contractAddress1155, [
+    //     {
+    //       name,
+    //       index,
+    //       amount,
+    //       collection: collectionDid,
+    //       tokenData: getTokenData(nftDid),
+    //     },
+    //   ]);
+    //   tokenId = utils.common.getValueFromEvents(res, "wasm", "token_id");
+    //   console.log({ tokenId });
+    //   return res;
+    // });
 
-    testMsg("/ixo.token.v1beta1.MsgCancelToken", () =>
-      Token.CancelToken([
-        {
-          id: tokenId,
-          amount: 1,
-        },
-      ])
-    );
+    // testMsg("/ixo.token.v1beta1.MsgCancelToken", () =>
+    //   Token.CancelToken([
+    //     {
+    //       id: tokenId,
+    //       amount: 1,
+    //     },
+    //   ])
+    // );
 
-    testMsg("/ixo.token.v1beta1.MsgRetireToken", () =>
-      Token.RetireToken([
-        {
-          id: tokenId,
-          amount: 3,
-        },
-      ])
-    );
+    // testMsg("/ixo.token.v1beta1.MsgRetireToken", () =>
+    //   Token.RetireToken([
+    //     {
+    //       id: tokenId,
+    //       amount: 3,
+    //     },
+    //   ])
+    // );
 
     // few more mint tokens
-    const nfts = [
-      "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
-      "did:ixo:entity:75d738bbf9a61ec05acc16625d70a82c",
-      "did:ixo:entity:237cb945b1368ed450ec67c7c4ac56ac",
-      "did:ixo:entity:72a27013b1d2f9c3561145e4a424778a",
-      "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
-      "did:ixo:entity:7b40f2500d4c89997f8389c5f2318cdb",
-    ];
+    // const nfts = [
+    //   "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
+    //   "did:ixo:entity:75d738bbf9a61ec05acc16625d70a82c",
+    //   "did:ixo:entity:237cb945b1368ed450ec67c7c4ac56ac",
+    //   "did:ixo:entity:72a27013b1d2f9c3561145e4a424778a",
+    //   "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
+    //   "did:ixo:entity:7b40f2500d4c89997f8389c5f2318cdb",
+    // ];
 
-    nfts.map((nft, i) => [
-      testMsg("/ixo.token.v1beta1.MsgMintToken", () =>
-        Token.MintToken(contractAddress1155, [
-          {
-            name,
-            index: (i + 3).toString(),
-            amount,
-            collection: collectionDid,
-            tokenData: getTokenData(nft),
-          },
-        ])
-      ),
-      testMsg("/cosmos.authz.v1beta1.MsgGrant mint token", () =>
-        Token.MsgGrantContract(
-          contractAddress1155,
-          name,
-          (i + 20).toString(),
-          collectionDid,
-          amount,
-          getTokenData(nft)
-        )
-      ),
-    ]);
+    // nfts.map((nft, i) => [
+    //   testMsg("/ixo.token.v1beta1.MsgMintToken", () =>
+    //     Token.MintToken(contractAddress1155, [
+    //       {
+    //         name,
+    //         index: (i + 3).toString(),
+    //         amount,
+    //         collection: collectionDid,
+    //         tokenData: getTokenData(nft),
+    //       },
+    //     ])
+    //   ),
+    //   testMsg("/cosmos.authz.v1beta1.MsgGrant mint token", () =>
+    //     Token.MsgGrantContract(
+    //       contractAddress1155,
+    //       name,
+    //       (i + 20).toString(),
+    //       collectionDid,
+    //       amount,
+    //       getTokenData(nft)
+    //     )
+    //   ),
+    // ]);
   });

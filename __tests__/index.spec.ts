@@ -24,7 +24,8 @@ import {
 import { tokenBasic, supamotoTokens } from "./flows/tokens";
 import { daoCore, wasmBasic } from "./flows/cosmwasm";
 import { quickQueries } from "./flows/quickQueries";
-import { claimsBasic, devnetClaims } from "./flows/claims";
+import { claimsBasic, supamotoClaims } from "./flows/claims";
+import { ChainNetwork } from "../src/custom_queries/chain.types";
 
 beforeAll(() => {
   generateConstants();
@@ -56,6 +57,7 @@ generateBlockchainTestUsers();
 // ------------------------------------------
 // Run the below after a devnet reset
 // ------------------------------------------
+export const chainNetwork: ChainNetwork = "devnet";
 // devnetProposals();
 // first run devnetProposals, the run initcontracts.sh on dev server
 // immidiately, and wait for all proposals to pass then run below
@@ -66,7 +68,5 @@ generateBlockchainTestUsers();
 //
 // After daos is on devnet you can run the below
 // registerIidsDev();
-
-// Dont run below on devnet restart yet
 // supamotoTokens();
-// devnetClaims();
+// supamotoClaims();

@@ -6,6 +6,7 @@ import { generateWallets } from "../helpers/common";
 import { classesFlow } from "./classes/setupFlow";
 import { ecsFlow } from "./ecs/setupFlow";
 import {
+  emergingAssetsFlow,
   emergingDaoFlow,
   emergingOraclesFlow,
   emergingProtocolsFlow,
@@ -25,28 +26,32 @@ beforeAll(() => generateWallets(false));
 classesFlow(); //impacts user
 
 // next create impacts dao and save impactsRootUserDid and impactsDao in ./constants.ts
-impactsFlow(); //impacts user
+// impactsFlow(); //impacts user
 
 // next create emerging dao to save emergingDao to ./constants.ts
-emergingDaoFlow(); //emerging user
+// emergingDaoFlow(); //emerging user
 
 // next create emerging oracle to save carbonOracle did to ./constants.ts
-emergingOraclesFlow(); //emerging user
+// emergingOraclesFlow(); //emerging user
 
 // next create emerging protocols and save cookstoveAssetProtocol to ./constants.ts
-emergingProtocolsFlow(); //emerging user
+// emergingProtocolsFlow(); //emerging user
 
 // next create daos and oracles and save prospectOracle did to ./constants.ts
-propectFlow(); //prospect user
+// propectFlow(); //prospect user
 
-// next can create the other daos etc and save ecsDao did to ./constants.ts
-ecsFlow(); //ecs user
+// next reate ecs daos etc and save ecsDao and assetCollectionDid did to ./constants.ts
+// ecsFlow(); //ecs user
 // Will issue device creds and claims etc
+// send extra tokens to ecs user to have enough for gas fees to create all entities
+// sendTokens(5);
 
-// first send extra tokens to ecs user to have enough for gas fees to create all entities
-sendTokens(5);
-// TODO
-cookstovesFlowDevnet(); //ecs user
+// next create emerging protocols and save carbonAsset to ./constants.ts
+// emergingAssetsFlow(); //emerging user
+
+// next create cookstoves
+// cookstovesFlowDevnet(); //ecs user
+// cookstovesFlow(); //ecs user, only for testnet and main net
 
 // custom test for web3 storage uploading
 // web3Storage();

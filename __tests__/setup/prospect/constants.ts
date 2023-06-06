@@ -40,6 +40,7 @@ export const setup_dao_constants = () => ({
         right: "",
       },
     ],
+    linkedEntity: [],
   },
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.
@@ -150,6 +151,7 @@ export const setup_oracle_constants = () => ({
       //   right: "",
       // },
     ],
+    linkedEntity: [],
   },
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.
