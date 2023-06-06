@@ -7,10 +7,15 @@ import {
   uploadAllToCellnodeWeb3,
   uploadAllToCellnodeWeb3Claims,
 } from "../helpers";
+import { WalletUsers } from "../../helpers/constants";
 
 export const ecsFlow = () =>
-  describe("Flow for creating a Entity (dao/protocol/oracle)", () => {
-    setAndLedgerUser(process.env.ROOT_ECS!, process.env.ROOT_ED_ECS!);
+  describe("Flow for creating ECS entities (dao/protocol/oracle)", () => {
+    setAndLedgerUser(
+      process.env.ROOT_ECS!,
+      process.env.ROOT_ED_ECS!,
+      process.env.ASSERT_USER_ECS!
+    );
 
     // =============================== START
     let daoDid: string;
@@ -34,6 +39,11 @@ export const ecsFlow = () =>
       return res;
     });
     // =============================== END
+
+    // Add Assertion Method user to ECS for claims
+    testMsg("/ixo.iid.v1beta1.MsgAddVerification", () =>
+      Entity.AddVerification(daoDid, "", WalletUsers.oracle)
+    );
 
     // =============================== START
     let assetCollectionDid: string;

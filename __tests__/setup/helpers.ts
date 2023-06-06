@@ -6,7 +6,6 @@ import {
   utils,
 } from "../helpers/common";
 import { WalletUsers } from "../helpers/constants";
-import { LinkedClaimUploaded, LinkedResourcesUploaded } from "./constants";
 import { chainNetwork } from "./index.setup.spec";
 import * as IidMain from "../modules/Iid";
 
@@ -88,29 +87,54 @@ export const uploadAllToCellnodeWeb3Claims = async (listToUpload: any[]) => {
 
 export const setAndLedgerUser = async (
   mnemonic: string,
-  mnemonicEdKeys?: string
+  mnemonicEdKeys?: string, //alice
+  mnemonicAssertUser?: string //oracle
 ) => {
   // ===============================================================
   // Set Testers mnemonic to env variable and ledger root user did
   // ===============================================================
-
-  // below test can fail as user might already be ledgered, that is ok
   beforeAll(() =>
-    mnemonicEdKeys
-      ? Promise.all([
-          generateNewWallet(WalletUsers.tester, mnemonic),
-          generateNewWallet(WalletUsers.alice, mnemonicEdKeys),
-        ])
-      : generateNewWallet(WalletUsers.tester, mnemonic)
+    Promise.all([
+      generateNewWallet(WalletUsers.tester, mnemonic),
+      generateNewWallet(WalletUsers.alice, mnemonicEdKeys),
+      generateNewWallet(WalletUsers.oracle, mnemonicAssertUser),
+    ])
   );
 
   if (chainNetwork != "mainnet") {
     // Send from faucet for devnet/testnet
     sendFromFaucet(WalletUsers.tester);
     if (mnemonicEdKeys) sendFromFaucet(WalletUsers.alice);
+    if (mnemonicAssertUser) sendFromFaucet(WalletUsers.oracle);
   }
 
+  // below tests can fail as user might already be ledgered, that is ok
   testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () =>
     IidMain.CreateIidDoc(WalletUsers.tester)
   );
+  if (mnemonicEdKeys) {
+    testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () =>
+      IidMain.CreateIidDoc(WalletUsers.alice)
+    );
+  }
+  if (mnemonicAssertUser) {
+    testMsg("/ixo.iid.v1beta1.MsgCreateIidDocument", () =>
+      IidMain.CreateIidDoc(WalletUsers.oracle)
+    );
+  }
 };
+
+export type LinkedResourcesUploaded = {
+  name: string;
+  cid: string;
+  type: string;
+  storage: "cellnode" | "ipfs";
+}[];
+
+export type LinkedClaimUploaded = {
+  name: string;
+  description: string;
+  cid: string;
+  type: string;
+  storage: "cellnode" | "ipfs";
+}[];

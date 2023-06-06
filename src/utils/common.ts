@@ -16,11 +16,12 @@ export const getValueFromEvents = (
   attribute: string,
   filterFunc = (s: any): any => s,
   logError?: boolean,
-  throwError?: boolean
+  throwError?: boolean,
+  messageIndex = 0
 ) => {
   try {
-    const value = JSON.parse(res.rawLog!)[0]
-      ["events"].find((e: any) => e.type === event)
+    const value = JSON.parse(res.rawLog!)
+      [messageIndex]["events"].find((e: any) => e.type === event)
       ["attributes"].find((e: any) => e.key === attribute)["value"];
     // ["value"].replaceAll('"', "");
     let filteredValue;
@@ -30,6 +31,33 @@ export const getValueFromEvents = (
       filteredValue = filterFunc(value);
     }
     return filteredValue;
+  } catch (error) {
+    if (logError) console.log({ error, res });
+    if (throwError) throw error;
+  }
+};
+
+// Iterator function to help run getValueFromEvents with mutliple messages
+export const getValuesFromEvents = (
+  res: DeliverTxResponse,
+  event: string,
+  attribute: string,
+  filterFunc = (s: any): any => s,
+  logError?: boolean,
+  throwError?: boolean
+) => {
+  try {
+    return JSON.parse(res.rawLog!).map((log, i) =>
+      getValueFromEvents(
+        res,
+        event,
+        attribute,
+        filterFunc,
+        logError,
+        throwError,
+        i
+      )
+    );
   } catch (error) {
     if (logError) console.log({ error, res });
     if (throwError) throw error;

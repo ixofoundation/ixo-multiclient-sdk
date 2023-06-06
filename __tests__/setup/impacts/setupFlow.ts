@@ -4,7 +4,7 @@ import * as Entity from "../Entity";
 import { setAndLedgerUser, uploadAllToCellnodeWeb3 } from "../helpers";
 
 export const impactsFlow = () =>
-  describe("Flow for creating a Entity (dao/protocol/oracle)", () => {
+  describe("Flow for creating Impacts entities (dao/protocol/oracle)", () => {
     setAndLedgerUser(process.env.ROOT_IMPACTS!);
 
     // =============================== START
@@ -28,4 +28,25 @@ export const impactsFlow = () =>
       return res;
     });
     // =============================== END
+
+    // Create oracle revenue entity account
+    let accountAddress: string;
+    testMsg(
+      "/ixo.entity.v1beta1.MsgCreateEntityAccount oracle revenue",
+      async () => {
+        const res = await Entity.CreateEntityAccount(daoDid, "oracle revenue");
+        accountAddress = utils.common.getValueFromEvents(
+          res,
+          "ixo.entity.v1beta1.EntityAccountCreatedEvent",
+          "account_address"
+        );
+        console.log({ accountAddress });
+
+        return res;
+      }
+    );
+    // add oracle revenue entity account to verification methods with entity did as id for relayerNode payments
+    testMsg("/ixo.iid.v1beta1.MsgAddVerification", () =>
+      Entity.AddVerification(daoDid, accountAddress)
+    );
   });

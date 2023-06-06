@@ -1,7 +1,8 @@
 // IMPORTANT! If you change these please revert before commiting, these are constants that is
 // repeatedly used for devnet reset.
+// DEVNET
+// ========================================
 export const dids = {
-  // impactsRootUserDid: "did:x:zQ3shoiydFD6jdTdXLPProPZWL6igg9bCyaJY6zEKqQoNE96C", // chain tester user for local testing
   impactsRootUserDid: "did:x:zQ3shj4dPHhbsSXYcmsZLoDkiPJxkHhWYZpihWSQn95fuos2y",
   daoClass: "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14",
   oracleClass: "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b",
@@ -15,22 +16,47 @@ export const dids = {
   prospectOracle: "did:ixo:entity:f2235630689d4b54a561ca3de57494f6",
   ecsDao: "did:ixo:entity:a1fcead81eab2f1158a726597d872413",
   assetCollection: "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
+  carbonAsset: "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
 };
 
+export const adminEntityAccounts = {
+  assetCollection: "ixo19e74tjy6gdwt0hjj6ph6xgtjhuulgqkzk8xaj4",
+};
+
+// export const EcsCredentialsWorkerUrl = "http://localhost:3000/";
 export const EcsCredentialsWorkerUrl =
-  "https://45zt3i0456.execute-api.us-east-1.amazonaws.com/dev/";
+  "https://ecs.credentials.devnet.ixo.earth/";
+export const ProspectCredentialsWorkerUrl =
+  "https://prospect.credentials.devnet.ixo.earth/";
+export const CarbonCredentialsWorkerUrl =
+  "https://carbon.credentials.devnet.ixo.earth/";
 
-export type LinkedResourcesUploaded = {
-  name: string;
-  cid: string;
-  type: string;
-  storage: "cellnode" | "ipfs";
-}[];
+// TESTNET
+// ========================================
+// export const dids = {
+//   impactsRootUserDid: "",
+//   daoClass: "",
+//   oracleClass: "",
+//   protocolClass: "",
+//   assetClass: "",
+//   impactsDao: "",
+//   emergingDao: "",
+//   carbonOracle: "",
+//   cleanCookingProtocol: "",
+//   prospectDao: "",
+//   prospectOracle: "",
+//   ecsDao: "",
+//   assetCollection: "",
+//   carbonAsset: "",
+// };
 
-export type LinkedClaimUploaded = {
-  name: string;
-  description: string;
-  cid: string;
-  type: string;
-  storage: "cellnode" | "ipfs";
-}[];
+// export const adminEntityAccounts = {
+//   assetCollection: "",
+// };
+
+// export const EcsCredentialsWorkerUrl =
+//   "";
+// export const ProspectCredentialsWorkerUrl =
+//   "";
+// export const CarbonCredentialsWorkerUrl =
+//   "";

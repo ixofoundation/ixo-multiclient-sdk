@@ -2,10 +2,15 @@ import { testMsg, utils } from "../../helpers/common";
 import { setup_dao_constants, setup_oracle_constants } from "./constants";
 import * as Entity from "../Entity";
 import { setAndLedgerUser, uploadAllToCellnodeWeb3 } from "../helpers";
+import { WalletUsers } from "../../helpers/constants";
 
 export const propectFlow = () =>
-  describe("Flow for creating a Entity (dao/protocol/oracle)", () => {
-    setAndLedgerUser(process.env.ROOT_PROSPECT!, process.env.ROOT_ED_PROSPECT!);
+  describe("Flow for creating Prospect entities (dao/protocol/oracle)", () => {
+    setAndLedgerUser(
+      process.env.ROOT_PROSPECT!,
+      process.env.ROOT_ED_PROSPECT!,
+      process.env.ASSERT_USER_PROSPECT_ORACLE!
+    );
 
     // =============================== START
     let daoDid: string;
@@ -50,5 +55,9 @@ export const propectFlow = () =>
 
       return res;
     });
+    // Add Assertion Method user to Oracle for claims
+    testMsg("/ixo.iid.v1beta1.MsgAddVerification", () =>
+      Entity.AddVerification(oracleDid, "", WalletUsers.oracle)
+    );
     // =============================== END
   });

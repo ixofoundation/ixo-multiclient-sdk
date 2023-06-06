@@ -53,7 +53,7 @@ export class SigningStargateClient extends StargateClient {
   private readonly gasPrice: GasPrice | undefined;
   private readonly ignoreGetSequence: boolean;
 
-  private tendermintClient: Tendermint34Client;
+  public tendermintClient: Tendermint34Client;
 
   public static async connectWithSigner(
     endpoint: string,

@@ -88,7 +88,7 @@ export const CreateEntityAssetSupamotoInstance = async (
       alsoKnownAs: `{id}#${entity.index}`,
       linkedResource: [
         ixo.iid.v1beta1.LinkedResource.fromPartial({
-          id: "{id}#device-credential",
+          id: "{id}#deviceCredential",
           type: "VerifiableCredential",
           description: "Certificate of Manufacture",
           mediaType: "application/ld+json",
@@ -98,7 +98,7 @@ export const CreateEntityAssetSupamotoInstance = async (
           right: "",
         }),
         ixo.iid.v1beta1.LinkedResource.fromPartial({
-          id: "{id}#asset-dashboard",
+          id: "{id}#assetDashboard",
           type: "WebDashboard",
           description: "SupaMoto Dashboard",
           mediaType: "application/html",

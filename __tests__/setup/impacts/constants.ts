@@ -26,6 +26,20 @@ export const setup_dao_constants = () => ({
         serviceEndpoint: "https://ipfs.io/ipfs/",
       },
     ],
+    linkedEntity: [
+      {
+        id: "ixo1pm6e78p4pgn0da365plzl4t56pxy8hwtqkl4nq",
+        type: "BlockchainAccount",
+        relationship: "ixo.world",
+        service: "did:cosmos:ixo",
+      },
+      {
+        id: "regen1pm6e78p4pgn0da365plzl4t56pxy8hwtqp2mph",
+        type: "BlockchainAccount",
+        relationship: "Regen Network",
+        service: "did:cosmos:regen",
+      },
+    ],
     // if you have any other linked resources other than the ones below that will automatically
     // be uploaded to cellnode/w3s, you can pass them here
     linkedResources: [
