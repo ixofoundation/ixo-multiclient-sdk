@@ -179,10 +179,11 @@ export const findTokensInfoFromDenoms = async (
 const fetchTokenHistory = async (
   denom: string,
   startDate: string,
-  endDate: string
+  endDate: string,
+  samples: number = 100
 ): Promise<CoinCodexHistoryResponse | undefined> => {
   try {
-    const url = `${coinCodexGetCoinHistoryUrl}/${denom}/${startDate}/${endDate}`;
+    const url = `${coinCodexGetCoinHistoryUrl}/${denom}/${startDate}/${endDate}/${samples}`;
     const response = await axios.get(url);
     if (response) return response.data as CoinCodexHistoryResponse;
     return undefined;
@@ -198,6 +199,7 @@ export const findTokenHistoryFromDenom = (() => {
     denom: string,
     startDate: string,
     endDate: string,
+    samples: number = 100,
     cacheResult: boolean = true
   ): Promise<TokenAssetHistory | undefined> => {
     if (!denom) return;
@@ -207,7 +209,8 @@ export const findTokenHistoryFromDenom = (() => {
     let coinCodexTokenHistory = await fetchTokenHistory(
       token?.coinCodexId ?? denom,
       startDate,
-      endDate
+      endDate,
+      samples
     );
     if (!coinCodexTokenHistory) return;
     const result = (Object.values(coinCodexTokenHistory) ?? [[]])[0]?.map(
@@ -222,10 +225,11 @@ export const findTokensHistoryFromDenoms = async (
   denoms: string[],
   startDate: string,
   endDate: string,
+  samples: number = 100,
   cacheResult: boolean = true
 ): Promise<Array<TokenAssetHistory | undefined>> => {
   const requests = denoms.map((d) =>
-    findTokenHistoryFromDenom(d, startDate, endDate, cacheResult)
+    findTokenHistoryFromDenom(d, startDate, endDate, samples, cacheResult)
   );
   const responses = await Promise.allSettled(requests);
   const results: Array<TokenAssetHistory | undefined> = responses.map(
