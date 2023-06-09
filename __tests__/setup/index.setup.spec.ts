@@ -4,7 +4,7 @@ import { ChainNetwork } from "../../src/custom_queries/chain.types";
 import { sendTokens } from "../flows/cosmos";
 import { generateWallets } from "../helpers/common";
 import { classesFlow } from "./classes/setupFlow";
-import { ecsFlow } from "./ecs/setupFlow";
+import { ecsDaoFlow, ecsFlow } from "./ecs/setupFlow";
 import {
   emergingAssetsFlow,
   emergingDaoFlow,
@@ -23,7 +23,7 @@ beforeAll(() => generateWallets(false));
 // Setup flow for dao and group creations
 // ------------------------------------------
 // first create god classes and save 4 top classes dids in ./constants.ts
-classesFlow(); //impacts user
+// classesFlow(); //impacts user
 
 // next create impacts dao and save impactsRootUserDid and impactsDao in ./constants.ts
 // impactsFlow(); //impacts user
@@ -40,7 +40,9 @@ classesFlow(); //impacts user
 // next create daos and oracles and save prospectOracle did to ./constants.ts
 // propectFlow(); //prospect user
 
-// next reate ecs daos etc and save ecsDao and assetCollectionDid did to ./constants.ts
+// next create ecs daos and save ecsDao did to ./constants.ts
+// ecsDaoFlow(); //ecs user
+// next create ecs owned assetCollection etc and save assetCollectionDid did to ./constants.ts
 // ecsFlow(); //ecs user
 // Will issue device creds and claims etc
 // send extra tokens to ecs user to have enough for gas fees to create all entities

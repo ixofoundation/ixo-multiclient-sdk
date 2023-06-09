@@ -9,7 +9,7 @@ import {
 } from "../helpers";
 import { WalletUsers } from "../../helpers/constants";
 
-export const ecsFlow = () =>
+export const ecsDaoFlow = () =>
   describe("Flow for creating ECS entities (dao/protocol/oracle)", () => {
     setAndLedgerUser(
       process.env.ROOT_ECS!,
@@ -44,6 +44,11 @@ export const ecsFlow = () =>
     testMsg("/ixo.iid.v1beta1.MsgAddVerification", () =>
       Entity.AddVerification(daoDid, "", WalletUsers.oracle)
     );
+  });
+
+export const ecsFlow = () =>
+  describe("Flow for creating ECS entities (dao/protocol/oracle)", () => {
+    setAndLedgerUser(process.env.ROOT_ECS!);
 
     // =============================== START
     let assetCollectionDid: string;

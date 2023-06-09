@@ -144,20 +144,20 @@ export const claimsBasic = () =>
 export const supamotoClaims = () =>
   describe("Testing the Claims module", () => {
     // Set tester as root ecs user
-    beforeAll(() =>
-      Promise.all([
-        generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS),
-        generateNewWallet(WalletUsers.oracle, process.env.ASSERT_USER_ECS),
-        generateNewWallet(
-          WalletUsers.bob,
-          process.env.ASSERT_USER_PROSPECT_ORACLE
-        ),
-        generateNewWallet(
-          WalletUsers.charlie,
-          process.env.ASSERT_USER_CARBON_ORACLE
-        ),
-      ])
-    );
+    // beforeAll(() =>
+    //   Promise.all([
+    //     generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS),
+    //     generateNewWallet(WalletUsers.oracle, process.env.ASSERT_USER_ECS),
+    //     generateNewWallet(
+    //       WalletUsers.bob,
+    //       process.env.ASSERT_USER_PROSPECT_ORACLE
+    //     ),
+    //     generateNewWallet(
+    //       WalletUsers.charlie,
+    //       process.env.ASSERT_USER_CARBON_ORACLE
+    //     ),
+    //   ])
+    // );
 
     // if (chainNetwork === "devnet") {
     //   // helper to send funds to an admin account
@@ -305,7 +305,7 @@ export const supamotoClaims = () =>
           "starting batch " + (index + 1) + " of " + purchaseData.length
         );
         // add wait for ipfs rate limit
-        await timeout(1000 * 50);
+        await timeout(1000 * 60);
 
         // create fuelPurchase claims for each purchase
         const fpClaims = await axios.post(
@@ -441,7 +441,7 @@ export const supamotoClaims = () =>
               verEvaluationsData.length
           );
           // wait for cellnode rate limit per 10s
-          await timeout(1000 * 15);
+          await timeout(1000 * 20);
 
           const verEvaluations = await axios.post(
             CarbonCredentialsWorkerUrl + "claims/certify",
