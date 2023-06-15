@@ -20,8 +20,14 @@ import {
 } from "../setup/constants";
 import { chainNetwork } from "../index.spec";
 import axios from "axios";
+import axiosRetry from "axios-retry";
 import { cookstoveIds } from "../setup/supamoto/stoves";
 import { assertIsDeliverTxSuccess } from "@cosmjs/stargate";
+
+axiosRetry(axios, {
+  retries: 3,
+  retryDelay: () => 1000,
+});
 
 export const claimsBasic = () =>
   describe("Testing the Claims module", () => {
@@ -144,20 +150,20 @@ export const claimsBasic = () =>
 export const supamotoClaims = () =>
   describe("Testing the Claims module", () => {
     // Set tester as root ecs user
-    beforeAll(() =>
-      Promise.all([
-        generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS),
-        generateNewWallet(WalletUsers.oracle, process.env.ASSERT_USER_ECS),
-        generateNewWallet(
-          WalletUsers.bob,
-          process.env.ASSERT_USER_PROSPECT_ORACLE
-        ),
-        generateNewWallet(
-          WalletUsers.charlie,
-          process.env.ASSERT_USER_CARBON_ORACLE
-        ),
-      ])
-    );
+    // beforeAll(() =>
+    //   Promise.all([
+    //     generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS),
+    //     generateNewWallet(WalletUsers.oracle, process.env.ASSERT_USER_ECS),
+    //     generateNewWallet(
+    //       WalletUsers.bob,
+    //       process.env.ASSERT_USER_PROSPECT_ORACLE
+    //     ),
+    //     generateNewWallet(
+    //       WalletUsers.charlie,
+    //       process.env.ASSERT_USER_CARBON_ORACLE
+    //     ),
+    //   ])
+    // );
 
     // if (chainNetwork === "devnet") {
     //   // helper to send funds to an admin account
@@ -305,7 +311,7 @@ export const supamotoClaims = () =>
           "starting batch " + (index + 1) + " of " + purchaseData.length
         );
         // add wait for ipfs rate limit
-        await timeout(1000 * 50);
+        if (index) await timeout(1000 * 20);
 
         // create fuelPurchase claims for each purchase
         const fpClaims = await axios.post(
@@ -340,8 +346,8 @@ export const supamotoClaims = () =>
           fpClaimIds.length + " FuelPurchase claims successfully created"
         );
 
-        // wait 10 seconds for claims to be indexed
-        await timeout(10 * 1000);
+        // wait 15 seconds for claims to be indexed
+        await timeout(15 * 1000);
 
         // save fuelPurchase claim ids per purchase
         stovePurchases.forEach((ps: any[], i) => {
@@ -395,94 +401,91 @@ export const supamotoClaims = () =>
         });
 
         // wait 7 seconds for claims to be indexed
-        await timeout(1000 * 7);
+        // await timeout(1000 * 7);
 
-        // create VER evaluations for cer claim in batches of 30 with cellnode ipfs rate limit being 30 per 10s
-        const now = new Date();
-        const verEvaluationsData = chunkArray<any>(
-          stovePurchases
-            .flat(1)
-            .map((p: any) => {
-              // if no cer claim then dont do ver evaluation
-              if (!p.cerClaimId) return null;
-              return {
-                claimId: p.cerClaimId,
-                reason: 1,
-                status: ixo.claims.v1beta1.EvaluationStatus.APPROVED,
-                oracle: dids.carbonOracle,
-                generate: {
-                  type: "VER",
-                  data: [
-                    {
-                      CERClaimId: p.cerClaimId, // claim id of CER claim
-                      validFrom: p.time_paid, // date that credentail is valid from
-                      status: "verified", // status of the credential
-                      factor: 11.48, // emission reduction factor
-                      evaluation: {
-                        model: "Awesome", // model used to calculate the emission reduction
-                        version: "1.0.0", // version of the model
-                        date: now, // date of model calculation
-                      },
-                    },
-                  ],
-                },
-              };
-            })
-            .filter((d) => !!d),
-          27
-        );
-        let verIndex = -1;
-        for (const evaluations of verEvaluationsData) {
-          verIndex++;
-          console.log(
-            "starting ver batch " +
-              (verIndex + 1) +
-              " of " +
-              verEvaluationsData.length
-          );
-          // wait for cellnode rate limit per 10s
-          await timeout(1000 * 15);
+        // create VER evaluations for cer claim in batches of 25 with cellnode ipfs rate limit being 30 per 10s
+        // const now = new Date();
+        // const verEvaluationsData = chunkArray<any>(
+        //   stovePurchases
+        //     .flat(1)
+        //     .map((p: any) => {
+        //       // if no cer claim then dont do ver evaluation
+        //       if (!p.cerClaimId) return null;
+        //       return {
+        //         claimId: p.cerClaimId,
+        //         reason: 1,
+        //         status: ixo.claims.v1beta1.EvaluationStatus.APPROVED,
+        //         oracle: dids.carbonOracle,
+        //         generate: {
+        //           type: "VER",
+        //           data: [
+        //             {
+        //               CERClaimId: p.cerClaimId, // claim id of CER claim
+        //               validFrom: p.time_paid, // date that credentail is valid from
+        //               status: "verified", // status of the credential
+        //               factor: 11.48, // emission reduction factor
+        //               evaluation: {
+        //                 model: "Awesome", // model used to calculate the emission reduction
+        //                 version: "1.0.0", // version of the model
+        //                 date: now, // date of model calculation
+        //               },
+        //             },
+        //           ],
+        //         },
+        //       };
+        //     })
+        //     .filter((d) => !!d),
+        //   25
+        // );
+        // let verIndex = -1;
+        // for (const evaluations of verEvaluationsData) {
+        //   verIndex++;
+        //   console.log(
+        //     "starting ver batch " +
+        //       (verIndex + 1) +
+        //       " of " +
+        //       verEvaluationsData.length
+        //   );
+        //   // wait for cellnode rate limit per 10s
+        //   // if (verIndex) await timeout(1000 * 10);
 
-          const verEvaluations = await axios.post(
-            CarbonCredentialsWorkerUrl + "claims/certify",
-            {
-              type: "VER",
-              collectionId: "1",
-              storage: "ipfs",
-              evaluationCreds: evaluations,
-            },
-            {
-              headers: {
-                Authorization: process.env.CARBON_CREDENTIAL_WORKER_AUTH,
-              },
-            }
-          );
-          assertIsDeliverTxSuccess(verEvaluations.data);
-        }
-        console.log("VER claims successfully created");
+        //   const verEvaluations = await axios.post(
+        //     CarbonCredentialsWorkerUrl + "claims/certify",
+        //     {
+        //       type: "VER",
+        //       collectionId: "1",
+        //       storage: "ipfs",
+        //       evaluationCreds: evaluations,
+        //     },
+        //     {
+        //       headers: {
+        //         Authorization: process.env.CARBON_CREDENTIAL_WORKER_AUTH,
+        //       },
+        //       timeout: 1000 * 60 * 5,
+        //     }
+        //   );
+        //   assertIsDeliverTxSuccess(verEvaluations.data);
 
-        // wait 10 seconds for evaluations to be indexed
-        await timeout(10 * 1000);
+        //   // wait 10 seconds for evaluations to be indexed
+        //   await timeout(10 * 1000);
 
-        // mint tokens for each cer claim with ver evaluation
-        const mintTokens = await axios.post(
-          CarbonCredentialsWorkerUrl + "tokens/mintFromVER",
-          {
-            name: "CARBON",
-            claimIds: stovePurchases
-              .flat(1)
-              .map((p: any) => p.cerClaimId)
-              .filter((d) => !!d),
-          },
-          {
-            headers: {
-              Authorization: process.env.CARBON_CREDENTIAL_WORKER_AUTH,
-            },
-          }
-        );
-        assertIsDeliverTxSuccess(mintTokens.data);
-        console.log("Tokens successfully minted");
-
+        //   // mint tokens ver evaluations
+        //   const mintTokens = await axios.post(
+        //     CarbonCredentialsWorkerUrl + "tokens/mintFromVER",
+        //     {
+        //       name: "CARBON",
+        //       claimIds: evaluations.map((e) => e.claimId),
+        //     },
+        //     {
+        //       headers: {
+        //         Authorization: process.env.CARBON_CREDENTIAL_WORKER_AUTH,
+        //       },
+        //       timeout: 1000 * 60 * 5,
+        //     }
+        //   );
+        //   assertIsDeliverTxSuccess(mintTokens.data);
+        // }
+        // console.log("VER claims successfully created and tokens minted");
         console.timeLog("claims");
         // add current stove purchases chunk to all stove purchases
         stovePurchasesAll = stovePurchasesAll.concat(stovePurchases);

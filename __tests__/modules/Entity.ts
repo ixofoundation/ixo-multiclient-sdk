@@ -256,19 +256,6 @@ export const GrantEntityAccountAuthz = async (
             })
           ).finish(),
         },
-        // authorization: {
-        //   typeUrl: "/cosmos.bank.v1beta1.SendAuthorization",
-        //   value: cosmos.bank.v1beta1.SendAuthorization.encode(
-        //     cosmos.bank.v1beta1.SendAuthorization.fromPartial({
-        //       spendLimit: [
-        //         cosmos.base.v1beta1.Coin.fromPartial({
-        //           amount: "10000000",
-        //           denom: "uixo",
-        //         }),
-        //       ],
-        //     })
-        //   ).finish(),
-        // },
         expiration: utils.proto.toTimestamp(addDays(new Date(), 365)),
       }),
     }),

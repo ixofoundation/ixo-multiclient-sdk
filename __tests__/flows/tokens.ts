@@ -144,7 +144,7 @@ export const supamotoTokens = () =>
     let cap = 0; // no cap
 
     let contractAddress1155 =
-      "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
+      "ixo1q85duf4uqqn97j2y52pep65mukux3edypm7ns2upfgnrg6pnsj0sj2hv3e";
     testMsg("/ixo.token.v1beta1.MsgCreateToken", async () => {
       const res = await Token.CreateToken(
         name,
@@ -162,11 +162,11 @@ export const supamotoTokens = () =>
     });
 
     // let index = "1";
-    // let amount = 2;
+    // let amount = 265;
     // // Did of collection (supamotoEntitiesFlow protocolAssetDid)
-    // let collectionDid = "did:ixo:entity:61392c571ef644d54d77e4daf611bf89";
+    // let collectionDid = "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258";
     // // Did of entity to map token to (supamotoEntitiesFlow first nft created)
-    // let nftDid = "did:ixo:entity:2f22535f8b179a51d77a0e302e68d35d"; //Cookstove
+    // let nftDid = "did:ixo:entity:75d738bbf9a61ec05acc16625d70a82c"; //Cookstove
     // const getTokenData = (nftDidId: string) => [
     //   {
     //     uri: "https://media.makeameme.org/created/haha-you-were-a3866a4349.jpg",
@@ -177,7 +177,7 @@ export const supamotoTokens = () =>
     //   },
     // ];
 
-    // let tokenId = "d89fc11cef9424891fdf9ae173f88a6e";
+    // let tokenId = "b38e39af5bafe82e4329e630b4439e08";
     // testMsg("/ixo.token.v1beta1.MsgMintToken", async () => {
     //   const res = await Token.MintToken(contractAddress1155, [
     //     {
@@ -193,11 +193,20 @@ export const supamotoTokens = () =>
     //   return res;
     // });
 
+    // testMsg("/ixo.token.v1beta1.MsgTransferToken", () =>
+    //   Token.TransferToken([
+    //     {
+    //       id: tokenId,
+    //       amount: 1,
+    //     },
+    //   ])
+    // );
+
     // testMsg("/ixo.token.v1beta1.MsgCancelToken", () =>
     //   Token.CancelToken([
     //     {
     //       id: tokenId,
-    //       amount: 1,
+    //       amount: 2,
     //     },
     //   ])
     // );

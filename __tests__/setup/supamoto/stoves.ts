@@ -1,3 +1,4 @@
+// list of Supamoto Genesis Collection stoves with devnet device credentials ipfs cid
 // commented out stoves that is not in the provided payments csv
 export const cookstoveIds = [
   {

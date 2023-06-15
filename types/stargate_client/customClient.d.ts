@@ -33,8 +33,8 @@ export declare class SigningStargateClient extends StargateClient {
      */
     static offline(signer: OfflineSigner, options?: SigningStargateClientOptions, ignoreGetSequence?: boolean): Promise<SigningStargateClient>;
     protected constructor(tmClient: Tendermint34Client | undefined, signer: OfflineSigner, options: SigningStargateClientOptions, ignoreGetSequence?: boolean);
-    simulate(signerAddress: string, messages: readonly EncodeObject[], memo: string | undefined): Promise<number>;
-    signAndBroadcast(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee | "auto" | number, memo?: string, explicitSignerData?: SignerData): Promise<DeliverTxResponse>;
+    simulate(signerAddress: string, messages: readonly EncodeObject[], memo: string | undefined, txBodyBytes?: Uint8Array): Promise<number>;
+    signAndBroadcast(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee | "auto" | number, memo?: string, explicitSignerData?: SignerData, txBodyBytes?: Uint8Array): Promise<DeliverTxResponse>;
     /**
      * Gets account number and sequence from the API, creates a sign doc,
      * creates a single signature and assembles the signed transaction.
@@ -45,7 +45,7 @@ export declare class SigningStargateClient extends StargateClient {
      * from the chain. This is needed when signing for a multisig account, but it also allows for offline signing
      * (See the SigningStargateClient.offline constructor).
      */
-    sign(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee, memo: string, explicitSignerData?: SignerData): Promise<TxRaw>;
+    sign(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee, memo: string, explicitSignerData?: SignerData, txBodyBytes?: Uint8Array): Promise<TxRaw>;
     private signAmino;
     private signDirect;
 }

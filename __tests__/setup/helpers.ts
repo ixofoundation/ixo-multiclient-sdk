@@ -96,8 +96,12 @@ export const setAndLedgerUser = async (
   beforeAll(() =>
     Promise.all([
       generateNewWallet(WalletUsers.tester, mnemonic),
-      generateNewWallet(WalletUsers.alice, mnemonicEdKeys),
-      generateNewWallet(WalletUsers.oracle, mnemonicAssertUser),
+      ...(mnemonicEdKeys
+        ? [generateNewWallet(WalletUsers.alice, mnemonicEdKeys)]
+        : []),
+      ...(mnemonicAssertUser
+        ? [generateNewWallet(WalletUsers.oracle, mnemonicAssertUser)]
+        : []),
     ])
   );
 

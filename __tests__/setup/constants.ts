@@ -34,29 +34,29 @@ export const CarbonCredentialsWorkerUrl =
 // TESTNET
 // ========================================
 // export const dids = {
-//   impactsRootUserDid: "",
-//   daoClass: "",
-//   oracleClass: "",
-//   protocolClass: "",
-//   assetClass: "",
-//   impactsDao: "",
-//   emergingDao: "",
-//   carbonOracle: "",
-//   cleanCookingProtocol: "",
-//   prospectDao: "",
-//   prospectOracle: "",
-//   ecsDao: "",
-//   assetCollection: "",
-//   carbonAsset: "",
+//   impactsRootUserDid: "did:x:zQ3shj4dPHhbsSXYcmsZLoDkiPJxkHhWYZpihWSQn95fuos2y",
+//   daoClass: "did:ixo:entity:8e8fc81e088154de379474db2f0aa2a9",
+//   oracleClass: "did:ixo:entity:a1fcead81eab2f1158a726597d872413",
+//   protocolClass: "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
+//   assetClass: "did:ixo:entity:f2235630689d4b54a561ca3de57494f6",
+//   impactsDao: "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
+//   emergingDao: "did:ixo:entity:29198b8a823e183a5e84d7ebf2f0febd",
+//   carbonOracle: "did:ixo:entity:75d738bbf9a61ec05acc16625d70a82c",
+//   cleanCookingProtocol: "did:ixo:entity:32a5a11ebf1ce614a6eb8ef874898eee",
+//   prospectDao: "did:ixo:entity:7b40f2500d4c89997f8389c5f2318cdb",
+//   prospectOracle: "did:ixo:entity:eb260ac6137fa9a7600ee7239e3e1fb1",
+//   ecsDao: "did:ixo:entity:237cb945b1368ed450ec67c7c4ac56ac",
+//   assetCollection: "did:ixo:entity:7f0cc7a072d514b38cb90bdf2e215901",
+//   carbonAsset: "did:ixo:entity:af96d8449eb5297a8b0812844374e0e2",
 // };
 
 // export const adminEntityAccounts = {
-//   assetCollection: "",
+//   assetCollection: "ixo1rm68f38tv9dl2gne6599y3vz4hfa6f74tgcnha",
 // };
 
 // export const EcsCredentialsWorkerUrl =
-//   "";
+//   "https://ecs.credentials.testnet.ixo.earth/";
 // export const ProspectCredentialsWorkerUrl =
-//   "";
+//   "https://prospect.credentials.testnet.ixo.earth/";
 // export const CarbonCredentialsWorkerUrl =
-//   "";
+//   "https://carbon.credentials.testnet.ixo.earth/";

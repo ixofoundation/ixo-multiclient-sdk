@@ -17,10 +17,41 @@ export const quickQueries = () =>
 
     // test("Query cosmos.tx.v1beta1.getTx", async () => {
     //   const res = await queryClient.cosmos.tx.v1beta1.getTx({
-    //     hash: "059CE93CA191E3E097247A23537A3B326128BF0101A44B5B23F9CD93A9AA68F5",
+    //     hash: "525F02F796360AE6B7407765FE679595EFB5053E352C18C276C0255D44290BF2",
     //   });
-    //   console.log(res.tx);
+    //   console.dir(res.tx, { depth: null });
+    //   // console.dir(createRegistry().decode(res.tx!.body!.messages![0]), {
+    //   //   depth: null,
+    //   // });
     //   expect(res).toBeTruthy();
+    // });
+
+    // test("Decode txBodyBytes", async () => {
+    //   const txBodyBytes = [
+    //     10, 217, 1, 10, 46, 47, 105, 120, 111, 46, 101, 110, 116, 105, 116, 121,
+    //     46, 118, 49, 98, 101, 116, 97, 49, 46, 77, 115, 103, 71, 114, 97, 110,
+    //     116, 69, 110, 116, 105, 116, 121, 65, 99, 99, 111, 117, 110, 116, 65,
+    //     117, 116, 104, 122, 18, 166, 1, 10, 3, 100, 105, 100, 18, 5, 97, 100,
+    //     109, 105, 110, 26, 16, 105, 120, 111, 49, 120, 113, 119, 108, 104, 106,
+    //     120, 107, 50, 99, 54, 122, 34, 90, 10, 75, 10, 42, 47, 99, 111, 115,
+    //     109, 111, 115, 46, 97, 117, 116, 104, 122, 46, 118, 49, 98, 101, 116,
+    //     97, 49, 46, 71, 101, 110, 101, 114, 105, 99, 65, 117, 116, 104, 111,
+    //     114, 105, 122, 97, 116, 105, 111, 110, 18, 29, 10, 27, 47, 99, 111, 115,
+    //     109, 111, 115, 46, 103, 111, 118, 46, 118, 49, 98, 101, 116, 97, 49, 46,
+    //     77, 115, 103, 86, 111, 116, 101, 18, 11, 8, 208, 217, 170, 164, 6, 16,
+    //     128, 235, 147, 79, 42, 42, 105, 120, 111, 49, 121, 48, 100, 55, 119, 53,
+    //     120, 102, 106, 57, 97, 48, 112, 55, 121, 103, 112, 120, 48, 117, 119,
+    //     118, 121, 114, 110, 109, 109, 113, 106, 51, 102, 100, 52, 115, 118, 97,
+    //     55, 116,
+    //   ];
+
+    //   const txBody = TxBody.decode(txBodyBytes as any);
+    //   console.dir(txBody.messages[0], { depth: null });
+
+    //   const msg = createRegistry().decode(txBody.messages[0]);
+    //   console.dir(msg, { depth: null });
+
+    //   expect(true).toBeTruthy();
     // });
 
     // test("Query cosmos.tx.v1beta1.getTxsEvent", async () => {
@@ -246,13 +277,13 @@ export const quickQueries = () =>
     //   const res = await queryClient.cosmos.authz.v1beta1.grants({
     //     granter,
     //     grantee,
-    //     msgTypeUrl: "/ixo.claims.v1beta1.MsgSubmitClaim",
+    //     msgTypeUrl: "",
     //   });
     //   console.log(res.grants);
-    //   if (res.grants.length > 0)
-    //     console.log(
-    //       res.grants.map((g) => createRegistry().decode(g.authorization!))
-    //     );
+    //   // if (res.grants.length > 0)
+    //   //   console.log(
+    //   //     res.grants.map((g) => createRegistry().decode(g.authorization!))
+    //   //   );
     //   expect(res).toBeTruthy();
     // });
 

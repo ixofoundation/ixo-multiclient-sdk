@@ -142,8 +142,7 @@ export const emergingAssetsFlow = () =>
       // Create the Entity
       const res = await Entity.CreateEntity(
         assetConst.entity,
-        assetLinkedResourcesUploaded,
-        true
+        assetLinkedResourcesUploaded
       );
       carbonAssetDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
       console.log({ carbonAssetDid });
