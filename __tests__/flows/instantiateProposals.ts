@@ -170,3 +170,28 @@ export const devnetProposals = () =>
       }
     );
   });
+
+// ------------------------------------------------------------
+// flow to upload a cw smart contract, then need to vote on it
+// ------------------------------------------------------------
+export const cwUploadProposal = () =>
+  describe("Testing the gov module", () => {
+    testMsg(
+      "/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract",
+      async () => {
+        const name = "wasmswap";
+        const res = await Cosmos.MsgSubmitProposalStoreCW(`custom ${name}`, [
+          "contracts",
+          "custom",
+          `${name}.wasm`,
+        ]);
+        const proposalId = utils.common.getValueFromEvents(
+          res,
+          "submit_proposal",
+          "proposal_id"
+        );
+        console.log({ proposalId });
+        return res;
+      }
+    );
+  });

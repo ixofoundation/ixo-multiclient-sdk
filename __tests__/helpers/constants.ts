@@ -69,7 +69,7 @@ export const getFee = (trxLength = 1): StdFee => ({
       amount: (trxLength * 10000).toString(),
     },
   ],
-  gas: (trxLength * 50000).toString(),
+  gas: (trxLength * 500000).toString(),
   // if wana do transactions using feegrant granter address
   // granter: "ixo1n8yrmeatsk74dw0zs95ess9sgzptd6thgjgcj2",
 });

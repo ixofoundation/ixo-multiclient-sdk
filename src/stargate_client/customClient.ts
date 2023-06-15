@@ -118,9 +118,12 @@ export class SigningStargateClient extends StargateClient {
   public async simulate(
     signerAddress: string,
     messages: readonly EncodeObject[],
-    memo: string | undefined
+    memo: string | undefined,
+    txBodyBytes?: Uint8Array
   ): Promise<number> {
-    const anyMsgs = messages.map((m) => this.registry.encodeAsAny(m));
+    const txBody = txBodyBytes ? this.registry.decodeTxBody(txBodyBytes) : null;
+    const anyMsgs =
+      txBody?.messages || messages.map((m) => this.registry.encodeAsAny(m));
     const accountFromSigner = (await this.signer.getAccounts()).find(
       (account) => account.address === signerAddress
     );
@@ -141,7 +144,7 @@ export class SigningStargateClient extends StargateClient {
 
     const { gasInfo } = await this.forceGetQueryClient().tx.simulate(
       anyMsgs,
-      memo,
+      txBody?.memo || memo,
       pubkey as any,
       sequence
     );
@@ -155,7 +158,8 @@ export class SigningStargateClient extends StargateClient {
     messages: readonly EncodeObject[],
     fee: StdFee | "auto" | number,
     memo = "",
-    explicitSignerData?: SignerData
+    explicitSignerData?: SignerData,
+    txBodyBytes?: Uint8Array
   ): Promise<DeliverTxResponse> {
     let usedFee: StdFee;
     if (fee == "auto" || typeof fee === "number") {
@@ -163,7 +167,12 @@ export class SigningStargateClient extends StargateClient {
         this.gasPrice,
         "Gas price must be set in the client options when auto gas is used."
       );
-      const gasEstimation = await this.simulate(signerAddress, messages, memo);
+      const gasEstimation = await this.simulate(
+        signerAddress,
+        messages,
+        memo,
+        txBodyBytes
+      );
       const multiplier = typeof fee === "number" ? fee : 1.3;
       usedFee = calculateFee(
         Math.round(gasEstimation * multiplier),
@@ -177,7 +186,8 @@ export class SigningStargateClient extends StargateClient {
       messages,
       usedFee,
       memo,
-      explicitSignerData
+      explicitSignerData,
+      txBodyBytes
     );
     const txBytes = TxRaw.encode(txRaw).finish();
     return this.broadcastTx(
@@ -202,7 +212,8 @@ export class SigningStargateClient extends StargateClient {
     messages: readonly EncodeObject[],
     fee: StdFee,
     memo: string,
-    explicitSignerData?: SignerData
+    explicitSignerData?: SignerData,
+    txBodyBytes?: Uint8Array
   ): Promise<TxRaw> {
     let signerData: SignerData;
     if (explicitSignerData) {
@@ -220,7 +231,14 @@ export class SigningStargateClient extends StargateClient {
     }
 
     return isOfflineDirectSigner(this.signer)
-      ? this.signDirect(signerAddress, messages, fee, memo, signerData)
+      ? this.signDirect(
+          signerAddress,
+          messages,
+          fee,
+          memo,
+          signerData,
+          txBodyBytes
+        )
       : this.signAmino(signerAddress, messages, fee, memo, signerData);
   }
 
@@ -290,7 +308,8 @@ export class SigningStargateClient extends StargateClient {
     messages: readonly EncodeObject[],
     fee: StdFee,
     memo: string,
-    { accountNumber, sequence, chainId }: SignerData
+    { accountNumber, sequence, chainId }: SignerData,
+    txBodyBytes?: Uint8Array
   ): Promise<TxRaw> {
     assert(isOfflineDirectSigner(this.signer));
     const accountFromSigner = (await this.signer.getAccounts()).find(
@@ -306,14 +325,8 @@ export class SigningStargateClient extends StargateClient {
           : pubkeyType.ed25519,
       value: toBase64(accountFromSigner.pubkey),
     });
-    const txBodyEncodeObject: TxBodyEncodeObject = {
-      typeUrl: "/cosmos.tx.v1beta1.TxBody",
-      value: {
-        messages: messages,
-        memo: memo,
-      },
-    };
-    const txBodyBytes = this.registry.encode(txBodyEncodeObject);
+    const txBodyBytes1 =
+      txBodyBytes || this.registry.encodeTxBody({ messages, memo });
     const gasLimit = Int53.fromString(fee.gas).toNumber();
     const authInfoBytes = makeAuthInfoBytes(
       [{ pubkey, sequence }],
@@ -323,7 +336,7 @@ export class SigningStargateClient extends StargateClient {
       fee.payer
     );
     const signDoc = makeSignDoc(
-      txBodyBytes,
+      txBodyBytes1,
       authInfoBytes,
       chainId,
       accountNumber

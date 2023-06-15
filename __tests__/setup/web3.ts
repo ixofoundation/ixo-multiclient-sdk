@@ -62,10 +62,10 @@ export const web3Storage = () =>
             vocab: "https://w3id.org/emerging/vocab/v1",
           },
         ],
-        id: "urn:uuid:16f6615c-17a0-4486-8080-37625d3e3c5e",
+        id: "urn:uuid:e9f0e597-a62e-41be-bd1b-020d9d632510",
         type: ["VerifiableCredential"],
         credentialSubject: {
-          id: "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
+          id: "did:ixo:entity:7f0cc7a072d514b38cb90bdf2e215901",
         },
         data: [
           {
@@ -526,16 +526,16 @@ export const web3Storage = () =>
           },
         ],
         issuer: {
-          id: "did:ixo:entity:a1fcead81eab2f1158a726597d872413",
+          id: "did:ixo:entity:237cb945b1368ed450ec67c7c4ac56ac",
         },
-        issuanceDate: "2023-06-06T05:18:29.027Z",
+        issuanceDate: "2023-06-10T09:39:52.500Z",
         proof: {
           type: "Ed25519Signature2018",
-          created: "2023-06-06T05:18:29Z",
+          created: "2023-06-10T09:39:52Z",
           verificationMethod:
-            "did:ixo:entity:a1fcead81eab2f1158a726597d872413#DQPAV2hR3RQzRATr2r6EHa3LW8zk1E6fw5gpNUZJkAzx",
+            "did:ixo:entity:237cb945b1368ed450ec67c7c4ac56ac#DQPAV2hR3RQzRATr2r6EHa3LW8zk1E6fw5gpNUZJkAzx",
           proofPurpose: "assertionMethod",
-          jws: "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..TiGSQNkpjDe1OdfbwGvFfvXF-EFMsHukCkbLerNU8dDscsju1ZzI4OdXexnx6f06hOjf1RwshR_w2yz-L32CAg",
+          jws: "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..zYy0VrnRHholzHCsryZfur4wkmZ84IW0gaFcqmsiMN7QDRtGETFXOoUPXX2S7kgGzqrn-Drf26C1tWfUGRXMBQ",
         },
       };
       const cid = await storeWeb3(

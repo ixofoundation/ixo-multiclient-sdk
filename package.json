@@ -1,6 +1,6 @@
 {
   "name": "@ixo/impactxclient-sdk",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them",
   "author": "Ixo <ixo>",
   "homepage": "https://github.com/ixofoundation/ixo-MultiClient-SDK#readme",
@@ -64,6 +64,7 @@
     "@osmonauts/telescope": "0.92.2",
     "@protobufs/cosmos": "0.1.0",
     "@types/jest": "29.1.2",
+    "axios-retry": "3.5.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "29.1.2",
     "babel-watch": "7.0.0",

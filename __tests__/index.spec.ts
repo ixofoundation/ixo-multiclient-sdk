@@ -20,6 +20,7 @@ import { bankBasic, authzBasic, sendTokens, govDeposit } from "./flows/cosmos";
 import {
   instantiateModulesProposals,
   devnetProposals,
+  cwUploadProposal,
 } from "./flows/instantiateProposals";
 import { tokenBasic, supamotoTokens } from "./flows/tokens";
 import { daoCore, wasmBasic } from "./flows/cosmwasm";
@@ -52,6 +53,7 @@ generateBlockchainTestUsers();
 // authzBasic();
 // wasmBasic();
 // daoCore();
+// cwUploadProposal();
 // quickQueries();
 
 // ------------------------------------------

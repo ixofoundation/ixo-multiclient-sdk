@@ -23,12 +23,12 @@ export const cookstovesFlow = () =>
 
     cookstoveIds
       .map((c) => c.id)
-      .map((id) =>
+      .map((id, i) =>
         testMsg(
           `/ixo.entity.v1beta1.MsgCreateEntity asset instance`,
           async () => {
             console.log(
-              `/ixo.entity.v1beta1.MsgCreateEntity asset instance index:${index} for id:${id}`
+              `/ixo.entity.v1beta1.MsgCreateEntity asset instance index:${index} (array index: ${i}) for id:${id}`
             );
             try {
               const file = JSON.parse(
@@ -44,7 +44,12 @@ export const cookstovesFlow = () =>
               // Create Credential, ecs must issue cert for each asset, so ecs creds worker
               const resCreds = await axios.post(
                 EcsCredentialsWorkerUrl + "credentials/create",
-                file
+                file,
+                {
+                  headers: {
+                    Authorization: process.env.ECS_CREDENTIAL_WORKER_AUTH,
+                  },
+                }
               );
               if (![200, 201].includes(resCreds.status) || !resCreds.data)
                 throw new Error("error creating device creds");
@@ -74,7 +79,9 @@ export const cookstovesFlow = () =>
                 "wasm",
                 "token_id"
               );
+              console.log({ nftAssetDid });
               if (!nftAssetDid) throw new Error("error creating nft asset");
+
               index++;
               assetInstanceDids.push({ id: id, did: nftAssetDid });
               return "res" as any;
@@ -88,9 +95,9 @@ export const cookstovesFlow = () =>
 
     test("Logging all nft assets created", async () => {
       console.log("Logging assetInstanceDids that was successfully created:");
-      console.log(assetInstanceDids);
+      console.dir(assetInstanceDids, { depth: null });
       console.log("Logging cookstove ids that failed upload:");
-      console.log(assetsFailed);
+      console.dir(assetsFailed, { depth: null });
       expect(true).toBeTruthy();
     });
   });

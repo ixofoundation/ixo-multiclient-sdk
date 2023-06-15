@@ -55,8 +55,8 @@ export const CarbonCredentialsWorkerUrl =
 // };
 
 // export const EcsCredentialsWorkerUrl =
-//   "https://ecs.credentials.tesnet.ixo.earth/";
+//   "https://ecs.credentials.testnet.ixo.earth/";
 // export const ProspectCredentialsWorkerUrl =
-//   "https://prospect.credentials.tesnet.ixo.earth/";
+//   "https://prospect.credentials.testnet.ixo.earth/";
 // export const CarbonCredentialsWorkerUrl =
-//   "https://carbon.credentials.tesnet.ixo.earth/";
+//   "https://carbon.credentials.testnet.ixo.earth/";
