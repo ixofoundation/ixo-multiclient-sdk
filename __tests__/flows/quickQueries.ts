@@ -130,28 +130,32 @@ export const quickQueries = () =>
     //   const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;
     //   const contractAddress =
     //     "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
-    //   const tokens = ["0ae9ee3f43c92806232971ee67e23e22"];
+    //   const tokens = [
+    //     "247bf50a1ce28ea7622ef6082e5e559f",
+    //     "3187434c0a27fc17e1f484812e6be90e",
+    //     "32fe8cdc405b2c5828e59c2432eb615a",
+    //   ];
     //   const msg = {
-    //     balance: {
-    //       owner: user,
-    //       token_id: tokens[0],
-    //     },
+    //     // balance: {
+    //     //   owner: "ixo1jacj68c9uffdjt0yw6mumkxzcmup7la2yhfs72",
+    //     //   token_id: tokens[0],
+    //     // },
     //     // tokens: {
-    //     //   owner: user,
+    //     //   owner: "ixo1jacj68c9uffdjt0yw6mumkxzcmup7la2yhfs72",
     //     // },
     //     // batch_balance: {
     //     //   owner: user,
     //     //   token_ids: tokens,
     //     // },
-    //     // token_info: {
-    //     //   token_id: tokens[0],
-    //     // },
+    //     token_info: {
+    //       token_id: tokens[0],
+    //     },
     //   };
     //   const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
     //     address: contractAddress,
     //     queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
     //   });
-    //   console.log(utils.conversions.Uint8ArrayToJS(res.data));
+    //   console.dir(utils.conversions.Uint8ArrayToJS(res.data), { depth: null });
     //   expect(res).toBeTruthy();
     // });
 
@@ -172,9 +176,9 @@ export const quickQueries = () =>
 
     // test("query token metadata by id", async () => {
     //   const res = await queryClient.ixo.token.v1beta1.tokenMetadata({
-    //     id: "d89fc11cef9424891fdf9ae173f88a6e",
+    //     id: "01a86ad8ffd270dc2d729365201debba",
     //   });
-    //   console.log(res);
+    //   console.dir(res, { depth: null });
     //   expect(res).toBeTruthy();
     // });
 
