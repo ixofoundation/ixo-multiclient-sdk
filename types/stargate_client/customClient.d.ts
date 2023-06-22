@@ -4,6 +4,7 @@ import { AminoTypes, DeliverTxResponse, SignerData, GasPrice } from "@cosmjs/sta
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { StargateClient, StargateClientOptions } from "./customStargateClient";
+import { LocalStoreFunctions } from "./store";
 export interface SigningStargateClientOptions extends StargateClientOptions {
     readonly registry?: Registry;
     readonly aminoTypes?: AminoTypes;
@@ -20,8 +21,9 @@ export declare class SigningStargateClient extends StargateClient {
     private readonly aminoTypes;
     private readonly gasPrice;
     private readonly ignoreGetSequence;
+    localStoreFunctions: LocalStoreFunctions;
     tendermintClient: Tendermint34Client;
-    static connectWithSigner(endpoint: string, signer: OfflineSigner, options?: SigningStargateClientOptions, ignoreGetSequence?: boolean): Promise<SigningStargateClient>;
+    static connectWithSigner(endpoint: string, signer: OfflineSigner, options?: SigningStargateClientOptions, ignoreGetSequence?: boolean, localStoreFunctions?: LocalStoreFunctions): Promise<SigningStargateClient>;
     /**
      * Creates a client in offline mode.
      *
@@ -31,8 +33,8 @@ export declare class SigningStargateClient extends StargateClient {
      * When you try to use online functionality with such a signer, an
      * exception will be raised.
      */
-    static offline(signer: OfflineSigner, options?: SigningStargateClientOptions, ignoreGetSequence?: boolean): Promise<SigningStargateClient>;
-    protected constructor(tmClient: Tendermint34Client | undefined, signer: OfflineSigner, options: SigningStargateClientOptions, ignoreGetSequence?: boolean);
+    static offline(signer: OfflineSigner, options?: SigningStargateClientOptions, ignoreGetSequence?: boolean, localStoreFunctions?: LocalStoreFunctions): Promise<SigningStargateClient>;
+    protected constructor(tmClient: Tendermint34Client | undefined, signer: OfflineSigner, options: SigningStargateClientOptions, ignoreGetSequence?: boolean, localStoreFunctions?: LocalStoreFunctions);
     simulate(signerAddress: string, messages: readonly EncodeObject[], memo: string | undefined, txBodyBytes?: Uint8Array): Promise<number>;
     signAndBroadcast(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee | "auto" | number, memo?: string, explicitSignerData?: SignerData, txBodyBytes?: Uint8Array): Promise<DeliverTxResponse>;
     /**
@@ -49,4 +51,12 @@ export declare class SigningStargateClient extends StargateClient {
     private signAmino;
     private signDirect;
 }
-export declare const createSigningClient: (rpcEndpoint: string, offlineWallet: OfflineSigner, ignoreGetSequence?: boolean, options?: SigningStargateClientOptions) => Promise<SigningStargateClient>;
+/**
+ * Creates a new SigningStargateClient with the given signer.
+ * @param rpcEndpoint - The RPC endpoint of the chain.
+ * @param offlineWallet - The wallet to sign transactions.
+ * @param ignoreGetSequence - If true, the client will not query the chain for the account sequence.
+ * @param options - The client options.
+ * @param localStoreFunctions - The local storage getter and setter to use save sequence locally.
+ */
+export declare const createSigningClient: (rpcEndpoint: string, offlineWallet: OfflineSigner, ignoreGetSequence?: boolean, options?: SigningStargateClientOptions, localStoreFunctions?: LocalStoreFunctions) => Promise<SigningStargateClient>;

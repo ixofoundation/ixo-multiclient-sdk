@@ -15,6 +15,7 @@ import { WalletUsers } from "../helpers/constants";
 import {
   CarbonCredentialsWorkerUrl,
   EcsCredentialsWorkerUrl,
+  ProspectCredentialsWorkerUrl,
   adminEntityAccounts,
   dids,
 } from "../setup/constants";
@@ -150,26 +151,26 @@ export const claimsBasic = () =>
 export const supamotoClaims = () =>
   describe("Testing the Claims module", () => {
     // Set tester as root ecs user
-    // beforeAll(() =>
-    //   Promise.all([
-    //     generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS),
-    //     generateNewWallet(WalletUsers.oracle, process.env.ASSERT_USER_ECS),
-    //     generateNewWallet(
-    //       WalletUsers.bob,
-    //       process.env.ASSERT_USER_PROSPECT_ORACLE
-    //     ),
-    //     generateNewWallet(
-    //       WalletUsers.charlie,
-    //       process.env.ASSERT_USER_CARBON_ORACLE
-    //     ),
-    //   ])
-    // );
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS),
+        generateNewWallet(WalletUsers.oracle, process.env.ASSERT_USER_ECS),
+        generateNewWallet(
+          WalletUsers.bob,
+          process.env.ASSERT_USER_PROSPECT_ORACLE
+        ),
+        generateNewWallet(
+          WalletUsers.charlie,
+          process.env.ASSERT_USER_CARBON_ORACLE
+        ),
+      ])
+    );
 
     // if (chainNetwork === "devnet") {
     //   // helper to send funds to an admin account
     //   testMsg("test Bank Send to admin account", () =>
     //     Cosmos.BankSendTrx(
-    //       10000000000,
+    //       100000000000,
     //       WalletUsers.alice,
     //       undefined,
     //       undefined,
@@ -191,9 +192,9 @@ export const supamotoClaims = () =>
     // testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
     //   // add wait according to chunk index for ipfs rate limit
     //   console.log(
-    //     "waiting 3 mintues as blocksync needs 5 minutes to load all ipfs files for entity external Ids"
+    //     "waiting 5 mintues as blocksync needs 5 minutes to load all ipfs files for entity external Ids"
     //   );
-    //   await timeout(1000 * 60 * 3);
+    //   // await timeout(1000 * 60 * 5);
 
     //   const res = await Claims.CreateCollectionSupamotoGenesis(
     //     dids.assetCollection,
@@ -290,7 +291,7 @@ export const supamotoClaims = () =>
 
       // devide payments per device into 50 devices at a time
       // ==============================================================
-      purchaseData = chunkArray<any[]>(Object.values(purchaseData), 16);
+      purchaseData = chunkArray<any[]>(Object.values(purchaseData), 30);
       let stovePurchasesAll: any[] = [];
       let index = -1;
       // console.dir(
@@ -298,15 +299,17 @@ export const supamotoClaims = () =>
       //     length: purchaseData.length,
       //     groups: purchaseData.map((p) => {
       //       const devices = p.map((d) => d.length);
-      //       return { devices, total: devices.reduce((a, b) => a + b, 0) };
+      //       // return { devices, total: devices.reduce((a, b) => a + b, 0) };
+      //       return { total: devices.reduce((a, b) => a + b, 0) };
       //     }),
       //   },
       //   { depth: null }
       // );
+
       console.time("claims");
       for (const stovePurchases of purchaseData) {
         index++;
-        // if (index !== 0) break; // if want to only mint a certain amount of batches add number here
+        // if (index !== 0) continue; // if want to only mint a certain amount of batches add number here
         console.log(
           "starting batch " + (index + 1) + " of " + purchaseData.length
         );
@@ -346,8 +349,29 @@ export const supamotoClaims = () =>
           fpClaimIds.length + " FuelPurchase claims successfully created"
         );
 
-        // wait 15 seconds for claims to be indexed
-        await timeout(15 * 1000);
+        // evaluate fuelPurchase claims
+        const fpEvaluations = await axios.post(
+          ProspectCredentialsWorkerUrl + "claims/evaluate",
+          {
+            collectionId: "1",
+            evaluations: fpClaimIds.map((id) => ({
+              claimId: id,
+              reason: 1,
+              status: ixo.claims.v1beta1.EvaluationStatus.APPROVED,
+              oracle: dids.prospectOracle,
+              verificationProof: "proof",
+            })),
+          },
+          {
+            headers: {
+              Authorization: process.env.PROSPECT_CREDENTIAL_WORKER_AUTH,
+            },
+          }
+        );
+        assertIsDeliverTxSuccess(fpEvaluations.data);
+        console.log(
+          fpClaimIds.length + " FuelPurchase claims successfully evaluated"
+        );
 
         // save fuelPurchase claim ids per purchase
         stovePurchases.forEach((ps: any[], i) => {
@@ -356,135 +380,6 @@ export const supamotoClaims = () =>
           });
         });
 
-        // create CER claims for each purchase that has a postceding purchase
-        const cerClaims = await axios.post(
-          EcsCredentialsWorkerUrl + "claims/create",
-          {
-            type: "CER",
-            collectionId: "1",
-            storage: "cellnode",
-            generate: {
-              type: "CER",
-              data: stovePurchases
-                .flat(1)
-                .map((p: any, i, arr) => {
-                  const nextPurchase = arr[i + 1];
-                  // if no next purchase for device then dont make cer claim
-                  if (!nextPurchase || nextPurchase.device_id !== p.device_id)
-                    return null;
-                  return {
-                    fuelPurchaseClaimId: p.fuelPurchaseClaimId, // fuel purchase claim id
-                    startDate: p.time_paid, // start date (current fpClaim date)
-                    endDate: nextPurchase.time_paid, // end date (next fpClaim date)
-                  };
-                })
-                .filter((d) => !!d),
-            },
-          },
-          { headers: { Authorization: process.env.ECS_CREDENTIAL_WORKER_AUTH } }
-        );
-        assertIsDeliverTxSuccess(cerClaims.data);
-        const cerClaimIds: string[] = utils.common.getValuesFromEvents(
-          cerClaims.data,
-          "ixo.claims.v1beta1.ClaimSubmittedEvent",
-          "claim",
-          (c) => c.claim_id
-        );
-        console.log(cerClaimIds.length + " CER claims successfully created");
-
-        // save cer claim ids per purchase
-        stovePurchases.forEach((ps: any[], i) => {
-          ps.forEach((p: any, j) => {
-            if (ps.length - 1 === j) return;
-            stovePurchases[i][j].cerClaimId = cerClaimIds.shift();
-          });
-        });
-
-        // wait 7 seconds for claims to be indexed
-        // await timeout(1000 * 7);
-
-        // create VER evaluations for cer claim in batches of 25 with cellnode ipfs rate limit being 30 per 10s
-        // const now = new Date();
-        // const verEvaluationsData = chunkArray<any>(
-        //   stovePurchases
-        //     .flat(1)
-        //     .map((p: any) => {
-        //       // if no cer claim then dont do ver evaluation
-        //       if (!p.cerClaimId) return null;
-        //       return {
-        //         claimId: p.cerClaimId,
-        //         reason: 1,
-        //         status: ixo.claims.v1beta1.EvaluationStatus.APPROVED,
-        //         oracle: dids.carbonOracle,
-        //         generate: {
-        //           type: "VER",
-        //           data: [
-        //             {
-        //               CERClaimId: p.cerClaimId, // claim id of CER claim
-        //               validFrom: p.time_paid, // date that credentail is valid from
-        //               status: "verified", // status of the credential
-        //               factor: 11.48, // emission reduction factor
-        //               evaluation: {
-        //                 model: "Awesome", // model used to calculate the emission reduction
-        //                 version: "1.0.0", // version of the model
-        //                 date: now, // date of model calculation
-        //               },
-        //             },
-        //           ],
-        //         },
-        //       };
-        //     })
-        //     .filter((d) => !!d),
-        //   25
-        // );
-        // let verIndex = -1;
-        // for (const evaluations of verEvaluationsData) {
-        //   verIndex++;
-        //   console.log(
-        //     "starting ver batch " +
-        //       (verIndex + 1) +
-        //       " of " +
-        //       verEvaluationsData.length
-        //   );
-        //   // wait for cellnode rate limit per 10s
-        //   // if (verIndex) await timeout(1000 * 10);
-
-        //   const verEvaluations = await axios.post(
-        //     CarbonCredentialsWorkerUrl + "claims/certify",
-        //     {
-        //       type: "VER",
-        //       collectionId: "1",
-        //       storage: "ipfs",
-        //       evaluationCreds: evaluations,
-        //     },
-        //     {
-        //       headers: {
-        //         Authorization: process.env.CARBON_CREDENTIAL_WORKER_AUTH,
-        //       },
-        //       timeout: 1000 * 60 * 5,
-        //     }
-        //   );
-        //   assertIsDeliverTxSuccess(verEvaluations.data);
-
-        //   // wait 10 seconds for evaluations to be indexed
-        //   await timeout(10 * 1000);
-
-        //   // mint tokens ver evaluations
-        //   const mintTokens = await axios.post(
-        //     CarbonCredentialsWorkerUrl + "tokens/mintFromVER",
-        //     {
-        //       name: "CARBON",
-        //       claimIds: evaluations.map((e) => e.claimId),
-        //     },
-        //     {
-        //       headers: {
-        //         Authorization: process.env.CARBON_CREDENTIAL_WORKER_AUTH,
-        //       },
-        //       timeout: 1000 * 60 * 5,
-        //     }
-        //   );
-        //   assertIsDeliverTxSuccess(mintTokens.data);
-        // }
         // console.log("VER claims successfully created and tokens minted");
         console.timeLog("claims");
         // add current stove purchases chunk to all stove purchases
@@ -501,6 +396,8 @@ export const supamotoClaims = () =>
       expect(true).toBeTruthy();
     });
 
+    // OLD DUMMY CLAIMS
+    // ===============================
     // let claimIds = [
     //   utils.common.generateId(10),
     //   utils.common.generateId(10),
