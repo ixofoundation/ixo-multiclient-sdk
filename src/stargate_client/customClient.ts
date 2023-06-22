@@ -29,6 +29,7 @@ import { encodePubkey } from "./customPubkey";
 import { accountFromAny } from "./edAccountHandler";
 import { StargateClient, StargateClientOptions } from "./customStargateClient";
 import { createRegistry, defaultRegistryTypes } from "./customRegistries";
+import { getSignerData, LocalStoreFunctions } from "./store";
 
 export interface SigningStargateClientOptions extends StargateClientOptions {
   readonly registry?: Registry;
@@ -53,20 +54,23 @@ export class SigningStargateClient extends StargateClient {
   private readonly gasPrice: GasPrice | undefined;
   private readonly ignoreGetSequence: boolean;
 
+  public localStoreFunctions: LocalStoreFunctions;
   public tendermintClient: Tendermint34Client;
 
   public static async connectWithSigner(
     endpoint: string,
     signer: OfflineSigner,
     options: SigningStargateClientOptions = {},
-    ignoreGetSequence?: boolean
+    ignoreGetSequence?: boolean,
+    localStoreFunctions?: LocalStoreFunctions
   ): Promise<SigningStargateClient> {
     const tmClient = await Tendermint34Client.connect(endpoint);
     return new SigningStargateClient(
       tmClient,
       signer,
       options,
-      ignoreGetSequence
+      ignoreGetSequence,
+      localStoreFunctions
     );
   }
 
@@ -82,13 +86,15 @@ export class SigningStargateClient extends StargateClient {
   public static async offline(
     signer: OfflineSigner,
     options: SigningStargateClientOptions = {},
-    ignoreGetSequence?: boolean
+    ignoreGetSequence?: boolean,
+    localStoreFunctions?: LocalStoreFunctions
   ): Promise<SigningStargateClient> {
     return new SigningStargateClient(
       undefined,
       signer,
       options,
-      ignoreGetSequence
+      ignoreGetSequence,
+      localStoreFunctions
     );
   }
 
@@ -96,7 +102,8 @@ export class SigningStargateClient extends StargateClient {
     tmClient: Tendermint34Client | undefined,
     signer: OfflineSigner,
     options: SigningStargateClientOptions,
-    ignoreGetSequence: boolean = false
+    ignoreGetSequence: boolean = false,
+    localStoreFunctions?: LocalStoreFunctions
   ) {
     super(tmClient!, options);
     const prefix = options.prefix ?? "ixo";
@@ -113,6 +120,7 @@ export class SigningStargateClient extends StargateClient {
     this.broadcastPollIntervalMs = options.broadcastPollIntervalMs;
     this.gasPrice = options.gasPrice;
     this.ignoreGetSequence = ignoreGetSequence;
+    this.localStoreFunctions = localStoreFunctions;
   }
 
   public async simulate(
@@ -218,6 +226,13 @@ export class SigningStargateClient extends StargateClient {
     let signerData: SignerData;
     if (explicitSignerData) {
       signerData = explicitSignerData;
+    } else if (!this.ignoreGetSequence && this.localStoreFunctions) {
+      // if dont skip sequence and want to use local sequence checker
+      signerData = await getSignerData(
+        this,
+        this.signer,
+        this.localStoreFunctions
+      );
     } else {
       const { accountNumber, sequence } = this.ignoreGetSequence
         ? { sequence: 0, accountNumber: 0 }
@@ -353,11 +368,20 @@ export class SigningStargateClient extends StargateClient {
   }
 }
 
+/**
+ * Creates a new SigningStargateClient with the given signer.
+ * @param rpcEndpoint - The RPC endpoint of the chain.
+ * @param offlineWallet - The wallet to sign transactions.
+ * @param ignoreGetSequence - If true, the client will not query the chain for the account sequence.
+ * @param options - The client options.
+ * @param localStoreFunctions - The local storage getter and setter to use save sequence locally.
+ */
 export const createSigningClient = async (
   rpcEndpoint: string,
   offlineWallet: OfflineSigner,
   ignoreGetSequence?: boolean,
-  options?: SigningStargateClientOptions
+  options?: SigningStargateClientOptions,
+  localStoreFunctions?: LocalStoreFunctions
 ): Promise<SigningStargateClient> => {
   return await SigningStargateClient.connectWithSigner(
     rpcEndpoint,
@@ -368,6 +392,7 @@ export const createSigningClient = async (
       accountParser: accountFromAny,
       ...options,
     },
-    ignoreGetSequence
+    ignoreGetSequence,
+    localStoreFunctions
   );
 };
