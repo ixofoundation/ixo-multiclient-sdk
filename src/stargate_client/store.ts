@@ -42,7 +42,8 @@ export const getSignerData = async (
   let data = storageFunctions.getLocalData(SignerStoreKey) || {};
   let now = new Date();
 
-  if (!data[chainId] || !data[chainId][accountNumber]) {
+  if (!data[chainId]) data[chainId] = {};
+  if (!data[chainId][accountNumber]) {
     data[chainId][accountNumber] = {
       sequence: sequence,
       updated: now.toISOString(),
