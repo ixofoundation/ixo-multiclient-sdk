@@ -2,6 +2,7 @@ import { OfflineSigner } from "@cosmjs/proto-signing";
 import { assertIsDeliverTxSuccess, DeliverTxResponse } from "@cosmjs/stargate";
 import axios from "axios";
 import base58 from "bs58";
+import store from "store";
 
 import { keyType, KeyTypes, RPC_URL, WalletUsers } from "./constants";
 import { getEdClient } from "./edClient";
@@ -116,7 +117,12 @@ export const createClient = async (
   return createSigningClient(
     RPC_URL,
     offlineWallet as OfflineSigner,
-    ignoreGetSequence
+    ignoreGetSequence,
+    undefined,
+    {
+      getLocalData: (k) => store.get(k),
+      setLocalData: (k, d) => store.set(k, d),
+    }
   );
 };
 

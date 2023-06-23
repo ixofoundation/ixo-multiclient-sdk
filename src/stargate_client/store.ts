@@ -52,9 +52,12 @@ export const getSignerData = async (
 
   const updated = new Date(data[chainId][accountNumber].updated);
 
+  const timeDiff = now.getTime() - updated.getTime();
   if (
     // last updated is more than 7 seconds ago
-    now.getTime() - updated.getTime() > 7000 ||
+    timeDiff > 7000 ||
+    // or no timeDiff which means it is the first time
+    timeDiff === 0 ||
     // or the remote sequence is more than local one
     sequence > data[chainId][accountNumber].sequence
   ) {
