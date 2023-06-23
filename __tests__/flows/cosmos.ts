@@ -13,7 +13,6 @@ export const bankBasic = () =>
         "secp",
         "ed"
       );
-      console.log(res);
       return res;
     });
   });
