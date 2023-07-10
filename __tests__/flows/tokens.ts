@@ -98,30 +98,33 @@ export const tokenBasic = () =>
     //   Token.StopToken(contractAddress1155)
     // );
 
-    // testMsg("/cosmos.authz.v1beta1.MsgGrant mint token", () =>
-    //   Token.MsgGrantContract(
-    //     contractAddress1155,
-    //     name,
-    //     index,
-    //     collectionDid,
-    //     amount,
-    //     tokenData
-    //   )
-    // );
+    let authzIndex = "2";
+    testMsg("/cosmos.authz.v1beta1.MsgGrant mint token", () =>
+      Token.MsgGrantContract(
+        contractAddress1155,
+        name,
+        authzIndex,
+        collectionDid,
+        amount,
+        tokenData
+      )
+    );
 
-    // testMsg("/cosmos.authz.v1beta1.MsgExec mint token", () =>
-    //   Token.MsgExecContract(contractAddress1155, [
-    //     {
-    //       name,
-    //       index,
-    //       amount,
-    //       collection: collectionDid,
-    //       tokenData,
-    //     },
-    //   ])
-    // );
+    testMsg("/cosmos.authz.v1beta1.MsgExec mint token", () =>
+      Token.MsgExecContract(contractAddress1155, [
+        {
+          name,
+          index: authzIndex,
+          amount,
+          collection: collectionDid,
+          tokenData,
+        },
+      ])
+    );
 
-    // testMsg("/cosmos.authz.v1beta1.MsgRevoke mint token", () => Token.MsgRevokeContract());
+    // testMsg("/cosmos.authz.v1beta1.MsgRevoke mint token", () =>
+    //   Token.MsgRevokeContract()
+    // );
   });
 
 // ------------------------------------------------------------

@@ -1,4 +1,4 @@
-import { fee, WalletUsers } from "../helpers/constants";
+import { getFee, WalletUsers } from "../helpers/constants";
 import {
   createClient,
   getUser,
@@ -36,7 +36,11 @@ export const WasmStoreTrx = async (
     }),
   };
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
   return response;
 };
 
@@ -68,7 +72,11 @@ export const WasmInstantiateTrx = async (
     }),
   };
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
   return response;
 };
 
@@ -97,6 +105,10 @@ export const WasmExecuteTrx = async (
     }),
   };
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
   return response;
 };

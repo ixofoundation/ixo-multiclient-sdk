@@ -1,6 +1,7 @@
-import { testMsg, utils } from "../../helpers/common";
+import { ixo, testMsg, utils } from "../../helpers/common";
 import { setup_dao_constants } from "./constants";
 import * as Entity from "../Entity";
+import * as Iid from "../../modules/Iid";
 import { setup_asset_collection_constants } from "../supamoto/constants";
 import {
   setAndLedgerUser,
@@ -81,4 +82,21 @@ export const ecsFlow = () =>
       return res;
     });
     // =============================== END
+
+    // Add the web dashboard linkedResource as need did
+    testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", () =>
+      Iid.AddLinkedResource(
+        assetCollectionDid,
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
+          id: "{id}#collectionDashboard",
+          type: "WebDashboard",
+          description: "Collection Dashboard",
+          mediaType: "application/html",
+          serviceEndpoint: "emerging:/collections/" + assetCollectionDid,
+          proof: "",
+          encrypted: "false",
+          right: "#apitoken",
+        })
+      )
+    );
   });

@@ -62,14 +62,22 @@ export const fee: StdFee = {
   // granter: "ixo1n8yrmeatsk74dw0zs95ess9sgzptd6thgjgcj2",
 };
 
-export const getFee = (trxLength = 1): StdFee => ({
-  amount: [
-    {
-      denom: "uixo",
-      amount: (trxLength * 10000).toString(),
-    },
-  ],
-  gas: (trxLength * 500000).toString(),
-  // if wana do transactions using feegrant granter address
-  // granter: "ixo1n8yrmeatsk74dw0zs95ess9sgzptd6thgjgcj2",
-});
+export const getFee = (
+  trxLength = 1,
+  simGas?: number
+): number | StdFee | "auto" => {
+  if (simGas && simGas > 50000) return "auto";
+  // console.log("getFee simGas too low: ", simGas);
+
+  return {
+    amount: [
+      {
+        denom: "uixo",
+        amount: (trxLength * 30000).toString(),
+      },
+    ],
+    gas: (trxLength * 500000).toString(),
+    // if wana do transactions using feegrant granter address
+    // granter: "ixo1n8yrmeatsk74dw0zs95ess9sgzptd6thgjgcj2",
+  };
+};

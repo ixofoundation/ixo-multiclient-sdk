@@ -1,5 +1,9 @@
 import { OfflineSigner } from "@cosmjs/proto-signing";
-import { assertIsDeliverTxSuccess, DeliverTxResponse } from "@cosmjs/stargate";
+import {
+  assertIsDeliverTxSuccess,
+  DeliverTxResponse,
+  GasPrice,
+} from "@cosmjs/stargate";
 import axios from "axios";
 import base58 from "bs58";
 import store from "store";
@@ -118,7 +122,7 @@ export const createClient = async (
     RPC_URL,
     offlineWallet as OfflineSigner,
     ignoreGetSequence,
-    undefined,
+    { gasPrice: GasPrice.fromString("0.025uixo") },
     {
       getLocalData: (k) => store.get(k),
       setLocalData: (k, d) => store.set(k, d),

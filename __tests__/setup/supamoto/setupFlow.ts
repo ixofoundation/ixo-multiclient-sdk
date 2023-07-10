@@ -2,6 +2,7 @@ import {
   chunkArray,
   customQueries,
   getFileFromPath,
+  saveFileToPath,
   testMsg,
   utils,
 } from "../../helpers/common";
@@ -17,7 +18,7 @@ export const cookstovesFlow = () =>
     setAndLedgerUser(process.env.ROOT_ECS!);
 
     // Create a batch of Asset entities for the individual Supamoto assets
-    let assetsFailed: number[] = [];
+    let assetsFailed: any[] = [];
     let assetInstanceDids: { id: number; did: string }[] = [];
     let index = 1;
 
@@ -39,7 +40,7 @@ export const cookstovesFlow = () =>
               );
               file["credential"]["credentialSubject"][
                 "id"
-              ] = `https://registry.emerging.eco/device/?id=${id}`;
+              ] = `https://app.emerging.eco/devices/${id}`;
 
               // Create Credential, ecs must issue cert for each asset, so ecs creds worker
               const resCreds = await axios.post(
@@ -86,7 +87,7 @@ export const cookstovesFlow = () =>
               assetInstanceDids.push({ id: id, did: nftAssetDid });
               return "res" as any;
             } catch (error) {
-              assetsFailed.push(id);
+              assetsFailed.push({ id });
               throw new Error(error);
             }
           }
@@ -94,10 +95,13 @@ export const cookstovesFlow = () =>
       );
 
     test("Logging all nft assets created", async () => {
-      console.log("Logging assetInstanceDids that was successfully created:");
-      console.dir(assetInstanceDids, { depth: null });
-      console.log("Logging cookstove ids that failed upload:");
-      console.dir(assetsFailed, { depth: null });
+      console.log(
+        "Create file to save assetInstanceDids that was successfully and failed"
+      );
+      saveFileToPath(
+        ["documents", "emerging", "cookstoves_dids.json"],
+        JSON.stringify({ assetInstanceDids, assetsFailed }, null, 2)
+      );
       expect(true).toBeTruthy();
     });
   });
@@ -143,7 +147,7 @@ export const cookstovesFlowDevnet = () =>
 
     test("Logging all nft assets created", async () => {
       console.log("Logging cookstove ids that failed upload:");
-      console.log(assetsFailed);
+      console.dir(assetsFailed, { depth: null });
       expect(true).toBeTruthy();
     });
   });

@@ -1,1 +1,1175 @@
-[]
+[
+  [
+    {
+      "device_id": "310017571",
+      "telco_transaction_id": "3092780397",
+      "telco": "mtn",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-06-22T14:44:33.000Z",
+      "fuelPurchaseClaimId": "bafkreiaf7a3e6grndmyxfu5ewh5o2c2dyjdwtnmorujt7ynuxtbndqwnga"
+    },
+    {
+      "device_id": "310017571",
+      "telco_transaction_id": "MP220722.1304.H79135",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-07-22T13:04:00.000Z",
+      "fuelPurchaseClaimId": "bafkreidjvxyttotu6veqepyiidnkb454cn5j6j36ffq6bylqqho7sw4eiq"
+    },
+    {
+      "device_id": "310017571",
+      "telco_transaction_id": "MP220829.1145.G65773",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-08-29T11:45:00.000Z",
+      "fuelPurchaseClaimId": "bafkreiabgpujla2lsn677y6mzmg2g7cv22j7fxyiwy5wrtysfduzdbjhf4"
+    },
+    {
+      "device_id": "310017571",
+      "telco_transaction_id": "MP221006.1520.L45505",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-10-06T15:20:00.000Z",
+      "fuelPurchaseClaimId": "bafkreic7tm7xhwzymsckuv2cpeu3l474wobmxgvczo77edcpufkwmtynoq"
+    },
+    {
+      "device_id": "310017571",
+      "telco_transaction_id": "MP221107.1834.I20223",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-11-07T18:34:00.000Z",
+      "fuelPurchaseClaimId": "bafkreifx2lipj7ks7gejmdrbnykxlx67qnvfoyt4s2rgugqaa2vvhxosym"
+    },
+    {
+      "device_id": "310017571",
+      "telco_transaction_id": "MP221212.1132.J53012",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-12-12T11:32:00.000Z",
+      "fuelPurchaseClaimId": "bafkreicg6cizmibhggqrob4thskkce66dorltprkcqvhrgf3thyvu72dfi"
+    },
+    {
+      "device_id": "310017571",
+      "telco_transaction_id": "MP230113.1917.N01081",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-01-13T19:17:00.000Z",
+      "fuelPurchaseClaimId": "bafkreieuxjvd2peek6xuhj7pdmlutzpkstjgfvnzez3vuy64tgs5lssw7e"
+    },
+    {
+      "device_id": "310017571",
+      "telco_transaction_id": "MP230213.1702.N37384",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-02-13T17:02:00.000Z",
+      "fuelPurchaseClaimId": "bafkreifnpavg3zlufo7suaqapwqgrd3lveenysnr5vmmqaxtyni5uvtuoa"
+    },
+    {
+      "device_id": "310017571",
+      "telco_transaction_id": "MP230307.0620.I24852",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-03-07T06:20:00.000Z",
+      "fuelPurchaseClaimId": "bafkreigxl3lwyoz2qkafh4szyzrcqpeszjmccf5i5khu5ju5b4mrhu2o4a"
+    },
+    {
+      "device_id": "310017571",
+      "telco_transaction_id": "MP230411.1237.N57465",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-04-11T12:37:00.000Z",
+      "fuelPurchaseClaimId": "bafkreihofyeseg2qugykdbwwbnwulvnnxy4kjbel7c5mqinlij3htmnz34"
+    }
+  ],
+  [
+    {
+      "device_id": "310017700",
+      "telco_transaction_id": "2991445884",
+      "telco": "mtn",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-05-10T10:32:13.000Z",
+      "fuelPurchaseClaimId": "bafkreigsklc3mfpj2oabuaz7nnyswxqflgg4n3s6hbbgist64rvhmjf55m"
+    },
+    {
+      "device_id": "310017700",
+      "telco_transaction_id": "3057177553",
+      "telco": "mtn",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-06-07T14:13:23.000Z",
+      "fuelPurchaseClaimId": "bafkreicqgrdxirgmlwzyu3vceath2iymj6d7e6uyzff6j5yxlvzwsnv7ta"
+    },
+    {
+      "device_id": "310017700",
+      "telco_transaction_id": "3141705035",
+      "telco": "mtn",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-07-11T09:12:53.000Z",
+      "fuelPurchaseClaimId": "bafkreiarexhpfmhq5weo6acgx5o5a6jjvobeowmffucdvzhrr5jlfeuy6i"
+    },
+    {
+      "device_id": "310017700",
+      "telco_transaction_id": "MP220822.1808.K00875",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-08-22T18:08:00.000Z",
+      "fuelPurchaseClaimId": "bafkreibopwdfvfffonouugghkocvqlg5ecofv7ihq4cpmbfwey5w62fybu"
+    },
+    {
+      "device_id": "310017700",
+      "telco_transaction_id": "MP221010.1240.K19766",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-10-10T12:40:00.000Z",
+      "fuelPurchaseClaimId": "bafkreignz5jo62uanbtqjfgdos3mpdgnzi4txv2vwrflclzi3rliahjhwa"
+    },
+    {
+      "device_id": "310017700",
+      "telco_transaction_id": "MP230110.1659.I03768",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-01-10T16:59:00.000Z",
+      "fuelPurchaseClaimId": "bafkreiheggx45dhtb3escwpglfj2dl2thiqiofqaccg3qeai4ml3vqelru"
+    },
+    {
+      "device_id": "310017700",
+      "telco_transaction_id": "3805866070",
+      "telco": "mtn",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-02-13T13:10:32.192Z",
+      "fuelPurchaseClaimId": "bafkreidgdhnmtfqj2f4mbmrtrytzmwxtif4igkavqwldyleghjklvvqiim"
+    },
+    {
+      "device_id": "310017700",
+      "telco_transaction_id": "3882496745",
+      "telco": "mtn",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-03-09T11:51:12.200Z",
+      "fuelPurchaseClaimId": "bafkreidqpj5fuu5eccihvxvwix3qvfy6r2vxwkukbdp26mj7hqdvaiujxa"
+    }
+  ],
+  [
+    {
+      "device_id": "310017865",
+      "telco_transaction_id": "MP220506.1421.G38200",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-05-06T14:21:00.000Z",
+      "fuelPurchaseClaimId": "bafkreiepphif7m4bzsqcyr3nmuzqxc6onj6bwan7sftbjiizpqhodp4jde"
+    },
+    {
+      "device_id": "310017865",
+      "telco_transaction_id": "MP220606.1101.H21223",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-06-06T11:01:00.000Z",
+      "fuelPurchaseClaimId": "bafkreifww6ggxjl33hr75dakwj2nzls25ny6oyv7dpskt6zzldr25buswe"
+    },
+    {
+      "device_id": "310017865",
+      "telco_transaction_id": "MP220714.1251.J17634",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-07-14T12:51:00.000Z",
+      "fuelPurchaseClaimId": "bafkreiegcqxp3zpnehby6qntgp7gdeko76rglhljlszlij5e2lj6eevlkm"
+    },
+    {
+      "device_id": "310017865",
+      "telco_transaction_id": "MP220804.1224.I23831",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-08-04T12:24:00.000Z",
+      "fuelPurchaseClaimId": "bafkreianqbtm3ifjykqjestlehse64yoioif7k62juf4a3m5hk4holw6we"
+    },
+    {
+      "device_id": "310017865",
+      "telco_transaction_id": "MP220906.1522.J34323",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-09-06T15:22:00.000Z",
+      "fuelPurchaseClaimId": "bafkreieep6qghjzrmde22yku4xjb6icnza5d5yq4jbv6jchbw7a6jqgnoq"
+    },
+    {
+      "device_id": "310017865",
+      "telco_transaction_id": "MP221004.1332.K62576",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-10-04T13:32:00.000Z",
+      "fuelPurchaseClaimId": "bafkreih4hjx5deiehnsy5e32xdr7wil5u2bpxxpvposuoyamkkf54elbsq"
+    },
+    {
+      "device_id": "310017865",
+      "telco_transaction_id": "MP221103.1328.I45563",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-11-03T13:28:00.000Z",
+      "fuelPurchaseClaimId": "bafkreicxbex6fdjduezocgdljkbf5ux5vuksepmpl3i5wys4opvxdx2dai"
+    },
+    {
+      "device_id": "310017865",
+      "telco_transaction_id": "MP221206.1741.I36759",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-12-06T17:41:00.000Z",
+      "fuelPurchaseClaimId": "bafkreigqxguqmkixh5uww3xasvmlefcuwi3naxrlknha43s6fs5u3glmwu"
+    },
+    {
+      "device_id": "310017865",
+      "telco_transaction_id": "MP230214.1607.N33349",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-02-14T16:07:00.000Z",
+      "fuelPurchaseClaimId": "bafkreig2nth5y6nnuq3g5nty7ib5lekt52apfycxtfwny6dbw3xc5z5d6a"
+    }
+  ],
+  [
+    {
+      "device_id": "310017935",
+      "telco_transaction_id": "MP220513.1451.G08262",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-05-13T14:51:00.000Z",
+      "fuelPurchaseClaimId": "bafkreicxxztvrx7x7v7qtcf3xwupsh2a4cewmgm4i25ikwd7k5gsgemfuq"
+    },
+    {
+      "device_id": "310017935",
+      "telco_transaction_id": "MP220613.1446.H20183",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-06-13T14:46:00.000Z",
+      "fuelPurchaseClaimId": "bafkreihdv7c577ullgrzzcvjg243qow7cusgwdrwzxzwjzablrbvjvimmi"
+    },
+    {
+      "device_id": "310017935",
+      "telco_transaction_id": "MP220715.1437.J81124",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-07-15T14:37:00.000Z",
+      "fuelPurchaseClaimId": "bafkreigspfgq4pbmvllbkjx5u2qzkf2zwzftlelat4vuunmtqj5czhzdmy"
+    },
+    {
+      "device_id": "310017935",
+      "telco_transaction_id": "MP220815.1044.G46447",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-08-15T10:44:00.000Z",
+      "fuelPurchaseClaimId": "bafkreidxob3xdbztbpvc3zzmtozqcseowouflhbsgxwm2thcqbu3c7vouq"
+    },
+    {
+      "device_id": "310017935",
+      "telco_transaction_id": "MP221012.1021.G88622",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-10-12T10:21:00.000Z",
+      "fuelPurchaseClaimId": "bafkreieiwtzm5n4di3k653fdpm6x2gxbcuv7s2pq2dbljaxv3q5wyqijbe"
+    },
+    {
+      "device_id": "310017935",
+      "telco_transaction_id": "MP221212.1453.J62747",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-12-12T14:53:00.000Z",
+      "fuelPurchaseClaimId": "bafkreif25cc66d2j5nlklw7nrz3aerwyiihsf3ddqm5ssu3sn2xspfnaym"
+    },
+    {
+      "device_id": "310017935",
+      "telco_transaction_id": "MP230112.1235.H18412",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-01-12T12:35:00.000Z",
+      "fuelPurchaseClaimId": "bafkreiaawocfwdc2cqgfwpqrjrg6hvdta5apcatxkfoxem6vwfjzq5tjpi"
+    },
+    {
+      "device_id": "310017935",
+      "telco_transaction_id": "MP230213.1317.J22684",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-02-13T13:17:00.000Z",
+      "fuelPurchaseClaimId": "bafkreieiod6tedkbmcs4qspatenufdt5jutpcbj4gjknryzupeqdxfscii"
+    },
+    {
+      "device_id": "310017935",
+      "telco_transaction_id": "MP230424.1254.K87683",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-04-24T12:54:00.000Z",
+      "fuelPurchaseClaimId": "bafkreias3q3cmrmrvwxq5a4fz4c6nhdy6x4oodvia4ri3q4e5rtlcny664"
+    }
+  ],
+  [
+    {
+      "device_id": "310018042",
+      "telco_transaction_id": "3110189349",
+      "telco": "mtn",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-06-29T11:26:33.000Z",
+      "fuelPurchaseClaimId": "bafkreigew5tq3vfw27jtg7da5vgdldmbqgaizy7krcisbcmamsbovhsnou"
+    },
+    {
+      "device_id": "310018042",
+      "telco_transaction_id": "MP220802.1026.L27963",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-08-02T10:26:00.000Z",
+      "fuelPurchaseClaimId": "bafkreihylrblgyxouiqaj4kwizwixfugfhumlwcuyyf5rtl22us2e3axze"
+    },
+    {
+      "device_id": "310018042",
+      "telco_transaction_id": "MP220901.1315.H21493",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-09-01T13:15:00.000Z",
+      "fuelPurchaseClaimId": "bafkreibwjmsk7hxy3soozvebxmcvcsutsb4aerievvprnru7dprpccis34"
+    },
+    {
+      "device_id": "310018042",
+      "telco_transaction_id": "MP221004.1429.K66174",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-10-04T14:29:00.000Z",
+      "fuelPurchaseClaimId": "bafkreiholt6rrqyqm4xloxbu43xqdqpuvnn47yq7y4tvacvowaezzorr74"
+    },
+    {
+      "device_id": "310018042",
+      "telco_transaction_id": "MP221031.0933.K25986",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-10-31T09:33:00.000Z",
+      "fuelPurchaseClaimId": "bafkreihy43luq6rrna4k2mboizd24qnqfwu2kj6waaz44rm2oii2odrq4a"
+    },
+    {
+      "device_id": "310018042",
+      "telco_transaction_id": "MP221201.1453.I00719",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-12-01T14:53:00.000Z",
+      "fuelPurchaseClaimId": "bafkreigrklxjp3rx4czwejooa74qf42qumdszrbsqpduvgalohzsmsouoq"
+    },
+    {
+      "device_id": "310018042",
+      "telco_transaction_id": "MP221231.1211.M24461",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-12-31T12:11:00.000Z",
+      "fuelPurchaseClaimId": "bafkreiczcb6646w2nuie77zmog5y7di77j35wkzjeho2u5jhlmcwcuwou4"
+    },
+    {
+      "device_id": "310018042",
+      "telco_transaction_id": "MP230203.1334.M93186",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-02-03T13:34:00.000Z",
+      "fuelPurchaseClaimId": "bafkreih5y2dvqp6h55qxyswkpml2ushhmu3ieelkkz3l4hcftnghyrsw7a"
+    },
+    {
+      "device_id": "310018042",
+      "telco_transaction_id": "MP230303.1741.J75423",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-03-03T17:41:00.000Z",
+      "fuelPurchaseClaimId": "bafkreigk2iulncqnjchhcb6ml5oeabh2uh5odoruhsz4cvasytjoa5deiq"
+    },
+    {
+      "device_id": "310018042",
+      "telco_transaction_id": "MP230403.2208.H09974",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-04-03T22:08:00.000Z",
+      "fuelPurchaseClaimId": "bafkreif2rf3fn4ryxhtyvwewlxhgp4ahszqlgsqqcsfrabv6n325br7rsi"
+    }
+  ],
+  [
+    {
+      "device_id": "310018331",
+      "telco_transaction_id": "MP220516.1502.K59372",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-05-16T15:02:00.000Z",
+      "fuelPurchaseClaimId": "bafkreifcmnxhrxkofawskjbbq5yc6urpegdfajontntpnp35qoqllnudxu"
+    },
+    {
+      "device_id": "310018331",
+      "telco_transaction_id": "MP220613.1328.L15347",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-06-13T13:28:00.000Z",
+      "fuelPurchaseClaimId": "bafkreigqd4ypeifjd2lnvu5yjmln473iryfcakwpvlmmksk4sue2eatroi"
+    },
+    {
+      "device_id": "310018331",
+      "telco_transaction_id": "MP220716.0919.I09764",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-07-16T09:19:00.000Z",
+      "fuelPurchaseClaimId": "bafkreiblm2h77t4vzip7ovzc3vzpaye5camocjrjcedai4sfvuissvcx5a"
+    },
+    {
+      "device_id": "310018331",
+      "telco_transaction_id": "3241089982",
+      "telco": "mtn",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-08-14T20:00:19.000Z",
+      "fuelPurchaseClaimId": "bafkreihw43gebafev2xnfptqfd6wiglfnup2yohrccsqy3yyqy6cckzgq4"
+    },
+    {
+      "device_id": "310018331",
+      "telco_transaction_id": "MP220916.1033.K78596",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-09-16T10:33:00.000Z",
+      "fuelPurchaseClaimId": "bafkreieul54tnngfepodft4qrhfxrovrhwvlitq5gewvyudbo4iww5gpwu"
+    },
+    {
+      "device_id": "310018331",
+      "telco_transaction_id": "MP220923.0727.L89698",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-09-23T07:27:00.000Z",
+      "fuelPurchaseClaimId": "bafkreiapwoslitwez3xgjfcxfvxncoq6vkef7rnaovw5zkzwkl4o6dr7fy"
+    },
+    {
+      "device_id": "310018331",
+      "telco_transaction_id": "MP221015.1000.G13871",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-10-15T10:00:00.000Z",
+      "fuelPurchaseClaimId": "bafkreiaa4t2g66xfzkryvrrr3nbpwehoo3nv6dtg6envzw3lp75pjtdqvu"
+    },
+    {
+      "device_id": "310018331",
+      "telco_transaction_id": "MP221119.0835.N52908",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-11-19T08:35:00.000Z",
+      "fuelPurchaseClaimId": "bafkreicivmppzc6llpyargktjqfx24dvisuxbk7otsqlpfxwxtwcd3ns4i"
+    },
+    {
+      "device_id": "310018331",
+      "telco_transaction_id": "MP221217.1934.L02405",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-12-17T19:34:00.000Z",
+      "fuelPurchaseClaimId": "bafkreifd3bfakvlwfnumvmxwxgego7crhkkei2om7kf5d46337aagwy6tm"
+    },
+    {
+      "device_id": "310018331",
+      "telco_transaction_id": "MP221222.1328.K79083",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-12-22T13:28:00.000Z",
+      "fuelPurchaseClaimId": "bafkreieu5mrbvy5gvp6uh24i6yj4hr33dn3kjxjx72hg2m3xru6qb43die"
+    },
+    {
+      "device_id": "310018331",
+      "telco_transaction_id": "MP230121.1002.L30232",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-01-21T10:02:00.000Z",
+      "fuelPurchaseClaimId": "bafkreigjgkib25iupx3htk7afr2ch5xudbht4j6ib2owxxjdcydpcnv64y"
+    },
+    {
+      "device_id": "310018331",
+      "telco_transaction_id": "MP230220.1734.H50364",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-02-20T17:34:00.000Z",
+      "fuelPurchaseClaimId": "bafkreic24ustqkhcgi6ztboa6kodixj5k67hsr5saqcicsotlqobrdjmie"
+    },
+    {
+      "device_id": "310018331",
+      "telco_transaction_id": "MP230301.1531.I71357",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-03-01T15:31:00.000Z",
+      "fuelPurchaseClaimId": "bafkreiezckwjd4e7zvi64cakcwc2nhdrwea2mxaq5aouiwnzkf43arboba"
+    },
+    {
+      "device_id": "310018331",
+      "telco_transaction_id": "MP230404.1657.M75136",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-04-04T16:57:00.000Z",
+      "fuelPurchaseClaimId": "bafkreigvcrgcsfacmv3mwxiuzjdy4a226edtkcvw6doansgyrcrkdvjec4"
+    },
+    {
+      "device_id": "310018331",
+      "telco_transaction_id": "MP230411.1228.G56203",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-04-11T12:28:00.000Z",
+      "fuelPurchaseClaimId": "bafkreig6pjvrlbr6no6lzlajrnnzoo44hjfbhbhf57luv53bczdwif7fhu"
+    }
+  ],
+  [
+    {
+      "device_id": "310019032",
+      "telco_transaction_id": "MP220723.1632.I56188",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-07-23T16:32:00.000Z",
+      "fuelPurchaseClaimId": "bafkreihadcc4akb426zvcksuf2v6nzmkdzvfx347tkwgqunnxep3zhnm7u"
+    },
+    {
+      "device_id": "310019032",
+      "telco_transaction_id": "MP220816.1751.I30989",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-08-16T17:51:00.000Z",
+      "fuelPurchaseClaimId": "bafkreihzdorsl2hlefsfes5cugk4os5qfn7r42ah5mnzxx7c5e6jzi63om"
+    },
+    {
+      "device_id": "310019032",
+      "telco_transaction_id": "MP220930.1818.G20860",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-09-30T18:18:00.000Z"
+    },
+    {
+      "device_id": "310019032",
+      "telco_transaction_id": "MP221124.0941.K36748",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-11-24T09:41:00.000Z"
+    },
+    {
+      "device_id": "310019032",
+      "telco_transaction_id": "MP221227.1538.L03704",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-12-27T15:38:00.000Z"
+    },
+    {
+      "device_id": "310019032",
+      "telco_transaction_id": "MP230116.1506.N24878",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-01-16T15:06:00.000Z"
+    },
+    {
+      "device_id": "310019032",
+      "telco_transaction_id": "MP230210.1453.H96570",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-02-10T14:53:00.000Z"
+    },
+    {
+      "device_id": "310019032",
+      "telco_transaction_id": "MP230309.1144.K88670",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-03-09T11:44:00.000Z"
+    }
+  ],
+  [
+    {
+      "device_id": "310019080",
+      "telco_transaction_id": "3106821790",
+      "telco": "mtn",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-06-28T07:37:43.000Z"
+    },
+    {
+      "device_id": "310019080",
+      "telco_transaction_id": "MP220728.1200.I44036",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-07-28T12:00:00.000Z"
+    },
+    {
+      "device_id": "310019080",
+      "telco_transaction_id": "MP220815.1705.J62690",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-08-15T17:05:00.000Z"
+    },
+    {
+      "device_id": "310019080",
+      "telco_transaction_id": "MP220915.1606.L37301",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-09-15T16:06:00.000Z"
+    },
+    {
+      "device_id": "310019080",
+      "telco_transaction_id": "MP221026.1149.G46773",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-10-26T11:49:00.000Z"
+    },
+    {
+      "device_id": "310019080",
+      "telco_transaction_id": "MP221123.1726.J85772",
+      "telco": "airtel",
+      "amount": "60.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "20",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-11-23T17:26:00.000Z"
+    },
+    {
+      "device_id": "310019080",
+      "telco_transaction_id": "MP221206.1724.L33757",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-12-06T17:24:00.000Z"
+    },
+    {
+      "device_id": "310019080",
+      "telco_transaction_id": "MP221220.1416.H74967",
+      "telco": "airtel",
+      "amount": "140.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "20",
+      "pellet_bag_quantity": "2",
+      "time_paid": "2022-12-20T14:16:00.000Z"
+    },
+    {
+      "device_id": "310019080",
+      "telco_transaction_id": "MP230111.1319.J52211",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-01-11T13:19:00.000Z"
+    },
+    {
+      "device_id": "310019080",
+      "telco_transaction_id": "MP230131.1055.I55443",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-01-31T10:55:00.000Z"
+    },
+    {
+      "device_id": "310019080",
+      "telco_transaction_id": "MP230217.1044.N11634",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-02-17T10:44:00.000Z"
+    },
+    {
+      "device_id": "310019080",
+      "telco_transaction_id": "MP230217.1050.L11468",
+      "telco": "airtel",
+      "amount": "70.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "20",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-02-17T10:50:00.000Z"
+    },
+    {
+      "device_id": "310019080",
+      "telco_transaction_id": "MP230328.1513.M38580",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-03-28T15:13:00.000Z"
+    }
+  ],
+  [
+    {
+      "device_id": "310019810",
+      "telco_transaction_id": "MP220527.1725.I28044",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-05-27T17:25:00.000Z"
+    },
+    {
+      "device_id": "310019810",
+      "telco_transaction_id": "MP220622.2112.J36731",
+      "telco": "airtel",
+      "amount": "260.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-06-22T21:12:00.000Z"
+    },
+    {
+      "device_id": "310019810",
+      "telco_transaction_id": "MP220710.2145.I01843",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-07-10T21:45:00.000Z"
+    },
+    {
+      "device_id": "310019810",
+      "telco_transaction_id": "MP220903.1413.J89003",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-09-03T14:13:00.000Z"
+    },
+    {
+      "device_id": "310019810",
+      "telco_transaction_id": "MP221006.2007.G34852",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-10-06T20:07:00.000Z"
+    },
+    {
+      "device_id": "310019810",
+      "telco_transaction_id": "MP221117.1009.I03476",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-11-17T10:09:00.000Z"
+    },
+    {
+      "device_id": "310019810",
+      "telco_transaction_id": "MP230106.0906.H40017",
+      "telco": "airtel",
+      "amount": "260.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "2",
+      "time_paid": "2023-01-06T09:06:00.000Z"
+    },
+    {
+      "device_id": "310019810",
+      "telco_transaction_id": "MP230414.1151.G80448",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-04-14T11:51:00.000Z"
+    }
+  ],
+  [
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP220510.1640.J77366",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-05-10T16:40:00.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP220606.1602.J19788",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-06-06T16:02:00.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "3071664630",
+      "telco": "mtn",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-06-13T15:37:13.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "3130194251",
+      "telco": "mtn",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-07-06T15:07:43.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP220723.1900.K63953",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-07-23T19:00:00.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP220806.1339.K87559",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-08-06T13:39:00.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP220823.1657.H61127",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-08-23T16:57:00.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP220909.1632.J01423",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-09-09T16:32:00.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP221010.1226.I19235",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-10-10T12:26:00.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP221025.1408.J91107",
+      "telco": "airtel",
+      "amount": "60.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "20",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-10-25T14:08:00.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP221104.1729.L75845",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-11-04T17:29:00.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP221123.1328.I66370",
+      "telco": "airtel",
+      "amount": "260.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "2",
+      "time_paid": "2022-11-23T13:28:00.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "3605100021",
+      "telco": "mtn",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2022-12-10T11:15:32.186Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP230109.1350.G26676",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-01-09T13:50:00.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP230201.1715.K69341",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-02-01T17:15:00.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP230210.1435.M91648",
+      "telco": "airtel",
+      "amount": "260.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "2",
+      "time_paid": "2023-02-10T14:35:00.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP230303.1251.K47050",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-03-03T12:51:00.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP230320.1540.M06826",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-03-20T15:40:00.000Z"
+    },
+    {
+      "device_id": "310020612",
+      "telco_transaction_id": "MP230403.1103.H53144",
+      "telco": "airtel",
+      "amount": "130.00",
+      "currency": "ZMW",
+      "pellet_bag_size": "30",
+      "pellet_bag_quantity": "1",
+      "time_paid": "2023-04-03T11:03:00.000Z"
+    }
+  ]
+]

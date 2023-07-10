@@ -49,8 +49,8 @@ export const setup_dao_constants = () => ({
         description: "Profile",
         mediaType: "application/ld+json",
         serviceEndpoint:
-          "ipfs:bafkreic66azea22jtjfhsn2qd4cq52pyu7ct5aijqeoq23ne6z5ag6qh4i",
-        proof: "bafkreic66azea22jtjfhsn2qd4cq52pyu7ct5aijqeoq23ne6z5ag6qh4i",
+          "ipfs:bafkreihefbnfysdc6i5lgpr725klialmqxt7y2opl5fqylh3a7k7sjoyly",
+        proof: "bafkreihefbnfysdc6i5lgpr725klialmqxt7y2opl5fqylh3a7k7sjoyly",
         encrypted: "false",
         right: "",
       },

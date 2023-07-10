@@ -1,3 +1,4 @@
+import { MsgUpdateEntity } from "../../src/codegen/ixo/entity/v1beta1/tx";
 import {
   createAgentIidContext,
   createIidVerificationMethods,
@@ -102,7 +103,7 @@ export const CreateEntityAssetSupamotoInstance = async (
           type: "WebDashboard",
           description: "SupaMoto Dashboard",
           mediaType: "application/html",
-          serviceEndpoint: `emerging:/collection/?id=${entity.deviceId}`,
+          serviceEndpoint: `emerging:/devices/${entity.deviceId}`,
           proof: "",
           encrypted: "false",
           right: "#apitoken",
@@ -137,7 +138,8 @@ export const CreateEntityAssetSupamotoInstance = async (
 
 export const TransferEntity = async (
   signer: WalletUsers = WalletUsers.tester,
-  entityDid: string
+  entityDid: string,
+  recipientDid?: string
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -154,27 +156,32 @@ export const TransferEntity = async (
       id: entityDid,
       ownerDid: did,
       ownerAddress: myAddress,
-      recipientDid: alice.did,
+      recipientDid: recipientDid || alice.did,
     }),
   };
 
+  console.log({ myAddress });
   const response = await client.signAndBroadcast(myAddress, [message], fee);
   return response;
 };
 
-export const UpdateEntity = async () => {
+export const UpdateEntity = async (data?: MsgUpdateEntity) => {
   const client = await createClient();
 
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const userDid = tester.did;
 
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgUpdateEntity",
     value: ixo.entity.v1beta1.MsgUpdateEntity.fromPartial({
-      entityStatus: 1,
-      controllerDid: did,
+      id: data?.id || userDid,
+      entityStatus: data?.entityStatus || 0,
+      startDate: data?.startDate || undefined,
+      endDate: data?.endDate || undefined,
+      credentials: data?.credentials || undefined,
+      controllerDid: userDid,
       controllerAddress: myAddress,
     }),
   };
