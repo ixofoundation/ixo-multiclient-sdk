@@ -178,6 +178,8 @@ export const devnetProposals = () =>
 // ------------------------------------------------------------
 export const cwUploadProposal = () =>
   describe("Testing the gov module", () => {
+    let proposalId: number;
+
     testMsg(
       "/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract",
       async () => {
@@ -187,7 +189,7 @@ export const cwUploadProposal = () =>
           "custom",
           `${name}.wasm`,
         ]);
-        const proposalId = utils.common.getValueFromEvents(
+        proposalId = utils.common.getValueFromEvents(
           res,
           "submit_proposal",
           "proposal_id"
@@ -196,4 +198,5 @@ export const cwUploadProposal = () =>
         return res;
       }
     );
+    testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(proposalId));
   });

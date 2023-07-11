@@ -45,7 +45,7 @@ generateBlockchainTestUsers();
 
 registerIids();
 instantiateModulesProposals();
-bankBasic();
+// bankBasic();
 // iidsBasic();
 // bondsBasic();
 // enititiesBasic();
