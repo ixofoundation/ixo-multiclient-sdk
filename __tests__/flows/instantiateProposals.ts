@@ -9,24 +9,24 @@ export const instantiateModulesProposals = () =>
     let proposalId: number;
 
     // to run all contracts proposals synchronously
-    // contracts.map((c, i) => [
-    //   testMsg(
-    //     `/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract ${
-    //       i + 1
-    //     } of ${contracts.length}`,
-    //     async () => {
-    //       const res = await Cosmos.MsgSubmitProposalStoreCW(c.name, c.path);
-    //       proposalId = utils.common.getValueFromEvents(
-    //         res,
-    //         "submit_proposal",
-    //         "proposal_id"
-    //       );
-    //       console.log({ proposalId });
-    //       return res;
-    //     }
-    //   ),
-    //   testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(proposalId)),
-    // ]);
+    contracts.map((c, i) => [
+      testMsg(
+        `/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract ${
+          i + 1
+        } of ${contracts.length}`,
+        async () => {
+          const res = await Cosmos.MsgSubmitProposalStoreCW(c.name, c.path);
+          proposalId = utils.common.getValueFromEvents(
+            res,
+            "submit_proposal",
+            "proposal_id"
+          );
+          console.log({ proposalId });
+          return res;
+        }
+      ),
+      testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(proposalId)),
+    ]);
 
     // NOTE: 721 and 1155 is in contract list above and follows the constants contract codes
     // Upload cw721 for entity module nfts
@@ -64,56 +64,58 @@ export const instantiateModulesProposals = () =>
     // );
     // testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(proposalId));
 
-    // test("timeout", async () => {
-    //   console.log(
-    //     "Waiting 90 second for previous proposal to pass (local chain)"
-    //   );
-    //   await timeout(90 * 1000);
-    //   expect(true).toBeTruthy();
-    // });
+    test("timeout", async () => {
+      console.log(
+        "Waiting 90 second for previous proposal to pass (local chain)"
+      );
+      await timeout(90 * 1000);
+      expect(true).toBeTruthy();
+    });
 
     let proposalIdUpdateEntityParams: number;
-    // testMsg(
-    //   "/cosmos.gov.v1beta1.MsgSubmitProposal update entity params",
-    //   async () => {
-    //     const res = await Cosmos.MsgSubmitProposalUpdateEntityParams(1);
-    //     proposalIdUpdateEntityParams = utils.common.getValueFromEvents(
-    //       res,
-    //       "submit_proposal",
-    //       "proposal_id"
-    //     );
-    //     console.log({ proposalIdUpdateEntityParams });
-    //     return res;
-    //   }
-    // );
-    testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(1));
+    testMsg(
+      "/cosmos.gov.v1beta1.MsgSubmitProposal update entity params",
+      async () => {
+        const res = await Cosmos.MsgSubmitProposalUpdateEntityParams(1);
+        proposalIdUpdateEntityParams = utils.common.getValueFromEvents(
+          res,
+          "submit_proposal",
+          "proposal_id"
+        );
+        console.log({ proposalIdUpdateEntityParams });
+        return res;
+      }
+    );
+    testMsg("/cosmos.gov.v1beta1.MsgVote", () =>
+      Cosmos.MsgVote(proposalIdUpdateEntityParams)
+    );
 
-    // let proposalIdUpdateTokenParams: number;
-    // testMsg(
-    //   "/cosmos.gov.v1beta1.MsgSubmitProposal update token params",
-    //   async () => {
-    //     const res = await Cosmos.MsgSubmitProposalUpdateTokenParams(2);
-    //     proposalIdUpdateTokenParams = utils.common.getValueFromEvents(
-    //       res,
-    //       "submit_proposal",
-    //       "proposal_id"
-    //     );
-    //     console.log({ proposalIdUpdateTokenParams });
-    //     return res;
-    //   }
-    // );
-    // testMsg("/cosmos.gov.v1beta1.MsgVote", () =>
-    //   Cosmos.MsgVote(proposalIdUpdateTokenParams)
-    // );
+    let proposalIdUpdateTokenParams: number;
+    testMsg(
+      "/cosmos.gov.v1beta1.MsgSubmitProposal update token params",
+      async () => {
+        const res = await Cosmos.MsgSubmitProposalUpdateTokenParams(2);
+        proposalIdUpdateTokenParams = utils.common.getValueFromEvents(
+          res,
+          "submit_proposal",
+          "proposal_id"
+        );
+        console.log({ proposalIdUpdateTokenParams });
+        return res;
+      }
+    );
+    testMsg("/cosmos.gov.v1beta1.MsgVote", () =>
+      Cosmos.MsgVote(proposalIdUpdateTokenParams)
+    );
 
-    // test("timeout", async () => {
-    //   console.log(
-    //     "Waiting 90 second for previous proposal to pass (local chain)"
-    //   );
-    //   await timeout(90 * 1000);
-    //   console.log("Entity and Token modules initiated, continue hacking away");
-    //   expect(true).toBeTruthy();
-    // });
+    test("timeout", async () => {
+      console.log(
+        "Waiting 90 second for previous proposal to pass (local chain)"
+      );
+      await timeout(90 * 1000);
+      console.log("Entity and Token modules initiated, continue hacking away");
+      expect(true).toBeTruthy();
+    });
   });
 
 // ------------------------------------------------------------
@@ -179,7 +181,7 @@ export const cwUploadProposal = () =>
     testMsg(
       "/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract",
       async () => {
-        const name = "wasmswap";
+        const name = "cw1155_base_lp";
         const res = await Cosmos.MsgSubmitProposalStoreCW(`custom ${name}`, [
           "contracts",
           "custom",

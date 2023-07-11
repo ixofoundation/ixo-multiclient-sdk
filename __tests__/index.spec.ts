@@ -43,13 +43,13 @@ beforeAll(() => {
 // To generate mapping of blockchain test users to sdk test users with set mnemonics
 generateBlockchainTestUsers();
 
-// registerIids();
-// instantiateModulesProposals();
-// bankBasic();
+registerIids();
+instantiateModulesProposals();
+bankBasic();
 // iidsBasic();
 // bondsBasic();
 // enititiesBasic();
-// tokenBasic();
+tokenBasic();
 // claimsBasic();
 // daoCore();
 // sendTokens();
