@@ -1,10 +1,7 @@
-import axios from "axios";
-
-import { keplrCurrencies } from "./currency.constants";
+import { coinCodexBaseUrl, keplrCurrencies } from "./currency.constants";
+import { fetchTokenHistory, fetchTokenInfo } from "./currency.utils";
 import { QueryClient } from "../queries";
 import {
-  CoinCodexCoinResponse,
-  CoinCodexHistoryResponse,
   IbcTokenAsset,
   TokenAsset,
   TokenAssetHistory,
@@ -108,35 +105,20 @@ export const findIbcTokensFromHashes = async (
 //   }, {});
 // };
 
-const coinCodexBaseUrl = "https://coincodex.com/api/coincodex";
-const coinCodexGetCoinUrl = coinCodexBaseUrl + "/get_coin";
-const coinCodexGetCoinHistoryUrl = coinCodexBaseUrl + "/get_coin_history";
-
-const fetchTokenInfo = async (
-  denom: string
-): Promise<CoinCodexCoinResponse | undefined> => {
-  try {
-    const url = `${coinCodexGetCoinUrl}/${denom}`;
-    const response = await axios.get(url);
-    if (response) return response.data as CoinCodexCoinResponse;
-    return undefined;
-  } catch (error) {
-    return undefined;
-  }
-};
 
 export const findTokenInfoFromDenom = (() => {
   const cache: { [denom: string]: TokenAssetInfo } = {};
 
   return async (
     denom: string,
-    cacheResult: boolean = true
+    cacheResult: boolean = true,
+    baseUrl: string = coinCodexBaseUrl
   ): Promise<TokenAssetInfo | undefined> => {
     if (!denom) return;
     const token = findTokenFromDenom(denom);
     if (cacheResult && (cache[denom] || cache[token?.coinCodexId]))
       return cache[denom] ?? cache[token?.coinCodexId];
-    let coinCodexTokenInfo = await fetchTokenInfo(token?.coinCodexId ?? denom);
+    let coinCodexTokenInfo = await fetchTokenInfo(token?.coinCodexId ?? denom, baseUrl);
     if (!coinCodexTokenInfo) return;
     const result = {
       symbol: coinCodexTokenInfo.symbol,
@@ -176,21 +158,6 @@ export const findTokensInfoFromDenoms = async (
   return results;
 };
 
-const fetchTokenHistory = async (
-  denom: string,
-  startDate: string,
-  endDate: string,
-  samples: number = 100
-): Promise<CoinCodexHistoryResponse | undefined> => {
-  try {
-    const url = `${coinCodexGetCoinHistoryUrl}/${denom}/${startDate}/${endDate}/${samples}`;
-    const response = await axios.get(url);
-    if (response) return response.data as CoinCodexHistoryResponse;
-    return undefined;
-  } catch (error) {
-    return undefined;
-  }
-};
 
 export const findTokenHistoryFromDenom = (() => {
   const cache: { [denom: string]: TokenAssetHistory } = {};
@@ -200,7 +167,8 @@ export const findTokenHistoryFromDenom = (() => {
     startDate: string,
     endDate: string,
     samples: number = 100,
-    cacheResult: boolean = true
+    cacheResult: boolean = true,
+    baseUrl: string = coinCodexBaseUrl
   ): Promise<TokenAssetHistory | undefined> => {
     if (!denom) return;
     const token = findTokenFromDenom(denom);
@@ -210,7 +178,8 @@ export const findTokenHistoryFromDenom = (() => {
       token?.coinCodexId ?? denom,
       startDate,
       endDate,
-      samples
+      samples,
+      baseUrl
     );
     if (!coinCodexTokenHistory) return;
     const result = (Object.values(coinCodexTokenHistory) ?? [[]])[0]?.map(

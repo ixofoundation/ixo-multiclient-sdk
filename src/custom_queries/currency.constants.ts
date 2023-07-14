@@ -1,3 +1,5 @@
+export const coinCodexBaseUrl = "https://coincodex.com"
+
 export const keplrCurrencies = {
   ubld: {
     coinDenom: "BLD",
