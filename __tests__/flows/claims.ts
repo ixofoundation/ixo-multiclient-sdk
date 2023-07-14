@@ -135,7 +135,8 @@ export const claimsBasic = () =>
       const res = await Claims.MsgExecWithdrawal(
         claimId,
         adminAccount,
-        ixo.claims.v1beta1.PaymentType.SUBMISSION
+        ixo.claims.v1beta1.PaymentType.SUBMISSION,
+        WalletUsers.tester
       );
       return res;
     });
@@ -166,98 +167,98 @@ export const supamotoClaims = () =>
       ])
     );
 
-    // if (chainNetwork === "devnet") {
-    //   // helper to send funds to an admin account
-    //   testMsg("test Bank Send to admin account", () =>
-    //     Cosmos.BankSendTrx(
-    //       100000000000,
-    //       WalletUsers.alice,
-    //       undefined,
-    //       undefined,
-    //       undefined,
-    //       adminEntityAccounts.assetCollection
-    //     )
-    //   );
-    //   // helper to send funds to carbon oracle assert user to make evaluations and mint tokens
-    //   testMsg("test Bank Send to carbon oracle assert user", () =>
-    //     Cosmos.BankSendTrx(1000000000, undefined, WalletUsers.charlie)
-    //   );
-    //   // helper to send funds to ecs assert user to make claims
-    //   testMsg("test Bank Send to ecs assert user", () =>
-    //     Cosmos.BankSendTrx(1000000000, undefined, WalletUsers.oracle)
-    //   );
-    // }
+    if (chainNetwork === "devnet") {
+      // helper to send funds to an admin account
+      testMsg("test Bank Send to admin account", () =>
+        Cosmos.BankSendTrx(
+          100000000000,
+          WalletUsers.alice,
+          undefined,
+          undefined,
+          undefined,
+          adminEntityAccounts.assetCollection
+        )
+      );
+      // helper to send funds to carbon oracle assert user to make evaluations and mint tokens
+      testMsg("test Bank Send to carbon oracle assert user", () =>
+        Cosmos.BankSendTrx(1000000000, undefined, WalletUsers.charlie)
+      );
+      // helper to send funds to ecs assert user to make claims
+      testMsg("test Bank Send to ecs assert user", () =>
+        Cosmos.BankSendTrx(1000000000, undefined, WalletUsers.oracle)
+      );
+    }
 
-    // let collectionId = "1";
-    // testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
-    //   // add wait according to chunk index for ipfs rate limit
-    //   console.log(
-    //     "waiting 5 mintues as blocksync needs 5 minutes to load all ipfs files for entity external Ids"
-    //   );
-    //   // await timeout(1000 * 60 * 5);
+    let collectionId = "1";
+    testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
+      // add wait according to chunk index for ipfs rate limit
+      console.log(
+        "waiting 5 mintues as blocksync needs 5 minutes to load all ipfs files for entity external Ids"
+      );
+      // await timeout(1000 * 60 * 5);
 
-    //   const res = await Claims.CreateCollectionSupamotoGenesis(
-    //     dids.assetCollection,
-    //     dids.cleanCookingProtocol,
-    //     adminEntityAccounts.assetCollection
-    //   );
-    //   collectionId = utils.common.getValueFromEvents(
-    //     res,
-    //     "ixo.claims.v1beta1.CollectionCreatedEvent",
-    //     "collection",
-    //     (c) => c.id
-    //   );
-    //   console.log({ collectionId });
-    //   return res;
-    // });
+      const res = await Claims.CreateCollectionSupamotoGenesis(
+        dids.assetCollection,
+        dids.cleanCookingProtocol,
+        adminEntityAccounts.assetCollection
+      );
+      collectionId = utils.common.getValueFromEvents(
+        res,
+        "ixo.claims.v1beta1.CollectionCreatedEvent",
+        "collection",
+        (c) => c.id
+      );
+      console.log({ collectionId });
+      return res;
+    });
 
-    // // ECS can submit claims
-    // testMsg("/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent submit", () =>
-    //   Claims.GrantEntityAccountClaimsSubmitAuthz(
-    //     dids.assetCollection,
-    //     "admin",
-    //     adminEntityAccounts.assetCollection,
-    //     collectionId,
-    //     999999999,
-    //     false,
-    //     WalletUsers.oracle
-    //   )
-    // );
+    // ECS can submit claims
+    testMsg("/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent submit", () =>
+      Claims.GrantEntityAccountClaimsSubmitAuthz(
+        dids.assetCollection,
+        "admin",
+        adminEntityAccounts.assetCollection,
+        collectionId,
+        999999999,
+        false,
+        WalletUsers.oracle
+      )
+    );
 
-    // // Prospect can evaluate
-    // testMsg(
-    //   "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent evaluate",
-    //   () =>
-    //     Claims.GrantEntityAccountClaimsEvaluateAuthzSupamoto(
-    //       dids.assetCollection,
-    //       "admin",
-    //       adminEntityAccounts.assetCollection,
-    //       collectionId,
-    //       [],
-    //       999999999,
-    //       false,
-    //       WalletUsers.bob
-    //     )
-    // );
+    // Prospect can evaluate
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent evaluate",
+      () =>
+        Claims.GrantEntityAccountClaimsEvaluateAuthzSupamoto(
+          dids.assetCollection,
+          "admin",
+          adminEntityAccounts.assetCollection,
+          collectionId,
+          [],
+          999999999,
+          false,
+          WalletUsers.bob
+        )
+    );
 
-    // // CARBON oracle can evaluate
-    // testMsg(
-    //   "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent evaluate",
-    //   () =>
-    //     Claims.GrantEntityAccountClaimsEvaluateAuthzSupamoto(
-    //       dids.assetCollection,
-    //       "admin",
-    //       adminEntityAccounts.assetCollection,
-    //       collectionId,
-    //       [],
-    //       999999999,
-    //       false,
-    //       WalletUsers.charlie
-    //     )
-    // );
+    // CARBON oracle can evaluate
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent evaluate",
+      () =>
+        Claims.GrantEntityAccountClaimsEvaluateAuthzSupamoto(
+          dids.assetCollection,
+          "admin",
+          adminEntityAccounts.assetCollection,
+          collectionId,
+          [],
+          999999999,
+          false,
+          WalletUsers.charlie
+        )
+    );
 
     let purchaseData: any;
-    test("Generate claims and mint tokens in batches", async () => {
+    test("Generate Fuel Purchase claims and evaluate them", async () => {
       purchaseData = await csvtojsonV2().fromFile(
         "./assets/documents/emerging/payments.csv"
       );
@@ -294,27 +295,16 @@ export const supamotoClaims = () =>
       purchaseData = chunkArray<any[]>(Object.values(purchaseData), 30);
       let stovePurchasesAll: any[] = [];
       let index = -1;
-      // console.dir(
-      //   {
-      //     length: purchaseData.length,
-      //     groups: purchaseData.map((p) => {
-      //       const devices = p.map((d) => d.length);
-      //       // return { devices, total: devices.reduce((a, b) => a + b, 0) };
-      //       return { total: devices.reduce((a, b) => a + b, 0) };
-      //     }),
-      //   },
-      //   { depth: null }
-      // );
 
       console.time("claims");
       for (const stovePurchases of purchaseData) {
         index++;
-        // if (index !== 0) continue; // if want to only mint a certain amount of batches add number here
+        // if (index !== 3) continue; // if want to only mint a certain amount of batches add number here
         console.log(
           "starting batch " + (index + 1) + " of " + purchaseData.length
         );
         // add wait for ipfs rate limit
-        if (index) await timeout(1000 * 20);
+        if (index) await timeout(1000 * 30);
 
         // create fuelPurchase claims for each purchase
         const fpClaims = await axios.post(
@@ -350,28 +340,28 @@ export const supamotoClaims = () =>
         );
 
         // evaluate fuelPurchase claims
-        const fpEvaluations = await axios.post(
-          ProspectCredentialsWorkerUrl + "claims/evaluate",
-          {
-            collectionId: "1",
-            evaluations: fpClaimIds.map((id) => ({
-              claimId: id,
-              reason: 1,
-              status: ixo.claims.v1beta1.EvaluationStatus.APPROVED,
-              oracle: dids.prospectOracle,
-              verificationProof: "proof",
-            })),
-          },
-          {
-            headers: {
-              Authorization: process.env.PROSPECT_CREDENTIAL_WORKER_AUTH,
-            },
-          }
-        );
-        assertIsDeliverTxSuccess(fpEvaluations.data);
-        console.log(
-          fpClaimIds.length + " FuelPurchase claims successfully evaluated"
-        );
+        // const fpEvaluations = await axios.post(
+        //   ProspectCredentialsWorkerUrl + "claims/evaluate",
+        //   {
+        //     collectionId: "1",
+        //     evaluations: fpClaimIds.map((id) => ({
+        //       claimId: id,
+        //       reason: 1,
+        //       status: ixo.claims.v1beta1.EvaluationStatus.APPROVED,
+        //       oracle: dids.prospectOracle,
+        //       verificationProof: "proof",
+        //     })),
+        //   },
+        //   {
+        //     headers: {
+        //       Authorization: process.env.PROSPECT_CREDENTIAL_WORKER_AUTH,
+        //     },
+        //   }
+        // );
+        // assertIsDeliverTxSuccess(fpEvaluations.data);
+        // console.log(
+        //   fpClaimIds.length + " FuelPurchase claims successfully evaluated"
+        // );
 
         // save fuelPurchase claim ids per purchase
         stovePurchases.forEach((ps: any[], i) => {

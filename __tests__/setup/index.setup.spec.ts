@@ -1,8 +1,10 @@
 require("dotenv").config();
 
 import { ChainNetwork } from "../../src/custom_queries/chain.types";
-import { sendTokens } from "../flows/cosmos";
-import { generateWallets } from "../helpers/common";
+import { bankBasic, sendTokens } from "../flows/cosmos";
+import { generateBlockchainTestUsers } from "../flows/iids";
+import { generateNewWallet, generateWallets } from "../helpers/common";
+import { WalletUsers } from "../helpers/constants";
 import { classesFlow } from "./classes/setupFlow";
 import { ecsDaoFlow, ecsFlow } from "./ecs/setupFlow";
 import {
@@ -19,6 +21,28 @@ import { web3Storage } from "./web3";
 export const chainNetwork: ChainNetwork = "devnet";
 
 beforeAll(() => generateWallets(false));
+
+// RUN BELOW IF USING LOCAL BLOCKCHAIN TO GIVE USERS FUNDS
+// generateBlockchainTestUsers();
+// [
+//   process.env.ROOT_IMPACTS,
+//   process.env.ROOT_EMERGING,
+//   process.env.ROOT_ECS,
+//   process.env.ROOT_PROSPECT,
+//   process.env.ASSERT_USER_ECS,
+//   process.env.ASSERT_USER_PROSPECT_ORACLE,
+//   process.env.ASSERT_USER_CARBON_ORACLE,
+//   process.env.ROOT_ED_EMERGING,
+//   process.env.ROOT_ED_ECS,
+//   process.env.ROOT_ED_PROSPECT,
+// ].map((did) => {
+//   if (did) {
+//     describe("Send funds to users", () => {
+//       beforeAll(() => generateNewWallet(WalletUsers.alice, did));
+//       bankBasic();
+//     });
+//   }
+// });
 
 // Setup flow for dao and group creations
 // ------------------------------------------

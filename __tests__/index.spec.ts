@@ -13,10 +13,17 @@ import {
   registerIidsDev,
   generateBlockchainTestUsers,
   iidAddEdKeys,
+  iidReplaceLinkedResource,
 } from "./flows/iids";
 import { enititiesBasic } from "./flows/entities";
 import { ibcBasic } from "./flows/ibc";
-import { bankBasic, authzBasic, sendTokens, govDeposit } from "./flows/cosmos";
+import {
+  bankBasic,
+  authzBasic,
+  sendTokens,
+  govDeposit,
+  feegrantBasic,
+} from "./flows/cosmos";
 import {
   instantiateModulesProposals,
   devnetProposals,
@@ -36,23 +43,25 @@ beforeAll(() => {
 // To generate mapping of blockchain test users to sdk test users with set mnemonics
 generateBlockchainTestUsers();
 
-// sendTokens();
-// registerIids();
-// instantiateModulesProposals();
-// iidsBasic();
-// iidAddEdKeys();
-// bondsBasic();
-// bondsSellsDisabled();
-// bondsSellsEnabled();
-// enititiesBasic();
-// tokenBasic();
-// claimsBasic();
-// ibcBasic();
+registerIids();
+instantiateModulesProposals();
 // bankBasic();
+// iidsBasic();
+// bondsBasic();
+// enititiesBasic();
+tokenBasic();
+// claimsBasic();
+// daoCore();
+// sendTokens();
+// bondsSellsDisabled();
+// iidAddEdKeys();
+// bondsSellsEnabled();
+// iidReplaceLinkedResource();
+// ibcBasic();
 // govDeposit();
 // authzBasic();
 // wasmBasic();
-// daoCore();
+// feegrantBasic();
 // cwUploadProposal();
 // quickQueries();
 

@@ -4,7 +4,14 @@ import {
   createIidVerificationMethods,
 } from "../../src/messages/iid";
 import { getUser, customMessages, createClient, ixo } from "../helpers/common";
-import { constants, fee, keyType, WalletUsers } from "../helpers/constants";
+import {
+  constants,
+  fee,
+  getFee,
+  keyType,
+  WalletUsers,
+} from "../helpers/constants";
+import { LinkedResource } from "../../src/codegen/ixo/iid/v1beta1/types";
 
 export const CreateIidDoc = async (
   signer: WalletUsers = WalletUsers.tester,
@@ -180,14 +187,16 @@ export const SetVerificationRelationships = async (
   const myAddress = account.address;
   const did = tester.did;
 
-  const alice = getUser(WalletUsers.alice);
-  const pubkeyBase58 = base58.encode((await alice.getAccounts())[0].pubkey);
+  // const alice = getUser(WalletUsers.alice);
+  // const pubkeyBase58 = base58.encode((await alice.getAccounts())[0].pubkey);
+  const accountEd = (await getUser(WalletUsers.tester, "ed").getAccounts())[0];
+  const myPubkey = base58.encode(accountEd.pubkey);
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgSetVerificationRelationships",
     value: ixo.iid.v1beta1.MsgSetVerificationRelationships.fromPartial({
       id: did,
-      methodId: alice.did + "#" + pubkeyBase58,
+      methodId: did + "#" + myPubkey,
       relationships: relationships,
       signer: myAddress,
     }),
@@ -205,14 +214,16 @@ export const RevokeVerification = async () => {
   const myAddress = account.address;
   const did = tester.did;
 
-  const alice = getUser(WalletUsers.alice);
-  const pubkeyBase58 = base58.encode((await alice.getAccounts())[0].pubkey);
+  // const alice = getUser(WalletUsers.alice);
+  // const pubkeyBase58 = base58.encode((await alice.getAccounts())[0].pubkey);
+  const accountEd = (await getUser(WalletUsers.tester, "ed").getAccounts())[0];
+  const myPubkey = base58.encode(accountEd.pubkey);
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgRevokeVerification",
     value: ixo.iid.v1beta1.MsgRevokeVerification.fromPartial({
       id: did,
-      methodId: alice.did + "#" + pubkeyBase58,
+      methodId: did + "#" + myPubkey,
       signer: myAddress,
     }),
   };
@@ -359,22 +370,27 @@ export const DeleteLinkedEntity = async () => {
   return response;
 };
 
-export const AddLinkedResource = async () => {
+export const AddLinkedResource = async (
+  did?: string,
+  linkedResource?: LinkedResource
+) => {
   const client = await createClient();
 
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const userDid = tester.did;
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgAddLinkedResource",
     value: ixo.iid.v1beta1.MsgAddLinkedResource.fromPartial({
-      id: did,
-      linkedResource: ixo.iid.v1beta1.LinkedResource.fromPartial({
-        id: constants.linkedResourceId,
-        description: "Description",
-      }),
+      id: did || userDid,
+      linkedResource:
+        linkedResource ||
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
+          id: constants.linkedResourceId,
+          description: "Description",
+        }),
       signer: myAddress,
     }),
   };
@@ -383,24 +399,79 @@ export const AddLinkedResource = async () => {
   return response;
 };
 
-export const DeleteLinkedResource = async () => {
+export const DeleteLinkedResource = async (
+  did?: string,
+  resourceId?: string
+) => {
   const client = await createClient();
 
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const userDid = tester.did;
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgDeleteLinkedResource",
     value: ixo.iid.v1beta1.MsgDeleteLinkedResource.fromPartial({
-      id: did,
-      resourceId: constants.linkedResourceId,
+      id: did || userDid,
+      resourceId: resourceId || constants.linkedResourceId,
       signer: myAddress,
     }),
   };
 
   const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const AddLinkedResources = async (
+  data: { did: string; linkedResource: LinkedResource }[]
+) => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const messages = data.map((d) => ({
+    typeUrl: "/ixo.iid.v1beta1.MsgAddLinkedResource",
+    value: ixo.iid.v1beta1.MsgAddLinkedResource.fromPartial({
+      id: d.did,
+      linkedResource: d.linkedResource,
+      signer: myAddress,
+    }),
+  }));
+
+  const response = await client.signAndBroadcast(
+    myAddress,
+    messages,
+    getFee(messages.length)
+  );
+  return response;
+};
+
+export const DeleteLinkedResources = async (
+  data: { did: string; resourceId: string }[]
+) => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const messages = data.map((d) => ({
+    typeUrl: "/ixo.iid.v1beta1.MsgDeleteLinkedResource",
+    value: ixo.iid.v1beta1.MsgDeleteLinkedResource.fromPartial({
+      id: d.did,
+      resourceId: d.resourceId,
+      signer: myAddress,
+    }),
+  }));
+
+  const response = await client.signAndBroadcast(
+    myAddress,
+    messages,
+    getFee(messages.length)
+  );
   return response;
 };
 

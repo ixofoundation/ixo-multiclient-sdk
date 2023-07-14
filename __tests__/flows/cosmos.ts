@@ -9,9 +9,9 @@ export const bankBasic = () =>
       const res = await Cosmos.BankSendTrx(
         undefined,
         WalletUsers.tester,
-        WalletUsers.tester,
+        WalletUsers.alice,
         "secp",
-        "ed"
+        "secp"
       );
       return res;
     });
@@ -60,4 +60,11 @@ export const sendTokens = (rounds = 1) =>
 export const govDeposit = () =>
   describe("Testing deposit funds into proposals", () => {
     testMsg("/cosmos.bank.v1beta1.MsgDeposit", () => Cosmos.MsgDeposit(434));
+  });
+
+export const feegrantBasic = () =>
+  describe("Testing feegrant for user", () => {
+    testMsg("/cosmos.feegrant.v1beta1.MsgGrantAllowance", () =>
+      Authz.MsgGrantAllowance()
+    );
   });

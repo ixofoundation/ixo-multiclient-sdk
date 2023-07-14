@@ -1,5 +1,9 @@
 import {
+  chunkArray,
+  customQueries,
   generateNewWallet,
+  getFileFromPath,
+  ixo,
   queryClient,
   sendFromFaucet,
   testMsg,
@@ -7,6 +11,10 @@ import {
 } from "../helpers/common";
 import { WalletUsers } from "../helpers/constants";
 import * as Iid from "../modules/Iid";
+import * as Entity from "../modules/Entity";
+import { setAndLedgerUser } from "../setup/helpers";
+import { toTimestamp } from "../../src/codegen/helpers";
+import axios from "axios";
 
 export const registerIids = () =>
   describe("Testing the faucet and creation of Iids", () => {
@@ -38,6 +46,211 @@ export const registerIids = () =>
         Iid.CreateIidDoc(user)
       );
     });
+  });
+
+export const iidReplaceLinkedResource = () =>
+  describe("Testing the iid module", () => {
+    beforeAll(() =>
+      generateNewWallet(WalletUsers.tester, process.env.ROOT_EMERGING!)
+    );
+
+    // test("haha", async () => {
+    //   const file = getFileFromPath([
+    //     "documents",
+    //     "impacts",
+    //     "ImpactsDao_page.png",
+    //   ]);
+    //   const json = {
+    //     "@context": [
+    //       "https://w3id.org/ixo/context/v1",
+    //       {
+    //         ixo: "https://w3id.org/ixo/vocab/v1",
+    //         id: "@id",
+    //         type: "@type",
+    //         "@protected": true,
+    //       },
+    //     ],
+    //     id: "{id}#page",
+    //     type: "ixo:Page",
+    //     page: [
+    //       {
+    //         id: "page-hero-image",
+    //         type: "heroImage",
+    //         data: {
+    //           file: {
+    //             url: "https://cellnode-pandora.ixo.earth/public/bafybeighcddun3njtgobun5kiimj4ybn377sex5p2r2al6cn63ajrebbce",
+    //           },
+    //           caption: "",
+    //           withBorder: false,
+    //           stretched: false,
+    //           withBackground: false,
+    //         },
+    //       },
+    //       {
+    //         id: "_fl_Wfifpy",
+    //         type: "paragraph",
+    //         data: {
+    //           text: "The Impacts  DAO is a Venture Cooperative that makes outcomes-based investments into innovations, projects and research that will result in solutions that are built on the Internet of Impact being delivered into the markets where these are most needed.",
+    //         },
+    //       },
+    //       {
+    //         id: "Xp1N61-A7e",
+    //         type: "paragraph",
+    //         data: {
+    //           text: "The Internet of Impact is a multi-network ecosystem of Web3, AI and related technologies and services for sustainable human development, human security, energy transition, and ecological regeneration.",
+    //         },
+    //       },
+    //       {
+    //         id: "huKDM9QuBb",
+    //         type: "paragraph",
+    //         data: {
+    //           text: "The Impacts DAO Cooperative is addressing market opportunities with innovations to:&nbsp;",
+    //         },
+    //       },
+    //       {
+    //         id: "sYQMoU9fEd",
+    //         type: "list",
+    //         data: {
+    //           style: "ordered",
+    //           items: [
+    //             "Scale outcomes-based funding: Using digital finance to decentralise and accelerate the flows of capital invested into assets and projects that produce Outcomes.",
+    //             "Reduce the costs of impact verification: Using Digital MRV technologies to automate and distribute services for Measurement, Verification and Reporting of Outcomes.<br>",
+    //             "Create regenerative wealth: Tokenising Outcomes, such as Carbon VERs, to account for the social and financial value of verified outcomes and exchange these as assets. Equitably distributing the social, economic and legal rights associated with the means of producing Outcomes, and the value of these Outcomes.<br>",
+    //           ],
+    //         },
+    //       },
+    //       {
+    //         id: "W62_MtWTH2",
+    //         type: "paragraph",
+    //         data: {
+    //           text: "Members of the cooperative include visionary innovators, investors, builders, and market implementers who contribute work, capital resources, open-source software, and market access opportunities to grow the value and utility of the Internet of Impact innovation ecosystem.",
+    //         },
+    //       },
+    //       {
+    //         id: "ar3avwpl2t",
+    //         type: "paragraph",
+    //         data: {
+    //           text: "The legal structure of the DAO is a Liechtenstein Venture Cooperative (LVC), which affords legal protections to its members.",
+    //         },
+    //       },
+    //       {
+    //         id: "ftIEtJgaY2",
+    //         type: "paragraph",
+    //         data: {
+    //           text: "The DAO Treasury provides sustainable funding for investing into the cooperative ecosystem by growing a portfolio of assets and by generating revenues from its investments.",
+    //         },
+    //       },
+    //       {
+    //         id: "yp_kM2W6q3",
+    //         type: "paragraph",
+    //         data: {
+    //           text: "Contributors to the cooperative receive DAO membership tokens that represent their voting rights and participation share in the cooperative’s investment portfolio.&nbsp;",
+    //         },
+    //       },
+    //       {
+    //         id: "PvLpJUzqEg",
+    //         type: "paragraph",
+    //         data: {
+    //           text: "The fair valuation of investments into the cooperative is determined by Contribution Regulations that consider the probability of investors receiving future financial returns.",
+    //         },
+    //       },
+    //       {
+    //         id: "-7Rr9K8_zs",
+    //         type: "paragraph",
+    //         data: {
+    //           text: "DAO membership tokens may be exchanged for liquid treasury assets when the cooperative is profitable, with distributions taking place during liquidity events. Most-recent investors have a liquidation preference that gives them the option to cash-out first, as they receive a lower rate of financial return for taking less investment risk.",
+    //         },
+    //       },
+    //       {
+    //         id: "-b4ic05Ftm",
+    //         type: "paragraph",
+    //         data: {
+    //           text: "The cooperative is governed as a decentralised autonomous organisation. New members are welcome to join by consensus vote.",
+    //         },
+    //       },
+    //     ],
+    //   };
+
+    //   const cellnode = await customQueries.cellnode.uploadPublicDoc(
+    //     "application/ld+json",
+    //     // file,
+    //     Buffer.from(JSON.stringify(json)).toString("base64"),
+    //     undefined,
+    //     "testnet"
+    //   );
+    //   console.log({ cellnode });
+    //   return expect(true).toBeTruthy();
+    // });
+
+    testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
+      const entityDid = "did:ixo:entity:32a5a11ebf1ce614a6eb8ef874898eee";
+      const resource = ixo.iid.v1beta1.LinkedResource.fromPartial({
+        id: `{id}#VER`,
+        type: "CredentialSchema",
+        description: "Verified emission reduction credential schema",
+        mediaType: "application/json",
+        serviceEndpoint:
+          "ipfs:bafkreicid3ryjrxwfhl5vlwoa6zrpfv3bqc3qfc7u2ijvdea4atqopfmna",
+        proof: "bafkreicid3ryjrxwfhl5vlwoa6zrpfv3bqc3qfc7u2ijvdea4atqopfmna",
+        encrypted: "false",
+        right: "",
+      });
+
+      const remove = await Iid.DeleteLinkedResource(entityDid, resource.id);
+      const add = await Iid.AddLinkedResource(entityDid, resource);
+
+      return remove as any;
+    });
+
+    // testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
+    //   const getResource = (externalId: string) =>
+    //     ixo.iid.v1beta1.LinkedResource.fromPartial({
+    //       id: "{id}#assetDashboard",
+    //       type: "WebDashboard",
+    //       description: "SupaMoto Dashboard",
+    //       mediaType: "application/html",
+    //       serviceEndpoint: `emerging:/devices/${externalId}`,
+    //       proof: "",
+    //       encrypted: "false",
+    //       right: "#apitoken",
+    //     });
+
+    //   const collections = await axios.get(
+    //     "https://blocksync-pandora.ixo.earth/api/entity/collectionsByOwnerAddress/ixo1mgwecafj48kuu0jawyw5emsqgpu36vthpph6d8"
+    //   );
+    //   const allEntities = collections.data[0].entities;
+    //   console.log(allEntities);
+
+    //   const chunkSize = 100;
+    //   let index = 0;
+    //   for (const entities of chunkArray(allEntities, chunkSize)) {
+    //     index++;
+    //     console.log("replacing linked resource for batch", index);
+    //     await Iid.DeleteLinkedResources(
+    //       entities.map((e: any) => ({
+    //         did: e.id,
+    //         resourceId: "{id}#assetDashboard",
+    //       }))
+    //     );
+    //     await Iid.AddLinkedResources(
+    //       entities.map((e: any) => ({
+    //         did: e.id,
+    //         linkedResource: getResource(e.externalId),
+    //       }))
+    //     );
+    //   }
+    //   return true as any;
+    // });
+
+    // testMsg("/ixo.entity.v1beta1.MsgUpdateEntity", () =>
+    //   Entity.UpdateEntity(
+    //     ixo.entity.v1beta1.MsgUpdateEntity.fromPartial({
+    //       id: "did:ixo:entity:2f22535f8b179a51d77a0e302e68d35d",
+    //       entityStatus: 0,
+    //       startDate: toTimestamp(new Date("2023-02-14T12:00:00Z")),
+    //     })
+    //   )
+    // );
   });
 
 // ------------------------------------------------------------
@@ -112,6 +325,7 @@ export const generateBlockchainTestUsers = () => {
     generateNewWallet(
       WalletUsers.tester, // Miguel
       "jungle brave person inmate dirt upset try rotate twin fossil grid border"
+      // process.env.ROOT_ECS!
     )
   );
   beforeAll(() =>

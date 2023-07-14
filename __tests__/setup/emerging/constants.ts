@@ -261,8 +261,8 @@ export const setup_protocol_clean_cooking_constants = () => ({
         description: "Verified emission reduction credential schema",
         mediaType: "application/json",
         serviceEndpoint:
-          "ipfs:bafkreifsg3gnrlibwwn2k3imlvrxxcx4x4ouef5xba2lpr6sbc4yqf5caq",
-        proof: "bafkreifsg3gnrlibwwn2k3imlvrxxcx4x4ouef5xba2lpr6sbc4yqf5caq",
+          "ipfs:bafkreicid3ryjrxwfhl5vlwoa6zrpfv3bqc3qfc7u2ijvdea4atqopfmna",
+        proof: "bafkreicid3ryjrxwfhl5vlwoa6zrpfv3bqc3qfc7u2ijvdea4atqopfmna",
         encrypted: "false",
         right: "",
       },

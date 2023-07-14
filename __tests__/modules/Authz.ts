@@ -5,7 +5,7 @@ import {
   utils,
   addDays,
 } from "../helpers/common";
-import { fee, WalletUsers } from "../helpers/constants";
+import { getFee, WalletUsers } from "../helpers/constants";
 
 export const MsgGrantSend = async (
   amount = "10000000",
@@ -44,7 +44,7 @@ export const MsgGrantSend = async (
   const response = await client.signAndBroadcast(
     granterAddress,
     [message],
-    fee
+    getFee(1, await client.simulate(granterAddress, [message], undefined))
   );
   return response;
 };
@@ -88,7 +88,62 @@ export const MsgExecSend = async (
   const response = await client.signAndBroadcast(
     granteeAddress,
     [message],
-    fee
+    getFee(1, await client.simulate(granteeAddress, [message], undefined))
+  );
+  return response;
+};
+
+export const MsgGrantAllowance = async (
+  granter = WalletUsers.tester,
+  grantee = WalletUsers.alice
+) => {
+  const client = await createClient(getUser(granter));
+
+  const granterAddress = (await getUser(granter).getAccounts())[0].address;
+  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/cosmos.feegrant.v1beta1.MsgGrantAllowance",
+    value: cosmos.feegrant.v1beta1.MsgGrantAllowance.fromPartial({
+      granter: granterAddress,
+      grantee: granteeAddress,
+      // allowance: {
+      //   typeUrl: "/cosmos.feegrant.v1beta1.PeriodicAllowance",
+      //   value: cosmos.feegrant.v1beta1.PeriodicAllowance.encode(
+      //     cosmos.feegrant.v1beta1.PeriodicAllowance.fromPartial({
+      //       periodSpendLimit: [
+      //         cosmos.base.v1beta1.Coin.fromPartial({
+      //           amount: "1000000",
+      //           denom: "uixo",
+      //         }),
+      //       ],
+      //       period: utils.proto.toDuration(
+      //         String(1000000000 * 60 * 60 * 24 * 30)
+      //       ),
+      //     })
+      //   ).finish(),
+      // },
+      allowance: {
+        typeUrl: "/cosmos.feegrant.v1beta1.BasicAllowance",
+        value: cosmos.feegrant.v1beta1.BasicAllowance.encode(
+          cosmos.feegrant.v1beta1.BasicAllowance.fromPartial({
+            // spendLimit: [
+            //   cosmos.base.v1beta1.Coin.fromPartial({
+            //     amount: "1000000",
+            //     denom: "uixo",
+            //   }),
+            // ],
+            expiration: utils.proto.toTimestamp(addDays(new Date(), 365)),
+          })
+        ).finish(),
+      },
+    }),
+  };
+
+  const response = await client.signAndBroadcast(
+    granterAddress,
+    [message],
+    getFee(1, await client.simulate(granterAddress, [message], undefined))
   );
   return response;
 };

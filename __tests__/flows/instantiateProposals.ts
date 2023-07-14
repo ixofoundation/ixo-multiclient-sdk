@@ -7,40 +7,62 @@ import * as Cosmos from "../modules/Cosmos";
 export const instantiateModulesProposals = () =>
   describe("Testing the gov module", () => {
     let proposalId: number;
-    // Upload cw721 for entity module nfts
-    testMsg(
-      "/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract",
-      async () => {
-        const res = await Cosmos.MsgSubmitProposalStoreCW(
-          "cw721"
-          // cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_NOBODY
-        );
-        proposalId = utils.common.getValueFromEvents(
-          res,
-          "submit_proposal",
-          "proposal_id"
-        );
-        console.log({ proposalId });
-        return res;
-      }
-    );
-    testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(proposalId));
 
-    // Upload ixo1155 for token module
-    testMsg(
-      "/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract",
-      async () => {
-        const res = await Cosmos.MsgSubmitProposalStoreCW("ixo1155");
-        proposalId = utils.common.getValueFromEvents(
-          res,
-          "submit_proposal",
-          "proposal_id"
-        );
-        console.log({ proposalId });
-        return res;
-      }
-    );
-    testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(proposalId));
+    // to run all contracts proposals synchronously
+    contracts.map((c, i) => [
+      testMsg(
+        `/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract ${
+          i + 1
+        } of ${contracts.length}`,
+        async () => {
+          const res = await Cosmos.MsgSubmitProposalStoreCW(c.name, c.path);
+          proposalId = utils.common.getValueFromEvents(
+            res,
+            "submit_proposal",
+            "proposal_id"
+          );
+          console.log({ proposalId });
+          return res;
+        }
+      ),
+      testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(proposalId)),
+    ]);
+
+    // NOTE: 721 and 1155 is in contract list above and follows the constants contract codes
+    // Upload cw721 for entity module nfts
+    // testMsg(
+    //   "/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract",
+    //   async () => {
+    //     const res = await Cosmos.MsgSubmitProposalStoreCW(
+    //       "cw721"
+    //       // cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_NOBODY
+    //     );
+    //     proposalId = utils.common.getValueFromEvents(
+    //       res,
+    //       "submit_proposal",
+    //       "proposal_id"
+    //     );
+    //     console.log({ proposalId });
+    //     return res;
+    //   }
+    // );
+    // testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(proposalId));
+
+    // // Upload ixo1155 for token module
+    // testMsg(
+    //   "/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract",
+    //   async () => {
+    //     const res = await Cosmos.MsgSubmitProposalStoreCW("ixo1155");
+    //     proposalId = utils.common.getValueFromEvents(
+    //       res,
+    //       "submit_proposal",
+    //       "proposal_id"
+    //     );
+    //     console.log({ proposalId });
+    //     return res;
+    //   }
+    // );
+    // testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(proposalId));
 
     test("timeout", async () => {
       console.log(
@@ -94,26 +116,6 @@ export const instantiateModulesProposals = () =>
       console.log("Entity and Token modules initiated, continue hacking away");
       expect(true).toBeTruthy();
     });
-
-    // to run all contracts proposals synchronously
-    // contracts.map((c, i) => [
-    //   testMsg(
-    //     `/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract ${
-    //       i + 1
-    //     } of ${contracts.length}`,
-    //     async () => {
-    //       const res = await Cosmos.MsgSubmitProposalStoreCW(c.name, c.path);
-    //       proposalId = utils.common.getValueFromEvents(
-    //         res,
-    //         "submit_proposal",
-    //         "proposal_id"
-    //       );
-    //       console.log({ proposalId });
-    //       return res;
-    //     }
-    //   ),
-    //   testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(proposalId)),
-    // ]);
   });
 
 // ------------------------------------------------------------
@@ -176,16 +178,18 @@ export const devnetProposals = () =>
 // ------------------------------------------------------------
 export const cwUploadProposal = () =>
   describe("Testing the gov module", () => {
+    let proposalId: number;
+
     testMsg(
       "/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract",
       async () => {
-        const name = "wasmswap";
+        const name = "cw1155_base_lp";
         const res = await Cosmos.MsgSubmitProposalStoreCW(`custom ${name}`, [
           "contracts",
           "custom",
           `${name}.wasm`,
         ]);
-        const proposalId = utils.common.getValueFromEvents(
+        proposalId = utils.common.getValueFromEvents(
           res,
           "submit_proposal",
           "proposal_id"
@@ -194,4 +198,5 @@ export const cwUploadProposal = () =>
         return res;
       }
     );
+    testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(proposalId));
   });

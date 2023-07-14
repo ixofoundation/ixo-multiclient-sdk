@@ -122,7 +122,10 @@ export const quickQueries = () =>
     //   const res = await queryClient.cosmos.feegrant.v1beta1.allowances({
     //     grantee: address,
     //   });
-    //   console.log(res.allowances);
+    //   console.dir(res, { depth: null });
+    //   if (res.allowances.length > 0) {
+    //     console.log(createRegistry().decode(res.allowances[0].allowance!));
+    //   }
     //   expect(res).toBeTruthy();
     // });
 
@@ -175,11 +178,15 @@ export const quickQueries = () =>
     // });
 
     // test("query token metadata by id", async () => {
-    //   const res = await queryClient.ixo.token.v1beta1.tokenMetadata({
-    //     id: "01a86ad8ffd270dc2d729365201debba",
-    //   });
-    //   console.dir(res, { depth: null });
-    //   expect(res).toBeTruthy();
+    //   try {
+    //     const res = await queryClient.ixo.token.v1beta1.tokenMetadata({
+    //       id: "009b08563bac2d805c0e3f84ddabc99d",
+    //     });
+    //     console.dir(res, { depth: null });
+    //     expect(res).toBeTruthy();
+    //   } catch (error) {
+    //     console.log("error", error.message);
+    //   }
     // });
 
     // test("query claim collections list", async () => {

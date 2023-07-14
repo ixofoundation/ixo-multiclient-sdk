@@ -1,4 +1,4 @@
-import { fee, KeyTypes, WalletUsers } from "../helpers/constants";
+import { fee, getFee, KeyTypes, WalletUsers } from "../helpers/constants";
 import {
   createClient,
   getUser,
@@ -13,7 +13,7 @@ import {
 import Long from "long";
 
 export const BankSendTrx = async (
-  amount = Math.pow(10, 6),
+  amount = Math.pow(10, 8),
   fromUser = WalletUsers.alice,
   toUser = WalletUsers.tester,
   fromWalletKeyType: KeyTypes = "secp",
@@ -44,7 +44,12 @@ export const BankSendTrx = async (
   };
 
   // const response = await client.simulate(fromAddress, [message], undefined);
-  const response = await client.signAndBroadcast(fromAddress, [message], fee);
+  // console.dir(response, { depth: null });
+  const response = await client.signAndBroadcast(
+    fromAddress,
+    [message],
+    getFee(1, await client.simulate(fromAddress, [message], undefined))
+  );
   return response as any;
 };
 
@@ -105,10 +110,10 @@ export const MsgSubmitProposalStoreCW = async (
     amount: [
       {
         denom: "uixo",
-        amount: "1000000",
+        amount: "3000000",
       },
     ],
-    gas: "10000000",
+    gas: "100000000",
   });
   return response;
 };
@@ -160,10 +165,10 @@ export const MsgSubmitProposalStoreCWMultiple = async (
     amount: [
       {
         denom: "uixo",
-        amount: (contracts.length * 1000000).toString(),
+        amount: (contracts.length * 3000000).toString(),
       },
     ],
-    gas: (contracts.length * 10000000).toString(),
+    gas: (contracts.length * 100000000).toString(),
   });
   return response;
 };
@@ -184,7 +189,11 @@ export const MsgVote = async (proposalId: number) => {
     }),
   };
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
   return response;
 };
 
@@ -220,7 +229,11 @@ export const MsgSubmitProposalUpdateEntityParams = async (
     }),
   };
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
   return response;
 };
 
@@ -254,7 +267,11 @@ export const MsgSubmitProposalUpdateTokenParams = async (
     }),
   };
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
   return response;
 };
 
@@ -282,6 +299,10 @@ export const MsgDeposit = async (
     }),
   };
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
   return response;
 };
