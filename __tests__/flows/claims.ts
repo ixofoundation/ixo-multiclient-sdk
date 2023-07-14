@@ -195,7 +195,7 @@ export const supamotoClaims = () =>
       console.log(
         "waiting 5 mintues as blocksync needs 5 minutes to load all ipfs files for entity external Ids"
       );
-      // await timeout(1000 * 60 * 5);
+      await timeout(1000 * 60 * 5);
 
       const res = await Claims.CreateCollectionSupamotoGenesis(
         dids.assetCollection,
@@ -340,28 +340,28 @@ export const supamotoClaims = () =>
         );
 
         // evaluate fuelPurchase claims
-        // const fpEvaluations = await axios.post(
-        //   ProspectCredentialsWorkerUrl + "claims/evaluate",
-        //   {
-        //     collectionId: "1",
-        //     evaluations: fpClaimIds.map((id) => ({
-        //       claimId: id,
-        //       reason: 1,
-        //       status: ixo.claims.v1beta1.EvaluationStatus.APPROVED,
-        //       oracle: dids.prospectOracle,
-        //       verificationProof: "proof",
-        //     })),
-        //   },
-        //   {
-        //     headers: {
-        //       Authorization: process.env.PROSPECT_CREDENTIAL_WORKER_AUTH,
-        //     },
-        //   }
-        // );
-        // assertIsDeliverTxSuccess(fpEvaluations.data);
-        // console.log(
-        //   fpClaimIds.length + " FuelPurchase claims successfully evaluated"
-        // );
+        const fpEvaluations = await axios.post(
+          ProspectCredentialsWorkerUrl + "claims/evaluate",
+          {
+            collectionId: "1",
+            evaluations: fpClaimIds.map((id) => ({
+              claimId: id,
+              reason: 1,
+              status: ixo.claims.v1beta1.EvaluationStatus.APPROVED,
+              oracle: dids.prospectOracle,
+              verificationProof: "proof",
+            })),
+          },
+          {
+            headers: {
+              Authorization: process.env.PROSPECT_CREDENTIAL_WORKER_AUTH,
+            },
+          }
+        );
+        assertIsDeliverTxSuccess(fpEvaluations.data);
+        console.log(
+          fpClaimIds.length + " FuelPurchase claims successfully evaluated"
+        );
 
         // save fuelPurchase claim ids per purchase
         stovePurchases.forEach((ps: any[], i) => {

@@ -119,6 +119,17 @@ export const CreateEntityAssetSupamotoInstance = async (
           encrypted: "false",
           right: "",
         },
+        {
+          id: `{id}#profile`,
+          type: "Settings",
+          description: "Profile",
+          mediaType: "application/ld+json",
+          serviceEndpoint:
+            "ipfs:bafkreigx7val5mfeghm636jcso6kt7wqpieh7h7hgdkcn64xxyy7ihp2q4",
+          proof: "bafkreigx7val5mfeghm636jcso6kt7wqpieh7h7hgdkcn64xxyy7ihp2q4",
+          encrypted: "false",
+          right: "",
+        },
       ],
       accordedRight: [],
       linkedEntity: [],

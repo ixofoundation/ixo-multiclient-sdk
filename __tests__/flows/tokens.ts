@@ -1,9 +1,17 @@
-import { generateNewWallet, testMsg, utils } from "../helpers/common";
+import {
+  chunkArray,
+  generateNewWallet,
+  getUser,
+  saveFileToPath,
+  testMsg,
+  utils,
+} from "../helpers/common";
 import * as Token from "../modules/Token";
 import * as Entity from "../modules/Entity";
 import { WalletUsers } from "../helpers/constants";
 import { TokenData } from "../../src/codegen/ixo/token/v1beta1/token";
 import { dids } from "../setup/constants";
+import axios from "axios";
 
 export const tokenBasic = () =>
   describe("Testing the Token module", () => {
@@ -256,4 +264,152 @@ export const supamotoTokens = () =>
     //     )
     //   ),
     // ]);
+  });
+
+// ------------------------------------------------------------
+// flow to farm nifty tokens and redistribute to
+// make all have 2000 carbon credits
+// ------------------------------------------------------------
+export const supamotoTokensFarm = () =>
+  describe("Testing the Supamoto Tokens flow", () => {
+    // Set tester as root ecs user
+    beforeAll(() =>
+      Promise.all([generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS)])
+    );
+
+    const blocksyncUrl = "https://blocksync.ixo.earth";
+
+    testMsg("Farm tokens", async () => {
+      const tester = (await getUser(WalletUsers.tester).getAccounts())[0]
+        .address;
+
+      const collections = await axios.get(
+        `${blocksyncUrl}/api/entity/collectionsByOwnerAddress/${tester}`
+      );
+      const allEntities = collections.data[0].entities;
+
+      const farm = false;
+      const topup = false;
+      const chunkSize = 40;
+      let totalAmounts: number[] = [];
+      let index = 0;
+
+      const userTokensRes = await axios.get(
+        `${blocksyncUrl}/api/token/byAddress/${tester}`
+      );
+      let userTokens = Object.entries(userTokensRes.data.CARBON?.tokens || {});
+
+      for (const entities of chunkArray(allEntities, chunkSize)) {
+        const farmBatches: any[] = [];
+        const topupBatches: any[] = [];
+
+        for (const entity of entities as any) {
+          index++;
+          // if (index > 7) break;
+          // console.log("farming for entity", index);
+
+          const adminAddress = entity.accounts[0].address;
+          const tokensRes = await axios.get(
+            `${blocksyncUrl}/api/token/byAddress/${adminAddress}`
+          );
+          const tokens = Object.entries(tokensRes.data.CARBON?.tokens || {});
+          if (!tokens || !tokens.length) continue;
+
+          const totalAmount = tokens.reduce(
+            (r: any, t: any) => r + (t[1].amount ?? 0),
+            0
+          ) as number;
+          totalAmounts.push(totalAmount);
+
+          if (farm && totalAmount > 2000) {
+            let amountToFarm = totalAmount - 2000;
+            const tokensToFarm: any[] = [];
+            tokens.forEach((tokenEntry) => {
+              if (amountToFarm <= 0) return;
+              const tokenId = tokenEntry[0];
+              const tokenAmount = (tokenEntry[1] as any).amount;
+              if (tokenAmount <= 0) return;
+              const amountToTransfer = Math.min(amountToFarm, tokenAmount);
+              tokensToFarm.push({ id: tokenId, amount: amountToTransfer });
+              amountToFarm -= amountToTransfer;
+            });
+            // console.log({ entityId: entity.id, tokensToFarm, totalAmount });
+            farmBatches.push({
+              entityDid: entity.id,
+              entityAdminAddress: adminAddress,
+              tokens: tokensToFarm,
+            });
+          }
+
+          if (topup && totalAmount < 2000) {
+            let amountToTopup = 2000 - totalAmount;
+            const tokensToTopup: any[] = [];
+            if (!userTokens || !userTokens.length) continue;
+            userTokens.forEach((tokenEntry) => {
+              if (amountToTopup <= 0) return;
+              const tokenId = tokenEntry[0];
+              const tokenAmount = (tokenEntry[1] as any).amount;
+              if (tokenAmount <= 0) return;
+              const amountToTransfer = Math.min(amountToTopup, tokenAmount);
+              tokensToTopup.push({ id: tokenId, amount: amountToTransfer });
+              amountToTopup -= amountToTransfer;
+            });
+            // console.log({ entityId: entity.id, tokensToTopup, totalAmount });
+            userTokens = userTokens
+              .map((tokenEntry) => {
+                const tokenInBatch = tokensToTopup.find(
+                  (t) => t.id == tokenEntry[0]
+                );
+                if (!tokenInBatch) return tokenEntry;
+                if ((tokenEntry[1] as any).amount == tokenInBatch.amount)
+                  return null;
+                else
+                  return [
+                    tokenEntry[0],
+                    {
+                      amount:
+                        (tokenEntry[1] as any).amount - tokenInBatch.amount,
+                    },
+                  ];
+              })
+              .filter((t) => t != null) as any[];
+
+            topupBatches.push({
+              entityDid: entity.id,
+              entityAdminAddress: adminAddress,
+              tokens: tokensToTopup,
+            });
+          }
+        }
+
+        if (farmBatches.length != 0) {
+          try {
+            console.log("farmBatches length", farmBatches.length);
+            const res = await Token.MsgGrantandExecuteTokenTransfer(
+              farmBatches
+            );
+            if (res.code != 0) throw new Error(res.rawLog);
+          } catch (error) {
+            console.log("farmBatches error", error.message);
+          }
+        }
+        if (topupBatches.length != 0) {
+          try {
+            console.log("topupBatches length", topupBatches.length);
+            const res = await Token.TransferTokenBatch(topupBatches);
+            if (res.code != 0) throw new Error(res.rawLog);
+          } catch (error) {
+            console.log("topupBatches error", error.message);
+          }
+        }
+      }
+
+      console.log("Create file to save tokens");
+      saveFileToPath(
+        ["documents", "emerging", "tokenData.json"],
+        JSON.stringify({ totalAmounts }, null, 2)
+      );
+
+      return true as any;
+    });
   });

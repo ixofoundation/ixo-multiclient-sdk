@@ -291,3 +291,9 @@ export const chunkArray = <T>(arr: T[], size: number): T[][] =>
   [...Array(Math.ceil(arr.length / size))].map((_, i) =>
     arr.slice(size * i, size + size * i)
   );
+
+export const addMinutesToDate = (date: Date, minutes: number): Date => {
+  const newDate = new Date(date);
+  newDate.setMinutes(newDate.getMinutes() + minutes);
+  return newDate;
+};

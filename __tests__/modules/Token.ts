@@ -1,6 +1,7 @@
 import { TokenData } from "../../src/codegen/ixo/token/v1beta1/token";
 import {
   addDays,
+  addMinutesToDate,
   cosmos,
   createClient,
   getUser,
@@ -8,7 +9,7 @@ import {
   queryClient,
   utils,
 } from "../helpers/common";
-import { fee, WalletUsers } from "../helpers/constants";
+import { fee, getFee, WalletUsers } from "../helpers/constants";
 
 export const CreateToken = async (
   name: string,
@@ -337,6 +338,111 @@ export const MsgRevokeContract = async (
     granterAddress,
     [message],
     fee
+  );
+  return response;
+};
+
+export const MsgGrantandExecuteTokenTransfer = async (
+  batches: { entityDid: string; entityAdminAddress: string; tokens: any[] }[],
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = (await getUser(signer).getAccounts())[0].address;
+
+  const batchMessages = batches.map(
+    ({ entityDid, entityAdminAddress, tokens }) => [
+      {
+        typeUrl: "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
+        value: ixo.entity.v1beta1.MsgGrantEntityAccountAuthz.fromPartial({
+          id: entityDid,
+          ownerAddress: tester,
+          name: "admin",
+          granteeAddress: tester,
+          grant: cosmos.authz.v1beta1.Grant.fromPartial({
+            authorization: {
+              typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
+              value: cosmos.authz.v1beta1.GenericAuthorization.encode(
+                cosmos.authz.v1beta1.GenericAuthorization.fromPartial({
+                  msg: "/ixo.token.v1beta1.MsgTransferToken",
+                })
+              ).finish(),
+            },
+            expiration: utils.proto.toTimestamp(
+              addMinutesToDate(new Date(), 5)
+            ),
+          }),
+        }),
+      },
+      {
+        typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+        value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+          grantee: tester,
+          msgs: [
+            {
+              typeUrl: "/ixo.token.v1beta1.MsgTransferToken",
+              value: ixo.token.v1beta1.MsgTransferToken.encode(
+                ixo.token.v1beta1.MsgTransferToken.fromPartial({
+                  owner: entityAdminAddress,
+                  recipient: tester,
+                  tokens: tokens.map((b: any) =>
+                    ixo.token.v1beta1.TokenBatch.fromPartial({
+                      id: b.id,
+                      amount: (b?.amount ?? 0).toString(),
+                    })
+                  ),
+                })
+              ).finish(),
+            },
+          ],
+        }),
+      },
+    ]
+  );
+
+  const messages = batchMessages.flat(1);
+
+  const response = await client.signAndBroadcast(
+    tester,
+    messages,
+    getFee(messages.length)
+  );
+  return response;
+};
+
+export const TransferTokenBatch = async (
+  batches: {
+    tokens: {
+      id: string;
+      amount: number;
+    }[];
+    entityDid: string;
+    entityAdminAddress: string;
+  }[]
+) => {
+  const client = await createClient();
+
+  const tester = (await getUser(WalletUsers.tester).getAccounts())[0].address;
+  const alice = (await getUser(WalletUsers.alice).getAccounts())[0].address;
+
+  const messages = batches.map((b) => ({
+    typeUrl: "/ixo.token.v1beta1.MsgTransferToken",
+    value: ixo.token.v1beta1.MsgTransferToken.fromPartial({
+      owner: tester,
+      recipient: b.entityAdminAddress,
+      tokens: b.tokens.map((b) =>
+        ixo.token.v1beta1.TokenBatch.fromPartial({
+          id: b.id,
+          amount: b.amount.toString(),
+        })
+      ),
+    }),
+  }));
+
+  const response = await client.signAndBroadcast(
+    tester,
+    messages,
+    getFee(messages.length)
   );
   return response;
 };

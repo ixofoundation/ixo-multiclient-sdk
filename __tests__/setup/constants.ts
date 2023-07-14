@@ -17,6 +17,7 @@ export const dids = {
   ecsDao: "did:ixo:entity:a1fcead81eab2f1158a726597d872413",
   assetCollection: "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
   carbonAsset: "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
+  ecsProject: "did:ixo:entity:29198b8a823e183a5e84d7ebf2f0febd",
 };
 
 export const adminEntityAccounts = {
@@ -48,6 +49,7 @@ export const CarbonCredentialsWorkerUrl =
 //   ecsDao: "did:ixo:entity:237cb945b1368ed450ec67c7c4ac56ac",
 //   assetCollection: "did:ixo:entity:7f0cc7a072d514b38cb90bdf2e215901",
 //   carbonAsset: "did:ixo:entity:af96d8449eb5297a8b0812844374e0e2",
+//   ecsProject: "did:ixo:entity:d9de4952c41124e453f260cfd2c7774a",
 // };
 
 // export const adminEntityAccounts = {
@@ -78,6 +80,7 @@ export const CarbonCredentialsWorkerUrl =
 //   ecsDao: "did:ixo:entity:a1fcead81eab2f1158a726597d872413",
 //   assetCollection: "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
 //   carbonAsset: "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
+//   ecsProject: "did:ixo:entity:b3839c8bccf7ecff3cb6822869bb0d81",
 // };
 
 // export const adminEntityAccounts = {

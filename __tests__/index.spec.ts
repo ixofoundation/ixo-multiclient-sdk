@@ -29,7 +29,7 @@ import {
   devnetProposals,
   cwUploadProposal,
 } from "./flows/instantiateProposals";
-import { tokenBasic, supamotoTokens } from "./flows/tokens";
+import { tokenBasic, supamotoTokens, supamotoTokensFarm } from "./flows/tokens";
 import { daoCore, wasmBasic } from "./flows/cosmwasm";
 import { quickQueries } from "./flows/quickQueries";
 import { claimsBasic, supamotoClaims } from "./flows/claims";
@@ -43,16 +43,16 @@ beforeAll(() => {
 // To generate mapping of blockchain test users to sdk test users with set mnemonics
 generateBlockchainTestUsers();
 
-registerIids();
-instantiateModulesProposals();
+// registerIids();
+// instantiateModulesProposals();
 // bankBasic();
 // iidsBasic();
 // bondsBasic();
 // enititiesBasic();
-tokenBasic();
+// tokenBasic();
 // claimsBasic();
 // daoCore();
-// sendTokens();
+// sendTokens(); // ecs plus 27 ixo
 // bondsSellsDisabled();
 // iidAddEdKeys();
 // bondsSellsEnabled();
@@ -64,6 +64,7 @@ tokenBasic();
 // feegrantBasic();
 // cwUploadProposal();
 // quickQueries();
+// supamotoTokensFarm();
 
 // ------------------------------------------
 // Run the below after a devnet reset

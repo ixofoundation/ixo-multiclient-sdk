@@ -17,9 +17,12 @@ export const quickQueries = () =>
 
     // test("Query cosmos.tx.v1beta1.getTx", async () => {
     //   const res = await queryClient.cosmos.tx.v1beta1.getTx({
-    //     hash: "525F02F796360AE6B7407765FE679595EFB5053E352C18C276C0255D44290BF2",
+    //     hash: "11CDBCF0E51D5FF185C7B0BB5921C006310F4B4FC53E8C3C1237192B88C91D6A",
     //   });
-    //   console.dir(res.tx, { depth: null });
+    //   console.dir(
+    //     res.tx?.body?.messages.map((m) => createRegistry().decode(m)),
+    //     { depth: null }
+    //   );
     //   // console.dir(createRegistry().decode(res.tx!.body!.messages![0]), {
     //   //   depth: null,
     //   // });
@@ -68,9 +71,9 @@ export const quickQueries = () =>
     // test("Query cosmos.tx.v1beta1.getBlockByHeight", async () => {
     //   const res =
     //     await queryClient.cosmos.base.tendermint.v1beta1.getBlockByHeight({
-    //       height: Long.fromNumber(15955),
+    //       height: Long.fromNumber(6525),
     //     });
-    //   console.log(res);
+    //   console.log(res.block?.data);
     //   expect(res).toBeTruthy();
     // });
 

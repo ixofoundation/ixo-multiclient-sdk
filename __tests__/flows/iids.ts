@@ -15,6 +15,7 @@ import * as Entity from "../modules/Entity";
 import { setAndLedgerUser } from "../setup/helpers";
 import { toTimestamp } from "../../src/codegen/helpers";
 import axios from "axios";
+import { dids } from "../setup/constants";
 
 export const registerIids = () =>
   describe("Testing the faucet and creation of Iids", () => {
@@ -51,10 +52,10 @@ export const registerIids = () =>
 export const iidReplaceLinkedResource = () =>
   describe("Testing the iid module", () => {
     beforeAll(() =>
-      generateNewWallet(WalletUsers.tester, process.env.ROOT_EMERGING!)
+      generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS!)
     );
 
-    // test("haha", async () => {
+    // test("upload file to cellnode", async () => {
     //   const file = getFileFromPath([
     //     "documents",
     //     "impacts",
@@ -70,108 +71,34 @@ export const iidReplaceLinkedResource = () =>
     //         "@protected": true,
     //       },
     //     ],
-    //     id: "{id}#page",
-    //     type: "ixo:Page",
-    //     page: [
+    //     id: "{id}#tags",
+    //     type: "ixo:Tags",
+    //     settings:
+    //       "https://github.com/emerging-eco/configs/blob/main/settings/config.json",
+    //     entityTags: [
     //       {
-    //         id: "page-hero-image",
-    //         type: "heroImage",
-    //         data: {
-    //           file: {
-    //             url: "https://cellnode-pandora.ixo.earth/public/bafybeighcddun3njtgobun5kiimj4ybn377sex5p2r2al6cn63ajrebbce",
-    //           },
-    //           caption: "",
-    //           withBorder: false,
-    //           stretched: false,
-    //           withBackground: false,
-    //         },
+    //         category: "Project Type",
+    //         tags: ["Decarbonisation"],
     //       },
     //       {
-    //         id: "_fl_Wfifpy",
-    //         type: "paragraph",
-    //         data: {
-    //           text: "The Impacts  DAO is a Venture Cooperative that makes outcomes-based investments into innovations, projects and research that will result in solutions that are built on the Internet of Impact being delivered into the markets where these are most needed.",
-    //         },
+    //         category: "SDG",
+    //         tags: [
+    //           "SDG13 – Climate Action",
+    //           "SDG7 – Affordable and Clean Energy",
+    //           "SDG9 – Industry, Innovation and Infrastructure",
+    //           "SDG3 – Good Health and Well-being",
+    //           "SDG5 – Gender Equality",
+    //         ],
     //       },
     //       {
-    //         id: "Xp1N61-A7e",
-    //         type: "paragraph",
-    //         data: {
-    //           text: "The Internet of Impact is a multi-network ecosystem of Web3, AI and related technologies and services for sustainable human development, human security, energy transition, and ecological regeneration.",
-    //         },
-    //       },
-    //       {
-    //         id: "huKDM9QuBb",
-    //         type: "paragraph",
-    //         data: {
-    //           text: "The Impacts DAO Cooperative is addressing market opportunities with innovations to:&nbsp;",
-    //         },
-    //       },
-    //       {
-    //         id: "sYQMoU9fEd",
-    //         type: "list",
-    //         data: {
-    //           style: "ordered",
-    //           items: [
-    //             "Scale outcomes-based funding: Using digital finance to decentralise and accelerate the flows of capital invested into assets and projects that produce Outcomes.",
-    //             "Reduce the costs of impact verification: Using Digital MRV technologies to automate and distribute services for Measurement, Verification and Reporting of Outcomes.<br>",
-    //             "Create regenerative wealth: Tokenising Outcomes, such as Carbon VERs, to account for the social and financial value of verified outcomes and exchange these as assets. Equitably distributing the social, economic and legal rights associated with the means of producing Outcomes, and the value of these Outcomes.<br>",
-    //           ],
-    //         },
-    //       },
-    //       {
-    //         id: "W62_MtWTH2",
-    //         type: "paragraph",
-    //         data: {
-    //           text: "Members of the cooperative include visionary innovators, investors, builders, and market implementers who contribute work, capital resources, open-source software, and market access opportunities to grow the value and utility of the Internet of Impact innovation ecosystem.",
-    //         },
-    //       },
-    //       {
-    //         id: "ar3avwpl2t",
-    //         type: "paragraph",
-    //         data: {
-    //           text: "The legal structure of the DAO is a Liechtenstein Venture Cooperative (LVC), which affords legal protections to its members.",
-    //         },
-    //       },
-    //       {
-    //         id: "ftIEtJgaY2",
-    //         type: "paragraph",
-    //         data: {
-    //           text: "The DAO Treasury provides sustainable funding for investing into the cooperative ecosystem by growing a portfolio of assets and by generating revenues from its investments.",
-    //         },
-    //       },
-    //       {
-    //         id: "yp_kM2W6q3",
-    //         type: "paragraph",
-    //         data: {
-    //           text: "Contributors to the cooperative receive DAO membership tokens that represent their voting rights and participation share in the cooperative’s investment portfolio.&nbsp;",
-    //         },
-    //       },
-    //       {
-    //         id: "PvLpJUzqEg",
-    //         type: "paragraph",
-    //         data: {
-    //           text: "The fair valuation of investments into the cooperative is determined by Contribution Regulations that consider the probability of investors receiving future financial returns.",
-    //         },
-    //       },
-    //       {
-    //         id: "-7Rr9K8_zs",
-    //         type: "paragraph",
-    //         data: {
-    //           text: "DAO membership tokens may be exchanged for liquid treasury assets when the cooperative is profitable, with distributions taking place during liquidity events. Most-recent investors have a liquidation preference that gives them the option to cash-out first, as they receive a lower rate of financial return for taking less investment risk.",
-    //         },
-    //       },
-    //       {
-    //         id: "-b4ic05Ftm",
-    //         type: "paragraph",
-    //         data: {
-    //           text: "The cooperative is governed as a decentralised autonomous organisation. New members are welcome to join by consensus vote.",
-    //         },
+    //         category: "Stage",
+    //         tags: ["Delivery"],
     //       },
     //     ],
     //   };
 
     //   const cellnode = await customQueries.cellnode.uploadPublicDoc(
+    //     // "image/png",
     //     "application/ld+json",
     //     // file,
     //     Buffer.from(JSON.stringify(json)).toString("base64"),
@@ -183,15 +110,15 @@ export const iidReplaceLinkedResource = () =>
     // });
 
     testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
-      const entityDid = "did:ixo:entity:32a5a11ebf1ce614a6eb8ef874898eee";
+      const entityDid = dids.ecsProject;
       const resource = ixo.iid.v1beta1.LinkedResource.fromPartial({
-        id: `{id}#VER`,
-        type: "CredentialSchema",
-        description: "Verified emission reduction credential schema",
-        mediaType: "application/json",
+        type: "Settings",
+        id: "{id}#tags",
+        description: "Tags",
+        mediaType: "application/ld+json",
         serviceEndpoint:
-          "ipfs:bafkreicid3ryjrxwfhl5vlwoa6zrpfv3bqc3qfc7u2ijvdea4atqopfmna",
-        proof: "bafkreicid3ryjrxwfhl5vlwoa6zrpfv3bqc3qfc7u2ijvdea4atqopfmna",
+          "cellnode:/public/bafkreibkkxicgw3qbvohcj2bczwuccknagzuwtsvrhpyzvpcl5hqzyflju",
+        proof: "bafkreibkkxicgw3qbvohcj2bczwuccknagzuwtsvrhpyzvpcl5hqzyflju",
         encrypted: "false",
         right: "",
       });
@@ -205,33 +132,36 @@ export const iidReplaceLinkedResource = () =>
     // testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
     //   const getResource = (externalId: string) =>
     //     ixo.iid.v1beta1.LinkedResource.fromPartial({
-    //       id: "{id}#assetDashboard",
-    //       type: "WebDashboard",
-    //       description: "SupaMoto Dashboard",
-    //       mediaType: "application/html",
-    //       serviceEndpoint: `emerging:/devices/${externalId}`,
-    //       proof: "",
+    //       id: `{id}#profile`,
+    //       type: "Settings",
+    //       description: "Profile",
+    //       mediaType: "application/ld+json",
+    //       serviceEndpoint:
+    //         "ipfs:bafkreigx7val5mfeghm636jcso6kt7wqpieh7h7hgdkcn64xxyy7ihp2q4",
+    //       proof: "bafkreigx7val5mfeghm636jcso6kt7wqpieh7h7hgdkcn64xxyy7ihp2q4",
     //       encrypted: "false",
-    //       right: "#apitoken",
+    //       right: "",
     //     });
 
     //   const collections = await axios.get(
-    //     "https://blocksync-pandora.ixo.earth/api/entity/collectionsByOwnerAddress/ixo1mgwecafj48kuu0jawyw5emsqgpu36vthpph6d8"
+    //     "https://blocksync.ixo.earth/api/entity/collectionsByOwnerAddress/ixo1lgelskjkjjasl860n6kmevlflanqj5vh8l8p5w"
     //   );
     //   const allEntities = collections.data[0].entities;
-    //   console.log(allEntities);
+    //   // console.log(allEntities);
 
     //   const chunkSize = 100;
     //   let index = 0;
     //   for (const entities of chunkArray(allEntities, chunkSize)) {
     //     index++;
     //     console.log("replacing linked resource for batch", index);
-    //     await Iid.DeleteLinkedResources(
-    //       entities.map((e: any) => ({
-    //         did: e.id,
-    //         resourceId: "{id}#assetDashboard",
-    //       }))
-    //     );
+    //     try {
+    //       await Iid.DeleteLinkedResources(
+    //         entities.map((e: any) => ({
+    //           did: e.id,
+    //           resourceId: `{id}#profile`,
+    //         }))
+    //       );
+    //     } catch (error) {}
     //     await Iid.AddLinkedResources(
     //       entities.map((e: any) => ({
     //         did: e.id,

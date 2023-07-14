@@ -6,7 +6,7 @@ import { generateBlockchainTestUsers } from "../flows/iids";
 import { generateNewWallet, generateWallets } from "../helpers/common";
 import { WalletUsers } from "../helpers/constants";
 import { classesFlow } from "./classes/setupFlow";
-import { ecsDaoFlow, ecsFlow } from "./ecs/setupFlow";
+import { ecsDaoFlow, ecsFlow, ecsProjectFlow } from "./ecs/setupFlow";
 import {
   emergingAssetsFlow,
   emergingDaoFlow,
@@ -74,6 +74,9 @@ sendTokens(5);
 
 // next create emerging protocols and save carbonAsset to ./constants.ts
 emergingAssetsFlow(); //emerging user
+
+// next create ecs owned project and save assetCollectionDid did to ./constants.ts
+ecsProjectFlow(); //ecs user
 
 // next create cookstoves
 cookstovesFlowDevnet(); //ecs user

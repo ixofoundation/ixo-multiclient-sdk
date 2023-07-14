@@ -132,6 +132,19 @@ export const setup_dao_constants = () => ({
         type: "ixo:Page",
         page: [
           {
+            id: "page-hero-image",
+            type: "heroImage",
+            data: {
+              file: {
+                url: "https://cellnode.ixo.earth/public/bafybeighcddun3njtgobun5kiimj4ybn377sex5p2r2al6cn63ajrebbce",
+              },
+              caption: "Impacts DAO Cooperative",
+              withBorder: false,
+              stretched: false,
+              withBackground: false,
+            },
+          },
+          {
             id: "_fl_Wfifpy",
             type: "paragraph",
             data: {
