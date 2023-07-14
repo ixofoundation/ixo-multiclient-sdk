@@ -1,3 +1,4 @@
+export declare const coinCodexBaseUrl = "https://coincodex.com";
 export declare const keplrCurrencies: {
     ubld: {
         coinDenom: string;
