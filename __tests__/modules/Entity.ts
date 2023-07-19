@@ -270,11 +270,11 @@ export const GrantEntityAccountAuthz = async (
           typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
           value: cosmos.authz.v1beta1.GenericAuthorization.encode(
             cosmos.authz.v1beta1.GenericAuthorization.fromPartial({
-              msg: "/cosmos.gov.v1beta1.MsgVote",
+              msg: "/cosmos.gov.v1beta1.MsgSend",
             })
           ).finish(),
         },
-        expiration: utils.proto.toTimestamp(addDays(new Date(), 365)),
+        expiration: utils.proto.toTimestamp(addDays(new Date(), 1)),
       }),
     }),
   };

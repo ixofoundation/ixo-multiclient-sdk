@@ -32,7 +32,11 @@ import {
 import { tokenBasic, supamotoTokens, supamotoTokensFarm } from "./flows/tokens";
 import { daoCore, wasmBasic } from "./flows/cosmwasm";
 import { quickQueries } from "./flows/quickQueries";
-import { claimsBasic, supamotoClaims } from "./flows/claims";
+import {
+  claimsBasic,
+  supamotoClaims,
+  supamotoClaimsRedoRejected,
+} from "./flows/claims";
 import { ChainNetwork } from "../src/custom_queries/chain.types";
 
 beforeAll(() => {
@@ -52,7 +56,7 @@ generateBlockchainTestUsers();
 // tokenBasic();
 // claimsBasic();
 // daoCore();
-// sendTokens(); // ecs plus 27 ixo
+// sendTokens();
 // bondsSellsDisabled();
 // iidAddEdKeys();
 // bondsSellsEnabled();
@@ -65,6 +69,7 @@ generateBlockchainTestUsers();
 // cwUploadProposal();
 // quickQueries();
 // supamotoTokensFarm();
+// supamotoClaimsRedoRejected();
 
 // ------------------------------------------
 // Run the below after a devnet reset

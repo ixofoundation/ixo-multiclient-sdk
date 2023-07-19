@@ -7,6 +7,7 @@ import {
   generateNewWallet,
   chunkArray,
   saveFileToPath,
+  addDays,
 } from "../helpers/common";
 import * as Claims from "../modules/Claims";
 import * as Cosmos from "../modules/Cosmos";
@@ -445,3 +446,200 @@ export const supamotoClaims = () =>
     //   Claims.DisputeClaim(claimIds[1], "proof1")
     // );
   });
+
+// ------------------------------------------------------------
+// flow to rrecreate CER claims that failed with adjusted period
+// ------------------------------------------------------------
+export const supamotoClaimsRedoRejected = () =>
+  describe("Testing the Claims module", () => {
+    // const blocksyncUrl = "https://devnet-blocksync.ixo.earth";
+    const blocksyncUrl = "https://blocksync.ixo.earth";
+
+    const cerClaimsData: any = [];
+    test("Generate CER claims", async () => {
+      try {
+        const res = await axios.get(
+          `${blocksyncUrl}/api/claims/collection/1/claims?status=2&type=CER&take=1000&orderBy=asc`
+        );
+        if (res.status !== 200)
+          throw new Error("Failed to fetch claims" + res.statusText);
+        let failedClaims = res.data.data;
+        if (!failedClaims.length) throw new Error("skip");
+        console.log("initial failedClaims length: " + failedClaims.length);
+
+        let fetchDataIndex = -1;
+        for (let cerClaim of failedClaims) {
+          fetchDataIndex++;
+          // if (cerClaimsData.length >= 1) break;
+          console.log("fetching claim data for index " + fetchDataIndex);
+
+          const claimDataRes = await axios.get(
+            `${EcsCredentialsWorkerUrl}claims/claim/${cerClaim.claimId}/data`,
+            {
+              headers: {
+                Authorization: process.env.ECS_CREDENTIAL_WORKER_AUTH,
+              },
+            }
+          );
+          if (claimDataRes.status !== 200)
+            throw new Error(
+              "Failed to fetch claim data" + claimDataRes.statusText
+            );
+          let claimData = claimDataRes.data;
+          const fpClaimId =
+            claimData.credentialSubject.claim.evidence[0].linkedClaim.id.split(
+              ":/"
+            )[1];
+          const period =
+            (new Date(
+              claimData.credentialSubject.claim.period.endDate
+            ).getTime() -
+              new Date(
+                claimData.credentialSubject.claim.period.startDate
+              ).getTime()) /
+            (1000 * 3600 * 24);
+          const startDate = claimData.credentialSubject.claim.period.startDate;
+          let endDate =
+            period > 30
+              ? addDays(
+                  new Date(claimData.credentialSubject.claim.period.startDate),
+                  30
+                ).toISOString()
+              : claimData.credentialSubject.claim.period.endDate;
+
+          // fetch cooking sessions for the period of CER
+          const deviceEntity = await axios.get(
+            `${blocksyncUrl}/api/entity/byId/${claimData.credentialSubject.id}`
+          );
+          if (deviceEntity.status !== 200)
+            throw new Error(
+              "Failed to fetch deviceId" + deviceEntity.statusText
+            );
+          const deviceId = deviceEntity.data.externalId;
+          if (!deviceId) throw new Error("deviceId not found on entity");
+
+          let cookingSessions = await getCookingSessions(
+            startDate.slice(0, 10),
+            endDate.slice(0, 10),
+            deviceId
+          );
+
+          // less than 80 already success
+          if (cookingSessions.length < 75) continue;
+
+          for (let i of [1, 2, 3, 4]) {
+            if (cookingSessions.length < 75) break;
+            const daysToAdd = i == 1 ? 20 : i == 2 ? 16 : i == 3 ? 12 : 8;
+            endDate = addDays(
+              new Date(claimData.credentialSubject.claim.period.startDate),
+              daysToAdd
+            ).toISOString();
+
+            cookingSessions = await getCookingSessions(
+              startDate.slice(0, 10),
+              endDate.slice(0, 10),
+              deviceId
+            );
+          }
+
+          // if any cerClaimsData with fp claimId already exists then skip
+          if (
+            cerClaimsData.filter((c: any) => c.fuelPurchaseClaimId == fpClaimId)
+              .length > 0
+          ) {
+            continue;
+          }
+          cerClaimsData.push({
+            fuelPurchaseClaimId: fpClaimId,
+            startDate: startDate,
+            endDate: endDate,
+            cookingSessions: cookingSessions.length,
+          });
+        }
+        if (!cerClaimsData.length) throw new Error("skip");
+
+        console.log("Create CER claims started!");
+        let index = -1;
+        for (let cerClaimsChunk of chunkArray(cerClaimsData, 100)) {
+          index++;
+          console.log("Creating for batch:", index);
+          if (index) await timeout(1000 * 90);
+          try {
+            //  create the CER claims through ecs credentials worker
+            const cerClaims = await axios.post(
+              EcsCredentialsWorkerUrl + "claims/create",
+              {
+                type: "CER",
+                collectionId: "1",
+                storage: "cellnode",
+                generate: {
+                  type: "CER",
+                  data: cerClaimsChunk,
+                },
+              },
+              {
+                headers: {
+                  Authorization: process.env.ECS_CREDENTIAL_WORKER_AUTH,
+                },
+              }
+            );
+            if (
+              ![200, 201].includes(cerClaims.status) ||
+              cerClaims.data.code != 0
+            )
+              throw new Error(
+                `Failed to create CERclaims:` + cerClaims.data.message
+              );
+          } catch (error) {
+            console.error(
+              `createCERClaims error for batch: ${index}`,
+              error.message
+            );
+          }
+        }
+
+        console.log("Create CER claims success! " + cerClaimsData.length);
+      } catch (error) {
+        console.error("createCERClaims", error.message);
+      }
+
+      // save all CER Claims to file
+      saveFileToPath(
+        ["documents", "emerging", "cer_claims_recreate.json"],
+        JSON.stringify(cerClaimsData, null, 2)
+      );
+
+      expect(true).toBeTruthy();
+    });
+  });
+
+const getCookingSessions = async (
+  startDate: string,
+  endDate: string,
+  deviceId: string
+) => {
+  let cookingSessions: any[] = [];
+  let done = false;
+  let page = 0;
+  while (!done) {
+    const csRes = await axios.get(
+      `https://api.supamoto.app/api/v2/stoves/${deviceId}/sessions/cooking?pageSize=500&startDate=${startDate}&endDate=${endDate}&page=${page}`,
+      {
+        headers: {
+          Authorization: `Basic ${process.env.SUPAMOTO_API_TOKEN}`,
+        },
+      }
+    );
+    if (csRes.status !== 200)
+      throw new Error("Failed to fetch cooking sessions" + csRes.statusText);
+    const csData = csRes.data;
+    cookingSessions.push(
+      ...csData.content.map((cs) => ({
+        id: String(cs.id),
+      }))
+    );
+    page++;
+    if (!csData.hasNextPage) done = true;
+  }
+  return cookingSessions;
+};

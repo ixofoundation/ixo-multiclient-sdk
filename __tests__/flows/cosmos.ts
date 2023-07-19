@@ -62,7 +62,7 @@ export const sendTokens = (rounds = 1) =>
 
 export const govDeposit = () =>
   describe("Testing deposit funds into proposals", () => {
-    testMsg("/cosmos.bank.v1beta1.MsgDeposit", () => Cosmos.MsgDeposit(434));
+    testMsg("/cosmos.bank.v1beta1.MsgDeposit", () => Cosmos.MsgDeposit(438));
   });
 
 export const feegrantBasic = () =>

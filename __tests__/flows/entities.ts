@@ -12,36 +12,36 @@ export const enititiesBasic = () =>
       return res;
     });
 
-    // testMsg("/ixo.entity.v1beta1.MsgUpdateEntityVerified", () =>
-    //   Entity.UpdateEntityVerified(undefined, entityDid)
-    // );
-
-    // testMsg("/ixo.entity.v1beta1.MsgTransferEntity", () =>
-    //   Entity.TransferEntity(
-    //     WalletUsers.tester,
-    //     "did:ixo:entity:8f7c804bc526aea81c0ac552d29e14d1",
-    //     "did:x:zQ3shQ3FDm5NaUfDNUuTexmWNBLAYMDo8fwLVPMfpVV2FUzub"
-    //   )
-    // );
+    testMsg("/ixo.entity.v1beta1.MsgUpdateEntityVerified", () =>
+      Entity.UpdateEntityVerified(undefined, entityDid)
+    );
 
     // testMsg("/ixo.entity.v1beta1.MsgUpdateEntity", () => Entity.UpdateEntity());
 
-    // let accountAddress = "ixo1syjk0qh59vxz3zk776m5vrzvyv4nwpvh57yps2";
-    // let name = "name";
-    // testMsg("/ixo.entity.v1beta1.MsgCreateEntityAccount", async () => {
-    //   const res = await Entity.CreateEntityAccount(entityDid, name);
-    //   accountAddress = utils.common.getValueFromEvents(
-    //     res,
-    //     "ixo.entity.v1beta1.EntityAccountCreatedEvent",
-    //     "account_address"
-    //   );
-    //   console.log({ accountAddress });
-    //   return res;
-    // });
+    let accountAddress = "ixo1syjk0qh59vxz3zk776m5vrzvyv4nwpvh57yps2";
+    let name = "name";
+    testMsg("/ixo.entity.v1beta1.MsgCreateEntityAccount", async () => {
+      const res = await Entity.CreateEntityAccount(entityDid, name);
+      accountAddress = utils.common.getValueFromEvents(
+        res,
+        "ixo.entity.v1beta1.EntityAccountCreatedEvent",
+        "account_address"
+      );
+      console.log({ accountAddress });
+      return res;
+    });
 
-    // testMsg(
-    //   "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
-    //   () => Entity.GrantEntityAccountAuthz(entityDid, name),
-    //   true
-    // );
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
+      () => Entity.GrantEntityAccountAuthz(entityDid, name),
+      true
+    );
+
+    testMsg("/ixo.entity.v1beta1.MsgTransferEntity", () =>
+      Entity.TransferEntity(
+        WalletUsers.tester,
+        entityDid
+        // "did:x:zQ3shQ3FDm5NaUfDNUuTexmWNBLAYMDo8fwLVPMfpVV2FUzub"
+      )
+    );
   });
