@@ -203,7 +203,8 @@ export const UpdateEntity = async (data?: MsgUpdateEntity) => {
 
 export const UpdateEntityVerified = async (
   signer: WalletUsers = WalletUsers.tester,
-  entityDid: string
+  entityDids: string[],
+  relayerDid?: string
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -211,17 +212,21 @@ export const UpdateEntityVerified = async (
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
 
-  const message = {
+  const messages = entityDids.map((did) => ({
     typeUrl: "/ixo.entity.v1beta1.MsgUpdateEntityVerified",
     value: ixo.entity.v1beta1.MsgUpdateEntityVerified.fromPartial({
-      id: entityDid,
+      id: did,
       entityVerified: true,
-      relayerNodeDid: tester.did,
+      relayerNodeDid: relayerDid || tester.did,
       relayerNodeAddress: myAddress,
     }),
-  };
+  }));
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  const response = await client.signAndBroadcast(
+    myAddress,
+    messages,
+    getFee(messages.length)
+  );
   return response;
 };
 

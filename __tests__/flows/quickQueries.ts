@@ -77,13 +77,13 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
-    // test("Query proposal by id", async () => {
-    //   const res = await queryClient.cosmos.gov.v1beta1.proposal({
-    //     proposalId: Long.fromNumber(4),
-    //   });
-    //   console.log(res.proposal);
-    //   expect(res).toBeTruthy();
-    // });
+    test("Query proposal by id", async () => {
+      const res = await queryClient.cosmos.gov.v1beta1.proposal({
+        proposalId: Long.fromNumber(4),
+      });
+      console.log(res.proposal);
+      expect(res).toBeTruthy();
+    });
 
     // test("Query user balance", async () => {
     //   const address = (await getUser(WalletUsers.alice).getAccounts())[0]
@@ -165,20 +165,20 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
-    // test("query wasm store codes", async () => {
-    //   const res = await queryClient.cosmwasm.wasm.v1.codes();
-    //   console.log(res.codeInfos);
-    //   expect(res).toBeTruthy();
-    // });
+    test("query wasm store codes", async () => {
+      const res = await queryClient.cosmwasm.wasm.v1.codes();
+      console.log(res.codeInfos);
+      expect(res).toBeTruthy();
+    });
 
-    // test("query tokens list by did", async () => {
-    //   const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;
-    //   const res = await queryClient.ixo.token.v1beta1.tokenList({
-    //     minter: user,
-    //   });
-    //   console.log(res.tokenDocs);
-    //   expect(res).toBeTruthy();
-    // });
+    test("query tokens list by did", async () => {
+      const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;
+      const res = await queryClient.ixo.token.v1beta1.tokenList({
+        minter: user,
+      });
+      console.log(res.tokenDocs);
+      expect(res).toBeTruthy();
+    });
 
     // test("query token metadata by id", async () => {
     //   try {

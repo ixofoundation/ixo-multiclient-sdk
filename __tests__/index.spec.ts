@@ -2,42 +2,18 @@ require("dotenv").config();
 
 import { createQueryClient, generateWallets } from "./helpers/common";
 import { generateConstants } from "./helpers/constants";
-import {
-  bondsBasic,
-  bondsSellsDisabled,
-  bondsSellsEnabled,
-} from "./flows/bonds";
-import {
-  iidsBasic,
-  registerIids,
-  registerIidsDev,
-  generateBlockchainTestUsers,
-  iidAddEdKeys,
-  iidReplaceLinkedResource,
-} from "./flows/iids";
-import { enititiesBasic } from "./flows/entities";
-import { ibcBasic } from "./flows/ibc";
-import {
-  bankBasic,
-  authzBasic,
-  sendTokens,
-  govDeposit,
-  feegrantBasic,
-} from "./flows/cosmos";
-import {
-  instantiateModulesProposals,
-  devnetProposals,
-  cwUploadProposal,
-} from "./flows/instantiateProposals";
-import { tokenBasic, supamotoTokens, supamotoTokensFarm } from "./flows/tokens";
-import { daoCore, wasmBasic } from "./flows/cosmwasm";
-import { quickQueries } from "./flows/quickQueries";
-import {
-  claimsBasic,
-  supamotoClaims,
-  supamotoClaimsRedoRejected,
-} from "./flows/claims";
+import * as Bonds from "./flows/bonds";
+import * as IID from "./flows/iids";
+import * as Entity from "./flows/entities";
+import * as IBC from "./flows/ibc";
+import * as Cosmos from "./flows/cosmos";
+import * as Proposals from "./flows/instantiateProposals";
+import * as Token from "./flows/tokens";
+import * as CosmWasm from "./flows/cosmwasm";
+import * as Queries from "./flows/quickQueries";
+import * as Claims from "./flows/claims";
 import { ChainNetwork } from "../src/custom_queries/chain.types";
+import { dids } from "./setup/constants";
 
 beforeAll(() => {
   generateConstants();
@@ -45,37 +21,42 @@ beforeAll(() => {
 });
 
 // To generate mapping of blockchain test users to sdk test users with set mnemonics
-generateBlockchainTestUsers();
+IID.generateBlockchainTestUsers();
 
-// registerIids();
-// instantiateModulesProposals();
-// bankBasic();
-// iidsBasic();
-// bondsBasic();
-// enititiesBasic();
-// tokenBasic();
-// claimsBasic();
-// daoCore();
-// sendTokens();
-// bondsSellsDisabled();
-// iidAddEdKeys();
-// bondsSellsEnabled();
-// iidReplaceLinkedResource();
-// ibcBasic();
-// govDeposit();
-// authzBasic();
-// wasmBasic();
-// feegrantBasic();
-// cwUploadProposal();
-// quickQueries();
-// supamotoTokensFarm();
-// supamotoClaimsRedoRejected();
+// IID.registerIids();
+// Proposals.instantiateModulesProposals();
+// Cosmos.bankBasic();
+// IID.iidsBasic();
+// Bonds.bondsBasic();
+// Entity.enititiesBasic();
+// Token.tokenBasic();
+// Claims.claimsBasic();
+// CosmWasm.daoCore();
+// Cosmos.sendTokens();
+// Bonds.bondsSellsDisabled();
+// IID.iidAddEdKeys();
+// Bonds.bondsSellsEnabled();
+// IID.iidReplaceLinkedResource();
+// IBC.ibcBasic();
+// Cosmos.govDeposit();
+// Cosmos.authzBasic();
+// CosmWasm.wasmBasic();
+// Cosmos.feegrantBasic();
+// Proposals.cwUploadProposal();
+// Queries.quickQueries();
+// Token.supamotoTokensFarm();
+// Claims.supamotoClaimsRedoRejected();
+// Entity.relayerVerifyAllEntities(
+//   process.env.ROOT_IMPACTS,
+//   dids.impactsDao,
+//   "devnet"
+// );
 
 // ------------------------------------------
 // Run the below after a devnet reset
 // ------------------------------------------
 export const chainNetwork: ChainNetwork = "devnet";
-// devnetProposals();
+// Proposals.devnetProposals();
 // first run devnetProposals, the run initcontracts.sh on dev server
 // immidiately, and wait for all proposals to pass then run below
 //
@@ -84,6 +65,6 @@ export const chainNetwork: ChainNetwork = "devnet";
 // you dont have to save did constants after dao creation, it deterministic so preset to devnet dids
 //
 // After daos is on devnet you can run the below
-// registerIidsDev();
-// supamotoTokens();
-// supamotoClaims();
+// IID.registerIidsDev();
+// Token.supamotoTokens();
+// Claims.supamotoClaims();

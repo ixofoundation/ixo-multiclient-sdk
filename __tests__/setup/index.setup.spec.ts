@@ -2,10 +2,12 @@ require("dotenv").config();
 
 import { ChainNetwork } from "../../src/custom_queries/chain.types";
 import { bankBasic, sendTokens } from "../flows/cosmos";
+import { relayerVerifyAllEntities } from "../flows/entities";
 import { generateBlockchainTestUsers } from "../flows/iids";
 import { generateNewWallet, generateWallets } from "../helpers/common";
 import { WalletUsers } from "../helpers/constants";
 import { classesFlow } from "./classes/setupFlow";
+import { dids } from "./constants";
 import { ecsDaoFlow, ecsFlow, ecsProjectFlow } from "./ecs/setupFlow";
 import {
   emergingAssetsFlow,
@@ -81,6 +83,15 @@ ecsProjectFlow(); //ecs user
 // next create cookstoves
 cookstovesFlowDevnet(); //ecs user
 // cookstovesFlow(); //ecs user, only for testnet and main net
+
+// next verify all entities created
+relayerVerifyAllEntities(undefined, undefined, chainNetwork); //impacts root user
+relayerVerifyAllEntities(undefined, dids.impactsDao, chainNetwork); //impacts dao user
+relayerVerifyAllEntities(
+  process.env.ROOT_EMERGING,
+  dids.emergingDao,
+  chainNetwork
+); //emerging dao user
 
 // custom test for web3 storage uploading
 // web3Storage();
