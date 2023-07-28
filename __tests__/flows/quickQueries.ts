@@ -1,9 +1,11 @@
 import Long from "long";
 import { createRegistry, utils } from "../../src";
 import { getUser, queryClient } from "../helpers/common";
-import { WalletUsers } from "../helpers/constants";
+import { RPC_URL, WalletUsers } from "../helpers/constants";
 import { AuthInfo, TxBody } from "../../src/codegen/cosmos/tx/v1beta1/tx";
 import { fromHex } from "@cosmjs/encoding";
+import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { Uint8ArrayToJS } from "../../src/utils/conversions";
 
 export const quickQueries = () =>
   describe("Quick queries to see states", () => {
@@ -26,6 +28,38 @@ export const quickQueries = () =>
     //   // console.dir(createRegistry().decode(res.tx!.body!.messages![0]), {
     //   //   depth: null,
     //   // });
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query block results from Tendermint Clint", async () => {
+    //   const res = await (
+    //     await Tendermint34Client.connect(RPC_URL)
+    //   ).blockResults(187175);
+
+    //   const ignoreList = [
+    //     "coin_received",
+    //     "rewards",
+    //     "commission",
+    //     "transfer",
+    //     "coin_spent",
+    //     "mint",
+    //   ];
+    //   console.dir(
+    //     {
+    //       beginBlockEvents: res.beginBlockEvents.map((e) =>
+    //         ignoreList.includes(e.type)
+    //           ? null
+    //           : e.attributes.map((a) => ({
+    //               a: Uint8ArrayToJS(a.key),
+    //               b: Uint8ArrayToJS(a.value),
+    //             }))
+    //       ),
+    //       endBlockEvents: res.endBlockEvents.map((e) =>
+    //         ignoreList.includes(e.type) ? null : e
+    //       ),
+    //     },
+    //     { depth: null }
+    //   );
     //   expect(res).toBeTruthy();
     // });
 
@@ -77,13 +111,13 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
-    test("Query proposal by id", async () => {
-      const res = await queryClient.cosmos.gov.v1beta1.proposal({
-        proposalId: Long.fromNumber(4),
-      });
-      console.log(res.proposal);
-      expect(res).toBeTruthy();
-    });
+    // test("Query proposal by id", async () => {
+    //   const res = await queryClient.cosmos.gov.v1beta1.proposal({
+    //     proposalId: Long.fromNumber(4),
+    //   });
+    //   console.log(res.proposal);
+    //   expect(res).toBeTruthy();
+    // });
 
     // test("Query user balance", async () => {
     //   const address = (await getUser(WalletUsers.alice).getAccounts())[0]
@@ -165,20 +199,20 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
-    test("query wasm store codes", async () => {
-      const res = await queryClient.cosmwasm.wasm.v1.codes();
-      console.log(res.codeInfos);
-      expect(res).toBeTruthy();
-    });
+    // test("query wasm store codes", async () => {
+    //   const res = await queryClient.cosmwasm.wasm.v1.codes();
+    //   console.log(res.codeInfos);
+    //   expect(res).toBeTruthy();
+    // });
 
-    test("query tokens list by did", async () => {
-      const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;
-      const res = await queryClient.ixo.token.v1beta1.tokenList({
-        minter: user,
-      });
-      console.log(res.tokenDocs);
-      expect(res).toBeTruthy();
-    });
+    // test("query tokens list by did", async () => {
+    //   const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;
+    //   const res = await queryClient.ixo.token.v1beta1.tokenList({
+    //     minter: user,
+    //   });
+    //   console.log(res.tokenDocs);
+    //   expect(res).toBeTruthy();
+    // });
 
     // test("query token metadata by id", async () => {
     //   try {
@@ -315,7 +349,7 @@ export const quickQueries = () =>
     // });
 
     // test("query iid doc", async () => {
-    //   const did: string = "did:ixo:entity:f2235630689d4b54a561ca3de57494f6";
+    //   const did: string = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
     //   // const did = getUser(WalletUsers.tester).did;
     //   try {
     //     const res = await queryClient.ixo.iid.v1beta1.iidDocument({
