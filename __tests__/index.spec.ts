@@ -46,11 +46,8 @@ IID.generateBlockchainTestUsers();
 // Queries.quickQueries();
 // Token.supamotoTokensFarm();
 // Claims.supamotoClaimsRedoRejected();
-// Entity.relayerVerifyAllEntities(
-//   process.env.ROOT_IMPACTS,
-//   dids.impactsDao,
-//   "devnet"
-// );
+// Entity.relayerVerifyAllEntities();
+// Entity.enititiesSetStatus();
 
 // ------------------------------------------
 // Run the below after a devnet reset

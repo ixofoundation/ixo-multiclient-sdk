@@ -121,3 +121,14 @@ export const relayerVerifyAllEntities = (
       return true as any;
     });
   });
+
+// Helper to update entity status
+export const enititiesSetStatus = () =>
+  describe("Testing the entities module", () => {
+    let entityDid = "did:ixo:entity:3e7253499daf46aab546ab7d2b884bde";
+    let status = 1;
+
+    testMsg("/ixo.entity.v1beta1.MsgUpdateEntity", () =>
+      Entity.UpdateEntity({ id: entityDid, entityStatus: status })
+    );
+  });

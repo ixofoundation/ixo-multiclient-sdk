@@ -3,12 +3,14 @@ import {
   createAgentIidContext,
   createIidVerificationMethods,
 } from "../../src/messages/iid";
+import { Timestamp } from "../../src/utils/proto";
 import {
   addDays,
   cosmos,
   createClient,
   getUser,
   ixo,
+  queryClient,
   utils,
 } from "../helpers/common";
 import { fee, getFee, keyType, WalletUsers } from "../helpers/constants";
@@ -176,7 +178,13 @@ export const TransferEntity = async (
   return response;
 };
 
-export const UpdateEntity = async (data?: MsgUpdateEntity) => {
+export const UpdateEntity = async (data: {
+  id?: string;
+  entityStatus?: number;
+  startDate?: Timestamp;
+  endDate?: Timestamp;
+  credentials?: string[];
+}) => {
   const client = await createClient();
 
   const tester = getUser();
@@ -184,14 +192,21 @@ export const UpdateEntity = async (data?: MsgUpdateEntity) => {
   const myAddress = account.address;
   const userDid = tester.did;
 
+  const entity = await queryClient.ixo.entity.v1beta1.entity({
+    id: data?.id || userDid,
+  });
+  if (!entity.entity) {
+    throw new Error("Entity not found");
+  }
+
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgUpdateEntity",
     value: ixo.entity.v1beta1.MsgUpdateEntity.fromPartial({
       id: data?.id || userDid,
-      entityStatus: data?.entityStatus || 0,
-      startDate: data?.startDate || undefined,
-      endDate: data?.endDate || undefined,
-      credentials: data?.credentials || undefined,
+      entityStatus: data?.entityStatus || entity.entity.status,
+      startDate: data?.startDate || entity.entity.startDate,
+      endDate: data?.endDate || entity.entity.endDate,
+      credentials: data?.credentials || entity.entity.credentials,
       controllerDid: userDid,
       controllerAddress: myAddress,
     }),
