@@ -300,7 +300,7 @@ export const supamotoClaims = () =>
       console.time("claims");
       for (const stovePurchases of purchaseData) {
         index++;
-        // if (index !== 3) continue; // if want to only mint a certain amount of batches add number here
+        if (index !== 0) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
         console.log(
           "starting batch " + (index + 1) + " of " + purchaseData.length
         );
@@ -379,10 +379,10 @@ export const supamotoClaims = () =>
       console.timeEnd("claims");
 
       // save all stove purchases to file
-      saveFileToPath(
-        ["documents", "emerging", "fuelPurchases_dev.json"],
-        JSON.stringify(stovePurchasesAll, null, 2)
-      );
+      // saveFileToPath(
+      //   ["documents", "emerging", "fuelPurchases_dev.json"],
+      //   JSON.stringify(stovePurchasesAll, null, 2)
+      // );
 
       expect(true).toBeTruthy();
     });
