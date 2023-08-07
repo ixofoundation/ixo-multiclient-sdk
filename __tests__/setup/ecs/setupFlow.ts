@@ -2,7 +2,10 @@ import { ixo, testMsg, utils } from "../../helpers/common";
 import { setup_dao_constants } from "./constants";
 import * as Entity from "../Entity";
 import * as Iid from "../../modules/Iid";
-import { setup_asset_collection_constants } from "../supamoto/constants";
+import {
+  setup_asset_collection_constants,
+  setup_project_constants,
+} from "../supamoto/constants";
 import {
   setAndLedgerUser,
   uploadAllToCellnodeWeb3,
@@ -99,4 +102,36 @@ export const ecsFlow = () =>
         })
       )
     );
+  });
+
+export const ecsProjectFlow = () =>
+  describe("Flow for creating ECS entities (dao/protocol/oracle)", () => {
+    setAndLedgerUser(process.env.ROOT_ECS!);
+
+    // =============================== START
+    let ecsProjectDid: string;
+    testMsg("/ixo.entity.v1beta1.MsgCreateEntity dao", async () => {
+      const projectConst = setup_project_constants();
+
+      let linkedResourcesUploaded = await uploadAllToCellnodeWeb3(
+        projectConst.linkedResources
+      );
+      console.log({ linkedResourcesUploaded });
+
+      let linkedClaimsUploaded = await uploadAllToCellnodeWeb3Claims(
+        projectConst.linkedClaims
+      );
+      console.log({ linkedClaimsUploaded });
+
+      // Create the Entity
+      const res = await Entity.CreateEntity(
+        projectConst.entity,
+        linkedResourcesUploaded
+      );
+      ecsProjectDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
+      console.log({ ecsProjectDid });
+
+      return res;
+    });
+    // =============================== END
   });

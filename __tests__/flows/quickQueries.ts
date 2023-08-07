@@ -1,9 +1,11 @@
 import Long from "long";
 import { createRegistry, utils } from "../../src";
 import { getUser, queryClient } from "../helpers/common";
-import { WalletUsers } from "../helpers/constants";
+import { RPC_URL, WalletUsers } from "../helpers/constants";
 import { AuthInfo, TxBody } from "../../src/codegen/cosmos/tx/v1beta1/tx";
 import { fromHex } from "@cosmjs/encoding";
+import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { Uint8ArrayToJS } from "../../src/utils/conversions";
 
 export const quickQueries = () =>
   describe("Quick queries to see states", () => {
@@ -17,12 +19,47 @@ export const quickQueries = () =>
 
     // test("Query cosmos.tx.v1beta1.getTx", async () => {
     //   const res = await queryClient.cosmos.tx.v1beta1.getTx({
-    //     hash: "525F02F796360AE6B7407765FE679595EFB5053E352C18C276C0255D44290BF2",
+    //     hash: "11CDBCF0E51D5FF185C7B0BB5921C006310F4B4FC53E8C3C1237192B88C91D6A",
     //   });
-    //   console.dir(res.tx, { depth: null });
+    //   console.dir(
+    //     res.tx?.body?.messages.map((m) => createRegistry().decode(m)),
+    //     { depth: null }
+    //   );
     //   // console.dir(createRegistry().decode(res.tx!.body!.messages![0]), {
     //   //   depth: null,
     //   // });
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query block results from Tendermint Clint", async () => {
+    //   const res = await (
+    //     await Tendermint34Client.connect(RPC_URL)
+    //   ).blockResults(187175);
+
+    //   const ignoreList = [
+    //     "coin_received",
+    //     "rewards",
+    //     "commission",
+    //     "transfer",
+    //     "coin_spent",
+    //     "mint",
+    //   ];
+    //   console.dir(
+    //     {
+    //       beginBlockEvents: res.beginBlockEvents.map((e) =>
+    //         ignoreList.includes(e.type)
+    //           ? null
+    //           : e.attributes.map((a) => ({
+    //               a: Uint8ArrayToJS(a.key),
+    //               b: Uint8ArrayToJS(a.value),
+    //             }))
+    //       ),
+    //       endBlockEvents: res.endBlockEvents.map((e) =>
+    //         ignoreList.includes(e.type) ? null : e
+    //       ),
+    //     },
+    //     { depth: null }
+    //   );
     //   expect(res).toBeTruthy();
     // });
 
@@ -68,9 +105,9 @@ export const quickQueries = () =>
     // test("Query cosmos.tx.v1beta1.getBlockByHeight", async () => {
     //   const res =
     //     await queryClient.cosmos.base.tendermint.v1beta1.getBlockByHeight({
-    //       height: Long.fromNumber(15955),
+    //       height: Long.fromNumber(6525),
     //     });
-    //   console.log(res);
+    //   console.log(res.block?.data);
     //   expect(res).toBeTruthy();
     // });
 
@@ -312,7 +349,7 @@ export const quickQueries = () =>
     // });
 
     // test("query iid doc", async () => {
-    //   const did: string = "did:ixo:entity:f2235630689d4b54a561ca3de57494f6";
+    //   const did: string = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
     //   // const did = getUser(WalletUsers.tester).did;
     //   try {
     //     const res = await queryClient.ixo.iid.v1beta1.iidDocument({

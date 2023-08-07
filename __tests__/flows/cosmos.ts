@@ -50,7 +50,10 @@ export const sendTokens = (rounds = 1) =>
         const res = await Cosmos.BankSendTrx(
           ixo * Math.pow(10, 6),
           WalletUsers.random,
-          WalletUsers.tester
+          WalletUsers.tester,
+          undefined,
+          undefined
+          // "ixo1mgwecafj48kuu0jawyw5emsqgpu36vthpph6d8"
         );
         return res;
       });
@@ -59,7 +62,7 @@ export const sendTokens = (rounds = 1) =>
 
 export const govDeposit = () =>
   describe("Testing deposit funds into proposals", () => {
-    testMsg("/cosmos.bank.v1beta1.MsgDeposit", () => Cosmos.MsgDeposit(434));
+    testMsg("/cosmos.bank.v1beta1.MsgDeposit", () => Cosmos.MsgDeposit(438));
   });
 
 export const feegrantBasic = () =>

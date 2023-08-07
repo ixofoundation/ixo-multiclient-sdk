@@ -3,12 +3,14 @@ import {
   createAgentIidContext,
   createIidVerificationMethods,
 } from "../../src/messages/iid";
+import { Timestamp } from "../../src/utils/proto";
 import {
   addDays,
   cosmos,
   createClient,
   getUser,
   ixo,
+  queryClient,
   utils,
 } from "../helpers/common";
 import { fee, getFee, keyType, WalletUsers } from "../helpers/constants";
@@ -119,6 +121,17 @@ export const CreateEntityAssetSupamotoInstance = async (
           encrypted: "false",
           right: "",
         },
+        {
+          id: `{id}#profile`,
+          type: "Settings",
+          description: "Profile",
+          mediaType: "application/ld+json",
+          serviceEndpoint:
+            "ipfs:bafkreigx7val5mfeghm636jcso6kt7wqpieh7h7hgdkcn64xxyy7ihp2q4",
+          proof: "bafkreigx7val5mfeghm636jcso6kt7wqpieh7h7hgdkcn64xxyy7ihp2q4",
+          encrypted: "false",
+          right: "",
+        },
       ],
       accordedRight: [],
       linkedEntity: [],
@@ -165,7 +178,13 @@ export const TransferEntity = async (
   return response;
 };
 
-export const UpdateEntity = async (data?: MsgUpdateEntity) => {
+export const UpdateEntity = async (data: {
+  id?: string;
+  entityStatus?: number;
+  startDate?: Timestamp;
+  endDate?: Timestamp;
+  credentials?: string[];
+}) => {
   const client = await createClient();
 
   const tester = getUser();
@@ -173,14 +192,21 @@ export const UpdateEntity = async (data?: MsgUpdateEntity) => {
   const myAddress = account.address;
   const userDid = tester.did;
 
+  const entity = await queryClient.ixo.entity.v1beta1.entity({
+    id: data?.id || userDid,
+  });
+  if (!entity.entity) {
+    throw new Error("Entity not found");
+  }
+
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgUpdateEntity",
     value: ixo.entity.v1beta1.MsgUpdateEntity.fromPartial({
       id: data?.id || userDid,
-      entityStatus: data?.entityStatus || 0,
-      startDate: data?.startDate || undefined,
-      endDate: data?.endDate || undefined,
-      credentials: data?.credentials || undefined,
+      entityStatus: data?.entityStatus || entity.entity.status,
+      startDate: data?.startDate || entity.entity.startDate,
+      endDate: data?.endDate || entity.entity.endDate,
+      credentials: data?.credentials || entity.entity.credentials,
       controllerDid: userDid,
       controllerAddress: myAddress,
     }),
@@ -192,7 +218,8 @@ export const UpdateEntity = async (data?: MsgUpdateEntity) => {
 
 export const UpdateEntityVerified = async (
   signer: WalletUsers = WalletUsers.tester,
-  entityDid: string
+  entityDids: string[],
+  relayerDid?: string
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -200,17 +227,21 @@ export const UpdateEntityVerified = async (
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
 
-  const message = {
+  const messages = entityDids.map((did) => ({
     typeUrl: "/ixo.entity.v1beta1.MsgUpdateEntityVerified",
     value: ixo.entity.v1beta1.MsgUpdateEntityVerified.fromPartial({
-      id: entityDid,
+      id: did,
       entityVerified: true,
-      relayerNodeDid: tester.did,
+      relayerNodeDid: relayerDid || tester.did,
       relayerNodeAddress: myAddress,
     }),
-  };
+  }));
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  const response = await client.signAndBroadcast(
+    myAddress,
+    messages,
+    getFee(messages.length)
+  );
   return response;
 };
 
@@ -259,11 +290,11 @@ export const GrantEntityAccountAuthz = async (
           typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
           value: cosmos.authz.v1beta1.GenericAuthorization.encode(
             cosmos.authz.v1beta1.GenericAuthorization.fromPartial({
-              msg: "/cosmos.gov.v1beta1.MsgVote",
+              msg: "/cosmos.gov.v1beta1.MsgSend",
             })
           ).finish(),
         },
-        expiration: utils.proto.toTimestamp(addDays(new Date(), 365)),
+        expiration: utils.proto.toTimestamp(addDays(new Date(), 1)),
       }),
     }),
   };

@@ -19,6 +19,12 @@ export enum WalletUsers {
   random = "random",
 }
 
+export const BlocksyncUrls = {
+  devnet: "https://devnet-blocksync.ixo.earth",
+  testnet: "https://blocksync-pandora.ixo.earth",
+  mainnet: "https://blocksync.ixo.earth",
+};
+
 export let constants: ReturnType<typeof generateConstants>;
 
 export const generateConstants = (setGlobal = true) => {

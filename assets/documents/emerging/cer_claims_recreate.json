@@ -1,0 +1,506 @@
+[
+  {
+    "fuelPurchaseClaimId": "bafkreigxf2k43awsgd7et3ycf6ewnlwysshroztzli5pyqpt3iwhl66of4",
+    "startDate": "2022-09-19T10:42:00.000Z",
+    "endDate": "2022-10-05T10:42:00.000Z",
+    "cookingSessions": 74
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiemrytiogdygper6cy273r67ixt2ivej32g2hu7rjxrckdq35bzrq",
+    "startDate": "2022-10-07T17:02:00.000Z",
+    "endDate": "2022-10-23T17:02:00.000Z",
+    "cookingSessions": 72
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreib2qcy7do5v6xn5qnmosq2hxv2bgklrykvfzifkxr6dd7pbjazrty",
+    "startDate": "2022-10-12T10:11:00.000Z",
+    "endDate": "2022-10-24T10:11:00.000Z",
+    "cookingSessions": 71
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreid2luoalcjazbjeleci4mw6lfek5oujrkhxbfe7zo6marr5iguatu",
+    "startDate": "2022-11-07T13:50:00.000Z",
+    "endDate": "2022-11-27T13:50:00.000Z",
+    "cookingSessions": 70
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiguujd53mwbkppbu6ejgg53dtoprdph5o5yvb56a4iw25jc4ao4ya",
+    "startDate": "2022-11-22T08:59:00.000Z",
+    "endDate": "2022-12-08T08:59:00.000Z",
+    "cookingSessions": 68
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiel6pttowdawde3nuts4lglzmvczma2mnqu5jkplxmhwxvfov627e",
+    "startDate": "2022-11-23T18:19:00.000Z",
+    "endDate": "2022-12-13T18:19:00.000Z",
+    "cookingSessions": 68
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiaift4b5yr7afqj6xte3bh3h7eellh7rorulgrvcdto2oxcsfbvai",
+    "startDate": "2022-12-20T11:52:00.000Z",
+    "endDate": "2023-01-05T11:52:00.000Z",
+    "cookingSessions": 68
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreicq2totqan7ubmoflszhfyzi6iomip7oekxmnvxo2z7y3xejz3zku",
+    "startDate": "2022-12-22T10:26:00.000Z",
+    "endDate": "2023-01-11T10:26:00.000Z",
+    "cookingSessions": 70
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreid7xrrymyufkcsfvqpbgkpqmgb5f36wnj22gtig6o53fnf7urro7e",
+    "startDate": "2022-12-30T13:02:00.000Z",
+    "endDate": "2023-01-15T13:02:00.000Z",
+    "cookingSessions": 72
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreigninvv5xwchjbilhwm67qcqo3xip72h67arlhysnjt5mjifamgiu",
+    "startDate": "2023-01-05T10:18:00.000Z",
+    "endDate": "2023-01-13T10:18:00.000Z",
+    "cookingSessions": 56
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreifw4bdoz5xurkoknypvdt2ejvzydsxd4bgpmjwp5wdlp5dkymjgea",
+    "startDate": "2023-01-19T20:36:00.000Z",
+    "endDate": "2023-02-08T20:36:00.000Z",
+    "cookingSessions": 67
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreieerh3ced6fvbychm3vskcaxtpju234aaea57klpsh377wsobr7hi",
+    "startDate": "2023-02-03T14:25:00.000Z",
+    "endDate": "2023-02-15T14:25:00.000Z",
+    "cookingSessions": 66
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreic7pplq6ei2o7tdvfmqhm4ndvmart2lrsusb5zillgzwlfsiwejjq",
+    "startDate": "2023-02-09T10:51:00.000Z",
+    "endDate": "2023-02-25T10:51:00.000Z",
+    "cookingSessions": 69
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreier6n6yinjlinlpxemh46tyiefidkrvrg5bc3flplfbicgfakchtq",
+    "startDate": "2023-02-09T10:59:00.000Z",
+    "endDate": "2023-03-01T10:59:00.000Z",
+    "cookingSessions": 73
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiepbxsfv3y4iy5ogj7et2wpe2v73373gmcsc4e6l2f7t2vdup2c2m",
+    "startDate": "2023-02-15T16:09:00.000Z",
+    "endDate": "2023-03-07T16:09:00.000Z",
+    "cookingSessions": 71
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreif3vh5dv2ez34zgpzwff7uk2n2gicuss3naoe4ntacof3db3sb56u",
+    "startDate": "2023-02-15T16:09:00.000Z",
+    "endDate": "2023-03-07T16:09:00.000Z",
+    "cookingSessions": 71
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiftorxoss76zqeq2negbywze7t35srkmmgx2t2rakk7ofvpudpyxe",
+    "startDate": "2023-02-22T08:23:00.000Z",
+    "endDate": "2023-03-10T08:23:00.000Z",
+    "cookingSessions": 64
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreidf2ogdoxnn57k5a3oaoqyz5kuusi3ix7tpweqifpa7dkrru6ogqu",
+    "startDate": "2023-03-03T19:06:00.000Z",
+    "endDate": "2023-03-15T19:06:00.000Z",
+    "cookingSessions": 73
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreibqf6m6r7nywtho5ml45ubvjtybuvm63h7vyo6bbaesm6pakhzaam",
+    "startDate": "2023-03-06T12:13:00.000Z",
+    "endDate": "2023-03-22T12:13:00.000Z",
+    "cookingSessions": 73
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreig3wx5xukvhmlg67o4hc7qgryy5dvr6ozuppg3cshv4kwjwzuhrka",
+    "startDate": "2023-03-09T11:53:00.000Z",
+    "endDate": "2023-03-21T11:53:00.000Z",
+    "cookingSessions": 63
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreifvzlepdrskvfvzhvexzgm5rtyz5mm27omxoe6wpd6o5yfe5stp5u",
+    "startDate": "2023-03-21T08:47:00.000Z",
+    "endDate": "2023-04-10T08:47:00.000Z",
+    "cookingSessions": 55
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreihjjwlhtdhla3zrzjl3j3nfyfu3rnpn5x3klkoptz4mqgzydywquy",
+    "startDate": "2023-03-21T08:47:00.000Z",
+    "endDate": "2023-04-10T08:47:00.000Z",
+    "cookingSessions": 55
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreidxoj3aer6vvi3f6vzbtwldh73vurtn25tn6knyqu56ej7l3scraq",
+    "startDate": "2022-07-02T12:16:00.000Z",
+    "endDate": "2022-07-14T12:16:00.000Z",
+    "cookingSessions": 66
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreih62rht54o7skmg7ps5ep4ehdwispnjppgfmopxnfi26r3wqhrouy",
+    "startDate": "2022-08-10T16:20:00.000Z",
+    "endDate": "2022-08-22T16:20:00.000Z",
+    "cookingSessions": 66
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiaflekhb2s3mjuyvubjd63nyvcg4vxwn53gswv345esreqaoiespi",
+    "startDate": "2022-09-07T17:38:00.000Z",
+    "endDate": "2022-09-23T17:38:00.000Z",
+    "cookingSessions": 63
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreigsnfmaevtjvf47aqqdzr422hbcalajcniq3x2ora7xgvhf3s3kwm",
+    "startDate": "2022-09-17T07:26:00.000Z",
+    "endDate": "2022-10-07T07:26:00.000Z",
+    "cookingSessions": 64
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreidmlnm363dkf5imz5vkhn2n3vtjwn7qe34otngaxmd6tfvvlz5z6y",
+    "startDate": "2022-09-30T13:06:00.000Z",
+    "endDate": "2022-10-12T13:06:00.000Z",
+    "cookingSessions": 64
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreihgrb5cmkvogj7gvzfrgtgrnoskrqimhwndipc6uah3upaulmfuqy",
+    "startDate": "2022-10-03T20:57:00.000Z",
+    "endDate": "2022-10-23T20:57:00.000Z",
+    "cookingSessions": 59
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreidrg6jjkajcvtb7i72ckozhcwulq3bo5utsxgysajwdbcaeiyez7e",
+    "startDate": "2022-12-12T11:05:00.000Z",
+    "endDate": "2022-12-28T11:05:00.000Z",
+    "cookingSessions": 60
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiasyoaxhm3dhorvo6icvuqvfqnenyzsnfxm64nsm5nc2ndbw3slwi",
+    "startDate": "2022-12-12T13:56:00.000Z",
+    "endDate": "2023-01-01T13:56:00.000Z",
+    "cookingSessions": 63
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreigzcrxawu4fj7sxxwf7nhymmaz4jrc4rvj2fkf4ban75tzkbmrewa",
+    "startDate": "2022-12-14T18:27:00.000Z",
+    "endDate": "2023-01-03T18:27:00.000Z",
+    "cookingSessions": 66
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreicvqwhonxrpty6erouovfc2rsg3ms4mbrpik3zhkl7ccopuc7chgu",
+    "startDate": "2022-12-28T09:34:00.000Z",
+    "endDate": "2023-01-17T09:34:00.000Z",
+    "cookingSessions": 66
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreib3ld7fegalieqdzdirw6ww3bqrd645rbvd4shzagkzwyd766ipjy",
+    "startDate": "2022-12-31T11:40:00.000Z",
+    "endDate": "2023-01-16T11:40:00.000Z",
+    "cookingSessions": 69
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreibvmniuxo7utsz6uzgnam2u2jhgaeijalf6b3krhakanfvjubhl2a",
+    "startDate": "2022-12-31T14:09:00.000Z",
+    "endDate": "2023-01-20T14:09:00.000Z",
+    "cookingSessions": 72
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiapnfkcqaawaoqxlbcdhkgqh3ay6uysnsndt4fk2cj6l6apreopf4",
+    "startDate": "2023-01-13T14:38:00.000Z",
+    "endDate": "2023-01-25T14:38:00.000Z",
+    "cookingSessions": 54
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreic56aicrzjjvcxg3jor73eqjakwilh27pitrhdv4ubumu5nrsnzoa",
+    "startDate": "2023-01-14T10:44:00.000Z",
+    "endDate": "2023-02-03T10:44:00.000Z",
+    "cookingSessions": 70
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreian4ajkmf3uryi5mxtfigqdcjnt6z6uhoj4dblek5ygd3gfqlkg3u",
+    "startDate": "2023-02-01T08:46:00.000Z",
+    "endDate": "2023-02-17T08:46:00.000Z",
+    "cookingSessions": 73
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreie77x5aoxqkokjqyiti6v36yem77m3t3mhfic5tqqhuxqopro34pe",
+    "startDate": "2023-02-02T12:14:00.000Z",
+    "endDate": "2023-02-14T12:14:00.000Z",
+    "cookingSessions": 65
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreigagbilrmxltsyicl47m2vo6nfvqdmjnghil3hdo2yrsbyerrfb54",
+    "startDate": "2023-02-23T08:57:00.000Z",
+    "endDate": "2023-03-15T08:57:00.000Z",
+    "cookingSessions": 61
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreifioxjp5tw6gxbcubj4e6sus3kuirc5k32bbmqi7bg4gmdk6hxsoe",
+    "startDate": "2023-03-11T10:22:00.000Z",
+    "endDate": "2023-03-31T10:22:00.000Z",
+    "cookingSessions": 66
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreigk3ifijvlhlbrkzttwfomh63ihn27z6qwwr7vp6ujpdgxorhju6a",
+    "startDate": "2022-05-27T16:30:00.000Z",
+    "endDate": "2022-06-16T16:30:00.000Z",
+    "cookingSessions": 58
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreihotxgvkir2m5jt6wfk2udgov5iqwyc5i3ggspcqyililihzdbiq4",
+    "startDate": "2022-06-13T16:18:24.000Z",
+    "endDate": "2022-07-03T16:18:24.000Z",
+    "cookingSessions": 70
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreicfgcidjkrhi2cjivi3h5xjlqjdxxlkah5kat5rwxfspxaym3vdau",
+    "startDate": "2022-06-30T16:15:00.000Z",
+    "endDate": "2022-07-12T16:15:00.000Z",
+    "cookingSessions": 71
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreigarydpz3e5lkkcduxt4bn6plcycm56yfyw3qc6yghj323th6n4ee",
+    "startDate": "2022-07-13T11:57:53.000Z",
+    "endDate": "2022-07-25T11:57:53.000Z",
+    "cookingSessions": 66
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreic2ahz26bf46axyxtrqvt6lyzf7hpgowhjdvljhozmvhcgjm3ddmu",
+    "startDate": "2022-07-18T19:18:13.000Z",
+    "endDate": "2022-07-30T19:18:13.000Z",
+    "cookingSessions": 60
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreihxpgktkazzf325enkout2svmgypzfbvvki2kd3skas7am63ope6u",
+    "startDate": "2022-09-04T18:00:00.000Z",
+    "endDate": "2022-09-24T18:00:00.000Z",
+    "cookingSessions": 52
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreihcx4h7bhmpwzw7oucsovpstgpwn4hvgnv22kaxcfermg3kjw7nb4",
+    "startDate": "2022-09-10T10:21:00.000Z",
+    "endDate": "2022-09-22T10:21:00.000Z",
+    "cookingSessions": 69
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreihl6fvvvdssybxh7uzkldj2crmvmixjsjum63nwboy2cgujnzzamy",
+    "startDate": "2022-09-10T15:39:00.000Z",
+    "endDate": "2022-09-30T15:39:00.000Z",
+    "cookingSessions": 32
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreibwjmsk7hxy3soozvebxmcvcsutsb4aerievvprnru7dprpccis34",
+    "startDate": "2022-07-10T21:45:00.000Z",
+    "endDate": "2022-07-26T21:45:00.000Z",
+    "cookingSessions": 70
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreic7tm7xhwzymsckuv2cpeu3l474wobmxgvczo77edcpufkwmtynoq",
+    "startDate": "2022-08-14T20:00:19.000Z",
+    "endDate": "2022-09-03T20:00:19.000Z",
+    "cookingSessions": 67
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreic4hu4ioomyheiphg4dx6hn65t2oehsye4sv5g5zad4sexu2mwaoi",
+    "startDate": "2022-10-07T09:40:00.000Z",
+    "endDate": "2022-10-27T09:40:00.000Z",
+    "cookingSessions": 61
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreihzloqt4jdjfi7jrevyh4jcwnzuixadhknaj545laefqfwbqt4sxm",
+    "startDate": "2022-10-13T08:54:00.000Z",
+    "endDate": "2022-11-02T08:54:00.000Z",
+    "cookingSessions": 61
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreicrgix6a3jgtsucjgq5zjxevdmmr5a6dzrutccjooehreozqzuwxa",
+    "startDate": "2022-11-01T15:34:00.000Z",
+    "endDate": "2022-11-13T15:34:00.000Z",
+    "cookingSessions": 56
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiey67zvqph7yc4fi7vpxacnjsgfndkwdlx47g3tc264iyd53ctbti",
+    "startDate": "2022-11-10T16:48:00.000Z",
+    "endDate": "2022-11-26T16:48:00.000Z",
+    "cookingSessions": 69
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreihjr256gsgktil5hvg2jhmnrk6ic36m5t37ntr6reqyba3wjaqjum",
+    "startDate": "2022-11-12T11:27:00.000Z",
+    "endDate": "2022-12-02T11:27:00.000Z",
+    "cookingSessions": 63
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreihuwtdszzzdyjptj4mimswxwuftnh3ogp35aervlzd24dfhmy7rmy",
+    "startDate": "2022-12-03T11:18:00.000Z",
+    "endDate": "2022-12-15T11:18:00.000Z",
+    "cookingSessions": 61
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiaqgelyz7mlzgzs5tah7rulwx7wgwjmlzg6f56iddsmrpi5jdn3me",
+    "startDate": "2022-12-05T13:18:00.000Z",
+    "endDate": "2022-12-21T13:18:00.000Z",
+    "cookingSessions": 51
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreietz5d7biici4gznhbtc6s7rkr33xivnugouvpupyxuhrrihgnkci",
+    "startDate": "2022-12-12T13:29:00.000Z",
+    "endDate": "2023-01-01T13:29:00.000Z",
+    "cookingSessions": 61
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreifaym35s7spzlj2puwmoomhkqqgtu7xm37zvkauyytamluxhnrud4",
+    "startDate": "2022-12-12T14:52:00.000Z",
+    "endDate": "2023-01-01T14:52:00.000Z",
+    "cookingSessions": 57
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreie24r46yb7hdfow6ak3pm7wtgrkvwlnnzpilwnveqem7tueon5rwm",
+    "startDate": "2022-12-12T16:06:00.000Z",
+    "endDate": "2022-12-24T16:06:00.000Z",
+    "cookingSessions": 63
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiagvyo23etoetvmzj6rm7xekhxlpgrqzkesop4pjh66qxqaagswum",
+    "startDate": "2022-12-16T15:18:00.000Z",
+    "endDate": "2023-01-05T15:18:00.000Z",
+    "cookingSessions": 48
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiebvjp6slphkzp265n6slfmc5mze2gw5hg45fj3tj6ihgrxxz4w4u",
+    "startDate": "2022-12-22T12:20:00.000Z",
+    "endDate": "2023-01-11T12:20:00.000Z",
+    "cookingSessions": 59
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiassgomlazchktwblqj6alxxdzqswgd2ivqb5rypxpbbwpfev7cvy",
+    "startDate": "2023-01-02T16:43:00.000Z",
+    "endDate": "2023-01-22T16:43:00.000Z",
+    "cookingSessions": 74
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreigif37a7cnbcfux23yzz4u255sij7ok6l7jhy75xk77v5c37h2cm4",
+    "startDate": "2023-01-04T13:32:00.000Z",
+    "endDate": "2023-01-20T13:32:00.000Z",
+    "cookingSessions": 72
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreic24ustqkhcgi6ztboa6kodixj5k67hsr5saqcicsotlqobrdjmie",
+    "startDate": "2023-01-09T13:50:00.000Z",
+    "endDate": "2023-01-25T13:50:00.000Z",
+    "cookingSessions": 72
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreibx57ix2wcdyuki5kjypnrjzilblmxqmfjhs2tmvh2fctzzqh3gqa",
+    "startDate": "2023-01-13T12:34:00.000Z",
+    "endDate": "2023-01-25T12:34:00.000Z",
+    "cookingSessions": 69
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiclomjpzujqt3mso5qa3hifqrmnlxgi4qmvafwkgb323lwwp72ufq",
+    "startDate": "2023-01-13T17:02:32.171Z",
+    "endDate": "2023-01-29T17:02:32.171Z",
+    "cookingSessions": 73
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreihfpovhykdosy2sqg5kf3jvflo342ibrpmjisovoeeoqqw2lxqoia",
+    "startDate": "2023-01-16T18:01:00.000Z",
+    "endDate": "2023-02-05T18:01:00.000Z",
+    "cookingSessions": 69
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreibzlrkbllxvpkm5qe2h5eoi3dafhilc464np5pvay2o4pe33uhjkm",
+    "startDate": "2023-01-19T16:39:00.000Z",
+    "endDate": "2023-02-04T16:39:00.000Z",
+    "cookingSessions": 65
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreiaf6i5j4ieltvxcqzyrbf5cp2fejxcz4iprwp3rh5kqyj2c4cre2q",
+    "startDate": "2023-01-20T15:58:00.000Z",
+    "endDate": "2023-02-01T15:58:00.000Z",
+    "cookingSessions": 63
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreicghsslxspiuzfvuu76eb7t32ctx5ctjzgro5yklylefptmd35jrm",
+    "startDate": "2023-01-23T13:01:00.000Z",
+    "endDate": "2023-02-08T13:01:00.000Z",
+    "cookingSessions": 73
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreidsxxkis3wptt3yk7a2anhtougr2b7sdtrdsb36jvlq2274nkpnjm",
+    "startDate": "2023-02-01T13:09:00.000Z",
+    "endDate": "2023-02-21T13:09:00.000Z",
+    "cookingSessions": 59
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreihknwcr2yyqvopl7fwriynh22fw2z7yeg4tevob4uq7t3j3e67xem",
+    "startDate": "2023-02-03T13:23:00.000Z",
+    "endDate": "2023-02-15T13:23:00.000Z",
+    "cookingSessions": 64
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreie7cypkrhmq5f3pd5cwoelbfbtp3wgokpcxrezkpkuw5smeqy26xi",
+    "startDate": "2023-02-04T10:35:00.000Z",
+    "endDate": "2023-02-16T10:35:00.000Z",
+    "cookingSessions": 69
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreidgncczx67gtzyir3bipfmr2ywvzjeodvvsnyidq5hinc2uhuxn5e",
+    "startDate": "2023-02-06T16:37:00.000Z",
+    "endDate": "2023-02-26T16:37:00.000Z",
+    "cookingSessions": 49
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreierir4kh24rgs7rwtowmuanqwmyc7zybm5xrpjjty6twneny5uelm",
+    "startDate": "2023-02-07T15:42:00.000Z",
+    "endDate": "2023-02-19T15:42:00.000Z",
+    "cookingSessions": 73
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreih74swml5sekocarm5cu47dyx65qxu2awlhtlztcmo6eq53tp7xhe",
+    "startDate": "2023-02-09T21:24:00.000Z",
+    "endDate": "2023-02-25T21:24:00.000Z",
+    "cookingSessions": 73
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreieiod6tedkbmcs4qspatenufdt5jutpcbj4gjknryzupeqdxfscii",
+    "startDate": "2023-02-17T10:50:00.000Z",
+    "endDate": "2023-03-09T10:50:00.000Z",
+    "cookingSessions": 68
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreigfuvvr63duv7ktnh3byhdvbrt2o6z4v7xzb3nzfbhz4nwxy3ad7q",
+    "startDate": "2023-03-07T15:19:00.000Z",
+    "endDate": "2023-03-19T15:19:00.000Z",
+    "cookingSessions": 64
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreibpwe6si7ythmc4tcogx4upk4ibtm2jxn3nidhslnqixwv7l6p7sy",
+    "startDate": "2023-03-09T09:45:00.000Z",
+    "endDate": "2023-03-21T09:45:00.000Z",
+    "cookingSessions": 63
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreibuyvlslu55of6amfyp76pjqkegrdtuqpbjn4ytky6e4bnqbkugvu",
+    "startDate": "2023-03-16T17:11:00.000Z",
+    "endDate": "2023-04-01T17:11:00.000Z",
+    "cookingSessions": 74
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreigususut5xqrnujm2siqfj3blrgurmxa55cd75uyhym3hzrzap3ii",
+    "startDate": "2023-03-18T14:43:00.000Z",
+    "endDate": "2023-04-03T14:43:00.000Z",
+    "cookingSessions": 69
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreigrorbpbdcefwgfc5lutprik7pyt6ulagamici3ir3ydzltyaqmoi",
+    "startDate": "2023-03-21T09:26:00.000Z",
+    "endDate": "2023-04-10T09:26:00.000Z",
+    "cookingSessions": 73
+  },
+  {
+    "fuelPurchaseClaimId": "bafkreihxhezymskb56javnoilu37lnjqdwcoirc36idz262yw3ekybj5nm",
+    "startDate": "2023-03-24T16:20:00.000Z",
+    "endDate": "2023-04-09T16:20:00.000Z",
+    "cookingSessions": 69
+  }
+]

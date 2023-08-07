@@ -45,8 +45,8 @@ export const setup_asset_collection_constants = () => ({
         description: "Profile",
         mediaType: "application/ld+json",
         serviceEndpoint:
-          "ipfs:bafkreiafmgkdhntrly76pejzxg2xdqhbceqpsfnw55hzhdeb7eesjxq67a",
-        proof: "bafkreiafmgkdhntrly76pejzxg2xdqhbceqpsfnw55hzhdeb7eesjxq67a",
+          "ipfs:bafkreiblldk3q4b3znranvn3fzaknt5ztouead7p6jetabc6ho2w7j7xcu",
+        proof: "bafkreiblldk3q4b3znranvn3fzaknt5ztouead7p6jetabc6ho2w7j7xcu",
         encrypted: "false",
         right: "",
       },
@@ -243,4 +243,147 @@ export const setup_asset_collection_constants = () => ({
       },
     },
   ],
+});
+
+export const setup_project_constants = () => ({
+  entity: {
+    // type of entity eg dao/protocol/asset/oracle
+    entityType: "project",
+    // please use Impact DAO's did as relayerNode eg dids.impactsDao
+    relayerNode: dids.emergingDao,
+    // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass
+    contextClass: dids.ecsDao,
+    // can add a also know ass if want
+    alsoKnownAs: "",
+    // you can remove/add more services
+    service: [
+      {
+        id: "{id}#cellnode",
+        type: "Cellnode",
+        serviceEndpoint: cellNodeChainMapping[chainNetwork],
+      },
+      {
+        id: "{id}#ipfs",
+        type: "Ipfs",
+        serviceEndpoint: "https://ipfs.io/ipfs/",
+      },
+    ],
+    // if you have any other linked resources other than the ones below that will automatically
+    // be uploaded to cellnode/w3s, you can pass them here
+    linkedResources: [
+      {
+        id: `{id}#profile`,
+        type: "Settings",
+        description: "Profile",
+        mediaType: "application/ld+json",
+        serviceEndpoint:
+          "ipfs:bafkreidxr2qme6pk7rlr7d5wfryficamojruualqqvue7vxlmce42nxjbq",
+        proof: "bafkreidxr2qme6pk7rlr7d5wfryficamojruualqqvue7vxlmce42nxjbq",
+        encrypted: "false",
+        right: "",
+      },
+    ],
+    linkedEntity: [],
+  },
+  // you can create linked resources that will be uploaded to the specified storage and resource will be saved
+  // on entity linked resources with the cid as proof and service endpoint of provided storage.
+  linkedResources: [
+    {
+      name: "page",
+      type: "Settings",
+      storage: "cellnode",
+      json: {
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
+        id: "{id}#page",
+        type: "ixo:Page",
+        page: [
+          {
+            id: "page-hero-image",
+            type: "heroImage",
+            data: {
+              file: {
+                url: "https://ipfs.io/ipfs/bafybeicav572xehbpzjfx4zhaqbsdez2h6gr3v4ils6jqqacgl5ohs4mbm",
+              },
+              caption: "SupaMoto Zambia",
+              withBorder: false,
+              stretched: false,
+              withBackground: false,
+            },
+          },
+          {
+            id: "LFk_K2rUo_",
+            type: "paragraph",
+            data: {
+              text: "SupaMoto distributes micro gasifier cookstoves running on pellets in Zambia, with a specific focus on Lusaka.",
+            },
+          },
+          {
+            id: "-0QottQWxt",
+            type: "paragraph",
+            data: {
+              text: "SupaMoto follows an 'energy utility' model, where the cookstoves serve as infrastructure and fuel pellets provide the energy source. By integrating both the fuel and the stove into a single system, SupaMoto enables clean cooking through an innovative product while maximizing the positive impacts on health, environment, and society.",
+            },
+          },
+          {
+            id: "6csOa4d3na",
+            type: "paragraph",
+            data: {
+              text: "The project boundary encompasses the physical and geographical sites where the stoves are used, as well as the baseline and project fuel production.",
+            },
+          },
+        ],
+      },
+    },
+    {
+      name: "tags",
+      type: "Settings",
+      storage: "cellnode",
+      json: {
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
+        id: "{id}#tags",
+        type: "ixo:Tags",
+        settings:
+          "https://github.com/emerging-eco/configs/blob/main/settings/config.json",
+        entityTags: [
+          {
+            category: "Project Type",
+            tags: ["Decarbonisation"],
+          },
+          {
+            category: "SDG",
+            tags: [
+              "SDG13 – Climate Action",
+              "SDG7 – Affordable and Clean Energy",
+              "SDG9 – Industry, Innovation and Infrastructure",
+              "SDG3 – Good Health and Well-being",
+              "SDG5 – Gender Equality",
+            ],
+          },
+          {
+            category: "Stage",
+            tags: ["Delivery"],
+          },
+        ],
+      },
+    },
+  ],
+  // you can create linked claims that will be uploaded to the specified storage and resource will be saved
+  // on entity linked claims with the cid as proof and service endpoint of provided storage.
+  linkedClaims: [],
 });
