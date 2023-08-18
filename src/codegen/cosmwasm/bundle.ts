@@ -5,24 +5,26 @@ import * as _97 from "./wasm/v1/proposal";
 import * as _98 from "./wasm/v1/query";
 import * as _99 from "./wasm/v1/tx";
 import * as _100 from "./wasm/v1/types";
-import * as _218 from "./wasm/v1/query.rpc.Query";
-import * as _219 from "./wasm/v1/tx.rpc.msg";
-import * as _246 from "./rpc.query";
-import * as _247 from "./rpc.tx";
+import * as _219 from "./wasm/v1/query.rpc.Query";
+import * as _220 from "./wasm/v1/tx.rpc.msg";
+import * as _247 from "./rpc.query";
+import * as _248 from "./rpc.tx";
 export namespace cosmwasm {
   export namespace wasm {
-    export const v1 = { ..._94,
+    export const v1 = {
+      ..._94,
       ..._95,
       ..._96,
       ..._97,
       ..._98,
       ..._99,
       ..._100,
-      ..._218,
-      ..._219
+      ..._219,
+      ..._220
     };
   }
-  export const ClientFactory = { ..._246,
-    ..._247
+  export const ClientFactory = {
+    ..._247,
+    ..._248
   };
 }

@@ -233,9 +233,9 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
         token: {
             v1beta1: {
                 params(request?: import("./token/v1beta1/query").QueryParamsRequest): Promise<import("./token/v1beta1/query").QueryParamsResponse>;
+                tokenMetadata(request: import("./token/v1beta1/query").QueryTokenMetadataRequest): Promise<import("./token/v1beta1/query").QueryTokenMetadataResponse>;
                 tokenList(request: import("./token/v1beta1/query").QueryTokenListRequest): Promise<import("./token/v1beta1/query").QueryTokenListResponse>;
                 tokenDoc(request: import("./token/v1beta1/query").QueryTokenDocRequest): Promise<import("./token/v1beta1/query").QueryTokenDocResponse>;
-                tokenMetadata(request: import("./token/v1beta1/query").QueryTokenMetadataRequest): Promise<import("./token/v1beta1/query").QueryTokenMetadataResponse>;
             };
         };
     };

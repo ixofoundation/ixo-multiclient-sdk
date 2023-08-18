@@ -31,24 +31,24 @@ import * as _138 from "./core/connection/v1/genesis";
 import * as _139 from "./core/connection/v1/query";
 import * as _140 from "./core/connection/v1/tx";
 import * as _141 from "./core/types/v1/genesis";
-import * as _220 from "./applications/fee/v1/query.rpc.Query";
-import * as _221 from "./applications/interchain_accounts/controller/v1/query.rpc.Query";
-import * as _222 from "./applications/interchain_accounts/host/v1/query.rpc.Query";
-import * as _223 from "./applications/transfer/v1/query.rpc.Query";
-import * as _224 from "./core/channel/v1/query.rpc.Query";
-import * as _225 from "./core/client/v1/query.rpc.Query";
-import * as _226 from "./core/connection/v1/query.rpc.Query";
-import * as _227 from "./applications/fee/v1/tx.rpc.msg";
-import * as _228 from "./applications/transfer/v1/tx.rpc.msg";
-import * as _229 from "./core/channel/v1/tx.rpc.msg";
-import * as _230 from "./core/client/v1/tx.rpc.msg";
-import * as _231 from "./core/connection/v1/tx.rpc.msg";
+import * as _221 from "./applications/fee/v1/query.rpc.Query";
+import * as _222 from "./applications/interchain_accounts/controller/v1/query.rpc.Query";
+import * as _223 from "./applications/interchain_accounts/host/v1/query.rpc.Query";
+import * as _224 from "./applications/transfer/v1/query.rpc.Query";
+import * as _225 from "./core/channel/v1/query.rpc.Query";
+import * as _226 from "./core/client/v1/query.rpc.Query";
+import * as _227 from "./core/connection/v1/query.rpc.Query";
+import * as _228 from "./applications/fee/v1/tx.rpc.msg";
+import * as _229 from "./applications/transfer/v1/tx.rpc.msg";
+import * as _230 from "./core/channel/v1/tx.rpc.msg";
+import * as _231 from "./core/client/v1/tx.rpc.msg";
+import * as _232 from "./core/connection/v1/tx.rpc.msg";
 export declare namespace ibc {
     namespace applications {
         namespace fee {
             const v1: {
-                MsgClientImpl: typeof _227.MsgClientImpl;
-                QueryClientImpl: typeof _220.QueryClientImpl;
+                MsgClientImpl: typeof _228.MsgClientImpl;
+                QueryClientImpl: typeof _221.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     incentivizedPackets(request: _113.QueryIncentivizedPacketsRequest): Promise<_113.QueryIncentivizedPacketsResponse>;
                     incentivizedPacket(request: _113.QueryIncentivizedPacketRequest): Promise<_113.QueryIncentivizedPacketResponse>;
@@ -339,7 +339,7 @@ export declare namespace ibc {
         namespace interchain_accounts {
             namespace controller {
                 const v1: {
-                    QueryClientImpl: typeof _221.QueryClientImpl;
+                    QueryClientImpl: typeof _222.QueryClientImpl;
                     createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                         interchainAccount(request: _116.QueryInterchainAccountRequest): Promise<_116.QueryInterchainAccountResponse>;
                         params(request?: _116.QueryParamsRequest): Promise<_116.QueryParamsResponse>;
@@ -383,7 +383,7 @@ export declare namespace ibc {
             }
             namespace host {
                 const v1: {
-                    QueryClientImpl: typeof _222.QueryClientImpl;
+                    QueryClientImpl: typeof _223.QueryClientImpl;
                     createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                         params(request?: _118.QueryParamsRequest): Promise<_118.QueryParamsResponse>;
                     };
@@ -482,8 +482,8 @@ export declare namespace ibc {
         }
         namespace transfer {
             const v1: {
-                MsgClientImpl: typeof _228.MsgClientImpl;
-                QueryClientImpl: typeof _223.QueryClientImpl;
+                MsgClientImpl: typeof _229.MsgClientImpl;
+                QueryClientImpl: typeof _224.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     denomTrace(request: _124.QueryDenomTraceRequest): Promise<_124.QueryDenomTraceResponse>;
                     denomTraces(request?: _124.QueryDenomTracesRequest): Promise<_124.QueryDenomTracesResponse>;
@@ -611,8 +611,8 @@ export declare namespace ibc {
     namespace core {
         namespace channel {
             const v1: {
-                MsgClientImpl: typeof _229.MsgClientImpl;
-                QueryClientImpl: typeof _224.QueryClientImpl;
+                MsgClientImpl: typeof _230.MsgClientImpl;
+                QueryClientImpl: typeof _225.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     channel(request: _130.QueryChannelRequest): Promise<_130.QueryChannelResponse>;
                     channels(request?: _130.QueryChannelsRequest): Promise<_130.QueryChannelsResponse>;
@@ -1029,8 +1029,8 @@ export declare namespace ibc {
         }
         namespace client {
             const v1: {
-                MsgClientImpl: typeof _230.MsgClientImpl;
-                QueryClientImpl: typeof _225.QueryClientImpl;
+                MsgClientImpl: typeof _231.MsgClientImpl;
+                QueryClientImpl: typeof _226.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     clientState(request: _134.QueryClientStateRequest): Promise<_134.QueryClientStateResponse>;
                     clientStates(request?: _134.QueryClientStatesRequest): Promise<_134.QueryClientStatesResponse>;
@@ -1330,8 +1330,8 @@ export declare namespace ibc {
         }
         namespace connection {
             const v1: {
-                MsgClientImpl: typeof _231.MsgClientImpl;
-                QueryClientImpl: typeof _226.QueryClientImpl;
+                MsgClientImpl: typeof _232.MsgClientImpl;
+                QueryClientImpl: typeof _227.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     connection(request: _139.QueryConnectionRequest): Promise<_139.QueryConnectionResponse>;
                     connections(request?: _139.QueryConnectionsRequest): Promise<_139.QueryConnectionsResponse>;
@@ -1588,21 +1588,21 @@ export declare namespace ibc {
             ibc: {
                 applications: {
                     fee: {
-                        v1: _227.MsgClientImpl;
+                        v1: _228.MsgClientImpl;
                     };
                     transfer: {
-                        v1: _228.MsgClientImpl;
+                        v1: _229.MsgClientImpl;
                     };
                 };
                 core: {
                     channel: {
-                        v1: _229.MsgClientImpl;
-                    };
-                    client: {
                         v1: _230.MsgClientImpl;
                     };
-                    connection: {
+                    client: {
                         v1: _231.MsgClientImpl;
+                    };
+                    connection: {
+                        v1: _232.MsgClientImpl;
                     };
                 };
             };

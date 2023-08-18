@@ -10,7 +10,7 @@ export declare namespace utils {
     };
     const did: {
         generateSecpDid(pubkey: string | Uint8Array, prefix?: string): string;
-        generateCosmwasmDid(address: string): string;
+        generateWasmDid(address: string): string;
     };
     const mnemonic: {
         Bip39: typeof _3.Bip39;

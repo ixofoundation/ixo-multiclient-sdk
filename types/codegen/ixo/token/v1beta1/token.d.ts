@@ -88,7 +88,7 @@ export interface TokenProperties {
     id: string;
     /** index is the unique identifier hexstring that identifies the token */
     index: string;
-    /** index is the unique identifier hexstring that identifies the token */
+    /** name is the token name, which is same as Token name */
     name: string;
     /** did of collection (eg Supamoto Malawi) */
     collection: string;
