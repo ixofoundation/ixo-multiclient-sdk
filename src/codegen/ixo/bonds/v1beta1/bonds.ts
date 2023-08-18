@@ -5,7 +5,6 @@ import { isSet } from "../../../helpers";
  * FunctionParam is a key-value pair used for specifying a specific bond
  * parameter.
  */
-
 export interface FunctionParam {
   param: string;
   value: string;
@@ -14,13 +13,11 @@ export interface FunctionParam {
  * FunctionParam is a key-value pair used for specifying a specific bond
  * parameter.
  */
-
 export interface FunctionParamSDKType {
   param: string;
   value: string;
 }
 /** BondDetails contains details about the current state of a given bond. */
-
 export interface BondDetails {
   bondDid: string;
   spotPrice: DecCoin[];
@@ -28,7 +25,6 @@ export interface BondDetails {
   reserve: Coin[];
 }
 /** BondDetails contains details about the current state of a given bond. */
-
 export interface BondDetailsSDKType {
   bond_did: string;
   spot_price: DecCoinSDKType[];
@@ -36,7 +32,6 @@ export interface BondDetailsSDKType {
   reserve: CoinSDKType[];
 }
 /** Bond defines a token bonding curve type with all of its parameters. */
-
 export interface Bond {
   token: string;
   name: string;
@@ -68,7 +63,6 @@ export interface Bond {
   oracleDid: string;
 }
 /** Bond defines a token bonding curve type with all of its parameters. */
-
 export interface BondSDKType {
   token: string;
   name: string;
@@ -103,7 +97,6 @@ export interface BondSDKType {
  * BaseOrder defines a base order type. It contains all the necessary fields for
  * specifying the general details about a buy, sell, or swap order.
  */
-
 export interface BaseOrder {
   accountDid: string;
   amount?: Coin;
@@ -114,7 +107,6 @@ export interface BaseOrder {
  * BaseOrder defines a base order type. It contains all the necessary fields for
  * specifying the general details about a buy, sell, or swap order.
  */
-
 export interface BaseOrderSDKType {
   account_did: string;
   amount?: CoinSDKType;
@@ -125,7 +117,6 @@ export interface BaseOrderSDKType {
  * BuyOrder defines a type for submitting a buy order on a bond, together with
  * the maximum amount of reserve tokens the buyer is willing to pay.
  */
-
 export interface BuyOrder {
   baseOrder?: BaseOrder;
   maxPrices: Coin[];
@@ -134,18 +125,16 @@ export interface BuyOrder {
  * BuyOrder defines a type for submitting a buy order on a bond, together with
  * the maximum amount of reserve tokens the buyer is willing to pay.
  */
-
 export interface BuyOrderSDKType {
   base_order?: BaseOrderSDKType;
   max_prices: CoinSDKType[];
 }
 /** SellOrder defines a type for submitting a sell order on a bond. */
-
 export interface SellOrder {
+  /** SellOrder defines a type for submitting a sell order on a bond. */
   baseOrder?: BaseOrder;
 }
 /** SellOrder defines a type for submitting a sell order on a bond. */
-
 export interface SellOrderSDKType {
   base_order?: BaseOrderSDKType;
 }
@@ -153,7 +142,6 @@ export interface SellOrderSDKType {
  * SwapOrder defines a type for submitting a swap order between two tokens on a
  * bond.
  */
-
 export interface SwapOrder {
   baseOrder?: BaseOrder;
   toToken: string;
@@ -162,7 +150,6 @@ export interface SwapOrder {
  * SwapOrder defines a type for submitting a swap order between two tokens on a
  * bond.
  */
-
 export interface SwapOrderSDKType {
   base_order?: BaseOrderSDKType;
   to_token: string;
@@ -171,7 +158,6 @@ export interface SwapOrderSDKType {
  * Batch holds a collection of outstanding buy, sell, and swap orders on a
  * particular bond.
  */
-
 export interface Batch {
   bondDid: string;
   blocksRemaining: string;
@@ -188,7 +174,6 @@ export interface Batch {
  * Batch holds a collection of outstanding buy, sell, and swap orders on a
  * particular bond.
  */
-
 export interface BatchSDKType {
   bond_did: string;
   blocks_remaining: string;
@@ -202,85 +187,69 @@ export interface BatchSDKType {
   swaps: SwapOrderSDKType[];
 }
 /** Params defines the parameters for the bonds module. */
-
 export interface Params {
+  /** Params defines the parameters for the bonds module. */
   reservedBondTokens: string[];
 }
 /** Params defines the parameters for the bonds module. */
-
 export interface ParamsSDKType {
   reserved_bond_tokens: string[];
 }
-
 function createBaseFunctionParam(): FunctionParam {
   return {
     param: "",
     value: ""
   };
 }
-
 export const FunctionParam = {
   encode(message: FunctionParam, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.param !== "") {
       writer.uint32(10).string(message.param);
     }
-
     if (message.value !== "") {
       writer.uint32(18).string(message.value);
     }
-
     return writer;
   },
-
   decode(input: _m0.Reader | Uint8Array, length?: number): FunctionParam {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFunctionParam();
-
     while (reader.pos < end) {
       const tag = reader.uint32();
-
       switch (tag >>> 3) {
         case 1:
           message.param = reader.string();
           break;
-
         case 2:
           message.value = reader.string();
           break;
-
         default:
           reader.skipType(tag & 7);
           break;
       }
     }
-
     return message;
   },
-
   fromJSON(object: any): FunctionParam {
     return {
       param: isSet(object.param) ? String(object.param) : "",
       value: isSet(object.value) ? String(object.value) : ""
     };
   },
-
   toJSON(message: FunctionParam): unknown {
     const obj: any = {};
     message.param !== undefined && (obj.param = message.param);
     message.value !== undefined && (obj.value = message.value);
     return obj;
   },
-
   fromPartial(object: Partial<FunctionParam>): FunctionParam {
     const message = createBaseFunctionParam();
     message.param = object.param ?? "";
     message.value = object.value ?? "";
     return message;
   }
-
 };
-
 function createBaseBondDetails(): BondDetails {
   return {
     bondDid: "",
@@ -289,62 +258,48 @@ function createBaseBondDetails(): BondDetails {
     reserve: []
   };
 }
-
 export const BondDetails = {
   encode(message: BondDetails, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
-
     for (const v of message.spotPrice) {
       DecCoin.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-
     if (message.supply !== undefined) {
       Coin.encode(message.supply, writer.uint32(26).fork()).ldelim();
     }
-
     for (const v of message.reserve) {
       Coin.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-
     return writer;
   },
-
   decode(input: _m0.Reader | Uint8Array, length?: number): BondDetails {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBondDetails();
-
     while (reader.pos < end) {
       const tag = reader.uint32();
-
       switch (tag >>> 3) {
         case 1:
           message.bondDid = reader.string();
           break;
-
         case 2:
           message.spotPrice.push(DecCoin.decode(reader, reader.uint32()));
           break;
-
         case 3:
           message.supply = Coin.decode(reader, reader.uint32());
           break;
-
         case 4:
           message.reserve.push(Coin.decode(reader, reader.uint32()));
           break;
-
         default:
           reader.skipType(tag & 7);
           break;
       }
     }
-
     return message;
   },
-
   fromJSON(object: any): BondDetails {
     return {
       bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
@@ -353,28 +308,22 @@ export const BondDetails = {
       reserve: Array.isArray(object?.reserve) ? object.reserve.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
-
   toJSON(message: BondDetails): unknown {
     const obj: any = {};
     message.bondDid !== undefined && (obj.bondDid = message.bondDid);
-
     if (message.spotPrice) {
       obj.spotPrice = message.spotPrice.map(e => e ? DecCoin.toJSON(e) : undefined);
     } else {
       obj.spotPrice = [];
     }
-
     message.supply !== undefined && (obj.supply = message.supply ? Coin.toJSON(message.supply) : undefined);
-
     if (message.reserve) {
       obj.reserve = message.reserve.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.reserve = [];
     }
-
     return obj;
   },
-
   fromPartial(object: Partial<BondDetails>): BondDetails {
     const message = createBaseBondDetails();
     message.bondDid = object.bondDid ?? "";
@@ -383,9 +332,7 @@ export const BondDetails = {
     message.reserve = object.reserve?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
-
 };
-
 function createBaseBond(): Bond {
   return {
     token: "",
@@ -418,254 +365,192 @@ function createBaseBond(): Bond {
     oracleDid: ""
   };
 }
-
 export const Bond = {
   encode(message: Bond, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.token !== "") {
       writer.uint32(10).string(message.token);
     }
-
     if (message.name !== "") {
       writer.uint32(18).string(message.name);
     }
-
     if (message.description !== "") {
       writer.uint32(26).string(message.description);
     }
-
     if (message.creatorDid !== "") {
       writer.uint32(34).string(message.creatorDid);
     }
-
     if (message.controllerDid !== "") {
       writer.uint32(42).string(message.controllerDid);
     }
-
     if (message.functionType !== "") {
       writer.uint32(50).string(message.functionType);
     }
-
     for (const v of message.functionParameters) {
       FunctionParam.encode(v!, writer.uint32(58).fork()).ldelim();
     }
-
     for (const v of message.reserveTokens) {
       writer.uint32(66).string(v!);
     }
-
     if (message.txFeePercentage !== "") {
       writer.uint32(74).string(message.txFeePercentage);
     }
-
     if (message.exitFeePercentage !== "") {
       writer.uint32(82).string(message.exitFeePercentage);
     }
-
     if (message.feeAddress !== "") {
       writer.uint32(90).string(message.feeAddress);
     }
-
     if (message.reserveWithdrawalAddress !== "") {
       writer.uint32(98).string(message.reserveWithdrawalAddress);
     }
-
     if (message.maxSupply !== undefined) {
       Coin.encode(message.maxSupply, writer.uint32(106).fork()).ldelim();
     }
-
     for (const v of message.orderQuantityLimits) {
       Coin.encode(v!, writer.uint32(114).fork()).ldelim();
     }
-
     if (message.sanityRate !== "") {
       writer.uint32(122).string(message.sanityRate);
     }
-
     if (message.sanityMarginPercentage !== "") {
       writer.uint32(130).string(message.sanityMarginPercentage);
     }
-
     if (message.currentSupply !== undefined) {
       Coin.encode(message.currentSupply, writer.uint32(138).fork()).ldelim();
     }
-
     for (const v of message.currentReserve) {
       Coin.encode(v!, writer.uint32(146).fork()).ldelim();
     }
-
     for (const v of message.availableReserve) {
       Coin.encode(v!, writer.uint32(154).fork()).ldelim();
     }
-
     for (const v of message.currentOutcomePaymentReserve) {
       Coin.encode(v!, writer.uint32(162).fork()).ldelim();
     }
-
     if (message.allowSells === true) {
       writer.uint32(168).bool(message.allowSells);
     }
-
     if (message.allowReserveWithdrawals === true) {
       writer.uint32(176).bool(message.allowReserveWithdrawals);
     }
-
     if (message.alphaBond === true) {
       writer.uint32(184).bool(message.alphaBond);
     }
-
     if (message.batchBlocks !== "") {
       writer.uint32(194).string(message.batchBlocks);
     }
-
     if (message.outcomePayment !== "") {
       writer.uint32(202).string(message.outcomePayment);
     }
-
     if (message.state !== "") {
       writer.uint32(210).string(message.state);
     }
-
     if (message.bondDid !== "") {
       writer.uint32(218).string(message.bondDid);
     }
-
     if (message.oracleDid !== "") {
       writer.uint32(226).string(message.oracleDid);
     }
-
     return writer;
   },
-
   decode(input: _m0.Reader | Uint8Array, length?: number): Bond {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBond();
-
     while (reader.pos < end) {
       const tag = reader.uint32();
-
       switch (tag >>> 3) {
         case 1:
           message.token = reader.string();
           break;
-
         case 2:
           message.name = reader.string();
           break;
-
         case 3:
           message.description = reader.string();
           break;
-
         case 4:
           message.creatorDid = reader.string();
           break;
-
         case 5:
           message.controllerDid = reader.string();
           break;
-
         case 6:
           message.functionType = reader.string();
           break;
-
         case 7:
           message.functionParameters.push(FunctionParam.decode(reader, reader.uint32()));
           break;
-
         case 8:
           message.reserveTokens.push(reader.string());
           break;
-
         case 9:
           message.txFeePercentage = reader.string();
           break;
-
         case 10:
           message.exitFeePercentage = reader.string();
           break;
-
         case 11:
           message.feeAddress = reader.string();
           break;
-
         case 12:
           message.reserveWithdrawalAddress = reader.string();
           break;
-
         case 13:
           message.maxSupply = Coin.decode(reader, reader.uint32());
           break;
-
         case 14:
           message.orderQuantityLimits.push(Coin.decode(reader, reader.uint32()));
           break;
-
         case 15:
           message.sanityRate = reader.string();
           break;
-
         case 16:
           message.sanityMarginPercentage = reader.string();
           break;
-
         case 17:
           message.currentSupply = Coin.decode(reader, reader.uint32());
           break;
-
         case 18:
           message.currentReserve.push(Coin.decode(reader, reader.uint32()));
           break;
-
         case 19:
           message.availableReserve.push(Coin.decode(reader, reader.uint32()));
           break;
-
         case 20:
           message.currentOutcomePaymentReserve.push(Coin.decode(reader, reader.uint32()));
           break;
-
         case 21:
           message.allowSells = reader.bool();
           break;
-
         case 22:
           message.allowReserveWithdrawals = reader.bool();
           break;
-
         case 23:
           message.alphaBond = reader.bool();
           break;
-
         case 24:
           message.batchBlocks = reader.string();
           break;
-
         case 25:
           message.outcomePayment = reader.string();
           break;
-
         case 26:
           message.state = reader.string();
           break;
-
         case 27:
           message.bondDid = reader.string();
           break;
-
         case 28:
           message.oracleDid = reader.string();
           break;
-
         default:
           reader.skipType(tag & 7);
           break;
       }
     }
-
     return message;
   },
-
   fromJSON(object: any): Bond {
     return {
       token: isSet(object.token) ? String(object.token) : "",
@@ -698,7 +583,6 @@ export const Bond = {
       oracleDid: isSet(object.oracleDid) ? String(object.oracleDid) : ""
     };
   },
-
   toJSON(message: Bond): unknown {
     const obj: any = {};
     message.token !== undefined && (obj.token = message.token);
@@ -707,53 +591,44 @@ export const Bond = {
     message.creatorDid !== undefined && (obj.creatorDid = message.creatorDid);
     message.controllerDid !== undefined && (obj.controllerDid = message.controllerDid);
     message.functionType !== undefined && (obj.functionType = message.functionType);
-
     if (message.functionParameters) {
       obj.functionParameters = message.functionParameters.map(e => e ? FunctionParam.toJSON(e) : undefined);
     } else {
       obj.functionParameters = [];
     }
-
     if (message.reserveTokens) {
       obj.reserveTokens = message.reserveTokens.map(e => e);
     } else {
       obj.reserveTokens = [];
     }
-
     message.txFeePercentage !== undefined && (obj.txFeePercentage = message.txFeePercentage);
     message.exitFeePercentage !== undefined && (obj.exitFeePercentage = message.exitFeePercentage);
     message.feeAddress !== undefined && (obj.feeAddress = message.feeAddress);
     message.reserveWithdrawalAddress !== undefined && (obj.reserveWithdrawalAddress = message.reserveWithdrawalAddress);
     message.maxSupply !== undefined && (obj.maxSupply = message.maxSupply ? Coin.toJSON(message.maxSupply) : undefined);
-
     if (message.orderQuantityLimits) {
       obj.orderQuantityLimits = message.orderQuantityLimits.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.orderQuantityLimits = [];
     }
-
     message.sanityRate !== undefined && (obj.sanityRate = message.sanityRate);
     message.sanityMarginPercentage !== undefined && (obj.sanityMarginPercentage = message.sanityMarginPercentage);
     message.currentSupply !== undefined && (obj.currentSupply = message.currentSupply ? Coin.toJSON(message.currentSupply) : undefined);
-
     if (message.currentReserve) {
       obj.currentReserve = message.currentReserve.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.currentReserve = [];
     }
-
     if (message.availableReserve) {
       obj.availableReserve = message.availableReserve.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.availableReserve = [];
     }
-
     if (message.currentOutcomePaymentReserve) {
       obj.currentOutcomePaymentReserve = message.currentOutcomePaymentReserve.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.currentOutcomePaymentReserve = [];
     }
-
     message.allowSells !== undefined && (obj.allowSells = message.allowSells);
     message.allowReserveWithdrawals !== undefined && (obj.allowReserveWithdrawals = message.allowReserveWithdrawals);
     message.alphaBond !== undefined && (obj.alphaBond = message.alphaBond);
@@ -764,7 +639,6 @@ export const Bond = {
     message.oracleDid !== undefined && (obj.oracleDid = message.oracleDid);
     return obj;
   },
-
   fromPartial(object: Partial<Bond>): Bond {
     const message = createBaseBond();
     message.token = object.token ?? "";
@@ -797,9 +671,7 @@ export const Bond = {
     message.oracleDid = object.oracleDid ?? "";
     return message;
   }
-
 };
-
 function createBaseBaseOrder(): BaseOrder {
   return {
     accountDid: "",
@@ -808,62 +680,48 @@ function createBaseBaseOrder(): BaseOrder {
     cancelReason: ""
   };
 }
-
 export const BaseOrder = {
   encode(message: BaseOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.accountDid !== "") {
       writer.uint32(10).string(message.accountDid);
     }
-
     if (message.amount !== undefined) {
       Coin.encode(message.amount, writer.uint32(18).fork()).ldelim();
     }
-
     if (message.cancelled === true) {
       writer.uint32(24).bool(message.cancelled);
     }
-
     if (message.cancelReason !== "") {
       writer.uint32(34).string(message.cancelReason);
     }
-
     return writer;
   },
-
   decode(input: _m0.Reader | Uint8Array, length?: number): BaseOrder {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBaseOrder();
-
     while (reader.pos < end) {
       const tag = reader.uint32();
-
       switch (tag >>> 3) {
         case 1:
           message.accountDid = reader.string();
           break;
-
         case 2:
           message.amount = Coin.decode(reader, reader.uint32());
           break;
-
         case 3:
           message.cancelled = reader.bool();
           break;
-
         case 4:
           message.cancelReason = reader.string();
           break;
-
         default:
           reader.skipType(tag & 7);
           break;
       }
     }
-
     return message;
   },
-
   fromJSON(object: any): BaseOrder {
     return {
       accountDid: isSet(object.accountDid) ? String(object.accountDid) : "",
@@ -872,7 +730,6 @@ export const BaseOrder = {
       cancelReason: isSet(object.cancelReason) ? String(object.cancelReason) : ""
     };
   },
-
   toJSON(message: BaseOrder): unknown {
     const obj: any = {};
     message.accountDid !== undefined && (obj.accountDid = message.accountDid);
@@ -881,7 +738,6 @@ export const BaseOrder = {
     message.cancelReason !== undefined && (obj.cancelReason = message.cancelReason);
     return obj;
   },
-
   fromPartial(object: Partial<BaseOrder>): BaseOrder {
     const message = createBaseBaseOrder();
     message.accountDid = object.accountDid ?? "";
@@ -890,210 +746,166 @@ export const BaseOrder = {
     message.cancelReason = object.cancelReason ?? "";
     return message;
   }
-
 };
-
 function createBaseBuyOrder(): BuyOrder {
   return {
     baseOrder: undefined,
     maxPrices: []
   };
 }
-
 export const BuyOrder = {
   encode(message: BuyOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.baseOrder !== undefined) {
       BaseOrder.encode(message.baseOrder, writer.uint32(10).fork()).ldelim();
     }
-
     for (const v of message.maxPrices) {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-
     return writer;
   },
-
   decode(input: _m0.Reader | Uint8Array, length?: number): BuyOrder {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBuyOrder();
-
     while (reader.pos < end) {
       const tag = reader.uint32();
-
       switch (tag >>> 3) {
         case 1:
           message.baseOrder = BaseOrder.decode(reader, reader.uint32());
           break;
-
         case 2:
           message.maxPrices.push(Coin.decode(reader, reader.uint32()));
           break;
-
         default:
           reader.skipType(tag & 7);
           break;
       }
     }
-
     return message;
   },
-
   fromJSON(object: any): BuyOrder {
     return {
       baseOrder: isSet(object.baseOrder) ? BaseOrder.fromJSON(object.baseOrder) : undefined,
       maxPrices: Array.isArray(object?.maxPrices) ? object.maxPrices.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
-
   toJSON(message: BuyOrder): unknown {
     const obj: any = {};
     message.baseOrder !== undefined && (obj.baseOrder = message.baseOrder ? BaseOrder.toJSON(message.baseOrder) : undefined);
-
     if (message.maxPrices) {
       obj.maxPrices = message.maxPrices.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
       obj.maxPrices = [];
     }
-
     return obj;
   },
-
   fromPartial(object: Partial<BuyOrder>): BuyOrder {
     const message = createBaseBuyOrder();
     message.baseOrder = object.baseOrder !== undefined && object.baseOrder !== null ? BaseOrder.fromPartial(object.baseOrder) : undefined;
     message.maxPrices = object.maxPrices?.map(e => Coin.fromPartial(e)) || [];
     return message;
   }
-
 };
-
 function createBaseSellOrder(): SellOrder {
   return {
     baseOrder: undefined
   };
 }
-
 export const SellOrder = {
   encode(message: SellOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.baseOrder !== undefined) {
       BaseOrder.encode(message.baseOrder, writer.uint32(10).fork()).ldelim();
     }
-
     return writer;
   },
-
   decode(input: _m0.Reader | Uint8Array, length?: number): SellOrder {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSellOrder();
-
     while (reader.pos < end) {
       const tag = reader.uint32();
-
       switch (tag >>> 3) {
         case 1:
           message.baseOrder = BaseOrder.decode(reader, reader.uint32());
           break;
-
         default:
           reader.skipType(tag & 7);
           break;
       }
     }
-
     return message;
   },
-
   fromJSON(object: any): SellOrder {
     return {
       baseOrder: isSet(object.baseOrder) ? BaseOrder.fromJSON(object.baseOrder) : undefined
     };
   },
-
   toJSON(message: SellOrder): unknown {
     const obj: any = {};
     message.baseOrder !== undefined && (obj.baseOrder = message.baseOrder ? BaseOrder.toJSON(message.baseOrder) : undefined);
     return obj;
   },
-
   fromPartial(object: Partial<SellOrder>): SellOrder {
     const message = createBaseSellOrder();
     message.baseOrder = object.baseOrder !== undefined && object.baseOrder !== null ? BaseOrder.fromPartial(object.baseOrder) : undefined;
     return message;
   }
-
 };
-
 function createBaseSwapOrder(): SwapOrder {
   return {
     baseOrder: undefined,
     toToken: ""
   };
 }
-
 export const SwapOrder = {
   encode(message: SwapOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.baseOrder !== undefined) {
       BaseOrder.encode(message.baseOrder, writer.uint32(10).fork()).ldelim();
     }
-
     if (message.toToken !== "") {
       writer.uint32(18).string(message.toToken);
     }
-
     return writer;
   },
-
   decode(input: _m0.Reader | Uint8Array, length?: number): SwapOrder {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSwapOrder();
-
     while (reader.pos < end) {
       const tag = reader.uint32();
-
       switch (tag >>> 3) {
         case 1:
           message.baseOrder = BaseOrder.decode(reader, reader.uint32());
           break;
-
         case 2:
           message.toToken = reader.string();
           break;
-
         default:
           reader.skipType(tag & 7);
           break;
       }
     }
-
     return message;
   },
-
   fromJSON(object: any): SwapOrder {
     return {
       baseOrder: isSet(object.baseOrder) ? BaseOrder.fromJSON(object.baseOrder) : undefined,
       toToken: isSet(object.toToken) ? String(object.toToken) : ""
     };
   },
-
   toJSON(message: SwapOrder): unknown {
     const obj: any = {};
     message.baseOrder !== undefined && (obj.baseOrder = message.baseOrder ? BaseOrder.toJSON(message.baseOrder) : undefined);
     message.toToken !== undefined && (obj.toToken = message.toToken);
     return obj;
   },
-
   fromPartial(object: Partial<SwapOrder>): SwapOrder {
     const message = createBaseSwapOrder();
     message.baseOrder = object.baseOrder !== undefined && object.baseOrder !== null ? BaseOrder.fromPartial(object.baseOrder) : undefined;
     message.toToken = object.toToken ?? "";
     return message;
   }
-
 };
-
 function createBaseBatch(): Batch {
   return {
     bondDid: "",
@@ -1108,110 +920,84 @@ function createBaseBatch(): Batch {
     swaps: []
   };
 }
-
 export const Batch = {
   encode(message: Batch, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bondDid !== "") {
       writer.uint32(10).string(message.bondDid);
     }
-
     if (message.blocksRemaining !== "") {
       writer.uint32(18).string(message.blocksRemaining);
     }
-
     if (message.nextPublicAlpha !== "") {
       writer.uint32(26).string(message.nextPublicAlpha);
     }
-
     if (message.totalBuyAmount !== undefined) {
       Coin.encode(message.totalBuyAmount, writer.uint32(34).fork()).ldelim();
     }
-
     if (message.totalSellAmount !== undefined) {
       Coin.encode(message.totalSellAmount, writer.uint32(42).fork()).ldelim();
     }
-
     for (const v of message.buyPrices) {
       DecCoin.encode(v!, writer.uint32(50).fork()).ldelim();
     }
-
     for (const v of message.sellPrices) {
       DecCoin.encode(v!, writer.uint32(58).fork()).ldelim();
     }
-
     for (const v of message.buys) {
       BuyOrder.encode(v!, writer.uint32(66).fork()).ldelim();
     }
-
     for (const v of message.sells) {
       SellOrder.encode(v!, writer.uint32(74).fork()).ldelim();
     }
-
     for (const v of message.swaps) {
       SwapOrder.encode(v!, writer.uint32(82).fork()).ldelim();
     }
-
     return writer;
   },
-
   decode(input: _m0.Reader | Uint8Array, length?: number): Batch {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBatch();
-
     while (reader.pos < end) {
       const tag = reader.uint32();
-
       switch (tag >>> 3) {
         case 1:
           message.bondDid = reader.string();
           break;
-
         case 2:
           message.blocksRemaining = reader.string();
           break;
-
         case 3:
           message.nextPublicAlpha = reader.string();
           break;
-
         case 4:
           message.totalBuyAmount = Coin.decode(reader, reader.uint32());
           break;
-
         case 5:
           message.totalSellAmount = Coin.decode(reader, reader.uint32());
           break;
-
         case 6:
           message.buyPrices.push(DecCoin.decode(reader, reader.uint32()));
           break;
-
         case 7:
           message.sellPrices.push(DecCoin.decode(reader, reader.uint32()));
           break;
-
         case 8:
           message.buys.push(BuyOrder.decode(reader, reader.uint32()));
           break;
-
         case 9:
           message.sells.push(SellOrder.decode(reader, reader.uint32()));
           break;
-
         case 10:
           message.swaps.push(SwapOrder.decode(reader, reader.uint32()));
           break;
-
         default:
           reader.skipType(tag & 7);
           break;
       }
     }
-
     return message;
   },
-
   fromJSON(object: any): Batch {
     return {
       bondDid: isSet(object.bondDid) ? String(object.bondDid) : "",
@@ -1226,7 +1012,6 @@ export const Batch = {
       swaps: Array.isArray(object?.swaps) ? object.swaps.map((e: any) => SwapOrder.fromJSON(e)) : []
     };
   },
-
   toJSON(message: Batch): unknown {
     const obj: any = {};
     message.bondDid !== undefined && (obj.bondDid = message.bondDid);
@@ -1234,40 +1019,33 @@ export const Batch = {
     message.nextPublicAlpha !== undefined && (obj.nextPublicAlpha = message.nextPublicAlpha);
     message.totalBuyAmount !== undefined && (obj.totalBuyAmount = message.totalBuyAmount ? Coin.toJSON(message.totalBuyAmount) : undefined);
     message.totalSellAmount !== undefined && (obj.totalSellAmount = message.totalSellAmount ? Coin.toJSON(message.totalSellAmount) : undefined);
-
     if (message.buyPrices) {
       obj.buyPrices = message.buyPrices.map(e => e ? DecCoin.toJSON(e) : undefined);
     } else {
       obj.buyPrices = [];
     }
-
     if (message.sellPrices) {
       obj.sellPrices = message.sellPrices.map(e => e ? DecCoin.toJSON(e) : undefined);
     } else {
       obj.sellPrices = [];
     }
-
     if (message.buys) {
       obj.buys = message.buys.map(e => e ? BuyOrder.toJSON(e) : undefined);
     } else {
       obj.buys = [];
     }
-
     if (message.sells) {
       obj.sells = message.sells.map(e => e ? SellOrder.toJSON(e) : undefined);
     } else {
       obj.sells = [];
     }
-
     if (message.swaps) {
       obj.swaps = message.swaps.map(e => e ? SwapOrder.toJSON(e) : undefined);
     } else {
       obj.swaps = [];
     }
-
     return obj;
   },
-
   fromPartial(object: Partial<Batch>): Batch {
     const message = createBaseBatch();
     message.bondDid = object.bondDid ?? "";
@@ -1282,68 +1060,53 @@ export const Batch = {
     message.swaps = object.swaps?.map(e => SwapOrder.fromPartial(e)) || [];
     return message;
   }
-
 };
-
 function createBaseParams(): Params {
   return {
     reservedBondTokens: []
   };
 }
-
 export const Params = {
   encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.reservedBondTokens) {
       writer.uint32(10).string(v!);
     }
-
     return writer;
   },
-
   decode(input: _m0.Reader | Uint8Array, length?: number): Params {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParams();
-
     while (reader.pos < end) {
       const tag = reader.uint32();
-
       switch (tag >>> 3) {
         case 1:
           message.reservedBondTokens.push(reader.string());
           break;
-
         default:
           reader.skipType(tag & 7);
           break;
       }
     }
-
     return message;
   },
-
   fromJSON(object: any): Params {
     return {
       reservedBondTokens: Array.isArray(object?.reservedBondTokens) ? object.reservedBondTokens.map((e: any) => String(e)) : []
     };
   },
-
   toJSON(message: Params): unknown {
     const obj: any = {};
-
     if (message.reservedBondTokens) {
       obj.reservedBondTokens = message.reservedBondTokens.map(e => e);
     } else {
       obj.reservedBondTokens = [];
     }
-
     return obj;
   },
-
   fromPartial(object: Partial<Params>): Params {
     const message = createBaseParams();
     message.reservedBondTokens = object.reservedBondTokens?.map(e => e) || [];
     return message;
   }
-
 };

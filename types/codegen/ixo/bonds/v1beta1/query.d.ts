@@ -9,6 +9,7 @@ export interface QueryBondsRequestSDKType {
 }
 /** QueryBondsResponse is the response type for the Query/Bonds RPC method. */
 export interface QueryBondsResponse {
+    /** QueryBondsResponse is the response type for the Query/Bonds RPC method. */
     bonds: string[];
 }
 /** QueryBondsResponse is the response type for the Query/Bonds RPC method. */
@@ -43,6 +44,7 @@ export interface QueryBondsDetailedResponseSDKType {
 }
 /** QueryBondRequest is the request type for the Query/Bond RPC method. */
 export interface QueryBondRequest {
+    /** QueryBondRequest is the request type for the Query/Bond RPC method. */
     bondDid: string;
 }
 /** QueryBondRequest is the request type for the Query/Bond RPC method. */
@@ -51,6 +53,7 @@ export interface QueryBondRequestSDKType {
 }
 /** QueryBondResponse is the response type for the Query/Bond RPC method. */
 export interface QueryBondResponse {
+    /** QueryBondResponse is the response type for the Query/Bond RPC method. */
     bond?: Bond;
 }
 /** QueryBondResponse is the response type for the Query/Bond RPC method. */
@@ -59,6 +62,7 @@ export interface QueryBondResponseSDKType {
 }
 /** QueryBatchRequest is the request type for the Query/Batch RPC method. */
 export interface QueryBatchRequest {
+    /** QueryBatchRequest is the request type for the Query/Batch RPC method. */
     bondDid: string;
 }
 /** QueryBatchRequest is the request type for the Query/Batch RPC method. */
@@ -67,6 +71,7 @@ export interface QueryBatchRequestSDKType {
 }
 /** QueryBatchResponse is the response type for the Query/Batch RPC method. */
 export interface QueryBatchResponse {
+    /** QueryBatchResponse is the response type for the Query/Batch RPC method. */
     batch?: Batch;
 }
 /** QueryBatchResponse is the response type for the Query/Batch RPC method. */
@@ -75,6 +80,7 @@ export interface QueryBatchResponseSDKType {
 }
 /** QueryLastBatchRequest is the request type for the Query/LastBatch RPC method. */
 export interface QueryLastBatchRequest {
+    /** QueryLastBatchRequest is the request type for the Query/LastBatch RPC method. */
     bondDid: string;
 }
 /** QueryLastBatchRequest is the request type for the Query/LastBatch RPC method. */
@@ -86,6 +92,10 @@ export interface QueryLastBatchRequestSDKType {
  * method.
  */
 export interface QueryLastBatchResponse {
+    /**
+     * QueryLastBatchResponse is the response type for the Query/LastBatch RPC
+     * method.
+     */
     lastBatch?: Batch;
 }
 /**
@@ -100,6 +110,10 @@ export interface QueryLastBatchResponseSDKType {
  * method.
  */
 export interface QueryCurrentPriceRequest {
+    /**
+     * QueryCurrentPriceRequest is the request type for the Query/CurrentPrice RPC
+     * method.
+     */
     bondDid: string;
 }
 /**
@@ -128,6 +142,10 @@ export interface QueryCurrentPriceResponseSDKType {
  * RPC method.
  */
 export interface QueryCurrentReserveRequest {
+    /**
+     * QueryCurrentReserveRequest is the request type for the Query/CurrentReserve
+     * RPC method.
+     */
     bondDid: string;
 }
 /**
@@ -156,6 +174,10 @@ export interface QueryCurrentReserveResponseSDKType {
  * Query/AvailableReserve RPC method.
  */
 export interface QueryAvailableReserveRequest {
+    /**
+     * QueryAvailableReserveRequest is the request type for the
+     * Query/AvailableReserve RPC method.
+     */
     bondDid: string;
 }
 /**
@@ -326,6 +348,10 @@ export interface QuerySwapReturnResponseSDKType {
  * method.
  */
 export interface QueryAlphaMaximumsRequest {
+    /**
+     * QueryAlphaMaximumsRequest is the request type for the Query/AlphaMaximums RPC
+     * method.
+     */
     bondDid: string;
 }
 /**
@@ -359,6 +385,7 @@ export interface QueryParamsRequestSDKType {
 }
 /** QueryParamsResponse is the response type for the Query/Params RPC method. */
 export interface QueryParamsResponse {
+    /** QueryParamsResponse is the response type for the Query/Params RPC method. */
     params?: Params;
 }
 /** QueryParamsResponse is the response type for the Query/Params RPC method. */

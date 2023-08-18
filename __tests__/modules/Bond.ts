@@ -14,16 +14,13 @@ export const CreateBond = async (allowSells: boolean) => {
   const bondDid = bond.did;
   const feeReserveAddress = myAddress;
 
-  const oracle = getUser(WalletUsers.oracle);
-  const oracleDid = oracle.did;
-
   const message = {
     typeUrl: "/ixo.bonds.v1beta1.MsgCreateBond",
     value: ixo.bonds.v1beta1.MsgCreateBond.fromPartial({
       bondDid: bondDid,
       token: constants.bondToken,
-      name: "A B C",
-      description: "Description about A B C",
+      name: `Bond ${constants.bondToken}`,
+      description: `Description about ${constants.bondToken}`,
       creatorDid: did,
       controllerDid: did,
       functionType: "augmented_function",
@@ -42,7 +39,7 @@ export const CreateBond = async (allowSells: boolean) => {
         }),
         ixo.bonds.v1beta1.FunctionParam.fromPartial({
           param: "d0",
-          value: "1000000000000000000000000", // 1mil
+          value: "1000000000000000000000", // 1 000 (initial batch before bond go into open state)
         }),
       ],
       reserveTokens: [constants.bondReserveToken],
@@ -61,9 +58,9 @@ export const CreateBond = async (allowSells: boolean) => {
       allowReserveWithdrawals: !allowSells,
       alphaBond: true,
       batchBlocks: "1",
-      outcomePayment: "300000000",
+      outcomePayment: "1000000",
       creatorAddress: myAddress,
-      oracleDid: oracleDid,
+      oracleDid: did,
     }),
   };
 
@@ -86,8 +83,8 @@ export const EditBond = async () => {
     typeUrl: "/ixo.bonds.v1beta1.MsgEditBond",
     value: ixo.bonds.v1beta1.MsgEditBond.fromPartial({
       bondDid: bondDid,
-      name: "New A B C",
-      description: "Description about A B C",
+      name: `Bond ${constants.bondToken}`,
+      description: `Description about ${constants.bondToken} edited`,
       sanityRate: "0",
       sanityMarginPercentage: "0",
       editorDid: did,

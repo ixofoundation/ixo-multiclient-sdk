@@ -130,6 +130,7 @@ export interface BuyOrderSDKType {
 }
 /** SellOrder defines a type for submitting a sell order on a bond. */
 export interface SellOrder {
+    /** SellOrder defines a type for submitting a sell order on a bond. */
     baseOrder?: BaseOrder;
 }
 /** SellOrder defines a type for submitting a sell order on a bond. */
@@ -186,6 +187,7 @@ export interface BatchSDKType {
 }
 /** Params defines the parameters for the bonds module. */
 export interface Params {
+    /** Params defines the parameters for the bonds module. */
     reservedBondTokens: string[];
 }
 /** Params defines the parameters for the bonds module. */

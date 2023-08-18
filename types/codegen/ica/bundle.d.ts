@@ -1,11 +1,11 @@
 import * as _142 from "./intertx/query";
 import * as _143 from "./intertx/tx";
-import * as _232 from "./intertx/query.rpc.Query";
-import * as _233 from "./intertx/tx.rpc.msg";
+import * as _233 from "./intertx/query.rpc.Query";
+import * as _234 from "./intertx/tx.rpc.msg";
 export declare namespace ica {
     const intertx: {
-        MsgClientImpl: typeof _233.MsgClientImpl;
-        QueryClientImpl: typeof _232.QueryClientImpl;
+        MsgClientImpl: typeof _234.MsgClientImpl;
+        QueryClientImpl: typeof _233.QueryClientImpl;
         createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
             interchainAccount(request: _142.QueryInterchainAccountRequest): Promise<_142.QueryInterchainAccountResponse>;
         };
@@ -99,7 +99,7 @@ export declare namespace ica {
                 };
             };
             ica: {
-                intertx: _233.MsgClientImpl;
+                intertx: _234.MsgClientImpl;
             };
         }>;
         createRPCQueryClient: ({ rpcEndpoint }: {
