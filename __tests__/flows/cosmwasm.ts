@@ -4,6 +4,7 @@ import {
   getUser,
   queryClient,
   testMsg,
+  timeout,
   utils,
 } from "../helpers/common";
 import { WalletUsers } from "../helpers/constants";
@@ -352,6 +353,9 @@ export const daoCore = () =>
     testMsg(
       "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal propose",
       async () => {
+        console.log("Waiting 10 seconds");
+        await timeout(10 * 1000);
+
         const msg = {
           propose: {
             msg: {
