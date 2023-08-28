@@ -10,7 +10,11 @@ import {
 import { WalletUsers } from "../helpers/constants";
 import * as Wasm from "../modules/CosmWasm";
 import * as Cosmos from "../modules/Cosmos";
+import * as Token from "../modules/Token";
 import { contracts } from "../../src/custom_queries/contract.constants";
+import { getRandomTokenIds, splitAmountOnRandomParts } from "../helpers/swap";
+import { DeliverTxResponse } from "@cosmjs/stargate";
+import { JsonToArray, Uint8ArrayToJS } from "../../src/utils/conversions";
 
 export const wasmBasic = () =>
   describe("Testing the wasmd module", () => {
@@ -474,3 +478,293 @@ export const daoCore = () =>
       expect(res).toBeTruthy();
     });
   });
+
+export const swapBasic = () => {
+  const contractAddress1155 =
+    "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
+  const name = "TEST";
+  const amount = 50;
+  const collectionDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
+  const nftDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
+  const tokenData = [
+    {
+      uri: "https://media.makeameme.org/created/haha-you-were-a3866a4349.jpg",
+      encrypted: false,
+      proof: "proof",
+      type: "application/json",
+      id: nftDid,
+    },
+  ];
+
+  const indexes = Array.from({ length: 29 }, (_, index) => index + 3);
+  indexes.map((index) => {
+    testMsg("/ixo.token.v1beta1.MsgMintToken", async () => {
+      const res = await Token.MintToken(contractAddress1155, [
+        {
+          name,
+          index: index.toString(),
+          amount,
+          collection: collectionDid,
+          tokenData,
+        },
+      ]);
+      console.log({
+        tokenId: utils.common.getValueFromEvents(res, "wasm", "token_id"),
+      });
+      return res;
+    });
+  });
+};
+
+export const swapContract = () => {
+  describe("Testing swaps on contract", () => {
+    let tokenContractAddress: string = "";
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
+      const tester = (await getUser().getAccounts())[0].address;
+      const msg = { minter: tester };
+
+      const res = await Wasm.WasmInstantiateTrx(2, JSON.stringify(msg));
+      tokenContractAddress = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ tokenContractAddress });
+      return res;
+    });
+
+    let tokenIds: string[] = [];
+    test("Query token ids", async () => {
+      const contractAddress1155 =
+        "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
+      const tester = (await getUser().getAccounts())[0].address;
+
+      const response = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: contractAddress1155,
+        queryData: JsonToArray(
+          JSON.stringify({
+            tokens: {
+              owner: tester,
+            },
+          })
+        ),
+      });
+      tokenIds = JSON.parse(Uint8ArrayToJS(response.data)).tokens;
+      console.log(tokenIds);
+      expect(response).toBeTruthy();
+    });
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract mint 1155 tokens",
+      async () => {
+        const tester = (await getUser().getAccounts())[0].address;
+        const msg = {
+          batch_mint: {
+            to: tester,
+            batch: tokenIds.map((id) => [id, "100000000", "uri"]),
+          },
+        };
+
+        const res = await Wasm.WasmExecuteTrx(
+          tokenContractAddress,
+          JSON.stringify(msg),
+          WalletUsers.tester
+        );
+        return res;
+      }
+    );
+
+    let swapContractAddress: string = "";
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
+      const tester = (await getUser().getAccounts())[0].address;
+      const msg = {
+        token1155_denom: { cw1155: [tokenContractAddress, "TEST"] },
+        token2_denom: { native: "uixo" },
+        lp_token_code_id: 25,
+        owner: tester,
+        protocol_fee_recipient: tester,
+        protocol_fee_percent: "0.1",
+        lp_fee_percent: "0.2",
+      };
+
+      const res = await Wasm.WasmInstantiateTrx(28, JSON.stringify(msg));
+      swapContractAddress = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ swapContractAddress });
+      return res;
+    });
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract approve swap contract for token",
+      async () => {
+        const msg = {
+          approve_all: {
+            operator: swapContractAddress,
+          },
+        };
+
+        const res = await Wasm.WasmExecuteTrx(
+          tokenContractAddress,
+          JSON.stringify(msg),
+          WalletUsers.tester
+        );
+        return res;
+      }
+    );
+
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract add liquidity", async () => {
+      const msg = {
+        add_liquidity: {
+          token1155_amounts: {
+            ...tokenIds.reduce((acc, id) => {
+              acc[id] = "2000000";
+              return acc;
+            }, {}),
+          },
+          min_liquidity: "10000000",
+          max_token2: "10000000",
+        },
+      };
+
+      const res = await Wasm.WasmExecuteTrx(
+        swapContractAddress,
+        JSON.stringify(msg),
+        WalletUsers.tester,
+        { amount: "10000000", denom: "uixo" }
+      );
+      return res;
+    });
+
+    const inputToken1155 = "token1155";
+    const inputToken2 = "token2";
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () => {
+      const numberOfTests = 5;
+      const promises: Promise<DeliverTxResponse>[] = [];
+
+      for (let i = 0; i < numberOfTests; i++) {
+        const inputToken =
+          Math.floor(Math.random() * 2) + 1 == 1 ? inputToken1155 : inputToken2;
+        const inputAmount = Math.floor(Math.random() * 200000) + 1;
+
+        let formattedInputAmount = {};
+        if (inputToken == inputToken1155) {
+          const includedBatchesCount =
+            Math.floor(Math.random() * tokenIds.length) + 1;
+          const batchesAmounts = splitAmountOnRandomParts(
+            inputAmount,
+            includedBatchesCount
+          );
+          const batchesIds = getRandomTokenIds(tokenIds, includedBatchesCount);
+
+          formattedInputAmount = {
+            multiple: {
+              ...batchesIds.reduce((acc, id, index) => {
+                acc[id] = batchesAmounts[index].toString();
+                return acc;
+              }, {}),
+            },
+          };
+        } else {
+          formattedInputAmount = { single: inputAmount.toString() };
+        }
+
+        // let query = {};
+        // if (inputToken == inputToken1155) {
+        //   query = {
+        //     token1155_for_token2_price: {
+        //       token1155_amount: formattedInputAmount,
+        //     },
+        //   };
+        // } else {
+        //   query = {
+        //     token2_for_token1155_price: {
+        //       token2_amount: formattedInputAmount,
+        //     },
+        //   };
+        // }
+
+        // const response = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        //   address: swapContractAddress,
+        //   queryData: JsonToArray(JSON.stringify(query)),
+        // });
+        // const parsedResponse = JSON.parse(Uint8ArrayToJS(response.data));
+        // const outputAmount =
+        //   parsedResponse.token2_amount ?? parsedResponse.token1155_amount;
+        // console.log(outputAmount);
+
+        let formattedOutputAmount = {};
+        if (inputToken == inputToken1155) {
+          formattedOutputAmount = { single: "1" };
+        } else {
+          const anyBatches = Math.random() < 0.5;
+
+          if (anyBatches) {
+            formattedOutputAmount = { single: "1" };
+          } else {
+            const includedBatchesCount =
+              Math.floor(Math.random() * tokenIds.length) + 1;
+            const batchesIds = getRandomTokenIds(
+              tokenIds,
+              includedBatchesCount
+            );
+
+            formattedOutputAmount = {
+              multiple: {
+                ...batchesIds.reduce((acc, id, i) => {
+                  acc[id] = "1";
+                  return acc;
+                }, {}),
+              },
+            };
+          }
+        }
+
+        const msg = {
+          swap: {
+            input_token: inputToken,
+            input_amount: formattedInputAmount,
+            min_output: formattedOutputAmount,
+          },
+        };
+        console.log(JSON.stringify(msg, null, 4));
+        promises.push(
+          Wasm.WasmExecuteTrx(
+            swapContractAddress,
+            JSON.stringify(msg),
+            WalletUsers.tester,
+            inputToken === inputToken2
+              ? {
+                  amount: inputAmount.toString(),
+                  denom: "uixo",
+                }
+              : undefined
+          )
+        );
+      }
+
+      const start = Date.now();
+      const responses = await Promise.all(promises);
+      const end = Date.now();
+
+      console.log(`Sent ${numberOfTests} transactions in ${end - start} ms`);
+
+      responses.forEach((res) => {
+        const tokenBought = utils.common.getValueFromEvents(
+          res,
+          "wasm",
+          "token_bought"
+        );
+        const tokenSold = utils.common.getValueFromEvents(
+          res,
+          "wasm",
+          "token_sold"
+        );
+        console.log({ tokenSold, tokenBought });
+      });
+      return responses![0];
+    });
+  });
+};
