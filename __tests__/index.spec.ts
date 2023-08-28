@@ -49,7 +49,7 @@ IID.generateBlockchainTestUsers();
 // Entity.relayerVerifyAllEntities();
 // Entity.enititiesSetStatus();
 // CosmWasm.swapBasic();
-CosmWasm.swapContract();
+// CosmWasm.swapContract();
 
 // ------------------------------------------
 // Run the below after a devnet reset
