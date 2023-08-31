@@ -12,7 +12,12 @@ import * as Wasm from "../modules/CosmWasm";
 import * as Cosmos from "../modules/Cosmos";
 import * as Token from "../modules/Token";
 import { contracts } from "../../src/custom_queries/contract.constants";
-import { getRandomTokenIds, splitAmountOnRandomParts } from "../helpers/swap";
+import {
+  TokenType,
+  formatInputAmount,
+  formatOutputAmount,
+  queryOutputAmount,
+} from "../helpers/swap";
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import { JsonToArray, Uint8ArrayToJS } from "../../src/utils/conversions";
 
@@ -649,102 +654,36 @@ export const swapContract = () => {
       return res;
     });
 
-    const token1155 = "token1155";
-    const token2 = "token2";
     testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () => {
       const numberOfTests = 5;
+      const slippage = 5;
       const promises: any[] = [];
       const signerData = await Wasm.getSignerDataWithWallet(WalletUsers.tester);
 
       for (let i = 0; i < numberOfTests; i++) {
         const inputToken =
-          Math.floor(Math.random() * 2) + 1 == 1 ? token1155 : token2;
+          Math.floor(Math.random() * 2) + 1 == 1
+            ? TokenType.Token1155
+            : TokenType.Token2;
         const inputAmount = Math.floor(Math.random() * 1000000) + 1;
-
-        let formattedInputAmount = {};
-        if (inputToken == token1155) {
-          const includedBatchesCount =
-            Math.floor(Math.random() * tokenIds.length) + 1;
-          const batchesAmounts = splitAmountOnRandomParts(
-            inputAmount,
-            includedBatchesCount
-          );
-          const batchesIds = getRandomTokenIds(tokenIds, includedBatchesCount);
-
-          formattedInputAmount = {
-            multiple: {
-              ...batchesIds.reduce((acc, id, index) => {
-                acc[id] = batchesAmounts[index].toString();
-                return acc;
-              }, {}),
-            },
-          };
-        } else {
-          formattedInputAmount = { single: inputAmount.toString() };
-        }
-
-        let query = {};
-        if (inputToken == token1155) {
-          query = {
-            token1155_for_token2_price: {
-              token1155_amount: formattedInputAmount,
-            },
-          };
-        } else {
-          query = {
-            token2_for_token1155_price: {
-              token2_amount: formattedInputAmount,
-            },
-          };
-        }
-
-        const response = await queryClient.cosmwasm.wasm.v1.smartContractState({
-          address: swapContractAddress,
-          queryData: JsonToArray(JSON.stringify(query)),
-        });
-        const parsedResponse = JSON.parse(Uint8ArrayToJS(response.data));
-        const outputAmount = Number(
-          parsedResponse.token2_amount ?? parsedResponse.token1155_amount
+        const formattedInputAmount = formatInputAmount(
+          inputToken,
+          inputAmount,
+          tokenIds
         );
 
-        const slippage = 5;
+        const outputAmount = await queryOutputAmount(
+          inputToken,
+          formattedInputAmount,
+          swapContractAddress
+        );
         const outputAmountWithSlippage =
           outputAmount - outputAmount * (slippage / 100);
-
-        let formattedOutputAmount = {};
-        if (inputToken == token1155) {
-          formattedOutputAmount = {
-            single: outputAmountWithSlippage.toFixed(),
-          };
-        } else {
-          const anyBatches = Math.random() < 0.5;
-
-          if (anyBatches) {
-            formattedOutputAmount = {
-              single: outputAmountWithSlippage.toFixed(),
-            };
-          } else {
-            const includedBatchesCount =
-              Math.floor(Math.random() * tokenIds.length) + 1;
-            const batchesAmounts = splitAmountOnRandomParts(
-              Number(outputAmountWithSlippage.toFixed()),
-              includedBatchesCount
-            );
-            const batchesIds = getRandomTokenIds(
-              tokenIds,
-              includedBatchesCount
-            );
-
-            formattedOutputAmount = {
-              multiple: {
-                ...batchesIds.reduce((acc, id, index) => {
-                  acc[id] = batchesAmounts[index].toString();
-                  return acc;
-                }, {}),
-              },
-            };
-          }
-        }
+        const formattedOutputAmount = formatOutputAmount(
+          inputToken,
+          tokenIds,
+          outputAmountWithSlippage
+        );
 
         const msg = {
           swap: {
@@ -761,7 +700,7 @@ export const swapContract = () => {
             swapContractAddress,
             JSON.stringify(msg),
             WalletUsers.tester,
-            inputToken === token2
+            inputToken === TokenType.Token2
               ? {
                   amount: inputAmount.toString(),
                   denom: "uixo",

@@ -1,11 +1,28 @@
-export const getRandomTokenIds = (
-  tokenIds: string[],
-  idsCount: number
-): string[] => tokenIds.sort(() => 0.5 - Math.random()).slice(0, idsCount);
-export const splitAmountOnRandomParts = (
-  amount: number,
-  parts: number
-): number[] => {
+import { JsonToArray, Uint8ArrayToJS } from "../../src/utils/conversions";
+import { queryClient } from "./common";
+
+type ObjectMap = {
+  [key: string]: string;
+};
+
+enum AmountType {
+  Single = "single",
+  Multiple = "multiple",
+}
+
+export enum TokenType {
+  Token1155 = "token1155",
+  Token2 = "token2",
+}
+
+export type TokenAmount = {
+  [key in AmountType]?: string | ObjectMap;
+};
+
+const getRandomTokenIds = (tokenIds: string[], idsCount: number): string[] =>
+  tokenIds.sort(() => 0.5 - Math.random()).slice(0, idsCount);
+
+const splitAmountOnRandomParts = (amount: number, parts: number): number[] => {
   const result: number[] = [];
   let sumParts = 0;
 
@@ -17,4 +34,102 @@ export const splitAmountOnRandomParts = (
 
   result.push(amount - sumParts);
   return result;
+};
+
+export const formatInputAmount = (
+  inputTokenType: TokenType,
+  inputAmount: number,
+  inputTokensId: string[]
+): TokenAmount => {
+  if (inputTokenType == TokenType.Token1155) {
+    const includedBatchesCount =
+      Math.floor(Math.random() * inputTokensId.length) + 1;
+    const batchesAmounts = splitAmountOnRandomParts(
+      inputAmount,
+      includedBatchesCount
+    );
+    const batchesIds = getRandomTokenIds(inputTokensId, includedBatchesCount);
+
+    return {
+      multiple: {
+        ...batchesIds.reduce((acc, id, index) => {
+          acc[id] = batchesAmounts[index].toString();
+          return acc;
+        }, {}),
+      },
+    };
+  } else {
+    return { single: inputAmount.toString() };
+  }
+};
+
+export const formatOutputAmount = (
+  inputTokenType: TokenType,
+  outputTokenIds: string[],
+  outputAmount: number
+): TokenAmount => {
+  if (inputTokenType == TokenType.Token1155) {
+    return {
+      single: outputAmount.toFixed(),
+    };
+  } else {
+    const anyBatches = Math.random() < 0.5;
+
+    if (anyBatches) {
+      return {
+        single: outputAmount.toFixed(),
+      };
+    } else {
+      const includedBatchesCount =
+        Math.floor(Math.random() * outputTokenIds.length) + 1;
+      const batchesAmounts = splitAmountOnRandomParts(
+        Number(outputAmount.toFixed()),
+        includedBatchesCount
+      );
+      const batchesIds = getRandomTokenIds(
+        outputTokenIds,
+        includedBatchesCount
+      );
+
+      return {
+        multiple: {
+          ...batchesIds.reduce((acc, id, index) => {
+            acc[id] = batchesAmounts[index].toString();
+            return acc;
+          }, {}),
+        },
+      };
+    }
+  }
+};
+
+export const queryOutputAmount = async (
+  inputTokenType: TokenType,
+  inputTokenAmount: TokenAmount,
+  swapContractAddress: string
+) => {
+  let query = {};
+  if (inputTokenType == TokenType.Token1155) {
+    query = {
+      token1155_for_token2_price: {
+        token1155_amount: inputTokenAmount,
+      },
+    };
+  } else {
+    query = {
+      token2_for_token1155_price: {
+        token2_amount: inputTokenAmount,
+      },
+    };
+  }
+
+  const response = await queryClient.cosmwasm.wasm.v1.smartContractState({
+    address: swapContractAddress,
+    queryData: JsonToArray(JSON.stringify(query)),
+  });
+  const parsedResponse = JSON.parse(Uint8ArrayToJS(response.data));
+
+  return Number(
+    parsedResponse.token2_amount ?? parsedResponse.token1155_amount
+  );
 };
