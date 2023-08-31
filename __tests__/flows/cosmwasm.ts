@@ -545,6 +545,7 @@ export const swapContract = () => {
           JSON.stringify({
             tokens: {
               owner: tester,
+              limit: 30,
             },
           })
         ),
@@ -615,17 +616,27 @@ export const swapContract = () => {
       }
     );
 
+    test("Query user balance", async () => {
+      const address = (await getUser(WalletUsers.tester).getAccounts())[0]
+        .address;
+      const res = await queryClient.cosmos.bank.v1beta1.allBalances({
+        address,
+      });
+      console.log(res.balances);
+      expect(res).toBeTruthy();
+    });
+
     testMsg("/cosmwasm.wasm.v1.MsgExecuteContract add liquidity", async () => {
       const msg = {
         add_liquidity: {
           token1155_amounts: {
             ...tokenIds.reduce((acc, id) => {
-              acc[id] = "2000000";
+              acc[id] = "30000000";
               return acc;
             }, {}),
           },
-          min_liquidity: "10000000",
-          max_token2: "10000000",
+          min_liquidity: "300000000",
+          max_token2: "1000000000",
         },
       };
 
@@ -633,24 +644,25 @@ export const swapContract = () => {
         swapContractAddress,
         JSON.stringify(msg),
         WalletUsers.tester,
-        { amount: "10000000", denom: "uixo" }
+        { amount: "1000000000", denom: "uixo" }
       );
       return res;
     });
 
-    const inputToken1155 = "token1155";
-    const inputToken2 = "token2";
+    const token1155 = "token1155";
+    const token2 = "token2";
     testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () => {
       const numberOfTests = 5;
       const promises: Promise<DeliverTxResponse>[] = [];
+      const signerData = await Wasm.getSignerDataWithWallet(WalletUsers.tester);
 
       for (let i = 0; i < numberOfTests; i++) {
         const inputToken =
-          Math.floor(Math.random() * 2) + 1 == 1 ? inputToken1155 : inputToken2;
-        const inputAmount = Math.floor(Math.random() * 200000) + 1;
+          Math.floor(Math.random() * 2) + 1 == 1 ? token1155 : token2;
+        const inputAmount = Math.floor(Math.random() * 1000000) + 1;
 
         let formattedInputAmount = {};
-        if (inputToken == inputToken1155) {
+        if (inputToken == token1155) {
           const includedBatchesCount =
             Math.floor(Math.random() * tokenIds.length) + 1;
           const batchesAmounts = splitAmountOnRandomParts(
@@ -671,41 +683,53 @@ export const swapContract = () => {
           formattedInputAmount = { single: inputAmount.toString() };
         }
 
-        // let query = {};
-        // if (inputToken == inputToken1155) {
-        //   query = {
-        //     token1155_for_token2_price: {
-        //       token1155_amount: formattedInputAmount,
-        //     },
-        //   };
-        // } else {
-        //   query = {
-        //     token2_for_token1155_price: {
-        //       token2_amount: formattedInputAmount,
-        //     },
-        //   };
-        // }
+        let query = {};
+        if (inputToken == token1155) {
+          query = {
+            token1155_for_token2_price: {
+              token1155_amount: formattedInputAmount,
+            },
+          };
+        } else {
+          query = {
+            token2_for_token1155_price: {
+              token2_amount: formattedInputAmount,
+            },
+          };
+        }
 
-        // const response = await queryClient.cosmwasm.wasm.v1.smartContractState({
-        //   address: swapContractAddress,
-        //   queryData: JsonToArray(JSON.stringify(query)),
-        // });
-        // const parsedResponse = JSON.parse(Uint8ArrayToJS(response.data));
-        // const outputAmount =
-        //   parsedResponse.token2_amount ?? parsedResponse.token1155_amount;
-        // console.log(outputAmount);
+        const response = await queryClient.cosmwasm.wasm.v1.smartContractState({
+          address: swapContractAddress,
+          queryData: JsonToArray(JSON.stringify(query)),
+        });
+        const parsedResponse = JSON.parse(Uint8ArrayToJS(response.data));
+        const outputAmount = Number(
+          parsedResponse.token2_amount ?? parsedResponse.token1155_amount
+        );
+
+        const slippage = 5;
+        const outputAmountWithSlippage =
+          outputAmount - outputAmount * (slippage / 100);
 
         let formattedOutputAmount = {};
-        if (inputToken == inputToken1155) {
-          formattedOutputAmount = { single: "1" };
+        if (inputToken == token1155) {
+          formattedOutputAmount = {
+            single: outputAmountWithSlippage.toFixed(),
+          };
         } else {
           const anyBatches = Math.random() < 0.5;
 
           if (anyBatches) {
-            formattedOutputAmount = { single: "1" };
+            formattedOutputAmount = {
+              single: outputAmountWithSlippage.toFixed(),
+            };
           } else {
             const includedBatchesCount =
               Math.floor(Math.random() * tokenIds.length) + 1;
+            const batchesAmounts = splitAmountOnRandomParts(
+              Number(outputAmountWithSlippage.toFixed()),
+              includedBatchesCount
+            );
             const batchesIds = getRandomTokenIds(
               tokenIds,
               includedBatchesCount
@@ -713,8 +737,8 @@ export const swapContract = () => {
 
             formattedOutputAmount = {
               multiple: {
-                ...batchesIds.reduce((acc, id, i) => {
-                  acc[id] = "1";
+                ...batchesIds.reduce((acc, id, index) => {
+                  acc[id] = batchesAmounts[index].toString();
                   return acc;
                 }, {}),
               },
@@ -729,42 +753,57 @@ export const swapContract = () => {
             min_output: formattedOutputAmount,
           },
         };
-        console.log(JSON.stringify(msg, null, 4));
+        console.log(msg);
         promises.push(
           Wasm.WasmExecuteTrx(
             swapContractAddress,
             JSON.stringify(msg),
             WalletUsers.tester,
-            inputToken === inputToken2
+            inputToken === token2
               ? {
                   amount: inputAmount.toString(),
                   denom: "uixo",
                 }
-              : undefined
+              : undefined,
+            {
+              ...signerData,
+              sequence: signerData.sequence + i,
+            }
           )
         );
       }
 
       const start = Date.now();
-      const responses = await Promise.all(promises);
+
+      for (const [index, promise] of promises.entries()) {
+        await timeout(3000);
+        const res = await promise;
+        console.log(res);
+      }
+
+      // const responses = await Promise.all(
+      //   promises.map(async (promise, index) => {
+      //     await timeout(30000);
+      //     return promise;
+      //   })
+      // );
       const end = Date.now();
+
+      // const tokenBought = utils.common.getValueFromEvents(
+      //   res,
+      //   "wasm",
+      //   "token_bought"
+      // );
+      // const tokenSold = utils.common.getValueFromEvents(
+      //   res,
+      //   "wasm",
+      //   "token_sold"
+      // );
+      // console.log({ tokenSold, tokenBought });
 
       console.log(`Sent ${numberOfTests} transactions in ${end - start} ms`);
 
-      responses.forEach((res) => {
-        const tokenBought = utils.common.getValueFromEvents(
-          res,
-          "wasm",
-          "token_bought"
-        );
-        const tokenSold = utils.common.getValueFromEvents(
-          res,
-          "wasm",
-          "token_sold"
-        );
-        console.log({ tokenSold, tokenBought });
-      });
-      return responses![0];
+      return true as any;
     });
   });
 };

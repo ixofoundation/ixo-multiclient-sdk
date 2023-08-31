@@ -9,6 +9,9 @@ import {
   getFileFromPath,
 } from "../helpers/common";
 import Long from "long";
+import { SignerData } from "@cosmjs/stargate";
+import { getSignerData } from "../../src/stargate_client/store";
+import { OfflineSigner } from "@cosmjs/proto-signing";
 
 export const WasmStoreTrx = async (
   contract: string = "cw721",
@@ -80,6 +83,19 @@ export const WasmInstantiateTrx = async (
   return response;
 };
 
+export const getSignerDataWithWallet = async (
+  signer: WalletUsers = WalletUsers.tester
+): Promise<SignerData> => {
+  const client = await createClient(getUser(signer));
+  const user = getUser(signer);
+
+  return getSignerData(
+    client,
+    user as OfflineSigner,
+    client.localStoreFunctions
+  );
+};
+
 export const WasmExecuteTrx = async (
   contractAddress: string,
   msg: string,
@@ -87,7 +103,8 @@ export const WasmExecuteTrx = async (
   funds = {
     amount: "1",
     denom: "uixo",
-  }
+  },
+  explicitSignerData?: SignerData
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -108,7 +125,9 @@ export const WasmExecuteTrx = async (
   const response = await client.signAndBroadcast(
     myAddress,
     [message],
-    getFee(1, await client.simulate(myAddress, [message], undefined))
+    getFee(1, await client.simulate(myAddress, [message], undefined)),
+    undefined,
+    explicitSignerData
   );
   return response;
 };
