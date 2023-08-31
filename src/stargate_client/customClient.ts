@@ -21,7 +21,10 @@ import {
   GasPrice,
   calculateFee,
 } from "@cosmjs/stargate";
-import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import {
+  BroadcastTxSyncResponse,
+  Tendermint34Client,
+} from "@cosmjs/tendermint-rpc";
 import { assert, assertDefined } from "@cosmjs/utils";
 import { SignMode } from "cosmjs-types/cosmos/tx/signing/v1beta1/signing";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
@@ -169,26 +172,13 @@ export class SigningStargateClient extends StargateClient {
     explicitSignerData?: SignerData,
     txBodyBytes?: Uint8Array
   ): Promise<DeliverTxResponse> {
-    let usedFee: StdFee;
-    if (fee == "auto" || typeof fee === "number") {
-      assertDefined(
-        this.gasPrice,
-        "Gas price must be set in the client options when auto gas is used."
-      );
-      const gasEstimation = await this.simulate(
-        signerAddress,
-        messages,
-        memo,
-        txBodyBytes
-      );
-      const multiplier = typeof fee === "number" ? fee : 1.3;
-      usedFee = calculateFee(
-        Math.round(gasEstimation * multiplier),
-        this.gasPrice
-      );
-    } else {
-      usedFee = fee;
-    }
+    const usedFee = await this.getUsedFee(
+      signerAddress,
+      messages,
+      fee,
+      memo,
+      txBodyBytes
+    );
     const txRaw = await this.sign(
       signerAddress,
       messages,
@@ -255,6 +245,41 @@ export class SigningStargateClient extends StargateClient {
           txBodyBytes
         )
       : this.signAmino(signerAddress, messages, fee, memo, signerData);
+  }
+
+  public async getUsedFee(
+    signerAddress: string,
+    messages: readonly EncodeObject[],
+    fee: StdFee | "auto" | number,
+    memo = "",
+    txBodyBytes?: Uint8Array
+  ): Promise<StdFee> {
+    if (fee == "auto" || typeof fee === "number") {
+      assertDefined(
+        this.gasPrice,
+        "Gas price must be set in the client options when auto gas is used."
+      );
+      const gasEstimation = await this.simulate(
+        signerAddress,
+        messages,
+        memo,
+        txBodyBytes
+      );
+      const multiplier = typeof fee === "number" ? fee : 1.3;
+
+      return calculateFee(
+        Math.round(gasEstimation * multiplier),
+        this.gasPrice
+      );
+    } else {
+      return fee;
+    }
+  }
+
+  public async tmBroadcastTxSync(
+    tx: Uint8Array
+  ): Promise<BroadcastTxSyncResponse> {
+    return this.forceGetTmClient().broadcastTxSync({ tx });
   }
 
   private async signAmino(

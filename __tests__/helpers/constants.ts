@@ -70,8 +70,7 @@ export const fee: StdFee = {
 
 export const getFee = (
   trxLength = 1,
-  simGas?: number,
-  timesConstant = 1
+  simGas?: number
 ): number | StdFee | "auto" => {
   if (simGas && simGas > 50000) return "auto";
   // console.log("getFee simGas too low: ", simGas);
@@ -80,10 +79,10 @@ export const getFee = (
     amount: [
       {
         denom: "uixo",
-        amount: (trxLength * 30000 * timesConstant).toString(),
+        amount: (trxLength * 30000).toString(),
       },
     ],
-    gas: (trxLength * 500000 * timesConstant).toString(),
+    gas: (trxLength * 500000).toString(),
     // if wana do transactions using feegrant granter address
     // granter: "ixo1n8yrmeatsk74dw0zs95ess9sgzptd6thgjgcj2",
   };

@@ -22,18 +22,20 @@ export type TokenAmount = {
 const getRandomTokenIds = (tokenIds: string[], idsCount: number): string[] =>
   tokenIds.sort(() => 0.5 - Math.random()).slice(0, idsCount);
 
-const splitAmountOnRandomParts = (amount: number, parts: number): number[] => {
+const splitAmountOnRandomParts = (
+  amount: number,
+  parts: number,
+  min = 100
+): number[] => {
+  const randomBit = amount - min * parts;
   const result: number[] = [];
-  let sumParts = 0;
 
-  for (let i = 0; i < parts - 1; i++) {
-    const pn = Math.ceil(Math.random() * (amount - sumParts));
-    result.push(pn);
-    sumParts += pn;
+  for (let i = 0; i < parts; i++) {
+    result.push(Math.random());
   }
 
-  result.push(amount - sumParts);
-  return result;
+  const multiplier = randomBit / result.reduce((prev, curr) => prev + curr);
+  return result.map((amount) => Math.round(amount * multiplier + min));
 };
 
 export const formatInputAmount = (

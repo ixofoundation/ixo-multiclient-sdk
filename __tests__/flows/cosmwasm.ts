@@ -1,5 +1,7 @@
+import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import {
   cosmos,
+  createClient,
   customQueries,
   getUser,
   queryClient,
@@ -20,6 +22,10 @@ import {
 } from "../helpers/swap";
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import { JsonToArray, Uint8ArrayToJS } from "../../src/utils/conversions";
+import { getSignerData } from "../../src/stargate_client/store";
+import { OfflineSigner } from "@cosmjs/proto-signing";
+import { BroadcastTxSyncResponse } from "@cosmjs/tendermint-rpc";
+import { toHex } from "@cosmjs/encoding";
 
 export const wasmBasic = () =>
   describe("Testing the wasmd module", () => {
@@ -486,7 +492,7 @@ export const daoCore = () =>
 
 export const swapBasic = () => {
   const contractAddress1155 =
-    "ixo1yg8930mj8pk288lmkjex0qz85mj8wgtns5uzwyn2hs25pwdnw42sff8a4r";
+    "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
   const name = "TEST";
   const amount = 50;
   const collectionDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
@@ -541,7 +547,7 @@ export const swapContract = () => {
     let tokenIds: string[] = [];
     test("Query token ids", async () => {
       const contractAddress1155 =
-        "ixo1yg8930mj8pk288lmkjex0qz85mj8wgtns5uzwyn2hs25pwdnw42sff8a4r";
+        "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
       const tester = (await getUser().getAccounts())[0].address;
 
       const response = await queryClient.cosmwasm.wasm.v1.smartContractState({
@@ -655,17 +661,23 @@ export const swapContract = () => {
     });
 
     testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () => {
-      const numberOfTests = 5;
+      const numberOfTests = 100;
       const slippage = 5;
-      const promises: any[] = [];
-      const signerData = await Wasm.getSignerDataWithWallet(WalletUsers.tester);
+      const txList: TxRaw[] = [];
+      const user = getUser(WalletUsers.tester);
+      const client = await createClient(user);
+      const signerData = await getSignerData(
+        client,
+        user as OfflineSigner,
+        client.localStoreFunctions
+      );
 
       for (let i = 0; i < numberOfTests; i++) {
         const inputToken =
           Math.floor(Math.random() * 2) + 1 == 1
             ? TokenType.Token1155
             : TokenType.Token2;
-        const inputAmount = Math.floor(Math.random() * 1000000) + 1;
+        const inputAmount = Math.floor(Math.random() * 1000000) + 10000;
         const formattedInputAmount = formatInputAmount(
           inputToken,
           inputAmount,
@@ -692,11 +704,11 @@ export const swapContract = () => {
             min_output: formattedOutputAmount,
           },
         };
-        console.log(msg);
-        promises.push(async () => {
-          await timeout(300 * i);
-          console.log("start: ", i, " ", signerData.sequence + i);
-          const res = await Wasm.WasmExecuteTrx(
+        console.log("Swap message: ", JSON.stringify(msg, null, 3));
+
+        txList.push(
+          await Wasm.WasmSignTrx(
+            client,
             swapContractAddress,
             JSON.stringify(msg),
             WalletUsers.tester,
@@ -709,47 +721,50 @@ export const swapContract = () => {
             {
               ...signerData,
               sequence: signerData.sequence + i,
-            },
-            true
-          );
-          return res;
-        });
+            }
+          )
+        );
       }
 
       const start = Date.now();
 
-      const results = await Promise.all(promises.map((promise) => promise()));
-      console.log(results);
+      const txHashes: BroadcastTxSyncResponse[] = [];
+      for (let i = 0; i < txList.length - 1; i++) {
+        const txRaw: TxRaw = txList[i];
+        txHashes.push(
+          await client.tmBroadcastTxSync(TxRaw.encode(txRaw).finish())
+        );
+      }
+      const lastDelivery: DeliverTxResponse = await client.broadcastTx(
+        TxRaw.encode(txList[txList.length - 1]).finish()
+      );
 
-      // for (const [index, promise] of promises.entries()) {
-      //   await timeout(3000);
-      //   const res = await promise;
-      //   console.log(res);
-      // }
-
-      // const responses = await Promise.all(
-      //   promises.map(async (promise, index) => {
-      //     await timeout(30000);
-      //     return promise;
-      //   })
-      // );
       const end = Date.now();
 
-      // const tokenBought = utils.common.getValueFromEvents(
-      //   res,
-      //   "wasm",
-      //   "token_bought"
-      // );
-      // const tokenSold = utils.common.getValueFromEvents(
-      //   res,
-      //   "wasm",
-      //   "token_sold"
-      // );
-      // console.log({ tokenSold, tokenBought });
+      const swapResponses: DeliverTxResponse[] = [];
+      for (const hash of txHashes) {
+        const res = await client.getTx(toHex(hash.hash));
+        swapResponses.push(res as unknown as DeliverTxResponse);
+      }
+      swapResponses.push(lastDelivery);
+
+      for (const [index, response] of swapResponses.entries()) {
+        const tokenBought = utils.common.getValueFromEvents(
+          response,
+          "wasm",
+          "token_bought"
+        );
+        const tokenSold = utils.common.getValueFromEvents(
+          response,
+          "wasm",
+          "token_sold"
+        );
+        console.log(`Swap ${index} result: `, { tokenSold, tokenBought });
+      }
 
       console.log(`Sent ${numberOfTests} transactions in ${end - start} ms`);
 
-      return true as any;
+      return swapResponses![0];
     });
   });
 };
