@@ -183,10 +183,10 @@ export const cwUploadProposal = () =>
     testMsg(
       "/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract",
       async () => {
-        const name = "cw1155_base_lp";
+        const name = "ixoswap";
         const res = await Cosmos.MsgSubmitProposalStoreCW(`custom ${name}`, [
           "contracts",
-          "custom",
+          "ixo",
           `${name}.wasm`,
         ]);
         proposalId = utils.common.getValueFromEvents(

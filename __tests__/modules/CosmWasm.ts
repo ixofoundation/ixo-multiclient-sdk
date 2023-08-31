@@ -104,7 +104,8 @@ export const WasmExecuteTrx = async (
     amount: "1",
     denom: "uixo",
   },
-  explicitSignerData?: SignerData
+  explicitSignerData?: SignerData,
+  fixedFee = false
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -125,7 +126,13 @@ export const WasmExecuteTrx = async (
   const response = await client.signAndBroadcast(
     myAddress,
     [message],
-    getFee(1, await client.simulate(myAddress, [message], undefined)),
+    getFee(
+      1,
+      fixedFee
+        ? undefined
+        : await client.simulate(myAddress, [message], undefined),
+      2.5
+    ),
     undefined,
     explicitSignerData
   );

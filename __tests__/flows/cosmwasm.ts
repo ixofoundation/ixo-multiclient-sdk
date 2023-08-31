@@ -481,7 +481,7 @@ export const daoCore = () =>
 
 export const swapBasic = () => {
   const contractAddress1155 =
-    "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
+    "ixo1yg8930mj8pk288lmkjex0qz85mj8wgtns5uzwyn2hs25pwdnw42sff8a4r";
   const name = "TEST";
   const amount = 50;
   const collectionDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
@@ -536,7 +536,7 @@ export const swapContract = () => {
     let tokenIds: string[] = [];
     test("Query token ids", async () => {
       const contractAddress1155 =
-        "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
+        "ixo1yg8930mj8pk288lmkjex0qz85mj8wgtns5uzwyn2hs25pwdnw42sff8a4r";
       const tester = (await getUser().getAccounts())[0].address;
 
       const response = await queryClient.cosmwasm.wasm.v1.smartContractState({
@@ -653,7 +653,7 @@ export const swapContract = () => {
     const token2 = "token2";
     testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () => {
       const numberOfTests = 5;
-      const promises: Promise<DeliverTxResponse>[] = [];
+      const promises: any[] = [];
       const signerData = await Wasm.getSignerDataWithWallet(WalletUsers.tester);
 
       for (let i = 0; i < numberOfTests; i++) {
@@ -754,8 +754,10 @@ export const swapContract = () => {
           },
         };
         console.log(msg);
-        promises.push(
-          Wasm.WasmExecuteTrx(
+        promises.push(async () => {
+          await timeout(300 * i);
+          console.log("start: ", i, " ", signerData.sequence + i);
+          const res = await Wasm.WasmExecuteTrx(
             swapContractAddress,
             JSON.stringify(msg),
             WalletUsers.tester,
@@ -768,18 +770,23 @@ export const swapContract = () => {
             {
               ...signerData,
               sequence: signerData.sequence + i,
-            }
-          )
-        );
+            },
+            true
+          );
+          return res;
+        });
       }
 
       const start = Date.now();
 
-      for (const [index, promise] of promises.entries()) {
-        await timeout(3000);
-        const res = await promise;
-        console.log(res);
-      }
+      const results = await Promise.all(promises.map((promise) => promise()));
+      console.log(results);
+
+      // for (const [index, promise] of promises.entries()) {
+      //   await timeout(3000);
+      //   const res = await promise;
+      //   console.log(res);
+      // }
 
       // const responses = await Promise.all(
       //   promises.map(async (promise, index) => {
