@@ -1,5 +1,5 @@
-import { JsonToArray, Uint8ArrayToJS } from "../../src/utils/conversions";
 import { queryClient } from "./common";
+import { JsonToArray, Uint8ArrayToJS } from "../../src/utils/conversions";
 
 type ObjectMap = {
   [key: string]: string;

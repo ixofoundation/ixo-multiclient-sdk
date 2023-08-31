@@ -1,3 +1,7 @@
+import { DeliverTxResponse } from "@cosmjs/stargate";
+import { OfflineSigner } from "@cosmjs/proto-signing";
+import { BroadcastTxSyncResponse } from "@cosmjs/tendermint-rpc";
+import { toHex } from "@cosmjs/encoding";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import {
   cosmos,
@@ -10,22 +14,18 @@ import {
   utils,
 } from "../helpers/common";
 import { WalletUsers } from "../helpers/constants";
-import * as Wasm from "../modules/CosmWasm";
-import * as Cosmos from "../modules/Cosmos";
-import * as Token from "../modules/Token";
-import { contracts } from "../../src/custom_queries/contract.constants";
 import {
   TokenType,
   formatInputAmount,
   formatOutputAmount,
   queryOutputAmount,
 } from "../helpers/swap";
-import { DeliverTxResponse } from "@cosmjs/stargate";
+import * as Wasm from "../modules/CosmWasm";
+import * as Cosmos from "../modules/Cosmos";
+import * as Token from "../modules/Token";
+import { contracts } from "../../src/custom_queries/contract.constants";
 import { JsonToArray, Uint8ArrayToJS } from "../../src/utils/conversions";
 import { getSignerData } from "../../src/stargate_client/store";
-import { OfflineSigner } from "@cosmjs/proto-signing";
-import { BroadcastTxSyncResponse } from "@cosmjs/tendermint-rpc";
-import { toHex } from "@cosmjs/encoding";
 
 export const wasmBasic = () =>
   describe("Testing the wasmd module", () => {

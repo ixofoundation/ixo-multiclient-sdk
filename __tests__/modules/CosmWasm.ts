@@ -1,17 +1,14 @@
+import { SignerData } from "@cosmjs/stargate";
+import Long from "long";
 import { getFee, WalletUsers } from "../helpers/constants";
 import {
   createClient,
   getUser,
   cosmos,
   cosmwasm,
-  queryClient,
   utils,
   getFileFromPath,
 } from "../helpers/common";
-import Long from "long";
-import { SignerData, StdFee } from "@cosmjs/stargate";
-import { getSignerData } from "../../src/stargate_client/store";
-import { OfflineSigner } from "@cosmjs/proto-signing";
 import { SigningStargateClient } from "../../src";
 
 export const WasmStoreTrx = async (
