@@ -573,7 +573,7 @@ export const swapContract = () => {
         const msg = {
           batch_mint: {
             to: tester,
-            batch: tokenIds.map((id) => [id, "100000000", "uri"]),
+            batch: tokenIds.map((id) => [id, "1000000000", "uri"]),
           },
         };
 
@@ -642,12 +642,12 @@ export const swapContract = () => {
         add_liquidity: {
           token1155_amounts: {
             ...tokenIds.reduce((acc, id) => {
-              acc[id] = "30000000";
+              acc[id] = "300000000";
               return acc;
             }, {}),
           },
-          min_liquidity: "300000000",
-          max_token2: "1000000000",
+          min_liquidity: "3000000000",
+          max_token2: "10000000000",
         },
       };
 
@@ -655,13 +655,13 @@ export const swapContract = () => {
         swapContractAddress,
         JSON.stringify(msg),
         WalletUsers.tester,
-        { amount: "1000000000", denom: "uixo" }
+        { amount: "10000000000", denom: "uixo" }
       );
       return res;
     });
 
     testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () => {
-      const numberOfTests = 100;
+      const numberOfTests = 1000;
       const slippage = 5;
       const txList: TxRaw[] = [];
       const user = getUser(WalletUsers.tester);
@@ -677,7 +677,7 @@ export const swapContract = () => {
           Math.floor(Math.random() * 2) + 1 == 1
             ? TokenType.Token1155
             : TokenType.Token2;
-        const inputAmount = Math.floor(Math.random() * 1000000) + 10000;
+        const inputAmount = Math.floor(Math.random() * 10000000) + 10000;
         const formattedInputAmount = formatInputAmount(
           inputToken,
           inputAmount,
@@ -735,7 +735,7 @@ export const swapContract = () => {
           await client.tmBroadcastTxSync(TxRaw.encode(txRaw).finish())
         );
       }
-      const lastDelivery: DeliverTxResponse = await client.broadcastTx(
+      const lastTx: DeliverTxResponse = await client.broadcastTx(
         TxRaw.encode(txList[txList.length - 1]).finish()
       );
 
@@ -746,7 +746,7 @@ export const swapContract = () => {
         const res = await client.getTx(toHex(hash.hash));
         swapResponses.push(res as unknown as DeliverTxResponse);
       }
-      swapResponses.push(lastDelivery);
+      swapResponses.push(lastTx);
 
       for (const [index, response] of swapResponses.entries()) {
         const tokenBought = utils.common.getValueFromEvents(
@@ -759,7 +759,7 @@ export const swapContract = () => {
           "wasm",
           "token_sold"
         );
-        console.log(`Swap ${index} result: `, { tokenSold, tokenBought });
+        console.log(`Swap ${index + 1} result: `, { tokenSold, tokenBought });
       }
 
       console.log(`Sent ${numberOfTests} transactions in ${end - start} ms`);
