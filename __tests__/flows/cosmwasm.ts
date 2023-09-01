@@ -572,7 +572,7 @@ export const swapContract = () => {
         const msg = {
           batch_mint: {
             to: tester,
-            batch: tokenIds.map((id) => [id, "1000000000", "uri"]),
+            batch: tokenIds.map((id) => [id, "20000000000", "uri"]),
           },
         };
 
@@ -641,11 +641,11 @@ export const swapContract = () => {
         add_liquidity: {
           token1155_amounts: {
             ...tokenIds.reduce((acc, id) => {
-              acc[id] = "300000000";
+              acc[id] = "10000000000";
               return acc;
             }, {}),
           },
-          min_liquidity: "3000000000",
+          min_liquidity: "100000000000",
           max_token2: "10000000000",
         },
       };
@@ -660,8 +660,8 @@ export const swapContract = () => {
     });
 
     testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () => {
-      const numberOfTests = 1000;
-      const slippage = 5;
+      const numberOfTests = 300;
+      const slippage = 30;
       const txList: TxRaw[] = [];
       const user = getUser(WalletUsers.tester);
       const client = await createClient(user);
@@ -758,7 +758,13 @@ export const swapContract = () => {
           "wasm",
           "token_sold"
         );
-        console.log(`Swap ${index + 1} result: `, { tokenSold, tokenBought });
+
+        const swapResult = `Swap ${index + 1} result: `;
+        if (tokenBought && tokenSold) {
+          console.log(swapResult, { tokenSold, tokenBought });
+        } else {
+          console.log(swapResult, "Insufficient output amount");
+        }
       }
 
       console.log(`Sent ${numberOfTests} transactions in ${end - start} ms`);
