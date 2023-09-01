@@ -24,7 +24,6 @@ import * as Wasm from "../modules/CosmWasm";
 import * as Cosmos from "../modules/Cosmos";
 import * as Token from "../modules/Token";
 import { contracts } from "../../src/custom_queries/contract.constants";
-import { JsonToArray, Uint8ArrayToJS } from "../../src/utils/conversions";
 import { getSignerData } from "../../src/stargate_client/store";
 
 export const wasmBasic = () =>
@@ -550,9 +549,9 @@ export const swapContract = () => {
         "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
       const tester = (await getUser().getAccounts())[0].address;
 
-      const response = await queryClient.cosmwasm.wasm.v1.smartContractState({
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
         address: contractAddress1155,
-        queryData: JsonToArray(
+        queryData: utils.conversions.JsonToArray(
           JSON.stringify({
             tokens: {
               owner: tester,
@@ -561,9 +560,9 @@ export const swapContract = () => {
           })
         ),
       });
-      tokenIds = JSON.parse(Uint8ArrayToJS(response.data)).tokens;
+      tokenIds = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data)).tokens;
       console.log(tokenIds);
-      expect(response).toBeTruthy();
+      expect(res).toBeTruthy();
     });
 
     testMsg(
