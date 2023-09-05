@@ -155,7 +155,7 @@ export const supamotoTokens = () =>
     let cap = 0; // no cap
 
     let contractAddress1155 =
-      "ixo1q85duf4uqqn97j2y52pep65mukux3edypm7ns2upfgnrg6pnsj0sj2hv3e";
+      "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
     testMsg("/ixo.token.v1beta1.MsgCreateToken", async () => {
       const res = await Token.CreateToken(
         name,

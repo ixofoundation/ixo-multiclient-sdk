@@ -7,6 +7,7 @@ import {
   cosmos,
   createClient,
   customQueries,
+  generateNewWallet,
   getUser,
   queryClient,
   testMsg,
@@ -760,6 +761,144 @@ export const swapContract = () => {
       console.log(`Sent ${numberOfTests} transactions in ${end - start} ms`);
 
       return swapResponses![0];
+    });
+  });
+};
+
+export const devnetSwapContract_IXO_CARBON = () => {
+  describe("Testing swaps on contract", () => {
+    // Set tester as carbon oracle user as that user owns the carbon tokens
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(
+          WalletUsers.tester,
+          process.env.ASSERT_USER_CARBON_ORACLE
+        ),
+      ])
+    );
+
+    // helper to send funds to an carbon oracle user account
+    testMsg("test Bank Send to carbon oracle account", () =>
+      Cosmos.BankSendTrx(1100000000)
+    );
+
+    const cw20_baseContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "cw20_base"
+    );
+    const ixoswapContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "ixoswap"
+    );
+
+    let contractAddress1155 =
+      "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
+
+    let tokenIds: string[] = [];
+    test("Query token ids", async () => {
+      const tester = (await getUser().getAccounts())[0].address;
+
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: contractAddress1155,
+        queryData: utils.conversions.JsonToArray(
+          JSON.stringify({
+            tokens: {
+              owner: tester,
+              limit: 30,
+            },
+          })
+        ),
+      });
+      tokenIds = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data)).tokens;
+      // console.log(tokenIds);
+      expect(res).toBeTruthy();
+    });
+
+    let swapContractAddress: string =
+      "ixo1fjyr0ga9k3z3gefpe5k9scgxx20h6wk2nywpf6wms6pfccve44mqhfk9t6";
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
+      const tester = (await getUser().getAccounts())[0].address;
+      const msg = {
+        token1155_denom: { cw1155: [contractAddress1155, "CARBON"] },
+        token2_denom: { native: "uixo" },
+        lp_token_code_id: cw20_baseContractCode,
+        owner: tester,
+        protocol_fee_recipient: tester,
+        protocol_fee_percent: "0.1",
+        lp_fee_percent: "0.1",
+      };
+
+      const res = await Wasm.WasmInstantiateTrx(
+        ixoswapContractCode!,
+        JSON.stringify(msg)
+      );
+      swapContractAddress = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ swapContractAddress });
+      return res;
+    });
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract approve swap contract for token",
+      async () => {
+        const msg = {
+          approve_all: {
+            operator: swapContractAddress,
+          },
+        };
+
+        const res = await Wasm.WasmExecuteTrx(
+          contractAddress1155,
+          JSON.stringify(msg),
+          WalletUsers.tester
+        );
+        return res;
+      }
+    );
+
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract add liquidity", async () => {
+      const msg = {
+        add_liquidity: {
+          token1155_amounts: {
+            ...tokenIds.reduce((acc, id) => {
+              acc[id] = "500";
+              return acc;
+            }, {}),
+          },
+          min_liquidity: "6500",
+          max_token2: "1000000000",
+        },
+      };
+
+      const res = await Wasm.WasmExecuteTrx(
+        swapContractAddress,
+        JSON.stringify(msg),
+        WalletUsers.tester,
+        { amount: "1000000000", denom: "uixo" }
+      );
+      return res;
+    });
+
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract add liquidity", async () => {
+      const inputToken = true ? TokenType.Token1155 : TokenType.Token2;
+      const inputAmount = 2000;
+      const formattedInputAmount = formatInputAmount(
+        inputToken,
+        inputAmount,
+        tokenIds
+      );
+      // console.log({ formattedInputAmount });
+
+      const outputAmount = await queryOutputAmount(
+        inputToken,
+        formattedInputAmount,
+        swapContractAddress
+      );
+      console.log({ outputAmount });
+      return true as any;
     });
   });
 };

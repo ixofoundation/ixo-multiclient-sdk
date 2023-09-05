@@ -68,3 +68,4 @@ export const chainNetwork: ChainNetwork = "devnet";
 // IID.registerIidsDev();
 // Token.supamotoTokens();
 // Claims.supamotoClaims();
+// CosmWasm.devnetSwapContract_IXO_CARBON();
