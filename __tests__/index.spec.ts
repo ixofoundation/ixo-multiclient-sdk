@@ -48,6 +48,7 @@ IID.generateBlockchainTestUsers();
 // Claims.supamotoClaimsRedoRejected();
 // Entity.relayerVerifyAllEntities();
 // Entity.enititiesSetStatus();
+// Claims.supamotoClaims2();
 
 // ------------------------------------------
 // Run the below after a devnet reset
