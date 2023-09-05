@@ -1,5 +1,11 @@
+import { DeliverTxResponse } from "@cosmjs/stargate";
+import { OfflineSigner } from "@cosmjs/proto-signing";
+import { BroadcastTxSyncResponse } from "@cosmjs/tendermint-rpc";
+import { toHex } from "@cosmjs/encoding";
+import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import {
   cosmos,
+  createClient,
   customQueries,
   getUser,
   queryClient,
@@ -8,9 +14,17 @@ import {
   utils,
 } from "../helpers/common";
 import { WalletUsers } from "../helpers/constants";
+import {
+  TokenType,
+  formatInputAmount,
+  formatOutputAmount,
+  queryOutputAmount,
+} from "../helpers/swap";
 import * as Wasm from "../modules/CosmWasm";
 import * as Cosmos from "../modules/Cosmos";
+import * as Token from "../modules/Token";
 import { contracts } from "../../src/custom_queries/contract.constants";
+import { getSignerData } from "../../src/stargate_client/store";
 
 export const wasmBasic = () =>
   describe("Testing the wasmd module", () => {
@@ -474,3 +488,278 @@ export const daoCore = () =>
       expect(res).toBeTruthy();
     });
   });
+
+export const swapBasic = () => {
+  const contractAddress1155 =
+    "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
+  const name = "TEST";
+  const amount = 50;
+  const collectionDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
+  const nftDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
+  const tokenData = [
+    {
+      uri: "https://media.makeameme.org/created/haha-you-were-a3866a4349.jpg",
+      encrypted: false,
+      proof: "proof",
+      type: "application/json",
+      id: nftDid,
+    },
+  ];
+
+  const indexes = Array.from({ length: 29 }, (_, index) => index + 3);
+  indexes.map((index) => {
+    testMsg("/ixo.token.v1beta1.MsgMintToken", async () => {
+      const res = await Token.MintToken(contractAddress1155, [
+        {
+          name,
+          index: index.toString(),
+          amount,
+          collection: collectionDid,
+          tokenData,
+        },
+      ]);
+      console.log({
+        tokenId: utils.common.getValueFromEvents(res, "wasm", "token_id"),
+      });
+      return res;
+    });
+  });
+};
+
+export const swapContract = () => {
+  describe("Testing swaps on contract", () => {
+    let tokenContractAddress: string = "";
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
+      const tester = (await getUser().getAccounts())[0].address;
+      const msg = { minter: tester };
+
+      const res = await Wasm.WasmInstantiateTrx(2, JSON.stringify(msg));
+      tokenContractAddress = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ tokenContractAddress });
+      return res;
+    });
+
+    let tokenIds: string[] = [];
+    test("Query token ids", async () => {
+      const contractAddress1155 =
+        "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
+      const tester = (await getUser().getAccounts())[0].address;
+
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: contractAddress1155,
+        queryData: utils.conversions.JsonToArray(
+          JSON.stringify({
+            tokens: {
+              owner: tester,
+              limit: 30,
+            },
+          })
+        ),
+      });
+      tokenIds = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data)).tokens;
+      console.log(tokenIds);
+      expect(res).toBeTruthy();
+    });
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract mint 1155 tokens",
+      async () => {
+        const tester = (await getUser().getAccounts())[0].address;
+        const msg = {
+          batch_mint: {
+            to: tester,
+            batch: tokenIds.map((id) => [id, "20000000000", "uri"]),
+          },
+        };
+
+        const res = await Wasm.WasmExecuteTrx(
+          tokenContractAddress,
+          JSON.stringify(msg),
+          WalletUsers.tester
+        );
+        return res;
+      }
+    );
+
+    let swapContractAddress: string = "";
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
+      const tester = (await getUser().getAccounts())[0].address;
+      const msg = {
+        token1155_denom: { cw1155: [tokenContractAddress, "TEST"] },
+        token2_denom: { native: "uixo" },
+        lp_token_code_id: 25,
+        owner: tester,
+        protocol_fee_recipient: tester,
+        protocol_fee_percent: "0.1",
+        lp_fee_percent: "0.2",
+      };
+
+      const res = await Wasm.WasmInstantiateTrx(28, JSON.stringify(msg));
+      swapContractAddress = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ swapContractAddress });
+      return res;
+    });
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract approve swap contract for token",
+      async () => {
+        const msg = {
+          approve_all: {
+            operator: swapContractAddress,
+          },
+        };
+
+        const res = await Wasm.WasmExecuteTrx(
+          tokenContractAddress,
+          JSON.stringify(msg),
+          WalletUsers.tester
+        );
+        return res;
+      }
+    );
+
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract add liquidity", async () => {
+      const msg = {
+        add_liquidity: {
+          token1155_amounts: {
+            ...tokenIds.reduce((acc, id) => {
+              acc[id] = "10000000000";
+              return acc;
+            }, {}),
+          },
+          min_liquidity: "100000000000",
+          max_token2: "10000000000",
+        },
+      };
+
+      const res = await Wasm.WasmExecuteTrx(
+        swapContractAddress,
+        JSON.stringify(msg),
+        WalletUsers.tester,
+        { amount: "10000000000", denom: "uixo" }
+      );
+      return res;
+    });
+
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () => {
+      const numberOfTests = 300;
+      const slippage = 30;
+      const txList: TxRaw[] = [];
+      const user = getUser(WalletUsers.tester);
+      const client = await createClient(user);
+      const signerData = await getSignerData(
+        client,
+        user as OfflineSigner,
+        client.localStoreFunctions
+      );
+
+      for (let i = 0; i < numberOfTests; i++) {
+        const inputToken =
+          Math.floor(Math.random() * 2) + 1 == 1
+            ? TokenType.Token1155
+            : TokenType.Token2;
+        const inputAmount = Math.floor(Math.random() * 10000000) + 10000;
+        const formattedInputAmount = formatInputAmount(
+          inputToken,
+          inputAmount,
+          tokenIds
+        );
+
+        const outputAmount = await queryOutputAmount(
+          inputToken,
+          formattedInputAmount,
+          swapContractAddress
+        );
+        const outputAmountWithSlippage =
+          outputAmount - outputAmount * (slippage / 100);
+        const formattedOutputAmount = formatOutputAmount(
+          inputToken,
+          tokenIds,
+          outputAmountWithSlippage
+        );
+
+        const msg = {
+          swap: {
+            input_token: inputToken,
+            input_amount: formattedInputAmount,
+            min_output: formattedOutputAmount,
+          },
+        };
+        console.log("Swap message: ", JSON.stringify(msg, null, 3));
+
+        txList.push(
+          await Wasm.WasmSignTrx(
+            client,
+            swapContractAddress,
+            JSON.stringify(msg),
+            WalletUsers.tester,
+            inputToken === TokenType.Token2
+              ? {
+                  amount: inputAmount.toString(),
+                  denom: "uixo",
+                }
+              : undefined,
+            {
+              ...signerData,
+              sequence: signerData.sequence + i,
+            }
+          )
+        );
+      }
+
+      const start = Date.now();
+
+      const txHashes: BroadcastTxSyncResponse[] = [];
+      for (let i = 0; i < txList.length - 1; i++) {
+        const txRaw: TxRaw = txList[i];
+        txHashes.push(
+          await client.tmBroadcastTxSync(TxRaw.encode(txRaw).finish())
+        );
+      }
+      const lastTx: DeliverTxResponse = await client.broadcastTx(
+        TxRaw.encode(txList[txList.length - 1]).finish()
+      );
+
+      const end = Date.now();
+
+      const swapResponses: DeliverTxResponse[] = [];
+      for (const hash of txHashes) {
+        const res = await client.getTx(toHex(hash.hash));
+        swapResponses.push(res as unknown as DeliverTxResponse);
+      }
+      swapResponses.push(lastTx);
+
+      for (const [index, response] of swapResponses.entries()) {
+        const tokenBought = utils.common.getValueFromEvents(
+          response,
+          "wasm",
+          "token_bought"
+        );
+        const tokenSold = utils.common.getValueFromEvents(
+          response,
+          "wasm",
+          "token_sold"
+        );
+
+        const swapResult = `Swap ${index + 1} result: `;
+        if (tokenBought && tokenSold) {
+          console.log(swapResult, { tokenSold, tokenBought });
+        } else {
+          console.log(swapResult, "Insufficient output amount");
+        }
+      }
+
+      console.log(`Sent ${numberOfTests} transactions in ${end - start} ms`);
+
+      return swapResponses![0];
+    });
+  });
+};

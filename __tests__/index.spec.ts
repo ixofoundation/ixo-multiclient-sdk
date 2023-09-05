@@ -49,6 +49,8 @@ IID.generateBlockchainTestUsers();
 // Entity.relayerVerifyAllEntities();
 // Entity.enititiesSetStatus();
 // Claims.supamotoClaims2();
+// CosmWasm.swapBasic();
+// CosmWasm.swapContract();
 
 // ------------------------------------------
 // Run the below after a devnet reset

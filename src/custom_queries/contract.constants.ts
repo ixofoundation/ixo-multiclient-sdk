@@ -161,4 +161,10 @@ export const contracts = [
     category: "daodao",
     code: { devnet: 27, testnet: 27, mainnet: 27 },
   },
+  {
+    name: "ixoswap",
+    path: ["contracts", "ixo", "ixoswap.wasm"],
+    category: "ixo",
+    code: { devnet: 28, testnet: 28, mainnet: 28 },
+  },
 ];
