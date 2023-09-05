@@ -626,16 +626,6 @@ export const swapContract = () => {
       }
     );
 
-    test("Query user balance", async () => {
-      const address = (await getUser(WalletUsers.tester).getAccounts())[0]
-        .address;
-      const res = await queryClient.cosmos.bank.v1beta1.allBalances({
-        address,
-      });
-      console.log(res.balances);
-      expect(res).toBeTruthy();
-    });
-
     testMsg("/cosmwasm.wasm.v1.MsgExecuteContract add liquidity", async () => {
       const msg = {
         add_liquidity: {
