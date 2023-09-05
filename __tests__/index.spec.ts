@@ -48,6 +48,7 @@ IID.generateBlockchainTestUsers();
 // Claims.supamotoClaimsRedoRejected();
 // Entity.relayerVerifyAllEntities();
 // Entity.enititiesSetStatus();
+// Claims.supamotoClaims2();
 // CosmWasm.swapBasic();
 // CosmWasm.swapContract();
 

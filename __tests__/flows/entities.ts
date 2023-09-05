@@ -4,6 +4,7 @@ import {
   generateNewWallet,
   getUser,
   testMsg,
+  timeout,
   utils,
 } from "../helpers/common";
 import { BlocksyncUrls, WalletUsers } from "../helpers/constants";
@@ -82,6 +83,9 @@ export const relayerVerifyAllEntities = (
     testMsg("Verifying", async () => {
       const tester = getUser(WalletUsers.tester);
       const relayerDid = relayerNodeDid || tester.did;
+
+      // adding 8seconds timeout for blocksyn to catch up before querying entities
+      await timeout(8000);
 
       const entitiesRes = await axios.get(`${blocksyncUrl}/api/entity/all`);
       const chunkSize = 200;
