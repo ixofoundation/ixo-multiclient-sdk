@@ -173,7 +173,7 @@ export const supamotoTokens = () =>
     });
 
     let index = "1";
-    let amount = 1000;
+    let amount = 10000;
     // Did of collection (supamotoEntitiesFlow protocolAssetDid)
     let collectionDid = "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258";
     // Did of entity to map token to (supamotoEntitiesFlow first nft created)
@@ -270,6 +270,31 @@ export const supamotoTokens = () =>
         )
       ),
     ]);
+  });
+
+export const supamotoTokensSendCARBON = () =>
+  describe("Testing the Supamoto Tokens flow", () => {
+    // Set tester as root ecs user
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(
+          WalletUsers.tester,
+          process.env.ASSERT_USER_CARBON_ORACLE
+        ),
+      ])
+    );
+
+    testMsg("/ixo.token.v1beta1.MsgTransferToken", () =>
+      Token.TransferToken(
+        [
+          {
+            id: "63bb9e8cfedfbf65298662c442a28ff2",
+            amount: 50,
+          },
+        ],
+        "ixo1hkrnq9a68l275klrkx4nhrvl2xvl6737p6329a"
+      )
+    );
   });
 
 // ------------------------------------------------------------

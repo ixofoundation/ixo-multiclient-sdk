@@ -68,7 +68,8 @@ export const formatInputAmount = (
 export const formatOutputAmount = (
   inputTokenType: TokenType,
   outputTokenIds: string[],
-  outputAmount: number
+  outputAmount: number,
+  includeBatches = true
 ): TokenAmount => {
   if (inputTokenType == TokenType.Token1155) {
     return {
@@ -76,6 +77,12 @@ export const formatOutputAmount = (
     };
   } else {
     const anyBatches = Math.random() < 0.5;
+
+    if (!includeBatches) {
+      return {
+        single: outputAmount.toFixed(),
+      };
+    }
 
     if (anyBatches) {
       return {

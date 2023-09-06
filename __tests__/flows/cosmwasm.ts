@@ -815,7 +815,7 @@ export const devnetSwapContract_IXO_CARBON = () => {
     });
 
     let swapContractAddress: string =
-      "ixo1fjyr0ga9k3z3gefpe5k9scgxx20h6wk2nywpf6wms6pfccve44mqhfk9t6";
+      "ixo17srjznxl9dvzdkpwpw24gg668wc73val88a6m5ajg6ankwvz9wtsek9x34";
     testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
       const tester = (await getUser().getAccounts())[0].address;
       const msg = {
@@ -882,23 +882,52 @@ export const devnetSwapContract_IXO_CARBON = () => {
       return res;
     });
 
-    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract add liquidity", async () => {
-      const inputToken = true ? TokenType.Token1155 : TokenType.Token2;
-      const inputAmount = 2000;
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () => {
+      const slippage = 20;
+      const inputToken = false ? TokenType.Token1155 : TokenType.Token2;
+      const inputAmount = 1000000;
+
       const formattedInputAmount = formatInputAmount(
         inputToken,
         inputAmount,
         tokenIds
       );
-      // console.log({ formattedInputAmount });
-
       const outputAmount = await queryOutputAmount(
         inputToken,
         formattedInputAmount,
         swapContractAddress
       );
-      console.log({ outputAmount });
-      return true as any;
+      const outputAmountWithSlippage =
+        outputAmount - outputAmount * (slippage / 100);
+      const formattedOutputAmount = formatOutputAmount(
+        inputToken,
+        tokenIds,
+        outputAmountWithSlippage,
+        false
+      );
+
+      const msg = {
+        swap: {
+          input_token: inputToken,
+          input_amount: formattedInputAmount,
+          min_output: formattedOutputAmount,
+        },
+      };
+      console.log("Swap message: ", JSON.stringify(msg, null, 3));
+
+      const res = await Wasm.WasmExecuteTrx(
+        swapContractAddress,
+        JSON.stringify(msg),
+        WalletUsers.tester,
+        inputToken === TokenType.Token2
+          ? {
+              amount: inputAmount.toString(),
+              denom: "uixo",
+            }
+          : undefined
+      );
+
+      return res;
     });
   });
 };
