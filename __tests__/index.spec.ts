@@ -62,7 +62,9 @@ export const chainNetwork: ChainNetwork = "devnet";
 // first run devnetProposals, the run initcontracts.sh on dev server
 // immidiately, and wait for all proposals to pass then run below
 //
-// After all proposals have passed, run `yarn test:setup` to create all base daos and entities,
+// After all proposals have passed, run
+// -  `yarn test:setup` to create all base daos and entities for emerging and ecs,
+// -  `yarn test:setup-umuzi` to create all base daos and entities for yoma and umuzi (Dont run yet!!!!!),
 // please ensure to have the env vars set for dao root users and ed key users. For devnet restart
 // you dont have to save did constants after dao creation, it deterministic so preset to devnet dids
 //

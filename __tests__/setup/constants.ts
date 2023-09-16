@@ -18,6 +18,15 @@ export const dids = {
   assetCollection: "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
   carbonAsset: "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
   ecsProject: "did:ixo:entity:29198b8a823e183a5e84d7ebf2f0febd",
+  // Yoma/Umuzi
+  yomaDao: "",
+  coderByteDao: "",
+  coderByteOracle: "",
+  learnershipProtocol: "",
+  umuziDao: "",
+  umuziAssetCollection: "",
+  educationAssetDid: "",
+  umuziProjectDid: "",
 };
 
 export const adminEntityAccounts = {
@@ -31,6 +40,7 @@ export const ProspectCredentialsWorkerUrl =
   "https://prospect.credentials.devnet.ixo.earth/";
 export const CarbonCredentialsWorkerUrl =
   "https://carbon.credentials.devnet.ixo.earth/";
+export const UmuziCredentialsWorkerUrl = "";
 
 // TESTNET
 // ========================================

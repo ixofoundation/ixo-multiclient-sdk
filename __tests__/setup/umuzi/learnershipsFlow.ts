@@ -8,21 +8,21 @@ import {
 } from "../../helpers/common";
 import * as Entity from "../Entity";
 import { chainNetwork } from "../index.setup.spec";
-import { EcsCredentialsWorkerUrl, dids } from "../constants";
+import { UmuziCredentialsWorkerUrl, dids } from "../constants";
 import { setAndLedgerUser } from "../helpers";
 import axios from "axios";
-import { cookstoveIds } from "./stoves";
+import { learnershipIds } from "./learnerships";
 
-export const cookstovesFlow = () =>
-  describe("Testing the Supamoto nfts flow", () => {
-    setAndLedgerUser(process.env.ROOT_ECS!);
+export const learnershipsFlow = () =>
+  describe("Testing the Umuzi nfts flow", () => {
+    setAndLedgerUser(process.env.ROOT_UMUZI!);
 
-    // Create a batch of Asset entities for the individual Supamoto assets
+    // Create a batch of Asset entities for the individual Umuzi assets
     let assetsFailed: any[] = [];
     let assetInstanceDids: { id: number; did: string }[] = [];
     let index = 1;
 
-    cookstoveIds
+    learnershipIds
       .map((c) => c.id)
       .map((id, i) =>
         testMsg(
@@ -32,33 +32,35 @@ export const cookstovesFlow = () =>
               `/ixo.entity.v1beta1.MsgCreateEntity asset instance index:${index} (array index: ${i}) for id:${id}`
             );
             try {
+              // TODO make sure file content is correct
               const file = JSON.parse(
                 getFileFromPath(
-                  ["documents", "test-supamoto-device-credential.jsonld"],
+                  ["documents", "test-umuzi-learnership-credential.jsonld"],
                   "ascii"
                 )
               );
               file["credential"]["credentialSubject"][
                 "id"
-              ] = `https://app.emerging.eco/devices/${id}`;
+              ] = `https://app.emerging.eco/learnerships/${id}`;
+              // TODO make sure above link is correct
 
-              // Create Credential, ecs must issue cert for each asset, so ecs creds worker
+              // Create Credential, umuzi must issue cert for each asset, so umuzi creds worker
               const resCreds = await axios.post(
-                EcsCredentialsWorkerUrl + "credentials/create",
+                UmuziCredentialsWorkerUrl + "credentials/create",
                 file,
                 {
                   headers: {
-                    Authorization: process.env.ECS_CREDENTIAL_WORKER_AUTH,
+                    Authorization: process.env.UMUZI_CREDENTIAL_WORKER_AUTH,
                   },
                 }
               );
               if (![200, 201].includes(resCreds.status) || !resCreds.data)
-                throw new Error("error creating device creds");
+                throw new Error("error creating learnership creds");
 
               // Upload credential to web3 storage
               const deviceCreds = (
                 await customQueries.cellnode.uploadWeb3Doc(
-                  `Supamoto Asset Device Creds: ${chainNetwork} ${id}`,
+                  `Umuzi Learnership Creds: ${chainNetwork} ${id}`,
                   "application/ld+json",
                   Buffer.from(JSON.stringify(resCreds.data)).toString("base64"),
                   undefined,
@@ -70,7 +72,8 @@ export const cookstovesFlow = () =>
               if (!deviceCreds)
                 throw new Error("error saving device creds file");
 
-              const res = await Entity.CreateEntityAssetSupamotoInstance(
+              // TODO update the function CreateEntityAssetUmuziInstance with correct values
+              const res = await Entity.CreateEntityAssetUmuziInstance(
                 dids.assetCollection,
                 [{ deviceId: id, index, deviceCreds }],
                 dids.emergingDao
@@ -99,23 +102,23 @@ export const cookstovesFlow = () =>
         "Create file to save assetInstanceDids that was successfully and failed"
       );
       saveFileToPath(
-        ["documents", "emerging", "cookstoves_dids.json"],
+        ["documents", "umuzi", "learnerships_dids.json"],
         JSON.stringify({ assetInstanceDids, assetsFailed }, null, 2)
       );
       expect(true).toBeTruthy();
     });
   });
 
-export const cookstovesFlowDevnet = () =>
-  describe("Testing the Supamoto nfts flow devnet", () => {
-    setAndLedgerUser(process.env.ROOT_ECS!);
+export const learnershipsFlowDevnet = () =>
+  describe("Testing the Umuzi nfts flow devnet", () => {
+    setAndLedgerUser(process.env.ROOT_UMUZI!);
 
-    // Create a batch of Asset entities for the individual Supamoto assets
+    // Create a batch of Asset entities for the individual Umuzi assets
     let assetsFailed: number[] = [];
     let index = 1;
 
     const chunkSize = 100;
-    chunkArray(cookstoveIds, chunkSize).map((ids) =>
+    chunkArray(learnershipIds, chunkSize).map((ids) =>
       testMsg(
         `/ixo.entity.v1beta1.MsgCreateEntity asset instance`,
         async () => {
@@ -125,7 +128,8 @@ export const cookstovesFlowDevnet = () =>
             }`
           );
           try {
-            const res = await Entity.CreateEntityAssetSupamotoInstance(
+            // TODO update the function CreateEntityAssetUmuziInstance with correct values
+            const res = await Entity.CreateEntityAssetUmuziInstance(
               dids.assetCollection,
               ids.map((e, ind) => ({
                 deviceId: e.id,
@@ -146,7 +150,7 @@ export const cookstovesFlowDevnet = () =>
     );
 
     test("Logging all nft assets created", async () => {
-      console.log("Logging cookstove ids that failed upload:");
+      console.log("Logging learnership ids that failed upload:");
       console.dir(assetsFailed, { depth: null });
       expect(true).toBeTruthy();
     });

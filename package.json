@@ -34,7 +34,8 @@
     "test:query": "jest __tests__/index.query.spec.ts --forceExit",
     "test:watch": "jest --watch",
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
-    "test:setup": "jest __tests__/setup/index.setup.spec.ts --forceExit"
+    "test:setup": "jest __tests__/setup/index.setup.spec.ts --forceExit",
+    "test:setup-umuzi": "jest __tests__/setup/index.setup_umuzi.spec.ts --forceExit"
   },
   "publishConfig": {
     "access": "public"
