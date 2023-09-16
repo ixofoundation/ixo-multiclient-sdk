@@ -52,6 +52,7 @@ IID.generateBlockchainTestUsers();
 // Claims.supamotoClaims2();
 // CosmWasm.swapBasic();
 // CosmWasm.swapContract();
+// Cosmos.feegrantAllCurrentUsers();
 
 // ------------------------------------------
 // Run the below after a devnet reset
@@ -69,4 +70,4 @@ export const chainNetwork: ChainNetwork = "devnet";
 // IID.registerIidsDev();
 // Token.supamotoTokens();
 // Claims.supamotoClaims();
-CosmWasm.devnetSwapContract_IXO_CARBON();
+// CosmWasm.devnetSwapContract_IXO_CARBON();

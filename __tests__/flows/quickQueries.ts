@@ -6,6 +6,7 @@ import { AuthInfo, TxBody } from "../../src/codegen/cosmos/tx/v1beta1/tx";
 import { fromHex } from "@cosmjs/encoding";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { Uint8ArrayToJS } from "../../src/utils/conversions";
+import { fromTimestamp } from "../../src/codegen/helpers";
 
 export const quickQueries = () =>
   describe("Quick queries to see states", () => {
@@ -154,15 +155,36 @@ export const quickQueries = () =>
     // });
 
     // test("Query user feegrant", async () => {
-    //   const address = (await getUser(WalletUsers.alice).getAccounts())[0]
+    //   const address = (await getUser(WalletUsers.tester).getAccounts())[0]
     //     .address;
-    //   const res = await queryClient.cosmos.feegrant.v1beta1.allowances({
-    //     grantee: address,
-    //   });
-    //   console.dir(res, { depth: null });
-    //   if (res.allowances.length > 0) {
-    //     console.log(createRegistry().decode(res.allowances[0].allowance!));
-    //   }
+    //   const res = await queryClient.cosmos.feegrant.v1beta1.allowancesByGranter(
+    //     {
+    //       granter: address,
+    //     }
+    //   );
+    //   const registry = createRegistry();
+    //   console.dir(
+    //     {
+    //       ...res,
+    //       allowances: res.allowances.map((g) => {
+    //         const allowance = registry.decode(g.allowance!);
+    //         const expiration =
+    //           allowance.expiration && fromTimestamp(allowance.expiration);
+    //         return {
+    //           ...g,
+    //           allowance: {
+    //             ...allowance,
+    //             expiration,
+    //           },
+    //         };
+    //       }),
+    //     },
+    //     { depth: null }
+    //   );
+    //   console.log(res.allowances.length);
+    //   // if (res.allowances.length > 0) {
+    //   //   console.log(registry.decode(res.allowances[0].allowance!));
+    //   // }
     //   expect(res).toBeTruthy();
     // });
 

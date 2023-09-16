@@ -135,8 +135,8 @@ export const setup_oracle_carbon_constants = () => ({
         description: "Profile",
         mediaType: "application/ld+json",
         serviceEndpoint:
-          "ipfs:bafkreig4bm53r3wujghdesnscpwcr7rucsigsqbr7f4ix7p7aebsumpnpy",
-        proof: "bafkreig4bm53r3wujghdesnscpwcr7rucsigsqbr7f4ix7p7aebsumpnpy",
+          "ipfs:bafkreidspm2panubcmtt4cybpggdiqeup4lfd7qlhsqr4kbqsvat2ui4yy",
+        proof: "bafkreidspm2panubcmtt4cybpggdiqeup4lfd7qlhsqr4kbqsvat2ui4yy",
         encrypted: "false",
         right: "",
       },

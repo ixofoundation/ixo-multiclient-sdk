@@ -776,6 +776,7 @@ export const devnetSwapContract_IXO_CARBON = () => {
         ),
       ])
     );
+    const user = WalletUsers.tester;
 
     // helper to send funds to an carbon oracle user account
     testMsg("test Bank Send to carbon oracle account", () =>
@@ -796,7 +797,7 @@ export const devnetSwapContract_IXO_CARBON = () => {
 
     let tokenIds: string[] = [];
     test("Query token ids", async () => {
-      const tester = (await getUser().getAccounts())[0].address;
+      const tester = (await getUser(user).getAccounts())[0].address;
 
       const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
         address: contractAddress1155,
@@ -810,7 +811,23 @@ export const devnetSwapContract_IXO_CARBON = () => {
         ),
       });
       tokenIds = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data)).tokens;
-      // console.log(tokenIds);
+      console.log(tokenIds);
+      expect(res).toBeTruthy();
+    });
+
+    test("query wasm state", async () => {
+      const tester = (await getUser(user).getAccounts())[0].address;
+      const msg = {
+        batch_balance: {
+          owner: tester,
+          token_ids: tokenIds,
+        },
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: contractAddress1155,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      console.log(utils.conversions.Uint8ArrayToJS(res.data));
       expect(res).toBeTruthy();
     });
 
@@ -882,52 +899,59 @@ export const devnetSwapContract_IXO_CARBON = () => {
       return res;
     });
 
-    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () => {
-      const slippage = 20;
-      const inputToken = false ? TokenType.Token1155 : TokenType.Token2;
-      const inputAmount = 1000000;
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract swap",
+      async () => {
+        const slippage = 20;
+        const inputToken = false ? TokenType.Token1155 : TokenType.Token2;
+        const inputAmount = 1000000;
 
-      const formattedInputAmount = formatInputAmount(
-        inputToken,
-        inputAmount,
-        tokenIds
-      );
-      const outputAmount = await queryOutputAmount(
-        inputToken,
-        formattedInputAmount,
-        swapContractAddress
-      );
-      const outputAmountWithSlippage =
-        outputAmount - outputAmount * (slippage / 100);
-      const formattedOutputAmount = formatOutputAmount(
-        inputToken,
-        tokenIds,
-        outputAmountWithSlippage,
-        false
-      );
+        const formattedInputAmount =
+          inputToken == TokenType.Token2
+            ? formatInputAmount(inputToken, inputAmount, tokenIds)
+            : {
+                multiple: {
+                  [tokenIds[0]]: inputAmount.toString(),
+                },
+              };
+        const outputAmount = await queryOutputAmount(
+          inputToken,
+          formattedInputAmount,
+          swapContractAddress
+        );
+        const outputAmountWithSlippage =
+          outputAmount - outputAmount * (slippage / 100);
+        const formattedOutputAmount = formatOutputAmount(
+          inputToken,
+          tokenIds,
+          outputAmountWithSlippage,
+          false
+        );
 
-      const msg = {
-        swap: {
-          input_token: inputToken,
-          input_amount: formattedInputAmount,
-          min_output: formattedOutputAmount,
-        },
-      };
-      console.log("Swap message: ", JSON.stringify(msg, null, 3));
+        const msg = {
+          swap: {
+            input_token: inputToken,
+            input_amount: formattedInputAmount,
+            min_output: formattedOutputAmount,
+          },
+        };
+        console.log("Swap message: ", JSON.stringify(msg, null, 3));
 
-      const res = await Wasm.WasmExecuteTrx(
-        swapContractAddress,
-        JSON.stringify(msg),
-        WalletUsers.tester,
-        inputToken === TokenType.Token2
-          ? {
-              amount: inputAmount.toString(),
-              denom: "uixo",
-            }
-          : undefined
-      );
+        const res = await Wasm.WasmExecuteTrx(
+          swapContractAddress,
+          JSON.stringify(msg),
+          user,
+          inputToken === TokenType.Token2
+            ? {
+                amount: inputAmount.toString(),
+                denom: "uixo",
+              }
+            : undefined
+        );
 
-      return res;
-    });
+        return res;
+      }
+      // true
+    );
   });
 };

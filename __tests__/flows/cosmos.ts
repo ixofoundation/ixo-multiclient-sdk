@@ -1,7 +1,16 @@
-import { generateNewWallet, sendFromFaucet, testMsg } from "../helpers/common";
+import {
+  chunkArray,
+  generateNewWallet,
+  getUser,
+  queryClient,
+  saveFileToPath,
+  sendFromFaucet,
+  testMsg,
+} from "../helpers/common";
 import * as Cosmos from "../modules/Cosmos";
 import * as Authz from "../modules/Authz";
 import { WalletUsers } from "../helpers/constants";
+import Long from "long";
 
 export const bankBasic = () =>
   describe("Testing the cosmos bank module", () => {
@@ -70,4 +79,60 @@ export const feegrantBasic = () =>
     testMsg("/cosmos.feegrant.v1beta1.MsgGrantAllowance", () =>
       Authz.MsgGrantAllowance()
     );
+  });
+
+export const feegrantAllCurrentUsers = () =>
+  describe("Refreshing feegrant for all current users", () => {
+    testMsg("/cosmos.feegrant.v1beta1.MsgGrantAllowance", async () => {
+      const address = (await getUser(WalletUsers.tester).getAccounts())[0]
+        .address;
+
+      const res = await queryClient.cosmos.feegrant.v1beta1.allowancesByGranter(
+        {
+          granter: address,
+          pagination: {
+            // @ts-ignore
+            key: [],
+            // set limit to 1000 as currentl there are +-700 grantees
+            limit: Long.fromNumber(1000),
+            offset: Long.fromNumber(0),
+          },
+        }
+      );
+
+      // to save current grantee addresses incase something goes wrong
+      // saveFileToPath(
+      //   ["documents", "random", "mainnet_feegrant_addresses.json"],
+      //   JSON.stringify(
+      //     res.allowances.map((a) => a.grantee),
+      //     null,
+      //     2
+      //   )
+      // );
+
+      // devide grantees (currently +-700) into chunks of 200
+      let granteesChunks = chunkArray<string>(
+        res.allowances.map((a) => a.grantee),
+        200
+      );
+
+      // first revoke all current feegrants
+      for (const grantees of granteesChunks) {
+        const ress = await Authz.MsgRevokeAllowance(
+          WalletUsers.tester,
+          grantees
+        );
+        if (ress.code != 0) throw new Error(ress.rawLog);
+      }
+      // then grant all current users new feegrants
+      for (const grantees of granteesChunks) {
+        const ress = await Authz.MsgGrantAllowance(
+          WalletUsers.tester,
+          grantees
+        );
+        if (ress.code != 0) throw new Error(ress.rawLog);
+      }
+
+      return true as any;
+    });
   });

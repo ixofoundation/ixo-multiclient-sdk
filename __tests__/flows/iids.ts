@@ -52,7 +52,7 @@ export const registerIids = () =>
 export const iidReplaceLinkedResource = () =>
   describe("Testing the iid module", () => {
     beforeAll(() =>
-      generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS!)
+      generateNewWallet(WalletUsers.tester, process.env.ROOT_EMERGING!)
     );
 
     // test("upload file to cellnode", async () => {
@@ -110,15 +110,15 @@ export const iidReplaceLinkedResource = () =>
     // });
 
     testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
-      const entityDid = dids.ecsProject;
+      const entityDid = dids.carbonOracle;
       const resource = ixo.iid.v1beta1.LinkedResource.fromPartial({
         type: "Settings",
-        id: "{id}#tags",
-        description: "Tags",
+        id: "{id}#profile",
+        description: "Profile",
         mediaType: "application/ld+json",
         serviceEndpoint:
-          "cellnode:/public/bafkreibkkxicgw3qbvohcj2bczwuccknagzuwtsvrhpyzvpcl5hqzyflju",
-        proof: "bafkreibkkxicgw3qbvohcj2bczwuccknagzuwtsvrhpyzvpcl5hqzyflju",
+          "ipfs:bafkreidspm2panubcmtt4cybpggdiqeup4lfd7qlhsqr4kbqsvat2ui4yy",
+        proof: "bafkreidspm2panubcmtt4cybpggdiqeup4lfd7qlhsqr4kbqsvat2ui4yy",
         encrypted: "false",
         right: "",
       });

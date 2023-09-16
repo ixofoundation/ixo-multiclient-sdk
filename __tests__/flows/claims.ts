@@ -8,6 +8,7 @@ import {
   chunkArray,
   saveFileToPath,
   addDays,
+  addMinutesToDate,
 } from "../helpers/common";
 import * as Claims from "../modules/Claims";
 import * as Cosmos from "../modules/Cosmos";
@@ -470,6 +471,9 @@ export const supamotoClaims2 = () =>
       const purchaseDataOld = await csvtojsonV2().fromFile(
         "./assets/documents/emerging/payments.csv"
       );
+      const purchaseDataOldTrxIds = purchaseDataOld.map(
+        (p) => p.telco_transaction_id
+      );
       purchaseData = await csvtojsonV2().fromFile(
         "./assets/documents/emerging/payments2.csv"
       );
@@ -477,11 +481,17 @@ export const supamotoClaims2 = () =>
       // remove any duplicate transactions by transaction id
       purchaseData = Object.values(
         purchaseData.reduce((aggObj, item) => {
+          // if purchase on old list then skip, already claimed
+          if (purchaseDataOldTrxIds.includes(item.CRM_Transaction_IDs))
+            return aggObj;
+
           if (!aggObj[item.CRM_Transaction_IDs])
             aggObj[item.CRM_Transaction_IDs] = {
               ...item,
               // Custom date transformation to match json schema format
-              // time_paid: new Date(item.time_paid.replace(" ", "T") + "Z"),
+              time_paid: new Date(
+                item.Date.replaceAll("/", "-").replace(" ", "T") + "Z"
+              ),
             };
           return aggObj;
         }, {})
@@ -498,74 +508,77 @@ export const supamotoClaims2 = () =>
       const allCookstoveIds = cookstoveIds.map((c) => c.id);
       Object.keys(purchaseData).forEach((k) => {
         if (!allCookstoveIds.includes(Number(k))) delete purchaseData[k];
-        // TODO
-        // else purchaseData[k].sort((a, b) => a.time_paid - b.time_paid);
+        else purchaseData[k].sort((a, b) => a.time_paid - b.time_paid);
       });
 
-      console.log({
-        amountOfStoves: Object.keys(purchaseData).length,
-        amountOfPurchases: Object.values(purchaseData).flat(1).length,
-        amountOfPurchasesPerDevice: Object.values(purchaseData).map(
-          (v: any) => v.length
-        ),
-      });
-
-      saveFileToPath(
-        ["documents", "emerging", "fuelPurchases_dev_test.json"],
-        JSON.stringify(purchaseData, null, 2)
-      );
-
-      const test = true;
-      if (test) throw new Error("stop");
+      // console.dir(
+      //   {
+      //     amountOfStoves: Object.keys(purchaseData).length,
+      //     amountOfPurchases: Object.values(purchaseData).flat(1).length,
+      //     amountOfPurchasesPerDevice: Object.values(purchaseData).map(
+      //       (v: any) => v.length
+      //     ),
+      //   },
+      //   { depth: null }
+      // );
+      // saveFileToPath(
+      //   ["documents", "emerging", "fuelPurchases_dev_test.json"],
+      //   JSON.stringify(purchaseData, null, 2)
+      // );
+      // const test = true;
+      // if (test) throw new Error("stop");
 
       // devide payments per device into 50 devices at a time
       // ==============================================================
-      purchaseData = chunkArray<any[]>(Object.values(purchaseData), 30);
+      purchaseData = chunkArray<any[]>(Object.values(purchaseData), 20);
       let stovePurchasesAll: any[] = [];
       let index = -1;
 
       console.time("claims");
+      // console.log(purchaseData[8].length);
+      // purchaseData = [purchaseData[8].slice(0, 15), purchaseData[8].slice(15)]; // if want to run all stoves inside certain batch if it failed because too big
+
       for (const stovePurchases of purchaseData) {
         index++;
-        // if (index !== 0) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
+        // if (index !== 8) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
         console.log(
           "starting batch " + (index + 1) + " of " + purchaseData.length
         );
         // add wait for ipfs rate limit
-        // if (index) await timeout(1000 * 30);
+        if (index) await timeout(1000 * 30);
 
         // create fuelPurchase claims for each purchase
-        // const fpClaims = await axios.post(
-        //   EcsCredentialsWorkerUrl + "claims/create",
-        //   {
-        //     type: "fuelPurchase",
-        //     collectionId: "1",
-        //     storage: "cellnode",
-        //     generate: {
-        //       type: "FuelPurchaseSupamotoZambia",
-        //       data: stovePurchases.flat(1).map((p: any) => ({
-        //         id: p.telco_transaction_id, // transaction id
-        //         provider: p.telco, // transaction provider
-        //         currency: p.currency, // transaction currency
-        //         value: Number(p.amount), // transaction value
-        //         dateTime: p.time_paid, // transaction date time
-        //         amount: Number(p.pellet_bag_size * p.pellet_bag_quantity), // amount pellets that bought in kg
-        //         deviceId: p.device_id, // device id
-        //       })),
-        //     },
-        //   },
-        //   { headers: { Authorization: process.env.ECS_CREDENTIAL_WORKER_AUTH } }
-        // );
-        // assertIsDeliverTxSuccess(fpClaims.data);
-        // const fpClaimIds: string[] = utils.common.getValuesFromEvents(
-        //   fpClaims.data,
-        //   "ixo.claims.v1beta1.ClaimSubmittedEvent",
-        //   "claim",
-        //   (c) => c.claim_id
-        // );
-        // console.log(
-        //   fpClaimIds.length + " FuelPurchase claims successfully created"
-        // );
+        const fpClaims = await axios.post(
+          EcsCredentialsWorkerUrl + "claims/create",
+          {
+            type: "fuelPurchase",
+            collectionId: "1",
+            storage: "cellnode",
+            generate: {
+              type: "FuelPurchaseSupamotoZambia",
+              data: stovePurchases.flat(1).map((p: any) => ({
+                id: p.CRM_Transaction_IDs, // transaction id
+                provider: p.Wallet_Operator, // transaction provider
+                currency: "ZMW", // transaction currency
+                value: Number(p.Transaction_Amount), // transaction value
+                dateTime: p.time_paid, // transaction date time
+                amount: Number(p.Total_Kgs), // amount pellets that bought in kg
+                deviceId: p.Device_ID, // device id
+              })),
+            },
+          },
+          { headers: { Authorization: process.env.ECS_CREDENTIAL_WORKER_AUTH } }
+        );
+        assertIsDeliverTxSuccess(fpClaims.data);
+        const fpClaimIds: string[] = utils.common.getValuesFromEvents(
+          fpClaims.data,
+          "ixo.claims.v1beta1.ClaimSubmittedEvent",
+          "claim",
+          (c) => c.claim_id
+        );
+        console.log(
+          fpClaimIds.length + " FuelPurchase claims successfully created"
+        );
 
         // evaluate fuelPurchase claims
         // const fpEvaluations = await axios.post(
@@ -592,13 +605,12 @@ export const supamotoClaims2 = () =>
         // );
 
         // save fuelPurchase claim ids per purchase
-        // stovePurchases.forEach((ps: any[], i) => {
-        //   ps.forEach((p: any, j) => {
-        //     stovePurchases[i][j].fuelPurchaseClaimId = fpClaimIds.shift();
-        //   });
-        // });
+        stovePurchases.forEach((ps: any[], i) => {
+          ps.forEach((p: any, j) => {
+            stovePurchases[i][j].fuelPurchaseClaimId = fpClaimIds.shift();
+          });
+        });
 
-        // console.log("VER claims successfully created and tokens minted");
         console.timeLog("claims");
         // add current stove purchases chunk to all stove purchases
         stovePurchasesAll = stovePurchasesAll.concat(stovePurchases);
@@ -607,7 +619,7 @@ export const supamotoClaims2 = () =>
 
       // save all stove purchases to file
       saveFileToPath(
-        ["documents", "emerging", "fuelPurchases_dev.json"],
+        ["documents", "emerging", "fuelPurchases2_mainnet.json"],
         JSON.stringify(stovePurchasesAll, null, 2)
       );
 
