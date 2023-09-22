@@ -151,8 +151,8 @@ export const CreateEntity = async (
       // since no groups at time of run no linkedEntities
       linkedEntity: entity.linkedEntity
         ? entity.linkedEntity.map((le) =>
-            ixo.iid.v1beta1.LinkedEntity.fromPartial(le)
-          )
+          ixo.iid.v1beta1.LinkedEntity.fromPartial(le)
+        )
         : undefined,
       ownerDid: did,
       startDate: utils.proto.toTimestamp(new Date()),
@@ -630,19 +630,18 @@ export const CreateEntityAssetUmuziInstance = async (
           encrypted: "false",
           right: "#apitoken",
         }),
-        // TODO need this!
         {
           id: `{id}#token`,
           type: "TokenMetadata",
           description: "Impact Token",
           mediaType: "application/json",
           serviceEndpoint:
-            "ipfs:bafkreid2shatt7tw7hs2b7j3eip7l52xa24xwtvnc2doj22g67fosvfize",
-          proof: "bafkreid2shatt7tw7hs2b7j3eip7l52xa24xwtvnc2doj22g67fosvfize",
+            "ipfs:bafkreih67hsagvq3zwsbrh2hlkls5bf72v5sj74eoqznfqggxhwpv4mlzy",
+          proof: "bafkreih67hsagvq3zwsbrh2hlkls5bf72v5sj74eoqznfqggxhwpv4mlzy",
           encrypted: "false",
           right: "",
         },
-        // TODO need this!
+        // TODO need this! Alwyn to edit after creation on devnet
         {
           id: `{id}#profile`,
           type: "Settings",
