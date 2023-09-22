@@ -520,7 +520,7 @@ export const CreateUmuziAssetCollection = async (
           service: "#ixo",
         }),
         ixo.iid.v1beta1.AccordedRight.fromPartial({
-          id: "{id}#carbon-claim",
+          id: "{id}#learnership-claim",
           type: "capability/attest",
           mechanism: "x/claims",
           message: "MsgSubmitClaim",
@@ -543,7 +543,7 @@ export const CreateUmuziAssetCollection = async (
           service: "emerging",
         }),
         ixo.iid.v1beta1.AccordedRight.fromPartial({
-          id: "{id}#mintCARBON",
+          id: "{id}#mintEDUCATION",
           type: "capability/mintToken",
           mechanism: "x/token",
           message: "MsgMintToken",
@@ -552,19 +552,13 @@ export const CreateUmuziAssetCollection = async (
       ],
       linkedEntity: [
         ixo.iid.v1beta1.LinkedEntity.fromPartial({
-          id: dids.prospectOracle,
+          id: dids.coderByteOracle,
           type: "oracle",
           relationship: "verifies",
           service: "ixo",
         }),
         ixo.iid.v1beta1.LinkedEntity.fromPartial({
-          id: dids.carbonOracle,
-          type: "oracle",
-          relationship: "verifies",
-          service: "ixo",
-        }),
-        ixo.iid.v1beta1.LinkedEntity.fromPartial({
-          id: dids.ecsDao,
+          id: dids.umuziDao,
           type: "dao",
           relationship: "mints",
           service: "ixo",
@@ -601,7 +595,7 @@ export const CreateEntityAssetUmuziInstance = async (
   const message = entities.map((entity) => ({
     typeUrl: "/ixo.entity.v1beta1.MsgCreateEntity",
     value: ixo.entity.v1beta1.MsgCreateEntity.fromPartial({
-      entityType: "asset/device",
+      entityType: "asset/learnership",
       entityStatus: 0,
       context: createAgentIidContext([{ key: "class", val: inheritEntityDid }]),
       controller: [did],
@@ -617,7 +611,7 @@ export const CreateEntityAssetUmuziInstance = async (
       alsoKnownAs: `{id}#${entity.index}`,
       linkedResource: [
         ixo.iid.v1beta1.LinkedResource.fromPartial({
-          id: "{id}#deviceCredential",
+          id: "{id}#learnershipCredential",
           type: "VerifiableCredential",
           description: "Certificate of Manufacture",
           mediaType: "application/ld+json",
@@ -629,13 +623,14 @@ export const CreateEntityAssetUmuziInstance = async (
         ixo.iid.v1beta1.LinkedResource.fromPartial({
           id: "{id}#assetDashboard",
           type: "WebDashboard",
-          description: "SupaMoto Dashboard",
+          description: "Emerging Dashboard",
           mediaType: "application/html",
-          serviceEndpoint: `emerging:/devices/${entity.deviceId}`,
+          serviceEndpoint: `emerging:/learnerships/${entity.deviceId}`,
           proof: "",
           encrypted: "false",
           right: "#apitoken",
         }),
+        // TODO need this!
         {
           id: `{id}#token`,
           type: "TokenMetadata",
@@ -647,14 +642,14 @@ export const CreateEntityAssetUmuziInstance = async (
           encrypted: "false",
           right: "",
         },
+        // TODO need this!
         {
           id: `{id}#profile`,
           type: "Settings",
           description: "Profile",
           mediaType: "application/ld+json",
-          serviceEndpoint:
-            "ipfs:bafkreigx7val5mfeghm636jcso6kt7wqpieh7h7hgdkcn64xxyy7ihp2q4",
-          proof: "bafkreigx7val5mfeghm636jcso6kt7wqpieh7h7hgdkcn64xxyy7ihp2q4",
+          serviceEndpoint: "ipfs:",
+          proof: "",
           encrypted: "false",
           right: "",
         },

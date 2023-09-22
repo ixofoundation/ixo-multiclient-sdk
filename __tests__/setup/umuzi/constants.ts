@@ -135,7 +135,6 @@ export const setup_umuzi_dao_constants = () => ({
 export const setup_protocol_learnership_constants = () => ({
   entity: {
     // type of entity eg dao/protocol/asset/oracle
-    // TODO also impact protocol?
     entityType: "protocol/impact",
     // please use Impact DAO's did as relayerNode eg dids.impactsDao
     relayerNode: dids.yomaDao,
@@ -194,35 +193,13 @@ export const setup_protocol_learnership_constants = () => ({
       },
       // TODO their claims schemas and claim names?
       {
-        id: `{id}#fuelPurchase`,
+        id: `{id}#assessmentScore`,
         type: "ClaimSchema",
-        description: "Fuel purchase claim schema",
+        description: "Assessment score claim schema",
         mediaType: "application/json",
         serviceEndpoint:
-          "ipfs:bafkreihydcnqrpe3ptrxiivgnwsbpvpfuwzjahsqk3bfp6pwimfklqbbxy",
-        proof: "bafkreihydcnqrpe3ptrxiivgnwsbpvpfuwzjahsqk3bfp6pwimfklqbbxy",
-        encrypted: "false",
-        right: "",
-      },
-      {
-        id: `{id}#CER`,
-        type: "ClaimSchema",
-        description: "GHG emission reduction claim schema",
-        mediaType: "application/json",
-        serviceEndpoint:
-          "ipfs:bafkreihcwa5pdwdw5po7etqru6pymhhqtbhu7yazbypcowkr76tn7vh3tu",
-        proof: "bafkreihcwa5pdwdw5po7etqru6pymhhqtbhu7yazbypcowkr76tn7vh3tu",
-        encrypted: "false",
-        right: "",
-      },
-      {
-        id: `{id}#VER`,
-        type: "CredentialSchema",
-        description: "Verified emission reduction credential schema",
-        mediaType: "application/json",
-        serviceEndpoint:
-          "ipfs:bafkreicid3ryjrxwfhl5vlwoa6zrpfv3bqc3qfc7u2ijvdea4atqopfmna",
-        proof: "bafkreicid3ryjrxwfhl5vlwoa6zrpfv3bqc3qfc7u2ijvdea4atqopfmna",
+          "ipfs:bafkreie7e4y2ymofgeznbewfpmzab5vaisexuxi7zbq6gozqgqiinw6tfa",
+        proof: "bafkreie7e4y2ymofgeznbewfpmzab5vaisexuxi7zbq6gozqgqiinw6tfa",
         encrypted: "false",
         right: "",
       },
@@ -262,7 +239,6 @@ export const setup_asset_collection_wafundaisa2023_constants = () => ({
         serviceEndpoint:
           "https://github.com/cosmos/chain-registry/blob/master/ixo/chain.json?rpc/",
       },
-      // TODO will it also utilise emergings dahsboard?
       {
         id: "{id}#emerging",
         type: "linkedDomains",
@@ -351,7 +327,6 @@ export const setup_asset_collection_wafundaisa2023_constants = () => ({
         encrypted: "false",
         right: "",
       },
-      // TODO and are we also using emerging dahsboard?
       // Getting added after did creation as need did
       // {
       //   id: "{id}#collectionDashboard",
@@ -371,12 +346,11 @@ export const setup_asset_collection_wafundaisa2023_constants = () => ({
   linkedResources: [],
   // you can create linked claims that will be uploaded to the specified storage and resource will be saved
   // on entity linked claims with the cid as proof and service endpoint of provided storage.
-  // TODO add depending on claim types? And link to protocol claim schemas
   linkedClaims: [
     {
-      name: "FuelPurchases",
-      description: "Fuel Purchase Claim",
-      type: "Procurement",
+      name: "AssessmentScore",
+      description: "Assessment Score Claim",
+      type: "Learnership",
       storage: "cellnode",
       json: {
         "@context": [
@@ -394,45 +368,10 @@ export const setup_asset_collection_wafundaisa2023_constants = () => ({
         entityClaims: [
           {
             template: {
-              id: dids.learnershipProtocol + "#fuelPurchase",
-              title: "Fuel Purchase Claim",
+              id: dids.learnershipProtocol + "#assessmentScore",
+              title: "Assessment Score Claim",
               description:
-                "Renewable biomass pellet fuel purchase claim based on transaction data.",
-            },
-            submissions: {
-              maximum: null,
-              startDate: "",
-              endDate: "",
-            },
-          },
-        ],
-      },
-    },
-    {
-      name: "CER",
-      description: "GHG Emission Reduction",
-      type: "Impact",
-      storage: "cellnode",
-      json: {
-        "@context": [
-          "https://w3id.org/ixo/context/v1",
-          {
-            ixo: "https://w3id.org/ixo/vocab/v1",
-            web3: "https://ipfs.io/ipfs/",
-            id: "@id",
-            type: "@type",
-            "@protected": true,
-          },
-        ],
-        id: "{id}#claims",
-        type: "ixo:Claims",
-        entityClaims: [
-          {
-            template: {
-              id: dids.learnershipProtocol + "#CER",
-              title: "Carbon Emission Reduction",
-              description:
-                "Claimed Amount of Carbon Emissions reduced through the use of an energy-efficient clean cookstove.",
+                "Result of any type of test e.g. Previous Qualification (The Learner's previous education and training), Aptitude Test (Results of the Learner's aptitude test taken during the application process), CoderBytes Tests (independent verification of learners skills).",
             },
             submissions: {
               maximum: null,
@@ -519,7 +458,6 @@ export const setup_project_constants = () => ({
 export const setup_education_asset_constants = () => ({
   entity: {
     // type of entity eg dao/protocol/asset/oracle
-    // TODO type?
     entityType: "asset/impactcredit",
     // please use Impact DAO's did as relayerNode eg dids.impactsDao
     relayerNode: dids.yomaDao,
@@ -554,6 +492,7 @@ export const setup_education_asset_constants = () => ({
         encrypted: "false",
         right: "",
       },
+      // TODO need these!
       {
         type: "Settings",
         id: "{id}#page",
@@ -564,6 +503,7 @@ export const setup_education_asset_constants = () => ({
         encrypted: "false",
         right: "",
       },
+      // TODO need these!
       {
         type: "Settings",
         id: "{id}#tags",

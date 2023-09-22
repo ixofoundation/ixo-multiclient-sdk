@@ -103,7 +103,7 @@ export const umuziDaoFlow = () =>
 
 export const umuziFlow = () =>
   describe("Flow for creating Umuzi entities (dao/protocol/oracle)", () => {
-    setAndLedgerUser(process.env.ROOT_ECS!);
+    setAndLedgerUser(process.env.ROOT_UMUZI!);
 
     // =============================== START
     let assetCollectionDid: string;
@@ -138,7 +138,6 @@ export const umuziFlow = () =>
     });
     // =============================== END
 
-    // TODO check this!
     // Add the web dashboard linkedResource as need did
     testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", () =>
       Iid.AddLinkedResource(

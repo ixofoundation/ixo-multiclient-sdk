@@ -57,7 +57,7 @@ export const CreateEntity = async (
 
 export const TransferEntity = async (
   signer: WalletUsers = WalletUsers.tester,
-  entityDid: string,
+  entities: string[],
   recipientDid?: string
 ) => {
   const client = await createClient(getUser(signer));
@@ -69,7 +69,7 @@ export const TransferEntity = async (
 
   const alice = getUser(WalletUsers.alice);
 
-  const message = {
+  const messages = entities.map((entityDid) => ({
     typeUrl: "/ixo.entity.v1beta1.MsgTransferEntity",
     value: ixo.entity.v1beta1.MsgTransferEntity.fromPartial({
       id: entityDid,
@@ -77,10 +77,10 @@ export const TransferEntity = async (
       ownerAddress: myAddress,
       recipientDid: recipientDid || alice.did,
     }),
-  };
+  }));
 
-  console.log({ myAddress });
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  // console.log({ myAddress });
+  const response = await client.signAndBroadcast(myAddress, messages, fee);
   return response;
 };
 

@@ -49,9 +49,29 @@ export const enititiesBasic = () =>
     testMsg("/ixo.entity.v1beta1.MsgTransferEntity", () =>
       Entity.TransferEntity(
         WalletUsers.tester,
-        entityDid
+        [entityDid]
         // "did:x:zQ3shQ3FDm5NaUfDNUuTexmWNBLAYMDo8fwLVPMfpVV2FUzub"
       )
+    );
+  });
+
+export const transferEntities = (mnemonic?: string) =>
+  describe("Testing the entities module", () => {
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(WalletUsers.tester, mnemonic || process.env.ROOT_ECS),
+      ])
+    );
+
+    let recipient = "did:x:zQ3shdfEnNGfFwdbT8ATxHYVpmYLFxEPCne6tu73KL79NewAA";
+    let entities = [
+      "did:ixo:entity:02f1939d7054b5b0df3e5a0d9cc2c8bf",
+      "did:ixo:entity:0978400d4375110e22228ecdbb5e8d73",
+      "did:ixo:entity:09fb798bed0d1df22827efea0f94bcfd",
+    ];
+
+    testMsg("/ixo.entity.v1beta1.MsgTransferEntity", () =>
+      Entity.TransferEntity(WalletUsers.tester, entities, recipient)
     );
   });
 

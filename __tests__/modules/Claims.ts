@@ -414,7 +414,11 @@ export const CreateCollectionSupamotoGenesis = async (
   entityDid: string,
   protocolDid: string,
   paymentsAccount: string,
-  signer: WalletUsers = WalletUsers.tester
+  signer: WalletUsers = WalletUsers.tester,
+  evaluatePayment = {
+    amount: "5000000",
+    denom: "uixo",
+  }
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -444,12 +448,7 @@ export const CreateCollectionSupamotoGenesis = async (
         // only this is needed now for prospects 5ixo per claim, timeout 0
         evaluation: ixo.claims.v1beta1.Payment.fromPartial({
           account: paymentsAccount,
-          amount: [
-            cosmos.base.v1beta1.Coin.fromPartial({
-              amount: "5000000",
-              denom: "uixo",
-            }),
-          ],
+          amount: [cosmos.base.v1beta1.Coin.fromPartial(evaluatePayment)],
           timeoutNs: utils.proto.toDuration((0).toString()),
         }),
         rejection: ixo.claims.v1beta1.Payment.fromPartial({

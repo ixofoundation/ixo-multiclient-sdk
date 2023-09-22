@@ -18,6 +18,16 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
+    // test("Query ixo.bonds.v1beta1", async () => {
+    //   const res = await queryClient.ibc.core.channel.v1.channels({});
+    //   console.dir(res.channels, { depth: null });
+    //   const res2 = await queryClient.ibc.core.connection.v1.connection({
+    //     connectionId: "connection-29",
+    //   });
+    //   console.dir(res2.connection, { depth: null });
+    //   expect(res).toBeTruthy();
+    // });
+
     // test("Query cosmos.tx.v1beta1.getTx", async () => {
     //   const res = await queryClient.cosmos.tx.v1beta1.getTx({
     //     hash: "11CDBCF0E51D5FF185C7B0BB5921C006310F4B4FC53E8C3C1237192B88C91D6A",

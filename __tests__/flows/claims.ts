@@ -511,22 +511,51 @@ export const supamotoClaims2 = () =>
         else purchaseData[k].sort((a, b) => a.time_paid - b.time_paid);
       });
 
-      // console.dir(
-      //   {
-      //     amountOfStoves: Object.keys(purchaseData).length,
-      //     amountOfPurchases: Object.values(purchaseData).flat(1).length,
-      //     amountOfPurchasesPerDevice: Object.values(purchaseData).map(
-      //       (v: any) => v.length
-      //     ),
-      //   },
-      //   { depth: null }
-      // );
-      // saveFileToPath(
-      //   ["documents", "emerging", "fuelPurchases_dev_test.json"],
-      //   JSON.stringify(purchaseData, null, 2)
-      // );
-      // const test = true;
-      // if (test) throw new Error("stop");
+      console.dir(
+        {
+          amountOfStoves: Object.keys(purchaseData).length,
+          amountOfPurchases: Object.values(purchaseData).flat(1).length,
+          amountOfPurchasesPerDevice: Object.values(purchaseData).map(
+            (v: any) => v.length
+          ),
+        },
+        { depth: null }
+      );
+      const amounts = Object.values(purchaseData)
+        .flat(1)
+        .map((p: any) => Number(p.Total_Kgs));
+      const amountsKgs = Object.values(purchaseData)
+        .flat(1)
+        .map((p: any) => Number(p.Total_Kgs) * 10.94);
+      saveFileToPath(
+        ["documents", "emerging", "fuelPurchases_dev_test.json"],
+        JSON.stringify(
+          {
+            kgsPellets: {
+              sections: amounts.reduce((a, b) => {
+                if (a[b]) a[b]++;
+                else a[b] = 1;
+                return a;
+              }, {}),
+              average: amounts.reduce((a, b) => a + b) / amounts.length,
+              totalClaims: amounts.length,
+            },
+            carbonCredits: {
+              sections: amountsKgs.reduce((a, b) => {
+                if (a[b]) a[b]++;
+                else a[b] = 1;
+                return a;
+              }, {}),
+              average: amountsKgs.reduce((a, b) => a + b) / amountsKgs.length,
+              totalClaims: amountsKgs.length,
+            },
+          },
+          null,
+          2
+        )
+      );
+      const test = true;
+      if (test) throw new Error("stop");
 
       // devide payments per device into 50 devices at a time
       // ==============================================================
@@ -623,6 +652,53 @@ export const supamotoClaims2 = () =>
         JSON.stringify(stovePurchasesAll, null, 2)
       );
 
+      expect(true).toBeTruthy();
+    });
+  });
+
+// ------------------------------------------------------------
+// flow to evaluate all FuelPurchase claims
+// ------------------------------------------------------------
+export const supamotoEvaluateFuelPurchases = () =>
+  describe("Testing the Claims module", () => {
+    // const blocksyncUrl = "https://devnet-blocksync.ixo.earth";
+    const blocksyncUrl = "https://blocksync-pandora.ixo.earth";
+
+    test("Evaluate FuelPurchase claims", async () => {
+      const res = await axios.get(
+        `${blocksyncUrl}/api/claims/collection/1/claims?status=0&type=FuelPurchase&take=3000&orderBy=asc`
+      );
+      if (res.status !== 200)
+        throw new Error("Failed to fetch claims" + res.statusText);
+      let fpClaimIds = res.data.data.map((fp) => fp.claimId);
+
+      const fpClaimIdsChunks = chunkArray<any[]>(Object.values(fpClaimIds), 50);
+      for (const fpClaimIdsChunk of fpClaimIdsChunks) {
+        // evaluate fuelPurchase claims
+        const fpEvaluations = await axios.post(
+          ProspectCredentialsWorkerUrl + "claims/evaluate",
+          {
+            collectionId: "1",
+            evaluations: fpClaimIdsChunk.map((id) => ({
+              claimId: id,
+              reason: 1,
+              status: ixo.claims.v1beta1.EvaluationStatus.APPROVED,
+              oracle: dids.prospectOracle,
+              verificationProof: "verificationProof",
+            })),
+          },
+          {
+            headers: {
+              Authorization: process.env.PROSPECT_CREDENTIAL_WORKER_AUTH,
+            },
+          }
+        );
+        assertIsDeliverTxSuccess(fpEvaluations.data);
+      }
+
+      console.log(
+        fpClaimIds.length + " FuelPurchase claims successfully evaluated"
+      );
       expect(true).toBeTruthy();
     });
   });
@@ -823,3 +899,75 @@ const getCookingSessions = async (
   }
   return cookingSessions;
 };
+
+// ------------------------------------------------------------
+// flow to create a claim collection for Supamoto
+// ------------------------------------------------------------
+export const supamotoCreateCollection = () =>
+  describe("Testing the Claims module", () => {
+    // Set tester as root ecs user
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS),
+        generateNewWallet(WalletUsers.oracle, process.env.ASSERT_USER_ECS),
+        generateNewWallet(
+          WalletUsers.charlie,
+          process.env.ASSERT_USER_CARBON_ORACLE
+        ),
+      ])
+    );
+
+    let collectionId = "1";
+    testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
+      const res = await Claims.CreateCollectionSupamotoGenesis(
+        dids.assetCollection,
+        dids.cleanCookingProtocol,
+        adminEntityAccounts.assetCollection,
+        WalletUsers.tester,
+        // testnet using 99 uosmo ibc (ibc/376222D6D9DAE23092E29740E56B758580935A6D77C24C2ABD57A6A78A1F3955) per evaluation
+        // mainnet using 990000 uusdc ibc (ibc/6BBE9BD4246F8E04948D5A4EEE7164B2630263B9EBB5E7DC5F0A46C62A2FF97B) per evaluation
+        {
+          amount: "990000",
+          denom:
+            "ibc/6BBE9BD4246F8E04948D5A4EEE7164B2630263B9EBB5E7DC5F0A46C62A2FF97B",
+        }
+      );
+      collectionId = utils.common.getValueFromEvents(
+        res,
+        "ixo.claims.v1beta1.CollectionCreatedEvent",
+        "collection",
+        (c) => c.id
+      );
+      console.log({ collectionId });
+      return res;
+    });
+
+    // ECS can submit claims
+    testMsg("/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent submit", () =>
+      Claims.GrantEntityAccountClaimsSubmitAuthz(
+        dids.assetCollection,
+        "admin",
+        adminEntityAccounts.assetCollection,
+        collectionId,
+        999999999,
+        false,
+        WalletUsers.oracle
+      )
+    );
+
+    // CARBON oracle can evaluate
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent evaluate",
+      () =>
+        Claims.GrantEntityAccountClaimsEvaluateAuthzSupamoto(
+          dids.assetCollection,
+          "admin",
+          adminEntityAccounts.assetCollection,
+          collectionId,
+          [],
+          999999999,
+          false,
+          WalletUsers.charlie
+        )
+    );
+  });

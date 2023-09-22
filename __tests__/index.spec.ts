@@ -53,6 +53,9 @@ IID.generateBlockchainTestUsers();
 // CosmWasm.swapBasic();
 // CosmWasm.swapContract();
 // Cosmos.feegrantAllCurrentUsers();
+// Claims.supamotoEvaluateFuelPurchases();
+// Claims.supamotoCreateCollection();
+// Entity.transferEntities();
 
 // ------------------------------------------
 // Run the below after a devnet reset

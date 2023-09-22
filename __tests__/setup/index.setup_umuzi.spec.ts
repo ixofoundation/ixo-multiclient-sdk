@@ -33,8 +33,7 @@ yomaDaoFlow(); //yoma user
 // next create daos and oracles and save coderByteOracle did to ./constants.ts
 coderbyteFlow(); //coderbyte user
 
-// TODO not sure who own protocol? (umuzi or yoma)
-// next create yoma protocols and save learnershipProtocol to ./constants.ts
+// next create umuzi protocols and save learnershipProtocol to ./constants.ts
 umuziProtocolsFlow(); //emerging user
 
 // next create umuzi daos and save umuziDao did to ./constants.ts
