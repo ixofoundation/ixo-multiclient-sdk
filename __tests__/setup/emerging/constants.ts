@@ -44,7 +44,6 @@ export const setup_dao_constants = () => ({
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.
   linkedResources: [
-    // TODO NEED!!!!
     {
       name: "page",
       type: "Settings",
@@ -145,7 +144,6 @@ export const setup_oracle_carbon_constants = () => ({
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.
   linkedResources: [
-    // TODO NEED!!!!
     {
       name: "page",
       type: "Settings",

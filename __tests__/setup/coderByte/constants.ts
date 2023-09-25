@@ -27,7 +27,7 @@ export const setup_dao_constants = () => ({
     // if you have any other linked resources other than the ones below that will automatically
     // be uploaded to cellnode/w3s, you can pass them here
     linkedResources: [
-      // TODO need!
+      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#profile",
@@ -38,7 +38,7 @@ export const setup_dao_constants = () => ({
         encrypted: "false",
         right: "",
       },
-      // TODO need!
+      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#page",
@@ -49,7 +49,7 @@ export const setup_dao_constants = () => ({
         encrypted: "false",
         right: "",
       },
-      // TODO need!
+      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#tags",
@@ -94,7 +94,7 @@ export const setup_oracle_education_constants = () => ({
     // if you have any other linked resources other than the ones below that will automatically
     // be uploaded to cellnode/w3s, you can pass them here
     linkedResources: [
-      // TODO need!
+      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#profile",
@@ -105,7 +105,7 @@ export const setup_oracle_education_constants = () => ({
         encrypted: "false",
         right: "",
       },
-      // TODO need!
+      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#page",
@@ -116,7 +116,7 @@ export const setup_oracle_education_constants = () => ({
         encrypted: "false",
         right: "",
       },
-      // TODO need!
+      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#tags",

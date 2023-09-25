@@ -31,7 +31,6 @@ export const learnershipsFlow = () =>
               `/ixo.entity.v1beta1.MsgCreateEntity asset instance index:${index} (array index: ${i}) for id:${id}`
             );
             try {
-              // TODO make sure file content is correct
               const file = JSON.parse(
                 getFileFromPath(
                   ["documents", "test-umuzi-learnership-credential.jsonld"],
@@ -41,7 +40,6 @@ export const learnershipsFlow = () =>
               file["credential"]["credentialSubject"][
                 "id"
               ] = `https://app.emerging.eco/learnerships/${id}`;
-              // TODO make sure above link is correct
 
               // Create Credential, umuzi must issue cert for each asset, so umuzi creds worker
               const resCreds = await axios.post(
@@ -122,8 +120,7 @@ export const learnershipsFlowDevnet = () =>
         `/ixo.entity.v1beta1.MsgCreateEntity asset instance`,
         async () => {
           console.log(
-            `/ixo.entity.v1beta1.MsgCreateEntity asset instance index:${index}-${
-              index + chunkSize - 1
+            `/ixo.entity.v1beta1.MsgCreateEntity asset instance index:${index}-${index + chunkSize - 1
             }`
           );
           try {

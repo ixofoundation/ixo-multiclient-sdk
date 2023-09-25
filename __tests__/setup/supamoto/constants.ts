@@ -109,7 +109,6 @@ export const setup_asset_collection_constants = () => ({
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.
   linkedResources: [
-    // TODO
     {
       name: "page",
       type: "Settings",

@@ -157,7 +157,7 @@ export const setup_protocol_learnership_constants = () => ({
     // if you have any other linked resources other than the ones below that will automatically
     // be uploaded to cellnode/w3s, you can pass them here
     linkedResources: [
-      // TODO need!
+      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#profile",
@@ -168,7 +168,7 @@ export const setup_protocol_learnership_constants = () => ({
         encrypted: "false",
         right: "",
       },
-      // TODO need!
+      // TODO need!  Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#page",
@@ -179,7 +179,7 @@ export const setup_protocol_learnership_constants = () => ({
         encrypted: "false",
         right: "",
       },
-      // TODO need!
+      // TODO need!  Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#tags",
@@ -190,11 +190,11 @@ export const setup_protocol_learnership_constants = () => ({
         encrypted: "false",
         right: "",
       },
-      // TODO their claims schemas and claim names?
+      // TODO Correct for devnet 1st run but incorrect for Testnet - Confirm the questions on Notion.
       {
         id: `{id}#assessmentScore`,
         type: "ClaimSchema",
-        description: "Assessment score claim schema",
+        description: "Assessment Score Claim Schema",
         mediaType: "application/json",
         serviceEndpoint:
           "ipfs:bafkreie7e4y2ymofgeznbewfpmzab5vaisexuxi7zbq6gozqgqiinw6tfa",
@@ -247,7 +247,7 @@ export const setup_asset_collection_wafundaisa2023_constants = () => ({
     // if you have any other linked resources other than the ones below that will automatically
     // be uploaded to cellnode/w3s, you can pass them here
     linkedResources: [
-      // TODO need!
+      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#profile",
@@ -258,7 +258,7 @@ export const setup_asset_collection_wafundaisa2023_constants = () => ({
         encrypted: "false",
         right: "",
       },
-      // TODO need!
+      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#page",
@@ -269,7 +269,7 @@ export const setup_asset_collection_wafundaisa2023_constants = () => ({
         encrypted: "false",
         right: "",
       },
-      // TODO need!
+      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#tags",
@@ -280,31 +280,30 @@ export const setup_asset_collection_wafundaisa2023_constants = () => ({
         encrypted: "false",
         right: "",
       },
-      // TODO need!
       {
         id: `{id}#token`,
         type: "TokenMetadata",
         description: "Impact Token",
         mediaType: "application/json",
         serviceEndpoint:
-          "ipfs:bafkreibvo2vsgbxbxuwxakd7gdq7a35t7krab67b5tkxjkbpxlm4mlri2e",
-        proof: "bafkreibvo2vsgbxbxuwxakd7gdq7a35t7krab67b5tkxjkbpxlm4mlri2e",
+          "ipfs:bafkreigq4jmqoz3x4d6c6zvr72q45acyione7hthiukmvivjhy6mrbriti",
+        proof: "bafkreigq4jmqoz3x4d6c6zvr72q45acyione7hthiukmvivjhy6mrbriti",
         encrypted: "false",
         right: "",
       },
-      // TODO need, are we alos doing zlottie for them?
+      // TODO need, are we alos doing zlottie for them? Yes and need a new one for this
       {
         id: "{id}#zlottie",
         type: "Lottie",
         description: "zLottie",
         mediaType: "application/json",
         serviceEndpoint:
-          "ipfs:bafkreiadrjh2pbl2vbutyfhjzuj5ylnsvexlkammulosu6s43atoyejz6u",
-        proof: "bafkreiadrjh2pbl2vbutyfhjzuj5ylnsvexlkammulosu6s43atoyejz6u",
+          "ipfs:",
+        proof: "",
         encrypted: "false",
         right: "",
       },
-      // TODO get cid from Shaun (supamoto also dont have yet, just ask)
+      // TODO get cid from Shaun (supamoto also dont have yet, just ask). Also, is this for Ummuzi, WaFunda, or Emerging?
       // {
       //   id: "{id}#termsConditions",
       //   type: "LegalAgreement",
@@ -315,7 +314,7 @@ export const setup_asset_collection_wafundaisa2023_constants = () => ({
       //   encrypted: "false",
       //   right: "#legal",
       // },
-      // TODO need!
+      // TODO need! Confirm as per question in Notion. Should we find a SustainCert equivalent or is it this the ixo Project entity?
       {
         id: "{id}#projectCredential",
         type: "ProjectCredential",
@@ -410,7 +409,7 @@ export const setup_project_constants = () => ({
     // if you have any other linked resources other than the ones below that will automatically
     // be uploaded to cellnode/w3s, you can pass them here
     linkedResources: [
-      // TODO need!
+      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#profile",
@@ -421,7 +420,7 @@ export const setup_project_constants = () => ({
         encrypted: "false",
         right: "",
       },
-      // TODO need!
+      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#page",
@@ -432,7 +431,7 @@ export const setup_project_constants = () => ({
         encrypted: "false",
         right: "",
       },
-      // TODO need!
+      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#tags",
@@ -480,7 +479,7 @@ export const setup_education_asset_constants = () => ({
     // if you have any other linked resources other than the ones below that will automatically
     // be uploaded to cellnode/w3s, you can pass them here
     linkedResources: [
-      // TODO need these!
+      // TODO need these!  Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#profile",
@@ -491,7 +490,7 @@ export const setup_education_asset_constants = () => ({
         encrypted: "false",
         right: "",
       },
-      // TODO need these!
+      // TODO need these!  Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#page",
@@ -502,7 +501,7 @@ export const setup_education_asset_constants = () => ({
         encrypted: "false",
         right: "",
       },
-      // TODO need these!
+      // TODO need these!  Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#tags",
