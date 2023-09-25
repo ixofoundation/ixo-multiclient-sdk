@@ -1,15 +1,15 @@
 require("dotenv").config();
 
-import { ChainNetwork } from "../../src/custom_queries/chain.types";
-import { sendTokens } from "../flows/cosmos";
-import { relayerVerifyAllEntities } from "../flows/entities";
-import { generateWallets } from "../helpers/common";
-import { coderbyteFlow } from "./coderByte/setupFlow";
-import { dids } from "./constants";
+import { ChainNetwork } from "../../../src/custom_queries/chain.types";
+import { sendTokens } from "../../flows/cosmos";
+import { relayerVerifyAllEntities } from "../../flows/entities";
+import { generateWallets } from "../../helpers/common";
+import { coderbyteFlow } from "../../setup/coderByte/setupFlow";
+import { dids } from "../../setup/constants";
 import {
   learnershipsFlow,
   learnershipsFlowDevnet,
-} from "./umuzi/learnershipsFlow";
+} from "../../setup/umuzi/learnershipsFlow";
 import {
   umuziAssetsFlow,
   umuziDaoFlow,
@@ -17,10 +17,9 @@ import {
   umuziProjectFlow,
   umuziProtocolsFlow,
   yomaDaoFlow,
-} from "./umuzi/setupFlow";
-import { web3Storage } from "./web3";
-
-export const chainNetwork: ChainNetwork = "devnet";
+} from "../../setup/umuzi/setupFlow";
+import { web3Storage } from "../../setup/web3";
+import { chainNetwork } from "../../setup/constants";
 
 beforeAll(() => generateWallets(false));
 

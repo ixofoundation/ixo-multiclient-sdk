@@ -1,7 +1,5 @@
 import { cellNodeChainMapping } from "../../../src/custom_queries/cellnode";
-import { dids } from "../constants";
-
-export const chainNetwork: ChainNetwork = "devnet";
+import { chainNetwork, dids } from "../constants";
 
 // You can define your group constants here, to create more than one group
 // you can just copy the whole management_group field and make another one

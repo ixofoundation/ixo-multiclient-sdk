@@ -3,7 +3,7 @@ import {
   ChainNetwork,
   SetupGroupConstantKeys,
   setup_group_constants,
-} from "./impacts/constants";
+} from "./fullExample/constants";
 
 export const createGroupMsg = (
   chainNetwork: ChainNetwork,

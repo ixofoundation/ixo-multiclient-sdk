@@ -7,8 +7,7 @@ import {
   utils,
 } from "../../helpers/common";
 import * as Entity from "../Entity";
-import { chainNetwork } from "../index.setup.spec";
-import { EcsCredentialsWorkerUrl, dids } from "../constants";
+import { EcsCredentialsWorkerUrl, chainNetwork, dids } from "../constants";
 import { setAndLedgerUser } from "../helpers";
 import axios from "axios";
 import { cookstoveIds } from "./stoves";

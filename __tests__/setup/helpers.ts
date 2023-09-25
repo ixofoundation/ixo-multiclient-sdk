@@ -6,8 +6,8 @@ import {
   utils,
 } from "../helpers/common";
 import { WalletUsers } from "../helpers/constants";
-import { chainNetwork } from "./index.setup.spec";
 import * as IidMain from "../modules/Iid";
+import { chainNetwork } from "./constants";
 
 export const uploadAllToCellnodeWeb3 = async (listToUpload: any[]) => {
   let linkedListUploaded: LinkedResourcesUploaded = [];

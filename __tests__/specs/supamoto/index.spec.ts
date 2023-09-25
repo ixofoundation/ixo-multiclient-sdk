@@ -1,26 +1,28 @@
 require("dotenv").config();
 
-import { ChainNetwork } from "../../src/custom_queries/chain.types";
-import { bankBasic, sendTokens } from "../flows/cosmos";
-import { relayerVerifyAllEntities } from "../flows/entities";
-import { generateBlockchainTestUsers } from "../flows/iids";
-import { generateNewWallet, generateWallets } from "../helpers/common";
-import { WalletUsers } from "../helpers/constants";
-import { classesFlow } from "./classes/setupFlow";
-import { dids } from "./constants";
-import { ecsDaoFlow, ecsFlow, ecsProjectFlow } from "./ecs/setupFlow";
+import { ChainNetwork } from "../../../src/custom_queries/chain.types";
+import { bankBasic, sendTokens } from "../../flows/cosmos";
+import { relayerVerifyAllEntities } from "../../flows/entities";
+import { generateBlockchainTestUsers } from "../../flows/iids";
+import { generateNewWallet, generateWallets } from "../../helpers/common";
+import { WalletUsers } from "../../helpers/constants";
+import { classesFlow } from "../../setup/classes/setupFlow";
+import { dids } from "../../setup/constants";
+import { ecsDaoFlow, ecsFlow, ecsProjectFlow } from "../../setup/ecs/setupFlow";
 import {
   emergingAssetsFlow,
   emergingDaoFlow,
   emergingOraclesFlow,
   emergingProtocolsFlow,
-} from "./emerging/setupFlow";
-import { impactsFlow } from "./impacts/setupFlow";
-import { propectFlow } from "./prospect/setupFlow";
-import { cookstovesFlow, cookstovesFlowDevnet } from "./supamoto/setupFlow";
-import { web3Storage } from "./web3";
-
-export const chainNetwork: ChainNetwork = "devnet";
+} from "../../setup/emerging/setupFlow";
+import { impactsFlow } from "../../setup/impacts/setupFlow";
+import { propectFlow } from "../../setup/prospect/setupFlow";
+import {
+  cookstovesFlow,
+  cookstovesFlowDevnet,
+} from "../../setup/supamoto/setupFlow";
+import { web3Storage } from "../../setup/web3";
+import { chainNetwork } from "../../setup/constants";
 
 beforeAll(() => generateWallets(false));
 

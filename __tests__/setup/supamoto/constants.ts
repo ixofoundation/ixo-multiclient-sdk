@@ -1,6 +1,5 @@
 import { cellNodeChainMapping } from "../../../src/custom_queries/cellnode";
-import { dids } from "../constants";
-import { chainNetwork } from "../index.setup.spec";
+import { chainNetwork, dids } from "../constants";
 
 export const setup_asset_collection_constants = () => ({
   entity: {

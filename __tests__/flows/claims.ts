@@ -13,7 +13,7 @@ import {
 import * as Claims from "../modules/Claims";
 import * as Cosmos from "../modules/Cosmos";
 import * as Entity from "../modules/Entity";
-import { WalletUsers } from "../helpers/constants";
+import { RPC_URL, WalletUsers } from "../helpers/constants";
 import {
   CarbonCredentialsWorkerUrl,
   EcsCredentialsWorkerUrl,
@@ -21,7 +21,6 @@ import {
   adminEntityAccounts,
   dids,
 } from "../setup/constants";
-import { chainNetwork } from "../index.spec";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import { cookstoveIds } from "../setup/supamoto/stoves";
@@ -169,7 +168,7 @@ export const supamotoClaims = () =>
       ])
     );
 
-    if (chainNetwork === "devnet") {
+    if (RPC_URL === "https://devnet.ixo.earth/rpc/") {
       // helper to send funds to an admin account
       testMsg("test Bank Send to admin account", () =>
         Cosmos.BankSendTrx(

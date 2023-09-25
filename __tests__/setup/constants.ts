@@ -1,5 +1,10 @@
 // IMPORTANT! If you change these please revert before commiting, these are constants that is
 // repeatedly used for devnet reset.
+
+import { ChainNetwork } from "../../src/custom_queries/chain.types";
+
+export const chainNetwork: ChainNetwork = "devnet";
+
 // DEVNET
 // ========================================
 export const dids = {

@@ -7,8 +7,7 @@ import {
   utils,
 } from "../../helpers/common";
 import * as Entity from "../Entity";
-import { chainNetwork } from "../index.setup.spec";
-import { UmuziCredentialsWorkerUrl, dids } from "../constants";
+import { UmuziCredentialsWorkerUrl, dids, chainNetwork } from "../constants";
 import { setAndLedgerUser } from "../helpers";
 import axios from "axios";
 import { learnershipIds } from "./learnerships";
