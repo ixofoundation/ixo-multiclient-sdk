@@ -59,7 +59,7 @@ IID.generateBlockchainTestUsers();
 // Run the below after a devnet reset
 // ------------------------------------------
 // Proposals.devnetProposals();
-
+//
 // first run above devnetProposals, the run initcontracts.sh on dev server
 // immidiately, and wait for all proposals to pass then run below
 //
@@ -70,7 +70,7 @@ IID.generateBlockchainTestUsers();
 // you dont have to save did constants after dao creation, it deterministic so preset to devnet dids
 //
 // After daos is on devnet you can run the below
-IID.registerIidsDev();
-Token.supamotoTokens();
-Claims.supamotoClaims();
-CosmWasm.devnetSwapContract_IXO_CARBON();
+// IID.registerIidsDev();
+// Token.supamotoTokens();
+// Claims.supamotoClaims();
+// CosmWasm.devnetSwapContract_IXO_CARBON();

@@ -1,0 +1,29 @@
+{
+  "assetInstanceDids": [
+    {
+      "id": 1,
+      "did": "did:ixo:entity:26c95309214e0349987f3b3699507a63"
+    },
+    {
+      "id": 2,
+      "did": "did:ixo:entity:b44a3de0f3dbbf6cbf23766759235ca7"
+    },
+    {
+      "id": 3,
+      "did": "did:ixo:entity:01dcabd7af8f0fa87775f3d7f043a11e"
+    },
+    {
+      "id": 4,
+      "did": "did:ixo:entity:f8ec0bf94eed5d5b183984efaaa41e53"
+    },
+    {
+      "id": 5,
+      "did": "did:ixo:entity:72540d0b8fc5040fa7d16f79ff8294bb"
+    },
+    {
+      "id": 6,
+      "did": "did:ixo:entity:a4bc51f4cfb32db1b533293ca8e27eb5"
+    }
+  ],
+  "assetsFailed": []
+}

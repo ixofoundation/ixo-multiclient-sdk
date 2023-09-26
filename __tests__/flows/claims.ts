@@ -194,9 +194,9 @@ export const supamotoClaims = () =>
     testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
       // add wait according to chunk index for ipfs rate limit
       console.log(
-        "waiting 5 mintues as blocksync needs 5 minutes to load all ipfs files for entity external Ids"
+        "waiting 10 mintues as blocksync needs 5 minutes to load all ipfs files for entity external Ids"
       );
-      await timeout(1000 * 60 * 5);
+      await timeout(1000 * 60 * 10);
 
       const res = await Claims.CreateCollectionSupamotoGenesis(
         dids.assetCollection,
@@ -300,7 +300,7 @@ export const supamotoClaims = () =>
       console.time("claims");
       for (const stovePurchases of purchaseData) {
         index++;
-        if (index !== 0) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
+        // if (index !== 0) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
         console.log(
           "starting batch " + (index + 1) + " of " + purchaseData.length
         );
