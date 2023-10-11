@@ -183,6 +183,8 @@ export const GrantEntityAccountAuthz = async (
 
   const tester = (await getUser(signer).getAccounts())[0].address;
   const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
+  // const granteeAddress =
+  //   "ixo1jxmrje2f26uvcesnj3naysu0fmukt5q74pxu2ukz6cjjjf0qtk9suyl4h6";
 
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
@@ -196,11 +198,12 @@ export const GrantEntityAccountAuthz = async (
           typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
           value: cosmos.authz.v1beta1.GenericAuthorization.encode(
             cosmos.authz.v1beta1.GenericAuthorization.fromPartial({
+              // msg: "/ibc.applications.transfer.v1.MsgTransfer",
               msg: "/cosmos.gov.v1beta1.MsgSend",
             })
           ).finish(),
         },
-        expiration: utils.proto.toTimestamp(addDays(new Date(), 1)),
+        expiration: utils.proto.toTimestamp(addDays(new Date(), 30)),
       }),
     }),
   };

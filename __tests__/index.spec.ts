@@ -37,11 +37,9 @@ IID.generateBlockchainTestUsers();
 // IID.iidReplaceLinkedResource();
 // IBC.ibcBasic();
 // Cosmos.govDeposit();
-// Cosmos.authzBasic();
 // CosmWasm.wasmBasic();
 // Cosmos.feegrantBasic();
 // Proposals.cwUploadProposal();
-// Queries.quickQueries();
 // Token.supamotoTokensFarm();
 // Token.supamotoTokensSendCARBON();
 // Claims.supamotoClaimsRedoRejected();
@@ -54,6 +52,10 @@ IID.generateBlockchainTestUsers();
 // Claims.supamotoEvaluateFuelPurchases();
 // Claims.supamotoCreateCollection();
 // Entity.transferEntities();
+// CosmWasm.daodaoAuthzExecute();
+// CosmWasm.multicallContract();
+// Cosmos.authzBasic();
+// Queries.quickQueries();
 
 // ------------------------------------------
 // Run the below after a devnet reset

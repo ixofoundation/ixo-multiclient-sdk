@@ -28,6 +28,12 @@ export const bankBasic = () =>
 
 export const authzBasic = () =>
   describe("Testing the cosmos bank module", () => {
+    // beforeAll(() =>
+    //   Promise.all([
+    //     generateNewWallet(WalletUsers.tester, process.env.ROOT_IMPACTS),
+    //   ])
+    // );
+
     testMsg("test Grant Send", async () => {
       const res = await Authz.MsgGrantSend();
       console.log(res);
@@ -45,6 +51,7 @@ export const authzBasic = () =>
     // );
 
     testMsg("test Exec Send", () => Authz.MsgExecSend(1000000));
+    // testMsg("test Exec Send", () => Authz.MsgExecSendIbc());
   });
 
 export const sendTokens = (rounds = 1) =>

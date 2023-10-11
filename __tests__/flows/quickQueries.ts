@@ -5,7 +5,11 @@ import { RPC_URL, WalletUsers } from "../helpers/constants";
 import { AuthInfo, TxBody } from "../../src/codegen/cosmos/tx/v1beta1/tx";
 import { fromHex } from "@cosmjs/encoding";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
-import { Uint8ArrayToJS } from "../../src/utils/conversions";
+import {
+  JsonToArray,
+  Uint8ArrayToJS,
+  b64toUint8Array,
+} from "../../src/utils/conversions";
 import { fromTimestamp } from "../../src/codegen/helpers";
 
 export const quickQueries = () =>
@@ -18,7 +22,24 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
-    // test("Query ixo.bonds.v1beta1", async () => {
+    // test("Query interchain_accounts params", async () => {
+    //   const res =
+    //     await queryClient.ibc.applications.interchain_accounts.host.v1.params();
+    //   console.log(res.params);
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query address staking", async () => {
+    //   const res = await queryClient.cosmos.staking.v1beta1.delegatorDelegations(
+    //     {
+    //       delegatorAddr: "ixo1n8yrmeatsk74dw0zs95ess9sgzptd6thgjgcj2",
+    //     }
+    //   );
+    //   console.log(res.delegationResponses);
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query ibc stuff", async () => {
     //   const res = await queryClient.ibc.core.channel.v1.channels({});
     //   console.dir(res.channels, { depth: null });
     //   const res2 = await queryClient.ibc.core.connection.v1.connection({
@@ -36,6 +57,22 @@ export const quickQueries = () =>
     //     res.tx?.body?.messages.map((m) => createRegistry().decode(m)),
     //     { depth: null }
     //   );
+    //   // console.dir(createRegistry().decode(res.tx!.body!.messages![0]), {
+    //   //   depth: null,
+    //   // });
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query cosmos.tx.v1beta1.getTx", async () => {
+    //   const res = {
+    //     typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    //     value: b64toUint8Array(
+    //       "Cj9qdW5vMXA3ZjR4a3dyazd3aHd1azk5MGFqYzR6a2RrcXBhdzhzemM0NnRlZ202dTU3dHM3Y3g5NHN1NGw2dHMSiQEKHC9jb3Ntb3MuYmFuay52MWJldGExLk1zZ1NlbmQSaQoranVubzE2czB0ODlhNGdrMGpkeGhwZndxNHNwaGp3NGRjZXg2cjkweHJ1dRIranVubzE2czB0ODlhNGdrMGpkeGhwZndxNHNwaGp3NGRjZXg2cjkweHJ1dRoNCgV1anVubxIEMTAwMA=="
+    //     ),
+    //   };
+    //   console.log(res);
+    //   const decodedRes = createRegistry().decode(res);
+    //   console.log(decodedRes);
     //   // console.dir(createRegistry().decode(res.tx!.body!.messages![0]), {
     //   //   depth: null,
     //   // });
