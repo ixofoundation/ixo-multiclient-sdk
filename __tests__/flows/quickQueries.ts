@@ -370,17 +370,18 @@ export const quickQueries = () =>
     //     granter: user,
     //   });
     //   if (res.grants.length > 0) {
-    //     console.log(
-    //       res.grants.map((g) => {
-    //         g.expiration = g.expiration?.seconds as any;
-    //         return g;
-    //       })
-    //     );
-    //     console.log(
-    //       res.grants.map((g) => {
-    //         const auth = createRegistry().decode(g.authorization!);
-    //         return auth.constraints || auth;
-    //       })
+    //     console.dir(
+    //       (res.grants ?? [])?.map((g) => ({
+    //         ...g,
+    //         expiration: !g.expiration
+    //           ? undefined
+    //           : utils.proto.fromTimestamp(g.expiration)?.getTime(),
+    //         authorization: {
+    //           ...g.authorization,
+    //           value: createRegistry().decode(g.authorization!),
+    //         },
+    //       })),
+    //       { depth: null }
     //     );
     //   }
     //   expect(res).toBeTruthy();
