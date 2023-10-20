@@ -53,8 +53,8 @@ IID.generateBlockchainTestUsers();
 // Claims.supamotoCreateCollection();
 // Entity.transferEntities();
 // CosmWasm.daodaoAuthzExecute();
-// CosmWasm.multicallContract();
 // Cosmos.authzBasic();
+// Cosmos.textProposalBasic();
 // Queries.quickQueries();
 
 // ------------------------------------------
@@ -73,6 +73,7 @@ IID.generateBlockchainTestUsers();
 //
 // After daos is on devnet you can run the below
 // IID.registerIidsDev();
+// CosmWasm.multicallContract();
+// CosmWasm.devnetSwapContract_IXO_CARBON();
 // Token.supamotoTokens();
 // Claims.supamotoClaims();
-// CosmWasm.devnetSwapContract_IXO_CARBON();

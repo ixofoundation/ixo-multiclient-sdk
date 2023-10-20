@@ -16,6 +16,35 @@ export const quickQueries = () =>
   describe("Quick queries to see states", () => {
     test("Quick queries to see states filler", () => expect(true).toBeTruthy());
 
+    // test("Test rpc endpoint rate limit", async () => {
+    //   const limit = 100;
+    //   const parallelSize = 2;
+    //   let i = 1;
+
+    //   console.time("rpc");
+    //   for (i = 1; i < limit; i++) {
+    //     try {
+    //       await Promise.all(
+    //         Array(parallelSize)
+    //           .fill(0)
+    //           .map(async () => {
+    //             await queryClient.cosmos.bank.v1beta1.params();
+    //           })
+    //       );
+
+    //       console.log("index: ", i, " queries: ", i * parallelSize);
+    //       console.timeLog("rpc");
+    //     } catch (error) {
+    //       console.log("error index: ", i);
+    //       console.log(error.message);
+    //       break;
+    //     }
+    //   }
+    //   console.timeEnd("rpc");
+
+    //   expect(true).toBeTruthy();
+    // });
+
     // test("Query ixo.bonds.v1beta1", async () => {
     //   const res = await queryClient.ixo.bonds.v1beta1.bondsDetailed();
     //   console.log(res.bondsDetailed);
@@ -161,7 +190,7 @@ export const quickQueries = () =>
 
     // test("Query proposal by id", async () => {
     //   const res = await queryClient.cosmos.gov.v1beta1.proposal({
-    //     proposalId: Long.fromNumber(4),
+    //     proposalId: Long.fromNumber(69),
     //   });
     //   console.log(res.proposal);
     //   expect(res).toBeTruthy();

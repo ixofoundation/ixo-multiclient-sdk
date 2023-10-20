@@ -1256,64 +1256,72 @@ export const daodaoAuthzExecute = () =>
   });
 
 export const multicallContract = () =>
-  describe("Testing the Dao Core", () => {
+  describe("Testing the multicallContract", () => {
     let contractAddress =
       "ixo1rrra808ggl30g27zdmp9ecc00u7le2tn5gunv86p8aa99jrc84qqk8dttm";
 
-    // testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract dao core", async () => {
-    //   const tester = (await getUser().getAccounts())[0].address;
+    const multicallContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "multicall"
+    );
 
-    //   const msg = {};
-    //   const res = await Wasm.WasmInstantiateTrx(29, JSON.stringify(msg));
-    //   console.log("initialize::", res);
-    //   contractAddress = utils.common.getValueFromEvents(
-    //     res,
-    //     "instantiate",
-    //     "_contract_address"
-    //   );
-    //   console.log({ contractAddress });
-    //   return res;
-    // });
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract dao core", async () => {
+      const tester = (await getUser().getAccounts())[0].address;
 
-    test("query dao core contract: dump_state", async () => {
-      const msg = {
-        aggregate: {
-          queries: [
-            {
-              address:
-                "ixo1jdeq6fjlnqfa5kc76u65e6ud7nzxm884v5wzus7vrejl0fmrccvqshmd45",
-              data: toBase64(
-                utils.conversions.JsonToArray(
-                  JSON.stringify({ dump_state: {} })
-                )
-              ),
-            },
-            {
-              address:
-                "ixo16j995dj88vx8wys4rqdyz7yug57w7vj4lwu6qydq842w40wtjclqxuqm0e",
-              data: toBase64(
-                utils.conversions.JsonToArray(
-                  JSON.stringify({ reverse_proposals: {} })
-                )
-              ),
-            },
-          ],
-        },
-      };
-      const multicallRes =
-        await queryClient.cosmwasm.wasm.v1.smartContractState({
-          address: contractAddress,
-          queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
-        });
-      const resParsed = JSON.parse(
-        utils.conversions.Uint8ArrayToJS(multicallRes.data)
+      const msg = {};
+      const res = await Wasm.WasmInstantiateTrx(
+        multicallContractCode!,
+        JSON.stringify(msg)
       );
-      const decoded = resParsed.return_data.map((e) => {
-        console.log(e);
-        return b64toJson(e.data);
-      });
-      console.dir(decoded, { depth: null });
-
-      expect(multicallRes).toBeTruthy();
+      console.log("initialize::", res);
+      contractAddress = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ contractAddress });
+      return res;
     });
+
+    // test("query dao core contract: dump_state", async () => {
+    //   const msg = {
+    //     aggregate: {
+    //       queries: [
+    //         {
+    //           address:
+    //             "ixo1jdeq6fjlnqfa5kc76u65e6ud7nzxm884v5wzus7vrejl0fmrccvqshmd45",
+    //           data: toBase64(
+    //             utils.conversions.JsonToArray(
+    //               JSON.stringify({ dump_state: {} })
+    //             )
+    //           ),
+    //         },
+    //         {
+    //           address:
+    //             "ixo16j995dj88vx8wys4rqdyz7yug57w7vj4lwu6qydq842w40wtjclqxuqm0e",
+    //           data: toBase64(
+    //             utils.conversions.JsonToArray(
+    //               JSON.stringify({ reverse_proposals: {} })
+    //             )
+    //           ),
+    //         },
+    //       ],
+    //     },
+    //   };
+    //   const multicallRes =
+    //     await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //       address: contractAddress,
+    //       queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+    //     });
+    //   const resParsed = JSON.parse(
+    //     utils.conversions.Uint8ArrayToJS(multicallRes.data)
+    //   );
+    //   const decoded = resParsed.return_data.map((e) => {
+    //     console.log(e);
+    //     return b64toJson(e.data);
+    //   });
+    //   console.dir(decoded, { depth: null });
+
+    //   expect(multicallRes).toBeTruthy();
+    // });
   });

@@ -27,6 +27,14 @@ export const bankBasic = () =>
     });
   });
 
+export const textProposalBasic = () =>
+  describe("Testing the cosmos gov module", () => {
+    testMsg("/cosmos.bank.v1beta1.MsgSubmitProposal", async () => {
+      const res = await Cosmos.MsgProposalText();
+      return res;
+    });
+  });
+
 export const authzBasic = () =>
   describe("Testing the cosmos bank module", () => {
     // beforeAll(() =>
@@ -79,7 +87,7 @@ export const sendTokens = (rounds = 1) =>
 
 export const govDeposit = () =>
   describe("Testing deposit funds into proposals", () => {
-    testMsg("/cosmos.bank.v1beta1.MsgDeposit", () => Cosmos.MsgDeposit(438));
+    testMsg("/cosmos.bank.v1beta1.MsgDeposit", () => Cosmos.MsgDeposit(69));
   });
 
 export const feegrantBasic = () =>

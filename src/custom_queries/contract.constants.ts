@@ -162,9 +162,20 @@ export const contracts = [
     code: { devnet: 27, testnet: 27, mainnet: 27 },
   },
   {
+    name: "multicall",
+    path: ["contracts", "custom", "multicall.wasm"],
+    category: "ixo",
+    code: { devnet: 28, testnet: 28, mainnet: 28 },
+    address: {
+      devnet: "",
+      testnet: "ixo17hgwjxmz70ks6v5u2ay2maqf8anrpmleu0p4vyqw88s3sflwv7fqgz8j0f",
+      mainnet: "",
+    },
+  },
+  {
     name: "ixoswap",
     path: ["contracts", "ixo", "ixoswap.wasm"],
     category: "ixo",
-    code: { devnet: 28, testnet: 28, mainnet: 28 },
+    code: { devnet: 29, testnet: 0, mainnet: 0 },
   },
 ];
