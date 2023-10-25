@@ -8,7 +8,7 @@ export const CreateIidDocForGroup = async (
 ) => {
   const client = await createClient(getUser(signer));
   const signerAddress = (await getUser(signer).getAccounts())[0].address;
-  const did = utils.did.generateCosmwasmDid(address);
+  const did = utils.did.generateWasmDid(address);
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgCreateIidDocument",

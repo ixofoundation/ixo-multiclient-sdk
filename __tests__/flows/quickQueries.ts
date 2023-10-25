@@ -5,15 +5,76 @@ import { RPC_URL, WalletUsers } from "../helpers/constants";
 import { AuthInfo, TxBody } from "../../src/codegen/cosmos/tx/v1beta1/tx";
 import { fromHex } from "@cosmjs/encoding";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
-import { Uint8ArrayToJS } from "../../src/utils/conversions";
+import {
+  JsonToArray,
+  Uint8ArrayToJS,
+  b64toUint8Array,
+} from "../../src/utils/conversions";
+import { fromTimestamp } from "../../src/codegen/helpers";
 
 export const quickQueries = () =>
   describe("Quick queries to see states", () => {
     test("Quick queries to see states filler", () => expect(true).toBeTruthy());
 
+    // test("Test rpc endpoint rate limit", async () => {
+    //   const limit = 100;
+    //   const parallelSize = 2;
+    //   let i = 1;
+
+    //   console.time("rpc");
+    //   for (i = 1; i < limit; i++) {
+    //     try {
+    //       await Promise.all(
+    //         Array(parallelSize)
+    //           .fill(0)
+    //           .map(async () => {
+    //             await queryClient.cosmos.bank.v1beta1.params();
+    //           })
+    //       );
+
+    //       console.log("index: ", i, " queries: ", i * parallelSize);
+    //       console.timeLog("rpc");
+    //     } catch (error) {
+    //       console.log("error index: ", i);
+    //       console.log(error.message);
+    //       break;
+    //     }
+    //   }
+    //   console.timeEnd("rpc");
+
+    //   expect(true).toBeTruthy();
+    // });
+
     // test("Query ixo.bonds.v1beta1", async () => {
     //   const res = await queryClient.ixo.bonds.v1beta1.bondsDetailed();
     //   console.log(res.bondsDetailed);
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query interchain_accounts params", async () => {
+    //   const res =
+    //     await queryClient.ibc.applications.interchain_accounts.host.v1.params();
+    //   console.log(res.params);
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query address staking", async () => {
+    //   const res = await queryClient.cosmos.staking.v1beta1.delegatorDelegations(
+    //     {
+    //       delegatorAddr: "ixo1n8yrmeatsk74dw0zs95ess9sgzptd6thgjgcj2",
+    //     }
+    //   );
+    //   console.log(res.delegationResponses);
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query ibc stuff", async () => {
+    //   const res = await queryClient.ibc.core.channel.v1.channels({});
+    //   console.dir(res.channels, { depth: null });
+    //   const res2 = await queryClient.ibc.core.connection.v1.connection({
+    //     connectionId: "connection-29",
+    //   });
+    //   console.dir(res2.connection, { depth: null });
     //   expect(res).toBeTruthy();
     // });
 
@@ -25,6 +86,22 @@ export const quickQueries = () =>
     //     res.tx?.body?.messages.map((m) => createRegistry().decode(m)),
     //     { depth: null }
     //   );
+    //   // console.dir(createRegistry().decode(res.tx!.body!.messages![0]), {
+    //   //   depth: null,
+    //   // });
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query cosmos.tx.v1beta1.getTx", async () => {
+    //   const res = {
+    //     typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    //     value: b64toUint8Array(
+    //       "Cj9qdW5vMXA3ZjR4a3dyazd3aHd1azk5MGFqYzR6a2RrcXBhdzhzemM0NnRlZ202dTU3dHM3Y3g5NHN1NGw2dHMSiQEKHC9jb3Ntb3MuYmFuay52MWJldGExLk1zZ1NlbmQSaQoranVubzE2czB0ODlhNGdrMGpkeGhwZndxNHNwaGp3NGRjZXg2cjkweHJ1dRIranVubzE2czB0ODlhNGdrMGpkeGhwZndxNHNwaGp3NGRjZXg2cjkweHJ1dRoNCgV1anVubxIEMTAwMA=="
+    //     ),
+    //   };
+    //   console.log(res);
+    //   const decodedRes = createRegistry().decode(res);
+    //   console.log(decodedRes);
     //   // console.dir(createRegistry().decode(res.tx!.body!.messages![0]), {
     //   //   depth: null,
     //   // });
@@ -113,7 +190,7 @@ export const quickQueries = () =>
 
     // test("Query proposal by id", async () => {
     //   const res = await queryClient.cosmos.gov.v1beta1.proposal({
-    //     proposalId: Long.fromNumber(4),
+    //     proposalId: Long.fromNumber(69),
     //   });
     //   console.log(res.proposal);
     //   expect(res).toBeTruthy();
@@ -154,15 +231,36 @@ export const quickQueries = () =>
     // });
 
     // test("Query user feegrant", async () => {
-    //   const address = (await getUser(WalletUsers.alice).getAccounts())[0]
+    //   const address = (await getUser(WalletUsers.tester).getAccounts())[0]
     //     .address;
-    //   const res = await queryClient.cosmos.feegrant.v1beta1.allowances({
-    //     grantee: address,
-    //   });
-    //   console.dir(res, { depth: null });
-    //   if (res.allowances.length > 0) {
-    //     console.log(createRegistry().decode(res.allowances[0].allowance!));
-    //   }
+    //   const res = await queryClient.cosmos.feegrant.v1beta1.allowancesByGranter(
+    //     {
+    //       granter: address,
+    //     }
+    //   );
+    //   const registry = createRegistry();
+    //   console.dir(
+    //     {
+    //       ...res,
+    //       allowances: res.allowances.map((g) => {
+    //         const allowance = registry.decode(g.allowance!);
+    //         const expiration =
+    //           allowance.expiration && fromTimestamp(allowance.expiration);
+    //         return {
+    //           ...g,
+    //           allowance: {
+    //             ...allowance,
+    //             expiration,
+    //           },
+    //         };
+    //       }),
+    //     },
+    //     { depth: null }
+    //   );
+    //   console.log(res.allowances.length);
+    //   // if (res.allowances.length > 0) {
+    //   //   console.log(registry.decode(res.allowances[0].allowance!));
+    //   // }
     //   expect(res).toBeTruthy();
     // });
 
@@ -301,17 +399,18 @@ export const quickQueries = () =>
     //     granter: user,
     //   });
     //   if (res.grants.length > 0) {
-    //     console.log(
-    //       res.grants.map((g) => {
-    //         g.expiration = g.expiration?.seconds as any;
-    //         return g;
-    //       })
-    //     );
-    //     console.log(
-    //       res.grants.map((g) => {
-    //         const auth = createRegistry().decode(g.authorization!);
-    //         return auth.constraints || auth;
-    //       })
+    //     console.dir(
+    //       (res.grants ?? [])?.map((g) => ({
+    //         ...g,
+    //         expiration: !g.expiration
+    //           ? undefined
+    //           : utils.proto.fromTimestamp(g.expiration)?.getTime(),
+    //         authorization: {
+    //           ...g.authorization,
+    //           value: createRegistry().decode(g.authorization!),
+    //         },
+    //       })),
+    //       { depth: null }
     //     );
     //   }
     //   expect(res).toBeTruthy();

@@ -1,6 +1,5 @@
 import { cellNodeChainMapping } from "../../../src/custom_queries/cellnode";
-import { dids } from "../constants";
-import { chainNetwork } from "../index.setup.spec";
+import { chainNetwork, dids } from "../constants";
 
 export const setup_dao_constants = () => ({
   entity: {
@@ -45,7 +44,6 @@ export const setup_dao_constants = () => ({
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.
   linkedResources: [
-    // TODO NEED!!!!
     {
       name: "page",
       type: "Settings",
@@ -135,8 +133,8 @@ export const setup_oracle_carbon_constants = () => ({
         description: "Profile",
         mediaType: "application/ld+json",
         serviceEndpoint:
-          "ipfs:bafkreig4bm53r3wujghdesnscpwcr7rucsigsqbr7f4ix7p7aebsumpnpy",
-        proof: "bafkreig4bm53r3wujghdesnscpwcr7rucsigsqbr7f4ix7p7aebsumpnpy",
+          "ipfs:bafkreidspm2panubcmtt4cybpggdiqeup4lfd7qlhsqr4kbqsvat2ui4yy",
+        proof: "bafkreidspm2panubcmtt4cybpggdiqeup4lfd7qlhsqr4kbqsvat2ui4yy",
         encrypted: "false",
         right: "",
       },
@@ -146,7 +144,6 @@ export const setup_oracle_carbon_constants = () => ({
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.
   linkedResources: [
-    // TODO NEED!!!!
     {
       name: "page",
       type: "Settings",

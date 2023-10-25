@@ -1,14 +1,13 @@
 require("dotenv").config();
 
-import { createQueryClient, runQry } from "./helpers/common";
-import * as Queries from "./modules/Queries";
+import { createQueryClient, runQry } from "../../helpers/common";
+import * as Queries from "../../modules/Queries";
 
 beforeAll(() => {
   return Promise.all([createQueryClient()]);
 });
 
 describe("Running queries", () => {
-
   runQry("AllAccounts", () => Queries.AllAccounts());
 
   // const did: string = "did:sov:LRGVKuk1Lmi16SUBWyXPAC";

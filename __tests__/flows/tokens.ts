@@ -150,12 +150,12 @@ export const supamotoTokens = () =>
       ])
     );
 
-    let name = "CARBON1";
+    let name = "CARBON";
     let description = "Carbon Credit";
     let cap = 0; // no cap
 
     let contractAddress1155 =
-      "ixo1q85duf4uqqn97j2y52pep65mukux3edypm7ns2upfgnrg6pnsj0sj2hv3e";
+      "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
     testMsg("/ixo.token.v1beta1.MsgCreateToken", async () => {
       const res = await Token.CreateToken(
         name,
@@ -173,7 +173,7 @@ export const supamotoTokens = () =>
     });
 
     let index = "1";
-    let amount = 265;
+    let amount = 10000;
     // Did of collection (supamotoEntitiesFlow protocolAssetDid)
     let collectionDid = "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258";
     // Did of entity to map token to (supamotoEntitiesFlow first nft created)
@@ -239,6 +239,12 @@ export const supamotoTokens = () =>
       "did:ixo:entity:72a27013b1d2f9c3561145e4a424778a",
       "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
       "did:ixo:entity:7b40f2500d4c89997f8389c5f2318cdb",
+      "did:ixo:entity:17af9d9079f94124e2a0443b489f1ab5",
+      "did:ixo:entity:1e5c9da5816be11dcd0fb0c4bc9353cf",
+      "did:ixo:entity:1fc4c786ce617c41990465b5fb8d1a09",
+      "did:ixo:entity:261e633b6198a7c2339d92454bc52c19",
+      "did:ixo:entity:366e24c64b793d8b750b1db1e87f3b09",
+      "did:ixo:entity:374dfa3a4fb238f6c15db756538a0c13",
     ];
 
     nfts.map((nft, i) => [
@@ -264,6 +270,31 @@ export const supamotoTokens = () =>
         )
       ),
     ]);
+  });
+
+export const supamotoTokensSendCARBON = () =>
+  describe("Testing the Supamoto Tokens flow", () => {
+    // Set tester as root ecs user
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(
+          WalletUsers.tester,
+          process.env.ASSERT_USER_CARBON_ORACLE
+        ),
+      ])
+    );
+
+    testMsg("/ixo.token.v1beta1.MsgTransferToken", () =>
+      Token.TransferToken(
+        [
+          {
+            id: "63bb9e8cfedfbf65298662c442a28ff2",
+            amount: 50,
+          },
+        ],
+        "ixo1hkrnq9a68l275klrkx4nhrvl2xvl6737p6329a"
+      )
+    );
   });
 
 // ------------------------------------------------------------

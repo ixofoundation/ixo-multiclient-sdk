@@ -55,103 +55,9 @@ export const CreateEntity = async (
   return response;
 };
 
-export const CreateEntityAssetSupamotoInstance = async (
-  inheritEntityDid: string,
-  entities: {
-    deviceId: string | number;
-    index: number;
-    deviceCreds: string;
-  }[],
-  relayerDid?: string
-) => {
-  const client = await createClient();
-
-  const tester = getUser();
-  const account = (await tester.getAccounts())[0];
-  const myAddress = account.address;
-  const myPubKey = account.pubkey;
-  const did = tester.did;
-
-  const message = entities.map((entity) => ({
-    typeUrl: "/ixo.entity.v1beta1.MsgCreateEntity",
-    value: ixo.entity.v1beta1.MsgCreateEntity.fromPartial({
-      entityType: "asset/device",
-      entityStatus: 0,
-      context: createAgentIidContext([{ key: "class", val: inheritEntityDid }]),
-      controller: [did],
-      service: [],
-      startDate: utils.proto.toTimestamp(new Date()),
-      verification: createIidVerificationMethods({
-        did,
-        pubkey: myPubKey,
-        address: myAddress,
-        controller: did,
-        type: keyType,
-      }),
-      alsoKnownAs: `{id}#${entity.index}`,
-      linkedResource: [
-        ixo.iid.v1beta1.LinkedResource.fromPartial({
-          id: "{id}#deviceCredential",
-          type: "VerifiableCredential",
-          description: "Certificate of Manufacture",
-          mediaType: "application/ld+json",
-          serviceEndpoint: `ipfs:${entity.deviceCreds}`,
-          proof: entity.deviceCreds,
-          encrypted: "false",
-          right: "",
-        }),
-        ixo.iid.v1beta1.LinkedResource.fromPartial({
-          id: "{id}#assetDashboard",
-          type: "WebDashboard",
-          description: "SupaMoto Dashboard",
-          mediaType: "application/html",
-          serviceEndpoint: `emerging:/devices/${entity.deviceId}`,
-          proof: "",
-          encrypted: "false",
-          right: "#apitoken",
-        }),
-        {
-          id: `{id}#token`,
-          type: "TokenMetadata",
-          description: "Impact Token",
-          mediaType: "application/json",
-          serviceEndpoint:
-            "ipfs:bafkreid2shatt7tw7hs2b7j3eip7l52xa24xwtvnc2doj22g67fosvfize",
-          proof: "bafkreid2shatt7tw7hs2b7j3eip7l52xa24xwtvnc2doj22g67fosvfize",
-          encrypted: "false",
-          right: "",
-        },
-        {
-          id: `{id}#profile`,
-          type: "Settings",
-          description: "Profile",
-          mediaType: "application/ld+json",
-          serviceEndpoint:
-            "ipfs:bafkreigx7val5mfeghm636jcso6kt7wqpieh7h7hgdkcn64xxyy7ihp2q4",
-          proof: "bafkreigx7val5mfeghm636jcso6kt7wqpieh7h7hgdkcn64xxyy7ihp2q4",
-          encrypted: "false",
-          right: "",
-        },
-      ],
-      accordedRight: [],
-      linkedEntity: [],
-      ownerDid: did,
-      ownerAddress: myAddress,
-      relayerNode: relayerDid || did,
-    }),
-  }));
-
-  const response = await client.signAndBroadcast(
-    myAddress,
-    message,
-    getFee(message.length)
-  );
-  return response;
-};
-
 export const TransferEntity = async (
   signer: WalletUsers = WalletUsers.tester,
-  entityDid: string,
+  entities: string[],
   recipientDid?: string
 ) => {
   const client = await createClient(getUser(signer));
@@ -163,7 +69,7 @@ export const TransferEntity = async (
 
   const alice = getUser(WalletUsers.alice);
 
-  const message = {
+  const messages = entities.map((entityDid) => ({
     typeUrl: "/ixo.entity.v1beta1.MsgTransferEntity",
     value: ixo.entity.v1beta1.MsgTransferEntity.fromPartial({
       id: entityDid,
@@ -171,10 +77,10 @@ export const TransferEntity = async (
       ownerAddress: myAddress,
       recipientDid: recipientDid || alice.did,
     }),
-  };
+  }));
 
-  console.log({ myAddress });
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  // console.log({ myAddress });
+  const response = await client.signAndBroadcast(myAddress, messages, fee);
   return response;
 };
 
@@ -277,6 +183,8 @@ export const GrantEntityAccountAuthz = async (
 
   const tester = (await getUser(signer).getAccounts())[0].address;
   const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
+  // const granteeAddress =
+  //   "ixo1jxmrje2f26uvcesnj3naysu0fmukt5q74pxu2ukz6cjjjf0qtk9suyl4h6";
 
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
@@ -290,11 +198,12 @@ export const GrantEntityAccountAuthz = async (
           typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
           value: cosmos.authz.v1beta1.GenericAuthorization.encode(
             cosmos.authz.v1beta1.GenericAuthorization.fromPartial({
+              // msg: "/ibc.applications.transfer.v1.MsgTransfer",
               msg: "/cosmos.gov.v1beta1.MsgSend",
             })
           ).finish(),
         },
-        expiration: utils.proto.toTimestamp(addDays(new Date(), 1)),
+        expiration: utils.proto.toTimestamp(addDays(new Date(), 30)),
       }),
     }),
   };
@@ -302,3 +211,10 @@ export const GrantEntityAccountAuthz = async (
   const response = await client.signAndBroadcast(tester, [message], fee);
   return response;
 };
+export function CreateEntityAssetSupamotoInstance(
+  assetCollection: string,
+  arg1: { deviceId: number; index: number; deviceCreds: string }[],
+  emergingDao: string
+) {
+  throw new Error("Function not implemented.");
+}

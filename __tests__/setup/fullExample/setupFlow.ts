@@ -143,7 +143,7 @@ export const impactsFlow = () =>
       // is the owner group, to which the dao will be transfered to
       const resTransfer = await Entity.TransferEntity(
         daoDid,
-        utils.did.generateCosmwasmDid(members_group)
+        utils.did.generateWasmDid(members_group)
       );
       return resTransfer;
     });

@@ -12,8 +12,6 @@ import * as Token from "./flows/tokens";
 import * as CosmWasm from "./flows/cosmwasm";
 import * as Queries from "./flows/quickQueries";
 import * as Claims from "./flows/claims";
-import { ChainNetwork } from "../src/custom_queries/chain.types";
-import { dids } from "./setup/constants";
 
 beforeAll(() => {
   generateConstants();
@@ -39,29 +37,43 @@ IID.generateBlockchainTestUsers();
 // IID.iidReplaceLinkedResource();
 // IBC.ibcBasic();
 // Cosmos.govDeposit();
-// Cosmos.authzBasic();
 // CosmWasm.wasmBasic();
 // Cosmos.feegrantBasic();
 // Proposals.cwUploadProposal();
-// Queries.quickQueries();
 // Token.supamotoTokensFarm();
+// Token.supamotoTokensSendCARBON();
 // Claims.supamotoClaimsRedoRejected();
 // Entity.relayerVerifyAllEntities();
 // Entity.enititiesSetStatus();
+// Claims.supamotoClaims2();
+// CosmWasm.swapBasic();
+// CosmWasm.swapContract();
+// Cosmos.feegrantAllCurrentUsers();
+// Claims.supamotoEvaluateFuelPurchases();
+// Claims.supamotoCreateCollection();
+// Entity.transferEntities();
+// CosmWasm.daodaoAuthzExecute();
+// Cosmos.authzBasic();
+// Cosmos.textProposalBasic();
+// Queries.quickQueries();
 
 // ------------------------------------------
 // Run the below after a devnet reset
 // ------------------------------------------
-export const chainNetwork: ChainNetwork = "devnet";
 // Proposals.devnetProposals();
-// first run devnetProposals, the run initcontracts.sh on dev server
+//
+// first run above devnetProposals, the run initcontracts.sh on dev server
 // immidiately, and wait for all proposals to pass then run below
 //
-// After all proposals have passed, run `yarn test:setup` to create all base daos and entities,
+// After all proposals have passed, run
+// -  `yarn test:supamoto` to create all base daos and entities for emerging and ecs,
+// -  `yarn test:umuzi` to create all base daos and entities for yoma and umuzi (Dont run yet!!!!!),
 // please ensure to have the env vars set for dao root users and ed key users. For devnet restart
 // you dont have to save did constants after dao creation, it deterministic so preset to devnet dids
 //
 // After daos is on devnet you can run the below
 // IID.registerIidsDev();
+// CosmWasm.multicallContract();
+// CosmWasm.devnetSwapContract_IXO_CARBON();
 // Token.supamotoTokens();
 // Claims.supamotoClaims();

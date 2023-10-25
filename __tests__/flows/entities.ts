@@ -4,6 +4,7 @@ import {
   generateNewWallet,
   getUser,
   testMsg,
+  timeout,
   utils,
 } from "../helpers/common";
 import { BlocksyncUrls, WalletUsers } from "../helpers/constants";
@@ -14,6 +15,12 @@ import { ChainNetwork } from "../../src/custom_queries/chain.types";
 
 export const enititiesBasic = () =>
   describe("Testing the entities module", () => {
+    // beforeAll(() =>
+    //   Promise.all([
+    //     generateNewWallet(WalletUsers.tester, process.env.ROOT_IMPACTS),
+    //   ])
+    // );
+
     let entityDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14"; // admin account ixo1kqmtxkggcqa9u34lnr6shy0euvclgatw4f9zz5
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset", async () => {
       const res = await Entity.CreateEntity();
@@ -48,9 +55,29 @@ export const enititiesBasic = () =>
     testMsg("/ixo.entity.v1beta1.MsgTransferEntity", () =>
       Entity.TransferEntity(
         WalletUsers.tester,
-        entityDid
+        [entityDid]
         // "did:x:zQ3shQ3FDm5NaUfDNUuTexmWNBLAYMDo8fwLVPMfpVV2FUzub"
       )
+    );
+  });
+
+export const transferEntities = (mnemonic?: string) =>
+  describe("Testing the entities module", () => {
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(WalletUsers.tester, mnemonic || process.env.ROOT_ECS),
+      ])
+    );
+
+    let recipient = "did:x:zQ3shdfEnNGfFwdbT8ATxHYVpmYLFxEPCne6tu73KL79NewAA";
+    let entities = [
+      "did:ixo:entity:02f1939d7054b5b0df3e5a0d9cc2c8bf",
+      "did:ixo:entity:0978400d4375110e22228ecdbb5e8d73",
+      "did:ixo:entity:09fb798bed0d1df22827efea0f94bcfd",
+    ];
+
+    testMsg("/ixo.entity.v1beta1.MsgTransferEntity", () =>
+      Entity.TransferEntity(WalletUsers.tester, entities, recipient)
     );
   });
 
@@ -82,6 +109,9 @@ export const relayerVerifyAllEntities = (
     testMsg("Verifying", async () => {
       const tester = getUser(WalletUsers.tester);
       const relayerDid = relayerNodeDid || tester.did;
+
+      // adding 8seconds timeout for blocksyn to catch up before querying entities
+      await timeout(8000);
 
       const entitiesRes = await axios.get(`${blocksyncUrl}/api/entity/all`);
       const chunkSize = 200;

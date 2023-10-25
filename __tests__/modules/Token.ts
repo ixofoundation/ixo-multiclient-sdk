@@ -80,12 +80,14 @@ export const TransferToken = async (
   tokens: {
     id: string;
     amount: number;
-  }[]
+  }[],
+  toAddress?: string
 ) => {
   const client = await createClient();
 
   const tester = (await getUser(WalletUsers.tester).getAccounts())[0].address;
-  const alice = (await getUser(WalletUsers.alice).getAccounts())[0].address;
+  const alice =
+    toAddress || (await getUser(WalletUsers.alice).getAccounts())[0].address;
 
   const message = {
     typeUrl: "/ixo.token.v1beta1.MsgTransferToken",

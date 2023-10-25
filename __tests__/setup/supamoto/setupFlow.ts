@@ -6,9 +6,8 @@ import {
   testMsg,
   utils,
 } from "../../helpers/common";
-import * as Entity1 from "../../modules/Entity";
-import { chainNetwork } from "../index.setup.spec";
-import { EcsCredentialsWorkerUrl, dids } from "../constants";
+import * as Entity from "../Entity";
+import { EcsCredentialsWorkerUrl, chainNetwork, dids } from "../constants";
 import { setAndLedgerUser } from "../helpers";
 import axios from "axios";
 import { cookstoveIds } from "./stoves";
@@ -70,7 +69,7 @@ export const cookstovesFlow = () =>
               if (!deviceCreds)
                 throw new Error("error saving device creds file");
 
-              const res = await Entity1.CreateEntityAssetSupamotoInstance(
+              const res = await Entity.CreateEntityAssetSupamotoInstance(
                 dids.assetCollection,
                 [{ deviceId: id, index, deviceCreds }],
                 dids.emergingDao
@@ -125,7 +124,7 @@ export const cookstovesFlowDevnet = () =>
             }`
           );
           try {
-            const res = await Entity1.CreateEntityAssetSupamotoInstance(
+            const res = await Entity.CreateEntityAssetSupamotoInstance(
               dids.assetCollection,
               ids.map((e, ind) => ({
                 deviceId: e.id,

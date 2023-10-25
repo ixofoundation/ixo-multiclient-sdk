@@ -1,14 +1,15 @@
+import { SignerData } from "@cosmjs/stargate";
+import Long from "long";
 import { getFee, WalletUsers } from "../helpers/constants";
 import {
   createClient,
   getUser,
   cosmos,
   cosmwasm,
-  queryClient,
   utils,
   getFileFromPath,
 } from "../helpers/common";
-import Long from "long";
+import { SigningStargateClient } from "../../src";
 
 export const WasmStoreTrx = async (
   contract: string = "cw721",
@@ -78,6 +79,36 @@ export const WasmInstantiateTrx = async (
     getFee(1, await client.simulate(myAddress, [message], undefined))
   );
   return response;
+};
+
+export const WasmSignTrx = async (
+  client: SigningStargateClient,
+  contractAddress: string,
+  msg: string,
+  signer: WalletUsers = WalletUsers.tester,
+  funds = {
+    amount: "1",
+    denom: "uixo",
+  },
+  explicitSignerData: SignerData
+) => {
+  const tester = getUser(signer);
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const message = {
+    typeUrl: "/cosmwasm.wasm.v1.MsgExecuteContract",
+    value: cosmwasm.wasm.v1.MsgExecuteContract.fromPartial({
+      contract: contractAddress,
+      funds: [cosmos.base.v1beta1.Coin.fromPartial(funds)],
+      msg: utils.conversions.JsonToArray(msg),
+      sender: myAddress,
+    }),
+  };
+  const fee = getFee(1, await client.simulate(myAddress, [message], undefined));
+  const usedFee = await client.getUsedFee(myAddress, [message], fee);
+
+  return client.sign(myAddress, [message], usedFee, "", explicitSignerData);
 };
 
 export const WasmExecuteTrx = async (
