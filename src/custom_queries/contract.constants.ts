@@ -169,7 +169,7 @@ export const contracts = [
     address: {
       devnet: "",
       testnet: "ixo17hgwjxmz70ks6v5u2ay2maqf8anrpmleu0p4vyqw88s3sflwv7fqgz8j0f",
-      mainnet: "",
+      mainnet: "ixo1d7d83gktpdlq0w0y0wtq6qd6yzp5jv744sz9dspluedvlxln23pq4ld8hc",
     },
   },
   {
