@@ -722,5 +722,13 @@ export declare namespace customQueries {
             code?: number;
         }[];
         getContractCode: (chainNetwork: import("./chain.types").ChainNetwork, contractName: string) => number;
+        getContractAddress: (chainNetwork: import("./chain.types").ChainNetwork, contractName: string) => string;
+        getContractData: (chainNetwork: import("./chain.types").ChainNetwork, contractName: string) => {
+            code: number;
+            address: string;
+            name: string;
+            path: string[];
+            category: string;
+        };
     };
 }
