@@ -32,28 +32,9 @@ export const setup_dao_constants = () => ({
         id: "{id}#profile",
         description: "Profile",
         mediaType: "application/ld+json",
-        serviceEndpoint: "ipfs:bafkreia6oml4bshg4rwyrxwzggq25gdqzfaroxjpnir65jgezu55braoe4",
+        serviceEndpoint:
+          "ipfs:bafkreia6oml4bshg4rwyrxwzggq25gdqzfaroxjpnir65jgezu55braoe4",
         proof: "bafkreia6oml4bshg4rwyrxwzggq25gdqzfaroxjpnir65jgezu55braoe4",
-        encrypted: "false",
-        right: "",
-      },
-      {
-        type: "Settings",
-        id: "{id}#page",
-        description: "Page",
-        mediaType: "application/ld+json",
-        serviceEndpoint: "cellnode:bafkreigj5k3q4z4wowsqjua6czufu6fp2zteijs34wy3bq3uujqfrvqgqm",
-        proof: "bafkreigj5k3q4z4wowsqjua6czufu6fp2zteijs34wy3bq3uujqfrvqgqm",
-        encrypted: "false",
-        right: "",
-      },
-      {
-        type: "Settings",
-        id: "{id}#tags",
-        description: "Tags",
-        mediaType: "application/ld+json",
-        serviceEndpoint: "cellnode:bafkreidkkbp6wmilmy4d5jtt3ywjlfklcubnxm4mnmj3g2kupjl4sr6s3i",
-        proof: "bafkreidkkbp6wmilmy4d5jtt3ywjlfklcubnxm4mnmj3g2kupjl4sr6s3i",
         encrypted: "false",
         right: "",
       },
@@ -62,7 +43,89 @@ export const setup_dao_constants = () => ({
   },
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.
-  linkedResources: [],
+  linkedResources: [
+    {
+      name: "page",
+      type: "Settings",
+      storage: "cellnode",
+      json: {
+        "@context": {
+          ixo: "https://w3id.org/ixo/ns/protocol/",
+          "@id": "@type",
+          type: "@type",
+          "@protected": true,
+        },
+        type: "ixo:entity#page",
+        page: [
+          {
+            id: "o0xt3YTpTG",
+            type: "image",
+            data: {
+              file: {
+                url: "https://devnet-cellnode.ixo.earth/public/bafkreiec5bof7m27ez3lct2vdusbzkvshg3mbqim6lxvzfup3fo7a7kace",
+              },
+              caption: "",
+              withBorder: false,
+              stretched: false,
+              withBackground: false,
+            },
+          },
+          {
+            id: "Jj4HkQOBJJ",
+            type: "header",
+            data: {
+              text: "Evaluate Candidates Quickly, Affordably, and Accurately",
+              level: 2,
+            },
+          },
+          {
+            id: "Ru8VZBIQTJ",
+            type: "paragraph",
+            data: {
+              text: "Supercharge remote and in-person hiring with three world-class capabilities for the price of one.",
+            },
+          },
+          {
+            id: "9s_I95jwET",
+            type: "paragraph",
+            data: {
+              text: 'You can create your own&nbsp;<a href="https://help.coderbyte.com/knowledge/custom-challenges">coding challenges</a>,&nbsp;<a href="https://help.coderbyte.com/knowledge/how-to-format-custom-questions">multiple choice questions</a>, open-ended questions, and video response questions. You can also import custom whiteboards and&nbsp;<a href="https://help.coderbyte.com/knowledge/creating-interview-templates">Jupyter Notebooks</a>&nbsp;during interviews.',
+            },
+          },
+        ],
+      },
+    },
+    {
+      name: "tags",
+      type: "Settings",
+      storage: "cellnode",
+      json: {
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
+        id: "{id}#tags",
+        type: "ixo:Tags",
+        settings:
+          "https://github.com/emerging-eco/configs/blob/main/settings/config.json",
+        entityTags: [
+          {
+            category: "DAO Type",
+            tags: ["Institute"],
+          },
+          {
+            category: "SDG",
+            tags: ["SDG4 – Quality Education"],
+          },
+        ],
+      },
+    },
+  ],
 });
 
 export const setup_oracle_education_constants = () => ({
@@ -96,28 +159,9 @@ export const setup_oracle_education_constants = () => ({
         id: "{id}#profile",
         description: "Profile",
         mediaType: "application/ld+json",
-        serviceEndpoint: "ipfs:bafkreia6oml4bshg4rwyrxwzggq25gdqzfaroxjpnir65jgezu55braoe4",
+        serviceEndpoint:
+          "ipfs:bafkreia6oml4bshg4rwyrxwzggq25gdqzfaroxjpnir65jgezu55braoe4",
         proof: "bafkreia6oml4bshg4rwyrxwzggq25gdqzfaroxjpnir65jgezu55braoe4",
-        encrypted: "false",
-        right: "",
-      },
-      {
-        type: "Settings",
-        id: "{id}#page",
-        description: "Page",
-        mediaType: "application/ld+json",
-        serviceEndpoint: "cellnode:bafkreigkxr7h2dz6dmt2cd4z2hb3erakumxo22ihgo4iwpp35tv52qzlja",
-        proof: "bafkreigkxr7h2dz6dmt2cd4z2hb3erakumxo22ihgo4iwpp35tv52qzlja",
-        encrypted: "false",
-        right: "",
-      },
-      {
-        type: "Settings",
-        id: "{id}#tags",
-        description: "Tags",
-        mediaType: "application/ld+json",
-        serviceEndpoint: "cellnode:bafkreicmp2qh2id7x3iys26dag45hyb6ii37f26qbxjndbgk5oemdd2zjq",
-        proof: "bafkreicmp2qh2id7x3iys26dag45hyb6ii37f26qbxjndbgk5oemdd2zjq",
         encrypted: "false",
         right: "",
       },
@@ -126,5 +170,59 @@ export const setup_oracle_education_constants = () => ({
   },
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.
-  linkedResources: [],
+  linkedResources: [
+    {
+      name: "page",
+      type: "Settings",
+      storage: "cellnode",
+      json: {
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
+        id: "{id}#page",
+        type: "ixo:Page",
+        page: [
+          {
+            id: "DFibzXTpCH",
+            type: "paragraph",
+            data: {
+              text: "The evaluation of a learner's skills.",
+            },
+          },
+        ],
+      },
+    },
+    {
+      name: "tags",
+      type: "Settings",
+      storage: "cellnode",
+      json: {
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
+        id: "{id}#tags",
+        type: "ixo:Tags",
+        settings:
+          "https://github.com/emerging-eco/configs/blob/main/settings/config.json",
+        entityTags: [
+          {
+            category: "Function",
+            tags: ["Proofing"],
+          },
+        ],
+      },
+    },
+  ],
 });

@@ -29,9 +29,9 @@ export const dids = {
   coderByteOracle: "did:ixo:entity:23bc6e04fea6d884b4efc8a0f31bb740",
   learnershipProtocol: "did:ixo:entity:0c12012217e08d3da96d33c85e09b9ad",
   umuziDao: "did:ixo:entity:0fb18fbac5f4e18c75ced2f23a021fe9",
+  umuziProjectDid: "did:ixo:entity:4af7faf72e47f4b91a38750cb6e359a7",
   umuziAssetCollection: "did:ixo:entity:b3104e1a5ffcbee06007d29525f3e07b",
   educationAssetDid: "did:ixo:entity:3e7253499daf46aab546ab7d2b884bde",
-  umuziProjectDid: "did:ixo:entity:4af7faf72e47f4b91a38750cb6e359a7",
 };
 
 export const adminEntityAccounts = {
