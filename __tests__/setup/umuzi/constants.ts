@@ -14,6 +14,11 @@ export const setup_yoma_dao_constants = () => ({
     // you can remove/add more services
     service: [
       {
+        id: "{id}#cellnode",
+        type: "Cellnode",
+        serviceEndpoint: cellNodeChainMapping[chainNetwork],
+      },
+      {
         id: "{id}#ipfs",
         type: "Ipfs",
         serviceEndpoint: "https://ipfs.io/ipfs/",
@@ -29,8 +34,8 @@ export const setup_yoma_dao_constants = () => ({
         description: "Profile",
         mediaType: "application/ld+json",
         serviceEndpoint:
-          "ipfs:bafkreid37azngjjghv7kbiiedwo5h4dox3na5ra6vsbwmblviry3f2icjq",
-        proof: "bafkreid37azngjjghv7kbiiedwo5h4dox3na5ra6vsbwmblviry3f2icjq",
+          "ipfs:bafkreibw3fgkqa3bvl7cuerl2esoaysnzwfpgwuw7q77qpncj4boovrrum",
+        proof: "bafkreibw3fgkqa3bvl7cuerl2esoaysnzwfpgwuw7q77qpncj4boovrrum",
         encrypted: "false",
         right: "",
       },
@@ -40,7 +45,7 @@ export const setup_yoma_dao_constants = () => ({
         description: "Page",
         mediaType: "application/ld+json",
         serviceEndpoint:
-          "ipfs:bafkreibybriynl6xk5eho4lttdijcfihqy6cnwsgpdebh6s7gow3aigm4e",
+          "cellnode:bafkreibybriynl6xk5eho4lttdijcfihqy6cnwsgpdebh6s7gow3aigm4e",
         proof: "bafkreibybriynl6xk5eho4lttdijcfihqy6cnwsgpdebh6s7gow3aigm4e",
         encrypted: "false",
         right: "",
@@ -51,8 +56,8 @@ export const setup_yoma_dao_constants = () => ({
         description: "Tags",
         mediaType: "application/ld+json",
         serviceEndpoint:
-          "ipfs:bafkreic25qhaofd33zakcmi57lbbmxtakefrk7youjitbvilohd7pf26ku",
-        proof: "bafkreic25qhaofd33zakcmi57lbbmxtakefrk7youjitbvilohd7pf26ku",
+          "cellnode:bafkreifwnyqrxcso3qxdb4x7byvmiek77fgvsbzcv64wsv3cvqwffftd5i",
+        proof: "bafkreifwnyqrxcso3qxdb4x7byvmiek77fgvsbzcv64wsv3cvqwffftd5i",
         encrypted: "false",
         right: "",
       },
@@ -96,8 +101,8 @@ export const setup_umuzi_dao_constants = () => ({
         description: "Profile",
         mediaType: "application/ld+json",
         serviceEndpoint:
-          "ipfs:bafkreidu5hqhqsd6g7pezfapuaoialehg3iq7nxhjyhffhvalunfugiw64",
-        proof: "bafkreidu5hqhqsd6g7pezfapuaoialehg3iq7nxhjyhffhvalunfugiw64",
+          "ipfs:bafkreigaix7ohbq6442cccpzlxhw3rtgsjsxgsfoo6fk267ymqhobgcaia",
+        proof: "bafkreigaix7ohbq6442cccpzlxhw3rtgsjsxgsfoo6fk267ymqhobgcaia",
         encrypted: "false",
         right: "",
       },
@@ -107,7 +112,7 @@ export const setup_umuzi_dao_constants = () => ({
         description: "Page",
         mediaType: "application/ld+json",
         serviceEndpoint:
-          "ipfs:bafkreierwb6w5es4hzb7avghign2fo3itxepoaezufx3tj3u7bi7qh4coy",
+          "cellnode:bafkreierwb6w5es4hzb7avghign2fo3itxepoaezufx3tj3u7bi7qh4coy",
         proof: "bafkreierwb6w5es4hzb7avghign2fo3itxepoaezufx3tj3u7bi7qh4coy",
         encrypted: "false",
         right: "",
@@ -118,8 +123,8 @@ export const setup_umuzi_dao_constants = () => ({
         description: "Tags",
         mediaType: "application/ld+json",
         serviceEndpoint:
-          "ipfs:bafkreifq6pp6uyb77jmkxycbf4ksjlhfgzaxrsnxrgyrhfj4rtzz7gfziy",
-        proof: "bafkreifq6pp6uyb77jmkxycbf4ksjlhfgzaxrsnxrgyrhfj4rtzz7gfziy",
+          "cellnode:bafkreib2gyvcwrz5iyhiaalgms4sscm4tafth4kenlkhq6ig3lzj6lg4dy",
+        proof: "bafkreib2gyvcwrz5iyhiaalgms4sscm4tafth4kenlkhq6ig3lzj6lg4dy",
         encrypted: "false",
         right: "",
       },
@@ -157,48 +162,77 @@ export const setup_protocol_learnership_constants = () => ({
     // if you have any other linked resources other than the ones below that will automatically
     // be uploaded to cellnode/w3s, you can pass them here
     linkedResources: [
-      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#profile",
         description: "Profile",
         mediaType: "application/ld+json",
-        serviceEndpoint: "ipfs:",
-        proof: "",
+        serviceEndpoint: "ipfs:bafkreigjew5e7wujsscjipq3nht23jgi5ydmfht6r5syyuxggcdtammo4m",
+        proof: "bafkreigjew5e7wujsscjipq3nht23jgi5ydmfht6r5syyuxggcdtammo4m",
         encrypted: "false",
         right: "",
       },
-      // TODO need!  Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#page",
         description: "Page",
         mediaType: "application/ld+json",
-        serviceEndpoint: "ipfs:",
-        proof: "",
+        serviceEndpoint: "cellnode:bafkreiheqpawqgazsapifen5kpnbpyvuxobxv2d2xssoo7txf5omyux2di",
+        proof: "bafkreiheqpawqgazsapifen5kpnbpyvuxobxv2d2xssoo7txf5omyux2di",
         encrypted: "false",
         right: "",
       },
-      // TODO need!  Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#tags",
         description: "Tags",
         mediaType: "application/ld+json",
-        serviceEndpoint: "ipfs:",
-        proof: "",
+        serviceEndpoint: "cellnode:bafkreiekjm47zsozizarxlcgak2d754gerzo3hdpufr5xjy2rk6dfvfdqy",
+        proof: "bafkreiekjm47zsozizarxlcgak2d754gerzo3hdpufr5xjy2rk6dfvfdqy",
         encrypted: "false",
         right: "",
       },
-      // TODO Correct for devnet 1st run but incorrect for Testnet - Confirm the questions on Notion.
       {
         id: `{id}#assessmentScore`,
         type: "ClaimSchema",
-        description: "Assessment Score Claim Schema",
+        description: "Assessment Score",
         mediaType: "application/json",
         serviceEndpoint:
-          "ipfs:bafkreie7e4y2ymofgeznbewfpmzab5vaisexuxi7zbq6gozqgqiinw6tfa",
-        proof: "bafkreie7e4y2ymofgeznbewfpmzab5vaisexuxi7zbq6gozqgqiinw6tfa",
+          "ipfs:bafkreiaywvy5ibuezmxwq7lhgfn4uucazvkpsp5k4wpbm46s4m5yvknwpy",
+        proof: "bafkreiaywvy5ibuezmxwq7lhgfn4uucazvkpsp5k4wpbm46s4m5yvknwpy",
+        encrypted: "false",
+        right: "",
+      },
+      {
+        id: `{id}#courseProgress`,
+        type: "ClaimSchema",
+        description: "Course Progress",
+        mediaType: "application/json",
+        serviceEndpoint:
+          "ipfs:bafkreihutnxli5illz5rurhsbdmibp5hghpn577rsj3sbjgxhu66llykm4",
+        proof: "bafkreihutnxli5illz5rurhsbdmibp5hghpn577rsj3sbjgxhu66llykm4",
+        encrypted: "false",
+        right: "",
+      },
+      {
+        id: `{id}#previousQualification`,
+        type: "ClaimSchema",
+        description: "Previous Qualification",
+        mediaType: "application/json",
+        serviceEndpoint:
+          "ipfs:bafkreifbnlsg7xexisrbyiv77daoz26hzxvc3rb7ztrrwgbk3vbtzm3fxm",
+        proof: "bafkreifbnlsg7xexisrbyiv77daoz26hzxvc3rb7ztrrwgbk3vbtzm3fxm",
+        encrypted: "false",
+        right: "",
+      },
+      {
+        id: `{id}#economicActivity`,
+        type: "ClaimSchema",
+        description: "Economic Activity",
+        mediaType: "application/json",
+        serviceEndpoint:
+          "ipfs:bafkreib3y7bnimwxfuk7jwlugqdhtrdwmyos5kqj37xdigaqjnnsqo3cii",
+        proof: "bafkreib3y7bnimwxfuk7jwlugqdhtrdwmyos5kqj37xdigaqjnnsqo3cii",
         encrypted: "false",
         right: "",
       },
@@ -264,7 +298,7 @@ export const setup_asset_collection_wafundaisa2023_constants = () => ({
         id: "{id}#page",
         description: "Page",
         mediaType: "application/ld+json",
-        serviceEndpoint: "ipfs:",
+        serviceEndpoint: "cellnode:",
         proof: "",
         encrypted: "false",
         right: "",
@@ -275,7 +309,7 @@ export const setup_asset_collection_wafundaisa2023_constants = () => ({
         id: "{id}#tags",
         description: "Tags",
         mediaType: "application/ld+json",
-        serviceEndpoint: "ipfs:",
+        serviceEndpoint: "cellnode:",
         proof: "",
         encrypted: "false",
         right: "",
@@ -320,7 +354,7 @@ export const setup_asset_collection_wafundaisa2023_constants = () => ({
         type: "ProjectCredential",
         description: "Project Document",
         mediaType: "application/pdf",
-        serviceEndpoint: `https://platform.sustain-cert.com/public-project/2710`,
+        serviceEndpoint: "https://platform.sustain-cert.com/public-project/2710",
         proof: "",
         encrypted: "false",
         right: "",

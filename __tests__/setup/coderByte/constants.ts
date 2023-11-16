@@ -27,36 +27,33 @@ export const setup_dao_constants = () => ({
     // if you have any other linked resources other than the ones below that will automatically
     // be uploaded to cellnode/w3s, you can pass them here
     linkedResources: [
-      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#profile",
         description: "Profile",
         mediaType: "application/ld+json",
-        serviceEndpoint: "ipfs:",
-        proof: "",
+        serviceEndpoint: "ipfs:bafkreia6oml4bshg4rwyrxwzggq25gdqzfaroxjpnir65jgezu55braoe4",
+        proof: "bafkreia6oml4bshg4rwyrxwzggq25gdqzfaroxjpnir65jgezu55braoe4",
         encrypted: "false",
         right: "",
       },
-      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#page",
         description: "Page",
         mediaType: "application/ld+json",
-        serviceEndpoint: "ipfs:",
-        proof: "",
+        serviceEndpoint: "cellnode:bafkreigj5k3q4z4wowsqjua6czufu6fp2zteijs34wy3bq3uujqfrvqgqm",
+        proof: "bafkreigj5k3q4z4wowsqjua6czufu6fp2zteijs34wy3bq3uujqfrvqgqm",
         encrypted: "false",
         right: "",
       },
-      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#tags",
         description: "Tags",
         mediaType: "application/ld+json",
-        serviceEndpoint: "ipfs:",
-        proof: "",
+        serviceEndpoint: "cellnode:bafkreidkkbp6wmilmy4d5jtt3ywjlfklcubnxm4mnmj3g2kupjl4sr6s3i",
+        proof: "bafkreidkkbp6wmilmy4d5jtt3ywjlfklcubnxm4mnmj3g2kupjl4sr6s3i",
         encrypted: "false",
         right: "",
       },
@@ -94,36 +91,33 @@ export const setup_oracle_education_constants = () => ({
     // if you have any other linked resources other than the ones below that will automatically
     // be uploaded to cellnode/w3s, you can pass them here
     linkedResources: [
-      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#profile",
         description: "Profile",
         mediaType: "application/ld+json",
-        serviceEndpoint: "ipfs:",
-        proof: "",
+        serviceEndpoint: "ipfs:bafkreia6oml4bshg4rwyrxwzggq25gdqzfaroxjpnir65jgezu55braoe4",
+        proof: "bafkreia6oml4bshg4rwyrxwzggq25gdqzfaroxjpnir65jgezu55braoe4",
         encrypted: "false",
         right: "",
       },
-      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#page",
         description: "Page",
         mediaType: "application/ld+json",
-        serviceEndpoint: "ipfs:",
-        proof: "",
+        serviceEndpoint: "cellnode:bafkreigkxr7h2dz6dmt2cd4z2hb3erakumxo22ihgo4iwpp35tv52qzlja",
+        proof: "bafkreigkxr7h2dz6dmt2cd4z2hb3erakumxo22ihgo4iwpp35tv52qzlja",
         encrypted: "false",
         right: "",
       },
-      // TODO need! Alwyn to edit after creation on devnet
       {
         type: "Settings",
         id: "{id}#tags",
         description: "Tags",
         mediaType: "application/ld+json",
-        serviceEndpoint: "ipfs:",
-        proof: "",
+        serviceEndpoint: "cellnode:bafkreicmp2qh2id7x3iys26dag45hyb6ii37f26qbxjndbgk5oemdd2zjq",
+        proof: "bafkreicmp2qh2id7x3iys26dag45hyb6ii37f26qbxjndbgk5oemdd2zjq",
         encrypted: "false",
         right: "",
       },
