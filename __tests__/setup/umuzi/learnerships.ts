@@ -2,28 +2,34 @@
 // TODO need ids and uplaod creds for devnet
 // Umuzi to provide ids - meanwhile, for devnet, increment from 1 to 30.
 export const learnershipIds = [
-  {
-    id: 1,
-    creds: "bafkreiajs3qllyt2a5dncp4d4jvawkcpm4tt6mezo5irm46xpd6iootmba",
-  },
-  {
-    id: 2,
-    creds: "bafkreie3aqz55jo6egn7ykgkvooa2hbihe7x25rjubveatfrgexeod3s5m",
-  },
-  {
-    id: 3,
-    creds: "bafkreibg3hrstq62kzehbu2unxxutprqok52shtnodok3kxw5wz3x3rifa",
-  },
-  {
-    id: 4,
-    creds: "bafkreig35lng2ymd5bvh7dgzvav7tiz525uartr2mzqzpxakb62ppfdbka",
-  },
-  {
-    id: 5,
-    creds: "bafkreibg5s5jjw2kmx2u24jhgcxr7dt5g3gy66m3eittg6e73oi3lfxlqi",
-  },
-  {
-    id: 6,
-    creds: "bafkreihvarhj36pljmovqc3s66y3kckbbnjaiu5enmi2lwsmvcibbynmf4",
-  },
+  { id: "5dac6733-1ef3-487f-ba69-af5266e13ee7", creds: "" },
+  { id: "a642969a-291a-48d6-9669-b5d793977341", creds: "" },
+  { id: "9f73c7ed-b4e0-4a8f-abd2-7f8c37e5a9f6", creds: "" },
+  { id: "c74d1e49-0884-440f-8a35-32e439c385af", creds: "" },
+  { id: "33a85e95-b4db-4792-aca4-4270e6da04cd", creds: "" },
+  { id: "ebde9f27-c13c-4c32-b968-903f6465efd3", creds: "" },
+  { id: "081698dd-c06e-43b4-9108-b4770841be5a", creds: "" },
+  { id: "bd4d419d-b7d0-4913-9fd4-59aa784031a4", creds: "" },
+  { id: "54415fd0-df22-46a0-a9c0-a18b08896388", creds: "" },
+  { id: "58c088c5-32c9-4596-89e7-9ee129df6409", creds: "" },
+  { id: "6a3946b3-e836-413d-bd8c-2db2753adc0b", creds: "" },
+  { id: "a3d7f9b4-36f5-4261-bc5a-367d45c335ed", creds: "" },
+  { id: "bdf2e028-e1d8-4026-ac03-c4f7d684991d", creds: "" },
+  { id: "fe9d1e8b-f1bd-449f-9e26-badabd23a7e9", creds: "" },
+  { id: "2c5a0c1a-ad3a-4ded-b881-b80f6e1a72c3", creds: "" },
+  { id: "615ea1ee-d459-4e96-9738-99a51731a92c", creds: "" },
+  { id: "233ed92b-e9fe-40d3-84f7-c7ba2f741414", creds: "" },
+  { id: "773c8458-3614-475d-a31e-5ef565ea4355", creds: "" },
+  { id: "2777785f-5f91-4a5e-9c01-e2570b4388af", creds: "" },
+  { id: "186e98ef-eebb-4468-a4d9-1782140ef304", creds: "" },
+  { id: "b94843dd-6e31-46e8-b9b5-10df209bcf42", creds: "" },
+  { id: "6745d804-9140-42de-a435-2c6680a114af", creds: "" },
+  { id: "f981b1b0-b3aa-4809-98d9-a939a99a2bf9", creds: "" },
+  { id: "04648d3b-4feb-457b-ab61-c4bafa0ef709", creds: "" },
+  { id: "ac627d73-3427-4a1d-b4dd-c44348a89bcd", creds: "" },
+  { id: "cb34a72e-687f-4403-a1ff-c68e9adbe57a", creds: "" },
+  { id: "75297b11-78c0-444d-b608-7b1707bf236a", creds: "" },
+  { id: "c4ae86dc-55fb-4e9f-ac3d-65484cb424c5", creds: "" },
+  { id: "5e775183-7e75-4ded-9dca-b632f88b8ea6", creds: "" },
+  { id: "1f9559f0-5882-4330-89be-22f706a78830", creds: "" },
 ];

@@ -37,6 +37,8 @@ umuziProtocolsFlow(); //emerging user
 
 // next create umuzi daos and save umuziDao did to ./constants.ts
 umuziDaoFlow(); //umuzi user
+// next create umuzi owned project and save umuziProjectDid did to ./constants.ts
+umuziProjectFlow(); //umuzi user
 // next create umuzi owned assetCollection etc and save assetCollectionDid did to ./constants.ts
 umuziFlow(); //ecs user
 // Will issue device creds and claims etc
@@ -45,9 +47,6 @@ sendTokens(5);
 
 // next create umuzi education asset and save educationAssetDid to ./constants.ts
 umuziAssetsFlow(); //umuzi user
-
-// next create umuzi owned project and save umuziProjectDid did to ./constants.ts
-umuziProjectFlow(); //umuzi user
 
 // next create learnerships
 learnershipsFlowDevnet(); //umuzi user

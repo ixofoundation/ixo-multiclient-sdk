@@ -641,14 +641,13 @@ export const CreateEntityAssetUmuziInstance = async (
           encrypted: "false",
           right: "",
         },
-        // TODO need this! Alwyn to edit after creation on devnet
         {
           id: `{id}#profile`,
           type: "Settings",
           description: "Profile",
           mediaType: "application/ld+json",
-          serviceEndpoint: "ipfs:",
-          proof: "",
+          serviceEndpoint: "ipfs:bafkreifmrku4sfl4nkly25ag4ojwsqzct2utf5yaus6hfsh2zsmhyjqxmq",
+          proof: "bafkreifmrku4sfl4nkly25ag4ojwsqzct2utf5yaus6hfsh2zsmhyjqxmq",
           encrypted: "false",
           right: "",
         },
