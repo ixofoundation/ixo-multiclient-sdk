@@ -1,5 +1,5 @@
 import Long from "long";
-import { createRegistry, utils } from "../../src";
+import { cosmos, createRegistry, utils } from "../../src";
 import { getUser, queryClient } from "../helpers/common";
 import { RPC_URL, WalletUsers } from "../helpers/constants";
 import { AuthInfo, TxBody } from "../../src/codegen/cosmos/tx/v1beta1/tx";
@@ -193,6 +193,17 @@ export const quickQueries = () =>
     //     proposalId: Long.fromNumber(69),
     //   });
     //   console.log(res.proposal);
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query proposal by id", async () => {
+    //   const res = await queryClient.cosmos.gov.v1beta1.proposals({
+    //     proposalStatus:
+    //       cosmos.gov.v1beta1.ProposalStatus.PROPOSAL_STATUS_UNSPECIFIED,
+    //     voter: "",
+    //     depositor: "",
+    //   });
+    //   console.log(res.pagination);
     //   expect(res).toBeTruthy();
     // });
 
