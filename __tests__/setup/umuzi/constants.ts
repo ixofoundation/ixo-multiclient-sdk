@@ -619,44 +619,7 @@ export const setup_asset_collection_wafundaisa2023_constants = () => ({
   ],
   // you can create linked claims that will be uploaded to the specified storage and resource will be saved
   // on entity linked claims with the cid as proof and service endpoint of provided storage.
-  // TODO add all 4
-  linkedClaims: [
-    {
-      name: "AssessmentScore",
-      description: "Assessment Score Claim",
-      type: "Learnership",
-      storage: "cellnode",
-      json: {
-        "@context": [
-          "https://w3id.org/ixo/context/v1",
-          {
-            ixo: "https://w3id.org/ixo/vocab/v1",
-            web3: "https://ipfs.io/ipfs/",
-            id: "@id",
-            type: "@type",
-            "@protected": true,
-          },
-        ],
-        id: "{id}#claims",
-        type: "ixo:Claims",
-        entityClaims: [
-          {
-            template: {
-              id: dids.learnershipProtocol + "#assessmentScore",
-              title: "Assessment Score Claim",
-              description:
-                "Result of any type of test e.g. Previous Qualification (The Learner's previous education and training), Aptitude Test (Results of the Learner's aptitude test taken during the application process), CoderBytes Tests (independent verification of learners skills).",
-            },
-            submissions: {
-              maximum: null,
-              startDate: "",
-              endDate: "",
-            },
-          },
-        ],
-      },
-    },
-  ],
+  linkedClaims: [],
 });
 
 export const setup_project_constants = () => ({
@@ -788,7 +751,44 @@ export const setup_project_constants = () => ({
   ],
   // you can create linked claims that will be uploaded to the specified storage and resource will be saved
   // on entity linked claims with the cid as proof and service endpoint of provided storage.
-  linkedClaims: [],
+  // TODO add all 4
+  linkedClaims: [
+    {
+      name: "AssessmentScore",
+      description: "Assessment Score Claim",
+      type: "Learnership",
+      storage: "cellnode",
+      json: {
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            web3: "https://ipfs.io/ipfs/",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
+        id: "{id}#claims",
+        type: "ixo:Claims",
+        entityClaims: [
+          {
+            template: {
+              id: dids.learnershipProtocol + "#assessmentScore",
+              title: "Assessment Score Claim",
+              description:
+                "Result of any type of test e.g. Previous Qualification (The Learner's previous education and training), Aptitude Test (Results of the Learner's aptitude test taken during the application process), CoderBytes Tests (independent verification of learners skills).",
+            },
+            submissions: {
+              maximum: null,
+              startDate: "",
+              endDate: "",
+            },
+          },
+        ],
+      },
+    },
+  ],
 });
 
 export const setup_education_asset_constants = () => ({
