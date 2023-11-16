@@ -37,11 +37,9 @@ IID.generateBlockchainTestUsers();
 // IID.iidReplaceLinkedResource();
 // IBC.ibcBasic();
 // Cosmos.govDeposit();
-// Cosmos.authzBasic();
 // CosmWasm.wasmBasic();
 // Cosmos.feegrantBasic();
 // Proposals.cwUploadProposal();
-// Queries.quickQueries();
 // Token.supamotoTokensFarm();
 // Token.supamotoTokensSendCARBON();
 // Claims.supamotoClaimsRedoRejected();
@@ -54,6 +52,10 @@ IID.generateBlockchainTestUsers();
 // Claims.supamotoEvaluateFuelPurchases();
 // Claims.supamotoCreateCollection();
 // Entity.transferEntities();
+// CosmWasm.daodaoAuthzExecute();
+// Cosmos.authzBasic();
+// Cosmos.textProposalBasic();
+// Queries.quickQueries();
 
 // ------------------------------------------
 // Run the below after a devnet reset
@@ -71,6 +73,7 @@ IID.generateBlockchainTestUsers();
 //
 // After daos is on devnet you can run the below
 // IID.registerIidsDev();
+// CosmWasm.multicallContract();
+// CosmWasm.devnetSwapContract_IXO_CARBON();
 // Token.supamotoTokens();
 // Claims.supamotoClaims();
-// CosmWasm.devnetSwapContract_IXO_CARBON();

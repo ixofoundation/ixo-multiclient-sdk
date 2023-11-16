@@ -15,6 +15,12 @@ import { ChainNetwork } from "../../src/custom_queries/chain.types";
 
 export const enititiesBasic = () =>
   describe("Testing the entities module", () => {
+    // beforeAll(() =>
+    //   Promise.all([
+    //     generateNewWallet(WalletUsers.tester, process.env.ROOT_IMPACTS),
+    //   ])
+    // );
+
     let entityDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14"; // admin account ixo1kqmtxkggcqa9u34lnr6shy0euvclgatw4f9zz5
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity asset", async () => {
       const res = await Entity.CreateEntity();

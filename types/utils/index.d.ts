@@ -3,6 +3,9 @@ import * as _6 from "./proto";
 export declare namespace utils {
     const conversions: {
         Uint8ArrayToJS(data: Uint8Array): string;
+        b64toUint8Array: (b64: string) => Uint8Array;
+        b64toJson: (b64: string) => any;
+        Uint8ArrayTob64: (u8: Uint8Array) => string;
         JsonToArray: (json: string) => Uint8Array;
         concatArrayBuffers: (...bufs: Uint8Array[]) => Uint8Array;
         jsonStringToBase64: (jsonString: string) => string;

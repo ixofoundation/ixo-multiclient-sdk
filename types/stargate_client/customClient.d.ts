@@ -1,7 +1,7 @@
 import { StdFee } from "@cosmjs/amino";
 import { EncodeObject, OfflineSigner, Registry } from "@cosmjs/proto-signing";
 import { AminoTypes, DeliverTxResponse, SignerData, GasPrice } from "@cosmjs/stargate";
-import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { BroadcastTxSyncResponse, Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { StargateClient, StargateClientOptions } from "./customStargateClient";
 import { LocalStoreFunctions } from "./store";
@@ -48,6 +48,8 @@ export declare class SigningStargateClient extends StargateClient {
      * (See the SigningStargateClient.offline constructor).
      */
     sign(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee, memo: string, explicitSignerData?: SignerData, txBodyBytes?: Uint8Array): Promise<TxRaw>;
+    getUsedFee(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee | "auto" | number, memo?: string, txBodyBytes?: Uint8Array): Promise<StdFee>;
+    tmBroadcastTxSync(tx: Uint8Array): Promise<BroadcastTxSyncResponse>;
     private signAmino;
     private signDirect;
 }

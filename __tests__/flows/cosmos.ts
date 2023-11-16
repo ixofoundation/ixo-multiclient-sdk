@@ -11,6 +11,7 @@ import * as Cosmos from "../modules/Cosmos";
 import * as Authz from "../modules/Authz";
 import { WalletUsers } from "../helpers/constants";
 import Long from "long";
+import { Grant } from "../../src/codegen/cosmos/authz/v1beta1/authz";
 
 export const bankBasic = () =>
   describe("Testing the cosmos bank module", () => {
@@ -26,8 +27,22 @@ export const bankBasic = () =>
     });
   });
 
+export const textProposalBasic = () =>
+  describe("Testing the cosmos gov module", () => {
+    testMsg("/cosmos.bank.v1beta1.MsgSubmitProposal", async () => {
+      const res = await Cosmos.MsgProposalText();
+      return res;
+    });
+  });
+
 export const authzBasic = () =>
   describe("Testing the cosmos bank module", () => {
+    // beforeAll(() =>
+    //   Promise.all([
+    //     generateNewWallet(WalletUsers.tester, process.env.ROOT_IMPACTS),
+    //   ])
+    // );
+
     testMsg("test Grant Send", async () => {
       const res = await Authz.MsgGrantSend();
       console.log(res);
@@ -45,6 +60,7 @@ export const authzBasic = () =>
     // );
 
     testMsg("test Exec Send", () => Authz.MsgExecSend(1000000));
+    // testMsg("test Exec Send", () => Authz.MsgExecSendIbc());
   });
 
 export const sendTokens = (rounds = 1) =>
@@ -71,7 +87,7 @@ export const sendTokens = (rounds = 1) =>
 
 export const govDeposit = () =>
   describe("Testing deposit funds into proposals", () => {
-    testMsg("/cosmos.bank.v1beta1.MsgDeposit", () => Cosmos.MsgDeposit(438));
+    testMsg("/cosmos.bank.v1beta1.MsgDeposit", () => Cosmos.MsgDeposit(69));
   });
 
 export const feegrantBasic = () =>
@@ -87,32 +103,40 @@ export const feegrantAllCurrentUsers = () =>
       const address = (await getUser(WalletUsers.tester).getAccounts())[0]
         .address;
 
-      const res = await queryClient.cosmos.feegrant.v1beta1.allowancesByGranter(
-        {
+      let allowances: any[] = [];
+      const query = async (key?: Uint8Array) =>
+        await queryClient.cosmos.feegrant.v1beta1.allowancesByGranter({
           granter: address,
           pagination: {
             // @ts-ignore
-            key: [],
-            // set limit to 1000 as currentl there are +-700 grantees
+            key: key || [],
             limit: Long.fromNumber(1000),
             offset: Long.fromNumber(0),
           },
-        }
-      );
+        });
+
+      let key: Uint8Array | undefined;
+      while (true) {
+        const res = await query(key);
+        allowances = [...allowances, ...res.allowances];
+        key = res.pagination?.nextKey || undefined;
+        if (!key?.length) break;
+      }
+      // console.log(allowances.length);
 
       // to save current grantee addresses incase something goes wrong
       // saveFileToPath(
       //   ["documents", "random", "mainnet_feegrant_addresses.json"],
       //   JSON.stringify(
-      //     res.allowances.map((a) => a.grantee),
+      //     allowances.map((a) => a.grantee),
       //     null,
       //     2
       //   )
       // );
 
-      // devide grantees (currently +-700) into chunks of 200
+      // devide grantees into chunks of 200
       let granteesChunks = chunkArray<string>(
-        res.allowances.map((a) => a.grantee),
+        allowances.map((a) => a.grantee),
         200
       );
 

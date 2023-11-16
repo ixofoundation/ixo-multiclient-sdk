@@ -1,9 +1,21 @@
 import { toBase64 } from "@cosmjs/encoding";
 
+export const b64toUint8Array = function (b64: string) {
+  return Uint8Array.from(Buffer.from(b64, "base64"));
+};
+
+export const b64toJson = function (b64: string) {
+  return JSON.parse(Buffer.from(b64, "base64").toString());
+};
+
+export const Uint8ArrayTob64 = function (u8: Uint8Array) {
+  var b64 = Buffer.from(u8).toString("base64");
+  return b64;
+};
+
 // JSON to Uint8Array parsing and visa versa
 export const JsonToArray = function (json: string) {
-  const ret = new Uint8Array(Buffer.from(json));
-  return ret;
+  return new Uint8Array(Buffer.from(json));
 };
 
 function Utf8ArrayToStr(array: Uint8Array) {

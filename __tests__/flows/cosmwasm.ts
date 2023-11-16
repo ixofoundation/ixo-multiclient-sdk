@@ -1,7 +1,7 @@
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import { OfflineSigner } from "@cosmjs/proto-signing";
 import { BroadcastTxSyncResponse } from "@cosmjs/tendermint-rpc";
-import { toHex } from "@cosmjs/encoding";
+import { toBase64, toHex } from "@cosmjs/encoding";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import {
   cosmos,
@@ -24,8 +24,10 @@ import {
 import * as Wasm from "../modules/CosmWasm";
 import * as Cosmos from "../modules/Cosmos";
 import * as Token from "../modules/Token";
+import * as Authz from "../modules/Authz";
 import { contracts } from "../../src/custom_queries/contract.constants";
 import { getSignerData } from "../../src/stargate_client/store";
+import { Uint8ArrayTob64, b64toJson } from "../../src/utils/conversions";
 
 export const wasmBasic = () =>
   describe("Testing the wasmd module", () => {
@@ -955,3 +957,371 @@ export const devnetSwapContract_IXO_CARBON = () => {
     );
   });
 };
+
+export const daodaoAuthzExecute = () =>
+  describe("Testing the Dao Core", () => {
+    const daoCoreContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "dao_core"
+    );
+    const daoProposalContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "dao_proposal_single"
+    );
+    const daoPreProposalContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "dao_pre_propose_single"
+    );
+    const daoVotingCw4ContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "dao_voting_cw4"
+    );
+    const cw4ContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "cw4_group"
+    );
+
+    let contractAddress =
+      "ixo1jdeq6fjlnqfa5kc76u65e6ud7nzxm884v5wzus7vrejl0fmrccvqshmd45";
+    let proposalContractAddress =
+      "ixo16j995dj88vx8wys4rqdyz7yug57w7vj4lwu6qydq842w40wtjclqxuqm0e";
+    let preProposalContractAddress =
+      "ixo1zkyy2znl6ys3weq0y83swkqs49m47k5hhpxfpqp4yz3xdc9eh0wsa59tg5";
+    let votingContractAddress =
+      "ixo1d6rp7vfccuy7dfa767wgk69e0l3gl6vn3z4cxlf3hkd0uxx43z5qjzn8ap";
+
+    // testMsg("test Grant Send", async () => {
+    //   return await Authz.MsgGrantSend();
+    // });
+
+    // testMsg("/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz", () =>
+    //   Entity.GrantEntityAccountAuthz(
+    //     "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
+    //     "admin"
+    //   )
+    // );
+
+    // testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract dao core", async () => {
+    //   const tester = (await getUser().getAccounts())[0].address;
+
+    //   const msg = {
+    //     admin: null,
+    //     automatically_add_cw20s: true,
+    //     automatically_add_cw721s: true,
+    //     description: "This is a test dao",
+    //     image_url:
+    //       "https://sienaconstruction.com/wp-content/uploads/2017/05/test-image.jpg",
+    //     name: "Test Dao",
+    //     proposal_modules_instantiate_info: [
+    //       {
+    //         admin: {
+    //           core_module: {},
+    //         },
+    //         code_id: daoProposalContractCode,
+    //         label: "DAO_Test Dao_DaoProposalSingle",
+    //         msg: utils.conversions.jsonToBase64({
+    //           allow_revoting: false,
+    //           close_proposal_on_execution_failure: true,
+    //           max_voting_period: {
+    //             time: 604800,
+    //           },
+    //           min_voting_period: null,
+    //           only_members_execute: true,
+    //           pre_propose_info: {
+    //             module_may_propose: {
+    //               info: {
+    //                 admin: {
+    //                   core_module: {},
+    //                 },
+    //                 code_id: daoPreProposalContractCode,
+    //                 label: "DAO_Test Dao_pre-propose-DaoProposalSingle",
+    //                 msg: utils.conversions.jsonToBase64({
+    //                   deposit_info: {
+    //                     amount: "1000000",
+    //                     denom: {
+    //                       token: {
+    //                         denom: {
+    //                           native: "uixo",
+    //                         },
+    //                       },
+    //                     },
+    //                     refund_policy: "only_passed",
+    //                   },
+    //                   extension: {},
+    //                   open_proposal_submission: false,
+    //                 }),
+    //               },
+    //             },
+    //           },
+    //           threshold: {
+    //             threshold_quorum: {
+    //               quorum: {
+    //                 percent: "0.20",
+    //               },
+    //               threshold: {
+    //                 majority: {},
+    //               },
+    //             },
+    //           },
+    //         }),
+    //       },
+    //     ],
+    //     voting_module_instantiate_info: {
+    //       admin: {
+    //         core_module: {},
+    //       },
+    //       code_id: daoVotingCw4ContractCode,
+    //       label: "DAO_Test Dao_DaoVotingCw4",
+    //       msg: utils.conversions.jsonToBase64({
+    //         cw4_group_code_id: cw4ContractCode,
+    //         initial_members: [
+    //           {
+    //             addr: tester,
+    //             weight: 1,
+    //           },
+    //         ],
+    //       }),
+    //     },
+    //   };
+    //   const res = await Wasm.WasmInstantiateTrx(
+    //     daoCoreContractCode!,
+    //     JSON.stringify(msg)
+    //   );
+    //   console.log("initialize::", res);
+    //   contractAddress = utils.common.getValueFromEvents(
+    //     res,
+    //     "instantiate",
+    //     "_contract_address"
+    //   );
+    //   console.log({ contractAddress });
+    //   return res;
+    // });
+
+    // test("query dao core contract: dump_state", async () => {
+    //   const msg = {
+    //     dump_state: {},
+    //   };
+    //   const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //     address: contractAddress,
+    //     queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+    //   });
+    //   const dumpState = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+    //   proposalContractAddress = dumpState.proposal_modules[0].address;
+    //   votingContractAddress = dumpState.voting_module;
+    //   console.log({ proposalContractAddress, votingContractAddress });
+    //   expect(res).toBeTruthy();
+    // });
+
+    test("query dao proposal contract: proposal_creation_policy", async () => {
+      const msg = {
+        proposal_creation_policy: {},
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: proposalContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const proposalCreationPolicy = JSON.parse(
+        utils.conversions.Uint8ArrayToJS(res.data)
+      );
+      preProposalContractAddress = proposalCreationPolicy.module.addr;
+      console.log({ preProposalContractAddress });
+      expect(res).toBeTruthy();
+    });
+
+    let proposalId = 8;
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal propose",
+      async () => {
+        const msg = {
+          propose: {
+            msg: {
+              propose: {
+                title: "Testing",
+                description: "Testing",
+                msgs: [
+                  {
+                    stargate: {
+                      type_url: "/cosmos.authz.v1beta1.MsgExec",
+                      value: Uint8ArrayTob64(
+                        cosmos.authz.v1beta1.MsgExec.encode({
+                          grantee: contractAddress,
+                          msgs: [
+                            {
+                              typeUrl: "/cosmos.bank.v1beta1.MsgSend",
+                              value: cosmos.bank.v1beta1.MsgSend.encode(
+                                cosmos.bank.v1beta1.MsgSend.fromPartial({
+                                  amount: [
+                                    cosmos.base.v1beta1.Coin.fromPartial({
+                                      amount: "1000000",
+                                      denom: "uixo",
+                                    }),
+                                  ],
+                                  fromAddress:
+                                    "ixo1n8yrmeatsk74dw0zs95ess9sgzptd6thgjgcj2",
+                                  toAddress:
+                                    "ixo19hunve4z9w8jwj8ac2xhvqgmmq4w6js7twyweh",
+                                })
+                              ).finish(),
+                            },
+                          ],
+                        }).finish()
+                      ),
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        };
+        console.dir({ msg }, { depth: null });
+
+        const res = await Wasm.WasmExecuteTrx(
+          preProposalContractAddress,
+          JSON.stringify(msg),
+          WalletUsers.tester,
+          { amount: "1000000", denom: "uixo" }
+        );
+        console.log("proposal", res);
+        return res;
+      }
+    );
+
+    // test("query dao proposal contract: reverse_proposals", async () => {
+    //   const msg = {
+    //     reverse_proposals: {},
+    //   };
+    //   const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //     address: proposalContractAddress,
+    //     queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+    //   });
+    //   const reverseProposals = JSON.parse(
+    //     utils.conversions.Uint8ArrayToJS(res.data)
+    //   );
+    //   proposalId = reverseProposals.proposals[0].id;
+    //   console.log({ proposalId });
+    //   expect(res).toBeTruthy();
+    // });
+
+    // testMsg(
+    //   "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal vote",
+    //   async () => {
+    //     const msg = {
+    //       vote: {
+    //         proposal_id: proposalId,
+    //         vote: "yes",
+    //       },
+    //     };
+    //     const res = await Wasm.WasmExecuteTrx(
+    //       proposalContractAddress,
+    //       JSON.stringify(msg)
+    //     );
+    //     console.log("vote", res);
+    //     return res;
+    //   }
+    // );
+
+    // test("query dao proposal contract: get_vote", async () => {
+    //   const tester = (await getUser().getAccounts())[0].address;
+    //   const msg = {
+    //     get_vote: {
+    //       proposal_id: proposalId,
+    //       voter: tester,
+    //     },
+    //   };
+    //   const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //     address: proposalContractAddress,
+    //     queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+    //   });
+    //   const vote = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+    //   console.log({ vote });
+    //   expect(res).toBeTruthy();
+    // });
+
+    // testMsg(
+    //   "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal execute",
+    //   async () => {
+    //     const msg = {
+    //       execute: {
+    //         proposal_id: proposalId,
+    //       },
+    //     };
+    //     const res = await Wasm.WasmExecuteTrx(
+    //       proposalContractAddress,
+    //       JSON.stringify(msg)
+    //     );
+    //     console.log("execute", res);
+    //     return res;
+    //   }
+    // );
+  });
+
+export const multicallContract = () =>
+  describe("Testing the multicallContract", () => {
+    let contractAddress =
+      "ixo1rrra808ggl30g27zdmp9ecc00u7le2tn5gunv86p8aa99jrc84qqk8dttm";
+
+    const multicallContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "multicall"
+    );
+
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract dao core", async () => {
+      const tester = (await getUser().getAccounts())[0].address;
+
+      const msg = {};
+      const res = await Wasm.WasmInstantiateTrx(
+        multicallContractCode!,
+        JSON.stringify(msg)
+      );
+      console.log("initialize::", res);
+      contractAddress = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ contractAddress });
+      return res;
+    });
+
+    // test("query dao core contract: dump_state", async () => {
+    //   const msg = {
+    //     aggregate: {
+    //       queries: [
+    //         {
+    //           address:
+    //             "ixo1jdeq6fjlnqfa5kc76u65e6ud7nzxm884v5wzus7vrejl0fmrccvqshmd45",
+    //           data: toBase64(
+    //             utils.conversions.JsonToArray(
+    //               JSON.stringify({ dump_state: {} })
+    //             )
+    //           ),
+    //         },
+    //         {
+    //           address:
+    //             "ixo16j995dj88vx8wys4rqdyz7yug57w7vj4lwu6qydq842w40wtjclqxuqm0e",
+    //           data: toBase64(
+    //             utils.conversions.JsonToArray(
+    //               JSON.stringify({ reverse_proposals: {} })
+    //             )
+    //           ),
+    //         },
+    //       ],
+    //     },
+    //   };
+    //   const multicallRes =
+    //     await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //       address: contractAddress,
+    //       queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+    //     });
+    //   const resParsed = JSON.parse(
+    //     utils.conversions.Uint8ArrayToJS(multicallRes.data)
+    //   );
+    //   const decoded = resParsed.return_data.map((e) => {
+    //     console.log(e);
+    //     return b64toJson(e.data);
+    //   });
+    //   console.dir(decoded, { depth: null });
+
+    //   expect(multicallRes).toBeTruthy();
+    // });
+  });
