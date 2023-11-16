@@ -151,8 +151,8 @@ export const CreateEntity = async (
       // since no groups at time of run no linkedEntities
       linkedEntity: entity.linkedEntity
         ? entity.linkedEntity.map((le) =>
-            ixo.iid.v1beta1.LinkedEntity.fromPartial(le)
-          )
+          ixo.iid.v1beta1.LinkedEntity.fromPartial(le)
+        )
         : undefined,
       ownerDid: did,
       startDate: utils.proto.toTimestamp(new Date()),
@@ -641,14 +641,13 @@ export const CreateEntityAssetUmuziInstance = async (
           encrypted: "false",
           right: "",
         },
-        // TODO need this! Alwyn to edit after creation on devnet. Name: "Tech Talents"
         {
           id: `{id}#profile`,
           type: "Settings",
           description: "Profile",
           mediaType: "application/ld+json",
-          serviceEndpoint: "ipfs:",
-          proof: "",
+          serviceEndpoint: "ipfs:bafkreifmrku4sfl4nkly25ag4ojwsqzct2utf5yaus6hfsh2zsmhyjqxmq",
+          proof: "bafkreifmrku4sfl4nkly25ag4ojwsqzct2utf5yaus6hfsh2zsmhyjqxmq",
           encrypted: "false",
           right: "",
         },
