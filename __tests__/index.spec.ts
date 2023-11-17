@@ -66,6 +66,9 @@ IID.generateBlockchainTestUsers();
 // immidiately, and wait for all proposals to pass then run below
 //
 // After all proposals have passed, run
+// CosmWasm.multicallContract();
+//
+// After the contract constants is generated, run below
 // -  `yarn test:supamoto` to create all base daos and entities for emerging and ecs,
 // -  `yarn test:umuzi` to create all base daos and entities for yoma and umuzi (Dont run yet!!!!!),
 // please ensure to have the env vars set for dao root users and ed key users. For devnet restart
@@ -73,7 +76,6 @@ IID.generateBlockchainTestUsers();
 //
 // After daos is on devnet you can run the below
 // IID.registerIidsDev();
-// CosmWasm.multicallContract();
-// CosmWasm.devnetSwapContract_IXO_CARBON();
 // Token.supamotoTokens();
+// CosmWasm.devnetSwapContract_IXO_CARBON();
 // Claims.supamotoClaims();

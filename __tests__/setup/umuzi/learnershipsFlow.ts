@@ -70,9 +70,9 @@ export const learnershipsFlow = () =>
                 throw new Error("error saving device creds file");
 
               const res = await Entity.CreateEntityAssetUmuziInstance(
-                dids.assetCollection,
+                dids.umuziAssetCollection,
                 [{ deviceId: id, index, deviceCreds }],
-                dids.emergingDao
+                dids.yomaDao
               );
               const nftAssetDid = utils.common.getValueFromEvents(
                 res,
@@ -124,15 +124,14 @@ export const learnershipsFlowDevnet = () =>
             }`
           );
           try {
-            // TODO update the function CreateEntityAssetUmuziInstance with correct values
             const res = await Entity.CreateEntityAssetUmuziInstance(
-              dids.assetCollection,
+              dids.umuziAssetCollection,
               ids.map((e, ind) => ({
                 deviceId: e.id,
                 index: index + ind,
                 deviceCreds: e.creds,
               })),
-              dids.emergingDao
+              dids.yomaDao
             );
 
             index = index + chunkSize;

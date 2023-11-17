@@ -138,7 +138,8 @@ export const devnetProposals = () =>
           contractPaths.slice(12, 16),
           contractPaths.slice(16, 20),
           contractPaths.slice(20, 24),
-          contractPaths.slice(24),
+          contractPaths.slice(24, 28),
+          contractPaths.slice(28),
         ];
 
         let i: number;

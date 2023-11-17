@@ -795,7 +795,7 @@ export const devnetSwapContract_IXO_CARBON = () => {
     );
 
     let contractAddress1155 =
-      "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
+      "ixo1xr3rq8yvd7qplsw5yx90ftsr2zdhg4e9z60h5duusgxpv72hud3sq0mjl6";
 
     let tokenIds: string[] = [];
     test("Query token ids", async () => {
