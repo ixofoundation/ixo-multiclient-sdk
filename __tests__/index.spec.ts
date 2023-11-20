@@ -62,7 +62,7 @@ IID.generateBlockchainTestUsers();
 // ------------------------------------------
 // Proposals.devnetProposals();
 //
-// first run above devnetProposals, the run initcontracts.sh on dev server
+// first run above devnetProposals, the run 'bash initcontracts.sh' on dev server
 // immidiately, and wait for all proposals to pass then run below
 //
 // After all proposals have passed, run

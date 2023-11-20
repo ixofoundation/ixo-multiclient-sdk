@@ -194,9 +194,9 @@ export const supamotoClaims = () =>
     testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
       // add wait according to chunk index for ipfs rate limit
       console.log(
-        "waiting 10 mintues as blocksync needs 5 minutes to load all ipfs files for entity external Ids"
+        "waiting 5 mintues as blocksync needs 5 minutes to load all ipfs files for entity external Ids"
       );
-      await timeout(1000 * 60 * 10);
+      await timeout(1000 * 60 * 5);
 
       const res = await Claims.CreateCollectionSupamotoGenesis(
         dids.assetCollection,

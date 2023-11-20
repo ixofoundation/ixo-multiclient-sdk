@@ -162,7 +162,7 @@ export const devnetProposals = () =>
                 c.name,
                 c.path,
                 signer,
-                ii * 0.5
+                ii * 0.75
               );
             })
           );
