@@ -319,6 +319,18 @@ export const supamotoTokensFarm = () =>
       );
       const allEntities = collections.data[0].entities;
 
+      // helpers to get a number of stove ids
+      // const ent100 = allEntities
+      //   .map((e: any) => ({ id: e.id, type: e.type }))
+      //   .slice(0, 100);
+      // console.log("ent100", ent100.length);
+      // saveFileToPath(
+      //   ["documents", "emerging", "100entities.json"],
+      //   JSON.stringify(ent100, null, 2)
+      // );
+      // const haha = true;
+      // if (haha) throw new Error("haha");
+
       const farm = false;
       const topup = false;
       const chunkSize = 40;

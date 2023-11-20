@@ -167,7 +167,7 @@ export const contracts = [
     category: "ixo",
     code: { devnet: 28, testnet: 28, mainnet: 28 },
     address: {
-      devnet: "",
+      devnet: "ixo19zpp643ax9sf7zxzjswcfy03kqk4hrxjr9yt0u4skyl879vzhvuqgegng0",
       testnet: "ixo17hgwjxmz70ks6v5u2ay2maqf8anrpmleu0p4vyqw88s3sflwv7fqgz8j0f",
       mainnet: "ixo1d7d83gktpdlq0w0y0wtq6qd6yzp5jv744sz9dspluedvlxln23pq4ld8hc",
     },

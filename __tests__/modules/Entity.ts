@@ -51,7 +51,11 @@ export const CreateEntity = async (
     }),
   };
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
   return response;
 };
 
@@ -80,7 +84,15 @@ export const TransferEntity = async (
   }));
 
   // console.log({ myAddress });
-  const response = await client.signAndBroadcast(myAddress, messages, fee);
+  const response = await client.signAndBroadcast(
+    myAddress,
+    messages,
+    getFee(
+      messages.length,
+      await client.simulate(myAddress, messages, undefined)
+    ),
+    "ECS to Sigma"
+  );
   return response;
 };
 
@@ -118,7 +130,11 @@ export const UpdateEntity = async (data: {
     }),
   };
 
-  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
   return response;
 };
 
@@ -146,7 +162,7 @@ export const UpdateEntityVerified = async (
   const response = await client.signAndBroadcast(
     myAddress,
     messages,
-    getFee(messages.length)
+    getFee(1, await client.simulate(myAddress, messages, undefined))
   );
   return response;
 };
@@ -169,7 +185,11 @@ export const CreateEntityAccount = async (
     }),
   };
 
-  const response = await client.signAndBroadcast(tester, [message], fee);
+  const response = await client.signAndBroadcast(
+    tester,
+    [message],
+    getFee(1, await client.simulate(tester, [message], undefined))
+  );
   return response;
 };
 
@@ -208,7 +228,11 @@ export const GrantEntityAccountAuthz = async (
     }),
   };
 
-  const response = await client.signAndBroadcast(tester, [message], fee);
+  const response = await client.signAndBroadcast(
+    tester,
+    [message],
+    getFee(1, await client.simulate(tester, [message], undefined))
+  );
   return response;
 };
 export function CreateEntityAssetSupamotoInstance(

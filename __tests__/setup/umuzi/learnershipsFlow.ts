@@ -18,7 +18,7 @@ export const learnershipsFlow = () =>
 
     // Create a batch of Asset entities for the individual Umuzi assets
     let assetsFailed: any[] = [];
-    let assetInstanceDids: { id: number; did: string }[] = [];
+    let assetInstanceDids: { id: string; did: string }[] = [];
     let index = 1;
 
     learnershipIds
@@ -69,11 +69,10 @@ export const learnershipsFlow = () =>
               if (!deviceCreds)
                 throw new Error("error saving device creds file");
 
-              // TODO update the function CreateEntityAssetUmuziInstance with correct values
               const res = await Entity.CreateEntityAssetUmuziInstance(
-                dids.assetCollection,
+                dids.umuziAssetCollection,
                 [{ deviceId: id, index, deviceCreds }],
-                dids.emergingDao
+                dids.yomaDao
               );
               const nftAssetDid = utils.common.getValueFromEvents(
                 res,
@@ -111,7 +110,7 @@ export const learnershipsFlowDevnet = () =>
     setAndLedgerUser(process.env.ROOT_UMUZI!);
 
     // Create a batch of Asset entities for the individual Umuzi assets
-    let assetsFailed: number[] = [];
+    let assetsFailed: string[] = [];
     let index = 1;
 
     const chunkSize = 100;
@@ -120,19 +119,19 @@ export const learnershipsFlowDevnet = () =>
         `/ixo.entity.v1beta1.MsgCreateEntity asset instance`,
         async () => {
           console.log(
-            `/ixo.entity.v1beta1.MsgCreateEntity asset instance index:${index}-${index + chunkSize - 1
+            `/ixo.entity.v1beta1.MsgCreateEntity asset instance index:${index}-${
+              index + chunkSize - 1
             }`
           );
           try {
-            // TODO update the function CreateEntityAssetUmuziInstance with correct values
             const res = await Entity.CreateEntityAssetUmuziInstance(
-              dids.assetCollection,
+              dids.umuziAssetCollection,
               ids.map((e, ind) => ({
                 deviceId: e.id,
                 index: index + ind,
                 deviceCreds: e.creds,
               })),
-              dids.emergingDao
+              dids.yomaDao
             );
 
             index = index + chunkSize;
