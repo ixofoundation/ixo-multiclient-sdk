@@ -66,33 +66,27 @@ export const iidReplaceLinkedResource = () =>
     //       "https://w3id.org/ixo/context/v1",
     //       {
     //         ixo: "https://w3id.org/ixo/vocab/v1",
+    //         web3: "https://ipfs.io/ipfs/",
     //         id: "@id",
     //         type: "@type",
     //         "@protected": true,
     //       },
     //     ],
-    //     id: "{id}#tags",
-    //     type: "ixo:Tags",
-    //     settings:
-    //       "https://github.com/emerging-eco/configs/blob/main/settings/config.json",
-    //     entityTags: [
+    //     id: "{id}#claims",
+    //     type: "ixo:Claims",
+    //     entityClaims: [
     //       {
-    //         category: "Project Type",
-    //         tags: ["Decarbonisation"],
-    //       },
-    //       {
-    //         category: "SDG",
-    //         tags: [
-    //           "SDG13 – Climate Action",
-    //           "SDG7 – Affordable and Clean Energy",
-    //           "SDG9 – Industry, Innovation and Infrastructure",
-    //           "SDG3 – Good Health and Well-being",
-    //           "SDG5 – Gender Equality",
-    //         ],
-    //       },
-    //       {
-    //         category: "Stage",
-    //         tags: ["Delivery"],
+    //         template: {
+    //           id: "did:ixo:entity:9dc2f06bf379c922d2aa8703ba276bc3#CER",
+    //           title: "Carbon Emission Reduction",
+    //           description:
+    //             "Claimed Amount of Carbon Emissions reduced through the use of an energy-efficient clean cookstove.",
+    //         },
+    //         submissions: {
+    //           maximum: null,
+    //           startDate: "",
+    //           endDate: "",
+    //         },
     //       },
     //     ],
     //   };
@@ -110,7 +104,7 @@ export const iidReplaceLinkedResource = () =>
     // });
 
     testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
-      const entityDid = dids.carbonOracle;
+      const entityDid = dids.legacyCollection;
       const resource = ixo.iid.v1beta1.LinkedResource.fromPartial({
         type: "Settings",
         id: "{id}#profile",
@@ -128,6 +122,25 @@ export const iidReplaceLinkedResource = () =>
 
       return remove as any;
     });
+
+    // testMsg("/ixo.iid.v1beta1.AddLinkedClaim", async () => {
+    //   const entityDid = dids.legacyCollection;
+    //   const resource = ixo.iid.v1beta1.LinkedClaim.fromPartial({
+    //     type: "Procurement",
+    //     id: "{id}#FuelPurchases",
+    //     description: "Fuel Purchase Claim",
+    //     serviceEndpoint:
+    //       "cellnode:/public/bafkreigmu5bvvoyibnqg4hwppasyr3briuknhgdagy5filwmpjvse3epfq",
+    //     proof: "bafkreigmu5bvvoyibnqg4hwppasyr3briuknhgdagy5filwmpjvse3epfq",
+    //     encrypted: "false",
+    //     right: "",
+    //   });
+
+    //   const remove = await Iid.DeleteLinkedClaim(entityDid, resource.id);
+    //   const add = await Iid.AddLinkedClaim(entityDid, resource);
+
+    //   return remove as any;
+    // });
 
     // testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
     //   const getResource = (externalId: string) =>
@@ -181,6 +194,16 @@ export const iidReplaceLinkedResource = () =>
     //     })
     //   )
     // );
+
+    // testMsg("/ixo.iid.v1beta1.AddLinkedEntity Project", async () => {
+    //   const resource = ixo.iid.v1beta1.LinkedEntity.fromPartial({
+    //     id: "ixo1lgelskjkjjasl860n6kmevlflanqj5vh8l8p5w",
+    //     type: "MemberDAO",
+    //     relationship: "member",
+    //     service: "",
+    //   });
+    //   return await Iid.AddLinkedEntity(dids.impactsDao, resource);
+    // });
   });
 
 // ------------------------------------------------------------

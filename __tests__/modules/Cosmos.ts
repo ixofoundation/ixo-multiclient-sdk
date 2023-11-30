@@ -13,7 +13,7 @@ import {
 import Long from "long";
 
 export const BankSendTrx = async (
-  amount = Math.pow(10, 8),
+  amount = Math.pow(10, 10),
   fromUser = WalletUsers.alice,
   toUser = WalletUsers.tester,
   fromWalletKeyType: KeyTypes = "secp",

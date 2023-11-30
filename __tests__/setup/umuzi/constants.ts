@@ -463,7 +463,6 @@ export const setup_asset_collection_wafundaisa2023_constants = () => ({
     // please use Impact DAO's did as relayerNode eg dids.impactsDao
     relayerNode: dids.yomaDao,
     // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass
-    // TODO confirm with Shaun project is parent
     contextClass: dids.umuziProjectDid,
     // can add a also know ass if want
     alsoKnownAs: "",
@@ -660,7 +659,14 @@ export const setup_project_constants = () => ({
         right: "",
       },
     ],
-    linkedEntity: [],
+    linkedEntity: [
+      {
+        id: dids.umuziDao,
+        type: "dao",
+        relationship: "implementation",
+        service: "ixo",
+      },
+    ],
   },
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.

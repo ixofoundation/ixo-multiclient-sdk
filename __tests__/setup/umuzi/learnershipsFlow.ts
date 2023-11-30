@@ -6,7 +6,7 @@ import {
   testMsg,
   utils,
 } from "../../helpers/common";
-import * as Entity from "../Entity";
+import * as EntityUmuzi from "./Entity";
 import { UmuziCredentialsWorkerUrl, dids, chainNetwork } from "../constants";
 import { setAndLedgerUser } from "../helpers";
 import axios from "axios";
@@ -69,7 +69,7 @@ export const learnershipsFlow = () =>
               if (!deviceCreds)
                 throw new Error("error saving device creds file");
 
-              const res = await Entity.CreateEntityAssetUmuziInstance(
+              const res = await EntityUmuzi.CreateEntityAssetUmuziInstance(
                 dids.umuziAssetCollection,
                 [{ deviceId: id, index, deviceCreds }],
                 dids.yomaDao
@@ -124,7 +124,7 @@ export const learnershipsFlowDevnet = () =>
             }`
           );
           try {
-            const res = await Entity.CreateEntityAssetUmuziInstance(
+            const res = await EntityUmuzi.CreateEntityAssetUmuziInstance(
               dids.umuziAssetCollection,
               ids.map((e, ind) => ({
                 deviceId: e.id,

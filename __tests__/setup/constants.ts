@@ -3,10 +3,10 @@
 
 import { ChainNetwork } from "../../src/custom_queries/chain.types";
 
-export const chainNetwork: ChainNetwork = "devnet";
-
 // DEVNET
 // ========================================
+export const chainNetwork: ChainNetwork = "devnet";
+
 export const dids = {
   impactsRootUserDid: "did:x:zQ3shj4dPHhbsSXYcmsZLoDkiPJxkHhWYZpihWSQn95fuos2y",
   daoClass: "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14",
@@ -23,6 +23,8 @@ export const dids = {
   assetCollection: "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
   carbonAsset: "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
   ecsProject: "did:ixo:entity:29198b8a823e183a5e84d7ebf2f0febd",
+  legacyCookingProtocol: "did:ixo:entity:8ad0c5568aea9632db56a846a7112353",
+  legacyCollection: "did:ixo:entity:f645a3221d05eba19fefb31f1025f3af",
   // Yoma/Umuzi
   yomaDao: "did:ixo:entity:50a7d92f449ab5752f63c64521adb3cc",
   coderByteDao: "did:ixo:entity:8abd3503cbf6717393478117b8df4e6e",
@@ -36,6 +38,7 @@ export const dids = {
 
 export const adminEntityAccounts = {
   assetCollection: "ixo19e74tjy6gdwt0hjj6ph6xgtjhuulgqkzk8xaj4",
+  legacyCollection: "ixo1kaluffrp0ncy3dlrerla3nd8v6zxwzmega3v7g",
 };
 
 // export const EcsCredentialsWorkerUrl = "http://localhost:3000/";
@@ -50,6 +53,8 @@ export const UmuziCredentialsWorkerUrl =
 
 // TESTNET
 // ========================================
+// export const chainNetwork: ChainNetwork = "testnet";
+
 // export const dids = {
 //   impactsRootUserDid: "did:x:zQ3shj4dPHhbsSXYcmsZLoDkiPJxkHhWYZpihWSQn95fuos2y",
 //   daoClass: "did:ixo:entity:8e8fc81e088154de379474db2f0aa2a9",
@@ -66,10 +71,13 @@ export const UmuziCredentialsWorkerUrl =
 //   assetCollection: "did:ixo:entity:7f0cc7a072d514b38cb90bdf2e215901",
 //   carbonAsset: "did:ixo:entity:af96d8449eb5297a8b0812844374e0e2",
 //   ecsProject: "did:ixo:entity:d9de4952c41124e453f260cfd2c7774a",
+//   legacyCookingProtocol: "did:ixo:entity:9dc2f06bf379c922d2aa8703ba276bc3",
+//   legacyCollection: "did:ixo:entity:314d8d02428debb5584d975910797121",
 // };
 
 // export const adminEntityAccounts = {
 //   assetCollection: "ixo1rm68f38tv9dl2gne6599y3vz4hfa6f74tgcnha",
+//   legacyCollection: "ixo1xwc3mty6jyqrzfjpqsrhtpcfz57798phfg8y6s",
 // };
 
 // export const EcsCredentialsWorkerUrl =
@@ -81,6 +89,8 @@ export const UmuziCredentialsWorkerUrl =
 
 // MAINNET
 // ========================================
+// export const chainNetwork: ChainNetwork = "mainnet";
+
 // export const dids = {
 //   impactsRootUserDid: "did:x:zQ3shdTvZuRtsRbdUY1ocoRJ6tSUqQGVFgwhpGApkEs3T3G9M",
 //   daoClass: "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14",
@@ -97,10 +107,13 @@ export const UmuziCredentialsWorkerUrl =
 //   assetCollection: "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
 //   carbonAsset: "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
 //   ecsProject: "did:ixo:entity:b3839c8bccf7ecff3cb6822869bb0d81",
+//   legacyCookingProtocol: "",
+//   legacyCollection: "",
 // };
 
 // export const adminEntityAccounts = {
 //   assetCollection: "ixo19e74tjy6gdwt0hjj6ph6xgtjhuulgqkzk8xaj4",
+//   legacyCollection: "",
 // };
 
 // export const EcsCredentialsWorkerUrl = "https://ecs.credentials.ixo.world/";

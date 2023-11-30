@@ -1,0 +1,53 @@
+{
+  "assetInstanceDids": [
+    {
+      "id": "310022765",
+      "did": "did:ixo:entity:3241029511655c09c7be5296b23d3e91"
+    },
+    {
+      "id": "310022943",
+      "did": "did:ixo:entity:0cac52e2011874cefc6c078a6e5c0f1b"
+    },
+    {
+      "id": "310025146",
+      "did": "did:ixo:entity:f794f8f78d283508834dc73808104785"
+    },
+    {
+      "id": "310025149",
+      "did": "did:ixo:entity:03b6153faeb426519cf789d16e88834a"
+    },
+    {
+      "id": "310025380",
+      "did": "did:ixo:entity:4b0a5a1febb817ce67af6eed096573fe"
+    },
+    {
+      "id": "310028747",
+      "did": "did:ixo:entity:1c016e94a3ab9fdabfe09d872755cc5a"
+    },
+    {
+      "id": "310028941",
+      "did": "did:ixo:entity:2cc36345010cc4f7292c079c141924e4"
+    },
+    {
+      "id": "310029895",
+      "did": "did:ixo:entity:4fb3d51c6e8451e0651a91d980e57242"
+    },
+    {
+      "id": "310030615",
+      "did": "did:ixo:entity:60b3e2f4ea28791f72431094619497b5"
+    },
+    {
+      "id": "310032103",
+      "did": "did:ixo:entity:930d0c462f0fdd96228532e2db8a418e"
+    },
+    {
+      "id": "310032354",
+      "did": "did:ixo:entity:bdbdc1973b937eb4f317c5cf5134745d"
+    },
+    {
+      "id": "310032520",
+      "did": "did:ixo:entity:3e553a228f7fc25680818a1927b7700f"
+    }
+  ],
+  "assetsFailed": []
+}

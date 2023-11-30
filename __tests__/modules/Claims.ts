@@ -416,7 +416,7 @@ export const CreateCollectionSupamotoGenesis = async (
   paymentsAccount: string,
   signer: WalletUsers = WalletUsers.tester,
   evaluatePayment = {
-    amount: "5000000",
+    amount: "500000",
     denom: "uixo",
   }
 ) => {
