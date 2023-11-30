@@ -22,6 +22,7 @@ export const bankBasic = () =>
         WalletUsers.alice,
         "secp",
         "secp"
+        // "ixo1kaluffrp0ncy3dlrerla3nd8v6zxwzmega3v7g"
       );
       return res;
     });

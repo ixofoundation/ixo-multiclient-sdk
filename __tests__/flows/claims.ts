@@ -502,16 +502,16 @@ export const supamotoClaims2 = () =>
         else purchaseData[k].sort((a, b) => a.time_paid - b.time_paid);
       });
 
-      console.dir(
-        {
-          amountOfStoves: Object.keys(purchaseData).length,
-          amountOfPurchases: Object.values(purchaseData).flat(1).length,
-          amountOfPurchasesPerDevice: Object.values(purchaseData).map(
-            (v: any) => v.length
-          ),
-        },
-        { depth: null }
-      );
+      // console.dir(
+      //   {
+      //     amountOfStoves: Object.keys(purchaseData).length,
+      //     amountOfPurchases: Object.values(purchaseData).flat(1).length,
+      //     amountOfPurchasesPerDevice: Object.values(purchaseData).map(
+      //       (v: any) => v.length
+      //     ),
+      //   },
+      //   { depth: null }
+      // );
       const amounts = Object.values(purchaseData)
         .flat(1)
         .map((p: any) => Number(p.Mass));
@@ -561,10 +561,14 @@ export const supamotoClaims2 = () =>
 
       for (const stovePurchases of purchaseData) {
         index++;
-        if (index !== 0) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
+        // if (index <= 22) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
         console.log(
-          "starting batch " + (index + 1) + " of " + purchaseData.length
+          "starting batch " + index + " of " + (purchaseData.length - 1)
         );
+        // saveFileToPath(
+        //   ["documents", "emerging", "fuelPurchases_batches.json"],
+        //   JSON.stringify(stovePurchases, null, 2)
+        // );
         // add wait for ipfs rate limit
         if (index) await timeout(1000 * 30);
 
@@ -655,12 +659,13 @@ export const supamotoClaims2 = () =>
 // ------------------------------------------------------------
 export const supamotoEvaluateFuelPurchases = () =>
   describe("Testing the Claims module", () => {
-    // const blocksyncUrl = "https://devnet-blocksync.ixo.earth";
-    const blocksyncUrl = "https://blocksync-pandora.ixo.earth";
+    const blocksyncUrl = "https://devnet-blocksync.ixo.earth";
+    // const blocksyncUrl = "https://blocksync-pandora.ixo.earth";
+    const collectionId = "2";
 
     test("Evaluate FuelPurchase claims", async () => {
       const res = await axios.get(
-        `${blocksyncUrl}/api/claims/collection/1/claims?status=0&type=FuelPurchase&take=3000&orderBy=asc`
+        `${blocksyncUrl}/api/claims/collection/${collectionId}/claims?status=0&type=FuelPurchase&take=3000&orderBy=asc`
       );
       if (res.status !== 200)
         throw new Error("Failed to fetch claims" + res.statusText);
@@ -672,7 +677,7 @@ export const supamotoEvaluateFuelPurchases = () =>
         const fpEvaluations = await axios.post(
           ProspectCredentialsWorkerUrl + "claims/evaluate",
           {
-            collectionId: "1",
+            collectionId: collectionId,
             evaluations: fpClaimIdsChunk.map((id) => ({
               claimId: id,
               reason: 1,
