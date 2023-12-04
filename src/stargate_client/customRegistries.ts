@@ -106,6 +106,10 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
     "/cosmos.vesting.v1beta1.MsgCreatePermanentLockedAccount",
     cosmos.vesting.v1beta1.MsgCreatePermanentLockedAccount,
   ],
+  [
+    "/cosmos.vesting.v1beta1.ContinuousVestingAccount",
+    cosmos.vesting.v1beta1.ContinuousVestingAccount,
+  ],
 
   // slashing
   ["/cosmos.slashing.v1beta1.MsgUnjail", cosmos.slashing.v1beta1.MsgUnjail],
