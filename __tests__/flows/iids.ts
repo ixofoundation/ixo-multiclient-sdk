@@ -52,7 +52,7 @@ export const registerIids = () =>
 export const iidReplaceLinkedResource = () =>
   describe("Testing the iid module", () => {
     beforeAll(() =>
-      generateNewWallet(WalletUsers.tester, process.env.ROOT_EMERGING!)
+      generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS!)
     );
 
     // test("upload file to cellnode", async () => {
@@ -103,22 +103,36 @@ export const iidReplaceLinkedResource = () =>
     //   return expect(true).toBeTruthy();
     // });
 
-    testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
+    // testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
+    //   const entityDid = dids.legacyCollection;
+    //   const resource = ixo.iid.v1beta1.LinkedResource.fromPartial({
+    //     type: "Settings",
+    //     id: "{id}#profile",
+    //     description: "Profile",
+    //     mediaType: "application/ld+json",
+    //     serviceEndpoint:
+    //       "ipfs:bafkreidspm2panubcmtt4cybpggdiqeup4lfd7qlhsqr4kbqsvat2ui4yy",
+    //     proof: "bafkreidspm2panubcmtt4cybpggdiqeup4lfd7qlhsqr4kbqsvat2ui4yy",
+    //     encrypted: "false",
+    //     right: "",
+    //   });
+
+    //   const remove = await Iid.DeleteLinkedResource(entityDid, resource.id);
+    //   const add = await Iid.AddLinkedResource(entityDid, resource);
+
+    //   return remove as any;
+    // });
+
+    testMsg("/ixo.iid.v1beta1.MsgAddService", async () => {
       const entityDid = dids.legacyCollection;
-      const resource = ixo.iid.v1beta1.LinkedResource.fromPartial({
-        type: "Settings",
-        id: "{id}#profile",
-        description: "Profile",
-        mediaType: "application/ld+json",
-        serviceEndpoint:
-          "ipfs:bafkreidspm2panubcmtt4cybpggdiqeup4lfd7qlhsqr4kbqsvat2ui4yy",
-        proof: "bafkreidspm2panubcmtt4cybpggdiqeup4lfd7qlhsqr4kbqsvat2ui4yy",
-        encrypted: "false",
-        right: "",
+      const resource = ixo.iid.v1beta1.Service.fromPartial({
+        id: "{id}#cellnode",
+        type: "Cellnode",
+        serviceEndpoint: "https://cellnode-pandora.ixo.earth",
       });
 
-      const remove = await Iid.DeleteLinkedResource(entityDid, resource.id);
-      const add = await Iid.AddLinkedResource(entityDid, resource);
+      const remove = await Iid.DeleteService(entityDid, resource.id);
+      const add = await Iid.AddService(entityDid, resource);
 
       return remove as any;
     });

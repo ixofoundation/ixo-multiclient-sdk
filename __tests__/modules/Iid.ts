@@ -16,6 +16,7 @@ import {
   LinkedEntity,
   Context,
   LinkedClaim,
+  Service,
 } from "../../src/codegen/ixo/iid/v1beta1/types";
 
 export const CreateIidDoc = async (
@@ -537,23 +538,25 @@ export const DeleteLinkedClaim = async (did?: string, claimId?: string) => {
   return response;
 };
 
-export const AddService = async () => {
+export const AddService = async (did?: string, service?: Service) => {
   const client = await createClient();
 
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const userDid = tester.did;
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgAddService",
     value: ixo.iid.v1beta1.MsgAddService.fromPartial({
-      id: did,
-      serviceData: ixo.iid.v1beta1.Service.fromPartial({
-        id: constants.serviceId,
-        serviceEndpoint: "https://ixo.world",
-        type: "awesome",
-      }),
+      id: did || userDid,
+      serviceData:
+        service ||
+        ixo.iid.v1beta1.Service.fromPartial({
+          id: constants.serviceId,
+          serviceEndpoint: "https://ixo.world",
+          type: "awesome",
+        }),
       signer: myAddress,
     }),
   };
@@ -562,19 +565,19 @@ export const AddService = async () => {
   return response;
 };
 
-export const DeleteService = async () => {
+export const DeleteService = async (did?: string, serviceId?: string) => {
   const client = await createClient();
 
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const userDid = tester.did;
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgDeleteService",
     value: ixo.iid.v1beta1.MsgDeleteService.fromPartial({
-      id: did,
-      serviceId: constants.serviceId,
+      id: did || userDid,
+      serviceId: serviceId || constants.serviceId,
       signer: myAddress,
     }),
   };

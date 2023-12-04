@@ -78,6 +78,14 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
+    // test("Query ibc stuff", async () => {
+    //   const res = await queryClient.ibc.applications.transfer.v1.denomTrace({
+    //     hash: "6BBE9BD4246F8E04948D5A4EEE7164B2630263B9EBB5E7DC5F0A46C62A2FF97B",
+    //   });
+    //   console.dir(res.denomTrace, { depth: null });
+    //   expect(res).toBeTruthy();
+    // });
+
     // test("Query cosmos.tx.v1beta1.getTx", async () => {
     //   const res = await queryClient.cosmos.tx.v1beta1.getTx({
     //     hash: "11CDBCF0E51D5FF185C7B0BB5921C006310F4B4FC53E8C3C1237192B88C91D6A",

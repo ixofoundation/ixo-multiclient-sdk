@@ -5,51 +5,51 @@ import { ChainNetwork } from "../../src/custom_queries/chain.types";
 
 // DEVNET
 // ========================================
-export const chainNetwork: ChainNetwork = "devnet";
+// export const chainNetwork: ChainNetwork = "devnet";
 
-export const dids = {
-  impactsRootUserDid: "did:x:zQ3shj4dPHhbsSXYcmsZLoDkiPJxkHhWYZpihWSQn95fuos2y",
-  daoClass: "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14",
-  oracleClass: "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b",
-  protocolClass: "did:ixo:entity:61392c571ef644d54d77e4daf611bf89",
-  assetClass: "did:ixo:entity:4d94f9b6078432648a755203eed50644",
-  impactsDao: "did:ixo:entity:2f22535f8b179a51d77a0e302e68d35d",
-  emergingDao: "did:ixo:entity:72a27013b1d2f9c3561145e4a424778a",
-  carbonOracle: "did:ixo:entity:7889238a0a6a68554f65f5c7da96f13b",
-  cleanCookingProtocol: "did:ixo:entity:8fcbc757e75c120dd4beae0e5696fd38",
-  prospectDao: "did:ixo:entity:8e8fc81e088154de379474db2f0aa2a9",
-  prospectOracle: "did:ixo:entity:f2235630689d4b54a561ca3de57494f6",
-  ecsDao: "did:ixo:entity:a1fcead81eab2f1158a726597d872413",
-  assetCollection: "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
-  carbonAsset: "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
-  ecsProject: "did:ixo:entity:29198b8a823e183a5e84d7ebf2f0febd",
-  legacyCookingProtocol: "did:ixo:entity:8ad0c5568aea9632db56a846a7112353",
-  legacyCollection: "did:ixo:entity:f645a3221d05eba19fefb31f1025f3af",
-  // Yoma/Umuzi
-  yomaDao: "did:ixo:entity:50a7d92f449ab5752f63c64521adb3cc",
-  coderByteDao: "did:ixo:entity:8abd3503cbf6717393478117b8df4e6e",
-  coderByteOracle: "did:ixo:entity:23bc6e04fea6d884b4efc8a0f31bb740",
-  learnershipProtocol: "did:ixo:entity:0c12012217e08d3da96d33c85e09b9ad",
-  umuziDao: "did:ixo:entity:0fb18fbac5f4e18c75ced2f23a021fe9",
-  umuziProjectDid: "did:ixo:entity:b3104e1a5ffcbee06007d29525f3e07b",
-  umuziAssetCollection: "did:ixo:entity:3e7253499daf46aab546ab7d2b884bde",
-  educationAssetDid: "did:ixo:entity:4af7faf72e47f4b91a38750cb6e359a7",
-};
+// export const dids = {
+//   impactsRootUserDid: "did:x:zQ3shj4dPHhbsSXYcmsZLoDkiPJxkHhWYZpihWSQn95fuos2y",
+//   daoClass: "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14",
+//   oracleClass: "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b",
+//   protocolClass: "did:ixo:entity:61392c571ef644d54d77e4daf611bf89",
+//   assetClass: "did:ixo:entity:4d94f9b6078432648a755203eed50644",
+//   impactsDao: "did:ixo:entity:2f22535f8b179a51d77a0e302e68d35d",
+//   emergingDao: "did:ixo:entity:72a27013b1d2f9c3561145e4a424778a",
+//   carbonOracle: "did:ixo:entity:7889238a0a6a68554f65f5c7da96f13b",
+//   cleanCookingProtocol: "did:ixo:entity:8fcbc757e75c120dd4beae0e5696fd38",
+//   prospectDao: "did:ixo:entity:8e8fc81e088154de379474db2f0aa2a9",
+//   prospectOracle: "did:ixo:entity:f2235630689d4b54a561ca3de57494f6",
+//   ecsDao: "did:ixo:entity:a1fcead81eab2f1158a726597d872413",
+//   assetCollection: "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
+//   carbonAsset: "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
+//   ecsProject: "did:ixo:entity:29198b8a823e183a5e84d7ebf2f0febd",
+//   legacyCookingProtocol: "did:ixo:entity:8ad0c5568aea9632db56a846a7112353",
+//   legacyCollection: "did:ixo:entity:f645a3221d05eba19fefb31f1025f3af",
+//   // Yoma/Umuzi
+//   yomaDao: "did:ixo:entity:50a7d92f449ab5752f63c64521adb3cc",
+//   coderByteDao: "did:ixo:entity:8abd3503cbf6717393478117b8df4e6e",
+//   coderByteOracle: "did:ixo:entity:23bc6e04fea6d884b4efc8a0f31bb740",
+//   learnershipProtocol: "did:ixo:entity:0c12012217e08d3da96d33c85e09b9ad",
+//   umuziDao: "did:ixo:entity:0fb18fbac5f4e18c75ced2f23a021fe9",
+//   umuziProjectDid: "did:ixo:entity:b3104e1a5ffcbee06007d29525f3e07b",
+//   umuziAssetCollection: "did:ixo:entity:3e7253499daf46aab546ab7d2b884bde",
+//   educationAssetDid: "did:ixo:entity:4af7faf72e47f4b91a38750cb6e359a7",
+// };
 
-export const adminEntityAccounts = {
-  assetCollection: "ixo19e74tjy6gdwt0hjj6ph6xgtjhuulgqkzk8xaj4",
-  legacyCollection: "ixo1kaluffrp0ncy3dlrerla3nd8v6zxwzmega3v7g",
-};
+// export const adminEntityAccounts = {
+//   assetCollection: "ixo19e74tjy6gdwt0hjj6ph6xgtjhuulgqkzk8xaj4",
+//   legacyCollection: "ixo1kaluffrp0ncy3dlrerla3nd8v6zxwzmega3v7g",
+// };
 
-// export const EcsCredentialsWorkerUrl = "http://localhost:3000/";
-export const EcsCredentialsWorkerUrl =
-  "https://ecs.credentials.devnet.ixo.earth/";
-export const ProspectCredentialsWorkerUrl =
-  "https://prospect.credentials.devnet.ixo.earth/";
-export const CarbonCredentialsWorkerUrl =
-  "https://carbon.credentials.devnet.ixo.earth/";
-export const UmuziCredentialsWorkerUrl =
-  "https://umuzi.credentials.devnet.ixo.earth/";
+// // export const EcsCredentialsWorkerUrl = "http://localhost:3000/";
+// export const EcsCredentialsWorkerUrl =
+//   "https://ecs.credentials.devnet.ixo.earth/";
+// export const ProspectCredentialsWorkerUrl =
+//   "https://prospect.credentials.devnet.ixo.earth/";
+// export const CarbonCredentialsWorkerUrl =
+//   "https://carbon.credentials.devnet.ixo.earth/";
+// export const UmuziCredentialsWorkerUrl =
+//   "https://umuzi.credentials.devnet.ixo.earth/";
 
 // TESTNET
 // ========================================
@@ -89,34 +89,34 @@ export const UmuziCredentialsWorkerUrl =
 
 // MAINNET
 // ========================================
-// export const chainNetwork: ChainNetwork = "mainnet";
+export const chainNetwork: ChainNetwork = "mainnet";
 
-// export const dids = {
-//   impactsRootUserDid: "did:x:zQ3shdTvZuRtsRbdUY1ocoRJ6tSUqQGVFgwhpGApkEs3T3G9M",
-//   daoClass: "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14",
-//   oracleClass: "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b",
-//   protocolClass: "did:ixo:entity:61392c571ef644d54d77e4daf611bf89",
-//   assetClass: "did:ixo:entity:4d94f9b6078432648a755203eed50644",
-//   impactsDao: "did:ixo:entity:2f22535f8b179a51d77a0e302e68d35d",
-//   emergingDao: "did:ixo:entity:72a27013b1d2f9c3561145e4a424778a",
-//   carbonOracle: "did:ixo:entity:7889238a0a6a68554f65f5c7da96f13b",
-//   cleanCookingProtocol: "did:ixo:entity:8fcbc757e75c120dd4beae0e5696fd38",
-//   prospectDao: "did:ixo:entity:8e8fc81e088154de379474db2f0aa2a9",
-//   prospectOracle: "did:ixo:entity:f2235630689d4b54a561ca3de57494f6",
-//   ecsDao: "did:ixo:entity:a1fcead81eab2f1158a726597d872413",
-//   assetCollection: "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
-//   carbonAsset: "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
-//   ecsProject: "did:ixo:entity:b3839c8bccf7ecff3cb6822869bb0d81",
-//   legacyCookingProtocol: "",
-//   legacyCollection: "",
-// };
+export const dids = {
+  impactsRootUserDid: "did:x:zQ3shdTvZuRtsRbdUY1ocoRJ6tSUqQGVFgwhpGApkEs3T3G9M",
+  daoClass: "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14",
+  oracleClass: "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b",
+  protocolClass: "did:ixo:entity:61392c571ef644d54d77e4daf611bf89",
+  assetClass: "did:ixo:entity:4d94f9b6078432648a755203eed50644",
+  impactsDao: "did:ixo:entity:2f22535f8b179a51d77a0e302e68d35d",
+  emergingDao: "did:ixo:entity:72a27013b1d2f9c3561145e4a424778a",
+  carbonOracle: "did:ixo:entity:7889238a0a6a68554f65f5c7da96f13b",
+  cleanCookingProtocol: "did:ixo:entity:8fcbc757e75c120dd4beae0e5696fd38",
+  prospectDao: "did:ixo:entity:8e8fc81e088154de379474db2f0aa2a9",
+  prospectOracle: "did:ixo:entity:f2235630689d4b54a561ca3de57494f6",
+  ecsDao: "did:ixo:entity:a1fcead81eab2f1158a726597d872413",
+  assetCollection: "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
+  carbonAsset: "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
+  ecsProject: "did:ixo:entity:b3839c8bccf7ecff3cb6822869bb0d81",
+  legacyCookingProtocol: "did:ixo:entity:f4427ae632de60a6f7ed47f46da32fa2",
+  legacyCollection: "did:ixo:entity:9f8749d749af260d185f3df6f2206b63",
+};
 
-// export const adminEntityAccounts = {
-//   assetCollection: "ixo19e74tjy6gdwt0hjj6ph6xgtjhuulgqkzk8xaj4",
-//   legacyCollection: "",
-// };
+export const adminEntityAccounts = {
+  assetCollection: "ixo19e74tjy6gdwt0hjj6ph6xgtjhuulgqkzk8xaj4",
+  legacyCollection: "ixo14x5r6stdxua49tc90jngj7k7xuwhgp9vlm5tc8",
+};
 
-// export const EcsCredentialsWorkerUrl = "https://ecs.credentials.ixo.world/";
-// export const ProspectCredentialsWorkerUrl = "";
-// export const CarbonCredentialsWorkerUrl =
-//   "https://carbon.credentials.ixo.world/";
+export const EcsCredentialsWorkerUrl = "https://ecs.credentials.ixo.world/";
+export const ProspectCredentialsWorkerUrl = "";
+export const CarbonCredentialsWorkerUrl =
+  "https://carbon.credentials.ixo.world/";

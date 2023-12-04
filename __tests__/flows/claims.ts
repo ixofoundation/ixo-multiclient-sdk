@@ -466,7 +466,7 @@ export const supamotoClaims2 = () =>
       ])
     );
 
-    const collectionId = "2";
+    const collectionId = "8";
 
     test("Generate Fuel Purchase claims and evaluate them", async () => {
       let purchaseData = await csvtojsonV2().fromFile(
@@ -551,7 +551,7 @@ export const supamotoClaims2 = () =>
       // if (test) throw new Error("stop");
 
       // devide payments per device into 50 devices at a time
-      purchaseData = chunkArray<any[]>(Object.values(purchaseData), 30);
+      purchaseData = chunkArray<any[]>(Object.values(purchaseData), 10);
       let stovePurchasesAll: any[] = [];
       let index = -1;
 
@@ -561,7 +561,7 @@ export const supamotoClaims2 = () =>
 
       for (const stovePurchases of purchaseData) {
         index++;
-        // if (index <= 22) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
+        if (index <= 45) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
         console.log(
           "starting batch " + index + " of " + (purchaseData.length - 1)
         );
@@ -659,9 +659,9 @@ export const supamotoClaims2 = () =>
 // ------------------------------------------------------------
 export const supamotoEvaluateFuelPurchases = () =>
   describe("Testing the Claims module", () => {
-    const blocksyncUrl = "https://devnet-blocksync.ixo.earth";
-    // const blocksyncUrl = "https://blocksync-pandora.ixo.earth";
-    const collectionId = "2";
+    // const blocksyncUrl = "https://devnet-blocksync.ixo.earth";
+    const blocksyncUrl = "https://blocksync-pandora.ixo.earth";
+    const collectionId = "8";
 
     test("Evaluate FuelPurchase claims", async () => {
       const res = await axios.get(

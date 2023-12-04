@@ -128,4 +128,4 @@ beforeAll(() => Promise.all([createQueryClient(), generateWallets(false)]));
 // // Create claims and after done run carbon manager
 // Claims.supamotoClaims2();
 // extra for evaluating any missed claims
-Claims.supamotoEvaluateFuelPurchases();
+// Claims.supamotoEvaluateFuelPurchases();
