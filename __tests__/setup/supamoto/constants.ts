@@ -8,7 +8,7 @@ export const setup_asset_collection_constants = () => ({
     // please use Impact DAO's did as relayerNode eg dids.impactsDao
     relayerNode: dids.emergingDao,
     // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass
-    contextClass: dids.assetClass,
+    contextClass: dids.ecsProject,
     // can add a also know ass if want
     alsoKnownAs: "",
     // you can remove/add more services
@@ -82,16 +82,6 @@ export const setup_asset_collection_constants = () => ({
       //   encrypted: "false",
       //   right: "#legal",
       // },
-      {
-        id: "{id}#projectCredential",
-        type: "ProjectCredential",
-        description: "Project Document",
-        mediaType: "application/pdf",
-        serviceEndpoint: `https://platform.sustain-cert.com/public-project/2710`,
-        proof: "",
-        encrypted: "false",
-        right: "",
-      },
       // Getting added after did creation as need did
       // {
       //   id: "{id}#collectionDashboard",
@@ -277,6 +267,16 @@ export const setup_project_constants = () => ({
         serviceEndpoint:
           "ipfs:bafkreidxr2qme6pk7rlr7d5wfryficamojruualqqvue7vxlmce42nxjbq",
         proof: "bafkreidxr2qme6pk7rlr7d5wfryficamojruualqqvue7vxlmce42nxjbq",
+        encrypted: "false",
+        right: "",
+      },
+      {
+        id: "{id}#projectCredential",
+        type: "ProjectCredential",
+        description: "Project Document",
+        mediaType: "application/pdf",
+        serviceEndpoint: `https://platform.sustain-cert.com/public-project/2710`,
+        proof: "",
         encrypted: "false",
         right: "",
       },

@@ -3,7 +3,7 @@ require("dotenv").config();
 import { ChainNetwork } from "../../../src/custom_queries/chain.types";
 import { sendTokens } from "../../flows/cosmos";
 import { relayerVerifyAllEntities } from "../../flows/entities";
-import { generateWallets } from "../../helpers/common";
+import { createQueryClient, generateWallets } from "../../helpers/common";
 import { coderbyteFlow } from "../../setup/coderByte/setupFlow";
 import { dids } from "../../setup/constants";
 import {
@@ -21,7 +21,7 @@ import {
 import { web3Storage } from "../../setup/web3";
 import { chainNetwork } from "../../setup/constants";
 
-beforeAll(() => generateWallets(false));
+beforeAll(() => Promise.all([createQueryClient(), generateWallets(false)]));
 
 // Setup flow for Umuzi dao and assets
 // ------------------------------------------

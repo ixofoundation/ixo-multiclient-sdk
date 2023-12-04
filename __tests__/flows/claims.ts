@@ -25,6 +25,7 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 import { cookstoveIds } from "../setup/supamoto/stoves";
 import { assertIsDeliverTxSuccess } from "@cosmjs/stargate";
+import { legacyCookstoveIds } from "../setup/emerging/extra";
 
 axiosRetry(axios, {
   retries: 3,
@@ -465,31 +466,23 @@ export const supamotoClaims2 = () =>
       ])
     );
 
-    let purchaseData: any;
+    const collectionId = "8";
+
     test("Generate Fuel Purchase claims and evaluate them", async () => {
-      const purchaseDataOld = await csvtojsonV2().fromFile(
-        "./assets/documents/emerging/payments.csv"
-      );
-      const purchaseDataOldTrxIds = purchaseDataOld.map(
-        (p) => p.telco_transaction_id
-      );
-      purchaseData = await csvtojsonV2().fromFile(
-        "./assets/documents/emerging/payments2.csv"
+      let purchaseData = await csvtojsonV2().fromFile(
+        "./assets/documents/emerging/payments3.csv"
       );
 
       // remove any duplicate transactions by transaction id
       purchaseData = Object.values(
         purchaseData.reduce((aggObj, item) => {
-          // if purchase on old list then skip, already claimed
-          if (purchaseDataOldTrxIds.includes(item.CRM_Transaction_IDs))
-            return aggObj;
-
-          if (!aggObj[item.CRM_Transaction_IDs])
-            aggObj[item.CRM_Transaction_IDs] = {
+          if (!aggObj[item.Transaction_ID])
+            aggObj[item.Transaction_ID] = {
               ...item,
               // Custom date transformation to match json schema format
               time_paid: new Date(
-                item.Date.replaceAll("/", "-").replace(" ", "T") + "Z"
+                item.Transaction_date.replaceAll("/", "-").replace(" ", "T") +
+                  "Z"
               ),
             };
           return aggObj;
@@ -503,29 +496,28 @@ export const supamotoClaims2 = () =>
         return aggObj;
       }, {});
 
-      // remove all stoveIds that id not in const list and sort device purchases according to time_paid
-      const allCookstoveIds = cookstoveIds.map((c) => c.id);
       Object.keys(purchaseData).forEach((k) => {
-        if (!allCookstoveIds.includes(Number(k))) delete purchaseData[k];
+        // if deviceId not in legacy cookstoves remove
+        if (!legacyCookstoveIds.includes(k)) delete purchaseData[k];
         else purchaseData[k].sort((a, b) => a.time_paid - b.time_paid);
       });
 
-      console.dir(
-        {
-          amountOfStoves: Object.keys(purchaseData).length,
-          amountOfPurchases: Object.values(purchaseData).flat(1).length,
-          amountOfPurchasesPerDevice: Object.values(purchaseData).map(
-            (v: any) => v.length
-          ),
-        },
-        { depth: null }
-      );
+      // console.dir(
+      //   {
+      //     amountOfStoves: Object.keys(purchaseData).length,
+      //     amountOfPurchases: Object.values(purchaseData).flat(1).length,
+      //     amountOfPurchasesPerDevice: Object.values(purchaseData).map(
+      //       (v: any) => v.length
+      //     ),
+      //   },
+      //   { depth: null }
+      // );
       const amounts = Object.values(purchaseData)
         .flat(1)
-        .map((p: any) => Number(p.Total_Kgs));
+        .map((p: any) => Number(p.Mass));
       const amountsKgs = Object.values(purchaseData)
         .flat(1)
-        .map((p: any) => Number(p.Total_Kgs) * 10.94);
+        .map((p: any) => Number(p.Mass) * 10.94);
       saveFileToPath(
         ["documents", "emerging", "fuelPurchases_dev_test.json"],
         JSON.stringify(
@@ -553,12 +545,13 @@ export const supamotoClaims2 = () =>
           2
         )
       );
-      const test = true;
-      if (test) throw new Error("stop");
+
+      // helper to stop flow if just want the above data
+      // const test = true;
+      // if (test) throw new Error("stop");
 
       // devide payments per device into 50 devices at a time
-      // ==============================================================
-      purchaseData = chunkArray<any[]>(Object.values(purchaseData), 20);
+      purchaseData = chunkArray<any[]>(Object.values(purchaseData), 10);
       let stovePurchasesAll: any[] = [];
       let index = -1;
 
@@ -568,10 +561,14 @@ export const supamotoClaims2 = () =>
 
       for (const stovePurchases of purchaseData) {
         index++;
-        // if (index !== 8) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
+        if (index <= 45) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
         console.log(
-          "starting batch " + (index + 1) + " of " + purchaseData.length
+          "starting batch " + index + " of " + (purchaseData.length - 1)
         );
+        // saveFileToPath(
+        //   ["documents", "emerging", "fuelPurchases_batches.json"],
+        //   JSON.stringify(stovePurchases, null, 2)
+        // );
         // add wait for ipfs rate limit
         if (index) await timeout(1000 * 30);
 
@@ -580,18 +577,20 @@ export const supamotoClaims2 = () =>
           EcsCredentialsWorkerUrl + "claims/create",
           {
             type: "fuelPurchase",
-            collectionId: "1",
+            collectionId: collectionId,
             storage: "cellnode",
             generate: {
               type: "FuelPurchaseSupamotoZambia",
               data: stovePurchases.flat(1).map((p: any) => ({
-                id: p.CRM_Transaction_IDs, // transaction id
-                provider: p.Wallet_Operator, // transaction provider
+                id: p.Transaction_ID, // transaction id
+                provider: p.Telco, // transaction provider
                 currency: "ZMW", // transaction currency
-                value: Number(p.Transaction_Amount), // transaction value
+                value: Number(p.Amount), // transaction value
                 dateTime: p.time_paid, // transaction date time
-                amount: Number(p.Total_Kgs), // amount pellets that bought in kg
+                amount: Number(p.Mass), // amount pellets that bought in kg
                 deviceId: p.Device_ID, // device id
+                protocolDid: dids.legacyCookingProtocol, // custom protocol
+                projectDid: dids.ecsProject, // custom project
               })),
             },
           },
@@ -609,28 +608,28 @@ export const supamotoClaims2 = () =>
         );
 
         // evaluate fuelPurchase claims
-        // const fpEvaluations = await axios.post(
-        //   ProspectCredentialsWorkerUrl + "claims/evaluate",
-        //   {
-        //     collectionId: "1",
-        //     evaluations: fpClaimIds.map((id) => ({
-        //       claimId: id,
-        //       reason: 1,
-        //       status: ixo.claims.v1beta1.EvaluationStatus.APPROVED,
-        //       oracle: dids.prospectOracle,
-        //       verificationProof: "proof",
-        //     })),
-        //   },
-        //   {
-        //     headers: {
-        //       Authorization: process.env.PROSPECT_CREDENTIAL_WORKER_AUTH,
-        //     },
-        //   }
-        // );
-        // assertIsDeliverTxSuccess(fpEvaluations.data);
-        // console.log(
-        //   fpClaimIds.length + " FuelPurchase claims successfully evaluated"
-        // );
+        const fpEvaluations = await axios.post(
+          ProspectCredentialsWorkerUrl + "claims/evaluate",
+          {
+            collectionId: collectionId,
+            evaluations: fpClaimIds.map((id) => ({
+              claimId: id,
+              reason: 1,
+              status: ixo.claims.v1beta1.EvaluationStatus.APPROVED,
+              oracle: dids.prospectOracle,
+              verificationProof: "proof",
+            })),
+          },
+          {
+            headers: {
+              Authorization: process.env.PROSPECT_CREDENTIAL_WORKER_AUTH,
+            },
+          }
+        );
+        assertIsDeliverTxSuccess(fpEvaluations.data);
+        console.log(
+          fpClaimIds.length + " FuelPurchase claims successfully evaluated"
+        );
 
         // save fuelPurchase claim ids per purchase
         stovePurchases.forEach((ps: any[], i) => {
@@ -662,10 +661,11 @@ export const supamotoEvaluateFuelPurchases = () =>
   describe("Testing the Claims module", () => {
     // const blocksyncUrl = "https://devnet-blocksync.ixo.earth";
     const blocksyncUrl = "https://blocksync-pandora.ixo.earth";
+    const collectionId = "8";
 
     test("Evaluate FuelPurchase claims", async () => {
       const res = await axios.get(
-        `${blocksyncUrl}/api/claims/collection/1/claims?status=0&type=FuelPurchase&take=3000&orderBy=asc`
+        `${blocksyncUrl}/api/claims/collection/${collectionId}/claims?status=0&type=FuelPurchase&take=3000&orderBy=asc`
       );
       if (res.status !== 200)
         throw new Error("Failed to fetch claims" + res.statusText);
@@ -677,7 +677,7 @@ export const supamotoEvaluateFuelPurchases = () =>
         const fpEvaluations = await axios.post(
           ProspectCredentialsWorkerUrl + "claims/evaluate",
           {
-            collectionId: "1",
+            collectionId: collectionId,
             evaluations: fpClaimIdsChunk.map((id) => ({
               claimId: id,
               reason: 1,
@@ -913,23 +913,31 @@ export const supamotoCreateCollection = () =>
           WalletUsers.charlie,
           process.env.ASSERT_USER_CARBON_ORACLE
         ),
+        generateNewWallet(
+          WalletUsers.bob,
+          process.env.ASSERT_USER_PROSPECT_ORACLE
+        ),
       ])
     );
+
+    const collection = dids.legacyCollection;
+    const collectionAdminAccount = adminEntityAccounts.legacyCollection;
+    const protocol = dids.legacyCookingProtocol;
 
     let collectionId = "1";
     testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
       const res = await Claims.CreateCollectionSupamotoGenesis(
-        dids.assetCollection,
-        dids.cleanCookingProtocol,
-        adminEntityAccounts.assetCollection,
-        WalletUsers.tester,
+        collection,
+        protocol,
+        collectionAdminAccount,
+        WalletUsers.tester
         // testnet using 99 uosmo ibc (ibc/376222D6D9DAE23092E29740E56B758580935A6D77C24C2ABD57A6A78A1F3955) per evaluation
         // mainnet using 990000 uusdc ibc (ibc/6BBE9BD4246F8E04948D5A4EEE7164B2630263B9EBB5E7DC5F0A46C62A2FF97B) per evaluation
-        {
-          amount: "990000",
-          denom:
-            "ibc/6BBE9BD4246F8E04948D5A4EEE7164B2630263B9EBB5E7DC5F0A46C62A2FF97B",
-        }
+        // {
+        //   amount: "990000",
+        //   denom:
+        //     "ibc/6BBE9BD4246F8E04948D5A4EEE7164B2630263B9EBB5E7DC5F0A46C62A2FF97B",
+        // }
       );
       collectionId = utils.common.getValueFromEvents(
         res,
@@ -944,9 +952,9 @@ export const supamotoCreateCollection = () =>
     // ECS can submit claims
     testMsg("/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent submit", () =>
       Claims.GrantEntityAccountClaimsSubmitAuthz(
-        dids.assetCollection,
+        collection,
         "admin",
-        adminEntityAccounts.assetCollection,
+        collectionAdminAccount,
         collectionId,
         999999999,
         false,
@@ -959,14 +967,30 @@ export const supamotoCreateCollection = () =>
       "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent evaluate",
       () =>
         Claims.GrantEntityAccountClaimsEvaluateAuthzSupamoto(
-          dids.assetCollection,
+          collection,
           "admin",
-          adminEntityAccounts.assetCollection,
+          collectionAdminAccount,
           collectionId,
           [],
           999999999,
           false,
           WalletUsers.charlie
+        )
+    );
+
+    // Prospect can evaluate
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent evaluate",
+      () =>
+        Claims.GrantEntityAccountClaimsEvaluateAuthzSupamoto(
+          collection,
+          "admin",
+          collectionAdminAccount,
+          collectionId,
+          [],
+          999999999,
+          false,
+          WalletUsers.bob
         )
     );
   });

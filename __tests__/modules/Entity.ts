@@ -162,7 +162,10 @@ export const UpdateEntityVerified = async (
   const response = await client.signAndBroadcast(
     myAddress,
     messages,
-    getFee(1, await client.simulate(myAddress, messages, undefined))
+    getFee(
+      messages.length,
+      await client.simulate(myAddress, messages, undefined)
+    )
   );
   return response;
 };

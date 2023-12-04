@@ -8,6 +8,7 @@ import {
   setup_protocol_learnership_constants,
 } from "./constants";
 import * as Entity from "../Entity";
+import * as EntityUmuzi from "./Entity";
 import * as Iid from "../../modules/Iid";
 import {
   setAndLedgerUser,
@@ -122,7 +123,7 @@ export const umuziFlow = () =>
 
       // Create the Entity
       // TODO update the function CreateUmuziAssetCollection with correct values
-      const res = await Entity.CreateUmuziAssetCollection(
+      const res = await EntityUmuzi.CreateUmuziAssetCollection(
         collectionConst.entity,
         linkedResourcesUploaded,
         linkedClaimsUploaded

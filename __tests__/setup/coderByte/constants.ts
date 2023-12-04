@@ -135,7 +135,7 @@ export const setup_oracle_education_constants = () => ({
     // please use Impact DAO's did as relayerNode eg dids.impactsDao
     relayerNode: dids.yomaDao,
     // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass
-    contextClass: dids.oracleClass,
+    contextClass: dids.coderByteDao,
     // can add a also know ass if want
     alsoKnownAs: "",
     // you can remove/add more services
@@ -166,7 +166,14 @@ export const setup_oracle_education_constants = () => ({
         right: "",
       },
     ],
-    linkedEntity: [],
+    linkedEntity: [
+      {
+        id: dids.coderByteDao,
+        type: "dao",
+        relationship: "prediction",
+        service: "ixo",
+      },
+    ],
   },
   // you can create linked resources that will be uploaded to the specified storage and resource will be saved
   // on entity linked resources with the cid as proof and service endpoint of provided storage.

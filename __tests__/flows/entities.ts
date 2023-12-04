@@ -87,7 +87,8 @@ export const transferEntities = (mnemonic?: string) =>
 export const relayerVerifyAllEntities = (
   mnemonic?: string,
   relayerNodeDid?: string,
-  chainNetworkParam?: ChainNetwork
+  chainNetworkParam?: ChainNetwork,
+  entityIds?: string[]
 ) =>
   describe("Verifying all entities under a relayer", () => {
     beforeAll(() =>
@@ -110,10 +111,13 @@ export const relayerVerifyAllEntities = (
       const tester = getUser(WalletUsers.tester);
       const relayerDid = relayerNodeDid || tester.did;
 
-      // adding 8seconds timeout for blocksyn to catch up before querying entities
+      // adding 8seconds timeout for blocksync to catch up before querying entities
       await timeout(8000);
 
-      const entitiesRes = await axios.get(`${blocksyncUrl}/api/entity/all`);
+      // if entityIds are passed in, use those, otherwise get all entities
+      const entitiesRes = entityIds?.length
+        ? { data: entityIds.map((id) => ({ id })) }
+        : await axios.get(`${blocksyncUrl}/api/entity/all`);
       const chunkSize = 200;
       let index = 0;
 
@@ -126,8 +130,9 @@ export const relayerVerifyAllEntities = (
           // console.log("verifying for entity", index);
 
           if (
-            entity.relayerNode === relayerDid &&
-            entity.entityVerified === false
+            entityIds?.length ||
+            (entity.relayerNode === relayerDid &&
+              entity.entityVerified === false)
           ) {
             verifyBatches.push(entity.id);
           }
@@ -155,7 +160,14 @@ export const relayerVerifyAllEntities = (
 // Helper to update entity status
 export const enititiesSetStatus = () =>
   describe("Testing the entities module", () => {
-    let entityDid = "did:ixo:entity:3e7253499daf46aab546ab7d2b884bde";
+    beforeAll(() =>
+      Promise.all([
+        // generateNewWallet(WalletUsers.tester, process.env.ROOT_EMERGING!),
+        generateNewWallet(WalletUsers.tester, process.env.ROOT_ED_EMERGING!),
+      ])
+    );
+
+    let entityDid = "did:ixo:entity:17fe01b2d77fa6f3d646ba1871432fbd";
     let status = 1;
 
     testMsg("/ixo.entity.v1beta1.MsgUpdateEntity", () =>
