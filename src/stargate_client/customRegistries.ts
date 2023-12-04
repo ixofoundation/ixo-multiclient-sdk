@@ -10,6 +10,7 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
 
   // auth
   ["/cosmos.auth.v1beta1.BaseAccount", cosmos.auth.v1beta1.BaseAccount],
+  ["/cosmos.auth.v1beta1.ModuleAccount", cosmos.auth.v1beta1.ModuleAccount],
 
   // authz
   ["/cosmos.authz.v1beta1.MsgExec", cosmos.authz.v1beta1.MsgExec],
