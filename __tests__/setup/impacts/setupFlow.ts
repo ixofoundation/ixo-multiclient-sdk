@@ -1,7 +1,11 @@
-import { testMsg, utils } from "../../helpers/common";
-import { setup_dao_constants } from "./constants";
+import { generateNewWallet, testMsg, utils } from "../../helpers/common";
+import {
+  setup_dao_constants,
+  setup_protocol_claim_form_object_constants,
+} from "./constants";
 import * as Entity from "../Entity";
 import { setAndLedgerUser, uploadAllToCellnodeWeb3 } from "../helpers";
+import { WalletUsers } from "../../helpers/constants";
 
 export const impactsFlow = () =>
   describe("Flow for creating Impacts entities (dao/protocol/oracle)", () => {
@@ -49,4 +53,35 @@ export const impactsFlow = () =>
     testMsg("/ixo.iid.v1beta1.MsgAddVerification", () =>
       Entity.AddVerification(daoDid, accountAddress)
     );
+  });
+
+export const claimFormObjectsProtocol = () =>
+  describe("Flow for creating Claim Form Object Protocol", () => {
+    setAndLedgerUser(
+      process.env.ROOT_CLAIM_FORM_OBJECT_PROTOCOL!,
+      process.env.ROOT_ED_CLAIM_FORM_OBJECT_PROTOCOL!
+    );
+
+    // =============================== START
+    let protDid: string;
+    testMsg("Create legacy cooking protocol", async () => {
+      const daoConst = setup_protocol_claim_form_object_constants();
+
+      let protLinkedResourcesUploaded = await uploadAllToCellnodeWeb3(
+        daoConst.linkedResources
+      );
+      console.log({ protLinkedResourcesUploaded });
+
+      // Create the Entity
+      const res = await Entity.CreateEntity(
+        daoConst.entity,
+        protLinkedResourcesUploaded,
+        true
+      );
+      protDid = utils.common.getValueFromEvents(res, "wasm", "token_id");
+      console.log({ protDid });
+
+      return res;
+    });
+    // =============================== END
   });

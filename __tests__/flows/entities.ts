@@ -120,6 +120,7 @@ export const relayerVerifyAllEntities = (
         : await axios.get(`${blocksyncUrl}/api/entity/all`);
       const chunkSize = 200;
       let index = 0;
+      // console.log("entitiesRes length", entitiesRes.data.length);
 
       for (const entities of chunkArray(entitiesRes.data, chunkSize)) {
         const verifyBatches: string[] = [];

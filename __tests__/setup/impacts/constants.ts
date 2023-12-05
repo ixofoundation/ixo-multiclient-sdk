@@ -264,3 +264,102 @@ export const setup_dao_constants = () => ({
 
 // Types for typescript strict type checking, please ignore
 export type SetupDaoConstantFields = ReturnType<typeof setup_dao_constants>;
+
+export const setup_protocol_claim_form_object_constants = () => ({
+  entity: {
+    // type of entity eg dao/protocol/asset/oracle
+    entityType: "protocol/impact",
+    // please use Impact DAO's did as relayerNode eg dids.impactsDao
+    relayerNode: dids.impactsDao,
+    // for context class below please use the parent dao/protocol/asset class did provided by ixo eg dids.daoClass
+    contextClass: dids.protocolClass,
+    // can add a also know ass if want
+    alsoKnownAs: "",
+    // you can remove/add more services
+    service: [
+      {
+        id: "{id}#ipfs",
+        type: "Ipfs",
+        serviceEndpoint: "https://ipfs.io/ipfs/",
+      },
+    ],
+    // if you have any other linked resources other than the ones below that will automatically
+    // be uploaded to cellnode/w3s, you can pass them here
+    linkedResources: [],
+    linkedEntity: [],
+  },
+  // you can create linked resources that will be uploaded to the specified storage and resource will be saved
+  // on entity linked resources with the cid as proof and service endpoint of provided storage.
+  linkedResources: [
+    {
+      name: "profile",
+      type: "Settings",
+      storage: "ipfs",
+      json: {
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            web3: "https://ipfs.io/ipfs/",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
+        id: "{id}#profile",
+        type: "ixo:Profile",
+        name: "Claim Form Objects",
+        image:
+          "web3:bafkreicruhbzjeql4r24gqdc6jwxkoe5n3kv7xxfm5ycbkunqbjynl2nk4",
+        logo: "web3:bafkreigaewz4n3wqpajmwvt3deeolux3vyklbwd3s6dpzy74jcf6amk54m",
+        brand: "Impacts",
+        location: "ZM",
+        description:
+          "Claim Form Objects Protocol is a protocol for creating claim forms for objects.",
+        attributes: [],
+        metrics: [],
+      },
+    },
+    {
+      name: "page",
+      type: "Settings",
+      storage: "cellnode",
+      json: {
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
+        id: "{id}#page",
+        type: "ixo:Page",
+        page: [],
+      },
+    },
+    {
+      name: "tags",
+      type: "Settings",
+      storage: "cellnode",
+      json: {
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            web3: "https://ipfs.io/ipfs/",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
+        id: "{id}#tags",
+        type: "ixo#Tags",
+        settings:
+          "https://github.com/emerging-eco/configs/blob/main/settings/config.json",
+        entityTags: [],
+      },
+    },
+  ],
+});
