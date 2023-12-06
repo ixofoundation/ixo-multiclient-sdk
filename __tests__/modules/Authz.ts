@@ -94,11 +94,13 @@ export const MsgExecSend = async (
               amount: [
                 cosmos.base.v1beta1.Coin.fromPartial({
                   amount: amount.toString(),
-                  denom: "uixo",
+                  // denom: "uixo",
+                  denom:
+                    "ibc/6BBE9BD4246F8E04948D5A4EEE7164B2630263B9EBB5E7DC5F0A46C62A2FF97B",
                 }),
               ],
               fromAddress: granterrAddress,
-              toAddress: granteeAddress,
+              toAddress: "ixo1pm6e78p4pgn0da365plzl4t56pxy8hwtqkl4nq",
             })
           ).finish(),
         },

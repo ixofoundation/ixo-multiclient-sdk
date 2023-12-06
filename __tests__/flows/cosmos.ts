@@ -38,17 +38,17 @@ export const textProposalBasic = () =>
 
 export const authzBasic = () =>
   describe("Testing the cosmos bank module", () => {
-    // beforeAll(() =>
-    //   Promise.all([
-    //     generateNewWallet(WalletUsers.tester, process.env.ROOT_IMPACTS),
-    //   ])
-    // );
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(WalletUsers.tester, process.env.ROOT_IMPACTS),
+      ])
+    );
 
-    testMsg("test Grant Send", async () => {
-      const res = await Authz.MsgGrantSend();
-      console.log(res);
-      return res;
-    });
+    // testMsg("test Grant Send", async () => {
+    //   const res = await Authz.MsgGrantSend();
+    //   console.log(res);
+    //   return res;
+    // });
 
     // quick helper to send funds to an address
     // testMsg("test Bank Send", () =>
@@ -60,7 +60,14 @@ export const authzBasic = () =>
     //   )
     // );
 
-    testMsg("test Exec Send", () => Authz.MsgExecSend(1000000));
+    testMsg("test Exec Send", () =>
+      Authz.MsgExecSend(
+        49000000,
+        "ixo1wc43xczdzlc623e9ssxkndpqnvgk2vq4hheyq2",
+        undefined,
+        WalletUsers.tester
+      )
+    );
     // testMsg("test Exec Send", () => Authz.MsgExecSendIbc());
   });
 

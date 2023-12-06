@@ -205,9 +205,8 @@ export const GrantEntityAccountAuthz = async (
   const client = await createClient(getUser(signer));
 
   const tester = (await getUser(signer).getAccounts())[0].address;
-  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
-  // const granteeAddress =
-  //   "ixo1jxmrje2f26uvcesnj3naysu0fmukt5q74pxu2ukz6cjjjf0qtk9suyl4h6";
+  // const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
+  const granteeAddress = "ixo1gwptvgg2qgwjlm868jqayk5e4yy7ggva5gdka7";
 
   const message = {
     typeUrl: "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
@@ -222,7 +221,7 @@ export const GrantEntityAccountAuthz = async (
           value: cosmos.authz.v1beta1.GenericAuthorization.encode(
             cosmos.authz.v1beta1.GenericAuthorization.fromPartial({
               // msg: "/ibc.applications.transfer.v1.MsgTransfer",
-              msg: "/cosmos.gov.v1beta1.MsgSend",
+              msg: "/cosmos.bank.v1beta1.MsgSend",
             })
           ).finish(),
         },
@@ -238,10 +237,3 @@ export const GrantEntityAccountAuthz = async (
   );
   return response;
 };
-export function CreateEntityAssetSupamotoInstance(
-  assetCollection: string,
-  arg1: { deviceId: number; index: number; deviceCreds: string }[],
-  emergingDao: string
-) {
-  throw new Error("Function not implemented.");
-}

@@ -390,27 +390,27 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
-    // test("query grants by grantee", async () => {
-    //   const user = (await getUser(WalletUsers.alice).getAccounts())[0].address;
-    //   const res = await queryClient.cosmos.authz.v1beta1.granteeGrants({
-    //     grantee: user,
-    //   });
-    //   if (res.grants.length > 0) {
-    //     console.log(
-    //       res.grants.map((g) => {
-    //         g.expiration = g.expiration?.seconds as any;
-    //         return g;
-    //       })
-    //     );
-    //     console.log(
-    //       res.grants.map((g) => {
-    //         const auth = createRegistry().decode(g.authorization!);
-    //         return auth.constraints || auth;
-    //       })
-    //     );
-    //   }
-    //   expect(res).toBeTruthy();
-    // });
+    test("query grants by grantee", async () => {
+      const user = "ixo1gwptvgg2qgwjlm868jqayk5e4yy7ggva5gdka7";
+      const res = await queryClient.cosmos.authz.v1beta1.granteeGrants({
+        grantee: user,
+      });
+      if (res.grants.length > 0) {
+        console.log(
+          res.grants.map((g) => {
+            g.expiration = g.expiration?.seconds as any;
+            return g;
+          })
+        );
+        console.log(
+          res.grants.map((g) => {
+            const auth = createRegistry().decode(g.authorization!);
+            return auth.constraints || auth;
+          })
+        );
+      }
+      expect(res).toBeTruthy();
+    });
 
     // test("query grants by granter", async () => {
     //   const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;

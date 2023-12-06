@@ -56,7 +56,7 @@ IID.generateBlockchainTestUsers();
 // Claims.supamotoCreateCollection();
 // Entity.transferEntities();
 // CosmWasm.daodaoAuthzExecute();
-// Cosmos.authzBasic();
+Cosmos.authzBasic();
 // Cosmos.textProposalBasic();
 // Queries.quickQueries();
 
