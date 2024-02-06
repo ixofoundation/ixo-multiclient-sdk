@@ -9,9 +9,11 @@ import {
 } from "../helpers/common";
 import * as Cosmos from "../modules/Cosmos";
 import * as Authz from "../modules/Authz";
+import * as Entity from "../modules/Entity";
 import { WalletUsers } from "../helpers/constants";
 import Long from "long";
 import { Grant } from "../../src/codegen/cosmos/authz/v1beta1/authz";
+import { dids } from "../setup/constants";
 
 export const bankBasic = () =>
   describe("Testing the cosmos bank module", () => {
@@ -60,9 +62,13 @@ export const authzBasic = () =>
     //   )
     // );
 
+    testMsg("/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz", () =>
+      Entity.GrantEntityAccountAuthz(dids.impactsDao, "admin")
+    );
+
     testMsg("test Exec Send", () =>
       Authz.MsgExecSend(
-        49000000,
+        40000000000,
         "ixo1wc43xczdzlc623e9ssxkndpqnvgk2vq4hheyq2",
         undefined,
         WalletUsers.tester

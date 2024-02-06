@@ -225,7 +225,7 @@ export const GrantEntityAccountAuthz = async (
             })
           ).finish(),
         },
-        expiration: utils.proto.toTimestamp(addDays(new Date(), 30)),
+        expiration: utils.proto.toTimestamp(addDays(new Date(), 2)),
       }),
     }),
   };
