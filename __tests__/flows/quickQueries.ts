@@ -1,6 +1,8 @@
 import Long from "long";
+import csvtojsonV2 from "csvtojson/v2";
+import { AsyncParser } from "@json2csv/node";
 import { cosmos, createRegistry, utils } from "../../src";
-import { getUser, queryClient } from "../helpers/common";
+import { getUser, queryClient, saveFileToPath } from "../helpers/common";
 import { RPC_URL, WalletUsers } from "../helpers/constants";
 import { AuthInfo, TxBody } from "../../src/codegen/cosmos/tx/v1beta1/tx";
 import { fromHex } from "@cosmjs/encoding";
@@ -11,6 +13,7 @@ import {
   b64toUint8Array,
 } from "../../src/utils/conversions";
 import { fromTimestamp } from "../../src/codegen/helpers";
+import axios from "axios";
 
 export const quickQueries = () =>
   describe("Quick queries to see states", () => {
@@ -18,7 +21,7 @@ export const quickQueries = () =>
 
     // test("Test rpc endpoint rate limit", async () => {
     //   const limit = 100;
-    //   const parallelSize = 2;
+    //   const parallelSize = 10;
     //   let i = 1;
 
     //   console.time("rpc");
@@ -28,6 +31,10 @@ export const quickQueries = () =>
     //         Array(parallelSize)
     //           .fill(0)
     //           .map(async () => {
+    //             // const res = await axios.get(
+    //             //   `https://cf-ipfs.com/ipfs/bafkreidw5lg6mn2q33vj6gokazbl6yepsh3s32xf5z3evqu43s2ccqg3xy`
+    //             // );
+    //             // console.log("res.status: ", res.status);
     //             await queryClient.cosmos.bank.v1beta1.params();
     //           })
     //       );
@@ -486,4 +493,164 @@ export const quickQueries = () =>
     //   console.log(res.params);
     //   expect(res).toBeTruthy();
     // });
+
+    // test("Gather account transactions", async () => {
+    //   const filtered = AccountTransactions.map((t) => {
+    //     const typeSplit = t.typeUrl.split(".");
+    //     const type = typeSplit[typeSplit.length - 1];
+    //     const amount =
+    //       t.value?.token?.amount ?? t.value.amount?.[0]?.amount ?? "000000";
+
+    //     return {
+    //       type,
+    //       from: t.from,
+    //       to: t.to,
+    //       amount: Number(amount) / 1000000,
+    //       time: t.transactionByTransactionHash.time,
+    //     };
+    //   });
+
+    //   // save all CER Claims to file
+    //   saveFileToPath(
+    //     ["documents", "test.json"],
+    //     JSON.stringify(filtered, null, 2)
+    //   );
+
+    //   expect(filtered).toBeTruthy();
+    // });
+
+    // test("Cookstove data analytics", async () => {
+    //   const data = await csvtojsonV2().fromFile(
+    //     "./assets/analytics/Nifty Perfomance  Report.csv"
+    //   );
+
+    //   const filtered = data
+    //     .map((t) => {
+    //       const id = t["Device Ids"];
+    //       const isActive = t["Status"] === "Active";
+    //       const isDaily = t["Connectivity"] === "DAILY";
+    //       const ppm = t["Pellets Per Month"];
+    //       let isPpm = false;
+    //       if (ppm.includes(">")) {
+    //         isPpm = true;
+    //       } else if (ppm.includes("No Data")) {
+    //         isPpm = false;
+    //       } else {
+    //         isPpm = Number(ppm) >= 25;
+    //       }
+
+    //       if (!isActive || !isPpm || !isDaily) return null;
+
+    //       return id;
+    //     })
+    //     .filter((t) => t);
+
+    //   console.log("filtered: ", filtered.length);
+    //   // save all CER Claims to file
+    //   saveFileToPath(
+    //     ["analytics", "test.json"],
+    //     JSON.stringify(filtered, null, 2)
+    //   );
+
+    //   expect(filtered).toBeTruthy();
+    // });
+
+    // test("Old testnet data", async () => {
+    //   const projectsRaw = require("../../assets/testnet/projects.json") as any;
+    //   let data;
+    //   const projects = projectsRaw.map((p: any) => {
+    //     p.id = JSON.parse(p._id)["$oid"];
+    //     delete p.__v;
+    //     delete p._id;
+    //     delete p.txHash;
+    //     data = JSON.parse(p.data);
+    //     delete p.data;
+    //     delete data.ixo;
+
+    //     if (data.agentStats) {
+    //       Object.keys(data.agentStats).forEach((k) => {
+    //         data[`agentStats__${k}`] = data.agentStats[k];
+    //       });
+    //     }
+    //     delete data.agentStats;
+
+    //     if (data.owner) {
+    //       Object.keys(data.owner).forEach((k) => {
+    //         data[`owner__${k}`] = data.owner[k];
+    //       });
+    //     }
+    //     delete data.owner;
+
+    //     if (data.creator) {
+    //       Object.keys(data.creator).forEach((k) => {
+    //         data[`creator__${k}`] = data.creator[k];
+    //       });
+    //     }
+    //     delete data.creator;
+
+    //     if (data.privacy) {
+    //       Object.keys(data.privacy).forEach((k) => {
+    //         data[`privacy__${k}`] = data.privacy[k];
+    //       });
+    //     }
+    //     delete data.privacy;
+
+    //     if (data.createdOn) {
+    //       data.createdOn = data.createdOn["$date"];
+    //     }
+
+    //     if (data.headlineMetric) {
+    //       data.headlineMetric_claimTemplateId =
+    //         data.headlineMetric.claimTemplateId;
+    //     }
+    //     delete data.headlineMetric;
+
+    //     if (data.page) {
+    //       data.page_cid = data.page.cid;
+    //     }
+    //     delete data.page;
+
+    //     if (data.version) {
+    //       data.effectiveDate = data.version.effectiveDate;
+    //     }
+    //     delete data.version;
+
+    //     delete data.entitySchemaVersion;
+
+    //     return { ...p, ...data };
+    //   });
+
+    //   console.log("filtered: ", projects.length);
+    //   saveFileToPath(
+    //     ["testnet", "projectsWorked.json"],
+    //     JSON.stringify(projects, null, 2)
+    //   );
+
+    //   const parser = new AsyncParser();
+    //   const csv = await parser.parse(projects).promise();
+    //   saveFileToPath(["testnet", "projectsWorked.csv"], csv);
+
+    //   expect(true).toBeTruthy();
+    // });
   });
+
+const AccountTransactions = [
+  {
+    typeUrl: "/cosmos.bank.v1beta1.MsgSend",
+    from: "ixo1zczq7zepyzkcyfh930rf9cg4leleplsuzkmpjs",
+    to: "ixo1ad4660pu2q00m47jcrn07d24hu6gxwylva243d",
+    value: {
+      amount: [
+        {
+          denom: "uixo",
+          amount: "262149000",
+        },
+      ],
+      toAddress: "ixo1ad4660pu2q00m47jcrn07d24hu6gxwylva243d",
+      fromAddress: "ixo1zczq7zepyzkcyfh930rf9cg4leleplsuzkmpjs",
+    },
+    transactionByTransactionHash: {
+      time: "2023-08-04T11:44:09.375",
+    },
+  },
+];

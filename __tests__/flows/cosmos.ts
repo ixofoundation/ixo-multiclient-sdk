@@ -11,7 +11,9 @@ import * as Cosmos from "../modules/Cosmos";
 import * as Authz from "../modules/Authz";
 import { WalletUsers } from "../helpers/constants";
 import Long from "long";
-import { Grant } from "../../src/codegen/cosmos/authz/v1beta1/authz";
+import { Grant } from "../../src/codegen/cosmos/feegrant/v1beta1/feegrant";
+import { createRegistry } from "../../src";
+import { fromTimestamp } from "../../src/codegen/helpers";
 
 export const bankBasic = () =>
   describe("Testing the cosmos bank module", () => {
@@ -88,7 +90,7 @@ export const sendTokens = (rounds = 1) =>
 
 export const govDeposit = () =>
   describe("Testing deposit funds into proposals", () => {
-    testMsg("/cosmos.bank.v1beta1.MsgDeposit", () => Cosmos.MsgDeposit(69));
+    testMsg("/cosmos.bank.v1beta1.MsgDeposit", () => Cosmos.MsgDeposit(446));
   });
 
 export const feegrantBasic = () =>
@@ -104,7 +106,7 @@ export const feegrantAllCurrentUsers = () =>
       const address = (await getUser(WalletUsers.tester).getAccounts())[0]
         .address;
 
-      let allowances: any[] = [];
+      let allowances: Grant[] = [];
       const query = async (key?: Uint8Array) =>
         await queryClient.cosmos.feegrant.v1beta1.allowancesByGranter({
           granter: address,
@@ -123,17 +125,29 @@ export const feegrantAllCurrentUsers = () =>
         key = res.pagination?.nextKey || undefined;
         if (!key?.length) break;
       }
-      // console.log(allowances.length);
+      console.log(allowances.length);
 
       // to save current grantee addresses incase something goes wrong
       // saveFileToPath(
-      //   ["documents", "random", "mainnet_feegrant_addresses.json"],
+      //   ["documents", "random", "mainnet_feegrant_addresses2.json"],
       //   JSON.stringify(
-      //     allowances.map((a) => a.grantee),
+      //     allowances.map((a) =>
+      //       fromTimestamp(
+      //         createRegistry().decode(a.allowance as any).expiration
+      //       )
+      //     ),
       //     null,
       //     2
       //   )
       // );
+      saveFileToPath(
+        ["documents", "random", "mainnet_feegrant_addresses.json"],
+        JSON.stringify(
+          allowances.map((a) => a.grantee),
+          null,
+          2
+        )
+      );
 
       // devide grantees into chunks of 200
       let granteesChunks = chunkArray<string>(
@@ -151,7 +165,7 @@ export const feegrantAllCurrentUsers = () =>
       }
       // then grant all current users new feegrants
       for (const grantees of granteesChunks) {
-        const ress = await Authz.MsgGrantAllowance(
+        const ress = await Authz.MsgGrantAllowanceFeegrant(
           WalletUsers.tester,
           grantees
         );

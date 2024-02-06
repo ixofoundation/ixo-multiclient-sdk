@@ -44,8 +44,8 @@ IID.generateBlockchainTestUsers();
 // Token.supamotoTokensFarm();
 // Token.supamotoTokensSendCARBON();
 // Claims.supamotoClaimsRedoRejected();
-// Entity.relayerVerifyAllEntities(undefined, dids.impactsDao, "mainnet", [
-//   "did:ixo:entity:50a336298abaaaa248d08d794b2e6231",
+// Entity.relayerVerifyAllEntities(undefined, dids.impactsDao, "devnet", [
+//   "did:ixo:entity:ff581af6e2e071758b1f94835933d038",
 // ]);
 // Entity.enititiesSetStatus();
 // Claims.supamotoClaims2();

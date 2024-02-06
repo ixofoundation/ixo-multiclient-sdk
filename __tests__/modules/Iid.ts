@@ -1,5 +1,6 @@
 import base58 from "bs58";
 import {
+  KeyTypes,
   createAgentIidContext,
   createIidVerificationMethods,
 } from "../../src/messages/iid";
@@ -17,6 +18,7 @@ import {
   Context,
   LinkedClaim,
   Service,
+  VerificationMethod,
 } from "../../src/codegen/ixo/iid/v1beta1/types";
 
 export const CreateIidDoc = async (
@@ -149,30 +151,51 @@ export const DeleteIidContext = async (did?: string, key?: string) => {
  * @param relationships list with values: 'authentication' | 'assertionMethod' | 'keyAgreement' | 'capabilityInvocation' | 'capabilityDelegation'
  */
 export const AddVerification = async (
-  relationships: string[] = ["authentication", "assertionMethod"]
+  relationships: string[] = ["authentication", "assertionMethod"],
+  did?: string,
+  keyType: KeyTypes = "ed",
+  userToAdd: WalletUsers = WalletUsers.tester,
+  addBlockchainAccountId = false
 ) => {
   const client = await createClient();
 
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const userDid = tester.did;
 
-  const accountEd = (await getUser(WalletUsers.tester, "ed").getAccounts())[0];
-  const myPubkey = accountEd.pubkey;
+  const userToAddAccount = getUser(userToAdd, keyType);
+  const userToAddPubkey = (await userToAddAccount.getAccounts())[0].pubkey;
+  const userToAddAddress = (await userToAddAccount.getAccounts())[0].address;
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgAddVerification",
     value: ixo.iid.v1beta1.MsgAddVerification.fromPartial({
-      id: did,
+      id: did ?? userDid,
       verification: ixo.iid.v1beta1.Verification.fromPartial({
         relationships: relationships,
-        method: customMessages.iid.createVerificationMethod(
-          did,
-          myPubkey,
-          did,
-          "ed"
-        ),
+        method: addBlockchainAccountId
+          ? ixo.iid.v1beta1.VerificationMethod.fromPartial({
+              id: did + "#" + userToAddAddress,
+              type: "CosmosAccountAddress",
+              blockchainAccountID: userToAddAddress,
+              controller: userToAddAccount.did,
+            })
+          : customMessages.iid.createVerificationMethod(
+              userToAddAccount.did,
+              userToAddPubkey,
+              userToAddAccount.did,
+              keyType
+            ),
+        // method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
+        //   id:
+        //     "{id}#" +
+        //     "ixo1svn6synsq98ynnxajenrtejjxv5rp0p9jnvhxhtjwfjm3kf5h4lq2hsyvd",
+        //   blockchainAccountID:
+        //     "ixo1svn6synsq98ynnxajenrtejjxv5rp0p9jnvhxhtjwfjm3kf5h4lq2hsyvd",
+        //   type: "CosmosAccountAddress",
+        //   controller: "{id}",
+        // }),
       }),
       signer: myAddress,
     }),
@@ -214,13 +237,13 @@ export const SetVerificationRelationships = async (
   return response;
 };
 
-export const RevokeVerification = async () => {
+export const RevokeVerification = async (did?: string, methodId?: string) => {
   const client = await createClient();
 
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const userDid = tester.did;
 
   // const alice = getUser(WalletUsers.alice);
   // const pubkeyBase58 = base58.encode((await alice.getAccounts())[0].pubkey);
@@ -230,8 +253,8 @@ export const RevokeVerification = async () => {
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgRevokeVerification",
     value: ixo.iid.v1beta1.MsgRevokeVerification.fromPartial({
-      id: did,
-      methodId: did + "#" + myPubkey,
+      id: did ?? userDid,
+      methodId: methodId ?? did + "#" + myPubkey,
       signer: myAddress,
     }),
   };

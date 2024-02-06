@@ -1,4 +1,6 @@
 import { toBase64 } from "@cosmjs/encoding";
+import { MULTIBASE_BASE58BTC_HEADER } from "./constants";
+import base58 from "bs58";
 
 export const b64toUint8Array = function (b64: string) {
   return Uint8Array.from(Buffer.from(b64, "base64"));
@@ -83,4 +85,17 @@ export const jsonStringToBase64 = (jsonString: string) => {
 export const jsonToBase64 = (json: unknown) => {
   const jsonString = JSON.stringify(json);
   return jsonStringToBase64(jsonString);
+};
+
+/**
+ * encode a multibase base58-btc multicodec key
+ *
+ * @param header Uint8Array header for multicodec encoding
+ * @param key Uint8Array of key encoding
+ */
+export const encodeMbKey = (header: Uint8Array, key: Uint8Array) => {
+  const mbKey = new Uint8Array(header.length + key.length);
+  mbKey.set(header);
+  mbKey.set(key, header.length);
+  return MULTIBASE_BASE58BTC_HEADER + base58.encode(mbKey);
 };

@@ -239,6 +239,12 @@ export const registerIidsDev = () =>
 
 export const iidsBasic = () =>
   describe("Testing the Iid module", () => {
+    // beforeAll(() =>
+    //   Promise.all([
+    //     generateNewWallet(WalletUsers.tester, process.env.ROOT_IMPACTS),
+    //   ])
+    // );
+
     // testMsg("/ixo.iid.v1beta1.MsgUpdateIidDocument", () => Iid.UpdateIidDoc());
     testMsg("/ixo.iid.v1beta1.MsgAddIidContext", () => Iid.AddIidContext());
     testMsg("/ixo.iid.v1beta1.MsgDeleteIidContext", () =>

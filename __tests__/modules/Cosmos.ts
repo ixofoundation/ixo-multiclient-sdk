@@ -275,7 +275,10 @@ export const MsgSubmitProposalUpdateTokenParams = async (
   return response;
 };
 
-export const MsgDeposit = async (proposalId: number, amount = "100000000") => {
+export const MsgDeposit = async (
+  proposalId: number,
+  amount = "10000000000"
+) => {
   const client = await createClient();
 
   const tester = getUser();

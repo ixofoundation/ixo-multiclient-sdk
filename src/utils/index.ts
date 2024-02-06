@@ -4,6 +4,7 @@ import * as _3 from "./fromMm";
 import * as _4 from "./address";
 import * as _5 from "./common";
 import * as _6 from "./proto";
+import * as _7 from "./constants";
 
 export namespace utils {
   export const conversions = {
@@ -23,5 +24,8 @@ export namespace utils {
   };
   export const proto = {
     ..._6,
+  };
+  export const constants = {
+    ..._7,
   };
 }
