@@ -13,6 +13,7 @@ import * as CosmWasm from "./flows/cosmwasm";
 import * as Queries from "./flows/quickQueries";
 import * as Claims from "./flows/claims";
 import { dids } from "./setup/constants";
+import { idcc_constants } from "./setup/idcc/creds";
 
 beforeAll(() => {
   generateConstants();
@@ -44,9 +45,13 @@ IID.generateBlockchainTestUsers();
 // Token.supamotoTokensFarm();
 // Token.supamotoTokensSendCARBON();
 // Claims.supamotoClaimsRedoRejected();
-// Entity.relayerVerifyAllEntities(undefined, dids.impactsDao, "devnet", [
-//   "did:ixo:entity:ff581af6e2e071758b1f94835933d038",
-// ]);
+// Entity.relayerVerifyAllEntities(
+//   process.env.IDCC_DAO,
+//   idcc_constants.idcc_dao,
+//   "devnet",
+//   ["did:ixo:entity:434a672f66420f5779cc35d823330b7f"],
+//   false
+// );
 // Entity.enititiesSetStatus();
 // Claims.supamotoClaims2();
 // CosmWasm.swapBasic();

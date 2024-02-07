@@ -141,7 +141,8 @@ export const UpdateEntity = async (data: {
 export const UpdateEntityVerified = async (
   signer: WalletUsers = WalletUsers.tester,
   entityDids: string[],
-  relayerDid?: string
+  relayerDid?: string,
+  entityVerified = true
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -153,7 +154,7 @@ export const UpdateEntityVerified = async (
     typeUrl: "/ixo.entity.v1beta1.MsgUpdateEntityVerified",
     value: ixo.entity.v1beta1.MsgUpdateEntityVerified.fromPartial({
       id: did,
-      entityVerified: true,
+      entityVerified,
       relayerNodeDid: relayerDid || tester.did,
       relayerNodeAddress: myAddress,
     }),

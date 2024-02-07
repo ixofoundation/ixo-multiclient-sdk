@@ -109,7 +109,8 @@ export const relayerVerifyAllEntities = (
   mnemonic?: string,
   relayerNodeDid?: string,
   chainNetworkParam?: ChainNetwork,
-  entityIds?: string[]
+  entityIds?: string[],
+  entityVerified = true
 ) =>
   describe("Verifying all entities under a relayer", () => {
     beforeAll(() =>
@@ -167,7 +168,8 @@ export const relayerVerifyAllEntities = (
             const res = await Entity.UpdateEntityVerified(
               undefined,
               verifyBatches,
-              relayerDid
+              relayerDid,
+              entityVerified
             );
             if (res.code != 0) throw new Error(res.rawLog);
           } catch (error) {
