@@ -185,7 +185,7 @@ export const legacyCookstovesFlow = () =>
     // Create a batch of Asset entities for the individual Supamoto assets
     let assetsFailed: any[] = [];
     let assetInstanceDids: { id: string; did: string }[] = [];
-    let index = 1;
+    let index = 970;
 
     legacyCookstoveIds.map((id, i) =>
       testMsg(

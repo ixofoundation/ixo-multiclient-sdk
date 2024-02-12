@@ -1,6 +1,6 @@
 {
   "name": "@ixo/impactxclient-sdk",
-  "version": "1.1.21",
+  "version": "1.1.22",
   "description": "One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them",
   "author": "Ixo <ixo>",
   "homepage": "https://github.com/ixofoundation/ixo-MultiClient-SDK#readme",
@@ -35,7 +35,8 @@
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "test:queries": "jest __tests__/specs/query --forceExit",
     "test:supamoto": "jest __tests__/specs/supamoto --forceExit",
-    "test:umuzi": "jest __tests__/specs/umuzi --forceExit"
+    "test:umuzi": "jest __tests__/specs/umuzi --forceExit",
+    "test:idcc": "jest __tests__/specs/idcc --forceExit"
   },
   "publishConfig": {
     "access": "public"
@@ -85,8 +86,8 @@
     "store": "^2.0.12",
     "ts-jest": "29.0.3",
     "typedoc": "0.23.20",
-    "typescript": "4.8.4",
-    "web3.storage": "4.5.4"
+    "@json2csv/node": "7.0.5",
+    "typescript": "4.8.4"
   },
   "dependencies": {
     "@babel/runtime": "7.19.4",

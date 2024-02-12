@@ -189,22 +189,6 @@ export const MsgGrantAllowance = async (
     value: cosmos.feegrant.v1beta1.MsgGrantAllowance.fromPartial({
       granter: granterAddress,
       grantee: grantee,
-      // allowance: {
-      //   typeUrl: "/cosmos.feegrant.v1beta1.PeriodicAllowance",
-      //   value: cosmos.feegrant.v1beta1.PeriodicAllowance.encode(
-      //     cosmos.feegrant.v1beta1.PeriodicAllowance.fromPartial({
-      //       periodSpendLimit: [
-      //         cosmos.base.v1beta1.Coin.fromPartial({
-      //           amount: "1000000",
-      //           denom: "uixo",
-      //         }),
-      //       ],
-      //       period: utils.proto.toDuration(
-      //         String(1000000000 * 60 * 60 * 24 * 30)
-      //       ),
-      //     })
-      //   ).finish(),
-      // },
       allowance: {
         typeUrl: "/cosmos.feegrant.v1beta1.BasicAllowance",
         value: cosmos.feegrant.v1beta1.BasicAllowance.encode(
@@ -226,6 +210,64 @@ export const MsgGrantAllowance = async (
     granterAddress,
     messages,
     getFee(1, await client.simulate(granterAddress, messages, undefined))
+  );
+  return response;
+};
+
+export const MsgGrantAllowanceFeegrant = async (
+  granter = WalletUsers.tester,
+  grantees: string[] = []
+) => {
+  const client = await createClient(getUser(granter));
+
+  const durationInDays = 32;
+  let date = new Date();
+  date = new Date(date.setDate(date.getDate() + durationInDays));
+  const granterAddress = (await getUser(granter).getAccounts())[0].address;
+  const granteeAddress = (await getUser(WalletUsers.alice).getAccounts())[0]
+    .address;
+
+  if (grantees.length === 0) grantees = [granteeAddress];
+
+  const messages = grantees.map((grantee) => ({
+    typeUrl: "/cosmos.feegrant.v1beta1.MsgGrantAllowance",
+    value: cosmos.feegrant.v1beta1.MsgGrantAllowance.fromPartial({
+      granter: granterAddress,
+      grantee: grantee,
+      allowance: {
+        typeUrl: "/cosmos.feegrant.v1beta1.BasicAllowance",
+        value: cosmos.feegrant.v1beta1.BasicAllowance.encode(
+          cosmos.feegrant.v1beta1.BasicAllowance.fromPartial({
+            expiration: utils.proto.toTimestamp(date),
+          })
+        ).finish(),
+      },
+      // allowance: {
+      //   typeUrl: "/cosmos.feegrant.v1beta1.PeriodicAllowance",
+      //   value: cosmos.feegrant.v1beta1.PeriodicAllowance.encode(
+      //     cosmos.feegrant.v1beta1.PeriodicAllowance.fromPartial({
+      //       periodSpendLimit: [
+      //         cosmos.base.v1beta1.Coin.fromPartial({
+      //           amount: "1000000",
+      //           denom: "uixo",
+      //         }),
+      //       ],
+      //       period: utils.proto.toDuration(
+      //         String(1000000000 * 60 * 60 * 24 * 31)
+      //       ),
+      //     })
+      //   ).finish(),
+      // },
+    }),
+  }));
+
+  const response = await client.signAndBroadcast(
+    granterAddress,
+    messages,
+    getFee(
+      messages.length,
+      await client.simulate(granterAddress, messages, undefined)
+    )
   );
   return response;
 };

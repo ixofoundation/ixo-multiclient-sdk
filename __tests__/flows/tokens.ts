@@ -314,26 +314,34 @@ export const supamotoTokensFarm = () =>
       const tester = (await getUser(WalletUsers.tester).getAccounts())[0]
         .address;
 
-      const collections = await axios.get(
+      let collections: any = await axios.get(
         `${blocksyncUrl}/api/entity/collectionsByOwnerAddress/${tester}`
       );
-      const allEntities = collections.data[0].entities;
+
+      // filter out only the collection that want to farm
+      collections = collections.data.filter(
+        (c) => c.collection.id == dids.legacyCollection
+      );
+      const colEntities = collections?.[0]?.entities ?? [];
+      collections = null; // free up memory
 
       // helpers to get a number of stove ids
-      // const ent100 = allEntities
+      // const ent100 = colEntities
       //   .map((e: any) => ({ id: e.id, type: e.type }))
       //   .slice(0, 100);
       // console.log("ent100", ent100.length);
       // saveFileToPath(
       //   ["documents", "emerging", "100entities.json"],
-      //   JSON.stringify(ent100, null, 2)
+      //   JSON.stringify(collections, null, 2)
       // );
+      // console.log(colEntities.length);
       // const haha = true;
       // if (haha) throw new Error("haha");
 
-      const farm = false;
+      const farm = true;
       const topup = false;
-      const chunkSize = 40;
+      const amountBalance = 0;
+      const chunkSize = 20;
       let totalAmounts: number[] = [];
       let index = 0;
 
@@ -342,7 +350,7 @@ export const supamotoTokensFarm = () =>
       );
       let userTokens = Object.entries(userTokensRes.data.CARBON?.tokens || {});
 
-      for (const entities of chunkArray(allEntities, chunkSize)) {
+      for (const entities of chunkArray(colEntities, chunkSize)) {
         const farmBatches: any[] = [];
         const topupBatches: any[] = [];
 
@@ -364,8 +372,8 @@ export const supamotoTokensFarm = () =>
           ) as number;
           totalAmounts.push(totalAmount);
 
-          if (farm && totalAmount > 2000) {
-            let amountToFarm = totalAmount - 2000;
+          if (farm && totalAmount > amountBalance) {
+            let amountToFarm = totalAmount - amountBalance;
             const tokensToFarm: any[] = [];
             tokens.forEach((tokenEntry) => {
               if (amountToFarm <= 0) return;
@@ -384,8 +392,8 @@ export const supamotoTokensFarm = () =>
             });
           }
 
-          if (topup && totalAmount < 2000) {
-            let amountToTopup = 2000 - totalAmount;
+          if (topup && totalAmount < amountBalance) {
+            let amountToTopup = amountBalance - totalAmount;
             const tokensToTopup: any[] = [];
             if (!userTokens || !userTokens.length) continue;
             userTokens.forEach((tokenEntry) => {

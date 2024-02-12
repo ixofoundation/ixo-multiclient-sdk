@@ -466,7 +466,7 @@ export const supamotoClaims2 = () =>
       ])
     );
 
-    const collectionId = "8";
+    const collectionId = "5";
 
     test("Generate Fuel Purchase claims and evaluate them", async () => {
       let purchaseData = await csvtojsonV2().fromFile(
@@ -561,7 +561,7 @@ export const supamotoClaims2 = () =>
 
       for (const stovePurchases of purchaseData) {
         index++;
-        if (index <= 45) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
+        // if (index <= 67) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
         console.log(
           "starting batch " + index + " of " + (purchaseData.length - 1)
         );
@@ -570,7 +570,7 @@ export const supamotoClaims2 = () =>
         //   JSON.stringify(stovePurchases, null, 2)
         // );
         // add wait for ipfs rate limit
-        if (index) await timeout(1000 * 30);
+        if (index) await timeout(1000 * 5);
 
         // create fuelPurchase claims for each purchase
         const fpClaims = await axios.post(
@@ -608,28 +608,28 @@ export const supamotoClaims2 = () =>
         );
 
         // evaluate fuelPurchase claims
-        const fpEvaluations = await axios.post(
-          ProspectCredentialsWorkerUrl + "claims/evaluate",
-          {
-            collectionId: collectionId,
-            evaluations: fpClaimIds.map((id) => ({
-              claimId: id,
-              reason: 1,
-              status: ixo.claims.v1beta1.EvaluationStatus.APPROVED,
-              oracle: dids.prospectOracle,
-              verificationProof: "proof",
-            })),
-          },
-          {
-            headers: {
-              Authorization: process.env.PROSPECT_CREDENTIAL_WORKER_AUTH,
-            },
-          }
-        );
-        assertIsDeliverTxSuccess(fpEvaluations.data);
-        console.log(
-          fpClaimIds.length + " FuelPurchase claims successfully evaluated"
-        );
+        // const fpEvaluations = await axios.post(
+        //   ProspectCredentialsWorkerUrl + "claims/evaluate",
+        //   {
+        //     collectionId: collectionId,
+        //     evaluations: fpClaimIds.map((id) => ({
+        //       claimId: id,
+        //       reason: 1,
+        //       status: ixo.claims.v1beta1.EvaluationStatus.APPROVED,
+        //       oracle: dids.prospectOracle,
+        //       verificationProof: "proof",
+        //     })),
+        //   },
+        //   {
+        //     headers: {
+        //       Authorization: process.env.PROSPECT_CREDENTIAL_WORKER_AUTH,
+        //     },
+        //   }
+        // );
+        // assertIsDeliverTxSuccess(fpEvaluations.data);
+        // console.log(
+        //   fpClaimIds.length + " FuelPurchase claims successfully evaluated"
+        // );
 
         // save fuelPurchase claim ids per purchase
         stovePurchases.forEach((ps: any[], i) => {

@@ -10,6 +10,7 @@ export declare namespace utils {
         concatArrayBuffers: (...bufs: Uint8Array[]) => Uint8Array;
         jsonStringToBase64: (jsonString: string) => string;
         jsonToBase64: (json: unknown) => string;
+        encodeMbKey: (header: Uint8Array, key: Uint8Array) => string;
     };
     const did: {
         generateSecpDid(pubkey: string | Uint8Array, prefix?: string): string;
@@ -34,5 +35,12 @@ export declare namespace utils {
         toTimestamp(date: Date): _6.Timestamp;
         fromTimestamp(t: _6.Timestamp): Date;
         numberToLong(number: number): import("long");
+    };
+    const constants: {
+        MULTIBASE_BASE58BTC_HEADER: "z";
+        MULTICODEC_ED25519_PUB_HEADER: Uint8Array;
+        MULTICODEC_ED25519_PRIV_HEADER: Uint8Array;
+        MULTICODEC_SECP256K1_PUB_HEADER: Uint8Array;
+        MULTICODEC_SECP256K1_PRIV_HEADER: Uint8Array;
     };
 }
