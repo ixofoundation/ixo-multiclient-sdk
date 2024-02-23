@@ -21,7 +21,7 @@ beforeAll(() => {
 });
 
 // To generate mapping of blockchain test users to sdk test users with set mnemonics
-IID.generateBlockchainTestUsers();
+// IID.generateBlockchainTestUsers();
 
 // IID.registerIids();
 // Proposals.instantiateModulesProposals();
@@ -36,7 +36,7 @@ IID.generateBlockchainTestUsers();
 // IID.iidAddEdKeys();
 // Bonds.bondsSellsDisabled();
 // Bonds.bondsSellsEnabled();
-// IID.iidReplaceLinkedResource();
+IID.iidReplaceLinkedResource();
 // IBC.ibcBasic();
 // Cosmos.govDeposit();
 // CosmWasm.wasmBasic();

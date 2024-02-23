@@ -154,7 +154,7 @@ export const UpdateEntityVerified = async (
     typeUrl: "/ixo.entity.v1beta1.MsgUpdateEntityVerified",
     value: ixo.entity.v1beta1.MsgUpdateEntityVerified.fromPartial({
       id: did,
-      entityVerified,
+      entityVerified: false,
       relayerNodeDid: relayerDid || tester.did,
       relayerNodeAddress: myAddress,
     }),

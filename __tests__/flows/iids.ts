@@ -15,7 +15,7 @@ import * as Entity from "../modules/Entity";
 import { setAndLedgerUser } from "../setup/helpers";
 import { toTimestamp } from "../../src/codegen/helpers";
 import axios from "axios";
-import { dids } from "../setup/constants";
+import { didArrays, intermediaryRegistry } from "../setup/constants";
 
 export const registerIids = () =>
   describe("Testing the faucet and creation of Iids", () => {
@@ -49,93 +49,109 @@ export const registerIids = () =>
     });
   });
 
-export const iidReplaceLinkedResource = () =>
+export const iidReplaceLinkedResource = () => {
+  // Loop through Intermediaries
+  for (const intermediary of intermediaryRegistry.intermediaries) {
+    console.log(intermediary);
+    iidReplaceLinkedResources(intermediary);
+  }
+}
+
+const iidReplaceLinkedResources = (intermediary) =>
   describe("Testing the iid module", () => {
     beforeAll(() =>
-      generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS!)
+      generateNewWallet(WalletUsers.tester, intermediary.mnemonic!)
     );
 
     // test("upload file to cellnode", async () => {
-    //   const file = getFileFromPath([
-    //     "documents",
-    //     "impacts",
-    //     "ImpactsDao_page.png",
-    //   ]);
     //   const json = {
-    //     "@context": [
-    //       "https://w3id.org/ixo/context/v1",
-    //       {
-    //         ixo: "https://w3id.org/ixo/vocab/v1",
-    //         web3: "https://ipfs.io/ipfs/",
-    //         id: "@id",
-    //         type: "@type",
-    //         "@protected": true,
-    //       },
-    //     ],
-    //     id: "{id}#claims",
-    //     type: "ixo:Claims",
-    //     entityClaims: [
-    //       {
-    //         template: {
-    //           id: "did:ixo:entity:9dc2f06bf379c922d2aa8703ba276bc3#CER",
-    //           title: "Carbon Emission Reduction",
-    //           description:
-    //             "Claimed Amount of Carbon Emissions reduced through the use of an energy-efficient clean cookstove.",
+    //     "@context":
+    //     {
+    //       "ixo": "https://w3id.org/ixo/ns/protocol/",
+    //       "@id": "@type",
+    //       "type": "@type",
+    //       "@protected": true
+    //     },
+    //     "type": "ixo:entity#tags",
+    //     "entityTags":
+    //       [
+    //         {
+    //           "category": "DAO Type",
+    //           "tags":
+    //             [
+    //               "Cooperative"
+    //             ]
     //         },
-    //         submissions: {
-    //           maximum: null,
-    //           startDate: "",
-    //           endDate: "",
-    //         },
-    //       },
-    //     ],
+    //         {
+    //           "category": "SDG",
+    //           "tags":
+    //             [
+    //               "SDG9 – Industry, Innovation and Infrastructure"
+    //             ]
+    //         }
+    //       ]
     //   };
-
     //   const cellnode = await customQueries.cellnode.uploadPublicDoc(
     //     // "image/png",
     //     "application/ld+json",
     //     // file,
     //     Buffer.from(JSON.stringify(json)).toString("base64"),
     //     undefined,
-    //     "testnet"
+    //     "devnet"
     //   );
     //   console.log({ cellnode });
     //   return expect(true).toBeTruthy();
     // });
 
-    // testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
+    testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
+      let removeDAOTags, addDAOTags, removeProjectTags, addProjectTags;
+      // Update the DAO's Tags linkedResource
+      const daoResource = ixo.iid.v1beta1.LinkedResource.fromPartial({
+        id: "{id}#tags",
+        type: "Settings",
+        proof: intermediary.daoTagsProof,
+        right: "",
+        encrypted: "false",
+        mediaType: "application/ld+json",
+        description: "Tags",
+        serviceEndpoint: "cellnode:" + intermediary.daoTagsProof,
+      });
+      removeDAOTags = await Iid.DeleteLinkedResource(intermediary.did, daoResource.id);
+      addDAOTags = await Iid.AddLinkedResource(intermediary.did, daoResource);
+      console.log(intermediary.name + " updated");
+      // Loop through the DAO's Projects to update their Tags linkedResources
+      // const didArray = didArrays[intermediary.name];
+      // const projectResource = ixo.iid.v1beta1.LinkedResource.fromPartial({
+      //   id: "{id}#tags",
+      //   type: "Settings",
+      //   proof: intermediary.projectTagsProof,
+      //   right: "",
+      //   encrypted: "false",
+      //   mediaType: "application/ld+json",
+      //   description: "Tags",
+      //   serviceEndpoint: "cellnode:" + intermediary.projectTagsProof,
+      // });
+      // for (const did of didArray) {
+      //   removeProjectTags = await Iid.DeleteLinkedResource(did, projectResource.id);
+      //   addProjectTags = await Iid.AddLinkedResource(did, projectResource);
+      //   console.log(did + " project changed");
+      // }
+      return addDAOTags as any;
+    });
+
+    // testMsg("/ixo.iid.v1beta1.MsgAddService", async () => {
     //   const entityDid = dids.legacyCollection;
-    //   const resource = ixo.iid.v1beta1.LinkedResource.fromPartial({
-    //     type: "Settings",
-    //     id: "{id}#profile",
-    //     description: "Profile",
-    //     mediaType: "application/ld+json",
-    //     serviceEndpoint:
-    //       "ipfs:bafkreidspm2panubcmtt4cybpggdiqeup4lfd7qlhsqr4kbqsvat2ui4yy",
-    //     proof: "bafkreidspm2panubcmtt4cybpggdiqeup4lfd7qlhsqr4kbqsvat2ui4yy",
-    //     encrypted: "false",
-    //     right: "",
+    //   const resource = ixo.iid.v1beta1.Service.fromPartial({
+    //     id: "{id}#cellnode",
+    //     type: "Cellnode",
+    //     serviceEndpoint: "https://cellnode-pandora.ixo.earth",
     //   });
 
-    //   const remove = await Iid.DeleteLinkedResource(entityDid, resource.id);
-    //   const add = await Iid.AddLinkedResource(entityDid, resource);
+    //   const remove = await Iid.DeleteService(entityDid, resource.id);
+    //   const add = await Iid.AddService(entityDid, resource);
 
     //   return remove as any;
     // });
-
-    testMsg("/ixo.iid.v1beta1.MsgAddService", async () => {
-      const entityDid = dids.legacyCollection;
-      const resource = ixo.iid.v1beta1.Service.fromPartial({
-        id: "{id}#cellnode",
-        type: "Cellnode",
-        serviceEndpoint: "https://cellnode-pandora.ixo.earth",
-      });
-
-      const remove = await Iid.DeleteService(entityDid, resource.id);
-      const add = await Iid.AddService(entityDid, resource);
-
-      return remove as any;
-    });
 
     // testMsg("/ixo.iid.v1beta1.AddLinkedClaim", async () => {
     //   const entityDid = dids.legacyCollection;
