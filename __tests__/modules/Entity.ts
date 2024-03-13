@@ -223,7 +223,7 @@ export const GrantEntityAccountAuthz = async (
           value: cosmos.authz.v1beta1.GenericAuthorization.encode(
             cosmos.authz.v1beta1.GenericAuthorization.fromPartial({
               // msg: "/ibc.applications.transfer.v1.MsgTransfer",
-              msg: "/cosmos.gov.v1beta1.MsgSend",
+              msg: "/cosmos.bank.v1beta1.MsgSend",
             })
           ).finish(),
         },

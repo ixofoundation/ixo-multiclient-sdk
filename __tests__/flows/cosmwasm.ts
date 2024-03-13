@@ -598,7 +598,7 @@ export const swapContract = () => {
         token1155_denom: { cw1155: [tokenContractAddress, "TEST"] },
         token2_denom: { native: "uixo" },
         lp_token_code_id: 25,
-        owner: tester,
+        max_slippage_percent: "50",
         protocol_fee_recipient: tester,
         protocol_fee_percent: "0.1",
         lp_fee_percent: "0.2",
@@ -784,9 +784,16 @@ export const devnetSwapContract_IXO_CARBON = () => {
     const user = WalletUsers.tester;
 
     // helper to send funds to an carbon oracle user account
-    testMsg("test Bank Send to carbon oracle account", () =>
-      Cosmos.BankSendTrx(1100000000)
-    );
+    // testMsg("test Bank Send to carbon oracle account", () =>
+    //   Cosmos.BankSendTrx(
+    //     1100000000,
+    //     undefined,
+    //     undefined,
+    //     undefined,
+    //     undefined,
+    //     "ixo16s0t89a4gk0jdxhpfwq4sphjw4dcex6rvgm2ln"
+    //   )
+    // );
 
     const cw20_baseContractCode = customQueries.contract.getContractCode(
       "devnet",
@@ -837,79 +844,77 @@ export const devnetSwapContract_IXO_CARBON = () => {
     });
 
     let swapContractAddress: string =
-      "ixo1p5nwq2ut6344qwlvjv42ayqhvarl46lnqfmnrgjnh2cwahl54g2qpg4y8y";
-    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
-      const tester = (await getUser().getAccounts())[0].address;
-      const msg = {
-        token1155_denom: { cw1155: [contractAddress1155, "CARBON"] },
-        token2_denom: { native: "uixo" },
-        lp_token_code_id: cw20_baseContractCode,
-        owner: tester,
-        protocol_fee_recipient: tester,
-        protocol_fee_percent: "0.1",
-        lp_fee_percent: "0.1",
-      };
+      "ixo1d3gupctdquscekqt48g2xnmfnweaqx7hh4l83vcgy5nw7sphjlvqju0vch";
+    // testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
+    //   const tester = (await getUser().getAccounts())[0].address;
+    //   const msg = {
+    //     token1155_denom: { cw1155: [contractAddress1155, "CARBON"] },
+    //     token2_denom: { native: "uixo" },
+    //     lp_token_code_id: cw20_baseContractCode,
+    //     max_slippage_percent: "0.4",
+    //     protocol_fee_recipient: tester,
+    //     protocol_fee_percent: "0.1",
+    //     lp_fee_percent: "0.1",
+    //   };
 
-      const res = await Wasm.WasmInstantiateTrx(
-        ixoswapContractCode!,
-        JSON.stringify(msg)
-      );
-      swapContractAddress = utils.common.getValueFromEvents(
-        res,
-        "instantiate",
-        "_contract_address"
-      );
-      console.log({ swapContractAddress });
-      return res;
-    });
+    //   const res = await Wasm.WasmInstantiateTrx(31!, JSON.stringify(msg));
+    //   console.log({ res });
+    //   swapContractAddress = utils.common.getValueFromEvents(
+    //     res,
+    //     "instantiate",
+    //     "_contract_address"
+    //   );
+    //   console.log({ swapContractAddress });
+    //   return res;
+    // });
 
-    testMsg(
-      "/cosmwasm.wasm.v1.MsgExecuteContract approve swap contract for token",
-      async () => {
-        const msg = {
-          approve_all: {
-            operator: swapContractAddress,
-          },
-        };
+    // testMsg(
+    //   "/cosmwasm.wasm.v1.MsgExecuteContract approve swap contract for token",
+    //   async () => {
+    //     const msg = {
+    //       approve_all: {
+    //         operator: swapContractAddress,
+    //       },
+    //     };
 
-        const res = await Wasm.WasmExecuteTrx(
-          contractAddress1155,
-          JSON.stringify(msg),
-          WalletUsers.tester
-        );
-        return res;
-      }
-    );
+    //     const res = await Wasm.WasmExecuteTrx(
+    //       contractAddress1155,
+    //       JSON.stringify(msg),
+    //       WalletUsers.tester
+    //     );
+    //     return res;
+    //   }
+    // );
 
-    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract add liquidity", async () => {
-      const msg = {
-        add_liquidity: {
-          token1155_amounts: {
-            ...tokenIds.reduce((acc, id) => {
-              acc[id] = "500";
-              return acc;
-            }, {}),
-          },
-          min_liquidity: "6500",
-          max_token2: "1000000000",
-        },
-      };
+    // testMsg("/cosmwasm.wasm.v1.MsgExecuteContract add liquidity", async () => {
+    //   const msg = {
+    //     add_liquidity: {
+    //       token1155_amounts: {
+    //         ...tokenIds.reduce((acc, id) => {
+    //           acc[id] = "500";
+    //           return acc;
+    //         }, {}),
+    //       },
+    //       min_liquidity: "6500",
+    //       max_token2: "1000000000",
+    //     },
+    //   };
 
-      const res = await Wasm.WasmExecuteTrx(
-        swapContractAddress,
-        JSON.stringify(msg),
-        WalletUsers.tester,
-        { amount: "1000000000", denom: "uixo" }
-      );
-      return res;
-    });
+    //   const res = await Wasm.WasmExecuteTrx(
+    //     swapContractAddress,
+    //     JSON.stringify(msg),
+    //     WalletUsers.tester,
+    //     { amount: "1000000000", denom: "uixo" }
+    //   );
+    //   return res;
+    // });
 
     testMsg(
       "/cosmwasm.wasm.v1.MsgExecuteContract swap",
       async () => {
-        const slippage = 20;
-        const inputToken = false ? TokenType.Token1155 : TokenType.Token2;
-        const inputAmount = 1000000;
+        const slippage = 10;
+        const inputToken = true ? TokenType.Token1155 : TokenType.Token2;
+        const inputAmount = 1000;
 
         const formattedInputAmount =
           inputToken == TokenType.Token2
@@ -938,6 +943,9 @@ export const devnetSwapContract_IXO_CARBON = () => {
             input_token: inputToken,
             input_amount: formattedInputAmount,
             min_output: formattedOutputAmount,
+            expiration: {
+              at_height: 1800000,
+            },
           },
         };
         console.log("Swap message: ", JSON.stringify(msg, null, 3));
@@ -955,8 +963,8 @@ export const devnetSwapContract_IXO_CARBON = () => {
         );
 
         return res;
-      }
-      // true
+      },
+      true
     );
   });
 };
