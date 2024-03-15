@@ -534,6 +534,21 @@ export const swapBasic = () => {
 
 export const swapContract = () => {
   describe("Testing swaps on contract", () => {
+    // Set tester as carbon oracle user as that user owns the carbon tokens
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(
+          WalletUsers.tester,
+          process.env.ASSERT_USER_CARBON_ORACLE
+        ),
+      ])
+    );
+
+    // helper to send funds to an carbon oracle user account
+    // testMsg("test Bank Send to carbon oracle account", () =>
+    //   Cosmos.BankSendTrx(100000000000)
+    // );
+
     let tokenContractAddress: string = "";
     testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
       const tester = (await getUser().getAccounts())[0].address;
@@ -595,7 +610,7 @@ export const swapContract = () => {
     testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
       const tester = (await getUser().getAccounts())[0].address;
       const msg = {
-        token1155_denom: { cw1155: [tokenContractAddress, "TEST"] },
+        token1155_denom: { cw1155: [tokenContractAddress, "CARBON"] },
         token2_denom: { native: "uixo" },
         lp_token_code_id: 25,
         max_slippage_percent: "0.3",
@@ -656,8 +671,8 @@ export const swapContract = () => {
     });
 
     testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () => {
-      const numberOfTests = 300;
-      const slippage = 30;
+      const numberOfTests = 50;
+      const slippage = 20;
       const txList: TxRaw[] = [];
       const user = getUser(WalletUsers.tester);
       const client = await createClient(user);

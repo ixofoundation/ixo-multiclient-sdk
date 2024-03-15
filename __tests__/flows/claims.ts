@@ -715,9 +715,22 @@ export const supamotoClaims3 = () =>
     // });
 
     test("Generate Fuel Purchase claims and evaluate them", async () => {
-      let purchaseData = await csvtojsonV2().fromFile(
+      // first load previous purchases and get only id, then load latest and remove ll previous purchases
+      let purchases4Data = await csvtojsonV2().fromFile(
         "./assets/documents/emerging/payments4.csv"
       );
+      purchases4Data = purchases4Data.map((p) => p["Transaction ID"]);
+      let purchaseData = await csvtojsonV2().fromFile(
+        "./assets/documents/emerging/payments5.csv"
+      );
+      purchaseData = purchaseData.filter(
+        (p) => !purchases4Data.includes(p["Transaction ID"])
+      );
+      // console.log(purchaseData);
+      console.log({
+        purchases4Data: purchases4Data.length,
+        purchaseData: purchaseData.length,
+      });
 
       // remove any duplicate transactions by transaction id
       purchaseData = Object.values(
@@ -745,7 +758,6 @@ export const supamotoClaims3 = () =>
       );
       // console.log(purchaseData);
 
-      // console.log(purchaseData.length);
       purchaseData = purchaseData.filter((p: any) => p.status === "Active");
       purchaseData = purchaseData.filter(
         (p: any) => p.lastConnectionDays !== ""
@@ -765,35 +777,34 @@ export const supamotoClaims3 = () =>
         return aggObj;
       }, {});
 
-      const stovesWithExternalId =
-        require("../../assets/documents/emerging/stoves_with_external_ids.json").map(
+      const stovesCollection =
+        require("../../assets/documents/emerging/stoves_legacy_collection.json").map(
+          // require("../../assets/documents/emerging/stoves_genesis_collection.json").map(
           (s: any) => s.externalId
         );
-      const stovesGenesisCollection =
-        require("../../assets/documents/emerging/stoves_genesis_collection.json").map(
-          (s: any) => s.externalId
-        );
-      const stovesOnChain = Object.keys(purchaseData).filter((s) =>
-        stovesWithExternalId.includes(s)
-      );
-      const stovesNotOnChain = Object.keys(purchaseData).filter(
-        (s) => !stovesWithExternalId.includes(s)
-      );
-      const stovesInGenesisCollection = stovesOnChain.filter((s) =>
-        stovesGenesisCollection.includes(s)
-      );
-      const stovesGenesisCollectionNotInpurchases =
-        stovesGenesisCollection.filter((s) => !stovesOnChain.includes(s));
-      console.log({
-        stovesNotOnChain: stovesNotOnChain.length,
-        stovesOnChain: stovesOnChain.length,
-        stovesInGenesisCollection: stovesInGenesisCollection.length,
-      });
+      // const stovesWithExternalId =
+      //   require("../../assets/documents/emerging/stoves_with_external_ids.json").map(
+      //     (s: any) => s.externalId
+      //   );
+      // const stovesOnChain = Object.keys(purchaseData).filter((s) =>
+      //   stovesWithExternalId.includes(s)
+      // );
+      // const stovesNotOnChain = Object.keys(purchaseData).filter(
+      //   (s) => !stovesWithExternalId.includes(s)
+      // );
+      // const stovesInGenesisCollection = stovesOnChain.filter((s) =>
+      //   stovesCollection.includes(s)
+      // );
+      // console.log({
+      //   stovesNotOnChain: stovesNotOnChain.length,
+      //   stovesOnChain: stovesOnChain.length,
+      //   stovesInGenesisCollection: stovesInGenesisCollection.length,
+      // });
 
       Object.keys(purchaseData).forEach((k) => {
         // purchaseData[k].sort((a, b) => a.time_paid - b.time_paid);
-        // if deviceId not in genesis cookstoves remove
-        if (!stovesGenesisCollection.includes(k)) delete purchaseData[k];
+        // if deviceId not in collection cookstoves remove
+        if (!stovesCollection.includes(k)) delete purchaseData[k];
         else purchaseData[k].sort((a, b) => a.time_paid - b.time_paid);
       });
 
@@ -804,7 +815,7 @@ export const supamotoClaims3 = () =>
         .flat(1)
         .map((p: any) => Number(p.Mass) * 10.94);
       saveFileToPath(
-        ["documents", "emerging", "fuelPurchases_dev_test.json"],
+        ["documents", "emerging", "fuelPurchases_data.json"],
         JSON.stringify(
           {
             kgsPellets: {
@@ -832,32 +843,31 @@ export const supamotoClaims3 = () =>
             // amountOfPurchasesPerDevice: Object.values(purchaseData).map(
             //   (v: any) => v.length
             // ),
-            stoves: Object.keys(purchaseData),
-            stovesNotOnChain,
-            stovesOnChain,
-            stovesInGenesisCollection,
-            stovesGenesisCollectionNotInpurchases,
+            // stoves: Object.keys(purchaseData),
+            // purchaseData,
           },
           null,
           2
         )
       );
 
-      // helper to stop flow if just want the above data
-      const test = true;
-      if (test) throw new Error("stop");
+      // // helper to stop flow if just want the above data
+      // const test = true;
+      // if (test) throw new Error("stop");
 
       // devide payments per device into 10 devices at a time
       // ==============================================================
       purchaseData = chunkArray<any[]>(Object.values(purchaseData), 10);
       let stovePurchasesAll: any[] = [];
       let index = -1;
-      const collectionId = "1";
+      // const collectionId = "1"; // testnet and mainnet genesis fuelpurchases
+      const collectionId = "5"; // mainnet legacy fuelpurchases
+      // const collectionId = "8"; // testnet legacy fuelpurchases
 
       console.time("claims");
       for (const stovePurchases of purchaseData) {
         index++;
-        // if (index < 3) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
+        // if (index < 1) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
 
         console.log(
           "starting batch " +
@@ -937,7 +947,6 @@ export const supamotoClaims3 = () =>
           });
         });
 
-        // console.log("VER claims successfully created and tokens minted");
         console.timeLog("claims");
         // add current stove purchases chunk to all stove purchases
         stovePurchasesAll = stovePurchasesAll.concat(stovePurchases);
@@ -946,7 +955,7 @@ export const supamotoClaims3 = () =>
 
       // save all stove purchases to file
       saveFileToPath(
-        ["documents", "emerging", "fuelPurchases_dev.json"],
+        ["documents", "emerging", "fuelPurchases_made.json"],
         JSON.stringify(stovePurchasesAll, null, 2)
       );
 
