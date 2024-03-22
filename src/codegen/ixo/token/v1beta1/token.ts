@@ -9,7 +9,7 @@ export interface ParamsSDKType {
 export interface Token {
   /** address of minter */
   minter: string;
-  /** generated on token intiation through MsgSetupMinter */
+  /** generated on token initiation */
   contractAddress: string;
   /** class is the token protocol entity DID (validated) */
   class: string;

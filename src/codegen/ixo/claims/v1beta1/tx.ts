@@ -63,7 +63,7 @@ export interface MsgSubmitClaimResponseSDKType {}
 export interface MsgEvaluateClaim {
   /** claimID is the unique identifier of the claim to make evaluation against */
   claimId: string;
-  /** claimID is the unique identifier of the claim to make evaluation against */
+  /** collection_id indicates to which Collection this claim belongs */
   collectionId: string;
   /** oracle is the DID of the Oracle entity that evaluates the claim */
   oracle: string;
@@ -176,6 +176,63 @@ export interface MsgWithdrawPaymentSDKType {
 }
 export interface MsgWithdrawPaymentResponse {}
 export interface MsgWithdrawPaymentResponseSDKType {}
+export interface MsgUpdateCollectionState {
+  /** collection_id indicates which Collection to update */
+  collectionId: string;
+  /**
+   * state is the state of this Collection (open, paused, closed) you want to
+   * update to
+   */
+  state: CollectionState;
+  /** admin address used to sign this message, validated against Collection Admin */
+  adminAddress: string;
+}
+export interface MsgUpdateCollectionStateSDKType {
+  collection_id: string;
+  state: CollectionState;
+  admin_address: string;
+}
+export interface MsgUpdateCollectionStateResponse {}
+export interface MsgUpdateCollectionStateResponseSDKType {}
+export interface MsgUpdateCollectionDates {
+  /** collection_id indicates which Collection to update */
+  collectionId: string;
+  /** startDate is the date after which claims may be submitted */
+  startDate?: Timestamp;
+  /**
+   * endDate is the date after which no more claims may be submitted (no endDate
+   * is allowed)
+   */
+  endDate?: Timestamp;
+  /** admin address used to sign this message, validated against Collection Admin */
+  adminAddress: string;
+}
+export interface MsgUpdateCollectionDatesSDKType {
+  collection_id: string;
+  start_date?: TimestampSDKType;
+  end_date?: TimestampSDKType;
+  admin_address: string;
+}
+export interface MsgUpdateCollectionDatesResponse {}
+export interface MsgUpdateCollectionDatesResponseSDKType {}
+export interface MsgUpdateCollectionPayments {
+  /** collection_id indicates which Collection to update */
+  collectionId: string;
+  /**
+   * payments is the amount paid for claim submission, evaluation, approval, or
+   * rejection
+   */
+  payments?: Payments;
+  /** admin address used to sign this message, validated against Collection Admin */
+  adminAddress: string;
+}
+export interface MsgUpdateCollectionPaymentsSDKType {
+  collection_id: string;
+  payments?: PaymentsSDKType;
+  admin_address: string;
+}
+export interface MsgUpdateCollectionPaymentsResponse {}
+export interface MsgUpdateCollectionPaymentsResponseSDKType {}
 function createBaseMsgCreateCollection(): MsgCreateCollection {
   return {
     entity: "",
@@ -895,6 +952,310 @@ export const MsgWithdrawPaymentResponse = {
   },
   fromPartial(_: Partial<MsgWithdrawPaymentResponse>): MsgWithdrawPaymentResponse {
     const message = createBaseMsgWithdrawPaymentResponse();
+    return message;
+  }
+};
+function createBaseMsgUpdateCollectionState(): MsgUpdateCollectionState {
+  return {
+    collectionId: "",
+    state: 0,
+    adminAddress: ""
+  };
+}
+export const MsgUpdateCollectionState = {
+  encode(message: MsgUpdateCollectionState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.collectionId !== "") {
+      writer.uint32(10).string(message.collectionId);
+    }
+    if (message.state !== 0) {
+      writer.uint32(16).int32(message.state);
+    }
+    if (message.adminAddress !== "") {
+      writer.uint32(26).string(message.adminAddress);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionState {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateCollectionState();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.collectionId = reader.string();
+          break;
+        case 2:
+          message.state = (reader.int32() as any);
+          break;
+        case 3:
+          message.adminAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUpdateCollectionState {
+    return {
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      state: isSet(object.state) ? collectionStateFromJSON(object.state) : 0,
+      adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : ""
+    };
+  },
+  toJSON(message: MsgUpdateCollectionState): unknown {
+    const obj: any = {};
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.state !== undefined && (obj.state = collectionStateToJSON(message.state));
+    message.adminAddress !== undefined && (obj.adminAddress = message.adminAddress);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgUpdateCollectionState>): MsgUpdateCollectionState {
+    const message = createBaseMsgUpdateCollectionState();
+    message.collectionId = object.collectionId ?? "";
+    message.state = object.state ?? 0;
+    message.adminAddress = object.adminAddress ?? "";
+    return message;
+  }
+};
+function createBaseMsgUpdateCollectionStateResponse(): MsgUpdateCollectionStateResponse {
+  return {};
+}
+export const MsgUpdateCollectionStateResponse = {
+  encode(_: MsgUpdateCollectionStateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionStateResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateCollectionStateResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgUpdateCollectionStateResponse {
+    return {};
+  },
+  toJSON(_: MsgUpdateCollectionStateResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgUpdateCollectionStateResponse>): MsgUpdateCollectionStateResponse {
+    const message = createBaseMsgUpdateCollectionStateResponse();
+    return message;
+  }
+};
+function createBaseMsgUpdateCollectionDates(): MsgUpdateCollectionDates {
+  return {
+    collectionId: "",
+    startDate: undefined,
+    endDate: undefined,
+    adminAddress: ""
+  };
+}
+export const MsgUpdateCollectionDates = {
+  encode(message: MsgUpdateCollectionDates, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.collectionId !== "") {
+      writer.uint32(10).string(message.collectionId);
+    }
+    if (message.startDate !== undefined) {
+      Timestamp.encode(message.startDate, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.endDate !== undefined) {
+      Timestamp.encode(message.endDate, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.adminAddress !== "") {
+      writer.uint32(34).string(message.adminAddress);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionDates {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateCollectionDates();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.collectionId = reader.string();
+          break;
+        case 2:
+          message.startDate = Timestamp.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.endDate = Timestamp.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.adminAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUpdateCollectionDates {
+    return {
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      startDate: isSet(object.startDate) ? fromJsonTimestamp(object.startDate) : undefined,
+      endDate: isSet(object.endDate) ? fromJsonTimestamp(object.endDate) : undefined,
+      adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : ""
+    };
+  },
+  toJSON(message: MsgUpdateCollectionDates): unknown {
+    const obj: any = {};
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.startDate !== undefined && (obj.startDate = fromTimestamp(message.startDate).toISOString());
+    message.endDate !== undefined && (obj.endDate = fromTimestamp(message.endDate).toISOString());
+    message.adminAddress !== undefined && (obj.adminAddress = message.adminAddress);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgUpdateCollectionDates>): MsgUpdateCollectionDates {
+    const message = createBaseMsgUpdateCollectionDates();
+    message.collectionId = object.collectionId ?? "";
+    message.startDate = object.startDate !== undefined && object.startDate !== null ? Timestamp.fromPartial(object.startDate) : undefined;
+    message.endDate = object.endDate !== undefined && object.endDate !== null ? Timestamp.fromPartial(object.endDate) : undefined;
+    message.adminAddress = object.adminAddress ?? "";
+    return message;
+  }
+};
+function createBaseMsgUpdateCollectionDatesResponse(): MsgUpdateCollectionDatesResponse {
+  return {};
+}
+export const MsgUpdateCollectionDatesResponse = {
+  encode(_: MsgUpdateCollectionDatesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionDatesResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateCollectionDatesResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgUpdateCollectionDatesResponse {
+    return {};
+  },
+  toJSON(_: MsgUpdateCollectionDatesResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgUpdateCollectionDatesResponse>): MsgUpdateCollectionDatesResponse {
+    const message = createBaseMsgUpdateCollectionDatesResponse();
+    return message;
+  }
+};
+function createBaseMsgUpdateCollectionPayments(): MsgUpdateCollectionPayments {
+  return {
+    collectionId: "",
+    payments: undefined,
+    adminAddress: ""
+  };
+}
+export const MsgUpdateCollectionPayments = {
+  encode(message: MsgUpdateCollectionPayments, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.collectionId !== "") {
+      writer.uint32(10).string(message.collectionId);
+    }
+    if (message.payments !== undefined) {
+      Payments.encode(message.payments, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.adminAddress !== "") {
+      writer.uint32(26).string(message.adminAddress);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionPayments {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateCollectionPayments();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.collectionId = reader.string();
+          break;
+        case 2:
+          message.payments = Payments.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.adminAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUpdateCollectionPayments {
+    return {
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      payments: isSet(object.payments) ? Payments.fromJSON(object.payments) : undefined,
+      adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : ""
+    };
+  },
+  toJSON(message: MsgUpdateCollectionPayments): unknown {
+    const obj: any = {};
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.payments !== undefined && (obj.payments = message.payments ? Payments.toJSON(message.payments) : undefined);
+    message.adminAddress !== undefined && (obj.adminAddress = message.adminAddress);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgUpdateCollectionPayments>): MsgUpdateCollectionPayments {
+    const message = createBaseMsgUpdateCollectionPayments();
+    message.collectionId = object.collectionId ?? "";
+    message.payments = object.payments !== undefined && object.payments !== null ? Payments.fromPartial(object.payments) : undefined;
+    message.adminAddress = object.adminAddress ?? "";
+    return message;
+  }
+};
+function createBaseMsgUpdateCollectionPaymentsResponse(): MsgUpdateCollectionPaymentsResponse {
+  return {};
+}
+export const MsgUpdateCollectionPaymentsResponse = {
+  encode(_: MsgUpdateCollectionPaymentsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionPaymentsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateCollectionPaymentsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgUpdateCollectionPaymentsResponse {
+    return {};
+  },
+  toJSON(_: MsgUpdateCollectionPaymentsResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgUpdateCollectionPaymentsResponse>): MsgUpdateCollectionPaymentsResponse {
+    const message = createBaseMsgUpdateCollectionPaymentsResponse();
     return message;
   }
 };

@@ -67,7 +67,7 @@ export interface MsgSubmitClaimResponseSDKType {
 export interface MsgEvaluateClaim {
     /** claimID is the unique identifier of the claim to make evaluation against */
     claimId: string;
-    /** claimID is the unique identifier of the claim to make evaluation against */
+    /** collection_id indicates to which Collection this claim belongs */
     collectionId: string;
     /** oracle is the DID of the Oracle entity that evaluates the claim */
     oracle: string;
@@ -186,6 +186,69 @@ export interface MsgWithdrawPaymentResponse {
 }
 export interface MsgWithdrawPaymentResponseSDKType {
 }
+export interface MsgUpdateCollectionState {
+    /** collection_id indicates which Collection to update */
+    collectionId: string;
+    /**
+     * state is the state of this Collection (open, paused, closed) you want to
+     * update to
+     */
+    state: CollectionState;
+    /** admin address used to sign this message, validated against Collection Admin */
+    adminAddress: string;
+}
+export interface MsgUpdateCollectionStateSDKType {
+    collection_id: string;
+    state: CollectionState;
+    admin_address: string;
+}
+export interface MsgUpdateCollectionStateResponse {
+}
+export interface MsgUpdateCollectionStateResponseSDKType {
+}
+export interface MsgUpdateCollectionDates {
+    /** collection_id indicates which Collection to update */
+    collectionId: string;
+    /** startDate is the date after which claims may be submitted */
+    startDate?: Timestamp;
+    /**
+     * endDate is the date after which no more claims may be submitted (no endDate
+     * is allowed)
+     */
+    endDate?: Timestamp;
+    /** admin address used to sign this message, validated against Collection Admin */
+    adminAddress: string;
+}
+export interface MsgUpdateCollectionDatesSDKType {
+    collection_id: string;
+    start_date?: TimestampSDKType;
+    end_date?: TimestampSDKType;
+    admin_address: string;
+}
+export interface MsgUpdateCollectionDatesResponse {
+}
+export interface MsgUpdateCollectionDatesResponseSDKType {
+}
+export interface MsgUpdateCollectionPayments {
+    /** collection_id indicates which Collection to update */
+    collectionId: string;
+    /**
+     * payments is the amount paid for claim submission, evaluation, approval, or
+     * rejection
+     */
+    payments?: Payments;
+    /** admin address used to sign this message, validated against Collection Admin */
+    adminAddress: string;
+}
+export interface MsgUpdateCollectionPaymentsSDKType {
+    collection_id: string;
+    payments?: PaymentsSDKType;
+    admin_address: string;
+}
+export interface MsgUpdateCollectionPaymentsResponse {
+}
+export interface MsgUpdateCollectionPaymentsResponseSDKType {
+}
 export declare const MsgCreateCollection: {
     encode(message: MsgCreateCollection, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateCollection;
@@ -255,4 +318,46 @@ export declare const MsgWithdrawPaymentResponse: {
     fromJSON(_: any): MsgWithdrawPaymentResponse;
     toJSON(_: MsgWithdrawPaymentResponse): unknown;
     fromPartial(_: Partial<MsgWithdrawPaymentResponse>): MsgWithdrawPaymentResponse;
+};
+export declare const MsgUpdateCollectionState: {
+    encode(message: MsgUpdateCollectionState, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionState;
+    fromJSON(object: any): MsgUpdateCollectionState;
+    toJSON(message: MsgUpdateCollectionState): unknown;
+    fromPartial(object: Partial<MsgUpdateCollectionState>): MsgUpdateCollectionState;
+};
+export declare const MsgUpdateCollectionStateResponse: {
+    encode(_: MsgUpdateCollectionStateResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionStateResponse;
+    fromJSON(_: any): MsgUpdateCollectionStateResponse;
+    toJSON(_: MsgUpdateCollectionStateResponse): unknown;
+    fromPartial(_: Partial<MsgUpdateCollectionStateResponse>): MsgUpdateCollectionStateResponse;
+};
+export declare const MsgUpdateCollectionDates: {
+    encode(message: MsgUpdateCollectionDates, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionDates;
+    fromJSON(object: any): MsgUpdateCollectionDates;
+    toJSON(message: MsgUpdateCollectionDates): unknown;
+    fromPartial(object: Partial<MsgUpdateCollectionDates>): MsgUpdateCollectionDates;
+};
+export declare const MsgUpdateCollectionDatesResponse: {
+    encode(_: MsgUpdateCollectionDatesResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionDatesResponse;
+    fromJSON(_: any): MsgUpdateCollectionDatesResponse;
+    toJSON(_: MsgUpdateCollectionDatesResponse): unknown;
+    fromPartial(_: Partial<MsgUpdateCollectionDatesResponse>): MsgUpdateCollectionDatesResponse;
+};
+export declare const MsgUpdateCollectionPayments: {
+    encode(message: MsgUpdateCollectionPayments, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionPayments;
+    fromJSON(object: any): MsgUpdateCollectionPayments;
+    toJSON(message: MsgUpdateCollectionPayments): unknown;
+    fromPartial(object: Partial<MsgUpdateCollectionPayments>): MsgUpdateCollectionPayments;
+};
+export declare const MsgUpdateCollectionPaymentsResponse: {
+    encode(_: MsgUpdateCollectionPaymentsResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionPaymentsResponse;
+    fromJSON(_: any): MsgUpdateCollectionPaymentsResponse;
+    toJSON(_: MsgUpdateCollectionPaymentsResponse): unknown;
+    fromPartial(_: Partial<MsgUpdateCollectionPaymentsResponse>): MsgUpdateCollectionPaymentsResponse;
 };

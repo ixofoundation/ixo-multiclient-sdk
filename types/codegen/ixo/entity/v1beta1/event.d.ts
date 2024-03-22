@@ -65,7 +65,10 @@ export interface EntityAccountCreatedEventSDKType {
     account_name: string;
     account_address: string;
 }
-/** EntityAccountCreatedEvent is an event triggered on a entity account creation */
+/**
+ * EntityAccountCreatedEvent is an event triggered on a entity account authz
+ * creation
+ */
 export interface EntityAccountAuthzCreatedEvent {
     id: string;
     signer: string;
@@ -74,7 +77,10 @@ export interface EntityAccountAuthzCreatedEvent {
     grantee: string;
     grant?: Grant;
 }
-/** EntityAccountCreatedEvent is an event triggered on a entity account creation */
+/**
+ * EntityAccountCreatedEvent is an event triggered on a entity account authz
+ * creation
+ */
 export interface EntityAccountAuthzCreatedEventSDKType {
     id: string;
     signer: string;
@@ -82,6 +88,30 @@ export interface EntityAccountAuthzCreatedEventSDKType {
     granter: string;
     grantee: string;
     grant?: GrantSDKType;
+}
+/**
+ * EntityAccountAuthzRevokedEvent is an event triggered on a entity account
+ * authz revocation
+ */
+export interface EntityAccountAuthzRevokedEvent {
+    id: string;
+    signer: string;
+    accountName: string;
+    granter: string;
+    grantee: string;
+    msgTypeUrl: string;
+}
+/**
+ * EntityAccountAuthzRevokedEvent is an event triggered on a entity account
+ * authz revocation
+ */
+export interface EntityAccountAuthzRevokedEventSDKType {
+    id: string;
+    signer: string;
+    account_name: string;
+    granter: string;
+    grantee: string;
+    msg_type_url: string;
 }
 export declare const EntityCreatedEvent: {
     encode(message: EntityCreatedEvent, writer?: _m0.Writer): _m0.Writer;
@@ -124,4 +154,11 @@ export declare const EntityAccountAuthzCreatedEvent: {
     fromJSON(object: any): EntityAccountAuthzCreatedEvent;
     toJSON(message: EntityAccountAuthzCreatedEvent): unknown;
     fromPartial(object: Partial<EntityAccountAuthzCreatedEvent>): EntityAccountAuthzCreatedEvent;
+};
+export declare const EntityAccountAuthzRevokedEvent: {
+    encode(message: EntityAccountAuthzRevokedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): EntityAccountAuthzRevokedEvent;
+    fromJSON(object: any): EntityAccountAuthzRevokedEvent;
+    toJSON(message: EntityAccountAuthzRevokedEvent): unknown;
+    fromPartial(object: Partial<EntityAccountAuthzRevokedEvent>): EntityAccountAuthzRevokedEvent;
 };

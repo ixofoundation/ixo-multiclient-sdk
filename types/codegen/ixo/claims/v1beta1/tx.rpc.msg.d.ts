@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import { MsgCreateCollection, MsgCreateCollectionResponse, MsgSubmitClaim, MsgSubmitClaimResponse, MsgEvaluateClaim, MsgEvaluateClaimResponse, MsgDisputeClaim, MsgDisputeClaimResponse, MsgWithdrawPayment, MsgWithdrawPaymentResponse } from "./tx";
+import { MsgCreateCollection, MsgCreateCollectionResponse, MsgSubmitClaim, MsgSubmitClaimResponse, MsgEvaluateClaim, MsgEvaluateClaimResponse, MsgDisputeClaim, MsgDisputeClaimResponse, MsgWithdrawPayment, MsgWithdrawPaymentResponse, MsgUpdateCollectionState, MsgUpdateCollectionStateResponse, MsgUpdateCollectionDates, MsgUpdateCollectionDatesResponse, MsgUpdateCollectionPayments, MsgUpdateCollectionPaymentsResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
     createCollection(request: MsgCreateCollection): Promise<MsgCreateCollectionResponse>;
@@ -7,6 +7,9 @@ export interface Msg {
     evaluateClaim(request: MsgEvaluateClaim): Promise<MsgEvaluateClaimResponse>;
     disputeClaim(request: MsgDisputeClaim): Promise<MsgDisputeClaimResponse>;
     withdrawPayment(request: MsgWithdrawPayment): Promise<MsgWithdrawPaymentResponse>;
+    updateCollectionState(request: MsgUpdateCollectionState): Promise<MsgUpdateCollectionStateResponse>;
+    updateCollectionDates(request: MsgUpdateCollectionDates): Promise<MsgUpdateCollectionDatesResponse>;
+    updateCollectionPayments(request: MsgUpdateCollectionPayments): Promise<MsgUpdateCollectionPaymentsResponse>;
 }
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
@@ -16,4 +19,7 @@ export declare class MsgClientImpl implements Msg {
     evaluateClaim(request: MsgEvaluateClaim): Promise<MsgEvaluateClaimResponse>;
     disputeClaim(request: MsgDisputeClaim): Promise<MsgDisputeClaimResponse>;
     withdrawPayment(request: MsgWithdrawPayment): Promise<MsgWithdrawPaymentResponse>;
+    updateCollectionState(request: MsgUpdateCollectionState): Promise<MsgUpdateCollectionStateResponse>;
+    updateCollectionDates(request: MsgUpdateCollectionDates): Promise<MsgUpdateCollectionDatesResponse>;
+    updateCollectionPayments(request: MsgUpdateCollectionPayments): Promise<MsgUpdateCollectionPaymentsResponse>;
 }

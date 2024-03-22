@@ -82,7 +82,7 @@ export const getFee = (
         amount: (trxLength * 30000).toString(),
       },
     ],
-    gas: (trxLength * 500000).toString(),
+    gas: (trxLength * 800000).toString(),
     // if wana do transactions using feegrant granter address
     // granter: "ixo1n8yrmeatsk74dw0zs95ess9sgzptd6thgjgcj2",
   };

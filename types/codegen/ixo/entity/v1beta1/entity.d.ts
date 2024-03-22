@@ -31,7 +31,7 @@ export interface Entity {
      * Client applications
      */
     status: number;
-    /** Address of the operator through which the Entity was created */
+    /** Did of the operator through which the Entity was created */
     relayerNode: string;
     /** Credentials of the enitity to be verified */
     credentials: string[];

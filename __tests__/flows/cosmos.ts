@@ -1,6 +1,7 @@
 import {
   chunkArray,
   generateNewWallet,
+  getFileFromPath,
   getUser,
   queryClient,
   saveFileToPath,
@@ -127,19 +128,24 @@ export const feegrantAllCurrentUsers = () =>
       }
       console.log(allowances.length);
 
-      // to save current grantee addresses incase something goes wrong
-      // saveFileToPath(
-      //   ["documents", "random", "mainnet_feegrant_addresses2.json"],
-      //   JSON.stringify(
-      //     allowances.map((a) =>
-      //       fromTimestamp(
-      //         createRegistry().decode(a.allowance as any).expiration
-      //       )
-      //     ),
-      //     null,
-      //     2
+      // devide grantees into chunks of 200
+      let granteesChunks = chunkArray<string>(
+        allowances.map((a) => a.grantee),
+        180
+      );
+
+      // optionally allow allowances to be fetched from saved file
+      // allowances = JSON.parse(
+      //   getFileFromPath(
+      //     ["documents", "random", "mainnet_feegrant_addresses.json"],
+      //     "ascii"
       //   )
       // );
+      // // @ts-ignore
+      // granteesChunks = chunkArray<string>(allowances, 180);
+      // console.log(allowances.length);
+
+      // to save current grantee addresses incase something goes wrong
       saveFileToPath(
         ["documents", "random", "mainnet_feegrant_addresses.json"],
         JSON.stringify(
@@ -147,12 +153,6 @@ export const feegrantAllCurrentUsers = () =>
           null,
           2
         )
-      );
-
-      // devide grantees into chunks of 200
-      let granteesChunks = chunkArray<string>(
-        allowances.map((a) => a.grantee),
-        200
       );
 
       // first revoke all current feegrants

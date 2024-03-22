@@ -53,6 +53,10 @@ export const enititiesBasic = () =>
       Entity.GrantEntityAccountAuthz(entityDid, name)
     );
 
+    testMsg("/ixo.entity.v1beta1.MsgRevokeEntityAccountAuthz", () =>
+      Entity.MsgRevokeEntityAccountAuthz(entityDid, name)
+    );
+
     testMsg("/ixo.entity.v1beta1.MsgTransferEntity", () =>
       Entity.TransferEntity(
         WalletUsers.tester,

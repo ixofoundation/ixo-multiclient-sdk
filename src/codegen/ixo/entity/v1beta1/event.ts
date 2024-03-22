@@ -66,7 +66,10 @@ export interface EntityAccountCreatedEventSDKType {
   account_name: string;
   account_address: string;
 }
-/** EntityAccountCreatedEvent is an event triggered on a entity account creation */
+/**
+ * EntityAccountCreatedEvent is an event triggered on a entity account authz
+ * creation
+ */
 export interface EntityAccountAuthzCreatedEvent {
   id: string;
   signer: string;
@@ -75,7 +78,10 @@ export interface EntityAccountAuthzCreatedEvent {
   grantee: string;
   grant?: Grant;
 }
-/** EntityAccountCreatedEvent is an event triggered on a entity account creation */
+/**
+ * EntityAccountCreatedEvent is an event triggered on a entity account authz
+ * creation
+ */
 export interface EntityAccountAuthzCreatedEventSDKType {
   id: string;
   signer: string;
@@ -83,6 +89,30 @@ export interface EntityAccountAuthzCreatedEventSDKType {
   granter: string;
   grantee: string;
   grant?: GrantSDKType;
+}
+/**
+ * EntityAccountAuthzRevokedEvent is an event triggered on a entity account
+ * authz revocation
+ */
+export interface EntityAccountAuthzRevokedEvent {
+  id: string;
+  signer: string;
+  accountName: string;
+  granter: string;
+  grantee: string;
+  msgTypeUrl: string;
+}
+/**
+ * EntityAccountAuthzRevokedEvent is an event triggered on a entity account
+ * authz revocation
+ */
+export interface EntityAccountAuthzRevokedEventSDKType {
+  id: string;
+  signer: string;
+  account_name: string;
+  granter: string;
+  grantee: string;
+  msg_type_url: string;
 }
 function createBaseEntityCreatedEvent(): EntityCreatedEvent {
   return {
@@ -491,6 +521,101 @@ export const EntityAccountAuthzCreatedEvent = {
     message.granter = object.granter ?? "";
     message.grantee = object.grantee ?? "";
     message.grant = object.grant !== undefined && object.grant !== null ? Grant.fromPartial(object.grant) : undefined;
+    return message;
+  }
+};
+function createBaseEntityAccountAuthzRevokedEvent(): EntityAccountAuthzRevokedEvent {
+  return {
+    id: "",
+    signer: "",
+    accountName: "",
+    granter: "",
+    grantee: "",
+    msgTypeUrl: ""
+  };
+}
+export const EntityAccountAuthzRevokedEvent = {
+  encode(message: EntityAccountAuthzRevokedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.signer !== "") {
+      writer.uint32(18).string(message.signer);
+    }
+    if (message.accountName !== "") {
+      writer.uint32(26).string(message.accountName);
+    }
+    if (message.granter !== "") {
+      writer.uint32(34).string(message.granter);
+    }
+    if (message.grantee !== "") {
+      writer.uint32(42).string(message.grantee);
+    }
+    if (message.msgTypeUrl !== "") {
+      writer.uint32(50).string(message.msgTypeUrl);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): EntityAccountAuthzRevokedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEntityAccountAuthzRevokedEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+        case 2:
+          message.signer = reader.string();
+          break;
+        case 3:
+          message.accountName = reader.string();
+          break;
+        case 4:
+          message.granter = reader.string();
+          break;
+        case 5:
+          message.grantee = reader.string();
+          break;
+        case 6:
+          message.msgTypeUrl = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EntityAccountAuthzRevokedEvent {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      signer: isSet(object.signer) ? String(object.signer) : "",
+      accountName: isSet(object.accountName) ? String(object.accountName) : "",
+      granter: isSet(object.granter) ? String(object.granter) : "",
+      grantee: isSet(object.grantee) ? String(object.grantee) : "",
+      msgTypeUrl: isSet(object.msgTypeUrl) ? String(object.msgTypeUrl) : ""
+    };
+  },
+  toJSON(message: EntityAccountAuthzRevokedEvent): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.signer !== undefined && (obj.signer = message.signer);
+    message.accountName !== undefined && (obj.accountName = message.accountName);
+    message.granter !== undefined && (obj.granter = message.granter);
+    message.grantee !== undefined && (obj.grantee = message.grantee);
+    message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl);
+    return obj;
+  },
+  fromPartial(object: Partial<EntityAccountAuthzRevokedEvent>): EntityAccountAuthzRevokedEvent {
+    const message = createBaseEntityAccountAuthzRevokedEvent();
+    message.id = object.id ?? "";
+    message.signer = object.signer ?? "";
+    message.accountName = object.accountName ?? "";
+    message.granter = object.granter ?? "";
+    message.grantee = object.grantee ?? "";
+    message.msgTypeUrl = object.msgTypeUrl ?? "";
     return message;
   }
 };
