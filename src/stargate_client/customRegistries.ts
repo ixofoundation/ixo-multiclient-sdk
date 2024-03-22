@@ -295,6 +295,10 @@ export const createRegistry = (): Registry => {
     "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
     ixo.entity.v1beta1.MsgGrantEntityAccountAuthz
   );
+  myRegistry.register(
+    "/ixo.entity.v1beta1.MsgRevokeEntityAccountAuthz",
+    ixo.entity.v1beta1.MsgRevokeEntityAccountAuthz
+  );
 
   // Ixo Bond module
   myRegistry.register(
@@ -395,6 +399,18 @@ export const createRegistry = (): Registry => {
   myRegistry.register(
     "/ixo.claims.v1beta1.WithdrawPaymentAuthorization",
     ixo.claims.v1beta1.WithdrawPaymentAuthorization
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgUpdateCollectionState",
+    ixo.claims.v1beta1.MsgUpdateCollectionState
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgUpdateCollectionDates",
+    ixo.claims.v1beta1.MsgUpdateCollectionDates
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgUpdateCollectionPayments",
+    ixo.claims.v1beta1.MsgUpdateCollectionPayments
   );
 
   return myRegistry;

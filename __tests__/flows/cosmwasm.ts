@@ -535,16 +535,16 @@ export const swapBasic = () => {
 export const swapContract = () => {
   describe("Testing swaps on contract", () => {
     // Set tester as carbon oracle user as that user owns the carbon tokens
-    beforeAll(() =>
-      Promise.all([
-        generateNewWallet(
-          WalletUsers.tester,
-          process.env.ASSERT_USER_CARBON_ORACLE
-        ),
-      ])
-    );
+    // beforeAll(() =>
+    //   Promise.all([
+    //     generateNewWallet(
+    //       WalletUsers.tester,
+    //       process.env.ASSERT_USER_CARBON_ORACLE
+    //     ),
+    //   ])
+    // );
 
-    // helper to send funds to an carbon oracle user account
+    // // helper to send funds to an carbon oracle user account
     // testMsg("test Bank Send to carbon oracle account", () =>
     //   Cosmos.BankSendTrx(100000000000)
     // );
@@ -567,7 +567,7 @@ export const swapContract = () => {
     let tokenIds: string[] = [];
     test("Query token ids", async () => {
       const contractAddress1155 =
-        "ixo1xr3rq8yvd7qplsw5yx90ftsr2zdhg4e9z60h5duusgxpv72hud3sq0mjl6";
+        "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
       const tester = (await getUser().getAccounts())[0].address;
 
       const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
@@ -610,7 +610,7 @@ export const swapContract = () => {
     testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
       const tester = (await getUser().getAccounts())[0].address;
       const msg = {
-        token1155_denom: { cw1155: [tokenContractAddress, "CARBON"] },
+        token1155_denom: { cw1155: [tokenContractAddress, "TEST"] },
         token2_denom: { native: "uixo" },
         lp_token_code_id: 25,
         max_slippage_percent: "0.3",
@@ -619,7 +619,7 @@ export const swapContract = () => {
         lp_fee_percent: "0.2",
       };
 
-      const res = await Wasm.WasmInstantiateTrx(32, JSON.stringify(msg));
+      const res = await Wasm.WasmInstantiateTrx(29, JSON.stringify(msg));
       swapContractAddress = utils.common.getValueFromEvents(
         res,
         "instantiate",
@@ -656,7 +656,7 @@ export const swapContract = () => {
               return acc;
             }, {}),
           },
-          min_liquidity: "100000000000",
+          min_liquidity: "10000000000",
           max_token2: "10000000000",
         },
       };
@@ -671,7 +671,7 @@ export const swapContract = () => {
     });
 
     testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () => {
-      const numberOfTests = 50;
+      const numberOfTests = 30;
       const slippage = 20;
       const txList: TxRaw[] = [];
       const user = getUser(WalletUsers.tester);

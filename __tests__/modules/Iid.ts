@@ -220,14 +220,15 @@ export const SetVerificationRelationships = async (
 
   // const alice = getUser(WalletUsers.alice);
   // const pubkeyBase58 = base58.encode((await alice.getAccounts())[0].pubkey);
-  const accountEd = (await getUser(WalletUsers.tester, "ed").getAccounts())[0];
+  const userEd = getUser(WalletUsers.tester, "ed");
+  const accountEd = (await userEd.getAccounts())[0];
   const myPubkey = base58.encode(accountEd.pubkey);
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgSetVerificationRelationships",
     value: ixo.iid.v1beta1.MsgSetVerificationRelationships.fromPartial({
       id: did,
-      methodId: did + "#" + myPubkey,
+      methodId: userEd.did + "#" + myPubkey,
       relationships: relationships,
       signer: myAddress,
     }),
@@ -247,14 +248,15 @@ export const RevokeVerification = async (did?: string, methodId?: string) => {
 
   // const alice = getUser(WalletUsers.alice);
   // const pubkeyBase58 = base58.encode((await alice.getAccounts())[0].pubkey);
-  const accountEd = (await getUser(WalletUsers.tester, "ed").getAccounts())[0];
+  const userEd = getUser(WalletUsers.tester, "ed");
+  const accountEd = (await userEd.getAccounts())[0];
   const myPubkey = base58.encode(accountEd.pubkey);
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgRevokeVerification",
     value: ixo.iid.v1beta1.MsgRevokeVerification.fromPartial({
       id: did ?? userDid,
-      methodId: methodId ?? did + "#" + myPubkey,
+      methodId: methodId ?? userEd.did + "#" + myPubkey,
       signer: myAddress,
     }),
   };

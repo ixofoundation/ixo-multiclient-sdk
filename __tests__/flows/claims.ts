@@ -85,6 +85,51 @@ export const claimsBasic = () =>
       return res;
     });
 
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz MsgUpdateCollectionState",
+      () =>
+        Entity.GrantEntityAccountAuthz(
+          protocol,
+          "admin",
+          WalletUsers.tester,
+          undefined,
+          "/ixo.claims.v1beta1.MsgUpdateCollectionState"
+        )
+    );
+    testMsg("/ixo.claims.v1beta1.MsgUpdateCollectionState", () =>
+      Claims.UpdateCollectionState(collectionId, adminAccount)
+    );
+
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz MsgUpdateCollectionDates",
+      () =>
+        Entity.GrantEntityAccountAuthz(
+          protocol,
+          "admin",
+          WalletUsers.tester,
+          undefined,
+          "/ixo.claims.v1beta1.MsgUpdateCollectionDates"
+        )
+    );
+    testMsg("/ixo.claims.v1beta1.MsgUpdateCollectionState", () =>
+      Claims.UpdateCollectionDates(collectionId, adminAccount)
+    );
+
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz MsgUpdateCollectionPayments",
+      () =>
+        Entity.GrantEntityAccountAuthz(
+          protocol,
+          "admin",
+          WalletUsers.tester,
+          undefined,
+          "/ixo.claims.v1beta1.MsgUpdateCollectionPayments"
+        )
+    );
+    testMsg("/ixo.claims.v1beta1.MsgUpdateCollectionState", () =>
+      Claims.UpdateCollectionPayments(collectionId, adminAccount, adminAccount)
+    );
+
     testMsg("/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent submit", () =>
       Claims.GrantEntityAccountClaimsSubmitAuthz(
         protocol,

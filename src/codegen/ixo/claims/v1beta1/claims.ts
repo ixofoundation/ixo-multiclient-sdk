@@ -45,6 +45,7 @@ export enum EvaluationStatus {
   APPROVED = 1,
   REJECTED = 2,
   DISPUTED = 3,
+  INVALIDATED = 4,
   UNRECOGNIZED = -1,
 }
 export const EvaluationStatusSDKType = EvaluationStatus;
@@ -62,6 +63,9 @@ export function evaluationStatusFromJSON(object: any): EvaluationStatus {
     case 3:
     case "DISPUTED":
       return EvaluationStatus.DISPUTED;
+    case 4:
+    case "INVALIDATED":
+      return EvaluationStatus.INVALIDATED;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -78,6 +82,8 @@ export function evaluationStatusToJSON(object: EvaluationStatus): string {
       return "REJECTED";
     case EvaluationStatus.DISPUTED:
       return "DISPUTED";
+    case EvaluationStatus.INVALIDATED:
+      return "INVALIDATED";
     case EvaluationStatus.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -206,7 +212,7 @@ export interface Collection {
   entity: string;
   /**
    * admin is the account address that will authorize or revoke agents and
-   * payments (the grantor)
+   * payments (the grantor), and can update the collection
    */
   admin: string;
   /** protocol is the DID of the claim protocol */
@@ -251,6 +257,11 @@ export interface Collection {
   payments?: Payments;
   /** signer address */
   signer: string;
+  /**
+   * invalidated is the number of claims that have been evaluated as invalid
+   * (internally calculated)
+   */
+  invalidated: Long;
 }
 export interface CollectionSDKType {
   id: string;
@@ -268,6 +279,7 @@ export interface CollectionSDKType {
   state: CollectionState;
   payments?: PaymentsSDKType;
   signer: string;
+  invalidated: Long;
 }
 export interface Payments {
   submission?: Payment;
@@ -507,7 +519,8 @@ function createBaseCollection(): Collection {
     disputed: Long.UZERO,
     state: 0,
     payments: undefined,
-    signer: ""
+    signer: "",
+    invalidated: Long.UZERO
   };
 }
 export const Collection = {
@@ -556,6 +569,9 @@ export const Collection = {
     }
     if (message.signer !== "") {
       writer.uint32(122).string(message.signer);
+    }
+    if (!message.invalidated.isZero()) {
+      writer.uint32(128).uint64(message.invalidated);
     }
     return writer;
   },
@@ -611,6 +627,9 @@ export const Collection = {
         case 15:
           message.signer = reader.string();
           break;
+        case 16:
+          message.invalidated = (reader.uint64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -634,7 +653,8 @@ export const Collection = {
       disputed: isSet(object.disputed) ? Long.fromValue(object.disputed) : Long.UZERO,
       state: isSet(object.state) ? collectionStateFromJSON(object.state) : 0,
       payments: isSet(object.payments) ? Payments.fromJSON(object.payments) : undefined,
-      signer: isSet(object.signer) ? String(object.signer) : ""
+      signer: isSet(object.signer) ? String(object.signer) : "",
+      invalidated: isSet(object.invalidated) ? Long.fromValue(object.invalidated) : Long.UZERO
     };
   },
   toJSON(message: Collection): unknown {
@@ -654,6 +674,7 @@ export const Collection = {
     message.state !== undefined && (obj.state = collectionStateToJSON(message.state));
     message.payments !== undefined && (obj.payments = message.payments ? Payments.toJSON(message.payments) : undefined);
     message.signer !== undefined && (obj.signer = message.signer);
+    message.invalidated !== undefined && (obj.invalidated = (message.invalidated || Long.UZERO).toString());
     return obj;
   },
   fromPartial(object: Partial<Collection>): Collection {
@@ -673,6 +694,7 @@ export const Collection = {
     message.state = object.state ?? 0;
     message.payments = object.payments !== undefined && object.payments !== null ? Payments.fromPartial(object.payments) : undefined;
     message.signer = object.signer ?? "";
+    message.invalidated = object.invalidated !== undefined && object.invalidated !== null ? Long.fromValue(object.invalidated) : Long.UZERO;
     return message;
   }
 };

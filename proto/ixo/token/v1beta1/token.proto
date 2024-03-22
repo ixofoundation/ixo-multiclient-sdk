@@ -3,7 +3,7 @@ package ixo.token.v1beta1;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/ixofoundation/ixo-blockchain/x/token/types";
+option go_package = "github.com/ixofoundation/ixo-blockchain/v2/x/token/types";
 
 message Params { uint64 ixo1155_contract_code = 1; }
 
@@ -12,7 +12,7 @@ message Token {
 
   // address of minter
   string minter = 1;
-  // generated on token intiation through MsgSetupMinter
+  // generated on token initiation
   string contract_address = 2;
   // class is the token protocol entity DID (validated)
   string class = 3;

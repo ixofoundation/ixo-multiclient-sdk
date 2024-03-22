@@ -35,7 +35,7 @@ export interface MsgCreateEntity {
      * Client applications
      */
     endDate?: Timestamp;
-    /** Address of the operator through which the Entity was created */
+    /** Did of the operator through which the Entity was created */
     relayerNode: string;
     /**
      * Content ID or Hash of public Verifiable Credentials associated with the
@@ -167,10 +167,7 @@ export interface MsgTransferEntityResponse {
 }
 export interface MsgTransferEntityResponseSDKType {
 }
-/**
- * create a module account for an entity, account details will be added as a
- * linkedEntity on entity iid doc where linkedEntity id is didfragment: did#name
- */
+/** create a module account for an entity */
 export interface MsgCreateEntityAccount {
     /** entity id (did) to create account for */
     id: string;
@@ -179,10 +176,7 @@ export interface MsgCreateEntityAccount {
     /** The owner_address used to sign this transaction. */
     ownerAddress: string;
 }
-/**
- * create a module account for an entity, account details will be added as a
- * linkedEntity on entity iid doc where linkedEntity id is didfragment: did#name
- */
+/** create a module account for an entity */
 export interface MsgCreateEntityAccountSDKType {
     id: string;
     name: string;
@@ -200,7 +194,7 @@ export interface MsgCreateEntityAccountResponseSDKType {
  * grantee for the specific authorization
  */
 export interface MsgGrantEntityAccountAuthz {
-    /** entity id (did) to create account for */
+    /** entity id (did) which has the account */
     id: string;
     /** name of account */
     name: string;
@@ -225,6 +219,31 @@ export interface MsgGrantEntityAccountAuthzSDKType {
 export interface MsgGrantEntityAccountAuthzResponse {
 }
 export interface MsgGrantEntityAccountAuthzResponseSDKType {
+}
+/** Revoke an existing authz grant from entity account (as grantor) to recipient */
+export interface MsgRevokeEntityAccountAuthz {
+    /** entity id (did) which has the account */
+    id: string;
+    /** name of account */
+    name: string;
+    /** the grantee address for which the authz grant will be revoked */
+    granteeAddress: string;
+    /** the msg type url of the grant to be revoked for the specific grantee */
+    msgTypeUrl: string;
+    /** the owner_address used to sign this transaction. */
+    ownerAddress: string;
+}
+/** Revoke an existing authz grant from entity account (as grantor) to recipient */
+export interface MsgRevokeEntityAccountAuthzSDKType {
+    id: string;
+    name: string;
+    grantee_address: string;
+    msg_type_url: string;
+    owner_address: string;
+}
+export interface MsgRevokeEntityAccountAuthzResponse {
+}
+export interface MsgRevokeEntityAccountAuthzResponseSDKType {
 }
 export declare const MsgCreateEntity: {
     encode(message: MsgCreateEntity, writer?: _m0.Writer): _m0.Writer;
@@ -309,4 +328,18 @@ export declare const MsgGrantEntityAccountAuthzResponse: {
     fromJSON(_: any): MsgGrantEntityAccountAuthzResponse;
     toJSON(_: MsgGrantEntityAccountAuthzResponse): unknown;
     fromPartial(_: Partial<MsgGrantEntityAccountAuthzResponse>): MsgGrantEntityAccountAuthzResponse;
+};
+export declare const MsgRevokeEntityAccountAuthz: {
+    encode(message: MsgRevokeEntityAccountAuthz, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgRevokeEntityAccountAuthz;
+    fromJSON(object: any): MsgRevokeEntityAccountAuthz;
+    toJSON(message: MsgRevokeEntityAccountAuthz): unknown;
+    fromPartial(object: Partial<MsgRevokeEntityAccountAuthz>): MsgRevokeEntityAccountAuthz;
+};
+export declare const MsgRevokeEntityAccountAuthzResponse: {
+    encode(_: MsgRevokeEntityAccountAuthzResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgRevokeEntityAccountAuthzResponse;
+    fromJSON(_: any): MsgRevokeEntityAccountAuthzResponse;
+    toJSON(_: MsgRevokeEntityAccountAuthzResponse): unknown;
+    fromPartial(_: Partial<MsgRevokeEntityAccountAuthzResponse>): MsgRevokeEntityAccountAuthzResponse;
 };

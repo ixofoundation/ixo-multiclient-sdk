@@ -36,7 +36,7 @@ export interface MsgCreateEntity {
    * Client applications
    */
   endDate?: Timestamp;
-  /** Address of the operator through which the Entity was created */
+  /** Did of the operator through which the Entity was created */
   relayerNode: string;
   /**
    * Content ID or Hash of public Verifiable Credentials associated with the
@@ -162,10 +162,7 @@ export interface MsgTransferEntitySDKType {
 }
 export interface MsgTransferEntityResponse {}
 export interface MsgTransferEntityResponseSDKType {}
-/**
- * create a module account for an entity, account details will be added as a
- * linkedEntity on entity iid doc where linkedEntity id is didfragment: did#name
- */
+/** create a module account for an entity */
 export interface MsgCreateEntityAccount {
   /** entity id (did) to create account for */
   id: string;
@@ -174,10 +171,7 @@ export interface MsgCreateEntityAccount {
   /** The owner_address used to sign this transaction. */
   ownerAddress: string;
 }
-/**
- * create a module account for an entity, account details will be added as a
- * linkedEntity on entity iid doc where linkedEntity id is didfragment: did#name
- */
+/** create a module account for an entity */
 export interface MsgCreateEntityAccountSDKType {
   id: string;
   name: string;
@@ -195,7 +189,7 @@ export interface MsgCreateEntityAccountResponseSDKType {
  * grantee for the specific authorization
  */
 export interface MsgGrantEntityAccountAuthz {
-  /** entity id (did) to create account for */
+  /** entity id (did) which has the account */
   id: string;
   /** name of account */
   name: string;
@@ -219,6 +213,29 @@ export interface MsgGrantEntityAccountAuthzSDKType {
 }
 export interface MsgGrantEntityAccountAuthzResponse {}
 export interface MsgGrantEntityAccountAuthzResponseSDKType {}
+/** Revoke an existing authz grant from entity account (as grantor) to recipient */
+export interface MsgRevokeEntityAccountAuthz {
+  /** entity id (did) which has the account */
+  id: string;
+  /** name of account */
+  name: string;
+  /** the grantee address for which the authz grant will be revoked */
+  granteeAddress: string;
+  /** the msg type url of the grant to be revoked for the specific grantee */
+  msgTypeUrl: string;
+  /** the owner_address used to sign this transaction. */
+  ownerAddress: string;
+}
+/** Revoke an existing authz grant from entity account (as grantor) to recipient */
+export interface MsgRevokeEntityAccountAuthzSDKType {
+  id: string;
+  name: string;
+  grantee_address: string;
+  msg_type_url: string;
+  owner_address: string;
+}
+export interface MsgRevokeEntityAccountAuthzResponse {}
+export interface MsgRevokeEntityAccountAuthzResponseSDKType {}
 function createBaseMsgCreateEntity(): MsgCreateEntity {
   return {
     entityType: "",
@@ -1118,6 +1135,124 @@ export const MsgGrantEntityAccountAuthzResponse = {
   },
   fromPartial(_: Partial<MsgGrantEntityAccountAuthzResponse>): MsgGrantEntityAccountAuthzResponse {
     const message = createBaseMsgGrantEntityAccountAuthzResponse();
+    return message;
+  }
+};
+function createBaseMsgRevokeEntityAccountAuthz(): MsgRevokeEntityAccountAuthz {
+  return {
+    id: "",
+    name: "",
+    granteeAddress: "",
+    msgTypeUrl: "",
+    ownerAddress: ""
+  };
+}
+export const MsgRevokeEntityAccountAuthz = {
+  encode(message: MsgRevokeEntityAccountAuthz, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.granteeAddress !== "") {
+      writer.uint32(26).string(message.granteeAddress);
+    }
+    if (message.msgTypeUrl !== "") {
+      writer.uint32(34).string(message.msgTypeUrl);
+    }
+    if (message.ownerAddress !== "") {
+      writer.uint32(42).string(message.ownerAddress);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRevokeEntityAccountAuthz {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRevokeEntityAccountAuthz();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+        case 2:
+          message.name = reader.string();
+          break;
+        case 3:
+          message.granteeAddress = reader.string();
+          break;
+        case 4:
+          message.msgTypeUrl = reader.string();
+          break;
+        case 5:
+          message.ownerAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgRevokeEntityAccountAuthz {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      name: isSet(object.name) ? String(object.name) : "",
+      granteeAddress: isSet(object.granteeAddress) ? String(object.granteeAddress) : "",
+      msgTypeUrl: isSet(object.msgTypeUrl) ? String(object.msgTypeUrl) : "",
+      ownerAddress: isSet(object.ownerAddress) ? String(object.ownerAddress) : ""
+    };
+  },
+  toJSON(message: MsgRevokeEntityAccountAuthz): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.name !== undefined && (obj.name = message.name);
+    message.granteeAddress !== undefined && (obj.granteeAddress = message.granteeAddress);
+    message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl);
+    message.ownerAddress !== undefined && (obj.ownerAddress = message.ownerAddress);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgRevokeEntityAccountAuthz>): MsgRevokeEntityAccountAuthz {
+    const message = createBaseMsgRevokeEntityAccountAuthz();
+    message.id = object.id ?? "";
+    message.name = object.name ?? "";
+    message.granteeAddress = object.granteeAddress ?? "";
+    message.msgTypeUrl = object.msgTypeUrl ?? "";
+    message.ownerAddress = object.ownerAddress ?? "";
+    return message;
+  }
+};
+function createBaseMsgRevokeEntityAccountAuthzResponse(): MsgRevokeEntityAccountAuthzResponse {
+  return {};
+}
+export const MsgRevokeEntityAccountAuthzResponse = {
+  encode(_: MsgRevokeEntityAccountAuthzResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRevokeEntityAccountAuthzResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRevokeEntityAccountAuthzResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgRevokeEntityAccountAuthzResponse {
+    return {};
+  },
+  toJSON(_: MsgRevokeEntityAccountAuthzResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgRevokeEntityAccountAuthzResponse>): MsgRevokeEntityAccountAuthzResponse {
+    const message = createBaseMsgRevokeEntityAccountAuthzResponse();
     return message;
   }
 };
