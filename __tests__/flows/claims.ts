@@ -760,21 +760,33 @@ export const supamotoClaims3 = () =>
     // });
 
     test("Generate Fuel Purchase claims and evaluate them", async () => {
-      // first load previous purchases and get only id, then load latest and remove ll previous purchases
-      let purchases4Data = await csvtojsonV2().fromFile(
-        "./assets/documents/emerging/payments4.csv"
-      );
-      purchases4Data = purchases4Data.map((p) => p["Transaction ID"]);
+      // first load previous purchases and get only id, then load latest and remove all previous purchases
+      let previousPurchases: string[] = [];
+      let paths = [
+        "./assets/documents/emerging/payments4.csv",
+        "./assets/documents/emerging/payments5.csv",
+      ];
+      // loop over paths and add all transaction ids to previous purchases list
+      for (let path of paths) {
+        let purchaseData = await csvtojsonV2().fromFile(path);
+        purchaseData = purchaseData.map((p) => p["Transaction ID"]);
+        console.log({ path, purchaseData: purchaseData.length });
+        previousPurchases = previousPurchases.concat(
+          purchaseData.filter((p) => !previousPurchases.includes(p))
+        );
+      }
+
+      // new purchases
       let purchaseData = await csvtojsonV2().fromFile(
-        "./assets/documents/emerging/payments5.csv"
+        "./assets/documents/emerging/payments6.csv"
       );
       purchaseData = purchaseData.filter(
-        (p) => !purchases4Data.includes(p["Transaction ID"])
+        (p) => !previousPurchases.includes(p["Transaction ID"])
       );
       // console.log(purchaseData);
       console.log({
-        purchases4Data: purchases4Data.length,
-        purchaseData: purchaseData.length,
+        previousPurchases: previousPurchases.length,
+        newPurchaseData: purchaseData.length,
       });
 
       // remove any duplicate transactions by transaction id
@@ -889,7 +901,7 @@ export const supamotoClaims3 = () =>
             //   (v: any) => v.length
             // ),
             // stoves: Object.keys(purchaseData),
-            // purchaseData,
+            purchaseData,
           },
           null,
           2
