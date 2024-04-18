@@ -17,6 +17,7 @@ export declare enum EvaluationStatus {
     APPROVED = 1,
     REJECTED = 2,
     DISPUTED = 3,
+    INVALIDATED = 4,
     UNRECOGNIZED = -1
 }
 export declare const EvaluationStatusSDKType: typeof EvaluationStatus;
@@ -64,7 +65,7 @@ export interface Collection {
     entity: string;
     /**
      * admin is the account address that will authorize or revoke agents and
-     * payments (the grantor)
+     * payments (the grantor), and can update the collection
      */
     admin: string;
     /** protocol is the DID of the claim protocol */
@@ -109,6 +110,11 @@ export interface Collection {
     payments?: Payments;
     /** signer address */
     signer: string;
+    /**
+     * invalidated is the number of claims that have been evaluated as invalid
+     * (internally calculated)
+     */
+    invalidated: Long;
 }
 export interface CollectionSDKType {
     id: string;
@@ -126,6 +132,7 @@ export interface CollectionSDKType {
     state: CollectionState;
     payments?: PaymentsSDKType;
     signer: string;
+    invalidated: Long;
 }
 export interface Payments {
     submission?: Payment;

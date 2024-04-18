@@ -534,6 +534,21 @@ export const swapBasic = () => {
 
 export const swapContract = () => {
   describe("Testing swaps on contract", () => {
+    // Set tester as carbon oracle user as that user owns the carbon tokens
+    // beforeAll(() =>
+    //   Promise.all([
+    //     generateNewWallet(
+    //       WalletUsers.tester,
+    //       process.env.ASSERT_USER_CARBON_ORACLE
+    //     ),
+    //   ])
+    // );
+
+    // // helper to send funds to an carbon oracle user account
+    // testMsg("test Bank Send to carbon oracle account", () =>
+    //   Cosmos.BankSendTrx(100000000000)
+    // );
+
     let tokenContractAddress: string = "";
     testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
       const tester = (await getUser().getAccounts())[0].address;
@@ -598,13 +613,13 @@ export const swapContract = () => {
         token1155_denom: { cw1155: [tokenContractAddress, "TEST"] },
         token2_denom: { native: "uixo" },
         lp_token_code_id: 25,
-        owner: tester,
+        max_slippage_percent: "0.3",
         protocol_fee_recipient: tester,
         protocol_fee_percent: "0.1",
         lp_fee_percent: "0.2",
       };
 
-      const res = await Wasm.WasmInstantiateTrx(28, JSON.stringify(msg));
+      const res = await Wasm.WasmInstantiateTrx(29, JSON.stringify(msg));
       swapContractAddress = utils.common.getValueFromEvents(
         res,
         "instantiate",
@@ -641,7 +656,7 @@ export const swapContract = () => {
               return acc;
             }, {}),
           },
-          min_liquidity: "100000000000",
+          min_liquidity: "10000000000",
           max_token2: "10000000000",
         },
       };
@@ -656,8 +671,8 @@ export const swapContract = () => {
     });
 
     testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () => {
-      const numberOfTests = 300;
-      const slippage = 30;
+      const numberOfTests = 30;
+      const slippage = 20;
       const txList: TxRaw[] = [];
       const user = getUser(WalletUsers.tester);
       const client = await createClient(user);
@@ -784,9 +799,16 @@ export const devnetSwapContract_IXO_CARBON = () => {
     const user = WalletUsers.tester;
 
     // helper to send funds to an carbon oracle user account
-    testMsg("test Bank Send to carbon oracle account", () =>
-      Cosmos.BankSendTrx(1100000000)
-    );
+    // testMsg("test Bank Send to carbon oracle account", () =>
+    //   Cosmos.BankSendTrx(
+    //     1100000000,
+    //     undefined,
+    //     undefined,
+    //     undefined,
+    //     undefined,
+    //     "ixo16s0t89a4gk0jdxhpfwq4sphjw4dcex6rvgm2ln"
+    //   )
+    // );
 
     const cw20_baseContractCode = customQueries.contract.getContractCode(
       "devnet",
@@ -837,23 +859,21 @@ export const devnetSwapContract_IXO_CARBON = () => {
     });
 
     let swapContractAddress: string =
-      "ixo1p5nwq2ut6344qwlvjv42ayqhvarl46lnqfmnrgjnh2cwahl54g2qpg4y8y";
+      "ixo1d3gupctdquscekqt48g2xnmfnweaqx7hh4l83vcgy5nw7sphjlvqju0vch";
     testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
       const tester = (await getUser().getAccounts())[0].address;
       const msg = {
         token1155_denom: { cw1155: [contractAddress1155, "CARBON"] },
         token2_denom: { native: "uixo" },
         lp_token_code_id: cw20_baseContractCode,
-        owner: tester,
+        max_slippage_percent: "0.4",
         protocol_fee_recipient: tester,
         protocol_fee_percent: "0.1",
         lp_fee_percent: "0.1",
       };
 
-      const res = await Wasm.WasmInstantiateTrx(
-        ixoswapContractCode!,
-        JSON.stringify(msg)
-      );
+      const res = await Wasm.WasmInstantiateTrx(31!, JSON.stringify(msg));
+      console.log({ res });
       swapContractAddress = utils.common.getValueFromEvents(
         res,
         "instantiate",
@@ -907,9 +927,9 @@ export const devnetSwapContract_IXO_CARBON = () => {
     testMsg(
       "/cosmwasm.wasm.v1.MsgExecuteContract swap",
       async () => {
-        const slippage = 20;
-        const inputToken = false ? TokenType.Token1155 : TokenType.Token2;
-        const inputAmount = 1000000;
+        const slippage = 10;
+        const inputToken = true ? TokenType.Token1155 : TokenType.Token2;
+        const inputAmount = 1000;
 
         const formattedInputAmount =
           inputToken == TokenType.Token2
@@ -938,6 +958,9 @@ export const devnetSwapContract_IXO_CARBON = () => {
             input_token: inputToken,
             input_amount: formattedInputAmount,
             min_output: formattedOutputAmount,
+            expiration: {
+              at_height: 1800000,
+            },
           },
         };
         console.log("Swap message: ", JSON.stringify(msg, null, 3));
@@ -955,8 +978,8 @@ export const devnetSwapContract_IXO_CARBON = () => {
         );
 
         return res;
-      }
-      // true
+      },
+      true
     );
   });
 };

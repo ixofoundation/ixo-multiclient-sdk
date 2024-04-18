@@ -24,7 +24,7 @@ export const CreateBond = async (allowSells: boolean) => {
       creatorDid: did,
       controllerDid: did,
       functionType: "augmented_function",
-      functionType: "bonding_function",
+      // functionType: "bonding_function",
       functionParameters: [
         ixo.bonds.v1beta1.FunctionParam.fromPartial({
           param: "p0",

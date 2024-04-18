@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import { MsgCreateEntity, MsgCreateEntityResponse, MsgUpdateEntity, MsgUpdateEntityResponse, MsgUpdateEntityVerified, MsgUpdateEntityVerifiedResponse, MsgTransferEntity, MsgTransferEntityResponse, MsgCreateEntityAccount, MsgCreateEntityAccountResponse, MsgGrantEntityAccountAuthz, MsgGrantEntityAccountAuthzResponse } from "./tx";
+import { MsgCreateEntity, MsgCreateEntityResponse, MsgUpdateEntity, MsgUpdateEntityResponse, MsgUpdateEntityVerified, MsgUpdateEntityVerifiedResponse, MsgTransferEntity, MsgTransferEntityResponse, MsgCreateEntityAccount, MsgCreateEntityAccountResponse, MsgGrantEntityAccountAuthz, MsgGrantEntityAccountAuthzResponse, MsgRevokeEntityAccountAuthz, MsgRevokeEntityAccountAuthzResponse } from "./tx";
 /** Msg defines the project Msg service. */
 export interface Msg {
     /** CreateEntity defines a method for creating a entity. */
@@ -12,8 +12,10 @@ export interface Msg {
     transferEntity(request: MsgTransferEntity): Promise<MsgTransferEntityResponse>;
     /** Create a module account for an entity, */
     createEntityAccount(request: MsgCreateEntityAccount): Promise<MsgCreateEntityAccountResponse>;
-    /** Create a authz grant from entity account */
+    /** Create an authz grant from entity account */
     grantEntityAccountAuthz(request: MsgGrantEntityAccountAuthz): Promise<MsgGrantEntityAccountAuthzResponse>;
+    /** Revoke an authz grant from entity account */
+    revokeEntityAccountAuthz(request: MsgRevokeEntityAccountAuthz): Promise<MsgRevokeEntityAccountAuthzResponse>;
 }
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
@@ -24,4 +26,5 @@ export declare class MsgClientImpl implements Msg {
     transferEntity(request: MsgTransferEntity): Promise<MsgTransferEntityResponse>;
     createEntityAccount(request: MsgCreateEntityAccount): Promise<MsgCreateEntityAccountResponse>;
     grantEntityAccountAuthz(request: MsgGrantEntityAccountAuthz): Promise<MsgGrantEntityAccountAuthzResponse>;
+    revokeEntityAccountAuthz(request: MsgRevokeEntityAccountAuthz): Promise<MsgRevokeEntityAccountAuthzResponse>;
 }

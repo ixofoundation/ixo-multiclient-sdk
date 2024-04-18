@@ -201,7 +201,8 @@ export const GrantEntityAccountAuthz = async (
   entityDid: string,
   name = "name",
   grantee: WalletUsers = WalletUsers.alice,
-  signer: WalletUsers = WalletUsers.tester
+  signer: WalletUsers = WalletUsers.tester,
+  genericAuthMsg = "/cosmos.bank.v1beta1.MsgSend"
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -223,7 +224,7 @@ export const GrantEntityAccountAuthz = async (
           value: cosmos.authz.v1beta1.GenericAuthorization.encode(
             cosmos.authz.v1beta1.GenericAuthorization.fromPartial({
               // msg: "/ibc.applications.transfer.v1.MsgTransfer",
-              msg: "/cosmos.gov.v1beta1.MsgSend",
+              msg: genericAuthMsg,
             })
           ).finish(),
         },
@@ -239,10 +240,36 @@ export const GrantEntityAccountAuthz = async (
   );
   return response;
 };
-export function CreateEntityAssetSupamotoInstance(
-  assetCollection: string,
-  arg1: { deviceId: number; index: number; deviceCreds: string }[],
-  emergingDao: string
-) {
-  throw new Error("Function not implemented.");
-}
+
+export const MsgRevokeEntityAccountAuthz = async (
+  entityDid: string,
+  name = "name",
+  grantee: WalletUsers = WalletUsers.alice,
+  msgTypeUrl = "/cosmos.bank.v1beta1.MsgSend",
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = (await getUser(signer).getAccounts())[0].address;
+  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
+  // const granteeAddress =
+  //   "ixo1jxmrje2f26uvcesnj3naysu0fmukt5q74pxu2ukz6cjjjf0qtk9suyl4h6";
+
+  const message = {
+    typeUrl: "/ixo.entity.v1beta1.MsgRevokeEntityAccountAuthz",
+    value: ixo.entity.v1beta1.MsgRevokeEntityAccountAuthz.fromPartial({
+      id: entityDid,
+      ownerAddress: tester,
+      name,
+      granteeAddress,
+      msgTypeUrl,
+    }),
+  };
+
+  const response = await client.signAndBroadcast(
+    tester,
+    [message],
+    getFee(1, await client.simulate(tester, [message], undefined))
+  );
+  return response;
+};

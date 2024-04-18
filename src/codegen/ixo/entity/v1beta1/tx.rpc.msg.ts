@@ -1,6 +1,6 @@
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { MsgCreateEntity, MsgCreateEntityResponse, MsgUpdateEntity, MsgUpdateEntityResponse, MsgUpdateEntityVerified, MsgUpdateEntityVerifiedResponse, MsgTransferEntity, MsgTransferEntityResponse, MsgCreateEntityAccount, MsgCreateEntityAccountResponse, MsgGrantEntityAccountAuthz, MsgGrantEntityAccountAuthzResponse } from "./tx";
+import { MsgCreateEntity, MsgCreateEntityResponse, MsgUpdateEntity, MsgUpdateEntityResponse, MsgUpdateEntityVerified, MsgUpdateEntityVerifiedResponse, MsgTransferEntity, MsgTransferEntityResponse, MsgCreateEntityAccount, MsgCreateEntityAccountResponse, MsgGrantEntityAccountAuthz, MsgGrantEntityAccountAuthzResponse, MsgRevokeEntityAccountAuthz, MsgRevokeEntityAccountAuthzResponse } from "./tx";
 /** Msg defines the project Msg service. */
 export interface Msg {
   /** CreateEntity defines a method for creating a entity. */
@@ -13,8 +13,10 @@ export interface Msg {
   transferEntity(request: MsgTransferEntity): Promise<MsgTransferEntityResponse>;
   /** Create a module account for an entity, */
   createEntityAccount(request: MsgCreateEntityAccount): Promise<MsgCreateEntityAccountResponse>;
-  /** Create a authz grant from entity account */
+  /** Create an authz grant from entity account */
   grantEntityAccountAuthz(request: MsgGrantEntityAccountAuthz): Promise<MsgGrantEntityAccountAuthzResponse>;
+  /** Revoke an authz grant from entity account */
+  revokeEntityAccountAuthz(request: MsgRevokeEntityAccountAuthz): Promise<MsgRevokeEntityAccountAuthzResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -26,6 +28,7 @@ export class MsgClientImpl implements Msg {
     this.transferEntity = this.transferEntity.bind(this);
     this.createEntityAccount = this.createEntityAccount.bind(this);
     this.grantEntityAccountAuthz = this.grantEntityAccountAuthz.bind(this);
+    this.revokeEntityAccountAuthz = this.revokeEntityAccountAuthz.bind(this);
   }
   createEntity(request: MsgCreateEntity): Promise<MsgCreateEntityResponse> {
     const data = MsgCreateEntity.encode(request).finish();
@@ -56,5 +59,10 @@ export class MsgClientImpl implements Msg {
     const data = MsgGrantEntityAccountAuthz.encode(request).finish();
     const promise = this.rpc.request("ixo.entity.v1beta1.Msg", "GrantEntityAccountAuthz", data);
     return promise.then(data => MsgGrantEntityAccountAuthzResponse.decode(new _m0.Reader(data)));
+  }
+  revokeEntityAccountAuthz(request: MsgRevokeEntityAccountAuthz): Promise<MsgRevokeEntityAccountAuthzResponse> {
+    const data = MsgRevokeEntityAccountAuthz.encode(request).finish();
+    const promise = this.rpc.request("ixo.entity.v1beta1.Msg", "RevokeEntityAccountAuthz", data);
+    return promise.then(data => MsgRevokeEntityAccountAuthzResponse.decode(new _m0.Reader(data)));
   }
 }

@@ -89,6 +89,148 @@ export const CreateCollection = async (
   return response;
 };
 
+export const UpdateCollectionState = async (
+  collectionId: string,
+  adminAddress: string,
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = (await getUser(signer).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+      grantee: tester,
+      msgs: [
+        {
+          typeUrl: "/ixo.claims.v1beta1.MsgUpdateCollectionState",
+          value: ixo.claims.v1beta1.MsgUpdateCollectionState.encode(
+            ixo.claims.v1beta1.MsgUpdateCollectionState.fromPartial({
+              adminAddress: adminAddress,
+              collectionId,
+              state: ixo.claims.v1beta1.CollectionState.OPEN,
+            })
+          ).finish(),
+        },
+      ],
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
+export const UpdateCollectionDates = async (
+  collectionId: string,
+  adminAddress: string,
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = (await getUser(signer).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+      grantee: tester,
+      msgs: [
+        {
+          typeUrl: "/ixo.claims.v1beta1.MsgUpdateCollectionDates",
+          value: ixo.claims.v1beta1.MsgUpdateCollectionDates.encode(
+            ixo.claims.v1beta1.MsgUpdateCollectionDates.fromPartial({
+              adminAddress: adminAddress,
+              collectionId,
+              startDate: utils.proto.toTimestamp(new Date()),
+              endDate: utils.proto.toTimestamp(addDays(new Date(), 400)),
+            })
+          ).finish(),
+        },
+      ],
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
+export const UpdateCollectionPayments = async (
+  collectionId: string,
+  paymentsAccount: string,
+  adminAddress: string,
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = (await getUser(signer).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+      grantee: tester,
+      msgs: [
+        {
+          typeUrl: "/ixo.claims.v1beta1.MsgUpdateCollectionPayments",
+          value: ixo.claims.v1beta1.MsgUpdateCollectionPayments.encode(
+            ixo.claims.v1beta1.MsgUpdateCollectionPayments.fromPartial({
+              adminAddress: adminAddress,
+              collectionId,
+              payments: ixo.claims.v1beta1.Payments.fromPartial({
+                approval: ixo.claims.v1beta1.Payment.fromPartial({
+                  account: paymentsAccount,
+                  amount: [
+                    cosmos.base.v1beta1.Coin.fromPartial({
+                      amount: "2000000",
+                      denom: "uixo",
+                    }),
+                  ],
+                  timeoutNs: utils.proto.toDuration(
+                    (1000000000 * 60 * 0).toString()
+                  ), // ns * seconds * minutes
+                }),
+                submission: ixo.claims.v1beta1.Payment.fromPartial({
+                  account: paymentsAccount,
+                  amount: [
+                    cosmos.base.v1beta1.Coin.fromPartial({
+                      amount: "2000000",
+                      denom: "uixo",
+                    }),
+                  ],
+                  timeoutNs: utils.proto.toDuration(
+                    (1000000000 * 60 * 0.5).toString()
+                  ), // ns * seconds * minutes
+                }),
+                evaluation: ixo.claims.v1beta1.Payment.fromPartial({
+                  account: paymentsAccount,
+                  amount: [
+                    cosmos.base.v1beta1.Coin.fromPartial({
+                      amount: "2000000",
+                      denom: "uixo",
+                    }),
+                  ],
+                  timeoutNs: utils.proto.toDuration(
+                    (1000000000 * 60 * 5).toString()
+                  ), // ns * seconds * minutes
+                }),
+                rejection: ixo.claims.v1beta1.Payment.fromPartial({
+                  account: paymentsAccount,
+                  amount: [],
+                  timeoutNs: utils.proto.toDuration(
+                    (1000000000 * 60 * 5).toString()
+                  ), // ns * seconds * minutes
+                }),
+              }),
+            })
+          ).finish(),
+        },
+      ],
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
 export const DisputeClaim = async (
   subjectId: string,
   disputeProof: string, // must be unique

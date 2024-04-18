@@ -76,7 +76,7 @@ export const WasmInstantiateTrx = async (
   const response = await client.signAndBroadcast(
     myAddress,
     [message],
-    getFee(1, await client.simulate(myAddress, [message], undefined))
+    getFee(1)
   );
   return response;
 };
