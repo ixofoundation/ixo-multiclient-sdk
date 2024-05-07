@@ -765,6 +765,7 @@ export const supamotoClaims3 = () =>
       let paths = [
         "./assets/documents/emerging/payments4.csv",
         "./assets/documents/emerging/payments5.csv",
+        "./assets/documents/emerging/payments6.csv",
       ];
       // loop over paths and add all transaction ids to previous purchases list
       for (let path of paths) {
@@ -778,7 +779,7 @@ export const supamotoClaims3 = () =>
 
       // new purchases
       let purchaseData = await csvtojsonV2().fromFile(
-        "./assets/documents/emerging/payments6.csv"
+        "./assets/documents/emerging/payments7.csv"
       );
       purchaseData = purchaseData.filter(
         (p) => !previousPurchases.includes(p["Transaction ID"])
@@ -796,7 +797,6 @@ export const supamotoClaims3 = () =>
             aggObj[item["Transaction ID"]] = {
               Device_ID: item["Device ID"],
               Transaction_ID: item["Transaction ID"],
-              isNft: item["isNFT"],
               type: item["Type"],
               lastConnectionDays: item["Last_Connectively (Days)"],
               status: item["Status_Connectivity"],
@@ -813,12 +813,21 @@ export const supamotoClaims3 = () =>
           return aggObj;
         }, {})
       );
-      // console.log(purchaseData);
 
-      purchaseData = purchaseData.filter((p: any) => p.status === "Active");
-      purchaseData = purchaseData.filter(
-        (p: any) => p.lastConnectionDays !== ""
-      );
+      type CollectionType = "Legacy" | "Genesis";
+      let collectionToUse: CollectionType;
+      collectionToUse = "Legacy";
+
+      // @ts-ignore
+      if (collectionToUse === "Genesis") {
+        purchaseData = purchaseData.filter((p: any) => p.status === "Active");
+        purchaseData = purchaseData.filter(
+          (p: any) =>
+            p.lastConnectionDays !== "" &&
+            p.lastConnectionDays !== "0" &&
+            p.lastConnectionDays !== "NOT FOUND"
+        );
+      }
 
       // filter out already made claims
       // const paymentsAlreadyClaimed = require("../../assets/documents/emerging/payments4_done.json");
@@ -828,17 +837,21 @@ export const supamotoClaims3 = () =>
       // console.log(purchaseData.length);
 
       // chunk payments into objects with device id as key
-      purchaseData = purchaseData.reduce((aggObj, item) => {
-        if (!aggObj[item.Device_ID]) aggObj[item.Device_ID] = [item];
-        else aggObj[item.Device_ID] = [...aggObj[item.Device_ID], item];
-        return aggObj;
+      purchaseData = purchaseData.reduce((a, p) => {
+        if (!a[p.Device_ID]) a[p.Device_ID] = [p];
+        else a[p.Device_ID] = [...a[p.Device_ID], p];
+        return a;
       }, {});
 
       const stovesCollection =
-        require("../../assets/documents/emerging/stoves_legacy_collection.json").map(
-          // require("../../assets/documents/emerging/stoves_genesis_collection.json").map(
-          (s: any) => s.externalId
-        );
+        // @ts-ignore
+        collectionToUse === "Legacy"
+          ? require("../../assets/documents/emerging/stoves_legacy_collection.json").map(
+              (s: any) => s.externalId
+            )
+          : require("../../assets/documents/emerging/stoves_genesis_collection.json").map(
+              (s: any) => s.externalId
+            );
       // const stovesWithExternalId =
       //   require("../../assets/documents/emerging/stoves_with_external_ids.json").map(
       //     (s: any) => s.externalId
@@ -908,9 +921,9 @@ export const supamotoClaims3 = () =>
         )
       );
 
-      // // helper to stop flow if just want the above data
-      // const test = true;
-      // if (test) throw new Error("stop");
+      // helper to stop flow if just want the above data
+      const test = true;
+      if (test) throw new Error("stop");
 
       // devide payments per device into 10 devices at a time
       // ==============================================================

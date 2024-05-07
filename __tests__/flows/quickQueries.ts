@@ -1,8 +1,11 @@
-import Long from "long";
 import csvtojsonV2 from "csvtojson/v2";
 import { AsyncParser } from "@json2csv/node";
 import { cosmos, createRegistry, utils } from "../../src";
-import { getUser, queryClient, saveFileToPath } from "../helpers/common";
+import gqlQuery, {
+  getUser,
+  queryClient,
+  saveFileToPath,
+} from "../helpers/common";
 import { RPC_URL, WalletUsers } from "../helpers/constants";
 import { AuthInfo, TxBody } from "../../src/codegen/cosmos/tx/v1beta1/tx";
 import { fromHex } from "@cosmjs/encoding";
@@ -492,6 +495,133 @@ export const quickQueries = () =>
     //   const res = await queryClient.ixo.claims.v1beta1.params();
     //   console.log(res.params);
     //   expect(res).toBeTruthy();
+    // });
+
+    // test("Gather stove details", async () => {
+    //   const collectionDid = "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258";
+    //   const entitiesQuery = `query Query {
+    //     entities(filter: {iidById: {context: {contains: [{key: "class", val: "${collectionDid}"}]}}}) {
+    //       nodes {
+    //         id
+    //         owner
+    //         accounts
+    //       }
+    //     }
+    //   }`;
+    //   let entities: any = await gqlQuery<{
+    //     data: {
+    //       entities: {
+    //         nodes: {
+    //           id: string;
+    //           owner: string;
+    //           accounts: { address: string; name: string }[];
+    //         }[];
+    //       };
+    //     };
+    //   }>("https://blocksync-graphql.ixo.earth", entitiesQuery);
+
+    //   const ownersToExclude = ["ixo1lgelskjkjjasl860n6kmevlflanqj5vh8l8p5w"];
+    //   entities = entities
+    //     .data!.data.entities.nodes.map((e) =>
+    //       !ownersToExclude.includes(e.owner)
+    //         ? {
+    //             id: e.id,
+    //             owner: e.owner,
+    //             adminAccount: e.accounts.find((a) => a.name == "admin")
+    //               ?.address,
+    //           }
+    //         : null
+    //     )
+    //     .filter(Boolean);
+
+    //   const getEvalDateById = (id: string, evaluations) => {
+    //     if (!evaluations) return "No evaluation";
+    //     return new Date(
+    //       evaluations.find((e) => e.verificationProof === id)?.evaluationDate
+    //     );
+    //   };
+    //   const filterTokensBeforeDate = new Date("2023-07-13");
+
+    //   for (let i = 0; i < entities.length; i++) {
+    //     // if (i === 2) break;
+    //     const e = entities[i];
+    //     const tokensQuery = `query Query {
+    //       tokenTransactions(filter: { and: { to: { equalTo: "${
+    //         e!.adminAccount
+    //       }" }, from: { equalTo: "" } } }, orderBy: PRIMARY_KEY_DESC) {
+    //         nodes {
+    //           amount
+    //           token {
+    //             id
+    //             index
+    //           }
+    //         }
+    //       }
+    //     }`;
+    //     console.log("getting tokens for index: ", i, " of ", entities.length);
+    //     const tokensRes = await gqlQuery<{
+    //       data: {
+    //         tokenTransactions: {
+    //           nodes: { amount: string; token: { id: string; index: string } }[];
+    //         };
+    //       };
+    //     }>("https://blocksync-graphql.ixo.earth", tokensQuery);
+
+    //     const evaluationsQuery = `query Query {
+    //       evaluations(filter: { verificationProof: { in: [${(
+    //         tokensRes.data?.data.tokenTransactions.nodes ?? []
+    //       ).map((t) => `"${t.token.index}"`)}] } }) {
+    //           nodes {
+    //             evaluationDate
+    //             verificationProof
+    //           }
+    //         }
+    //       }`;
+    //     const evalsRes = await gqlQuery<{
+    //       data: {
+    //         evaluations: {
+    //           nodes: { evaluationDate: string; verificationProof: string }[];
+    //         };
+    //       };
+    //     }>("https://blocksync-graphql.ixo.earth", evaluationsQuery);
+
+    //     const tokens =
+    //       tokensRes.data?.data.tokenTransactions.nodes
+    //         .map((t) => {
+    //           if (!t.token.index) return null;
+    //           const evaluationDate = getEvalDateById(
+    //             t.token.index,
+    //             evalsRes.data?.data.evaluations.nodes
+    //           );
+    //           if (evaluationDate < filterTokensBeforeDate) return null;
+
+    //           return {
+    //             ...t,
+    //             evaluationDate,
+    //           };
+    //         })
+    //         .filter(Boolean) ?? [];
+
+    //     entities[i] = {
+    //       ...e,
+    //       tokensAfterInitialDate: tokens.reduce((acc, t) => {
+    //         acc += Number(t!.amount);
+    //         return acc;
+    //       }, 0),
+    //       tokens: tokens.map((t: any) => ({
+    //         amount: t.amount,
+    //         evaluationDate: t.evaluationDate,
+    //       })),
+    //     };
+    //   }
+
+    //   // save all CER Claims to file
+    //   saveFileToPath(
+    //     ["documents", "stove_analysis.json"],
+    //     JSON.stringify(entities, null, 2)
+    //   );
+
+    //   expect(entities).toBeTruthy();
     // });
 
     // test("Gather account transactions", async () => {
