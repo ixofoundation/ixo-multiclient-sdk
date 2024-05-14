@@ -64,7 +64,7 @@ IID.generateBlockchainTestUsers();
 // CosmWasm.daodaoAuthzExecute();
 // Cosmos.authzBasic();
 // Cosmos.textProposalBasic();
-Authz.authzBasic();
+// Authz.authzBasic();
 // Queries.quickQueries();
 
 // ------------------------------------------

@@ -7,6 +7,7 @@ import {
   addDays,
   ibc,
   createQueryClient,
+  ixo,
 } from "../helpers/common";
 import { getFee, WalletUsers } from "../helpers/constants";
 
@@ -301,6 +302,7 @@ export const MsgRevokeAllowance = async (
 };
 
 export const MsgGrantAuthz = async (
+  msgTypeUrl = "/cosmos.authz.v1beta1.MsgGrant",
   granter = WalletUsers.tester,
   grantee = WalletUsers.alice
 ) => {
@@ -319,7 +321,7 @@ export const MsgGrantAuthz = async (
           typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
           value: cosmos.authz.v1beta1.GenericAuthorization.encode(
             cosmos.authz.v1beta1.GenericAuthorization.fromPartial({
-              msg: "/cosmos.authz.v1beta1.MsgGrant",
+              msg: msgTypeUrl,
             })
           ).finish(),
         },
@@ -337,19 +339,22 @@ export const MsgGrantAuthz = async (
 };
 
 export const MsgExecAuthz = async (
+  entityDid: string,
+  granter = WalletUsers.tester,
   grantee = WalletUsers.alice,
   nextGranter = WalletUsers.tester,
   nextGrantee = WalletUsers.bob
 ) => {
   const client = await createClient(getUser(grantee));
 
+  const granterAddress = (await getUser(granter).getAccounts())[0].address;
   const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
   const nextGranterAddress = (await getUser(nextGranter).getAccounts())[0]
     .address;
   const nextGranteeAddress = (await getUser(nextGrantee).getAccounts())[0]
     .address;
 
-  const grantAuthzAgainMessage = {
+  const grantAuthzAgainMessageSend = {
     typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
     value: cosmos.authz.v1beta1.MsgGrant.encode(
       cosmos.authz.v1beta1.MsgGrant.fromPartial({
@@ -370,11 +375,34 @@ export const MsgExecAuthz = async (
     ).finish(),
   };
 
+  const executeMsgGrantEntityAccountAuthz = {
+    typeUrl: "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
+    value: ixo.entity.v1beta1.MsgGrantEntityAccountAuthz.encode(
+      ixo.entity.v1beta1.MsgGrantEntityAccountAuthz.fromPartial({
+        id: entityDid,
+        ownerAddress: granterAddress,
+        name: "admin",
+        granteeAddress: nextGranteeAddress,
+        grant: cosmos.authz.v1beta1.Grant.fromPartial({
+          authorization: {
+            typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
+            value: cosmos.authz.v1beta1.GenericAuthorization.encode(
+              cosmos.authz.v1beta1.GenericAuthorization.fromPartial({
+                msg: "/cosmos.bank.v1beta1.MsgSend",
+              })
+            ).finish(),
+          },
+          expiration: utils.proto.toTimestamp(addDays(new Date(), 365 * 3)),
+        }),
+      })
+    ).finish(),
+  };
+
   const message = {
     typeUrl: "/cosmos.authz.v1beta1.MsgExec",
     value: cosmos.authz.v1beta1.MsgExec.fromPartial({
       grantee: granteeAddress,
-      msgs: [grantAuthzAgainMessage],
+      msgs: [executeMsgGrantEntityAccountAuthz],
     }),
   };
 
