@@ -340,6 +340,7 @@ export const MsgGrantAuthz = async (
 
 export const MsgExecAuthz = async (
   entityDid: string,
+  collectionId: string,
   granter = WalletUsers.tester,
   grantee = WalletUsers.alice,
   nextGranter = WalletUsers.tester,
@@ -375,7 +376,7 @@ export const MsgExecAuthz = async (
     ).finish(),
   };
 
-  const executeMsgGrantEntityAccountAuthz = {
+  const executeMsgGrantEntityAccountAuthzMsgSend = {
     typeUrl: "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
     value: ixo.entity.v1beta1.MsgGrantEntityAccountAuthz.encode(
       ixo.entity.v1beta1.MsgGrantEntityAccountAuthz.fromPartial({
@@ -398,11 +399,43 @@ export const MsgExecAuthz = async (
     ).finish(),
   };
 
+  const executeMsgGrantEntityAccountAuthzSubmitClaimAuthorization = {
+    typeUrl: "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
+    value: ixo.entity.v1beta1.MsgGrantEntityAccountAuthz.encode(
+      ixo.entity.v1beta1.MsgGrantEntityAccountAuthz.fromPartial({
+        id: entityDid,
+        ownerAddress: granterAddress,
+        name: "admin",
+        granteeAddress: nextGranteeAddress,
+        grant: cosmos.authz.v1beta1.Grant.fromPartial({
+          authorization: {
+            typeUrl: "/ixo.claims.v1beta1.SubmitClaimAuthorization",
+            value: ixo.claims.v1beta1.SubmitClaimAuthorization.encode(
+              ixo.claims.v1beta1.SubmitClaimAuthorization.fromPartial({
+                admin: granterAddress, // admi of collection must be same as entity owner
+                constraints: [
+                  ixo.claims.v1beta1.SubmitClaimConstraints.fromPartial({
+                    collectionId,
+                    agentQuota: Long.fromNumber(10),
+                  }),
+                  // IMPORTANT! Need below mapping so user can keep old authz's assigned to them
+                  // check --tests__/modules/Claims.ts => GrantEntityAccountClaimsSubmitAuthz as example
+                  // ...granteeCurrentAuthConstraints,
+                ],
+              })
+            ).finish(),
+          },
+          expiration: utils.proto.toTimestamp(addDays(new Date(), 365 * 3)),
+        }),
+      })
+    ).finish(),
+  };
+
   const message = {
     typeUrl: "/cosmos.authz.v1beta1.MsgExec",
     value: cosmos.authz.v1beta1.MsgExec.fromPartial({
       grantee: granteeAddress,
-      msgs: [executeMsgGrantEntityAccountAuthz],
+      msgs: [executeMsgGrantEntityAccountAuthzSubmitClaimAuthorization],
     }),
   };
 
