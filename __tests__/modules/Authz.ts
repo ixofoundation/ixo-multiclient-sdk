@@ -299,3 +299,89 @@ export const MsgRevokeAllowance = async (
   );
   return response;
 };
+
+export const MsgGrantAuthz = async (
+  granter = WalletUsers.tester,
+  grantee = WalletUsers.alice
+) => {
+  const client = await createClient(getUser(granter));
+
+  const granterAddress = (await getUser(granter).getAccounts())[0].address;
+  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
+    value: cosmos.authz.v1beta1.MsgGrant.fromPartial({
+      granter: granterAddress,
+      grantee: granteeAddress,
+      grant: cosmos.authz.v1beta1.Grant.fromPartial({
+        authorization: {
+          typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
+          value: cosmos.authz.v1beta1.GenericAuthorization.encode(
+            cosmos.authz.v1beta1.GenericAuthorization.fromPartial({
+              msg: "/cosmos.authz.v1beta1.MsgGrant",
+            })
+          ).finish(),
+        },
+        expiration: utils.proto.toTimestamp(addDays(new Date(), 365)),
+      }),
+    }),
+  };
+
+  const response = await client.signAndBroadcast(
+    granterAddress,
+    [message],
+    getFee(1, await client.simulate(granterAddress, [message], undefined))
+  );
+  return response;
+};
+
+export const MsgExecAuthz = async (
+  grantee = WalletUsers.alice,
+  nextGranter = WalletUsers.tester,
+  nextGrantee = WalletUsers.bob
+) => {
+  const client = await createClient(getUser(grantee));
+
+  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
+  const nextGranterAddress = (await getUser(nextGranter).getAccounts())[0]
+    .address;
+  const nextGranteeAddress = (await getUser(nextGrantee).getAccounts())[0]
+    .address;
+
+  const grantAuthzAgainMessage = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
+    value: cosmos.authz.v1beta1.MsgGrant.encode(
+      cosmos.authz.v1beta1.MsgGrant.fromPartial({
+        granter: nextGranterAddress,
+        grantee: nextGranteeAddress,
+        grant: cosmos.authz.v1beta1.Grant.fromPartial({
+          authorization: {
+            typeUrl: "/cosmos.authz.v1beta1.GenericAuthorization",
+            value: cosmos.authz.v1beta1.GenericAuthorization.encode(
+              cosmos.authz.v1beta1.GenericAuthorization.fromPartial({
+                msg: "/cosmos.bank.v1beta1.MsgSend",
+              })
+            ).finish(),
+          },
+          expiration: utils.proto.toTimestamp(addDays(new Date(), 365)),
+        }),
+      })
+    ).finish(),
+  };
+
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+      grantee: granteeAddress,
+      msgs: [grantAuthzAgainMessage],
+    }),
+  };
+
+  const response = await client.signAndBroadcast(
+    granteeAddress,
+    [message],
+    getFee(1, await client.simulate(granteeAddress, [message], undefined))
+  );
+  return response;
+};
