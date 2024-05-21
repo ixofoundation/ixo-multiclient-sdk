@@ -17,6 +17,8 @@ import {
 } from "../../src/utils/conversions";
 import { fromTimestamp } from "../../src/codegen/helpers";
 import axios from "axios";
+import { claims_mainnet, claims_testnet } from "../constants/claims";
+import { EcsCredentialsWorkerUrl } from "../setup/constants";
 
 export const quickQueries = () =>
   describe("Quick queries to see states", () => {
@@ -51,6 +53,53 @@ export const quickQueries = () =>
     //     }
     //   }
     //   console.timeEnd("rpc");
+
+    //   expect(true).toBeTruthy();
+    // });
+
+    // test("Test rpc endpoint rate limit", async () => {
+    //   const claims = claims_mainnet;
+    //   // const claims = claims_testnet;
+    //   const limit = 100;
+    //   const parallelSize = 15;
+    //   let i = 0;
+
+    //   console.time("query");
+    //   for (i = 0; i < limit; i++) {
+    //     try {
+    //       const startClaim = i * parallelSize;
+    //       if (startClaim >= claims.length) break;
+    //       console.time("innerQuery");
+
+    //       await Promise.all(
+    //         claims
+    //           .slice(startClaim, startClaim + parallelSize)
+    //           .map(async ({ claimId }) => {
+    //             // console.log("claimId: ", claimId);
+    //             const res = await axios.get(
+    //               `${EcsCredentialsWorkerUrl}claims/claim/${claimId}/data`,
+    //               {
+    //                 headers: {
+    //                   Authorization: process.env.ECS_CREDENTIAL_WORKER_AUTH,
+    //                 },
+    //               }
+    //             );
+    //             if (res.status !== 200) {
+    //               throw new Error("Error fetching claim data");
+    //             }
+    //             // console.log("res.status: ", res.status);
+    //           })
+    //       );
+
+    //       console.log("index: ", i, " batch index start: ", i * parallelSize);
+    //       console.timeEnd("innerQuery");
+    //     } catch (error) {
+    //       console.log("error index: ", i);
+    //       console.log(error.message);
+    //       break;
+    //     }
+    //   }
+    //   console.timeEnd("query");
 
     //   expect(true).toBeTruthy();
     // });
@@ -615,10 +664,31 @@ export const quickQueries = () =>
     //     };
     //   }
 
+    //   const entitiesWithNewTokensDate = new Date("2024-05-18");
+    //   const entitiesWithNewTokens = entities.filter(
+    //     (e) =>
+    //       e.tokens.filter((t) => t.evaluationDate > entitiesWithNewTokensDate)
+    //         .length > 0
+    //   );
+    //   const entitiesWithNoNewTokens = entities.filter(
+    //     (e) =>
+    //       e.tokens.filter((t) => t.evaluationDate > entitiesWithNewTokensDate)
+    //         .length < 1
+    //   );
+
     //   // save all CER Claims to file
     //   saveFileToPath(
     //     ["documents", "stove_analysis.json"],
-    //     JSON.stringify(entities, null, 2)
+    //     JSON.stringify(
+    //       {
+    //         entitiesLength: entities.length,
+    //         entitesWithNewTokensLength: entitiesWithNewTokens.length,
+    //         entitiesWithNoNewTokensLength: entitiesWithNoNewTokens.length,
+    //         entities,
+    //       },
+    //       null,
+    //       2
+    //     )
     //   );
 
     //   expect(entities).toBeTruthy();
