@@ -1,54 +1,56 @@
-# @ixo/impactxclient-sdk
+# Welcome
 
-![GitHub contributors](https://img.shields.io/github/contributors/ixofoundation/ixo-multiclient-sdk)
-![GitHub repo size](https://img.shields.io/github/repo-size/ixofoundation/ixo-multiclient-sdk)
+## @ixo/impactxclient-sdk
 
-![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)![Jest](https://img.shields.io/badge/Jest-323330?style=for-the-badge&logo=Jest&logoColor=white)
+![GitHub contributors](https://img.shields.io/github/contributors/ixofoundation/ixo-multiclient-sdk) ![GitHub repo size](https://img.shields.io/github/repo-size/ixofoundation/ixo-multiclient-sdk)
 
-[![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/invite/ixo) [![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/ixonetwork)
-[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/ixoworld)
-[![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/ixo-blog)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge\&logo=node.js\&logoColor=white) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge\&logo=typescript\&logoColor=white) ![Jest](https://img.shields.io/badge/Jest-323330?style=for-the-badge\&logo=Jest\&logoColor=white)
 
-<p align="center">
-  <img  src="assets/images/readme_banner.png"/>
-</p>
+[![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge\&logo=discord\&logoColor=white)](https://discord.com/invite/ixo) [![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge\&logo=telegram\&logoColor=white)](https://t.me/ixonetwork) [![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge\&logo=twitter\&logoColor=white)](https://twitter.com/ixoworld) [![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge\&logo=medium\&logoColor=white)](https://medium.com/ixo-blog)
 
-<br />
+<div align="center">
 
-<h2 align="center">
-    The ultimate utility client for the ixo Blockchain.
-</h2>
+<img src="assets/images/readme_banner.png" alt="">
 
-<br />
+</div>
 
-## Table of contents
+\
 
-- [@ixo/impactxclient-sdk](#ixoimpactxclient-sdk)
-  - [Table of contents](#table-of-contents)
-  - [Install](#install)
-  - [Usage](#usage)
-    - [RPC Clients](#rpc-clients)
-    - [Composing Messages](#composing-messages)
-      - [IBC Messages](#ibc-messages)
-    - [Contracts](#contracts)
-    - [Utility Functions](#utility-functions)
-    - [Custom Queries](#custom-queries)
-  - [Connecting with Wallets and Signing Messages](#connecting-with-wallets-and-signing-messages)
-    - [Initializing the Stargate Client](#initializing-the-stargate-client)
-    - [Creating Signers](#creating-signers)
-    - [Amino Signer](#amino-signer)
-    - [Proto Signer](#proto-signer)
-    - [Broadcasting Messages](#broadcasting-messages)
-  - [Developing](#developing)
-    - [Codegen](#codegen)
-    - [Publishing](#publishing)
-- [BigInt React Native](#bigint-react-native)
-  - [Credits](#credits)
-  - [Disclaimer](#disclaimer)
 
-<br />
+### The ultimate utility client for the ixo Blockchain.
 
-## Install
+\
+
+
+### Table of contents
+
+* [@ixo/impactxclient-sdk](./#ixoimpactxclient-sdk)
+  * [Table of contents](./#table-of-contents)
+  * [Install](./#install)
+  * [Usage](./#usage)
+    * [RPC Clients](./#rpc-clients)
+    * [Composing Messages](./#composing-messages)
+      * [IBC Messages](./#ibc-messages)
+    * [Contracts](./#contracts)
+    * [Utility Functions](./#utility-functions)
+    * [Custom Queries](./#custom-queries)
+  * [Connecting with Wallets and Signing Messages](./#connecting-with-wallets-and-signing-messages)
+    * [Initializing the Stargate Client](./#initializing-the-stargate-client)
+    * [Creating Signers](./#creating-signers)
+    * [Amino Signer](./#amino-signer)
+    * [Proto Signer](./#proto-signer)
+    * [Broadcasting Messages](./#broadcasting-messages)
+  * [Developing](./#developing)
+    * [Codegen](./#codegen)
+    * [Publishing](./#publishing)
+* [BigInt React Native](./#bigint-react-native)
+  * [Credits](./#credits)
+  * [Disclaimer](./#disclaimer)
+
+\
+
+
+### Install
 
 ```sh
 npm install @ixo/impactxclient-sdk
@@ -56,9 +58,9 @@ npm install @ixo/impactxclient-sdk
 yarn add  @ixo/impactxclient-sdk
 ```
 
-## Usage
+### Usage
 
-### RPC Clients
+#### RPC Clients
 
 ```js
 import { ixo, createQueryClient } from "@ixo/impactxclient-sdk";
@@ -87,7 +89,7 @@ const balances = await client.ixo.exchange.v1beta1.exchangeBalances();
 
 ```
 
-### Composing Messages
+#### Composing Messages
 
 Import the `ixo` object from `@ixo/impactxclient-sdk`.
 
@@ -127,9 +129,9 @@ const message = {
 
 Please have a look at the tests folder to see examples of all the messages and how to format!
 
-#### IBC Messages
+**IBC Messages**
 
-Same note from [Composing Messages](#composing-messages) above apply about msg creation
+Same note from [Composing Messages](./#composing-messages) above apply about msg creation
 
 ```js
 import { ibc } from "@ixo/impactxclient-sdk";
@@ -138,7 +140,7 @@ import { ibc } from "@ixo/impactxclient-sdk";
 // const { transfer } = ibc.applications.transfer.v1.MessageComposer.withTypeUrl;
 ```
 
-### Contracts
+#### Contracts
 
 To work with a cosmwasm contract, you first need to instantiate it with the contract code and other instantiation data. The contract code is provided by the contract namespace in custom queries. After instantiation, you receive the contract's address as a response, which you must use to execute any further transactions on the contract.
 
@@ -219,10 +221,9 @@ const executeContractResponse = await client.signAndBroadcast(
 );
 ```
 
-### Utility Functions
+#### Utility Functions
 
-Import the `utils` object from `@ixo/impactxclient-sdk`.
-From that you can destructure utlity functions to help with using the sdk.
+Import the `utils` object from `@ixo/impactxclient-sdk`. From that you can destructure utlity functions to help with using the sdk.
 
 ```js
 import { utils } from "@ixo/impactxclient-sdk";
@@ -233,10 +234,9 @@ const mnemonicUtils = utils.mnemonic;
 const addressUtils = utils.address;
 ```
 
-### Custom Queries
+#### Custom Queries
 
-Import the `customQueries` object from `@ixo/impactxclient-sdk`.
-From that you can destructure `currency` functions that will allow you to get the token info based on the provided denom or the `contract` functions that will provide ixo or daodao contract codes for instantiation.
+Import the `customQueries` object from `@ixo/impactxclient-sdk`. From that you can destructure `currency` functions that will allow you to get the token info based on the provided denom or the `contract` functions that will provide ixo or daodao contract codes for instantiation.
 
 ```js
 import { customQueries } from "@ixo/impactxclient-sdk";
@@ -272,11 +272,11 @@ const daoCoreContractCode = customQueries.contract.getContractCode(
 // daoCoreContractCode = 3
 ```
 
-## Connecting with Wallets and Signing Messages
+### Connecting with Wallets and Signing Messages
 
 Here are the docs on [creating signers](https://github.com/cosmology-tech/cosmos-kit/tree/main/packages/react#signing-clients) in cosmos-kit that can be used with Keplr and other wallets.
 
-### Initializing the Stargate Client
+#### Initializing the Stargate Client
 
 We added a custom Stargate Signing Client that can be exported and creatable under createSigningClient, please note it only support Direct Proto signing through the rpc endpoint! It already has all the proto defininitions in the registry for ixo modules.
 
@@ -286,7 +286,7 @@ import { createSigningClient } from "@ixo/impactxclient-sdk";
 const signingClient = await createSigningClient(RPC_URL, offlineWallet);
 ```
 
-THE FOLLOWING IS JUST ADVICE AS YOU CAN INSTEAD USE THE createSigningClient AS DESCRIBED ABOVE</br>
+THE FOLLOWING IS JUST ADVICE AS YOU CAN INSTEAD USE THE createSigningClient AS DESCRIBED ABOVE\
 Use `getSigningixoClient` to get your `SigningStargateClient`, with the proto/amino messages full-loaded. No need to manually add amino types, just require and initialize the client:
 
 ```js
@@ -298,24 +298,24 @@ const stargateClient = await getSigningixoClient({
 });
 ```
 
-### Creating Signers
+#### Creating Signers
 
 To broadcast messages, you can create signers with a variety of options:
 
-- [cosmos-kit](https://github.com/cosmology-tech/cosmos-kit/tree/main/packages/react#signing-clients) (recommended)
-- [keplr](https://docs.keplr.app/api/cosmjs.html)
-- [cosmjs](https://gist.github.com/webmaster128/8444d42a7eceeda2544c8a59fbd7e1d9)
+* [cosmos-kit](https://github.com/cosmology-tech/cosmos-kit/tree/main/packages/react#signing-clients) (recommended)
+* [keplr](https://docs.keplr.app/api/cosmjs.html)
+* [cosmjs](https://gist.github.com/webmaster128/8444d42a7eceeda2544c8a59fbd7e1d9)
 
-### Amino Signer
+#### Amino Signer
 
-THE CURRENT SDK DOES NOT INCLUDE AMINO TYPES< PLEASE USE ONLY PROTO FOR NOW</br>
+THE CURRENT SDK DOES NOT INCLUDE AMINO TYPES< PLEASE USE ONLY PROTO FOR NOW\
 Likely you'll want to use the Amino, so unless you need proto, you should use this one:
 
 ```js
 import { getOfflineSignerAmino as getOfflineSigner } from "cosmjs-utils";
 ```
 
-### Proto Signer
+#### Proto Signer
 
 ```js
 import { getOfflineSignerProto as getOfflineSigner } from "cosmjs-utils";
@@ -335,11 +335,11 @@ const signer = await getOfflineSigner({
 });
 ```
 
-### Broadcasting Messages
+#### Broadcasting Messages
 
 Now that you have your `stargateClient`, you can broadcast messages:
 
-DESTRUCTURE MSG FROM NAMESPACE INSTEAD OF USING MessageComposer AS DESCRIBED IN [Composing Messages](#composing-messages)</br>
+DESTRUCTURE MSG FROM NAMESPACE INSTEAD OF USING MessageComposer AS DESCRIBED IN [Composing Messages](./#composing-messages)\
 The `stargateClient.signAndBroadcast(address, [msg], fee)` can still be used as in example
 
 ```js
@@ -368,7 +368,7 @@ const fee: StdFee = {
 const response = await stargateClient.signAndBroadcast(address, [msg], fee);
 ```
 
-## Developing
+### Developing
 
 When first cloning the repo:
 
@@ -377,7 +377,7 @@ yarn
 yarn build
 ```
 
-### Codegen
+#### Codegen
 
 Contract schemas live in `./contracts`, and protos in `./proto`. Look inside of `scripts/codegen.js` and configure the settings for bundling your SDK and contracts into `ixo-multiclient-sdk`:
 
@@ -385,7 +385,7 @@ Contract schemas live in `./contracts`, and protos in `./proto`. Look inside of 
 yarn codegen
 ```
 
-### Publishing
+#### Publishing
 
 Build the types and then publish:
 
@@ -394,7 +394,7 @@ yarn build:ts
 yarn publish
 ```
 
-#React-Native
+\#React-Native
 
 Install the below Library and import into your main app entry file. This ensures the required Polyfils are covered on mobile.
 
@@ -402,15 +402,15 @@ Install the below Library and import into your main app entry file. This ensures
 yarn add @walletconnect/react-native-compat
 ```
 
-# BigInt React Native
+## BigInt React Native
 
 To ensure no issues with the React Native bigInt implementation, be sure to wrap your decimal gas amounts and others in a JS Double.
 
-## Credits
+### Credits
 
 🛠 Built using Telescope from Cosmology.
 
-## Disclaimer
+### Disclaimer
 
 AS DESCRIBED IN THE LICENSES, THE SOFTWARE IS PROVIDED “AS IS”, AT YOUR OWN RISK, AND WITHOUT WARRANTIES OF ANY KIND.
 
