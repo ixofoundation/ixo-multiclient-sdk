@@ -547,7 +547,7 @@ export const quickQueries = () =>
     // });
 
     // test("Gather stove details", async () => {
-    //   const collectionDid = "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258";
+    //   const collectionDid = "did:ixo:entity:9f8749d749af260d185f3df6f2206b63";
     //   const entitiesQuery = `query Query {
     //     entities(filter: {iidById: {context: {contains: [{key: "class", val: "${collectionDid}"}]}}}) {
     //       nodes {
@@ -569,7 +569,8 @@ export const quickQueries = () =>
     //     };
     //   }>("https://blocksync-graphql.ixo.earth", entitiesQuery);
 
-    //   const ownersToExclude = ["ixo1lgelskjkjjasl860n6kmevlflanqj5vh8l8p5w"];
+    //   // const ownersToExclude = ["ixo1lgelskjkjjasl860n6kmevlflanqj5vh8l8p5w"];
+    //   const ownersToExclude = [""];
     //   entities = entities
     //     .data!.data.entities.nodes.map((e) =>
     //       !ownersToExclude.includes(e.owner)
@@ -589,7 +590,8 @@ export const quickQueries = () =>
     //       evaluations.find((e) => e.verificationProof === id)?.evaluationDate
     //     );
     //   };
-    //   const filterTokensBeforeDate = new Date("2023-07-13");
+    //   // const filterTokensBeforeDate = new Date("2023-07-13");
+    //   const filterTokensBeforeDate = new Date("2024-05-18");
 
     //   for (let i = 0; i < entities.length; i++) {
     //     // if (i === 2) break;
@@ -664,17 +666,17 @@ export const quickQueries = () =>
     //     };
     //   }
 
-    //   const entitiesWithNewTokensDate = new Date("2024-05-18");
-    //   const entitiesWithNewTokens = entities.filter(
-    //     (e) =>
-    //       e.tokens.filter((t) => t.evaluationDate > entitiesWithNewTokensDate)
-    //         .length > 0
-    //   );
-    //   const entitiesWithNoNewTokens = entities.filter(
-    //     (e) =>
-    //       e.tokens.filter((t) => t.evaluationDate > entitiesWithNewTokensDate)
-    //         .length < 1
-    //   );
+    //   // const entitiesWithNewTokensDate = new Date("2024-05-18");
+    //   // const entitiesWithNewTokens = entities.filter(
+    //   //   (e) =>
+    //   //     e.tokens.filter((t) => t.evaluationDate > entitiesWithNewTokensDate)
+    //   //       .length > 0
+    //   // );
+    //   // const entitiesWithNoNewTokens = entities.filter(
+    //   //   (e) =>
+    //   //     e.tokens.filter((t) => t.evaluationDate > entitiesWithNewTokensDate)
+    //   //       .length < 1
+    //   // );
 
     //   // save all CER Claims to file
     //   saveFileToPath(
@@ -682,9 +684,13 @@ export const quickQueries = () =>
     //     JSON.stringify(
     //       {
     //         entitiesLength: entities.length,
-    //         entitesWithNewTokensLength: entitiesWithNewTokens.length,
-    //         entitiesWithNoNewTokensLength: entitiesWithNoNewTokens.length,
+    //         // entitesWithNewTokensLength: entitiesWithNewTokens.length,
+    //         // entitiesWithNoNewTokensLength: entitiesWithNoNewTokens.length,
     //         entities,
+    //         totalMintedTokens: entities.reduce(
+    //           (acc, e) => acc + e.tokensAfterInitialDate,
+    //           0
+    //         ),
     //       },
     //       null,
     //       2

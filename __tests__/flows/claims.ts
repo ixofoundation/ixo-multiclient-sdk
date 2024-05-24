@@ -770,7 +770,7 @@ export const supamotoClaims3 = () =>
 
       // first load previous purchases and get only id, then load latest and remove all previous purchases
       let previousPurchases: string[] = [];
-      let paths = ["./assets/documents/emerging/payments8.csv"];
+      let paths = ["./assets/documents/emerging/payments_new.csv"];
 
       // filter out already made claims, export from carbon manager db
       const existingFPClaimsTrxIds =
