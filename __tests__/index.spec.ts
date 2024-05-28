@@ -12,6 +12,7 @@ import * as Token from "./flows/tokens";
 import * as CosmWasm from "./flows/cosmwasm";
 import * as Queries from "./flows/quickQueries";
 import * as Claims from "./flows/claims";
+import * as Authz from "./flows/authz";
 import { dids } from "./setup/constants";
 import { idcc_constants } from "./setup/idcc/creds";
 
@@ -63,6 +64,8 @@ IID.iidReplaceLinkedResource();
 // CosmWasm.daodaoAuthzExecute();
 // Cosmos.authzBasic();
 // Cosmos.textProposalBasic();
+// Authz.authzBasic();
+// Claims.supamotoClaims3();
 // Queries.quickQueries();
 
 // ------------------------------------------
