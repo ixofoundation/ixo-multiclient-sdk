@@ -79,7 +79,7 @@ export const getFee = (
     amount: [
       {
         denom: "uixo",
-        amount: (trxLength * 30000).toString(),
+        amount: (trxLength * 1000).toString(),
       },
     ],
     gas: (trxLength * 800000).toString(),

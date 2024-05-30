@@ -25,7 +25,7 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 import { cookstoveIds } from "../setup/supamoto/stoves";
 import { assertIsDeliverTxSuccess } from "@cosmjs/stargate";
-import { legacyCookstoveIds } from "../setup/emerging/extra";
+import { legacyCookstoveIds } from "../setup/emerging/legacy";
 
 axiosRetry(axios, {
   retries: 3,

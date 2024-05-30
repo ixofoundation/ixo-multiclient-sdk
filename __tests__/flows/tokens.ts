@@ -1,4 +1,4 @@
-import {
+import gqlQuery, {
   chunkArray,
   generateNewWallet,
   getUser,
@@ -309,6 +309,8 @@ export const supamotoTokensFarm = () =>
     );
 
     const blocksyncUrl = "https://blocksync.ixo.earth";
+    const blocksyncUrlGraphql = "https://blocksync-graphql.ixo.earth";
+    // const blocksyncUrl = "https://blocksync-pandora.ixo.earth";
 
     testMsg("Farm tokens", async () => {
       const tester = (await getUser(WalletUsers.tester).getAccounts())[0]
@@ -324,6 +326,7 @@ export const supamotoTokensFarm = () =>
       );
       const colEntities = collections?.[0]?.entities ?? [];
       collections = null; // free up memory
+      console.log("colEntities", colEntities.length);
 
       // helpers to get a number of stove ids
       // const ent100 = colEntities
@@ -345,12 +348,29 @@ export const supamotoTokensFarm = () =>
       let totalAmounts: number[] = [];
       let index = 0;
 
-      const userTokensRes = await axios.get(
-        `${blocksyncUrl}/api/token/byAddress/${tester}`
-      );
-      let userTokens = Object.entries(userTokensRes.data.CARBON?.tokens || {});
+      const getAccountTokensQuery = (address: string) => `query Query {
+        getAccountTokens(address: "${address}", name: "CARBON")
+        }`;
+      const getAccountTokens = async (address: string) =>
+        await gqlQuery<any>(
+          blocksyncUrlGraphql,
+          getAccountTokensQuery(address)
+        );
 
+      const userTokensRes = await getAccountTokens(tester);
+      let userTokens = Object.entries(
+        userTokensRes?.data?.data?.getAccountTokens?.CARBON?.tokens || {}
+      );
+
+      let i = 0;
       for (const entities of chunkArray(colEntities, chunkSize)) {
+        i++;
+        console.log(
+          "chunk",
+          i,
+          "out of",
+          Math.ceil(colEntities.length / chunkSize)
+        );
         const farmBatches: any[] = [];
         const topupBatches: any[] = [];
 
@@ -360,10 +380,10 @@ export const supamotoTokensFarm = () =>
           // console.log("farming for entity", index);
 
           const adminAddress = entity.accounts[0].address;
-          const tokensRes = await axios.get(
-            `${blocksyncUrl}/api/token/byAddress/${adminAddress}`
+          const tokensRes = await getAccountTokens(adminAddress);
+          const tokens = Object.entries(
+            tokensRes?.data?.data?.getAccountTokens?.CARBON?.tokens || {}
           );
-          const tokens = Object.entries(tokensRes.data.CARBON?.tokens || {});
           if (!tokens || !tokens.length) continue;
 
           const totalAmount = tokens.reduce(

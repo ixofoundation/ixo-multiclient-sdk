@@ -11,11 +11,7 @@ import { WalletUsers } from "../../helpers/constants";
 import * as Iid from "../../modules/Iid";
 import * as Entity from "./Entity";
 import * as Entity1 from "../Entity";
-import {
-  EcsCredentialsWorkerUrl,
-  chainNetwork,
-  dids,
-} from "../../setup/constants";
+import { EcsCredentialsWorkerUrl, chainNetwork, dids } from "../constants";
 import {
   uploadAllToCellnodeWeb3,
   uploadAllToCellnodeWeb3Claims,
@@ -23,7 +19,7 @@ import {
 import {
   setup_asset_collection_constants,
   setup_protocol_legacy_cooking_constants,
-} from "./extra-constants";
+} from "./legacy-constants";
 import axios from "axios";
 
 export const cookstovesExtra = () =>
