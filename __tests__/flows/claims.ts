@@ -765,8 +765,8 @@ export const supamotoClaims3 = () =>
       collectionToUse = "Legacy";
 
       // const collectionId = "1"; // testnet and mainnet genesis fuelpurchases
-      // const collectionId = "5"; // mainnet legacy fuelpurchases
-      const collectionId = "8"; // testnet legacy fuelpurchases
+      const collectionId = "5"; // mainnet legacy fuelpurchases
+      // const collectionId = "8"; // testnet legacy fuelpurchases
 
       // first load previous purchases and get only id, then load latest and remove all previous purchases
       let previousPurchases: string[] = [];
