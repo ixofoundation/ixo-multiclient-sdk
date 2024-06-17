@@ -125,7 +125,8 @@ export const UmuziCredentialsWorkerUrl =
 //   ai4gCollection: "ixo1atkdpd2cmh7tfehvsafpk6f6a0rq74ykekr4j9",
 // };
 
-// export const EcsCredentialsWorkerUrl = "https://ecs.credentials.ixo.world/";
+// export const EcsCredentialsWorkerUrl = "http://localhost:3006/";
+// // export const EcsCredentialsWorkerUrl = "https://ecs.credentials.ixo.world/";
 // export const ProspectCredentialsWorkerUrl = "";
 // export const CarbonCredentialsWorkerUrl =
 //   "https://carbon.credentials.ixo.world/";
