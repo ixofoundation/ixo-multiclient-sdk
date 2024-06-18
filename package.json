@@ -35,6 +35,7 @@
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "test:queries": "jest __tests__/specs/query --forceExit",
     "test:supamoto": "jest __tests__/specs/supamoto --forceExit",
+    "test:ai4g": "jest __tests__/specs/ai4g --forceExit",
     "test:umuzi": "jest __tests__/specs/umuzi --forceExit",
     "test:idcc": "jest __tests__/specs/idcc --forceExit"
   },
@@ -63,6 +64,7 @@
     "@babel/plugin-transform-runtime": "7.19.1",
     "@babel/preset-env": "7.19.4",
     "@babel/preset-typescript": "7.18.6",
+    "@json2csv/node": "7.0.5",
     "@osmonauts/telescope": "0.92.2",
     "@protobufs/cosmos": "0.1.0",
     "@types/jest": "29.1.2",
@@ -86,7 +88,6 @@
     "store": "^2.0.12",
     "ts-jest": "29.0.3",
     "typedoc": "0.23.20",
-    "@json2csv/node": "7.0.5",
     "typescript": "4.8.4"
   },
   "dependencies": {

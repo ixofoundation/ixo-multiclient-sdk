@@ -13,7 +13,8 @@ export const CreateSupamotoAssetCollection = async (
   entity: SetupDaoConstantFields["entity"],
   linkedResourcesUploaded: LinkedResourcesUploaded,
   linkedClaimsUploaded: LinkedClaimUploaded,
-  addEdKeys = false
+  addEdKeys = false,
+  endDate?: string
 ) => {
   const client = await createClient();
 
@@ -171,6 +172,9 @@ export const CreateSupamotoAssetCollection = async (
       relayerNode: entity.relayerNode || did,
     }),
   };
+  if (endDate) {
+    message.value.endDate = utils.proto.toTimestamp(new Date(endDate));
+  }
 
   const response = await client.signAndBroadcast(myAddress, [message], fee);
   return response;
@@ -202,6 +206,7 @@ export const CreateEntityAssetSupamotoInstance = async (
       controller: [did],
       service: [],
       startDate: utils.proto.toTimestamp(new Date()),
+      endDate: utils.proto.toTimestamp(new Date("2024-07-31T23:59:59Z")),
       verification: createIidVerificationMethods({
         did,
         pubkey: myPubKey,
@@ -237,8 +242,8 @@ export const CreateEntityAssetSupamotoInstance = async (
           description: "Impact Token",
           mediaType: "application/json",
           serviceEndpoint:
-            "ipfs:bafkreif2dai7ilb6v44if4dfnqnjkec7o3zn2jc2lo4f2fazvwa6p5ijaq",
-          proof: "bafkreif2dai7ilb6v44if4dfnqnjkec7o3zn2jc2lo4f2fazvwa6p5ijaq",
+            "ipfs:bafkreigsemewlm4ihwnuxbbironfvex56o5k6ho5hdmcacvrtybpqlhxne",
+          proof: "bafkreigsemewlm4ihwnuxbbironfvex56o5k6ho5hdmcacvrtybpqlhxne",
           encrypted: "false",
           right: "",
         },
@@ -248,8 +253,8 @@ export const CreateEntityAssetSupamotoInstance = async (
           description: "Profile",
           mediaType: "application/ld+json",
           serviceEndpoint:
-            "ipfs:bafkreibp5wtr5c7j6m2q5wxdevhn2iipt5yi4zllod4ve4byiym6etxxka",
-          proof: "bafkreibp5wtr5c7j6m2q5wxdevhn2iipt5yi4zllod4ve4byiym6etxxka",
+            "ipfs:bafkreihavbzy2nugfl7qoxrmpcn7nwlmwrohoxocxzugvjxha575de5jde",
+          proof: "bafkreihavbzy2nugfl7qoxrmpcn7nwlmwrohoxocxzugvjxha575de5jde",
           encrypted: "false",
           right: "",
         },
@@ -257,7 +262,7 @@ export const CreateEntityAssetSupamotoInstance = async (
       accordedRight: [],
       linkedEntity: [
         ixo.iid.v1beta1.LinkedEntity.fromPartial({
-          id: dids.legacyCollection,
+          id: dids.ai4gCollection,
           type: "collection",
           relationship: "instantiation",
           service: "ixo",

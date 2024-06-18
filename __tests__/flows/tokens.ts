@@ -1,4 +1,4 @@
-import {
+import gqlQuery, {
   chunkArray,
   generateNewWallet,
   getUser,
@@ -308,63 +308,109 @@ export const supamotoTokensFarm = () =>
       Promise.all([generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS)])
     );
 
-    const blocksyncUrl = "https://blocksync.ixo.earth";
+    const blocksyncUrlGraphql = "https://blocksync-graphql.ixo.earth";
 
     testMsg("Farm tokens", async () => {
       const tester = (await getUser(WalletUsers.tester).getAccounts())[0]
         .address;
 
-      let collections: any = await axios.get(
-        `${blocksyncUrl}/api/entity/collectionsByOwnerAddress/${tester}`
-      );
+      const getCollEntitiesByOwnerQuery = `query Query {
+        entities(
+          filter: {
+            owner: { equalTo: "${tester}" }
+            type: { equalTo: "asset/device" }
+            iidById: {
+              context: { contains: [{ key: "class", val: "${dids.ai4gCollection}" }] }
+            }
+          }
+        ) {
+          nodes {
+            id
+            accounts
+          }
+        }
+      }`;
+      const getCollEntitiesByOwner = async () =>
+        await gqlQuery<any>(blocksyncUrlGraphql, getCollEntitiesByOwnerQuery);
 
-      // filter out only the collection that want to farm
-      collections = collections.data.filter(
-        (c) => c.collection.id == dids.legacyCollection
-      );
-      const colEntities = collections?.[0]?.entities ?? [];
-      collections = null; // free up memory
+      const res = await getCollEntitiesByOwner();
+      const colEntities = res.data?.data?.entities?.nodes ?? [];
+      // const colEntities = (res.data?.data?.entities?.nodes ?? []).slice(0, 2); // if want to test with limited entities
+      console.log("colEntities", colEntities.length);
 
-      // helpers to get a number of stove ids
-      // const ent100 = colEntities
-      //   .map((e: any) => ({ id: e.id, type: e.type }))
-      //   .slice(0, 100);
-      // console.log("ent100", ent100.length);
-      // saveFileToPath(
-      //   ["documents", "emerging", "100entities.json"],
-      //   JSON.stringify(collections, null, 2)
-      // );
-      // console.log(colEntities.length);
-      // const haha = true;
-      // if (haha) throw new Error("haha");
-
-      const farm = true;
-      const topup = false;
-      const amountBalance = 0;
+      const farm = false;
+      const topup = true;
+      const amountBalance = 1000;
       const chunkSize = 20;
       let totalAmounts: number[] = [];
       let index = 0;
 
-      const userTokensRes = await axios.get(
-        `${blocksyncUrl}/api/token/byAddress/${tester}`
-      );
-      let userTokens = Object.entries(userTokensRes.data.CARBON?.tokens || {});
+      const getAccountTokensQuery = (address: string) => `query Query {
+        getAccountTokens(address: "${address}", name: "CARBON")
+        }`;
+      const getAccountTokens = async (address: string) =>
+        await gqlQuery<any>(
+          blocksyncUrlGraphql,
+          getAccountTokensQuery(address)
+        );
 
+      const userTokensRes = await getAccountTokens(tester);
+      let userTokens = Object.entries(
+        userTokensRes?.data?.data?.getAccountTokens?.CARBON?.tokens || {}
+      );
+      // console.log("userTokens", userTokens.length);
+      // userTokens example:
+      // [
+      //   [
+      //     "60671d0d651688e775fe46efd3a63724",
+      //     {
+      //       collection: "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
+      //       amount: 0,
+      //       minted: 0,
+      //       retired: 7,
+      //     },
+      //   ],
+      // ];
+
+      const collTokensToUse = dids.legacyCollection;
+      // filter out userTokens to only use ones with specific collection
+      userTokens = userTokens.filter(
+        (t) => (t[1] as any).collection === collTokensToUse
+      );
+
+      // if (!!1) throw new Error("haha");
+
+      let i = 0;
       for (const entities of chunkArray(colEntities, chunkSize)) {
+        i++;
+        console.log(
+          "chunk",
+          i,
+          "out of",
+          Math.ceil(colEntities.length / chunkSize)
+        );
         const farmBatches: any[] = [];
         const topupBatches: any[] = [];
 
         for (const entity of entities as any) {
           index++;
           // if (index > 7) break;
-          // console.log("farming for entity", index);
 
-          const adminAddress = entity.accounts[0].address;
-          const tokensRes = await axios.get(
-            `${blocksyncUrl}/api/token/byAddress/${adminAddress}`
+          const adminAddress = entity.accounts.find(
+            (a) => a.name === "admin"
+          )?.address;
+          // console.log(
+          //   "farming/topup for entity ",
+          //   entity.id,
+          //   adminAddress,
+          //   index
+          // );
+
+          const tokensRes = await getAccountTokens(adminAddress);
+          const tokens = Object.entries(
+            tokensRes?.data?.data?.getAccountTokens?.CARBON?.tokens || {}
           );
-          const tokens = Object.entries(tokensRes.data.CARBON?.tokens || {});
-          if (!tokens || !tokens.length) continue;
+          if (farm && (!tokens || !tokens.length)) continue;
 
           const totalAmount = tokens.reduce(
             (r: any, t: any) => r + (t[1].amount ?? 0),

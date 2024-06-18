@@ -25,7 +25,7 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 import { cookstoveIds } from "../setup/supamoto/stoves";
 import { assertIsDeliverTxSuccess } from "@cosmjs/stargate";
-import { legacyCookstoveIds } from "../setup/emerging/extra";
+import { legacyCookstoveIds } from "../setup/emerging/legacy";
 
 axiosRetry(axios, {
   retries: 3,
@@ -760,33 +760,41 @@ export const supamotoClaims3 = () =>
     // });
 
     test("Generate Fuel Purchase claims and evaluate them", async () => {
-      // first load previous purchases and get only id, then load latest and remove ll previous purchases
-      let purchases4Data = await csvtojsonV2().fromFile(
-        "./assets/documents/emerging/payments4.csv"
-      );
-      purchases4Data = purchases4Data.map((p) => p["Transaction ID"]);
-      let purchaseData = await csvtojsonV2().fromFile(
-        "./assets/documents/emerging/payments5.csv"
-      );
-      purchaseData = purchaseData.filter(
-        (p) => !purchases4Data.includes(p["Transaction ID"])
-      );
-      // console.log(purchaseData);
-      console.log({
-        purchases4Data: purchases4Data.length,
-        purchaseData: purchaseData.length,
-      });
+      type CollectionType = "Legacy" | "Genesis";
+      let collectionToUse: CollectionType;
+      collectionToUse = "Genesis";
 
-      // remove any duplicate transactions by transaction id
-      purchaseData = Object.values(
-        purchaseData.reduce((aggObj, item) => {
-          if (!aggObj[item.Transaction_ID])
+      const collectionId = "1"; // testnet and mainnet genesis fuelpurchases
+      // const collectionId = "5"; // mainnet legacy fuelpurchases
+      // const collectionId = "8"; // testnet legacy fuelpurchases
+
+      // first load previous purchases and get only id, then load latest and remove all previous purchases
+      let previousPurchases: string[] = [];
+      let paths = ["./assets/documents/emerging/payments_new.csv"];
+
+      // filter out already made claims, export from carbon manager db
+      const existingFPClaimsTrxIds =
+        require("../../assets/documents/emerging/FuelPurchaseClaims.json").map(
+          (s: any) => s.transactionId
+        );
+      console.log({ existingFPClaimsTrxIds: existingFPClaimsTrxIds.length });
+      previousPurchases.push(...existingFPClaimsTrxIds);
+
+      let purchaseData: any[] = [];
+      let duplicatesData: any[] = [];
+      // loop over paths and add all transaction ids to previous purchases list
+      for (let path of paths) {
+        let data = await csvtojsonV2().fromFile(path);
+        console.log({ path, purchaseData: data.length });
+        data = data.reduce((aggObj, item) => {
+          if (
+            !aggObj[item["Transaction ID"]] &&
+            !previousPurchases.includes(item["Transaction ID"])
+          ) {
             aggObj[item["Transaction ID"]] = {
-              Device_ID: item["Device ID"],
+              // Device_ID: item["Device ID"],
+              Device_ID: item["Device ID Revised"],
               Transaction_ID: item["Transaction ID"],
-              isNft: item["isNFT"],
-              type: item["Type"],
-              lastConnectionDays: item["Last_Connectively (Days)"],
               status: item["Status_Connectivity"],
               country: item["Country"],
               Mass: item["Total KG"],
@@ -798,53 +806,47 @@ export const supamotoClaims3 = () =>
                   "Z"
               ),
             };
+          } else {
+            previousPurchases.push(item["Transaction ID"]);
+            duplicatesData.push({
+              Device_ID: item["Device ID"],
+              Transaction_ID: item["Transaction ID"],
+            });
+          }
+
           return aggObj;
-        }, {})
-      );
-      // console.log(purchaseData);
+        }, {});
+        previousPurchases.push(...Object.keys(data));
+        purchaseData.push(...Object.values(data));
+      }
 
-      purchaseData = purchaseData.filter((p: any) => p.status === "Active");
-      purchaseData = purchaseData.filter(
-        (p: any) => p.lastConnectionDays !== ""
-      );
+      console.log("Total purchases: " + purchaseData.length);
+      console.log("Total duplicates: " + duplicatesData.length);
+      previousPurchases = []; // clear memory
+      duplicatesData = []; // clear memory
 
-      // filter out already made claims
-      // const paymentsAlreadyClaimed = require("../../assets/documents/emerging/payments4_done.json");
-      // purchaseData = purchaseData.filter(
-      //   (p: any) => !paymentsAlreadyClaimed.includes(p.Transaction_ID)
+      // saveFileToPath(
+      //   ["documents", "emerging", "fuelPurchases_data1.json"],
+      //   JSON.stringify({ duplicatesData, purchaseData }, null, 2)
       // );
-      // console.log(purchaseData.length);
+      // if (!!1) throw new Error("stop");
 
       // chunk payments into objects with device id as key
-      purchaseData = purchaseData.reduce((aggObj, item) => {
-        if (!aggObj[item.Device_ID]) aggObj[item.Device_ID] = [item];
-        else aggObj[item.Device_ID] = [...aggObj[item.Device_ID], item];
-        return aggObj;
+      purchaseData = purchaseData.reduce((a, p) => {
+        if (!a[p.Device_ID]) a[p.Device_ID] = [p];
+        else a[p.Device_ID] = [...a[p.Device_ID], p];
+        return a;
       }, {});
 
       const stovesCollection =
-        require("../../assets/documents/emerging/stoves_legacy_collection.json").map(
-          // require("../../assets/documents/emerging/stoves_genesis_collection.json").map(
-          (s: any) => s.externalId
-        );
-      // const stovesWithExternalId =
-      //   require("../../assets/documents/emerging/stoves_with_external_ids.json").map(
-      //     (s: any) => s.externalId
-      //   );
-      // const stovesOnChain = Object.keys(purchaseData).filter((s) =>
-      //   stovesWithExternalId.includes(s)
-      // );
-      // const stovesNotOnChain = Object.keys(purchaseData).filter(
-      //   (s) => !stovesWithExternalId.includes(s)
-      // );
-      // const stovesInGenesisCollection = stovesOnChain.filter((s) =>
-      //   stovesCollection.includes(s)
-      // );
-      // console.log({
-      //   stovesNotOnChain: stovesNotOnChain.length,
-      //   stovesOnChain: stovesOnChain.length,
-      //   stovesInGenesisCollection: stovesInGenesisCollection.length,
-      // });
+        // @ts-ignore
+        collectionToUse === "Legacy"
+          ? require("../../assets/documents/emerging/stoves_legacy_collection.json").map(
+              (s: any) => s.externalId
+            )
+          : require("../../assets/documents/emerging/stoves_genesis_collection.json").map(
+              (s: any) => s.externalId
+            );
 
       Object.keys(purchaseData).forEach((k) => {
         // purchaseData[k].sort((a, b) => a.time_paid - b.time_paid);
@@ -852,6 +854,7 @@ export const supamotoClaims3 = () =>
         if (!stovesCollection.includes(k)) delete purchaseData[k];
         else purchaseData[k].sort((a, b) => a.time_paid - b.time_paid);
       });
+      // console.log({ purchaseData: Object.keys(purchaseData).length });
 
       const amounts = Object.values(purchaseData)
         .flat(1)
@@ -864,21 +867,21 @@ export const supamotoClaims3 = () =>
         JSON.stringify(
           {
             kgsPellets: {
-              sections: amounts.reduce((a, b) => {
-                if (a[b]) a[b]++;
-                else a[b] = 1;
-                return a;
-              }, {}),
+              // sections: amounts.reduce((a, b) => {
+              //   if (a[b]) a[b]++;
+              //   else a[b] = 1;
+              //   return a;
+              // }, {}),
               average: amounts.reduce((a, b) => a + b) / amounts.length,
               totalClaims: amounts.length,
               totalKgPellets: amounts.reduce((a, b) => a + b),
             },
             carbonCredits: {
-              sections: amountsKgs.reduce((a, b) => {
-                if (a[b]) a[b]++;
-                else a[b] = 1;
-                return a;
-              }, {}),
+              // sections: amountsKgs.reduce((a, b) => {
+              //   if (a[b]) a[b]++;
+              //   else a[b] = 1;
+              //   return a;
+              // }, {}),
               average: amountsKgs.reduce((a, b) => a + b) / amountsKgs.length,
               totalClaims: amountsKgs.length,
               totalCarbonCredits: amountsKgs.reduce((a, b) => a + b),
@@ -889,6 +892,9 @@ export const supamotoClaims3 = () =>
             //   (v: any) => v.length
             // ),
             // stoves: Object.keys(purchaseData),
+            // purchaseIds: Object.values(purchaseData)
+            //   .flat(1)
+            //   .map((p: any) => p.Transaction_ID),
             // purchaseData,
           },
           null,
@@ -896,23 +902,19 @@ export const supamotoClaims3 = () =>
         )
       );
 
-      // // helper to stop flow if just want the above data
-      // const test = true;
-      // if (test) throw new Error("stop");
+      // helper to stop flow if just want the above data
+      // if (!!1) throw new Error("stop");
 
       // devide payments per device into 10 devices at a time
       // ==============================================================
       purchaseData = chunkArray<any[]>(Object.values(purchaseData), 10);
       let stovePurchasesAll: any[] = [];
       let index = -1;
-      // const collectionId = "1"; // testnet and mainnet genesis fuelpurchases
-      const collectionId = "5"; // mainnet legacy fuelpurchases
-      // const collectionId = "8"; // testnet legacy fuelpurchases
 
       console.time("claims");
       for (const stovePurchases of purchaseData) {
         index++;
-        // if (index < 1) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
+        // if (index < 6) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
 
         console.log(
           "starting batch " +
@@ -943,8 +945,14 @@ export const supamotoClaims3 = () =>
                 dateTime: p.time_paid, // transaction date time
                 amount: Number(p.Mass), // amount pellets that bought in kg
                 deviceId: p.Device_ID, // device id
-                // protocolDid: dids.legacyCookingProtocol, // custom protocol
-                // projectDid: dids.ecsProject, // custom project
+                protocolDid:
+                  // @ts-ignore
+                  collectionToUse === "Legacy"
+                    ? dids.legacyCookingProtocol
+                    : null, // custom protocol
+                projectDid:
+                  // @ts-ignore
+                  collectionToUse === "Legacy" ? dids.ecsProject : null, // custom project
               })),
             },
           },
