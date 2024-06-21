@@ -37,7 +37,16 @@ beforeAll(() => {
 // IID.iidAddEdKeys();
 // Bonds.bondsSellsDisabled();
 // Bonds.bondsSellsEnabled();
-IID.iidReplaceLinkedResource();
+IID.deleteLinkedClaims();
+// IID.iidDeleteLinkedResource();
+// IID.iidReplaceLinkedResourcesArrayOfDIDs(
+//   [
+//     "did:ixo:entity:",
+//   ]
+// );
+//
+// IID.iidReplaceLinkedResource(process.env.ROOT_IMPACTS);
+// IID.iidReplaceService(process.env.ROOT_IMPACTS);
 // IBC.ibcBasic();
 // Cosmos.govDeposit();
 // CosmWasm.wasmBasic();

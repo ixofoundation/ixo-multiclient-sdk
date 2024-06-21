@@ -136,6 +136,7 @@ export const relayerVerifyAllEntities = (
     testMsg("Verifying", async () => {
       const tester = getUser(WalletUsers.tester);
       const relayerDid = relayerNodeDid || tester.did;
+      console.log(blocksyncUrl);
 
       // adding 8seconds timeout for blocksync to catch up before querying entities
       await timeout(8000);
@@ -148,10 +149,13 @@ export const relayerVerifyAllEntities = (
       let index = 0;
       // console.log("entitiesRes length", entitiesRes.data.length);
 
+      let res;
+
       for (const entities of chunkArray(entitiesRes.data, chunkSize)) {
         const verifyBatches: string[] = [];
 
         for (const entity of entities as any) {
+          console.log(entity.id);
           index++;
           // if (index > 7) break;
           // console.log("verifying for entity", index);
@@ -168,8 +172,9 @@ export const relayerVerifyAllEntities = (
         if (verifyBatches.length != 0) {
           try {
             console.log("verifyBatches length", verifyBatches.length);
+            console.log(entityVerified);
             // console.dir(verifyBatches, { depth: null });
-            const res = await Entity.UpdateEntityVerified(
+            res = await Entity.UpdateEntityVerified(
               undefined,
               verifyBatches,
               relayerDid,
@@ -181,7 +186,7 @@ export const relayerVerifyAllEntities = (
           }
         }
       }
-      return true as any;
+      return res as any;
     });
   });
 

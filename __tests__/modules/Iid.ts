@@ -176,17 +176,17 @@ export const AddVerification = async (
         relationships: relationships,
         method: addBlockchainAccountId
           ? ixo.iid.v1beta1.VerificationMethod.fromPartial({
-              id: did + "#" + userToAddAddress,
-              type: "CosmosAccountAddress",
-              blockchainAccountID: userToAddAddress,
-              controller: userToAddAccount.did,
-            })
+            id: did + "#" + userToAddAddress,
+            type: "CosmosAccountAddress",
+            blockchainAccountID: userToAddAddress,
+            controller: userToAddAccount.did,
+          })
           : customMessages.iid.createVerificationMethod(
-              userToAddAccount.did,
-              userToAddPubkey,
-              userToAddAccount.did,
-              keyType
-            ),
+            userToAddAccount.did,
+            userToAddPubkey,
+            userToAddAccount.did,
+            keyType
+          ),
         // method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
         //   id:
         //     "{id}#" +
@@ -543,6 +543,7 @@ export const AddLinkedClaim = async (
 };
 
 export const DeleteLinkedClaim = async (did?: string, claimId?: string) => {
+
   const client = await createClient();
 
   const tester = getUser();
@@ -559,7 +560,10 @@ export const DeleteLinkedClaim = async (did?: string, claimId?: string) => {
     }),
   };
 
+  console.log("DeleteLinkedClaim message = ", { message });
+
   const response = await client.signAndBroadcast(myAddress, [message], fee);
+  console.log("DeleteLinkedClaim response = ", { response });
   return response;
 };
 
