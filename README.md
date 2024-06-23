@@ -109,18 +109,16 @@ The [Bonds Module](https://github.com/ixofoundation/ixo-blockchain/tree/a161b2ef
 
 ### Cosmos Transactions
 
-## CosmWasm Contracts
+## CosmWasm and Smart Contracts
 - `./codegen`
   - `./cosmwasm/bundle`;
   - `./contracts`;
 
-### CosmWasm Queries
+### DAODAO
+The basic DAO contracts are forked from the DAO-DAO Github organisation's [dao-contracts repository.](https://github.com/DA0-DA0/dao-contracts)
+Furthermore, there has been significant enhancements to how the original contracts are used in practice.
 
-#### DAODAO
-
-#### Tokens, NFTs, and Swaps
-
-### CosmWasm Transactions
+### Tokens, NFTs, and Swaps
 
 ## Construct, Sign, and Broadcast Messages
 - `./stargate_client`
