@@ -4,6 +4,7 @@ import { relayerVerifyAllEntities } from "../../flows/entities";
 import { createQueryClient, generateWallets } from "../../helpers/common";
 import { dids } from "../../setup/constants";
 import { chainNetwork } from "../../setup/constants";
+import { didOracleFlow } from "../../setup/didOracle/setupFlow";
 import * as AI4G from "../../setup/emerging/ai4g";
 
 beforeAll(() => Promise.all([createQueryClient(), generateWallets(false)]));
@@ -282,3 +283,8 @@ beforeAll(() => Promise.all([createQueryClient(), generateWallets(false)]));
 //   ],
 //   true
 // ); //emerging dao user
+
+// ------------------------------------------
+// DID ORACLE add ed keys
+// ------------------------------------------
+// didOracleFlow();
