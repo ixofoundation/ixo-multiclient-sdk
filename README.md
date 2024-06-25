@@ -1,4 +1,4 @@
-# @ixo/impactxclient-sdk
+@ixo/impactxclient-sdk
 
 ![GitHub contributors](https://img.shields.io/github/contributors/ixofoundation/ixo-multiclient-sdk) ![GitHub repo size](https://img.shields.io/github/repo-size/ixofoundation/ixo-multiclient-sdk)
 
@@ -7,12 +7,13 @@
 [![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge\&logo=discord\&logoColor=white)](https://discord.com/invite/ixo) [![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge\&logo=telegram\&logoColor=white)](https://t.me/ixonetwork) [![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge\&logo=twitter\&logoColor=white)](https://twitter.com/ixoworld) [![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge\&logo=medium\&logoColor=white)](https://medium.com/ixo-blog)
 
 <div align="center">
+  <h1> IXO Impacts Client SDK </h1>
 <img src="assets/images/readme_banner.png" alt="">
 </div>
 
-The `@ixo/impactxclient-sdk` is a TypeScript SDK designed to interact with the IXO appchain and other Cosmos chains. It provides a comprehensive set of tools for developers to query data and perform transactions on the blockchain.
-
 ## The ultimate utility client for the IXO Blockchain.
+
+The `@ixo/impactxclient-sdk` is a TypeScript SDK designed to interact with the IXO appchain and other Cosmos chains. It provides a comprehensive set of tools for developers to query data and perform transactions on the blockchain.
 
 ## Key Features
 
@@ -25,6 +26,7 @@ The `@ixo/impactxclient-sdk` is a TypeScript SDK designed to interact with the I
 # This SDK provides the following APIs:
 
 ## IXO Modules
+Available at [IXO Blockchain](https://github.com/ixofoundation/ixo-blockchain)
 
 ### IIDs
 
@@ -95,6 +97,7 @@ The [Bonds Module](https://github.com/ixofoundation/ixo-blockchain/tree/a161b2ef
     - `./bonds/v1beta1/tx.rpc.msg`
 
 ## Cosmos Modules
+Available at the [Cosmos SDK](https://github.com/cosmos/cosmos-sdk)
 - `./codegen`
   - `./ics23/bundle`;
   - `./cosmos_proto/bundle`;
@@ -105,20 +108,16 @@ The [Bonds Module](https://github.com/ixofoundation/ixo-blockchain/tree/a161b2ef
   - `./ica/bundle`;
   - `./tendermint/bundle`;
 
-### Cosmos Queries
-
-### Cosmos Transactions
-
-## CosmWasm and Smart Contracts
+## CosmWasm Smart Contracts
 - `./codegen`
   - `./cosmwasm/bundle`;
   - `./contracts`;
 
-### DAODAO
-The basic DAO contracts are forked from the DAO-DAO Github organisation's [dao-contracts repository.](https://github.com/DA0-DA0/dao-contracts)
-Furthermore, there has been significant enhancements to how the original contracts are used in practice.
+### Swaps
 
-### Tokens, NFTs, and Swaps
+## DAODAO Smart Contracts
+The basic DAO contracts are forked from the DAO-DAO Github organisation's [dao-contracts repository.](https://github.com/DA0-DA0/dao-contracts)
+IXO has implemented the contracts in an innovative manner as generally available [DAO Tooling in Impacts Portal](https://github.com/ixofoundation/ixo-webclient).
 
 ## Construct, Sign, and Broadcast Messages
 - `./stargate_client`
@@ -137,25 +136,8 @@ Furthermore, there has been significant enhancements to how the original contrac
   - `./proto`;
   - `./constants`;
 
-
-`./queries`
-`./messages`
-`./custom_queries`
-
-
-- Custom Queries
-- Messages
-- Queries
-- Stargate Client
-- Utilities
-- IXO Modules
-- Cosmos Modules
-- IBC Modules
-- CosmWasm Modules
-- Contracts
-
 > [!NOTE]
-> These files were generated from the `*.proto` files of the IXO appchain by the `@osmonauts/telescope@0.92.2` package.
+> Files generated from the `*.proto` files of the IXO appchain using the `@osmonauts/telescope@0.92.2` package.
 > 
 > `/codegen/*.ts`
 > `/codegen/ics23/bundle/*.ts`
