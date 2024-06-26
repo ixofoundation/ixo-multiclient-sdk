@@ -17,16 +17,16 @@ The `@ixo/impactxclient-sdk` is a TypeScript SDK designed to interact with the I
 
 ## Key Features
 
-- Easy-to-use API for querying the IXO blockchain and transacting.
-- Support for multiple chains.
+- Easy-to-use API for querying and transacting with the IXO blockchain.
 - Wallet integration for secure transactions.
 - Custom queries to simplify complex queries.
 - Support for smart contracts.
+- Support for multiple Cosmos chains.
 
 # This SDK provides the following APIs:
 
 ## IXO Modules
-Available at [IXO Blockchain](https://github.com/ixofoundation/ixo-blockchain)
+Available at the [IXO Blockchain](https://github.com/ixofoundation/ixo-blockchain) repository.
 
 ### IIDs
 
@@ -97,7 +97,7 @@ The [Bonds Module](https://github.com/ixofoundation/ixo-blockchain/tree/a161b2ef
     - `./bonds/v1beta1/tx.rpc.msg`
 
 ## Cosmos Modules
-Available at the [Cosmos SDK](https://github.com/cosmos/cosmos-sdk)
+Available at the [Cosmos SDK](https://github.com/cosmos/cosmos-sdk) repository.
 - `./codegen`
   - `./ics23/bundle`;
   - `./cosmos_proto/bundle`;
@@ -109,13 +109,103 @@ Available at the [Cosmos SDK](https://github.com/cosmos/cosmos-sdk)
   - `./tendermint/bundle`;
 
 ## CosmWasm Smart Contracts
+Available at the [CosmWasm module](https://github.com/CosmWasm/wasmd) repository.
 - `./codegen`
   - `./cosmwasm/bundle`;
-  - `./contracts`;
+    - `./wasm/v1`;
 
-### Swaps
+There are a few steps to follow when working with a CosmWasm smart contract.
+1. Instantiate the contract code and other instantiation data.
+   1. Contract code is provided by the contract namespace in custom queries.
+     1. `./custom_queries` - 
+After instantiation, you receive the contract's address as a response, which you must use to execute any further transactions on the contract.
 
-## DAODAO Smart Contracts
+Here is an example code snippet that shows how to instantiate and execute messages on a contract using the ixo1155 contract code:
+
+```js
+import { createSigningClient, customQueries, cosmwasm, cosmos } from '@ixo/impactxclient-sdk';
+
+// create a signing client
+const client = await createSigningClient(rpc, offlineSigner);
+
+// get user account info
+const account = {};
+const myAddress = account.address;
+
+// get contract code to instantiate - using ixo1155 for this example
+const contractCodes = customQueries.contract.getContractCodes('devnet', 'ixo');
+const contractCode = contractCodes.find((contract) => contract.name === 'ixo1155');
+
+// instantiate the contract
+const instantiateContractMessage = {
+  typeUrl: '/cosmwasm.wasm.v1.MsgInstantiateContract',
+  value: cosmwasm.wasm.v1.MsgInstantiateContract.fromPartial({
+    admin: myAddress,
+    codeId: contractCode.code,
+    funds: [
+      cosmos.base.v1beta1.Coin.fromPartial({
+        amount: '1',
+        denom: 'uixo',
+      }),
+    ],
+    label: account.did + 'contract' + contractCode.code,
+		msg: new Uint8Array(Buffer.from(JSON.stringify({
+      minter: myAddress
+    }))),
+    sender: myAddress,
+  }),
+};
+
+const instantiateContractResponse = await client.signAndBroadcast(
+  myAddress,
+  [instantiateContractMessage],
+  "auto"
+);
+const contractAddress = JSON.parse(instantiateContractResponse.rawLog!)[0]
+  .events
+  .instantiate
+  .attributes
+  ._contract_address
+  .value;
+
+// execute messages on the contract
+const tokenId = 'CARBON:bafybeib22s3lyz3guicawoboeieltpyewkdnuuheklpeu3zbrwekmpdew5';
+const executeContractMessage = {
+  typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
+  value: cosmwasm.wasm.v1.MsgExecuteContract.fromPartial({
+    contract: contractAddress,
+    funds: [
+      cosmos.base.v1beta1.Coin.fromPartial({
+        amount: '1',
+        denom: 'uixo',
+      }),
+    ],
+		msg: new Uint8Array(Buffer.from(JSON.stringify({
+      batch_mint: {
+        to: myAddress,
+        batch: [[tokenId, '5000', 'uri']],
+      },
+    }))),
+    sender: myAddress,
+  }),
+};
+
+const executeContractResponse = await client.signAndBroadcast(
+  myAddress,
+  [executeContractMessage],
+  "auto"
+);
+```
+
+### Swap Contracts
+IXO developed a smart contract named [ixoSwap](https://github.com/ixofoundation/ixo-contracts/tree/master/ixo-swap) to enable swapping of tokens on the IXO network.
+The contract has been [audited by an independent party](https://github.com/oak-security/audit-reports/tree/main/ixo).
+Here is an example of how to implement Swap contracts.
+```javascript
+
+```
+
+### DAODAO DAO Contracts
 The basic DAO contracts are forked from the DAO-DAO Github organisation's [dao-contracts repository.](https://github.com/DA0-DA0/dao-contracts)
 IXO has implemented the contracts in an innovative manner as generally available [DAO Tooling in Impacts Portal](https://github.com/ixofoundation/ixo-webclient).
 
