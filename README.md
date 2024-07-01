@@ -13,7 +13,7 @@
 
 ## The ultimate utility client for the IXO Blockchain.
 
-The `@ixo/impactxclient-sdk` is a TypeScript SDK designed to interact with the IXO appchain and other Cosmos chains. It provides a comprehensive set of tools for developers to query data and perform transactions on the blockchain.
+The `@ixo/impactxclient-sdk` is a TypeScript SDK designed to interact with the IXO blockchain and other Cosmos appchains. It provides a comprehensive set of tools for developers to query data and perform transactions on the blockchain.
 
 ## Key Features
 
@@ -25,8 +25,45 @@ The `@ixo/impactxclient-sdk` is a TypeScript SDK designed to interact with the I
 
 # This SDK provides the following APIs:
 
-## IXO Modules
+## Query and transact with IXO Modules
 Available at the [IXO Blockchain](https://github.com/ixofoundation/ixo-blockchain) repository.
+
+#### RPC Clients
+
+Connect to an RPC Client in order to interact with the IXO blockchain.
+
+We added a custom `queryClient` that includes the Cosmos modules and IXO modules, as well as Custom Queries.
+Custom Queries are available at 
+- `./custom_queries`
+
+Here is an example code snippet that shows how to easily set up your `queryClient` and query the Cosmos and IXO modules.
+Remember to set the `RPC_ENDPOINT` environment variable.
+- Published `RPC_ENDPOINT` providers can be found at the Cosmos [Chain Registry Github repository](https://github.com/cosmos/chain-registry/blob/master/impacthub/chain.json#L143) for Mainnet.
+- Testnet providers are [found here.](https://github.com/cosmos/chain-registry/blob/master/testnets/impacthubtestnet/chain.json#L81)
+- Providers for Devnet are [found here.](https://github.com/cosmos/chain-registry/blob/master/testnets/impacthubdevnet/chain.json#L56)
+
+```js
+import { ixo, createQueryClient } from "@ixo/impactxclient-sdk";
+
+// BELOW METHOD NOT IMPLEMENTED YET!
+// const { createRPCQueryClient } = ixo.ClientFactory;
+// const client = await createRPCQueryClient({ rpcEndpoint: RPC_ENDPOINT });
+
+// now you can query the cosmos modules
+// const balance = await client.cosmos.bank.v1beta1.allBalances({
+//   address: "ixo1addresshere",
+// });
+
+const queryClient = await createQueryClient(RPC_ENDPOINT);
+
+// now you can query any module
+const balance = await queryClient.cosmos.bank.v1beta1.allBalances({
+  address: "ixo1addresshere",
+});
+
+// you can also query the ixo modules.
+const balances = await queryClient.ixo.exchange.v1beta1.exchangeBalances();
+```
 
 ### IIDs
 
@@ -115,28 +152,35 @@ Available at the [CosmWasm module](https://github.com/CosmWasm/wasmd) repository
     - `./wasm/v1`;
 
 There are a few steps to follow when working with a CosmWasm smart contract.
-1. Instantiate the contract code and other instantiation data.
+1. Retrieve the contract code for your target smart contract.
    1. Contract code is provided by the contract namespace in custom queries.
-     1. `./custom_queries` - 
-After instantiation, you receive the contract's address as a response, which you must use to execute any further transactions on the contract.
+   - `./custom_queries/contract`
+1. Instantiate an instance of the contract with which to interact.
+
 
 Here is an example code snippet that shows how to instantiate and execute messages on a contract using the ixo1155 contract code:
 
 ```js
 import { createSigningClient, customQueries, cosmwasm, cosmos } from '@ixo/impactxclient-sdk';
 
-// create a signing client
+/*
+// Create a signing client in order to sign the contract instantiation message.
+// Retrieve the Account Addres for the connected user account.
+*/
 const client = await createSigningClient(rpc, offlineSigner);
-
-// get user account info
 const account = {};
 const myAddress = account.address;
 
-// get contract code to instantiate - using ixo1155 for this example
+/*
+// 1. Retrieve the Code for this contract (using ixo1155 for this example).
+// 2. Create the instantiation message for the contract.
+// - Remember to provide 1 uixo as message funding.
+// 3. Sign the message and broadcast it to the IXO blockchain.
+// - The most important part of this response is the Contract Address.
+// - It is required for all further interactions with the contract.
+*/
 const contractCodes = customQueries.contract.getContractCodes('devnet', 'ixo');
 const contractCode = contractCodes.find((contract) => contract.name === 'ixo1155');
-
-// instantiate the contract
 const instantiateContractMessage = {
   typeUrl: '/cosmwasm.wasm.v1.MsgInstantiateContract',
   value: cosmwasm.wasm.v1.MsgInstantiateContract.fromPartial({
@@ -168,7 +212,17 @@ const contractAddress = JSON.parse(instantiateContractResponse.rawLog!)[0]
   ._contract_address
   .value;
 
-// execute messages on the contract
+/*
+// Execute messages on the contract with these steps:
+// 1. All contract messages need to be wrapped in the /cosmwasm.wasm.v1.MsgExecuteContract blockchain message.
+// - Remember to provide 1 uixo as message funding.
+// 2. Create the message that you want to execute on the contract and include it in the msg field.
+// - This example executes the batch_mint message.
+// 3. Sign the message and broadcast it to the IXO blockchain.
+// - A successful message execution means that the transaction was completed.
+*/
+
+// tokenId is an example in this case to support the batch_mint contract message.
 const tokenId = 'CARBON:bafybeib22s3lyz3guicawoboeieltpyewkdnuuheklpeu3zbrwekmpdew5';
 const executeContractMessage = {
   typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
@@ -189,7 +243,6 @@ const executeContractMessage = {
     sender: myAddress,
   }),
 };
-
 const executeContractResponse = await client.signAndBroadcast(
   myAddress,
   [executeContractMessage],
@@ -202,12 +255,16 @@ IXO developed a smart contract named [ixoSwap](https://github.com/ixofoundation/
 The contract has been [audited by an independent party](https://github.com/oak-security/audit-reports/tree/main/ixo).
 Here is an example of how to implement Swap contracts.
 ```javascript
-
+TODO
 ```
 
 ### DAODAO DAO Contracts
 The basic DAO contracts are forked from the DAO-DAO Github organisation's [dao-contracts repository.](https://github.com/DA0-DA0/dao-contracts)
 IXO has implemented the contracts in an innovative manner as generally available [DAO Tooling in Impacts Portal](https://github.com/ixofoundation/ixo-webclient).
+Here is an example of how to implement DAODAO DAO contracts.
+```javascript
+TODO
+```
 
 ## Construct, Sign, and Broadcast Messages
 - `./stargate_client`
