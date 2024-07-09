@@ -1,6 +1,6 @@
 <div align="center">
   <h1> IXO Impacts Client SDK </h1>
-<img src="assets/images/readme_banner.png" alt="">
+<img src="assets/images/readme_banner.png" alt="Impacts Client SDK image">
 </div>
 
 @ixo/impactxclient-sdk
@@ -27,11 +27,11 @@ The Impacts Client SDK provides support for both [ESM (ECMAScript Modules)](http
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
   - [Usage](#usage)
-    - [Querying Data using the QueryClient](#querying-data-using-the-queryclient)
-    - [Performing Transactions](#performing-transactions)
+    - [QueryClient](#queryclient)
+      - [RPC Client](#rpc-client)
+    - [SigningClient](#signingclient)
     - [Blockchain Modules](#blockchain-modules)
-      - [RPC Clients](#rpc-clients)
-      - [Query and transact with IXO Modules](#query-and-transact-with-ixo-modules)
+      - [IXO Modules](#ixo-modules)
         - [IIDs](#iids)
         - [Entities](#entities)
         - [Tokens](#tokens)
@@ -63,6 +63,8 @@ The Impacts Client SDK provides support for both [ESM (ECMAScript Modules)](http
 - Supports multiple Cosmos chains
 
 ## API
+- [QueryClient](#queryclient)
+- [SigningClient](#signingclient)
 - [Blockchain Modules](#blockchain-modules)
 - [Smart Contracts](#smart-contracts)
 - [Construct, Sign, and Broadcast Messages](#construct-sign-and-broadcast-messages)
@@ -84,60 +86,25 @@ yarn add @ixo/multiclient-sdk
 ```
 
 ## Usage
-The QueryClient and 
+The QueryClient and SigningClient provide simple interfaces to abstract away the complexity of querying data on the IXO blockchain and signing messages for broadcasting to the IXO blockchain.
+These client also work for other Cosmos appchains.
 
-### Querying Data using the QueryClient
+### QueryClient
 
-Here is an example of how to query account information.
-```javascript
-const { QueryClient } = require("@ixo/multiclient-sdk");
+IXO created a QueryClient to simplify queries to the `cosmos` and `ixo` modules, as well as provide custom queries to often-used queries.
 
-const queryClient = new QueryClient({ apiUrl: "https://api.ixo.world" });
+#### RPC Client
 
-async function getAccountInfo(address) {
-  const accountInfo = await queryClient.getAccount(address);
-  console.log(accountInfo);
-}
+First connect to an RPC Client in order to interact with a blockchain; in this case the IXO blockchain.
 
-getAccountInfo("ixo1...");
-```
-
-### Performing Transactions
-
-Here is an example of how to perform a transaction.
-```javascript
-const { TransactionClient } = require("@ixo/multiclient-sdk");
-
-const transactionClient = new TransactionClient({ apiUrl: "https://api.ixo.world" });
-
-async function sendTransaction() {
-  const txResult = await transactionClient.sendTransaction({
-    fromAddress: "ixo1...",
-    toAddress: "ixo1...",
-    amount: "1000000",
-    denom: "uixo",
-    gas: "200000",
-    fee: "2000"
-  });
-  console.log(txResult);
-}
-
-sendTransaction();
-```
-
-### Blockchain Modules
-First, you need to connect to an RPC Client, in order to view the API endpoints available for a specific blockchin, for example IXO.
-
-#### RPC Clients
-
-Connect to an RPC Client in order to interact with a blockchain; in this case the IXO blockchain.
-The [Cosmos Chain Resolver SDK](https://www.npmjs.com/package/@ixo/cosmos-chain-resolver), created by IXO, provides a simple way to retrieve RPC endpoints for any Cosmos chain.
+> The [Cosmos Chain Resolver SDK](https://www.npmjs.com/package/@ixo/cosmos-chain-resolver), created by IXO, provides a simple way to retrieve RPC endpoints for any Cosmos chain.
 
 We added a custom `queryClient` that includes the Cosmos modules and IXO modules, as well as Custom Queries.
 Custom Queries are available at 
 - `./custom_queries`
 
 Here is an example code snippet that shows how to easily set up your `queryClient` and query the Cosmos and IXO modules.
+
 Remember to set the `RPC_ENDPOINT` environment variable.
 - Published `RPC_ENDPOINT` providers can be found at the Cosmos [Chain Registry Github repository](https://github.com/cosmos/chain-registry/blob/master/impacthub/chain.json#L143) for Mainnet.
 - Testnet providers are [found here.](https://github.com/cosmos/chain-registry/blob/master/testnets/impacthubtestnet/chain.json#L81)
@@ -146,27 +113,24 @@ Remember to set the `RPC_ENDPOINT` environment variable.
 ```js
 import { ixo, createQueryClient } from "@ixo/impactxclient-sdk";
 
-// BELOW METHOD NOT IMPLEMENTED YET!
-// const { createRPCQueryClient } = ixo.ClientFactory;
-// const client = await createRPCQueryClient({ rpcEndpoint: RPC_ENDPOINT });
-
-// now you can query the cosmos modules
-// const balance = await client.cosmos.bank.v1beta1.allBalances({
-//   address: "ixo1addresshere",
-// });
-
 const queryClient = await createQueryClient(RPC_ENDPOINT);
 
-// now you can query any module
-const balance = await queryClient.cosmos.bank.v1beta1.allBalances({
+// now you can query any Cosmos module
+const balance = await client.cosmos.bank.v1beta1.allBalances({
   address: "ixo1addresshere",
 });
 
-// you can also query the ixo modules.
-const balances = await queryClient.ixo.exchange.v1beta1.exchangeBalances();
+// you can also query the IXO modules
+const entities = await queryClient.ixo.entity.v1beta1.entityList();
+
 ```
 
-#### Query and transact with IXO Modules
+### SigningClient
+
+
+### Blockchain Modules
+
+#### IXO Modules
 Available at the [IXO Blockchain](https://github.com/ixofoundation/ixo-blockchain) repository.
 - `./codegen/ixo/bundle.d.ts`
 
