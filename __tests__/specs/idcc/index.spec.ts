@@ -30,7 +30,7 @@ relayerVerifyAllEntities(
   "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
   chainNetwork,
   [
-    "did:ixo:entity:504a8255ca35e103bc8e3e78f62a5231",
+    "did:ixo:entity:46ee50fef809d2a84e1041863b884763",
     // "did:ixo:entity:e89dcfa3b1038f495951d25f0083b23c",
     // "did:ixo:entity:7bb1fd9b6a1a5ab132df06231016f44a",
   ],
