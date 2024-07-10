@@ -27,9 +27,16 @@ The Impacts Client SDK provides support for both [ESM (ECMAScript Modules)](http
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
   - [Usage](#usage)
+    - [RPC Client](#rpc-client)
     - [QueryClient](#queryclient)
-      - [RPC Client](#rpc-client)
+      - [Custom Queries](#custom-queries)
     - [SigningClient](#signingclient)
+      - [Composing Messages](#composing-messages)
+        - [Composing IBC Messages](#composing-ibc-messages)
+      - [Signing Messages](#signing-messages)
+        - [Initializing the Stargate Client](#initializing-the-stargate-client)
+        - [Creating Signers](#creating-signers)
+      - [Broadcasting Messages](#broadcasting-messages)
     - [Blockchain Modules](#blockchain-modules)
       - [IXO Modules](#ixo-modules)
         - [IIDs](#iids)
@@ -39,14 +46,9 @@ The Impacts Client SDK provides support for both [ESM (ECMAScript Modules)](http
         - [Bonds](#bonds)
       - [Query and transact with Cosmos Modules](#query-and-transact-with-cosmos-modules)
     - [Smart Contracts](#smart-contracts)
-      - [CosmWasm Smart Contracts](#cosmwasm-smart-contracts)
+      - [CosmWasm](#cosmwasm)
       - [Swap Contract](#swap-contract)
       - [DAODAO Contracts](#daodao-contracts)
-    - [Construct, Sign, and Broadcast Messages](#construct-sign-and-broadcast-messages)
-      - [Constructing a Message](#constructing-a-message)
-      - [Signing a Message](#signing-a-message)
-      - [Broadcasting a Message](#broadcasting-a-message)
-    - [Inter-Blockchain Communication](#inter-blockchain-communication)
     - [Utility Functions](#utility-functions)
     - [Notes](#notes)
       - [Attributions](#attributions)
@@ -88,45 +90,232 @@ yarn add @ixo/multiclient-sdk
 ## Usage
 The QueryClient and SigningClient provide simple interfaces to abstract away the complexity of querying data on the IXO blockchain and signing messages for broadcasting to the IXO blockchain.
 These client also work for other Cosmos appchains.
+It is important to first connect to an RPC Client.
 
-### QueryClient
-
-IXO created a QueryClient to simplify queries to the `cosmos` and `ixo` modules, as well as provide custom queries to often-used queries.
-
-#### RPC Client
+### RPC Client
 
 First connect to an RPC Client in order to interact with a blockchain; in this case the IXO blockchain.
 
 > The [Cosmos Chain Resolver SDK](https://www.npmjs.com/package/@ixo/cosmos-chain-resolver), created by IXO, provides a simple way to retrieve RPC endpoints for any Cosmos chain.
 
-We added a custom `queryClient` that includes the Cosmos modules and IXO modules, as well as Custom Queries.
-Custom Queries are available at 
-- `./custom_queries`
-
-Here is an example code snippet that shows how to easily set up your `queryClient` and query the Cosmos and IXO modules.
+We added a custom [QueryClient](#queryclient) that includes the Cosmos modules and IXO modules, as well as [Custom Queries](#custom-queries).
 
 Remember to set the `RPC_ENDPOINT` environment variable.
 - Published `RPC_ENDPOINT` providers can be found at the Cosmos [Chain Registry Github repository](https://github.com/cosmos/chain-registry/blob/master/impacthub/chain.json#L143) for Mainnet.
 - Testnet providers are [found here.](https://github.com/cosmos/chain-registry/blob/master/testnets/impacthubtestnet/chain.json#L81)
 - Providers for Devnet are [found here.](https://github.com/cosmos/chain-registry/blob/master/testnets/impacthubdevnet/chain.json#L56)
 
+Example that describes how to set up your `queryClient` with an RPC endpoint.
+
+```js
+import { ixo, createQueryClient } from "@ixo/impactxclient-sdk";
+
+const queryClient = await createQueryClient(RPC_ENDPOINT);
+```
+
+### QueryClient
+
+IXO created a custom QueryClient to facilitate queries to the `cosmos` and `ixo` modules, as well as to provide [Custom Queries](#custom-queries).
+> First connect to an [RPC client](#rpc-client).
+
+Example code snippet assuming that the `queryClient` has been initialised with an RPC endpoint.
+
 ```js
 import { ixo, createQueryClient } from "@ixo/impactxclient-sdk";
 
 const queryClient = await createQueryClient(RPC_ENDPOINT);
 
-// now you can query any Cosmos module
 const balance = await client.cosmos.bank.v1beta1.allBalances({
   address: "ixo1addresshere",
 });
-
-// you can also query the IXO modules
 const entities = await queryClient.ixo.entity.v1beta1.entityList();
+```
 
+#### Custom Queries
+
+Import the `customQueries` object from `@ixo/impactxclient-sdk`. Use the object to destructure `currency` functions that will allow you to get the token info based on the provided denom or the `contract` functions that will provide ixo or daodao contract codes for instantiation.
+
+Example of custom queries.
+```js
+import { customQueries } from "@ixo/impactxclient-sdk";
+
+// get token info based on denom (coinMinimalDenom)
+const token = customQueries.currency.findTokenFromDenom("uixo");
+
+// get ibc token info based on ibc hash (and instantiated query client)
+const ibcToken = await customQueries.currency.findIbcTokenFromHash(
+  queryClient,
+  "ibc/u05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1"
+);
+// `findIbcTokensFromHashes` requires an array of hashes to fetch multiple ibc token infos
+
+// get coincodex info for a coin
+const coinCodexInfo = customQueries.currency.findTokenInfoFromDenom("ixo");
+// `findTokensInfoFromDenoms` requires an array of denoms to fetch multiple coinCodex infos
+```
+
+```js
+// get daodao contract codes (for devnet) to instatiate
+const contractCodes = customQueries.contract.getContractCodes(
+  "devnet",
+  "daodao"
+); // contractCodes = [{ name: "dao_core", code: 3 }, ...];
+const { code } = contractCodes.find((contract) => contract.name === "dao_core");
+
+// get specific contract code (for testnet) to instantiate
+const daoCoreContractCode = customQueries.contract.getContractCode(
+  "testnet",
+  "dao_core"
+);
+// daoCoreContractCode = 3
 ```
 
 ### SigningClient
 
+A message to the IXO blockchain requires three steps:
+1. [Compose Message](#composing-messages)
+2. [Sign Message](#signing-messages)
+3. [Broadcast Message](#broadcasting-messages)
+
+See
+**Note**
+> IXO has developed an improved signing client named SignX that interacts seamlessly with the [Impacts X mobile app](https://mobile.ixo.world/). Read more about how to utilise [the SignX client](https://github.com/ixofoundation/ixo-signx) instead of using this SigningClient.
+
+#### Composing Messages
+
+THe following example describes one type of message. Reference the `__tests__` directory of this repository for further examples of most messages and how to format them.
+
+```js
+import { ixo } from "@ixo/impactxclient-sdk";
+
+const message = {
+  typeUrl: "/ixo.iid.v1beta1.MsgCreateIidDocument",
+  value: ixo.iid.v1beta1.MsgCreateIidDocument.fromPartial({
+    id: did,
+    verifications: [
+      ixo.iid.v1beta1.Verification.fromPartial({
+        relationships: ["authentication"],
+        method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
+          id: did,
+          type: "EcdsaSecp256k1VerificationKey2019",
+          publicKeyMultibase: "F" + toHex(pubkey),
+          controller: controller,
+        }),
+      }),
+    ],
+    signer: address,
+    controllers: [did],
+  }),
+};
+```
+
+##### Composing IBC Messages
+
+Reference [Composing Messages](./#composing-messages) for information about composing messages.
+
+```js
+import { ibc } from "@ixo/impactxclient-sdk";
+```
+
+#### Signing Messages
+
+Here are the docs on [creating signers](https://github.com/cosmology-tech/cosmos-kit/tree/main/packages/react#signing-clients) in cosmos-kit that can be used with Keplr and other wallets.
+
+##### Initializing the Stargate Client
+
+IXO added a custom Stargate Signing Client that can be exported and is creatable under createSigningClient.
+
+Note
+> It only support Direct Proto signing through the rpc endpoint.
+> It already has all the proto defininitions in the registry for ixo modules.
+
+```js
+import { createSigningClient } from "@ixo/impactxclient-sdk";
+
+const signingClient = await createSigningClient(RPC_URL, offlineWallet);
+```
+
+Note
+> The following, named `getSigningixoClient`, is an alternative to `createSigningClient`.
+
+Use `getSigningixoClient` to get your `SigningStargateClient`, with the proto/amino messages full-loaded.
+There is no need to manually add amino types, just import and initialize the client:
+
+```js
+import { getSigningixoClient } from "@ixo/impactxclient-sdk";
+
+const stargateClient = await getSigningixoClient({
+  rpcEndpoint,
+  signer, // OfflineSigner
+});
+```
+
+##### Creating Signers
+
+To broadcast messages, you can create signers with a variety of options:
+
+* [cosmos-kit](https://github.com/cosmology-tech/cosmos-kit/tree/main/packages/react#signing-clients) (recommended)
+* [keplr](https://docs.keplr.app/api/cosmjs.html)
+* [cosmjs](https://gist.github.com/webmaster128/8444d42a7eceeda2544c8a59fbd7e1d9)
+
+**Proto Signer**
+```js
+import { getOfflineSignerProto as getOfflineSigner } from "cosmjs-utils";
+```
+
+**Amino Signer**
+Note
+> The SDK currently does not include amino types. Use the Proto Signer for now. 
+```js
+import { getOfflineSignerAmino as getOfflineSigner } from "cosmjs-utils";
+```
+
+Once the Signer type has been imported, the signer can be created.
+
+WARNING 
+> It is not recommended to write your *mnemonic*, also known as *seed phrase*, in plain text. The example below is only for illustration and has no balances.
+> Please take care of your security and use best practices such as AES encryption and/or methods from 12factor applications.
+
+```js
+import { chains } from "chain-registry";
+
+const mnemonic =
+  "unfold client turtles either pilots stocks floors glow toward bullets cars science";
+const chain = chains.find(({ chain_name }) => chain_name === "ixo");
+const signer = await getOfflineSigner({
+  mnemonic,
+  chain,
+});
+```
+
+#### Broadcasting Messages
+
+Now that you have your `stargateClient`, you can broadcast messages that were composed as described in [Composing Messages](#composing-messages).
+This example demonstrates broadcasting the `/cosmos.bank.v1beta1.MsgSend` message.
+
+```js
+const msg = send({
+  amount: [
+    {
+      denom: "coin",
+      amount: "1000",
+    },
+  ],
+  toAddress: address,
+  fromAddress: address,
+});
+
+const fee: StdFee = {
+  amount: [
+    {
+      denom: "coin",
+      amount: "864",
+    },
+  ],
+  gas: "86364",
+};
+const response = await stargateClient.signAndBroadcast(address, [msg], fee);
+```
 
 ### Blockchain Modules
 
@@ -137,16 +326,8 @@ Available at the [IXO Blockchain](https://github.com/ixofoundation/ixo-blockchai
 ##### IIDs
 
 The [IID (Interchain Identifier) Module](https://github.com/ixofoundation/ixo-blockchain/tree/a161b2ef40ca56dd066bc0b1eb21913174c65b89/x/iid) establishes a decentralized identity mechanism, ensuring a standardized approach for all entities within the system. By harnessing the power of DIDs (Decentralized Identifiers) and IIDs, this module facilitates a robust, secure, and universally recognizable identity framework, paving the way for a seamless integration across various platforms and networks.
-- `./codegen`
-  - `./ixo/bundle`;
-    - `./iid/v1beta1/event`
-    - `./iid/v1beta1/genesis`
-    - `./iid/v1beta1/iid`
-    - `./iid/v1beta1/query`
-    - `./iid/v1beta1/tx`
-    - `./iid/v1beta1/types`
-    - `./iid/v1beta1/query.rpc.Query`
-    - `./iid/v1beta1/tx.rpc.msg`
+- `./codegen/ixo/iid/v1beta1/query`
+- `./codegen/ixo/iid/v1beta1/tx`
 
 ##### Entities
 The [Entity Module](https://github.com/ixofoundation/ixo-blockchain/tree/a161b2ef40ca56dd066bc0b1eb21913174c65b89/x/entity) introduces a holistic approach to NFT-backed identities, bridging the gap between decentralized identifiers and tangible assets. Upon entity creation, a symbiotic relationship forms between an IID Document, an NFT, and the Entity's metadata. Further enriched with the concept of Entity Accounts, this module ensures a seamless transition of ownership, while offering a robust framework for entities to operate within a decentralized landscape.
@@ -215,23 +396,20 @@ Available at the [Cosmos SDK](https://github.com/cosmos/cosmos-sdk) repository.
   - `./tendermint/bundle`;
 
 ### Smart Contracts
-In order to instantiate and execute smart contracts on the IXO blockchain, messages on the `wasm` module has to be invoked. The `wasm` message contains the smart contract details and the message to execute.
+In order to instantiate and execute smart contracts on the IXO blockchain, messages on the `wasm` module have to be invoked. The `wasm` message contains the smart contract details and the message to execute.
 
-#### CosmWasm Smart Contracts
+#### CosmWasm
 Available at the [CosmWasm module](https://github.com/CosmWasm/wasmd) repository.
-- `./codegen`
-  - `./cosmwasm/bundle`;
-    - `./wasm/v1`;
+*Type Definition:* `./codegen/cosmwasm/bundle/wasm/v1`
 
 There are a few steps to follow when working with a CosmWasm smart contract.
 NB: Instantiation is only required when the contract is not available on the chain instance that you are working with.
-1. See NB above ^. Instantiate an instance of the contract with which to interact.
+1. See NB note above. Only instantiate an instance of the contract with which to interact, if needed.
   1. Retrieve the contract code for your target smart contract.
      - Contract code is provided by the contract namespace in custom queries.
      - `./custom_queries/contract`
 1. Create the message to Execute on the contract.
 1. Execute the message on the contract by signing it.
-
 
 Here is an example code snippet that shows how to instantiate and execute messages on a contract using the ixo1155 contract code:
 
@@ -327,32 +505,21 @@ const executeContractResponse = await client.signAndBroadcast(
 ```
 
 #### Swap Contract
-IXO developed a smart contract named [ixoSwap](https://github.com/ixofoundation/ixo-contracts/tree/master/ixo-swap) to enable swapping of tokens on the IXO network.
+IXO developed a smart contract named [ixoSwap](https://github.com/ixofoundation/ixo-contracts/tree/master/ixo-swap) to enable swapping of tokens on the IXO network. Read more about the contract in the [Swimm documentation.](https://github.com/ixofoundation/ixo-contracts/tree/master/.swm) 
 The contract has been [audited by an independent party](https://github.com/oak-security/audit-reports/tree/main/ixo).
-Here is an example of how to implement Swap contracts.
-```javascript
-TODO
-```
+
+Examples of how to use the ixoSwap contract are available here:
+- View [implementation examples](https://github.com/ixofoundation/ixo-multiclient-sdk/blob/26e254979175137156db8033a6c089efa4b171d5/__tests__/flows/cosmwasm.ts#L655) in the `__tests__` directory of this repository. 
+- Another working example is available at the Jambo repository [in this branch](https://github.com/ixofoundation/jambo/tree/develop-swap).
 
 #### DAODAO Contracts
 The basic DAO contracts are forked from the DAO-DAO Github organisation's [dao-contracts repository.](https://github.com/DA0-DA0/dao-contracts)
 IXO has implemented the contracts in an innovative manner as generally available [DAO Tooling in Impacts Portal](https://github.com/ixofoundation/ixo-webclient).
+
 Here is an example of how to implement DAODAO DAO contracts.
 ```javascript
 TODO
 ```
-
-### Construct, Sign, and Broadcast Messages
-- `./stargate_client`
-> NOTE
-> IXO has developed an improved signing client named SignX that interacts seamlessly with the [Impacts X mobile app.](https://mobile.ixo.world/) Read more about how to utilise [the SignX client.]()
-
-#### Constructing a Message
-#### Signing a Message
-#### Broadcasting a Message
-
-### Inter-Blockchain Communication
-- `./codegen/cosmos/bundle`
 
 ### Utility Functions
 - `./utils`
