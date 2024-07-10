@@ -27,6 +27,7 @@ The Impacts Client SDK provides support for both [ESM (ECMAScript Modules)](http
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
   - [Usage](#usage)
+    - [Utility Functions](#utility-functions)
     - [RPC Client](#rpc-client)
     - [QueryClient](#queryclient)
       - [Custom Queries](#custom-queries)
@@ -44,14 +45,19 @@ The Impacts Client SDK provides support for both [ESM (ECMAScript Modules)](http
         - [Tokens](#tokens)
         - [Claims](#claims)
         - [Bonds](#bonds)
-      - [Query and transact with Cosmos Modules](#query-and-transact-with-cosmos-modules)
+      - [Cosmos Modules](#cosmos-modules)
     - [Smart Contracts](#smart-contracts)
       - [CosmWasm](#cosmwasm)
       - [Swap Contract](#swap-contract)
       - [DAODAO Contracts](#daodao-contracts)
-    - [Utility Functions](#utility-functions)
     - [Notes](#notes)
+      - [React Native](#react-native)
+        - [BigInt React Native](#bigint-react-native)
       - [Attributions](#attributions)
+  - [How to contribute to the Impacts Client SDK](#how-to-contribute-to-the-impacts-client-sdk)
+    - [Set up your local environment](#set-up-your-local-environment)
+    - [Codegen](#codegen)
+    - [Publishing](#publishing)
   - [License](#license)
 
 
@@ -65,8 +71,8 @@ The Impacts Client SDK provides support for both [ESM (ECMAScript Modules)](http
 - Supports multiple Cosmos chains
 
 ## API
-- [QueryClient](#queryclient)
-- [SigningClient](#signingclient)
+- [Query Client](#queryclient)
+- [Signing Client](#signingclient)
 - [Blockchain Modules](#blockchain-modules)
 - [Smart Contracts](#smart-contracts)
 - [Construct, Sign, and Broadcast Messages](#construct-sign-and-broadcast-messages)
@@ -88,9 +94,21 @@ yarn add @ixo/multiclient-sdk
 ```
 
 ## Usage
-The QueryClient and SigningClient provide simple interfaces to abstract away the complexity of querying data on the IXO blockchain and signing messages for broadcasting to the IXO blockchain.
-These client also work for other Cosmos appchains.
-It is important to first connect to an RPC Client.
+The Query Client and Signing Client provide simple interfaces to abstract away the complexity of querying data on the IXO blockchain and signing messages for broadcasting to the IXO blockchain. These clients also work for other Cosmos appchains.
+
+### Utility Functions
+- `./utils`
+
+Import the `utils` object from `@ixo/impactxclient-sdk` to destructure utlity functions to help with using this SDK.
+
+```js
+import { utils } from "@ixo/impactxclient-sdk";
+
+const conversionUtils = utils.conversions;
+const didUtils = utils.did;
+const mnemonicUtils = utils.mnemonic;
+const addressUtils = utils.address;
+```
 
 ### RPC Client
 
@@ -211,7 +229,9 @@ const message = {
 
 ##### Composing IBC Messages
 
-Reference [Composing Messages](./#composing-messages) for information about composing messages.
+> Reference [Composing Messages](./#composing-messages) for information about composing messages in general.
+
+- `./codegen/ibc/bundle`
 
 ```js
 import { ibc } from "@ixo/impactxclient-sdk";
@@ -331,76 +351,42 @@ The [IID (Interchain Identifier) Module](https://github.com/ixofoundation/ixo-bl
 
 ##### Entities
 The [Entity Module](https://github.com/ixofoundation/ixo-blockchain/tree/a161b2ef40ca56dd066bc0b1eb21913174c65b89/x/entity) introduces a holistic approach to NFT-backed identities, bridging the gap between decentralized identifiers and tangible assets. Upon entity creation, a symbiotic relationship forms between an IID Document, an NFT, and the Entity's metadata. Further enriched with the concept of Entity Accounts, this module ensures a seamless transition of ownership, while offering a robust framework for entities to operate within a decentralized landscape.
-- `./codegen`
-  - `./ixo/bundle`;
-    - `./entity/v1beta1/cosmos`
-    - `./entity/v1beta1/entity`
-    - `./entity/v1beta1/event`
-    - `./entity/v1beta1/genesis`
-    - `./entity/v1beta1/proposal`
-    - `./entity/v1beta1/query`
-    - `./entity/v1beta1/tx`
-    - `./entity/v1beta1/query.rpc.Query`
-    - `./entity/v1beta1/tx.rpc.msg`
+- `./codegen/ixo/entity/v1beta1/query`
+- `./codegen/ixo/entity/v1beta1/tx`
 
 ##### Tokens
 Embracing the versatility of the EIP-1155 standard, the [Token Module](https://github.com/ixofoundation/ixo-blockchain/tree/a161b2ef40ca56dd066bc0b1eb21913174c65b89/x/token) offers a sophisticated mechanism for managing multi-token smart contracts. Whether you're dealing with fungible or non-fungible tokens, this module streamlines the process of creation, minting, and management. From defining token collections to ensuring transparent on-chain token attributes, the Token Module stands as a beacon of efficiency and flexibility in the decentralized token ecosystem.
-- `./codegen`
-  - `./ixo/bundle`;
-    - `./token/v1beta1/authz`
-    - `./token/v1beta1/event`
-    - `./token/v1beta1/genesis`
-    - `./token/v1beta1/proposal`
-    - `./token/v1beta1/query`
-    - `./token/v1beta1/token`
-    - `./token/v1beta1/tx`
-    - `./token/v1beta1/query.rpc.Query`
-    - `./token/v1beta1/tx.rpc.msg`
+- `./codegen/ixo/token/v1beta1/query`
+- `./codegen/ixo/token/v1beta1/tx`
 
 ##### Claims
 The [Claims Module](https://github.com/ixofoundation/ixo-blockchain/tree/a161b2ef40ca56dd066bc0b1eb21913174c65b89/x/claims) provides an advanced structure for handling Verifiable Claims (VCs), cryptographic attestations regarding a subject. By aligning with the W3C standard and incorporating unique IXO system identifiers, this module offers a comprehensive solution for creating, evaluating, and managing claims. It enables entities to define protocols, authorize agents, and maintain a verifiable registry, ensuring authenticity and transparency in all claim-related processes.
-- `./codegen`
-  - `./ixo/bundle`;
-    - `./claims/v1beta1/authz`
-    - `./claims/v1beta1/claims`
-    - `./claims/v1beta1/cosmos`
-    - `./claims/v1beta1/event`
-    - `./claims/v1beta1/genesis`
-    - `./claims/v1beta1/query`
-    - `./claims/v1beta1/tx`
-    - `./claims/v1beta1/query.rpc.Query`
-    - `./claims/v1beta1/tx.rpc.msg`
+- `./codegen/ixo/claims/v1beta1/query`
+- `./codegen/ixo/claims/v1beta1/tx`
     
 ##### Bonds
 The [Bonds Module](https://github.com/ixofoundation/ixo-blockchain/tree/a161b2ef40ca56dd066bc0b1eb21913174c65b89/x/bonds) provides universal token bonding curve functions to mint, burn or swap any token in a Cosmos blockchain.
-- `./codegen`
-  - `./ixo/bundle`;
-    - `./bonds/v1beta1/bonds`
-    - `./bonds/v1beta1/event`
-    - `./bonds/v1beta1/genesis`
-    - `./bonds/v1beta1/query`
-    - `./bonds/v1beta1/tx`
-    - `./bonds/v1beta1/query.rpc.Query`
-    - `./bonds/v1beta1/tx.rpc.msg`
+- `./codegen/ixo/bonds/v1beta1/query`
+- `./codegen/ixo/bonds/v1beta1/tx`
 
-#### Query and transact with Cosmos Modules
+#### Cosmos Modules
 Available at the [Cosmos SDK](https://github.com/cosmos/cosmos-sdk) repository.
-- `./codegen/cosmos/bundle`
+View the [examples provided](https://docs.cosmos.network/main/build/modules) by the Cosmos SDK team.
 
-  - `./ics23/bundle`;
-  - `./cosmos_proto/bundle`;
-  - `./cosmos/bundle`;
-  - `./gogoproto/bundle`;
-  - `./google/bundle`;
-  - `./ica/bundle`;
-  - `./tendermint/bundle`;
+- `./codegen/contracts`
+- `./codegen/cosmos/bundle`
+- `./codegen/cosmwasm/bundle`
+- `./codegen/ibc/bundle`
+- `./codegen/ica/bundle`
+- `./codegen/ics23/bundle`
+- `./codegen/tendermint/bundle`
 
 ### Smart Contracts
 In order to instantiate and execute smart contracts on the IXO blockchain, messages on the `wasm` module have to be invoked. The `wasm` message contains the smart contract details and the message to execute.
 
 #### CosmWasm
 Available at the [CosmWasm module](https://github.com/CosmWasm/wasmd) repository.
-*Type Definition:* `./codegen/cosmwasm/bundle/wasm/v1`
+`./codegen/cosmwasm/bundle`
 
 There are a few steps to follow when working with a CosmWasm smart contract.
 NB: Instantiation is only required when the contract is not available on the chain instance that you are working with.
@@ -408,8 +394,8 @@ NB: Instantiation is only required when the contract is not available on the cha
   1. Retrieve the contract code for your target smart contract.
      - Contract code is provided by the contract namespace in custom queries.
      - `./custom_queries/contract`
-1. Create the message to Execute on the contract.
-1. Execute the message on the contract by signing it.
+2. Create the message to Execute on the contract.
+3. Execute the message on the contract by signing it.
 
 Here is an example code snippet that shows how to instantiate and execute messages on a contract using the ixo1155 contract code:
 
@@ -514,29 +500,66 @@ Examples of how to use the ixoSwap contract are available here:
 
 #### DAODAO Contracts
 The basic DAO contracts are forked from the DAO-DAO Github organisation's [dao-contracts repository.](https://github.com/DA0-DA0/dao-contracts)
-IXO has implemented the contracts in an innovative manner as generally available [DAO Tooling in Impacts Portal](https://github.com/ixofoundation/ixo-webclient).
-
-Here is an example of how to implement DAODAO DAO contracts.
-```javascript
-TODO
-```
-
-### Utility Functions
-- `./utils`
-  - `./conversions`;
-  - `./did`;
-  - `./fromMm`;
-  - `./address`;
-  - `./common`;
-  - `./proto`;
-  - `./constants`;
+IXO has implemented the contracts in an innovative manner and this implementation is generally available [DAO Tooling in Impacts Portal](https://github.com/ixofoundation/ixo-webclient). Examples of how to use DAODAO Contracts [can be found here](https://github.com/ixofoundation/ixo-webclient/blob/40f9c34b161d4419a1a1490f555a0ac89f10dba6/apps/web/src/components/Modals/AddActionModal/SetupAddEntityModal.tsx).
 
 ### Notes
+
+#### React Native
+
+Install the below Library and import into your main app entry file. This ensures the required Polyfils are covered on mobile.
+
+```
+yarn add @walletconnect/react-native-compat
+```
+
+##### BigInt React Native
+
+To ensure no issues with the React Native bigInt implementation, be sure to wrap your decimal gas amounts and others in a JS Double.
 
 #### Attributions
 
 Types were generated from the `*.proto` files of the IXO appchain using the `@osmonauts/telescope@0.92.2` package.
 > See `@ixo/impactxclient-sdk/types/index.d.ts` for the complete list.
+
+## How to contribute to the Impacts Client SDK
+
+IXO welcomes contributions and comments of all kinds!
+
+First off, thank you for applying your mind and time to improving this repo - it helps the Internet of Impact to save our planet!
+Whether you are contributing in your own space-time or following a bounty; we are grateful!
+
+1. Fork the repo.
+2. Ensure that you sync the fork often.
+3. Clone your fork and create a branch.
+4. Implement your changes one at a time and commit regularly to your fork.
+5. Once your change is completed and passes all of the local tests, create a PR.
+6. Your change will be reviewed as soon as possible with helpful feedback for your further updates to the change.
+7. Finally, when everything is good to go and your PR approved, you can squash and merge your branch.
+
+### Set up your local environment
+Clone the [repository](https://github.com/ixofoundation/ixo-multiclient-sdk.git).
+After successfully cloning:
+```
+yarn
+yarn build
+```
+
+### Codegen
+
+Contract schemas live in `./contracts`, and protos in `./proto`. Look inside of `scripts/codegen.js` and configure the settings for bundling your SDK and contracts into `ixo-multiclient-sdk`:
+
+```
+yarn codegen
+```
+
+### Publishing
+
+Build the types and then publish:
+
+```
+yarn build:ts
+yarn publish
+```
 
 ## License
 This SDK is licensed under the Apache 2 License. See the [LICENSE](/LICENSE) file for more information.
