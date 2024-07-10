@@ -29,9 +29,9 @@ The Impacts Client SDK provides support for both [ESM (ECMAScript Modules)](http
   - [Usage](#usage)
     - [Utility Functions](#utility-functions)
     - [RPC Client](#rpc-client)
-    - [QueryClient](#queryclient)
+    - [Query Client](#query-client)
       - [Custom Queries](#custom-queries)
-    - [SigningClient](#signingclient)
+    - [Signing Client](#signing-client)
       - [Composing Messages](#composing-messages)
         - [Composing IBC Messages](#composing-ibc-messages)
       - [Signing Messages](#signing-messages)
@@ -71,8 +71,8 @@ The Impacts Client SDK provides support for both [ESM (ECMAScript Modules)](http
 - Supports multiple Cosmos chains
 
 ## API
-- [Query Client](#queryclient)
-- [Signing Client](#signingclient)
+- [Query Client](#query-client)
+- [Signing Client](#signing-client)
 - [Blockchain Modules](#blockchain-modules)
 - [Smart Contracts](#smart-contracts)
 - [Construct, Sign, and Broadcast Messages](#construct-sign-and-broadcast-messages)
@@ -94,7 +94,7 @@ yarn add @ixo/multiclient-sdk
 ```
 
 ## Usage
-The Query Client and Signing Client provide simple interfaces to abstract away the complexity of querying data on the IXO blockchain and signing messages for broadcasting to the IXO blockchain. These clients also work for other Cosmos appchains.
+The [Query Client](#query-client) and [Signing Client](#signing-client) provide simple interfaces to abstract away the complexity of querying data on the IXO blockchain and signing messages for broadcasting to the IXO blockchain. These clients also work for other Cosmos appchains.
 
 ### Utility Functions
 - `./utils`
@@ -116,7 +116,7 @@ First connect to an RPC Client in order to interact with a blockchain; in this c
 
 > The [Cosmos Chain Resolver SDK](https://www.npmjs.com/package/@ixo/cosmos-chain-resolver), created by IXO, provides a simple way to retrieve RPC endpoints for any Cosmos chain.
 
-We added a custom [QueryClient](#queryclient) that includes the Cosmos modules and IXO modules, as well as [Custom Queries](#custom-queries).
+We added a custom [Query Client](#query-client) that includes the Cosmos modules and IXO modules, as well as [Custom Queries](#custom-queries).
 
 Remember to set the `RPC_ENDPOINT` environment variable.
 - Published `RPC_ENDPOINT` providers can be found at the Cosmos [Chain Registry Github repository](https://github.com/cosmos/chain-registry/blob/master/impacthub/chain.json#L143) for Mainnet.
@@ -131,7 +131,7 @@ import { ixo, createQueryClient } from "@ixo/impactxclient-sdk";
 const queryClient = await createQueryClient(RPC_ENDPOINT);
 ```
 
-### QueryClient
+### Query Client
 
 IXO created a custom QueryClient to facilitate queries to the `cosmos` and `ixo` modules, as well as to provide [Custom Queries](#custom-queries).
 > First connect to an [RPC client](#rpc-client).
@@ -143,9 +143,11 @@ import { ixo, createQueryClient } from "@ixo/impactxclient-sdk";
 
 const queryClient = await createQueryClient(RPC_ENDPOINT);
 
+// Example of querying the Cosmos Bank module for the balances of an account on the IXO blockchain
 const balance = await client.cosmos.bank.v1beta1.allBalances({
   address: "ixo1addresshere",
 });
+// Example of querying the IXO Entity module for all entities on the IXO blockchain
 const entities = await queryClient.ixo.entity.v1beta1.entityList();
 ```
 
@@ -185,10 +187,9 @@ const daoCoreContractCode = customQueries.contract.getContractCode(
   "testnet",
   "dao_core"
 );
-// daoCoreContractCode = 3
 ```
 
-### SigningClient
+### Signing Client
 
 A message to the IXO blockchain requires three steps:
 1. [Compose Message](#composing-messages)
@@ -246,8 +247,8 @@ Here are the docs on [creating signers](https://github.com/cosmology-tech/cosmos
 IXO added a custom Stargate Signing Client that can be exported and is creatable under createSigningClient.
 
 Note
-> It only support Direct Proto signing through the rpc endpoint.
-> It already has all the proto defininitions in the registry for ixo modules.
+> It only supports Direct Proto signing through the RPC endpoint.
+> It already has all the proto defininitions in the registry for IXO blockchain modules.
 
 ```js
 import { createSigningClient } from "@ixo/impactxclient-sdk";
