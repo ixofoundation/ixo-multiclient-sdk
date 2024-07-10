@@ -75,8 +75,7 @@ The Impacts Client SDK provides support for both [ESM (ECMAScript Modules)](http
 - [Signing Client](#signing-client)
 - [Blockchain Modules](#blockchain-modules)
 - [Smart Contracts](#smart-contracts)
-- [Construct, Sign, and Broadcast Messages](#construct-sign-and-broadcast-messages)
-- [Inter-Blockchain Communication](#inter-blockchain-communication)
+- [Inter-Blockchain Communication](#composing-ibc-messages)
 - [Utility Functions](#utility-functions)
 
 ## Getting Started
@@ -119,9 +118,9 @@ First connect to an RPC Client in order to interact with a blockchain; in this c
 We added a custom [Query Client](#query-client) that includes the Cosmos modules and IXO modules, as well as [Custom Queries](#custom-queries).
 
 Remember to set the `RPC_ENDPOINT` environment variable.
-- Published `RPC_ENDPOINT` providers can be found at the Cosmos [Chain Registry Github repository](https://github.com/cosmos/chain-registry/blob/master/impacthub/chain.json#L143) for Mainnet.
-- Testnet providers are [found here.](https://github.com/cosmos/chain-registry/blob/master/testnets/impacthubtestnet/chain.json#L81)
-- Providers for Devnet are [found here.](https://github.com/cosmos/chain-registry/blob/master/testnets/impacthubdevnet/chain.json#L56)
+- Published `RPC_ENDPOINT` providers can be found at the Cosmos [Chain Registry Github repository](https://github.com/cosmos/chain-registry/blob/533af67f3a21bb952189070c106859eac59e4466/impacthub/chain.json#L148) for Mainnet.
+- Testnet providers are [found here.](https://github.com/cosmos/chain-registry/blob/533af67f3a21bb952189070c106859eac59e4466/testnets/impacthubtestnet/chain.json#L81)
+- Providers for Devnet are [found here.](https://github.com/cosmos/chain-registry/blob/533af67f3a21bb952189070c106859eac59e4466/testnets/impacthubdevnet/chain.json#L56)
 
 Example that describes how to set up your `queryClient` with an RPC endpoint.
 
@@ -202,7 +201,7 @@ See
 
 #### Composing Messages
 
-THe following example describes one type of message. Reference the `__tests__` directory of this repository for further examples of most messages and how to format them.
+The following example describes one type of message. Reference the `__tests__` directory of this repository for further examples of most messages and how to format them.
 
 ```js
 import { ixo } from "@ixo/impactxclient-sdk";
@@ -387,11 +386,13 @@ In order to instantiate and execute smart contracts on the IXO blockchain, messa
 
 #### CosmWasm
 Available at the [CosmWasm module](https://github.com/CosmWasm/wasmd) repository.
-`./codegen/cosmwasm/bundle`
+- `./codegen/cosmwasm/bundle`
 
 There are a few steps to follow when working with a CosmWasm smart contract.
-NB: Instantiation is only required when the contract is not available on the chain instance that you are working with.
-1. See NB note above. Only instantiate an instance of the contract with which to interact, if needed.
+
+> Instantiation is only required when the contract is not available on the chain instance that you are working with.
+
+1. See note above. Only instantiate an instance of the contract, if needed.
   1. Retrieve the contract code for your target smart contract.
      - Contract code is provided by the contract namespace in custom queries.
      - `./custom_queries/contract`
@@ -501,7 +502,10 @@ Examples of how to use the ixoSwap contract are available here:
 
 #### DAODAO Contracts
 The basic DAO contracts are forked from the DAO-DAO Github organisation's [dao-contracts repository.](https://github.com/DA0-DA0/dao-contracts)
-IXO has implemented the contracts in an innovative manner and this implementation is generally available [DAO Tooling in Impacts Portal](https://github.com/ixofoundation/ixo-webclient). Examples of how to use DAODAO Contracts [can be found here](https://github.com/ixofoundation/ixo-webclient/blob/40f9c34b161d4419a1a1490f555a0ac89f10dba6/apps/web/src/components/Modals/AddActionModal/SetupAddEntityModal.tsx).
+
+IXO has implemented the contracts in an innovative manner and this implementation is generally available [DAO Tooling in Impacts Portal](https://github.com/ixofoundation/ixo-webclient).
+
+Examples of how to use DAODAO Contracts [can be found here](https://github.com/ixofoundation/ixo-webclient/blob/40f9c34b161d4419a1a1490f555a0ac89f10dba6/apps/web/src/components/Modals/AddActionModal/SetupAddEntityModal.tsx).
 
 ### Notes
 
@@ -520,13 +524,13 @@ To ensure no issues with the React Native bigInt implementation, be sure to wrap
 #### Attributions
 
 Types were generated from the `*.proto` files of the IXO appchain using the `@osmonauts/telescope@0.92.2` package.
-> See `@ixo/impactxclient-sdk/types/index.d.ts` for the complete list.
+> See `@ixo/impactxclient-sdk/types/index.d.ts` for the complete list of types.
 
 ## How to contribute to the Impacts Client SDK
 
 IXO welcomes contributions and comments of all kinds!
 
-First off, thank you for applying your mind and time to improving this repo - it helps the Internet of Impact to save our planet!
+First off, thank you for applying your mind and time to improving this repo - it helps the Internet of Impacts to save our planet!
 Whether you are contributing in your own space-time or following a bounty; we are grateful!
 
 1. Fork the repo.
