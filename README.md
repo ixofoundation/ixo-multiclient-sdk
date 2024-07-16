@@ -341,8 +341,11 @@ const response = await stargateClient.signAndBroadcast(address, [msg], fee);
 
 #### IXO Modules
 Available at the [IXO Blockchain](https://github.com/ixofoundation/ixo-blockchain) repository.
-- `./codegen/ixo/bundle.d.ts`
 
+See [potential use cases](./USE_CASES.md/#ixo-modules) that may be applicable to your application.
+
+- `./codegen/ixo/bundle.d.ts`
+  
 ##### IIDs
 
 The [IID (Interchain Identifier) Module](https://github.com/ixofoundation/ixo-blockchain/tree/a161b2ef40ca56dd066bc0b1eb21913174c65b89/x/iid) establishes a decentralized identity mechanism, ensuring a standardized approach for all entities within the system. By harnessing the power of DIDs (Decentralized Identifiers) and IIDs, this module facilitates a robust, secure, and universally recognizable identity framework, paving the way for a seamless integration across various platforms and networks.
@@ -503,9 +506,11 @@ Examples of how to use the ixoSwap contract are available here:
 #### DAODAO Contracts
 The basic DAO contracts are forked from the DAO-DAO Github organisation's [dao-contracts repository.](https://github.com/DA0-DA0/dao-contracts)
 
-IXO has implemented the contracts in an innovative manner and this implementation is generally available [DAO Tooling in Impacts Portal](https://github.com/ixofoundation/ixo-webclient).
+IXO has implemented the contracts in an innovative manner and this implementation is generally available as [DAO Tooling in the Impacts Portal](https://github.com/ixofoundation/ixo-webclient).
 
 Examples of how to use DAODAO Contracts [can be found here](https://github.com/ixofoundation/ixo-webclient/blob/40f9c34b161d4419a1a1490f555a0ac89f10dba6/apps/web/src/components/Modals/AddActionModal/SetupAddEntityModal.tsx).
+
+See [potential use cases](./USE_CASES.md/#daodao-contracts) that may be applicable to your application.
 
 ### Notes
 
