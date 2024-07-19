@@ -227,7 +227,7 @@ export const CreateSupamotoAssetCollection = async (
 
     verification.push(
       ixo.iid.v1beta1.Verification.fromPartial({
-        relationships: ["attestation"],
+        relationships: ["authentication"],
         method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
           id: did + "#" + pubkeyBase58,
           type: "Ed25519VerificationKey2018",
@@ -504,6 +504,39 @@ export const AddVerification = async (
           type: "CosmosAccountAddress",
           blockchainAccountID: accountUserAddress || address,
           controller: accountUserDid || entityId,
+        }),
+      }),
+      signer: myAddress,
+    }),
+  };
+
+  const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const AddEdKeysVerification = async (entityId: string) => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+  const did = tester.did;
+
+  // Add ed keys user to verification method for verification of credentials
+  const edPubKey = (await getUser(WalletUsers.alice).getAccounts())[0].pubkey;
+  const pubkeyBase58 = base58.encode(edPubKey);
+
+  const message = {
+    typeUrl: "/ixo.iid.v1beta1.MsgAddVerification",
+    value: ixo.iid.v1beta1.MsgAddVerification.fromPartial({
+      id: entityId,
+      verification: ixo.iid.v1beta1.Verification.fromPartial({
+        relationships: ["authentication"],
+        method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
+          id: did + "#" + pubkeyBase58,
+          type: "Ed25519VerificationKey2018",
+          publicKeyBase58: pubkeyBase58,
+          controller: "{id}",
         }),
       }),
       signer: myAddress,

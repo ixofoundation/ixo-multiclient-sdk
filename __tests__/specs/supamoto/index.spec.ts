@@ -30,7 +30,7 @@ import {
 } from "../../setup/supamoto/setupFlow";
 import { web3Storage } from "../../setup/web3";
 import { chainNetwork } from "../../setup/constants";
-import * as Emerging from "../../setup/emerging/extra";
+import * as Emerging from "../../setup/emerging/legacy";
 import * as Claims from "../../flows/claims";
 
 beforeAll(() => Promise.all([createQueryClient(), generateWallets(false)]));
@@ -116,7 +116,7 @@ relayerVerifyAllEntities(
 // ]); // impacts dao user
 
 // ------------------------------------------
-// Unconnected COLLECTION
+// Legacy COLLECTION
 // ------------------------------------------
 // Extras needed to correct current collection and project
 // Emerging.cookstovesExtra();

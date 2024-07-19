@@ -15,6 +15,7 @@ import * as Claims from "./flows/claims";
 import * as Authz from "./flows/authz";
 import { dids } from "./setup/constants";
 import { idcc_constants } from "./setup/idcc/creds";
+import { web3Storage } from "./setup/web3";
 
 beforeAll(() => {
   generateConstants();
@@ -76,6 +77,7 @@ IID.deleteLinkedClaims();
 // Authz.authzBasic();
 // Claims.supamotoClaims3();
 // Queries.quickQueries();
+// web3Storage();
 
 // ------------------------------------------
 // Run the below after a devnet reset

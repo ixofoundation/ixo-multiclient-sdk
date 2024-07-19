@@ -25,7 +25,7 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 import { cookstoveIds } from "../setup/supamoto/stoves";
 import { assertIsDeliverTxSuccess } from "@cosmjs/stargate";
-import { legacyCookstoveIds } from "../setup/emerging/extra";
+import { legacyCookstoveIds } from "../setup/emerging/legacy";
 
 axiosRetry(axios, {
   retries: 3,
@@ -762,11 +762,11 @@ export const supamotoClaims3 = () =>
     test("Generate Fuel Purchase claims and evaluate them", async () => {
       type CollectionType = "Legacy" | "Genesis";
       let collectionToUse: CollectionType;
-      collectionToUse = "Legacy";
+      collectionToUse = "Genesis";
 
-      // const collectionId = "1"; // testnet and mainnet genesis fuelpurchases
+      const collectionId = "1"; // testnet and mainnet genesis fuelpurchases
       // const collectionId = "5"; // mainnet legacy fuelpurchases
-      const collectionId = "8"; // testnet legacy fuelpurchases
+      // const collectionId = "8"; // testnet legacy fuelpurchases
 
       // first load previous purchases and get only id, then load latest and remove all previous purchases
       let previousPurchases: string[] = [];
@@ -829,8 +829,7 @@ export const supamotoClaims3 = () =>
       //   ["documents", "emerging", "fuelPurchases_data1.json"],
       //   JSON.stringify({ duplicatesData, purchaseData }, null, 2)
       // );
-      // const test1 = true;
-      // if (test1) throw new Error("stop");
+      // if (!!1) throw new Error("stop");
 
       // chunk payments into objects with device id as key
       purchaseData = purchaseData.reduce((a, p) => {
@@ -893,6 +892,9 @@ export const supamotoClaims3 = () =>
             //   (v: any) => v.length
             // ),
             // stoves: Object.keys(purchaseData),
+            // purchaseIds: Object.values(purchaseData)
+            //   .flat(1)
+            //   .map((p: any) => p.Transaction_ID),
             // purchaseData,
           },
           null,
@@ -901,8 +903,7 @@ export const supamotoClaims3 = () =>
       );
 
       // helper to stop flow if just want the above data
-      // const test = true;
-      // if (test) throw new Error("stop");
+      // if (!!1) throw new Error("stop");
 
       // devide payments per device into 10 devices at a time
       // ==============================================================

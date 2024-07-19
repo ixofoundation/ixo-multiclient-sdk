@@ -27,12 +27,11 @@ beforeAll(() => Promise.all([createQueryClient(), generateWallets(true)]));
 // next verify all entities created
 relayerVerifyAllEntities(
   process.env.ROOT_IMPACTS,
-  "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
+  "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb", //testnet
   chainNetwork,
   [
     "did:ixo:entity:46ee50fef809d2a84e1041863b884763",
-    // "did:ixo:entity:e89dcfa3b1038f495951d25f0083b23c",
-    // "did:ixo:entity:7bb1fd9b6a1a5ab132df06231016f44a",
+    // "did:ixo:entity:",
   ],
   true,
 );

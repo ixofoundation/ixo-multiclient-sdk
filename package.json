@@ -35,6 +35,7 @@
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "test:queries": "jest __tests__/specs/query --forceExit",
     "test:supamoto": "jest __tests__/specs/supamoto --forceExit",
+    "test:ai4g": "jest __tests__/specs/ai4g --forceExit",
     "test:umuzi": "jest __tests__/specs/umuzi --forceExit",
     "test:idcc": "jest __tests__/specs/idcc --forceExit"
   },
