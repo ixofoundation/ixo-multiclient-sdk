@@ -1,3 +1,4 @@
+//@ts-nocheck
 import * as _m0 from "protobufjs/minimal";
 import { bytesFromBase64, base64FromBytes } from "../../../helpers";
 /** GenesisState defines the raw genesis transaction in JSON. */

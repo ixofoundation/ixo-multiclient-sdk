@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { IdentifiedClientState, IdentifiedClientStateSDKType, ClientConsensusStates, ClientConsensusStatesSDKType, Params, ParamsSDKType } from "./client";
 import { Long, isSet, bytesFromBase64, base64FromBytes } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";
@@ -10,7 +11,11 @@ export interface GenesisState {
   /** metadata from each client */
   clientsMetadata: IdentifiedGenesisMetadata[];
   params?: Params;
-  /** create localhost on initialization */
+  /**
+   * Deprecated: create_localhost has been deprecated.
+   * The localhost client is automatically created at genesis.
+   */
+  /** @deprecated */
   createLocalhost: boolean;
   /** the sequence for the next generated client identifier */
   nextClientSequence: Long;
@@ -21,6 +26,7 @@ export interface GenesisStateSDKType {
   clients_consensus: ClientConsensusStatesSDKType[];
   clients_metadata: IdentifiedGenesisMetadataSDKType[];
   params?: ParamsSDKType;
+  /** @deprecated */
   create_localhost: boolean;
   next_client_sequence: Long;
 }

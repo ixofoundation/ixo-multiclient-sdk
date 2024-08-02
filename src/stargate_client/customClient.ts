@@ -7,6 +7,7 @@ import { fromBase64, toBase64 } from "@cosmjs/encoding";
 import { Int53, Uint53 } from "@cosmjs/math";
 import {
   EncodeObject,
+  encodePubkey,
   isOfflineDirectSigner,
   makeAuthInfoBytes,
   makeSignDoc,
@@ -20,17 +21,14 @@ import {
   SignerData,
   GasPrice,
   calculateFee,
+  accountFromAny,
+  StargateClient,
+  StargateClientOptions,
 } from "@cosmjs/stargate";
-import {
-  BroadcastTxSyncResponse,
-  Tendermint34Client,
-} from "@cosmjs/tendermint-rpc";
+import { CometClient, connectComet } from "@cosmjs/tendermint-rpc";
 import { assert, assertDefined } from "@cosmjs/utils";
 import { SignMode } from "cosmjs-types/cosmos/tx/signing/v1beta1/signing";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
-import { encodePubkey } from "./customPubkey";
-import { accountFromAny } from "./edAccountHandler";
-import { StargateClient, StargateClientOptions } from "./customStargateClient";
 import { createRegistry, defaultRegistryTypes } from "./customRegistries";
 import { getSignerData, LocalStoreFunctions } from "./store";
 
@@ -56,9 +54,14 @@ export class SigningStargateClient extends StargateClient {
   private readonly aminoTypes: AminoTypes;
   private readonly gasPrice: GasPrice | undefined;
   private readonly ignoreGetSequence: boolean;
+  // Starting with Cosmos SDK 0.47, we see many cases in which 1.3 is not enough anymore
+  // E.g. https://github.com/cosmos/cosmos-sdk/issues/16020
+  private readonly defaultGasMultiplier = 1.4;
 
+  // sequence store functions for consecutive transactions
   public localStoreFunctions: LocalStoreFunctions;
-  public tendermintClient: Tendermint34Client;
+  // public cometClient for convenience
+  public publicCometClient: CometClient;
 
   public static async connectWithSigner(
     endpoint: string,
@@ -67,14 +70,26 @@ export class SigningStargateClient extends StargateClient {
     ignoreGetSequence?: boolean,
     localStoreFunctions?: LocalStoreFunctions
   ): Promise<SigningStargateClient> {
-    const tmClient = await Tendermint34Client.connect(endpoint);
+    const cometClient = await connectComet(endpoint);
     return new SigningStargateClient(
-      tmClient,
+      cometClient,
       signer,
       options,
       ignoreGetSequence,
       localStoreFunctions
     );
+  }
+
+  /**
+   * Creates an instance from a manually created Comet client.
+   * Use this to use `Comet38Client` or `Tendermint37Client` instead of `Tendermint34Client`.
+   */
+  public static async createWithSigner(
+    cometClient: CometClient,
+    signer: OfflineSigner,
+    options: SigningStargateClientOptions = {}
+  ): Promise<SigningStargateClient> {
+    return new SigningStargateClient(cometClient, signer, options);
   }
 
   /**
@@ -102,22 +117,21 @@ export class SigningStargateClient extends StargateClient {
   }
 
   protected constructor(
-    tmClient: Tendermint34Client | undefined,
+    cometClient: CometClient | undefined,
     signer: OfflineSigner,
     options: SigningStargateClientOptions,
     ignoreGetSequence: boolean = false,
     localStoreFunctions?: LocalStoreFunctions
   ) {
-    super(tmClient!, options);
-    const prefix = options.prefix ?? "ixo";
+    super(cometClient, options);
     const {
       registry = createDefaultRegistry(),
       // aminoTypes = new AminoTypes(createDefaultTypes(prefix)),
       aminoTypes,
     } = options;
-    this.tendermintClient = tmClient!;
+    this.publicCometClient = cometClient;
     this.registry = registry;
-    this.aminoTypes = aminoTypes!;
+    this.aminoTypes = aminoTypes;
     this.signer = signer;
     this.broadcastTimeoutMs = options.broadcastTimeoutMs;
     this.broadcastPollIntervalMs = options.broadcastPollIntervalMs;
@@ -135,6 +149,7 @@ export class SigningStargateClient extends StargateClient {
     const txBody = txBodyBytes ? this.registry.decodeTxBody(txBodyBytes) : null;
     const anyMsgs =
       txBody?.messages || messages.map((m) => this.registry.encodeAsAny(m));
+
     const accountFromSigner = (await this.signer.getAccounts()).find(
       (account) => account.address === signerAddress
     );
@@ -156,10 +171,9 @@ export class SigningStargateClient extends StargateClient {
     const { gasInfo } = await this.forceGetQueryClient().tx.simulate(
       anyMsgs,
       txBody?.memo || memo,
-      pubkey as any,
+      pubkey,
       sequence
     );
-
     assertDefined(gasInfo);
     return Uint53.fromString(gasInfo.gasUsed.toString()).toNumber();
   }
@@ -170,7 +184,8 @@ export class SigningStargateClient extends StargateClient {
     fee: StdFee | "auto" | number,
     memo = "",
     explicitSignerData?: SignerData,
-    txBodyBytes?: Uint8Array
+    txBodyBytes?: Uint8Array,
+    timeoutHeight?: bigint
   ): Promise<DeliverTxResponse> {
     const usedFee = await this.getUsedFee(
       signerAddress,
@@ -185,7 +200,8 @@ export class SigningStargateClient extends StargateClient {
       usedFee,
       memo,
       explicitSignerData,
-      txBodyBytes
+      txBodyBytes,
+      timeoutHeight
     );
     const txBytes = TxRaw.encode(txRaw).finish();
     return this.broadcastTx(
@@ -193,6 +209,41 @@ export class SigningStargateClient extends StargateClient {
       this.broadcastTimeoutMs,
       this.broadcastPollIntervalMs
     );
+  }
+
+  /**
+   * This method is useful if you want to send a transaction in broadcast,
+   * without waiting for it to be placed inside a block, because for example
+   * I would like to receive the hash to later track the transaction with another tool.
+   * @returns Returns the hash of the transaction
+   */
+  public async signAndBroadcastSync(
+    signerAddress: string,
+    messages: readonly EncodeObject[],
+    fee: StdFee | "auto" | number,
+    memo = "",
+    explicitSignerData?: SignerData,
+    txBodyBytes?: Uint8Array,
+    timeoutHeight?: bigint
+  ): Promise<string> {
+    const usedFee = await this.getUsedFee(
+      signerAddress,
+      messages,
+      fee,
+      memo,
+      txBodyBytes
+    );
+    const txRaw = await this.sign(
+      signerAddress,
+      messages,
+      usedFee,
+      memo,
+      explicitSignerData,
+      txBodyBytes,
+      timeoutHeight
+    );
+    const txBytes = TxRaw.encode(txRaw).finish();
+    return this.broadcastTxSync(txBytes);
   }
 
   /**
@@ -211,7 +262,8 @@ export class SigningStargateClient extends StargateClient {
     fee: StdFee,
     memo: string,
     explicitSignerData?: SignerData,
-    txBodyBytes?: Uint8Array
+    txBodyBytes?: Uint8Array,
+    timeoutHeight?: bigint
   ): Promise<TxRaw> {
     let signerData: SignerData;
     if (explicitSignerData) {
@@ -242,9 +294,17 @@ export class SigningStargateClient extends StargateClient {
           fee,
           memo,
           signerData,
-          txBodyBytes
+          txBodyBytes,
+          timeoutHeight
         )
-      : this.signAmino(signerAddress, messages, fee, memo, signerData);
+      : this.signAmino(
+          signerAddress,
+          messages,
+          fee,
+          memo,
+          signerData,
+          timeoutHeight
+        );
   }
 
   public async getUsedFee(
@@ -265,7 +325,8 @@ export class SigningStargateClient extends StargateClient {
         memo,
         txBodyBytes
       );
-      const multiplier = typeof fee === "number" ? fee : 1.3;
+      const multiplier =
+        typeof fee === "number" ? fee : this.defaultGasMultiplier;
 
       return calculateFee(
         Math.round(gasEstimation * multiplier),
@@ -276,18 +337,13 @@ export class SigningStargateClient extends StargateClient {
     }
   }
 
-  public async tmBroadcastTxSync(
-    tx: Uint8Array
-  ): Promise<BroadcastTxSyncResponse> {
-    return this.forceGetTmClient().broadcastTxSync({ tx });
-  }
-
   private async signAmino(
     signerAddress: string,
     messages: readonly EncodeObject[],
     fee: StdFee,
     memo: string,
-    { accountNumber, sequence, chainId }: SignerData
+    { accountNumber, sequence, chainId }: SignerData,
+    timeoutHeight?: bigint
   ): Promise<TxRaw> {
     assert(!isOfflineDirectSigner(this.signer));
     const accountFromSigner = (await this.signer.getAccounts()).find(
@@ -311,15 +367,18 @@ export class SigningStargateClient extends StargateClient {
       chainId,
       memo,
       accountNumber,
-      sequence
+      sequence,
+      timeoutHeight
     );
     const { signature, signed } = await this.signer.signAmino(
       signerAddress,
       signDoc
     );
     const signedTxBody = {
-      messages: messages,
+      // messages: messages,
+      messages: signed.msgs.map((msg) => this.aminoTypes.fromAmino(msg)),
       memo: signed.memo,
+      timeoutHeight: timeoutHeight,
     };
     const signedTxBodyEncodeObject: TxBodyEncodeObject = {
       typeUrl: "/cosmos.tx.v1beta1.TxBody",
@@ -349,7 +408,8 @@ export class SigningStargateClient extends StargateClient {
     fee: StdFee,
     memo: string,
     { accountNumber, sequence, chainId }: SignerData,
-    txBodyBytes?: Uint8Array
+    txBodyBytes?: Uint8Array,
+    timeoutHeight?: bigint
   ): Promise<TxRaw> {
     assert(isOfflineDirectSigner(this.signer));
     const accountFromSigner = (await this.signer.getAccounts()).find(
@@ -365,8 +425,10 @@ export class SigningStargateClient extends StargateClient {
           : pubkeyType.ed25519,
       value: toBase64(accountFromSigner.pubkey),
     });
+
     const txBodyBytes1 =
-      txBodyBytes || this.registry.encodeTxBody({ messages, memo });
+      txBodyBytes ||
+      this.registry.encodeTxBody({ messages, memo, timeoutHeight });
     const gasLimit = Int53.fromString(fee.gas).toNumber();
     const authInfoBytes = makeAuthInfoBytes(
       [{ pubkey, sequence }],
@@ -375,6 +437,7 @@ export class SigningStargateClient extends StargateClient {
       fee.granter,
       fee.payer
     );
+
     const signDoc = makeSignDoc(
       txBodyBytes1,
       authInfoBytes,

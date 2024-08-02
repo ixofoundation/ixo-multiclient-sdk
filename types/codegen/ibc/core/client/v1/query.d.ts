@@ -1,6 +1,7 @@
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../../cosmos/base/query/v1beta1/pagination";
-import { Any, AnySDKType } from "../../../../google/protobuf/any";
 import { Height, HeightSDKType, IdentifiedClientState, IdentifiedClientStateSDKType, ConsensusStateWithHeight, ConsensusStateWithHeightSDKType, Params, ParamsSDKType } from "./client";
+import { MerklePath, MerklePathSDKType } from "../../commitment/v1/commitment";
+import { Any, AnySDKType } from "../../../../google/protobuf/any";
 import { Long } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /**
@@ -306,6 +307,42 @@ export interface QueryUpgradedConsensusStateResponse {
 export interface QueryUpgradedConsensusStateResponseSDKType {
     upgraded_consensus_state?: AnySDKType;
 }
+/** QueryVerifyMembershipRequest is the request type for the Query/VerifyMembership RPC method */
+export interface QueryVerifyMembershipRequest {
+    /** client unique identifier. */
+    clientId: string;
+    /** the proof to be verified by the client. */
+    proof: Uint8Array;
+    /** the height of the commitment root at which the proof is verified. */
+    proofHeight?: Height;
+    /** the commitment key path. */
+    merklePath?: MerklePath;
+    /** the value which is proven. */
+    value: Uint8Array;
+    /** optional time delay */
+    timeDelay: Long;
+    /** optional block delay */
+    blockDelay: Long;
+}
+/** QueryVerifyMembershipRequest is the request type for the Query/VerifyMembership RPC method */
+export interface QueryVerifyMembershipRequestSDKType {
+    client_id: string;
+    proof: Uint8Array;
+    proof_height?: HeightSDKType;
+    merkle_path?: MerklePathSDKType;
+    value: Uint8Array;
+    time_delay: Long;
+    block_delay: Long;
+}
+/** QueryVerifyMembershipResponse is the response type for the Query/VerifyMembership RPC method */
+export interface QueryVerifyMembershipResponse {
+    /** boolean indicating success or failure of proof verification. */
+    success: boolean;
+}
+/** QueryVerifyMembershipResponse is the response type for the Query/VerifyMembership RPC method */
+export interface QueryVerifyMembershipResponseSDKType {
+    success: boolean;
+}
 export declare const QueryClientStateRequest: {
     encode(message: QueryClientStateRequest, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): QueryClientStateRequest;
@@ -431,4 +468,18 @@ export declare const QueryUpgradedConsensusStateResponse: {
     fromJSON(object: any): QueryUpgradedConsensusStateResponse;
     toJSON(message: QueryUpgradedConsensusStateResponse): unknown;
     fromPartial(object: Partial<QueryUpgradedConsensusStateResponse>): QueryUpgradedConsensusStateResponse;
+};
+export declare const QueryVerifyMembershipRequest: {
+    encode(message: QueryVerifyMembershipRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryVerifyMembershipRequest;
+    fromJSON(object: any): QueryVerifyMembershipRequest;
+    toJSON(message: QueryVerifyMembershipRequest): unknown;
+    fromPartial(object: Partial<QueryVerifyMembershipRequest>): QueryVerifyMembershipRequest;
+};
+export declare const QueryVerifyMembershipResponse: {
+    encode(message: QueryVerifyMembershipResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryVerifyMembershipResponse;
+    fromJSON(object: any): QueryVerifyMembershipResponse;
+    toJSON(message: QueryVerifyMembershipResponse): unknown;
+    fromPartial(object: Partial<QueryVerifyMembershipResponse>): QueryVerifyMembershipResponse;
 };

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Entity, EntitySDKType, Params, ParamsSDKType } from "./entity";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";

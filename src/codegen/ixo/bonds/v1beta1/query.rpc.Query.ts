@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
@@ -11,7 +12,7 @@ export interface Query {
    * their current state.
    */
   bondsDetailed(request?: QueryBondsDetailedRequest): Promise<QueryBondsDetailedResponse>;
-  /** Params queries the paramaters of x/bonds module. */
+  /** Params queries the parameters of x/bonds module. */
   params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
   /** Bond queries info of a specific bond. */
   bond(request: QueryBondRequest): Promise<QueryBondResponse>;

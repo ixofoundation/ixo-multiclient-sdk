@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Any, AnySDKType } from "../../../google/protobuf/any";
 import * as _m0 from "protobufjs/minimal";
 import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
@@ -6,7 +7,9 @@ import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
  * Evidence of misbehavior such as equivocation or counterfactual signing.
  */
 export interface MsgSubmitEvidence {
+  /** submitter is the signer account address of evidence. */
   submitter: string;
+  /** evidence defines the evidence of misbehavior. */
   evidence?: Any;
 }
 /**

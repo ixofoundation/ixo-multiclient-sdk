@@ -1,4 +1,5 @@
-import { Deposit, DepositSDKType, Vote, VoteSDKType, Proposal, ProposalSDKType, DepositParams, DepositParamsSDKType, VotingParams, VotingParamsSDKType, TallyParams, TallyParamsSDKType } from "./gov";
+//@ts-nocheck
+import { Deposit, DepositSDKType, Vote, VoteSDKType, Proposal, ProposalSDKType, DepositParams, DepositParamsSDKType, VotingParams, VotingParamsSDKType, TallyParams, TallyParamsSDKType, Params, ParamsSDKType } from "./gov";
 import { Long, isSet } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /** GenesisState defines the gov module's genesis state. */
@@ -11,12 +12,39 @@ export interface GenesisState {
   votes: Vote[];
   /** proposals defines all the proposals present at genesis. */
   proposals: Proposal[];
-  /** params defines all the paramaters of related to deposit. */
+  /**
+   * Deprecated: Prefer to use `params` instead.
+   * deposit_params defines all the paramaters of related to deposit.
+   */
+  /** @deprecated */
   depositParams?: DepositParams;
-  /** params defines all the paramaters of related to voting. */
+  /**
+   * Deprecated: Prefer to use `params` instead.
+   * voting_params defines all the paramaters of related to voting.
+   */
+  /** @deprecated */
   votingParams?: VotingParams;
-  /** params defines all the paramaters of related to tally. */
+  /**
+   * Deprecated: Prefer to use `params` instead.
+   * tally_params defines all the paramaters of related to tally.
+   */
+  /** @deprecated */
   tallyParams?: TallyParams;
+  /**
+   * params defines all the paramaters of x/gov module.
+   * 
+   * Since: cosmos-sdk 0.47
+   */
+  params?: Params;
+  /**
+   * The constitution allows builders to lay a foundation and define purpose.
+   * This is an immutable string set in genesis.
+   * There are no amendments, to go outside of scope, just fork.
+   * constitution is an immutable string in genesis for a chain builder to lay out their vision, ideas and ideals.
+   * 
+   * Since: cosmos-sdk 0.50
+   */
+  constitution: string;
 }
 /** GenesisState defines the gov module's genesis state. */
 export interface GenesisStateSDKType {
@@ -24,9 +52,14 @@ export interface GenesisStateSDKType {
   deposits: DepositSDKType[];
   votes: VoteSDKType[];
   proposals: ProposalSDKType[];
+  /** @deprecated */
   deposit_params?: DepositParamsSDKType;
+  /** @deprecated */
   voting_params?: VotingParamsSDKType;
+  /** @deprecated */
   tally_params?: TallyParamsSDKType;
+  params?: ParamsSDKType;
+  constitution: string;
 }
 function createBaseGenesisState(): GenesisState {
   return {
@@ -36,7 +69,9 @@ function createBaseGenesisState(): GenesisState {
     proposals: [],
     depositParams: undefined,
     votingParams: undefined,
-    tallyParams: undefined
+    tallyParams: undefined,
+    params: undefined,
+    constitution: ""
   };
 }
 export const GenesisState = {
@@ -61,6 +96,12 @@ export const GenesisState = {
     }
     if (message.tallyParams !== undefined) {
       TallyParams.encode(message.tallyParams, writer.uint32(58).fork()).ldelim();
+    }
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(66).fork()).ldelim();
+    }
+    if (message.constitution !== "") {
+      writer.uint32(74).string(message.constitution);
     }
     return writer;
   },
@@ -92,6 +133,12 @@ export const GenesisState = {
         case 7:
           message.tallyParams = TallyParams.decode(reader, reader.uint32());
           break;
+        case 8:
+          message.params = Params.decode(reader, reader.uint32());
+          break;
+        case 9:
+          message.constitution = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -107,7 +154,9 @@ export const GenesisState = {
       proposals: Array.isArray(object?.proposals) ? object.proposals.map((e: any) => Proposal.fromJSON(e)) : [],
       depositParams: isSet(object.depositParams) ? DepositParams.fromJSON(object.depositParams) : undefined,
       votingParams: isSet(object.votingParams) ? VotingParams.fromJSON(object.votingParams) : undefined,
-      tallyParams: isSet(object.tallyParams) ? TallyParams.fromJSON(object.tallyParams) : undefined
+      tallyParams: isSet(object.tallyParams) ? TallyParams.fromJSON(object.tallyParams) : undefined,
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
+      constitution: isSet(object.constitution) ? String(object.constitution) : ""
     };
   },
   toJSON(message: GenesisState): unknown {
@@ -131,6 +180,8 @@ export const GenesisState = {
     message.depositParams !== undefined && (obj.depositParams = message.depositParams ? DepositParams.toJSON(message.depositParams) : undefined);
     message.votingParams !== undefined && (obj.votingParams = message.votingParams ? VotingParams.toJSON(message.votingParams) : undefined);
     message.tallyParams !== undefined && (obj.tallyParams = message.tallyParams ? TallyParams.toJSON(message.tallyParams) : undefined);
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    message.constitution !== undefined && (obj.constitution = message.constitution);
     return obj;
   },
   fromPartial(object: Partial<GenesisState>): GenesisState {
@@ -142,6 +193,8 @@ export const GenesisState = {
     message.depositParams = object.depositParams !== undefined && object.depositParams !== null ? DepositParams.fromPartial(object.depositParams) : undefined;
     message.votingParams = object.votingParams !== undefined && object.votingParams !== null ? VotingParams.fromPartial(object.votingParams) : undefined;
     message.tallyParams = object.tallyParams !== undefined && object.tallyParams !== null ? TallyParams.fromPartial(object.tallyParams) : undefined;
+    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    message.constitution = object.constitution ?? "";
     return message;
   }
 };

@@ -27,7 +27,7 @@ IID.generateBlockchainTestUsers();
 
 // IID.registerIids();
 // Proposals.instantiateModulesProposals();
-// Cosmos.bankBasic();
+Cosmos.bankBasic();
 // IID.iidsBasic();
 // Bonds.bondsBasic();
 // Entity.enititiesBasic();

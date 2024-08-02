@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import { MsgUnjail, MsgUnjailResponse } from "./tx";
+import { MsgUnjail, MsgUnjailResponse, MsgUpdateParams, MsgUpdateParamsResponse } from "./tx";
 /** Msg defines the slashing Msg service. */
 export interface Msg {
     /**
@@ -8,9 +8,17 @@ export interface Msg {
      * and rewards again.
      */
     unjail(request: MsgUnjail): Promise<MsgUnjailResponse>;
+    /**
+     * UpdateParams defines a governance operation for updating the x/slashing module
+     * parameters. The authority defaults to the x/gov module account.
+     *
+     * Since: cosmos-sdk 0.47
+     */
+    updateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
 }
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
     constructor(rpc: Rpc);
     unjail(request: MsgUnjail): Promise<MsgUnjailResponse>;
+    updateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
 }

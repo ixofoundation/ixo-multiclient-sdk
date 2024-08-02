@@ -1,9 +1,8 @@
 import { StdFee } from "@cosmjs/amino";
 import { EncodeObject, OfflineSigner, Registry } from "@cosmjs/proto-signing";
-import { AminoTypes, DeliverTxResponse, SignerData, GasPrice } from "@cosmjs/stargate";
-import { BroadcastTxSyncResponse, Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { AminoTypes, DeliverTxResponse, SignerData, GasPrice, StargateClient, StargateClientOptions } from "@cosmjs/stargate";
+import { CometClient } from "@cosmjs/tendermint-rpc";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
-import { StargateClient, StargateClientOptions } from "./customStargateClient";
 import { LocalStoreFunctions } from "./store";
 export interface SigningStargateClientOptions extends StargateClientOptions {
     readonly registry?: Registry;
@@ -21,9 +20,15 @@ export declare class SigningStargateClient extends StargateClient {
     private readonly aminoTypes;
     private readonly gasPrice;
     private readonly ignoreGetSequence;
+    private readonly defaultGasMultiplier;
     localStoreFunctions: LocalStoreFunctions;
-    tendermintClient: Tendermint34Client;
+    publicCometClient: CometClient;
     static connectWithSigner(endpoint: string, signer: OfflineSigner, options?: SigningStargateClientOptions, ignoreGetSequence?: boolean, localStoreFunctions?: LocalStoreFunctions): Promise<SigningStargateClient>;
+    /**
+     * Creates an instance from a manually created Comet client.
+     * Use this to use `Comet38Client` or `Tendermint37Client` instead of `Tendermint34Client`.
+     */
+    static createWithSigner(cometClient: CometClient, signer: OfflineSigner, options?: SigningStargateClientOptions): Promise<SigningStargateClient>;
     /**
      * Creates a client in offline mode.
      *
@@ -34,9 +39,16 @@ export declare class SigningStargateClient extends StargateClient {
      * exception will be raised.
      */
     static offline(signer: OfflineSigner, options?: SigningStargateClientOptions, ignoreGetSequence?: boolean, localStoreFunctions?: LocalStoreFunctions): Promise<SigningStargateClient>;
-    protected constructor(tmClient: Tendermint34Client | undefined, signer: OfflineSigner, options: SigningStargateClientOptions, ignoreGetSequence?: boolean, localStoreFunctions?: LocalStoreFunctions);
+    protected constructor(cometClient: CometClient | undefined, signer: OfflineSigner, options: SigningStargateClientOptions, ignoreGetSequence?: boolean, localStoreFunctions?: LocalStoreFunctions);
     simulate(signerAddress: string, messages: readonly EncodeObject[], memo: string | undefined, txBodyBytes?: Uint8Array): Promise<number>;
-    signAndBroadcast(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee | "auto" | number, memo?: string, explicitSignerData?: SignerData, txBodyBytes?: Uint8Array): Promise<DeliverTxResponse>;
+    signAndBroadcast(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee | "auto" | number, memo?: string, explicitSignerData?: SignerData, txBodyBytes?: Uint8Array, timeoutHeight?: bigint): Promise<DeliverTxResponse>;
+    /**
+     * This method is useful if you want to send a transaction in broadcast,
+     * without waiting for it to be placed inside a block, because for example
+     * I would like to receive the hash to later track the transaction with another tool.
+     * @returns Returns the hash of the transaction
+     */
+    signAndBroadcastSync(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee | "auto" | number, memo?: string, explicitSignerData?: SignerData, txBodyBytes?: Uint8Array, timeoutHeight?: bigint): Promise<string>;
     /**
      * Gets account number and sequence from the API, creates a sign doc,
      * creates a single signature and assembles the signed transaction.
@@ -47,9 +59,8 @@ export declare class SigningStargateClient extends StargateClient {
      * from the chain. This is needed when signing for a multisig account, but it also allows for offline signing
      * (See the SigningStargateClient.offline constructor).
      */
-    sign(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee, memo: string, explicitSignerData?: SignerData, txBodyBytes?: Uint8Array): Promise<TxRaw>;
+    sign(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee, memo: string, explicitSignerData?: SignerData, txBodyBytes?: Uint8Array, timeoutHeight?: bigint): Promise<TxRaw>;
     getUsedFee(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee | "auto" | number, memo?: string, txBodyBytes?: Uint8Array): Promise<StdFee>;
-    tmBroadcastTxSync(tx: Uint8Array): Promise<BroadcastTxSyncResponse>;
     private signAmino;
     private signDirect;
 }

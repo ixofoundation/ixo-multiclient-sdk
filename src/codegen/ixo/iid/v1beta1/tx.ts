@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, LinkedClaim, LinkedClaimSDKType, VerificationMethod, VerificationMethodSDKType } from "./types";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";

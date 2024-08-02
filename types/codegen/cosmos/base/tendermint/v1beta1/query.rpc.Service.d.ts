@@ -1,6 +1,6 @@
 import { Rpc } from "../../../../helpers";
 import { QueryClient } from "@cosmjs/stargate";
-import { GetNodeInfoRequest, GetNodeInfoResponse, GetSyncingRequest, GetSyncingResponse, GetLatestBlockRequest, GetLatestBlockResponse, GetBlockByHeightRequest, GetBlockByHeightResponse, GetLatestValidatorSetRequest, GetLatestValidatorSetResponse, GetValidatorSetByHeightRequest, GetValidatorSetByHeightResponse } from "./query";
+import { GetNodeInfoRequest, GetNodeInfoResponse, GetSyncingRequest, GetSyncingResponse, GetLatestBlockRequest, GetLatestBlockResponse, GetBlockByHeightRequest, GetBlockByHeightResponse, GetLatestValidatorSetRequest, GetLatestValidatorSetResponse, GetValidatorSetByHeightRequest, GetValidatorSetByHeightResponse, ABCIQueryRequest, ABCIQueryResponse } from "./query";
 /** Service defines the gRPC querier service for tendermint queries. */
 export interface Service {
     /** GetNodeInfo queries the current node info. */
@@ -15,6 +15,14 @@ export interface Service {
     getLatestValidatorSet(request?: GetLatestValidatorSetRequest): Promise<GetLatestValidatorSetResponse>;
     /** GetValidatorSetByHeight queries validator-set at a given height. */
     getValidatorSetByHeight(request: GetValidatorSetByHeightRequest): Promise<GetValidatorSetByHeightResponse>;
+    /**
+     * ABCIQuery defines a query handler that supports ABCI queries directly to the
+     * application, bypassing Tendermint completely. The ABCI query must contain
+     * a valid and supported path, including app, custom, p2p, and store.
+     *
+     * Since: cosmos-sdk 0.46
+     */
+    aBCIQuery(request: ABCIQueryRequest): Promise<ABCIQueryResponse>;
 }
 export declare class ServiceClientImpl implements Service {
     private readonly rpc;
@@ -25,6 +33,7 @@ export declare class ServiceClientImpl implements Service {
     getBlockByHeight(request: GetBlockByHeightRequest): Promise<GetBlockByHeightResponse>;
     getLatestValidatorSet(request?: GetLatestValidatorSetRequest): Promise<GetLatestValidatorSetResponse>;
     getValidatorSetByHeight(request: GetValidatorSetByHeightRequest): Promise<GetValidatorSetByHeightResponse>;
+    aBCIQuery(request: ABCIQueryRequest): Promise<ABCIQueryResponse>;
 }
 export declare const createRpcQueryExtension: (base: QueryClient) => {
     getNodeInfo(request?: GetNodeInfoRequest): Promise<GetNodeInfoResponse>;
@@ -33,4 +42,5 @@ export declare const createRpcQueryExtension: (base: QueryClient) => {
     getBlockByHeight(request: GetBlockByHeightRequest): Promise<GetBlockByHeightResponse>;
     getLatestValidatorSet(request?: GetLatestValidatorSetRequest): Promise<GetLatestValidatorSetResponse>;
     getValidatorSetByHeight(request: GetValidatorSetByHeightRequest): Promise<GetValidatorSetByHeightResponse>;
+    aBCIQuery(request: ABCIQueryRequest): Promise<ABCIQueryResponse>;
 };

@@ -1,7 +1,23 @@
+import { AccessConfig, AccessConfigSDKType } from "./types";
 import { Any, AnySDKType } from "../../../google/protobuf/any";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Long } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
+/**
+ * StoreCodeAuthorization defines authorization for wasm code upload.
+ * Since: wasmd 0.42
+ */
+export interface StoreCodeAuthorization {
+    /** Grants for code upload */
+    grants: CodeGrant[];
+}
+/**
+ * StoreCodeAuthorization defines authorization for wasm code upload.
+ * Since: wasmd 0.42
+ */
+export interface StoreCodeAuthorizationSDKType {
+    grants: CodeGrantSDKType[];
+}
 /**
  * ContractExecutionAuthorization defines authorization for wasm execute.
  * Since: wasmd 0.30
@@ -31,6 +47,25 @@ export interface ContractMigrationAuthorization {
  */
 export interface ContractMigrationAuthorizationSDKType {
     grants: ContractGrantSDKType[];
+}
+/** CodeGrant a granted permission for a single code */
+export interface CodeGrant {
+    /**
+     * CodeHash is the unique identifier created by wasmvm
+     * Wildcard "*" is used to specify any kind of grant.
+     */
+    codeHash: Uint8Array;
+    /**
+     * InstantiatePermission is the superset access control to apply
+     * on contract creation.
+     * Optional
+     */
+    instantiatePermission?: AccessConfig;
+}
+/** CodeGrant a granted permission for a single code */
+export interface CodeGrantSDKType {
+    code_hash: Uint8Array;
+    instantiate_permission?: AccessConfigSDKType;
 }
 /**
  * ContractGrant a granted permission for a single contract
@@ -158,6 +193,13 @@ export interface AcceptedMessagesFilter {
 export interface AcceptedMessagesFilterSDKType {
     messages: Uint8Array[];
 }
+export declare const StoreCodeAuthorization: {
+    encode(message: StoreCodeAuthorization, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): StoreCodeAuthorization;
+    fromJSON(object: any): StoreCodeAuthorization;
+    toJSON(message: StoreCodeAuthorization): unknown;
+    fromPartial(object: Partial<StoreCodeAuthorization>): StoreCodeAuthorization;
+};
 export declare const ContractExecutionAuthorization: {
     encode(message: ContractExecutionAuthorization, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): ContractExecutionAuthorization;
@@ -171,6 +213,13 @@ export declare const ContractMigrationAuthorization: {
     fromJSON(object: any): ContractMigrationAuthorization;
     toJSON(message: ContractMigrationAuthorization): unknown;
     fromPartial(object: Partial<ContractMigrationAuthorization>): ContractMigrationAuthorization;
+};
+export declare const CodeGrant: {
+    encode(message: CodeGrant, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): CodeGrant;
+    fromJSON(object: any): CodeGrant;
+    toJSON(message: CodeGrant): unknown;
+    fromPartial(object: Partial<CodeGrant>): CodeGrant;
 };
 export declare const ContractGrant: {
     encode(message: ContractGrant, writer?: _m0.Writer): _m0.Writer;

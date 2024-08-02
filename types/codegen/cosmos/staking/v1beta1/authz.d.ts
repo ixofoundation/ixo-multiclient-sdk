@@ -14,6 +14,8 @@ export declare enum AuthorizationType {
     AUTHORIZATION_TYPE_UNDELEGATE = 2,
     /** AUTHORIZATION_TYPE_REDELEGATE - AUTHORIZATION_TYPE_REDELEGATE defines an authorization type for Msg/BeginRedelegate */
     AUTHORIZATION_TYPE_REDELEGATE = 3,
+    /** AUTHORIZATION_TYPE_CANCEL_UNBONDING_DELEGATION - AUTHORIZATION_TYPE_CANCEL_UNBONDING_DELEGATION defines an authorization type for Msg/MsgCancelUnbondingDelegation */
+    AUTHORIZATION_TYPE_CANCEL_UNBONDING_DELEGATION = 4,
     UNRECOGNIZED = -1
 }
 export declare const AuthorizationTypeSDKType: typeof AuthorizationType;

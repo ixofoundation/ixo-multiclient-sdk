@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Long, isSet } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface InitializeNftContract {

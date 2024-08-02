@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Long, isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /** MsgIBCSend */
@@ -26,6 +27,15 @@ export interface MsgIBCSendSDKType {
   timeout_height: Long;
   timeout_timestamp: Long;
   data: Uint8Array;
+}
+/** MsgIBCSendResponse */
+export interface MsgIBCSendResponse {
+  /** Sequence number of the IBC packet sent */
+  sequence: Long;
+}
+/** MsgIBCSendResponse */
+export interface MsgIBCSendResponseSDKType {
+  sequence: Long;
 }
 /** MsgIBCCloseChannel port and channel need to be owned by the contract */
 export interface MsgIBCCloseChannel {
@@ -107,6 +117,51 @@ export const MsgIBCSend = {
     message.timeoutHeight = object.timeoutHeight !== undefined && object.timeoutHeight !== null ? Long.fromValue(object.timeoutHeight) : Long.UZERO;
     message.timeoutTimestamp = object.timeoutTimestamp !== undefined && object.timeoutTimestamp !== null ? Long.fromValue(object.timeoutTimestamp) : Long.UZERO;
     message.data = object.data ?? new Uint8Array();
+    return message;
+  }
+};
+function createBaseMsgIBCSendResponse(): MsgIBCSendResponse {
+  return {
+    sequence: Long.UZERO
+  };
+}
+export const MsgIBCSendResponse = {
+  encode(message: MsgIBCSendResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (!message.sequence.isZero()) {
+      writer.uint32(8).uint64(message.sequence);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgIBCSendResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgIBCSendResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.sequence = (reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgIBCSendResponse {
+    return {
+      sequence: isSet(object.sequence) ? Long.fromValue(object.sequence) : Long.UZERO
+    };
+  },
+  toJSON(message: MsgIBCSendResponse): unknown {
+    const obj: any = {};
+    message.sequence !== undefined && (obj.sequence = (message.sequence || Long.UZERO).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<MsgIBCSendResponse>): MsgIBCSendResponse {
+    const message = createBaseMsgIBCSendResponse();
+    message.sequence = object.sequence !== undefined && object.sequence !== null ? Long.fromValue(object.sequence) : Long.UZERO;
     return message;
   }
 };

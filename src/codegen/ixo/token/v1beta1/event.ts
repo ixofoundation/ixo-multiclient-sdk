@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Token, TokenSDKType, TokenProperties, TokenPropertiesSDKType } from "./token";
 import { TokenBatch, TokenBatchSDKType } from "./tx";
 import * as _m0 from "protobufjs/minimal";

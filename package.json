@@ -1,6 +1,6 @@
 {
   "name": "@ixo/impactxclient-sdk",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them",
   "author": "Ixo <ixo>",
   "homepage": "https://github.com/ixofoundation/ixo-MultiClient-SDK#readme",
@@ -29,7 +29,8 @@
     "prepare": "npm run build",
     "dev": "cross-env NODE_ENV=development babel-node src/index --extensions \".tsx,.ts,.js\"",
     "watch": "cross-env NODE_ENV=development babel-watch src/index --extensions \".tsx,.ts,.js\"",
-    "lint": "eslint src --fix",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
     "test": "jest __tests__/index.spec.ts --forceExit",
     "test:watch": "jest --watch",
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
@@ -92,17 +93,17 @@
   },
   "dependencies": {
     "@babel/runtime": "7.19.4",
-    "@cosmjs/amino": "0.29.4",
-    "@cosmjs/cosmwasm-stargate": "0.29.4",
-    "@cosmjs/encoding": "0.29.4",
-    "@cosmjs/proto-signing": "0.29.4",
-    "@cosmjs/stargate": "0.29.4",
-    "@cosmjs/tendermint-rpc": "0.29.5",
+    "@cosmjs/amino": "0.32.4",
+    "@cosmjs/cosmwasm-stargate": "0.32.4",
+    "@cosmjs/crypto": "0.32.4",
+    "@cosmjs/encoding": "0.32.4",
+    "@cosmjs/proto-signing": "0.32.4",
+    "@cosmjs/stargate": "0.32.4",
+    "@cosmjs/tendermint-rpc": "0.32.4",
     "axios": "1.2.5",
     "bip39": "3.0.4",
     "bs58": "5.0.0",
     "dotenv": "16.0.3",
     "protobufjs": "6.11.2"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  }
 }

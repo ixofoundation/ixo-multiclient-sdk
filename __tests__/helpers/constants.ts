@@ -47,13 +47,21 @@ export const generateConstants = (setGlobal = true) => {
   return newConstants;
 };
 
-export const generateNewConstant = async (constant: keyof typeof constants) => {
+/**
+ * Generates a new constant and logs it to console
+ * @param constant The constant to generate
+ * @param fixedConstant If set, the constant will be set to this value
+ */
+export const generateNewConstant = async (
+  constant: keyof typeof constants,
+  fixedConstant?: string
+) => {
   const newConstants = generateConstants(false);
-  const newConstant = newConstants[constant];
+  const newConstant = fixedConstant || newConstants[constant];
   // @ts-ignore
   constants[constant] = newConstant;
   console.log({ constant: newConstant });
-  return newConstant;
+  return fixedConstant || newConstant;
 };
 
 export const fee: StdFee = {

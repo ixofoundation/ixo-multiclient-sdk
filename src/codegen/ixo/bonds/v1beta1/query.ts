@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { BondDetails, BondDetailsSDKType, Bond, BondSDKType, Batch, BatchSDKType, Params, ParamsSDKType } from "./bonds";
 import { DecCoin, DecCoinSDKType, Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import * as _m0 from "protobufjs/minimal";

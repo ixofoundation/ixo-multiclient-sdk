@@ -57,65 +57,6 @@ export interface ClientConsensusStatesSDKType {
     consensus_states: ConsensusStateWithHeightSDKType[];
 }
 /**
- * ClientUpdateProposal is a governance proposal. If it passes, the substitute
- * client's latest consensus state is copied over to the subject client. The proposal
- * handler may fail if the subject and the substitute do not match in client and
- * chain parameters (with exception to latest height, frozen height, and chain-id).
- */
-export interface ClientUpdateProposal {
-    /** the title of the update proposal */
-    title: string;
-    /** the description of the proposal */
-    description: string;
-    /** the client identifier for the client to be updated if the proposal passes */
-    subjectClientId: string;
-    /**
-     * the substitute client identifier for the client standing in for the subject
-     * client
-     */
-    substituteClientId: string;
-}
-/**
- * ClientUpdateProposal is a governance proposal. If it passes, the substitute
- * client's latest consensus state is copied over to the subject client. The proposal
- * handler may fail if the subject and the substitute do not match in client and
- * chain parameters (with exception to latest height, frozen height, and chain-id).
- */
-export interface ClientUpdateProposalSDKType {
-    title: string;
-    description: string;
-    subject_client_id: string;
-    substitute_client_id: string;
-}
-/**
- * UpgradeProposal is a gov Content type for initiating an IBC breaking
- * upgrade.
- */
-export interface UpgradeProposal {
-    title: string;
-    description: string;
-    plan?: Plan;
-    /**
-     * An UpgradedClientState must be provided to perform an IBC breaking upgrade.
-     * This will make the chain commit to the correct upgraded (self) client state
-     * before the upgrade occurs, so that connecting chains can verify that the
-     * new upgraded client is valid by verifying a proof on the previous version
-     * of the chain. This will allow IBC connections to persist smoothly across
-     * planned chain upgrades
-     */
-    upgradedClientState?: Any;
-}
-/**
- * UpgradeProposal is a gov Content type for initiating an IBC breaking
- * upgrade.
- */
-export interface UpgradeProposalSDKType {
-    title: string;
-    description: string;
-    plan?: PlanSDKType;
-    upgraded_client_state?: AnySDKType;
-}
-/**
  * Height is a monotonically increasing data type
  * that can be compared against another Height for the purposes of updating and
  * freezing clients
@@ -151,12 +92,87 @@ export interface HeightSDKType {
 }
 /** Params defines the set of IBC light client parameters. */
 export interface Params {
-    /** allowed_clients defines the list of allowed client state types. */
+    /**
+     * allowed_clients defines the list of allowed client state types which can be created
+     * and interacted with. If a client type is removed from the allowed clients list, usage
+     * of this client will be disabled until it is added again to the list.
+     */
     allowedClients: string[];
 }
 /** Params defines the set of IBC light client parameters. */
 export interface ParamsSDKType {
     allowed_clients: string[];
+}
+/**
+ * ClientUpdateProposal is a legacy governance proposal. If it passes, the substitute
+ * client's latest consensus state is copied over to the subject client. The proposal
+ * handler may fail if the subject and the substitute do not match in client and
+ * chain parameters (with exception to latest height, frozen height, and chain-id).
+ *
+ * Deprecated: Please use MsgRecoverClient in favour of this message type.
+ */
+/** @deprecated */
+export interface ClientUpdateProposal {
+    /** the title of the update proposal */
+    title: string;
+    /** the description of the proposal */
+    description: string;
+    /** the client identifier for the client to be updated if the proposal passes */
+    subjectClientId: string;
+    /**
+     * the substitute client identifier for the client standing in for the subject
+     * client
+     */
+    substituteClientId: string;
+}
+/**
+ * ClientUpdateProposal is a legacy governance proposal. If it passes, the substitute
+ * client's latest consensus state is copied over to the subject client. The proposal
+ * handler may fail if the subject and the substitute do not match in client and
+ * chain parameters (with exception to latest height, frozen height, and chain-id).
+ *
+ * Deprecated: Please use MsgRecoverClient in favour of this message type.
+ */
+/** @deprecated */
+export interface ClientUpdateProposalSDKType {
+    title: string;
+    description: string;
+    subject_client_id: string;
+    substitute_client_id: string;
+}
+/**
+ * UpgradeProposal is a gov Content type for initiating an IBC breaking
+ * upgrade.
+ *
+ * Deprecated: Please use MsgIBCSoftwareUpgrade in favour of this message type.
+ */
+/** @deprecated */
+export interface UpgradeProposal {
+    title: string;
+    description: string;
+    plan?: Plan;
+    /**
+     * An UpgradedClientState must be provided to perform an IBC breaking upgrade.
+     * This will make the chain commit to the correct upgraded (self) client state
+     * before the upgrade occurs, so that connecting chains can verify that the
+     * new upgraded client is valid by verifying a proof on the previous version
+     * of the chain. This will allow IBC connections to persist smoothly across
+     * planned chain upgrades
+     */
+    upgradedClientState?: Any;
+}
+/**
+ * UpgradeProposal is a gov Content type for initiating an IBC breaking
+ * upgrade.
+ *
+ * Deprecated: Please use MsgIBCSoftwareUpgrade in favour of this message type.
+ */
+/** @deprecated */
+export interface UpgradeProposalSDKType {
+    title: string;
+    description: string;
+    plan?: PlanSDKType;
+    upgraded_client_state?: AnySDKType;
 }
 export declare const IdentifiedClientState: {
     encode(message: IdentifiedClientState, writer?: _m0.Writer): _m0.Writer;
@@ -179,20 +195,6 @@ export declare const ClientConsensusStates: {
     toJSON(message: ClientConsensusStates): unknown;
     fromPartial(object: Partial<ClientConsensusStates>): ClientConsensusStates;
 };
-export declare const ClientUpdateProposal: {
-    encode(message: ClientUpdateProposal, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): ClientUpdateProposal;
-    fromJSON(object: any): ClientUpdateProposal;
-    toJSON(message: ClientUpdateProposal): unknown;
-    fromPartial(object: Partial<ClientUpdateProposal>): ClientUpdateProposal;
-};
-export declare const UpgradeProposal: {
-    encode(message: UpgradeProposal, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): UpgradeProposal;
-    fromJSON(object: any): UpgradeProposal;
-    toJSON(message: UpgradeProposal): unknown;
-    fromPartial(object: Partial<UpgradeProposal>): UpgradeProposal;
-};
 export declare const Height: {
     encode(message: Height, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): Height;
@@ -206,4 +208,18 @@ export declare const Params: {
     fromJSON(object: any): Params;
     toJSON(message: Params): unknown;
     fromPartial(object: Partial<Params>): Params;
+};
+export declare const ClientUpdateProposal: {
+    encode(message: ClientUpdateProposal, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): ClientUpdateProposal;
+    fromJSON(object: any): ClientUpdateProposal;
+    toJSON(message: ClientUpdateProposal): unknown;
+    fromPartial(object: Partial<ClientUpdateProposal>): ClientUpdateProposal;
+};
+export declare const UpgradeProposal: {
+    encode(message: UpgradeProposal, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): UpgradeProposal;
+    fromJSON(object: any): UpgradeProposal;
+    toJSON(message: UpgradeProposal): unknown;
+    fromPartial(object: Partial<UpgradeProposal>): UpgradeProposal;
 };

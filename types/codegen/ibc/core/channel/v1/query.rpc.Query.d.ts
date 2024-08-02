@@ -1,6 +1,6 @@
 import { Rpc } from "../../../../helpers";
 import { QueryClient } from "@cosmjs/stargate";
-import { QueryChannelRequest, QueryChannelResponse, QueryChannelsRequest, QueryChannelsResponse, QueryConnectionChannelsRequest, QueryConnectionChannelsResponse, QueryChannelClientStateRequest, QueryChannelClientStateResponse, QueryChannelConsensusStateRequest, QueryChannelConsensusStateResponse, QueryPacketCommitmentRequest, QueryPacketCommitmentResponse, QueryPacketCommitmentsRequest, QueryPacketCommitmentsResponse, QueryPacketReceiptRequest, QueryPacketReceiptResponse, QueryPacketAcknowledgementRequest, QueryPacketAcknowledgementResponse, QueryPacketAcknowledgementsRequest, QueryPacketAcknowledgementsResponse, QueryUnreceivedPacketsRequest, QueryUnreceivedPacketsResponse, QueryUnreceivedAcksRequest, QueryUnreceivedAcksResponse, QueryNextSequenceReceiveRequest, QueryNextSequenceReceiveResponse } from "./query";
+import { QueryChannelRequest, QueryChannelResponse, QueryChannelsRequest, QueryChannelsResponse, QueryConnectionChannelsRequest, QueryConnectionChannelsResponse, QueryChannelClientStateRequest, QueryChannelClientStateResponse, QueryChannelConsensusStateRequest, QueryChannelConsensusStateResponse, QueryPacketCommitmentRequest, QueryPacketCommitmentResponse, QueryPacketCommitmentsRequest, QueryPacketCommitmentsResponse, QueryPacketReceiptRequest, QueryPacketReceiptResponse, QueryPacketAcknowledgementRequest, QueryPacketAcknowledgementResponse, QueryPacketAcknowledgementsRequest, QueryPacketAcknowledgementsResponse, QueryUnreceivedPacketsRequest, QueryUnreceivedPacketsResponse, QueryUnreceivedAcksRequest, QueryUnreceivedAcksResponse, QueryNextSequenceReceiveRequest, QueryNextSequenceReceiveResponse, QueryNextSequenceSendRequest, QueryNextSequenceSendResponse, QueryUpgradeErrorRequest, QueryUpgradeErrorResponse, QueryUpgradeRequest, QueryUpgradeResponse, QueryChannelParamsRequest, QueryChannelParamsResponse } from "./query";
 /** Query provides defines the gRPC querier service */
 export interface Query {
     /** Channel queries an IBC Channel. */
@@ -53,6 +53,14 @@ export interface Query {
     unreceivedAcks(request: QueryUnreceivedAcksRequest): Promise<QueryUnreceivedAcksResponse>;
     /** NextSequenceReceive returns the next receive sequence for a given channel. */
     nextSequenceReceive(request: QueryNextSequenceReceiveRequest): Promise<QueryNextSequenceReceiveResponse>;
+    /** NextSequenceSend returns the next send sequence for a given channel. */
+    nextSequenceSend(request: QueryNextSequenceSendRequest): Promise<QueryNextSequenceSendResponse>;
+    /** UpgradeError returns the error receipt if the upgrade handshake failed. */
+    upgradeError(request: QueryUpgradeErrorRequest): Promise<QueryUpgradeErrorResponse>;
+    /** Upgrade returns the upgrade for a given port and channel id. */
+    upgrade(request: QueryUpgradeRequest): Promise<QueryUpgradeResponse>;
+    /** ChannelParams queries all parameters of the ibc channel submodule. */
+    channelParams(request?: QueryChannelParamsRequest): Promise<QueryChannelParamsResponse>;
 }
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
@@ -70,6 +78,10 @@ export declare class QueryClientImpl implements Query {
     unreceivedPackets(request: QueryUnreceivedPacketsRequest): Promise<QueryUnreceivedPacketsResponse>;
     unreceivedAcks(request: QueryUnreceivedAcksRequest): Promise<QueryUnreceivedAcksResponse>;
     nextSequenceReceive(request: QueryNextSequenceReceiveRequest): Promise<QueryNextSequenceReceiveResponse>;
+    nextSequenceSend(request: QueryNextSequenceSendRequest): Promise<QueryNextSequenceSendResponse>;
+    upgradeError(request: QueryUpgradeErrorRequest): Promise<QueryUpgradeErrorResponse>;
+    upgrade(request: QueryUpgradeRequest): Promise<QueryUpgradeResponse>;
+    channelParams(request?: QueryChannelParamsRequest): Promise<QueryChannelParamsResponse>;
 }
 export declare const createRpcQueryExtension: (base: QueryClient) => {
     channel(request: QueryChannelRequest): Promise<QueryChannelResponse>;
@@ -85,4 +97,8 @@ export declare const createRpcQueryExtension: (base: QueryClient) => {
     unreceivedPackets(request: QueryUnreceivedPacketsRequest): Promise<QueryUnreceivedPacketsResponse>;
     unreceivedAcks(request: QueryUnreceivedAcksRequest): Promise<QueryUnreceivedAcksResponse>;
     nextSequenceReceive(request: QueryNextSequenceReceiveRequest): Promise<QueryNextSequenceReceiveResponse>;
+    nextSequenceSend(request: QueryNextSequenceSendRequest): Promise<QueryNextSequenceSendResponse>;
+    upgradeError(request: QueryUpgradeErrorRequest): Promise<QueryUpgradeErrorResponse>;
+    upgrade(request: QueryUpgradeRequest): Promise<QueryUpgradeResponse>;
+    channelParams(request?: QueryChannelParamsRequest): Promise<QueryChannelParamsResponse>;
 };

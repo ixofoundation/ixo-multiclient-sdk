@@ -53,7 +53,7 @@ export const BankSendTrx = async (
   return response as any;
 };
 
-export const MsgSubmitProposalStoreCW = async (
+export const MsgSubmitProposalStoreCWOld = async (
   contract: string = "cw721",
   pathList?: string[],
   signer = WalletUsers.tester,
@@ -101,6 +101,82 @@ export const MsgSubmitProposalStoreCW = async (
           })
         ).finish(),
       },
+    }),
+  };
+
+  await timeout(timeoutSeconds * 1000);
+
+  const response = await client.signAndBroadcast(myAddress, [message], {
+    amount: [
+      {
+        denom: "uixo",
+        amount: "3000000",
+      },
+    ],
+    gas: "100000000",
+  });
+  return response;
+};
+export const MsgSubmitProposalStoreCW = async (
+  contract: string = "cw721",
+  pathList?: string[],
+  signer = WalletUsers.tester,
+  timeoutSeconds = 0,
+  instantiateAccessType = cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_EVERYBODY
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = getUser(signer);
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const govModAccRes =
+    await queryClient.cosmos.auth.v1beta1.moduleAccountByName({
+      name: "gov",
+    });
+  if (!govModAccRes?.account?.value)
+    throw new Error("gov module account not found");
+  const govModAcc = client.registry.decode(govModAccRes.account)?.baseAccount
+    ?.address;
+  // console.log({ govModAcc });
+
+  const message = {
+    typeUrl: "/cosmos.gov.v1.MsgSubmitProposal",
+    value: cosmos.gov.v1.MsgSubmitProposal.fromPartial({
+      initialDeposit: [
+        cosmos.base.v1beta1.Coin.fromPartial({
+          amount: "10000000",
+          denom: "uixo",
+        }),
+      ],
+      proposer: myAddress,
+      title: `Upload ${contract} smart contract`,
+      summary: "A cosmwasm smart contract",
+      expedited: false,
+      messages: [
+        {
+          typeUrl: "/cosmwasm.wasm.v1.MsgStoreCode",
+          value: cosmwasm.wasm.v1.MsgStoreCode.encode(
+            cosmwasm.wasm.v1.MsgStoreCode.fromPartial({
+              sender: govModAcc,
+              wasmByteCode: new Uint8Array(
+                getFileFromPath(
+                  pathList ?? ["contracts", "ixo", `${contract}.wasm`],
+                  ""
+                )
+              ),
+              instantiatePermission: cosmwasm.wasm.v1.AccessConfig.fromPartial({
+                permission: instantiateAccessType,
+                addresses:
+                  instantiateAccessType ==
+                  cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_ANY_OF_ADDRESSES
+                    ? [myAddress]
+                    : undefined,
+              }),
+            })
+          ).finish(),
+        },
+      ],
     }),
   };
 

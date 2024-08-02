@@ -1,5 +1,5 @@
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
-import { ixo, ica, ibc, cosmwasm, cosmos } from "../codegen";
+import { ixo, ibc, cosmwasm, cosmos } from "../codegen";
 import {
   QueryClient as QueryClientStargate,
   createProtobufRpcClient,
@@ -33,11 +33,6 @@ export const createQueryClient = async (rpcEndpoint: string) => {
       token: {
         v1beta1: new ixo.token.v1beta1.QueryClientImpl(rpc),
       },
-    },
-    // ICA modules
-    // ================================================
-    ica: {
-      intertx: new ica.intertx.QueryClientImpl(rpc),
     },
     // IBC modules
     // ================================================
@@ -74,7 +69,7 @@ export const createQueryClient = async (rpcEndpoint: string) => {
         },
       },
     },
-    // IBC modules
+    // Cosmwasm modules
     // ================================================
     cosmwasm: {
       wasm: {
@@ -100,6 +95,15 @@ export const createQueryClient = async (rpcEndpoint: string) => {
         tendermint: {
           v1beta1: new cosmos.base.tendermint.v1beta1.ServiceClientImpl(rpc),
         },
+        node: {
+          v1beta1: new cosmos.base.node.v1beta1.ServiceClientImpl(rpc),
+        },
+      },
+      circuit: {
+        v1: new cosmos.circuit.v1.QueryClientImpl(rpc),
+      },
+      consensus: {
+        v1: new cosmos.consensus.v1.QueryClientImpl(rpc),
       },
       distribution: {
         v1beta1: new cosmos.distribution.v1beta1.QueryClientImpl(rpc),
@@ -114,14 +118,8 @@ export const createQueryClient = async (rpcEndpoint: string) => {
         v1: new cosmos.gov.v1.QueryClientImpl(rpc),
         v1beta1: new cosmos.gov.v1beta1.QueryClientImpl(rpc),
       },
-      group: {
-        v1: new cosmos.group.v1.QueryClientImpl(rpc),
-      },
       mint: {
         v1beta1: new cosmos.mint.v1beta1.QueryClientImpl(rpc),
-      },
-      nft: {
-        v1beta1: new cosmos.nft.v1beta1.QueryClientImpl(rpc),
       },
       params: {
         v1beta1: new cosmos.params.v1beta1.QueryClientImpl(rpc),

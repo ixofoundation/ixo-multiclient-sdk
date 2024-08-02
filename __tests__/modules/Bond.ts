@@ -2,6 +2,9 @@ import base58 from "bs58";
 import { createClient, getUser, ixo, cosmos } from "../helpers/common";
 import { constants, fee, WalletUsers } from "../helpers/constants";
 
+// set constant for bondDid if have one
+const bondDidConst = undefined;
+
 export const CreateBond = async (allowSells: boolean) => {
   const client = await createClient();
 
@@ -11,7 +14,7 @@ export const CreateBond = async (allowSells: boolean) => {
   const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
-  const bondDid = bond.did;
+  const bondDid = bondDidConst || bond.did;
   const feeReserveAddress = myAddress;
 
   const message = {
@@ -78,7 +81,7 @@ export const EditBond = async () => {
   const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
-  const bondDid = bond.did;
+  const bondDid = bondDidConst || bond.did;
 
   const message = {
     typeUrl: "/ixo.bonds.v1beta1.MsgEditBond",
@@ -109,7 +112,7 @@ export const SetNextAlpha = async (alpha: string = "520000000000000000") => {
   const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
-  const bondDid = bond.did;
+  const bondDid = bondDidConst || bond.did;
 
   const message = {
     typeUrl: "/ixo.bonds.v1beta1.MsgSetNextAlpha",
@@ -140,7 +143,7 @@ export const UpdateBondState = async (
   const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
-  const bondDid = bond.did;
+  const bondDid = bondDidConst || bond.did;
 
   const message = {
     typeUrl: "/ixo.bonds.v1beta1.MsgUpdateBondState",
@@ -168,7 +171,7 @@ export const Buy = async (
   const did = user.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
-  const bondDid = bond.did;
+  const bondDid = bondDidConst || bond.did;
 
   const message = {
     typeUrl: "/ixo.bonds.v1beta1.MsgBuy",
@@ -205,7 +208,7 @@ export const Sell = async (
   const did = user.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
-  const bondDid = bond.did;
+  const bondDid = bondDidConst || bond.did;
 
   const message = {
     typeUrl: "/ixo.bonds.v1beta1.MsgSell",
@@ -234,7 +237,7 @@ export const Swap = async () => {
   const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
-  const bondDid = bond.did;
+  const bondDid = bondDidConst || bond.did;
 
   const message = {
     typeUrl: "/ixo.bonds.v1beta1.MsgSwap",
@@ -263,7 +266,7 @@ export const MakeOutcomePayment = async (amount: number) => {
   const did = tester.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
-  const bondDid = bond.did;
+  const bondDid = bondDidConst || bond.did;
 
   const message = {
     typeUrl: "/ixo.bonds.v1beta1.MsgMakeOutcomePayment",
@@ -290,7 +293,7 @@ export const WithdrawShare = async (
   const did = user.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
-  const bondDid = bond.did;
+  const bondDid = bondDidConst || bond.did;
 
   const message = {
     typeUrl: "/ixo.bonds.v1beta1.MsgWithdrawShare",
@@ -317,7 +320,7 @@ export const WithdrawReserve = async (
   const did = user.did + "#" + base58.encode(account.pubkey);
 
   const bond = getUser(WalletUsers.bond);
-  const bondDid = bond.did;
+  const bondDid = bondDidConst || bond.did;
 
   const message = {
     typeUrl: "/ixo.bonds.v1beta1.MsgWithdrawReserve",
