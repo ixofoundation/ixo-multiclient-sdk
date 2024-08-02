@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Any, AnySDKType } from "../../../google/protobuf/any";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
@@ -42,6 +43,35 @@ export interface MsgRevokeAllowanceSDKType {
 export interface MsgRevokeAllowanceResponse {}
 /** MsgRevokeAllowanceResponse defines the Msg/RevokeAllowanceResponse response type. */
 export interface MsgRevokeAllowanceResponseSDKType {}
+/**
+ * MsgPruneAllowances prunes expired fee allowances.
+ * 
+ * Since cosmos-sdk 0.50
+ */
+export interface MsgPruneAllowances {
+  /** pruner is the address of the user pruning expired allowances. */
+  pruner: string;
+}
+/**
+ * MsgPruneAllowances prunes expired fee allowances.
+ * 
+ * Since cosmos-sdk 0.50
+ */
+export interface MsgPruneAllowancesSDKType {
+  pruner: string;
+}
+/**
+ * MsgPruneAllowancesResponse defines the Msg/PruneAllowancesResponse response type.
+ * 
+ * Since cosmos-sdk 0.50
+ */
+export interface MsgPruneAllowancesResponse {}
+/**
+ * MsgPruneAllowancesResponse defines the Msg/PruneAllowancesResponse response type.
+ * 
+ * Since cosmos-sdk 0.50
+ */
+export interface MsgPruneAllowancesResponseSDKType {}
 function createBaseMsgGrantAllowance(): MsgGrantAllowance {
   return {
     granter: "",
@@ -225,6 +255,84 @@ export const MsgRevokeAllowanceResponse = {
   },
   fromPartial(_: Partial<MsgRevokeAllowanceResponse>): MsgRevokeAllowanceResponse {
     const message = createBaseMsgRevokeAllowanceResponse();
+    return message;
+  }
+};
+function createBaseMsgPruneAllowances(): MsgPruneAllowances {
+  return {
+    pruner: ""
+  };
+}
+export const MsgPruneAllowances = {
+  encode(message: MsgPruneAllowances, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pruner !== "") {
+      writer.uint32(10).string(message.pruner);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgPruneAllowances {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgPruneAllowances();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pruner = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgPruneAllowances {
+    return {
+      pruner: isSet(object.pruner) ? String(object.pruner) : ""
+    };
+  },
+  toJSON(message: MsgPruneAllowances): unknown {
+    const obj: any = {};
+    message.pruner !== undefined && (obj.pruner = message.pruner);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgPruneAllowances>): MsgPruneAllowances {
+    const message = createBaseMsgPruneAllowances();
+    message.pruner = object.pruner ?? "";
+    return message;
+  }
+};
+function createBaseMsgPruneAllowancesResponse(): MsgPruneAllowancesResponse {
+  return {};
+}
+export const MsgPruneAllowancesResponse = {
+  encode(_: MsgPruneAllowancesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgPruneAllowancesResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgPruneAllowancesResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgPruneAllowancesResponse {
+    return {};
+  },
+  toJSON(_: MsgPruneAllowancesResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgPruneAllowancesResponse>): MsgPruneAllowancesResponse {
+    const message = createBaseMsgPruneAllowancesResponse();
     return message;
   }
 };

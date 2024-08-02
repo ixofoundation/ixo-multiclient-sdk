@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 import { MsgCreateEntity, MsgCreateEntityResponse, MsgUpdateEntity, MsgUpdateEntityResponse, MsgUpdateEntityVerified, MsgUpdateEntityVerifiedResponse, MsgTransferEntity, MsgTransferEntityResponse, MsgCreateEntityAccount, MsgCreateEntityAccountResponse, MsgGrantEntityAccountAuthz, MsgGrantEntityAccountAuthzResponse, MsgRevokeEntityAccountAuthz, MsgRevokeEntityAccountAuthzResponse } from "./tx";

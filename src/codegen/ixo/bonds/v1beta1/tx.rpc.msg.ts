@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 import { MsgCreateBond, MsgCreateBondResponse, MsgEditBond, MsgEditBondResponse, MsgSetNextAlpha, MsgSetNextAlphaResponse, MsgUpdateBondState, MsgUpdateBondStateResponse, MsgBuy, MsgBuyResponse, MsgSell, MsgSellResponse, MsgSwap, MsgSwapResponse, MsgMakeOutcomePayment, MsgMakeOutcomePaymentResponse, MsgWithdrawShare, MsgWithdrawShareResponse, MsgWithdrawReserve, MsgWithdrawReserveResponse } from "./tx";

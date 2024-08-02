@@ -1,7 +1,7 @@
+/* eslint-disable no-console */
 import { join } from 'path';
 import telescope from '@osmonauts/telescope';
 import { sync as rimraf } from 'rimraf';
-import { AMINO_MAP } from './aminos';
 
 const protoDirs = [join(__dirname, '/../proto')];
 const outPath = join(__dirname, '../src/codegen');
@@ -13,7 +13,7 @@ telescope({
   outPath,
   options: {
     tsDisable: {
-      files: ['cosmos/authz/v1beta1/tx.amino.ts', 'cosmos/staking/v1beta1/tx.amino.ts']
+      disableAll: true
     },
     prototypes: {
       includePackageVar: false,
@@ -25,12 +25,14 @@ telescope({
       },
       methods: {
         toJSON: true,
-        fromJSON: true
+        fromJSON: true,
+        encode: true,
+        decode: true,
+        fromPartial: true
       }
     },
     aminoEncoding: {
       enabled: false
-      // exceptions: AMINO_MAP
     },
     lcdClients: {
       enabled: false

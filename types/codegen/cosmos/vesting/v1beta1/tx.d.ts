@@ -10,6 +10,7 @@ export interface MsgCreateVestingAccount {
     fromAddress: string;
     toAddress: string;
     amount: Coin[];
+    /** end of vesting as unix time (in seconds). */
     endTime: Long;
     delayed: boolean;
 }
@@ -33,6 +34,8 @@ export interface MsgCreateVestingAccountResponseSDKType {
 /**
  * MsgCreatePermanentLockedAccount defines a message that enables creating a permanent
  * locked account.
+ *
+ * Since: cosmos-sdk 0.46
  */
 export interface MsgCreatePermanentLockedAccount {
     fromAddress: string;
@@ -42,31 +45,46 @@ export interface MsgCreatePermanentLockedAccount {
 /**
  * MsgCreatePermanentLockedAccount defines a message that enables creating a permanent
  * locked account.
+ *
+ * Since: cosmos-sdk 0.46
  */
 export interface MsgCreatePermanentLockedAccountSDKType {
     from_address: string;
     to_address: string;
     amount: CoinSDKType[];
 }
-/** MsgCreatePermanentLockedAccountResponse defines the Msg/CreatePermanentLockedAccount response type. */
+/**
+ * MsgCreatePermanentLockedAccountResponse defines the Msg/CreatePermanentLockedAccount response type.
+ *
+ * Since: cosmos-sdk 0.46
+ */
 export interface MsgCreatePermanentLockedAccountResponse {
 }
-/** MsgCreatePermanentLockedAccountResponse defines the Msg/CreatePermanentLockedAccount response type. */
+/**
+ * MsgCreatePermanentLockedAccountResponse defines the Msg/CreatePermanentLockedAccount response type.
+ *
+ * Since: cosmos-sdk 0.46
+ */
 export interface MsgCreatePermanentLockedAccountResponseSDKType {
 }
 /**
  * MsgCreateVestingAccount defines a message that enables creating a vesting
  * account.
+ *
+ * Since: cosmos-sdk 0.46
  */
 export interface MsgCreatePeriodicVestingAccount {
     fromAddress: string;
     toAddress: string;
+    /** start of vesting as unix time (in seconds). */
     startTime: Long;
     vestingPeriods: Period[];
 }
 /**
  * MsgCreateVestingAccount defines a message that enables creating a vesting
  * account.
+ *
+ * Since: cosmos-sdk 0.46
  */
 export interface MsgCreatePeriodicVestingAccountSDKType {
     from_address: string;
@@ -77,12 +95,16 @@ export interface MsgCreatePeriodicVestingAccountSDKType {
 /**
  * MsgCreateVestingAccountResponse defines the Msg/CreatePeriodicVestingAccount
  * response type.
+ *
+ * Since: cosmos-sdk 0.46
  */
 export interface MsgCreatePeriodicVestingAccountResponse {
 }
 /**
  * MsgCreateVestingAccountResponse defines the Msg/CreatePeriodicVestingAccount
  * response type.
+ *
+ * Since: cosmos-sdk 0.46
  */
 export interface MsgCreatePeriodicVestingAccountResponseSDKType {
 }

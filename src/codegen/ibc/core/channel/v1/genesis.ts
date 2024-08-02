@@ -1,4 +1,5 @@
-import { IdentifiedChannel, IdentifiedChannelSDKType, PacketState, PacketStateSDKType } from "./channel";
+//@ts-nocheck
+import { IdentifiedChannel, IdentifiedChannelSDKType, PacketState, PacketStateSDKType, Params, ParamsSDKType } from "./channel";
 import { Long, isSet } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /** GenesisState defines the ibc channel submodule's genesis state. */
@@ -12,6 +13,7 @@ export interface GenesisState {
   ackSequences: PacketSequence[];
   /** the sequence for the next generated channel identifier */
   nextChannelSequence: Long;
+  params?: Params;
 }
 /** GenesisState defines the ibc channel submodule's genesis state. */
 export interface GenesisStateSDKType {
@@ -23,6 +25,7 @@ export interface GenesisStateSDKType {
   recv_sequences: PacketSequenceSDKType[];
   ack_sequences: PacketSequenceSDKType[];
   next_channel_sequence: Long;
+  params?: ParamsSDKType;
 }
 /**
  * PacketSequence defines the genesis type necessary to retrieve and store
@@ -51,7 +54,8 @@ function createBaseGenesisState(): GenesisState {
     sendSequences: [],
     recvSequences: [],
     ackSequences: [],
-    nextChannelSequence: Long.UZERO
+    nextChannelSequence: Long.UZERO,
+    params: undefined
   };
 }
 export const GenesisState = {
@@ -79,6 +83,9 @@ export const GenesisState = {
     }
     if (!message.nextChannelSequence.isZero()) {
       writer.uint32(64).uint64(message.nextChannelSequence);
+    }
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -113,6 +120,9 @@ export const GenesisState = {
         case 8:
           message.nextChannelSequence = (reader.uint64() as Long);
           break;
+        case 9:
+          message.params = Params.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -129,7 +139,8 @@ export const GenesisState = {
       sendSequences: Array.isArray(object?.sendSequences) ? object.sendSequences.map((e: any) => PacketSequence.fromJSON(e)) : [],
       recvSequences: Array.isArray(object?.recvSequences) ? object.recvSequences.map((e: any) => PacketSequence.fromJSON(e)) : [],
       ackSequences: Array.isArray(object?.ackSequences) ? object.ackSequences.map((e: any) => PacketSequence.fromJSON(e)) : [],
-      nextChannelSequence: isSet(object.nextChannelSequence) ? Long.fromValue(object.nextChannelSequence) : Long.UZERO
+      nextChannelSequence: isSet(object.nextChannelSequence) ? Long.fromValue(object.nextChannelSequence) : Long.UZERO,
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined
     };
   },
   toJSON(message: GenesisState): unknown {
@@ -170,6 +181,7 @@ export const GenesisState = {
       obj.ackSequences = [];
     }
     message.nextChannelSequence !== undefined && (obj.nextChannelSequence = (message.nextChannelSequence || Long.UZERO).toString());
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
   },
   fromPartial(object: Partial<GenesisState>): GenesisState {
@@ -182,6 +194,7 @@ export const GenesisState = {
     message.recvSequences = object.recvSequences?.map(e => PacketSequence.fromPartial(e)) || [];
     message.ackSequences = object.ackSequences?.map(e => PacketSequence.fromPartial(e)) || [];
     message.nextChannelSequence = object.nextChannelSequence !== undefined && object.nextChannelSequence !== null ? Long.fromValue(object.nextChannelSequence) : Long.UZERO;
+    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
   }
 };

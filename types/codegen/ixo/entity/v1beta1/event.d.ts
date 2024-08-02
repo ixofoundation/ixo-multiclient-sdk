@@ -1,5 +1,5 @@
 import { Entity, EntitySDKType } from "./entity";
-import { Grant, GrantSDKType } from "./cosmos";
+import { Grant, GrantSDKType } from "../../../cosmos/authz/v1beta1/authz";
 import * as _m0 from "protobufjs/minimal";
 /** EntityCreatedEvent is an event triggered on a Entity creation */
 export interface EntityCreatedEvent {

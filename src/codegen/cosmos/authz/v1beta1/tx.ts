@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Grant, GrantSDKType } from "./authz";
 import { Any, AnySDKType } from "../../../google/protobuf/any";
 import * as _m0 from "protobufjs/minimal";
@@ -20,14 +21,10 @@ export interface MsgGrantSDKType {
   grantee: string;
   grant?: GrantSDKType;
 }
-/** MsgExecResponse defines the Msg/MsgExecResponse response type. */
-export interface MsgExecResponse {
-  results: Uint8Array[];
-}
-/** MsgExecResponse defines the Msg/MsgExecResponse response type. */
-export interface MsgExecResponseSDKType {
-  results: Uint8Array[];
-}
+/** MsgGrantResponse defines the Msg/MsgGrant response type. */
+export interface MsgGrantResponse {}
+/** MsgGrantResponse defines the Msg/MsgGrant response type. */
+export interface MsgGrantResponseSDKType {}
 /**
  * MsgExec attempts to execute the provided messages using
  * authorizations granted to the grantee. Each message should have only
@@ -36,7 +33,7 @@ export interface MsgExecResponseSDKType {
 export interface MsgExec {
   grantee: string;
   /**
-   * Authorization Msg requests to execute. Each msg must implement Authorization interface
+   * Execute Msg.
    * The x/authz will try to find a grant matching (msg.signers[0], grantee, MsgTypeURL(msg))
    * triple and validate it.
    */
@@ -51,10 +48,14 @@ export interface MsgExecSDKType {
   grantee: string;
   msgs: AnySDKType[];
 }
-/** MsgGrantResponse defines the Msg/MsgGrant response type. */
-export interface MsgGrantResponse {}
-/** MsgGrantResponse defines the Msg/MsgGrant response type. */
-export interface MsgGrantResponseSDKType {}
+/** MsgExecResponse defines the Msg/MsgExecResponse response type. */
+export interface MsgExecResponse {
+  results: Uint8Array[];
+}
+/** MsgExecResponse defines the Msg/MsgExecResponse response type. */
+export interface MsgExecResponseSDKType {
+  results: Uint8Array[];
+}
 /**
  * MsgRevoke revokes any authorization with the provided sdk.Msg type on the
  * granter's account with that has been granted to the grantee.
@@ -142,28 +143,20 @@ export const MsgGrant = {
     return message;
   }
 };
-function createBaseMsgExecResponse(): MsgExecResponse {
-  return {
-    results: []
-  };
+function createBaseMsgGrantResponse(): MsgGrantResponse {
+  return {};
 }
-export const MsgExecResponse = {
-  encode(message: MsgExecResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.results) {
-      writer.uint32(10).bytes(v!);
-    }
+export const MsgGrantResponse = {
+  encode(_: MsgGrantResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgExecResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgGrantResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgExecResponse();
+    const message = createBaseMsgGrantResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 1:
-          message.results.push(reader.bytes());
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -171,23 +164,15 @@ export const MsgExecResponse = {
     }
     return message;
   },
-  fromJSON(object: any): MsgExecResponse {
-    return {
-      results: Array.isArray(object?.results) ? object.results.map((e: any) => bytesFromBase64(e)) : []
-    };
+  fromJSON(_: any): MsgGrantResponse {
+    return {};
   },
-  toJSON(message: MsgExecResponse): unknown {
+  toJSON(_: MsgGrantResponse): unknown {
     const obj: any = {};
-    if (message.results) {
-      obj.results = message.results.map(e => base64FromBytes(e !== undefined ? e : new Uint8Array()));
-    } else {
-      obj.results = [];
-    }
     return obj;
   },
-  fromPartial(object: Partial<MsgExecResponse>): MsgExecResponse {
-    const message = createBaseMsgExecResponse();
-    message.results = object.results?.map(e => e) || [];
+  fromPartial(_: Partial<MsgGrantResponse>): MsgGrantResponse {
+    const message = createBaseMsgGrantResponse();
     return message;
   }
 };
@@ -250,20 +235,28 @@ export const MsgExec = {
     return message;
   }
 };
-function createBaseMsgGrantResponse(): MsgGrantResponse {
-  return {};
+function createBaseMsgExecResponse(): MsgExecResponse {
+  return {
+    results: []
+  };
 }
-export const MsgGrantResponse = {
-  encode(_: MsgGrantResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const MsgExecResponse = {
+  encode(message: MsgExecResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.results) {
+      writer.uint32(10).bytes(v!);
+    }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgGrantResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgExecResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgGrantResponse();
+    const message = createBaseMsgExecResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.results.push(reader.bytes());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -271,15 +264,23 @@ export const MsgGrantResponse = {
     }
     return message;
   },
-  fromJSON(_: any): MsgGrantResponse {
-    return {};
+  fromJSON(object: any): MsgExecResponse {
+    return {
+      results: Array.isArray(object?.results) ? object.results.map((e: any) => bytesFromBase64(e)) : []
+    };
   },
-  toJSON(_: MsgGrantResponse): unknown {
+  toJSON(message: MsgExecResponse): unknown {
     const obj: any = {};
+    if (message.results) {
+      obj.results = message.results.map(e => base64FromBytes(e !== undefined ? e : new Uint8Array()));
+    } else {
+      obj.results = [];
+    }
     return obj;
   },
-  fromPartial(_: Partial<MsgGrantResponse>): MsgGrantResponse {
-    const message = createBaseMsgGrantResponse();
+  fromPartial(object: Partial<MsgExecResponse>): MsgExecResponse {
+    const message = createBaseMsgExecResponse();
+    message.results = object.results?.map(e => e) || [];
     return message;
   }
 };

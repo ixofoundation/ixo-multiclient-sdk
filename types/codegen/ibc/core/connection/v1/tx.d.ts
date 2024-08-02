@@ -1,6 +1,6 @@
 import { Counterparty, CounterpartySDKType, Version, VersionSDKType } from "./connection";
 import { Any, AnySDKType } from "../../../../google/protobuf/any";
-import { Height, HeightSDKType } from "../../client/v1/client";
+import { Height, HeightSDKType, Params, ParamsSDKType } from "../../client/v1/client";
 import { Long } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /**
@@ -62,6 +62,8 @@ export interface MsgConnectionOpenTry {
     proofConsensus: Uint8Array;
     consensusHeight?: Height;
     signer: string;
+    /** optional proof data for host state machines that are unable to introspect their own consensus state */
+    hostConsensusStateProof: Uint8Array;
 }
 /**
  * MsgConnectionOpenTry defines a msg sent by a Relayer to try to open a
@@ -81,6 +83,7 @@ export interface MsgConnectionOpenTrySDKType {
     proof_consensus: Uint8Array;
     consensus_height?: HeightSDKType;
     signer: string;
+    host_consensus_state_proof: Uint8Array;
 }
 /** MsgConnectionOpenTryResponse defines the Msg/ConnectionOpenTry response type. */
 export interface MsgConnectionOpenTryResponse {
@@ -109,6 +112,8 @@ export interface MsgConnectionOpenAck {
     proofConsensus: Uint8Array;
     consensusHeight?: Height;
     signer: string;
+    /** optional proof data for host state machines that are unable to introspect their own consensus state */
+    hostConsensusStateProof: Uint8Array;
 }
 /**
  * MsgConnectionOpenAck defines a msg sent by a Relayer to Chain A to
@@ -125,6 +130,7 @@ export interface MsgConnectionOpenAckSDKType {
     proof_consensus: Uint8Array;
     consensus_height?: HeightSDKType;
     signer: string;
+    host_consensus_state_proof: Uint8Array;
 }
 /** MsgConnectionOpenAckResponse defines the Msg/ConnectionOpenAck response type. */
 export interface MsgConnectionOpenAckResponse {
@@ -164,6 +170,28 @@ export interface MsgConnectionOpenConfirmResponse {
  * response type.
  */
 export interface MsgConnectionOpenConfirmResponseSDKType {
+}
+/** MsgUpdateParams defines the sdk.Msg type to update the connection parameters. */
+export interface MsgUpdateParams {
+    /** signer address */
+    signer: string;
+    /**
+     * params defines the connection parameters to update.
+     *
+     * NOTE: All parameters must be supplied.
+     */
+    params?: Params;
+}
+/** MsgUpdateParams defines the sdk.Msg type to update the connection parameters. */
+export interface MsgUpdateParamsSDKType {
+    signer: string;
+    params?: ParamsSDKType;
+}
+/** MsgUpdateParamsResponse defines the MsgUpdateParams response type. */
+export interface MsgUpdateParamsResponse {
+}
+/** MsgUpdateParamsResponse defines the MsgUpdateParams response type. */
+export interface MsgUpdateParamsResponseSDKType {
 }
 export declare const MsgConnectionOpenInit: {
     encode(message: MsgConnectionOpenInit, writer?: _m0.Writer): _m0.Writer;
@@ -220,4 +248,18 @@ export declare const MsgConnectionOpenConfirmResponse: {
     fromJSON(_: any): MsgConnectionOpenConfirmResponse;
     toJSON(_: MsgConnectionOpenConfirmResponse): unknown;
     fromPartial(_: Partial<MsgConnectionOpenConfirmResponse>): MsgConnectionOpenConfirmResponse;
+};
+export declare const MsgUpdateParams: {
+    encode(message: MsgUpdateParams, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams;
+    fromJSON(object: any): MsgUpdateParams;
+    toJSON(message: MsgUpdateParams): unknown;
+    fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams;
+};
+export declare const MsgUpdateParamsResponse: {
+    encode(_: MsgUpdateParamsResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse;
+    fromJSON(_: any): MsgUpdateParamsResponse;
+    toJSON(_: MsgUpdateParamsResponse): unknown;
+    fromPartial(_: Partial<MsgUpdateParamsResponse>): MsgUpdateParamsResponse;
 };

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
@@ -136,10 +137,10 @@ export enum PaymentStatus {
   NO_PAYMENT = 0,
   PROMISED = 1,
   AUTHORIZED = 2,
-  GAURANTEED = 3,
+  GUARANTEED = 3,
   PAID = 4,
   FAILED = 5,
-  DISPUTED = 6,
+  DISPUTED_PAYMENT = 6,
   UNRECOGNIZED = -1,
 }
 export const PaymentStatusSDKType = PaymentStatus;
@@ -155,8 +156,8 @@ export function paymentStatusFromJSON(object: any): PaymentStatus {
     case "AUTHORIZED":
       return PaymentStatus.AUTHORIZED;
     case 3:
-    case "GAURANTEED":
-      return PaymentStatus.GAURANTEED;
+    case "GUARANTEED":
+      return PaymentStatus.GUARANTEED;
     case 4:
     case "PAID":
       return PaymentStatus.PAID;
@@ -164,8 +165,8 @@ export function paymentStatusFromJSON(object: any): PaymentStatus {
     case "FAILED":
       return PaymentStatus.FAILED;
     case 6:
-    case "DISPUTED":
-      return PaymentStatus.DISPUTED;
+    case "DISPUTED_PAYMENT":
+      return PaymentStatus.DISPUTED_PAYMENT;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -180,14 +181,14 @@ export function paymentStatusToJSON(object: PaymentStatus): string {
       return "PROMISED";
     case PaymentStatus.AUTHORIZED:
       return "AUTHORIZED";
-    case PaymentStatus.GAURANTEED:
-      return "GAURANTEED";
+    case PaymentStatus.GUARANTEED:
+      return "GUARANTEED";
     case PaymentStatus.PAID:
       return "PAID";
     case PaymentStatus.FAILED:
       return "FAILED";
-    case PaymentStatus.DISPUTED:
-      return "DISPUTED";
+    case PaymentStatus.DISPUTED_PAYMENT:
+      return "DISPUTED_PAYMENT";
     case PaymentStatus.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -301,7 +302,7 @@ export interface Payment {
   contract_1155Payment?: Contract1155Payment;
   /**
    * timeout after claim/evaluation to create authZ for payment, if 0 then
-   * immidiate direct payment
+   * immediate direct payment
    */
   timeoutNs?: Duration;
 }

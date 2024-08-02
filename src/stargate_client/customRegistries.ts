@@ -1,16 +1,14 @@
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { ixo, cosmwasm, cosmos, ibc, ica } from "../codegen";
+import { ixo, cosmwasm, cosmos, ibc } from "../codegen";
 
 export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
   // tx
   ["/cosmos.tx.v1beta1.Tx", cosmos.tx.v1beta1.Tx],
 
-  // base
-  ["/cosmos.base.v1beta1.Coin", cosmos.base.v1beta1.Coin],
-
   // auth
   ["/cosmos.auth.v1beta1.BaseAccount", cosmos.auth.v1beta1.BaseAccount],
   ["/cosmos.auth.v1beta1.ModuleAccount", cosmos.auth.v1beta1.ModuleAccount],
+  ["/cosmos.auth.v1beta1.MsgUpdateParams", cosmos.auth.v1beta1.MsgUpdateParams],
 
   // authz
   ["/cosmos.authz.v1beta1.MsgExec", cosmos.authz.v1beta1.MsgExec],
@@ -27,6 +25,41 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
   [
     "/cosmos.bank.v1beta1.SendAuthorization",
     cosmos.bank.v1beta1.SendAuthorization,
+  ],
+  ["/cosmos.bank.v1beta1.MsgUpdateParams", cosmos.bank.v1beta1.MsgUpdateParams],
+  [
+    "/cosmos.bank.v1beta1.MsgSetSendEnabled",
+    cosmos.bank.v1beta1.MsgSetSendEnabled,
+  ],
+
+  // base
+  ["/cosmos.base.v1beta1.Coin", cosmos.base.v1beta1.Coin],
+
+  // circuit breaker
+  [
+    "/cosmos.circuit.v1.MsgAuthorizeCircuitBreaker",
+    cosmos.circuit.v1.MsgAuthorizeCircuitBreaker,
+  ],
+  [
+    "/cosmos.circuit.v1.MsgTripCircuitBreaker",
+    cosmos.circuit.v1.MsgTripCircuitBreaker,
+  ],
+  [
+    "/cosmos.circuit.v1.MsgResetCircuitBreaker",
+    cosmos.circuit.v1.MsgResetCircuitBreaker,
+  ],
+
+  // consensus
+  ["/cosmos.consensus.v1.MsgUpdateParams", cosmos.consensus.v1.MsgUpdateParams],
+
+  // crisis
+  [
+    "/cosmos.crisis.v1beta1.MsgVerifyInvariant",
+    cosmos.crisis.v1beta1.MsgVerifyInvariant,
+  ],
+  [
+    "/cosmos.crisis.v1beta1.MsgUpdateParams",
+    cosmos.crisis.v1beta1.MsgUpdateParams,
   ],
 
   // distribution
@@ -46,6 +79,24 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
     "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission",
     cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission,
   ],
+  [
+    "/cosmos.distribution.v1beta1.MsgCommunityPoolSpend",
+    cosmos.distribution.v1beta1.MsgCommunityPoolSpend,
+  ],
+  [
+    "/cosmos.distribution.v1beta1.MsgDepositValidatorRewardsPool",
+    cosmos.distribution.v1beta1.MsgDepositValidatorRewardsPool,
+  ],
+  [
+    "/cosmos.distribution.v1beta1.MsgUpdateParams",
+    cosmos.distribution.v1beta1.MsgUpdateParams,
+  ],
+
+  // evidence
+  [
+    "/cosmos.evidence.v1beta1.MsgSubmitEvidence",
+    cosmos.evidence.v1beta1.MsgSubmitEvidence,
+  ],
 
   // feegrant
   [
@@ -64,6 +115,10 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
     "/cosmos.feegrant.v1beta1.PeriodicAllowance",
     cosmos.feegrant.v1beta1.PeriodicAllowance,
   ],
+  [
+    "/cosmos.feegrant.v1beta1.MsgPruneAllowances",
+    cosmos.feegrant.v1beta1.MsgPruneAllowances,
+  ],
 
   // gov
   ["/cosmos.gov.v1beta1.MsgDeposit", cosmos.gov.v1beta1.MsgDeposit],
@@ -73,6 +128,22 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
   ],
   ["/cosmos.gov.v1beta1.MsgVote", cosmos.gov.v1beta1.MsgVote],
   ["/cosmos.gov.v1beta1.MsgVoteWeighted", cosmos.gov.v1beta1.MsgVoteWeighted],
+  ["/cosmos.gov.v1.MsgSubmitProposal", cosmos.gov.v1.MsgSubmitProposal],
+  ["/cosmos.gov.v1.MsgVote", cosmos.gov.v1.MsgVote],
+  ["/cosmos.gov.v1.MsgVoteWeighted", cosmos.gov.v1.MsgVoteWeighted],
+  ["/cosmos.gov.v1.MsgDeposit", cosmos.gov.v1.MsgDeposit],
+  ["/cosmos.gov.v1.MsgExecLegacyContent", cosmos.gov.v1.MsgExecLegacyContent],
+  ["/cosmos.gov.v1.MsgCancelProposal", cosmos.gov.v1.MsgCancelProposal],
+
+  // mint
+  ["/cosmos.mint.v1beta1.MsgUpdateParams", cosmos.mint.v1beta1.MsgUpdateParams],
+
+  // slashing
+  ["/cosmos.slashing.v1beta1.MsgUnjail", cosmos.slashing.v1beta1.MsgUnjail],
+  [
+    "/cosmos.slashing.v1beta1.MsgUpdateParams",
+    cosmos.slashing.v1beta1.MsgUpdateParams,
+  ],
 
   // staking
   [
@@ -91,6 +162,24 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
   [
     "/cosmos.staking.v1beta1.MsgUndelegate",
     cosmos.staking.v1beta1.MsgUndelegate,
+  ],
+  [
+    "/cosmos.staking.v1beta1.MsgCancelUnbondingDelegation",
+    cosmos.staking.v1beta1.MsgCancelUnbondingDelegation,
+  ],
+  [
+    "/cosmos.staking.v1beta1.MsgUpdateParams",
+    cosmos.staking.v1beta1.MsgUpdateParams,
+  ],
+
+  // upgrade
+  [
+    "/cosmos.upgrade.v1beta1.MsgCancelUpgrade",
+    cosmos.upgrade.v1beta1.MsgCancelUpgrade,
+  ],
+  [
+    "/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade",
+    cosmos.upgrade.v1beta1.MsgSoftwareUpgrade,
   ],
 
   // vesting
@@ -127,35 +216,15 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
     cosmos.vesting.v1beta1.PermanentLockedAccount,
   ],
 
-  // slashing
-  ["/cosmos.slashing.v1beta1.MsgUnjail", cosmos.slashing.v1beta1.MsgUnjail],
-
-  // crisis
-  [
-    "/cosmos.crisis.v1beta1.MsgVerifyInvariant",
-    cosmos.crisis.v1beta1.MsgVerifyInvariant,
-  ],
-
-  // evidence
-  [
-    "/cosmos.evidence.v1beta1.MsgSubmitEvidence",
-    cosmos.evidence.v1beta1.MsgSubmitEvidence,
-  ],
-
-  // upgrade
-  [
-    "/cosmos.upgrade.v1beta1.MsgCancelUpgrade",
-    cosmos.upgrade.v1beta1.MsgCancelUpgrade,
-  ],
-  [
-    "/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade",
-    cosmos.upgrade.v1beta1.MsgSoftwareUpgrade,
-  ],
-
   // ibc
+  // -----------------------------------------------------------------------------
   [
     "/ibc.applications.transfer.v1.MsgTransfer",
     ibc.applications.transfer.v1.MsgTransfer,
+  ],
+  [
+    "/ibc.applications.transfer.v1.MsgUpdateParams",
+    ibc.applications.transfer.v1.MsgUpdateParams,
   ],
   ["/ibc.core.client.v1.MsgCreateClient", ibc.core.client.v1.MsgCreateClient],
   [
@@ -164,8 +233,35 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
   ],
   ["/ibc.core.client.v1.MsgUpdateClient", ibc.core.client.v1.MsgUpdateClient],
   ["/ibc.core.client.v1.MsgUpgradeClient", ibc.core.client.v1.MsgUpgradeClient],
+  [
+    "/ibc.core.client.v1.MsgIBCSoftwareUpgrade",
+    ibc.core.client.v1.MsgIBCSoftwareUpgrade,
+  ],
+  ["/ibc.core.client.v1.MsgRecoverClient", ibc.core.client.v1.MsgRecoverClient],
+  ["/ibc.core.client.v1.MsgUpdateParams", ibc.core.client.v1.MsgUpdateParams],
+
+  // ibc interchain accounts
+  // -----------------------------------------------------------------------------
+  [
+    "/ibc.applications.interchain_accounts.controller.v1.MsgRegisterInterchainAccount",
+    ibc.applications.interchain_accounts.controller.v1
+      .MsgRegisterInterchainAccount,
+  ],
+  [
+    "/ibc.applications.interchain_accounts.controller.v1.MsgSendTx",
+    ibc.applications.interchain_accounts.controller.v1.MsgSendTx,
+  ],
+  [
+    "/ibc.applications.interchain_accounts.controller.v1.MsgUpdateParams",
+    ibc.applications.interchain_accounts.controller.v1.MsgUpdateParams,
+  ],
+  [
+    "/ibc.applications.interchain_accounts.host.v1.MsgUpdateParams",
+    ibc.applications.interchain_accounts.host.v1.MsgUpdateParams,
+  ],
 
   // cosmwasm
+  // -----------------------------------------------------------------------------
   ["/cosmwasm.wasm.v1.MsgStoreCode", cosmwasm.wasm.v1.MsgStoreCode],
   [
     "/cosmwasm.wasm.v1.MsgInstantiateContract",
@@ -179,16 +275,41 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
   ["/cosmwasm.wasm.v1.MsgMigrateContract", cosmwasm.wasm.v1.MsgMigrateContract],
   ["/cosmwasm.wasm.v1.MsgUpdateAdmin", cosmwasm.wasm.v1.MsgUpdateAdmin],
   ["/cosmwasm.wasm.v1.MsgClearAdmin", cosmwasm.wasm.v1.MsgClearAdmin],
-
-  // intertx (interchain accounts)
-  ["/ica.intertx.MsgRegisterAccount", ica.intertx.MsgRegisterAccount],
-  ["/ica.intertx.MsgSubmitTx", ica.intertx.MsgSubmitTx],
+  [
+    "/cosmwasm.wasm.v1.MsgUpdateInstantiateConfig",
+    cosmwasm.wasm.v1.MsgUpdateInstantiateConfig,
+  ],
+  ["/cosmwasm.wasm.v1.MsgUpdateParams", cosmwasm.wasm.v1.MsgUpdateParams],
+  ["/cosmwasm.wasm.v1.MsgSudoContract", cosmwasm.wasm.v1.MsgSudoContract],
+  ["/cosmwasm.wasm.v1.MsgPinCodes", cosmwasm.wasm.v1.MsgPinCodes],
+  ["/cosmwasm.wasm.v1.MsgUnpinCodes", cosmwasm.wasm.v1.MsgUnpinCodes],
+  [
+    "/cosmwasm.wasm.v1.MsgStoreAndInstantiateContract",
+    cosmwasm.wasm.v1.MsgStoreAndInstantiateContract,
+  ],
+  [
+    "/cosmwasm.wasm.v1.MsgRemoveCodeUploadParamsAddresses",
+    cosmwasm.wasm.v1.MsgRemoveCodeUploadParamsAddresses,
+  ],
+  [
+    "/cosmwasm.wasm.v1.MsgAddCodeUploadParamsAddresses",
+    cosmwasm.wasm.v1.MsgAddCodeUploadParamsAddresses,
+  ],
+  [
+    "/cosmwasm.wasm.v1.MsgStoreAndMigrateContract",
+    cosmwasm.wasm.v1.MsgStoreAndMigrateContract,
+  ],
+  [
+    "/cosmwasm.wasm.v1.MsgUpdateContractLabel",
+    cosmwasm.wasm.v1.MsgUpdateContractLabel,
+  ],
 ];
 
 export const createRegistry = (): Registry => {
   const myRegistry = new Registry(defaultRegistryTypes);
 
   // Ixo Iid module
+  // -----------------------------------------------------------------------------
   myRegistry.register(
     "/ixo.iid.v1beta1.MsgCreateIidDocument",
     ixo.iid.v1beta1.MsgCreateIidDocument
@@ -271,6 +392,7 @@ export const createRegistry = (): Registry => {
   );
 
   // Ixo Entity module
+  // -----------------------------------------------------------------------------
   myRegistry.register(
     "/ixo.entity.v1beta1.MsgCreateEntity",
     ixo.entity.v1beta1.MsgCreateEntity
@@ -301,6 +423,7 @@ export const createRegistry = (): Registry => {
   );
 
   // Ixo Bond module
+  // -----------------------------------------------------------------------------
   myRegistry.register(
     "/ixo.bonds.v1beta1.MsgCreateBond",
     ixo.bonds.v1beta1.MsgCreateBond
@@ -334,6 +457,7 @@ export const createRegistry = (): Registry => {
   );
 
   // Ixo Token module
+  // -----------------------------------------------------------------------------
   myRegistry.register(
     "/ixo.token.v1beta1.MsgCreateToken",
     ixo.token.v1beta1.MsgCreateToken
@@ -368,6 +492,7 @@ export const createRegistry = (): Registry => {
   );
 
   // Ixo Claims module
+  // -----------------------------------------------------------------------------
   myRegistry.register(
     "/ixo.claims.v1beta1.MsgCreateCollection",
     ixo.claims.v1beta1.MsgCreateCollection

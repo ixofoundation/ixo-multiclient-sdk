@@ -1,4 +1,4 @@
-import { PageRequest, PageRequestSDKType } from "../../../../cosmos/base/query/v1beta1/pagination";
+import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../../cosmos/base/query/v1beta1/pagination";
 import { PacketId, PacketIdSDKType } from "../../../core/channel/v1/channel";
 import { IdentifiedPacketFees, IdentifiedPacketFeesSDKType } from "./fee";
 import { Coin, CoinSDKType } from "../../../../cosmos/base/v1beta1/coin";
@@ -21,10 +21,13 @@ export interface QueryIncentivizedPacketsRequestSDKType {
 export interface QueryIncentivizedPacketsResponse {
     /** list of identified fees for incentivized packets */
     incentivizedPackets: IdentifiedPacketFees[];
+    /** pagination defines the pagination in the response. */
+    pagination?: PageResponse;
 }
 /** QueryIncentivizedPacketsResponse defines the response type for the IncentivizedPackets rpc */
 export interface QueryIncentivizedPacketsResponseSDKType {
     incentivized_packets: IdentifiedPacketFeesSDKType[];
+    pagination?: PageResponseSDKType;
 }
 /** QueryIncentivizedPacketRequest defines the request type for the IncentivizedPacket rpc */
 export interface QueryIncentivizedPacketRequest {
@@ -73,10 +76,13 @@ export interface QueryIncentivizedPacketsForChannelRequestSDKType {
 export interface QueryIncentivizedPacketsForChannelResponse {
     /** Map of all incentivized_packets */
     incentivizedPackets: IdentifiedPacketFees[];
+    /** pagination defines the pagination in the response. */
+    pagination?: PageResponse;
 }
 /** QueryIncentivizedPacketsResponse defines the response type for the incentivized packets RPC */
 export interface QueryIncentivizedPacketsForChannelResponseSDKType {
     incentivized_packets: IdentifiedPacketFeesSDKType[];
+    pagination?: PageResponseSDKType;
 }
 /** QueryTotalRecvFeesRequest defines the request type for the TotalRecvFees rpc */
 export interface QueryTotalRecvFeesRequest {
@@ -190,10 +196,13 @@ export interface QueryFeeEnabledChannelsRequestSDKType {
 export interface QueryFeeEnabledChannelsResponse {
     /** list of fee enabled channels */
     feeEnabledChannels: FeeEnabledChannel[];
+    /** pagination defines the pagination in the response. */
+    pagination?: PageResponse;
 }
 /** QueryFeeEnabledChannelsResponse defines the response type for the FeeEnabledChannels rpc */
 export interface QueryFeeEnabledChannelsResponseSDKType {
     fee_enabled_channels: FeeEnabledChannelSDKType[];
+    pagination?: PageResponseSDKType;
 }
 /** QueryFeeEnabledChannelRequest defines the request type for the FeeEnabledChannel rpc */
 export interface QueryFeeEnabledChannelRequest {

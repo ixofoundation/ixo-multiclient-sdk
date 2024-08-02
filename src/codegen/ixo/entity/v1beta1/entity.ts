@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
@@ -33,7 +34,7 @@ export interface Entity {
   status: number;
   /** Did of the operator through which the Entity was created */
   relayerNode: string;
-  /** Credentials of the enitity to be verified */
+  /** Credentials of the entity to be verified */
   credentials: string[];
   /** Used as check whether the credentials of entity is verified */
   entityVerified: boolean;

@@ -1,4 +1,5 @@
-import { CommitmentProof, CommitmentProofSDKType } from "../../../../confio/proofs";
+//@ts-nocheck
+import { CommitmentProof, CommitmentProofSDKType } from "../../../../cosmos/ics23/v1/proofs";
 import * as _m0 from "protobufjs/minimal";
 import { isSet, bytesFromBase64, base64FromBytes } from "../../../../helpers";
 /**

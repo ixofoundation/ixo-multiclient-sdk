@@ -1,3 +1,4 @@
+//@ts-nocheck
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../../helpers";
 /** BIP44Params is used as path field in ledger item in Record. */

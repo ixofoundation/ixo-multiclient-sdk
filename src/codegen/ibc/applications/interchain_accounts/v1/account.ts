@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { BaseAccount, BaseAccountSDKType } from "../../../../cosmos/auth/v1beta1/auth";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../../helpers";

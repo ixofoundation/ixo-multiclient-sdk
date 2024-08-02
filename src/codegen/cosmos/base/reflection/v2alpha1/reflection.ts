@@ -1,3 +1,4 @@
+//@ts-nocheck
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../../helpers";
 /** AppDescriptor describes a cosmos-sdk based application */

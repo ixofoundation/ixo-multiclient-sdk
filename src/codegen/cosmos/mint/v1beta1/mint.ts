@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Long, isSet } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /** Minter represents the minting state. */
@@ -12,7 +13,7 @@ export interface MinterSDKType {
   inflation: string;
   annual_provisions: string;
 }
-/** Params holds parameters for the mint module. */
+/** Params defines the parameters for the x/mint module. */
 export interface Params {
   /** type of coin to mint */
   mintDenom: string;
@@ -27,7 +28,7 @@ export interface Params {
   /** expected blocks per year */
   blocksPerYear: Long;
 }
-/** Params holds parameters for the mint module. */
+/** Params defines the parameters for the x/mint module. */
 export interface ParamsSDKType {
   mint_denom: string;
   inflation_rate_change: string;

@@ -3,12 +3,24 @@ import { Any, AnySDKType } from "../../../google/protobuf/any";
 import * as _m0 from "protobufjs/minimal";
 /** QueryEvidenceRequest is the request type for the Query/Evidence RPC method. */
 export interface QueryEvidenceRequest {
-    /** evidence_hash defines the hash of the requested evidence. */
+    /**
+     * evidence_hash defines the hash of the requested evidence.
+     * Deprecated: Use hash, a HEX encoded string, instead.
+     */
+    /** @deprecated */
     evidenceHash: Uint8Array;
+    /**
+     * hash defines the evidence hash of the requested evidence.
+     *
+     * Since: cosmos-sdk 0.47
+     */
+    hash: string;
 }
 /** QueryEvidenceRequest is the request type for the Query/Evidence RPC method. */
 export interface QueryEvidenceRequestSDKType {
+    /** @deprecated */
     evidence_hash: Uint8Array;
+    hash: string;
 }
 /** QueryEvidenceResponse is the response type for the Query/Evidence RPC method. */
 export interface QueryEvidenceResponse {

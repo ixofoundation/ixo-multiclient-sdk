@@ -1,4 +1,7 @@
+//@ts-nocheck
 import { Any, AnySDKType } from "../../../../google/protobuf/any";
+import { Plan, PlanSDKType } from "../../../../cosmos/upgrade/v1beta1/upgrade";
+import { Params, ParamsSDKType } from "./client";
 import * as _m0 from "protobufjs/minimal";
 import { isSet, bytesFromBase64, base64FromBytes } from "../../../../helpers";
 /** MsgCreateClient defines a message to create an IBC client */
@@ -25,23 +28,23 @@ export interface MsgCreateClientResponse {}
 export interface MsgCreateClientResponseSDKType {}
 /**
  * MsgUpdateClient defines an sdk.Msg to update a IBC client state using
- * the given header.
+ * the given client message.
  */
 export interface MsgUpdateClient {
   /** client unique identifier */
   clientId: string;
-  /** header to update the light client */
-  header?: Any;
+  /** client message to update the light client */
+  clientMessage?: Any;
   /** signer address */
   signer: string;
 }
 /**
  * MsgUpdateClient defines an sdk.Msg to update a IBC client state using
- * the given header.
+ * the given client message.
  */
 export interface MsgUpdateClientSDKType {
   client_id: string;
-  header?: AnySDKType;
+  client_message?: AnySDKType;
   signer: string;
 }
 /** MsgUpdateClientResponse defines the Msg/UpdateClient response type. */
@@ -88,7 +91,9 @@ export interface MsgUpgradeClientResponseSDKType {}
 /**
  * MsgSubmitMisbehaviour defines an sdk.Msg type that submits Evidence for
  * light client misbehaviour.
+ * This message has been deprecated. Use MsgUpdateClient instead.
  */
+/** @deprecated */
 export interface MsgSubmitMisbehaviour {
   /** client unique identifier */
   clientId: string;
@@ -100,7 +105,9 @@ export interface MsgSubmitMisbehaviour {
 /**
  * MsgSubmitMisbehaviour defines an sdk.Msg type that submits Evidence for
  * light client misbehaviour.
+ * This message has been deprecated. Use MsgUpdateClient instead.
  */
+/** @deprecated */
 export interface MsgSubmitMisbehaviourSDKType {
   client_id: string;
   misbehaviour?: AnySDKType;
@@ -116,6 +123,75 @@ export interface MsgSubmitMisbehaviourResponse {}
  * type.
  */
 export interface MsgSubmitMisbehaviourResponseSDKType {}
+/** MsgRecoverClient defines the message used to recover a frozen or expired client. */
+export interface MsgRecoverClient {
+  /** the client identifier for the client to be updated if the proposal passes */
+  subjectClientId: string;
+  /**
+   * the substitute client identifier for the client which will replace the subject
+   * client
+   */
+  substituteClientId: string;
+  /** signer address */
+  signer: string;
+}
+/** MsgRecoverClient defines the message used to recover a frozen or expired client. */
+export interface MsgRecoverClientSDKType {
+  subject_client_id: string;
+  substitute_client_id: string;
+  signer: string;
+}
+/** MsgRecoverClientResponse defines the Msg/RecoverClient response type. */
+export interface MsgRecoverClientResponse {}
+/** MsgRecoverClientResponse defines the Msg/RecoverClient response type. */
+export interface MsgRecoverClientResponseSDKType {}
+/** MsgIBCSoftwareUpgrade defines the message used to schedule an upgrade of an IBC client using a v1 governance proposal */
+export interface MsgIBCSoftwareUpgrade {
+  plan?: Plan;
+  /**
+   * An UpgradedClientState must be provided to perform an IBC breaking upgrade.
+   * This will make the chain commit to the correct upgraded (self) client state
+   * before the upgrade occurs, so that connecting chains can verify that the
+   * new upgraded client is valid by verifying a proof on the previous version
+   * of the chain. This will allow IBC connections to persist smoothly across
+   * planned chain upgrades. Correspondingly, the UpgradedClientState field has been
+   * deprecated in the Cosmos SDK to allow for this logic to exist solely in
+   * the 02-client module.
+   */
+  upgradedClientState?: Any;
+  /** signer address */
+  signer: string;
+}
+/** MsgIBCSoftwareUpgrade defines the message used to schedule an upgrade of an IBC client using a v1 governance proposal */
+export interface MsgIBCSoftwareUpgradeSDKType {
+  plan?: PlanSDKType;
+  upgraded_client_state?: AnySDKType;
+  signer: string;
+}
+/** MsgIBCSoftwareUpgradeResponse defines the Msg/IBCSoftwareUpgrade response type. */
+export interface MsgIBCSoftwareUpgradeResponse {}
+/** MsgIBCSoftwareUpgradeResponse defines the Msg/IBCSoftwareUpgrade response type. */
+export interface MsgIBCSoftwareUpgradeResponseSDKType {}
+/** MsgUpdateParams defines the sdk.Msg type to update the client parameters. */
+export interface MsgUpdateParams {
+  /** signer address */
+  signer: string;
+  /**
+   * params defines the client parameters to update.
+   * 
+   * NOTE: All parameters must be supplied.
+   */
+  params?: Params;
+}
+/** MsgUpdateParams defines the sdk.Msg type to update the client parameters. */
+export interface MsgUpdateParamsSDKType {
+  signer: string;
+  params?: ParamsSDKType;
+}
+/** MsgUpdateParamsResponse defines the MsgUpdateParams response type. */
+export interface MsgUpdateParamsResponse {}
+/** MsgUpdateParamsResponse defines the MsgUpdateParams response type. */
+export interface MsgUpdateParamsResponseSDKType {}
 function createBaseMsgCreateClient(): MsgCreateClient {
   return {
     clientState: undefined,
@@ -217,7 +293,7 @@ export const MsgCreateClientResponse = {
 function createBaseMsgUpdateClient(): MsgUpdateClient {
   return {
     clientId: "",
-    header: undefined,
+    clientMessage: undefined,
     signer: ""
   };
 }
@@ -226,8 +302,8 @@ export const MsgUpdateClient = {
     if (message.clientId !== "") {
       writer.uint32(10).string(message.clientId);
     }
-    if (message.header !== undefined) {
-      Any.encode(message.header, writer.uint32(18).fork()).ldelim();
+    if (message.clientMessage !== undefined) {
+      Any.encode(message.clientMessage, writer.uint32(18).fork()).ldelim();
     }
     if (message.signer !== "") {
       writer.uint32(26).string(message.signer);
@@ -245,7 +321,7 @@ export const MsgUpdateClient = {
           message.clientId = reader.string();
           break;
         case 2:
-          message.header = Any.decode(reader, reader.uint32());
+          message.clientMessage = Any.decode(reader, reader.uint32());
           break;
         case 3:
           message.signer = reader.string();
@@ -260,21 +336,21 @@ export const MsgUpdateClient = {
   fromJSON(object: any): MsgUpdateClient {
     return {
       clientId: isSet(object.clientId) ? String(object.clientId) : "",
-      header: isSet(object.header) ? Any.fromJSON(object.header) : undefined,
+      clientMessage: isSet(object.clientMessage) ? Any.fromJSON(object.clientMessage) : undefined,
       signer: isSet(object.signer) ? String(object.signer) : ""
     };
   },
   toJSON(message: MsgUpdateClient): unknown {
     const obj: any = {};
     message.clientId !== undefined && (obj.clientId = message.clientId);
-    message.header !== undefined && (obj.header = message.header ? Any.toJSON(message.header) : undefined);
+    message.clientMessage !== undefined && (obj.clientMessage = message.clientMessage ? Any.toJSON(message.clientMessage) : undefined);
     message.signer !== undefined && (obj.signer = message.signer);
     return obj;
   },
   fromPartial(object: Partial<MsgUpdateClient>): MsgUpdateClient {
     const message = createBaseMsgUpdateClient();
     message.clientId = object.clientId ?? "";
-    message.header = object.header !== undefined && object.header !== null ? Any.fromPartial(object.header) : undefined;
+    message.clientMessage = object.clientMessage !== undefined && object.clientMessage !== null ? Any.fromPartial(object.clientMessage) : undefined;
     message.signer = object.signer ?? "";
     return message;
   }
@@ -535,6 +611,290 @@ export const MsgSubmitMisbehaviourResponse = {
   },
   fromPartial(_: Partial<MsgSubmitMisbehaviourResponse>): MsgSubmitMisbehaviourResponse {
     const message = createBaseMsgSubmitMisbehaviourResponse();
+    return message;
+  }
+};
+function createBaseMsgRecoverClient(): MsgRecoverClient {
+  return {
+    subjectClientId: "",
+    substituteClientId: "",
+    signer: ""
+  };
+}
+export const MsgRecoverClient = {
+  encode(message: MsgRecoverClient, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.subjectClientId !== "") {
+      writer.uint32(10).string(message.subjectClientId);
+    }
+    if (message.substituteClientId !== "") {
+      writer.uint32(18).string(message.substituteClientId);
+    }
+    if (message.signer !== "") {
+      writer.uint32(26).string(message.signer);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRecoverClient {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRecoverClient();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.subjectClientId = reader.string();
+          break;
+        case 2:
+          message.substituteClientId = reader.string();
+          break;
+        case 3:
+          message.signer = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgRecoverClient {
+    return {
+      subjectClientId: isSet(object.subjectClientId) ? String(object.subjectClientId) : "",
+      substituteClientId: isSet(object.substituteClientId) ? String(object.substituteClientId) : "",
+      signer: isSet(object.signer) ? String(object.signer) : ""
+    };
+  },
+  toJSON(message: MsgRecoverClient): unknown {
+    const obj: any = {};
+    message.subjectClientId !== undefined && (obj.subjectClientId = message.subjectClientId);
+    message.substituteClientId !== undefined && (obj.substituteClientId = message.substituteClientId);
+    message.signer !== undefined && (obj.signer = message.signer);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgRecoverClient>): MsgRecoverClient {
+    const message = createBaseMsgRecoverClient();
+    message.subjectClientId = object.subjectClientId ?? "";
+    message.substituteClientId = object.substituteClientId ?? "";
+    message.signer = object.signer ?? "";
+    return message;
+  }
+};
+function createBaseMsgRecoverClientResponse(): MsgRecoverClientResponse {
+  return {};
+}
+export const MsgRecoverClientResponse = {
+  encode(_: MsgRecoverClientResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRecoverClientResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRecoverClientResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgRecoverClientResponse {
+    return {};
+  },
+  toJSON(_: MsgRecoverClientResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgRecoverClientResponse>): MsgRecoverClientResponse {
+    const message = createBaseMsgRecoverClientResponse();
+    return message;
+  }
+};
+function createBaseMsgIBCSoftwareUpgrade(): MsgIBCSoftwareUpgrade {
+  return {
+    plan: undefined,
+    upgradedClientState: undefined,
+    signer: ""
+  };
+}
+export const MsgIBCSoftwareUpgrade = {
+  encode(message: MsgIBCSoftwareUpgrade, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.plan !== undefined) {
+      Plan.encode(message.plan, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.upgradedClientState !== undefined) {
+      Any.encode(message.upgradedClientState, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.signer !== "") {
+      writer.uint32(26).string(message.signer);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgIBCSoftwareUpgrade {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgIBCSoftwareUpgrade();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.plan = Plan.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.upgradedClientState = Any.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.signer = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgIBCSoftwareUpgrade {
+    return {
+      plan: isSet(object.plan) ? Plan.fromJSON(object.plan) : undefined,
+      upgradedClientState: isSet(object.upgradedClientState) ? Any.fromJSON(object.upgradedClientState) : undefined,
+      signer: isSet(object.signer) ? String(object.signer) : ""
+    };
+  },
+  toJSON(message: MsgIBCSoftwareUpgrade): unknown {
+    const obj: any = {};
+    message.plan !== undefined && (obj.plan = message.plan ? Plan.toJSON(message.plan) : undefined);
+    message.upgradedClientState !== undefined && (obj.upgradedClientState = message.upgradedClientState ? Any.toJSON(message.upgradedClientState) : undefined);
+    message.signer !== undefined && (obj.signer = message.signer);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgIBCSoftwareUpgrade>): MsgIBCSoftwareUpgrade {
+    const message = createBaseMsgIBCSoftwareUpgrade();
+    message.plan = object.plan !== undefined && object.plan !== null ? Plan.fromPartial(object.plan) : undefined;
+    message.upgradedClientState = object.upgradedClientState !== undefined && object.upgradedClientState !== null ? Any.fromPartial(object.upgradedClientState) : undefined;
+    message.signer = object.signer ?? "";
+    return message;
+  }
+};
+function createBaseMsgIBCSoftwareUpgradeResponse(): MsgIBCSoftwareUpgradeResponse {
+  return {};
+}
+export const MsgIBCSoftwareUpgradeResponse = {
+  encode(_: MsgIBCSoftwareUpgradeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgIBCSoftwareUpgradeResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgIBCSoftwareUpgradeResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgIBCSoftwareUpgradeResponse {
+    return {};
+  },
+  toJSON(_: MsgIBCSoftwareUpgradeResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgIBCSoftwareUpgradeResponse>): MsgIBCSoftwareUpgradeResponse {
+    const message = createBaseMsgIBCSoftwareUpgradeResponse();
+    return message;
+  }
+};
+function createBaseMsgUpdateParams(): MsgUpdateParams {
+  return {
+    signer: "",
+    params: undefined
+  };
+}
+export const MsgUpdateParams = {
+  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.signer !== "") {
+      writer.uint32(10).string(message.signer);
+    }
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.signer = reader.string();
+          break;
+        case 2:
+          message.params = Params.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUpdateParams {
+    return {
+      signer: isSet(object.signer) ? String(object.signer) : "",
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined
+    };
+  },
+  toJSON(message: MsgUpdateParams): unknown {
+    const obj: any = {};
+    message.signer !== undefined && (obj.signer = message.signer);
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams {
+    const message = createBaseMsgUpdateParams();
+    message.signer = object.signer ?? "";
+    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    return message;
+  }
+};
+function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
+  return {};
+}
+export const MsgUpdateParamsResponse = {
+  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgUpdateParamsResponse {
+    return {};
+  },
+  toJSON(_: MsgUpdateParamsResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgUpdateParamsResponse>): MsgUpdateParamsResponse {
+    const message = createBaseMsgUpdateParamsResponse();
     return message;
   }
 };

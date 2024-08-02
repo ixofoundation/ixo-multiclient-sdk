@@ -2,6 +2,7 @@ import csvtojsonV2 from "csvtojson/v2";
 import { AsyncParser } from "@json2csv/node";
 import { cosmos, createRegistry, utils } from "../../src";
 import gqlQuery, {
+  chunkArray,
   getUser,
   queryClient,
   saveFileToPath,
@@ -19,6 +20,7 @@ import { fromTimestamp } from "../../src/codegen/helpers";
 import axios from "axios";
 import { claims_mainnet, claims_testnet } from "../constants/claims";
 import { EcsCredentialsWorkerUrl } from "../setup/constants";
+import Long from "long";
 
 export const quickQueries = () =>
   describe("Quick queries to see states", () => {
@@ -257,7 +259,7 @@ export const quickQueries = () =>
 
     // test("Query proposal by id", async () => {
     //   const res = await queryClient.cosmos.gov.v1beta1.proposal({
-    //     proposalId: Long.fromNumber(69),
+    //     proposalId: Long.fromNumber(12),
     //   });
     //   console.log(res.proposal);
     //   expect(res).toBeTruthy();
@@ -279,6 +281,7 @@ export const quickQueries = () =>
     //     .address;
     //   const res = await queryClient.cosmos.bank.v1beta1.allBalances({
     //     address,
+    //     resolveDenom: false,
     //   });
     //   console.log(res.balances);
     //   expect(res).toBeTruthy();
@@ -837,6 +840,141 @@ export const quickQueries = () =>
     //   saveFileToPath(["testnet", "projectsWorked.csv"], csv);
 
     //   expect(true).toBeTruthy();
+    // });
+
+    // test("Gather claims details", async () => {
+    //   // queries claims count and sort by evaluation date, for financing accounting
+    //   // Genesis: Coll 1 (FP), Coll 3 (CER), Coll 7 (CER)
+    //   // Legacy: Coll 5 (FP), Coll 6 (CER)
+    //   const claimCollId = "6";
+    //   // "FuelPurchase" | "CER"
+    //   let claimType = "CER";
+    //   // "2023-01-01T0:0:0" for all claims
+    //   const fromDate = "2024-06-04T0:0:0";
+
+    //   const includeTokensAmount = claimType === "CER";
+
+    //   // bafkreia22vjjxkhztnkztanplbj63kcsnzekqimrihd6c5afd3ddnpknbe
+    //   // bafkreibi7aglnyb3d5ort5wpslfe55ufvya2dqsas7p2gkpk2b4tuxzky4
+    //   const claimsQuery = `query Query {
+    //     claims(
+    //       filter: {collectionId: {equalTo: "${claimCollId}"}, schemaType: {equalTo: "${claimType}"}, evaluationByClaimIdExists: true, evaluationByClaimId: {status: {equalTo: 1}, evaluationDate: {greaterThanOrEqualTo: "${fromDate}"}}}
+    //     ) {
+    //       totalCount
+    //       nodes {
+    //         evaluationByClaimId {
+    //           evaluationDate
+    //           verificationProof
+    //         }
+    //       }
+    //     }
+    //   }`;
+    //   let claims: any = await gqlQuery<{
+    //     data: {
+    //       claims: {
+    //         totalCount: number;
+    //         nodes: {
+    //           evaluationByClaimId: {
+    //             evaluationDate: string;
+    //             verificationProof: string;
+    //           };
+    //         }[];
+    //       };
+    //     };
+    //   }>("https://blocksync-graphql.ixo.earth", claimsQuery);
+
+    //   claims = claims
+    //     .data!.data.claims.nodes.map((n) => ({
+    //       evaluationDate: new Date(n.evaluationByClaimId.evaluationDate),
+    //       verificationProof: n.evaluationByClaimId.verificationProof,
+    //     }))
+    //     .filter(Boolean);
+
+    //   // group claims by date same day
+    //   const groupedClaims = claims.reduce((acc, c) => {
+    //     const date = (c.evaluationDate as Date).toDateString();
+    //     if (!acc[date]) acc[date] = [c.verificationProof];
+    //     else acc[date] = [...acc[date], c.verificationProof];
+    //     return acc;
+    //   }, {});
+
+    //   const tokenAmountsPerDate = {};
+    //   if (includeTokensAmount) {
+    //     // for each grouped claims fetch the amount of tokens minted from it, aka from is empty
+    //     for (const date of Object.keys(groupedClaims)) {
+    //       const ids = groupedClaims[date];
+
+    //       // chunk query for all claims in the same day
+    //       let totalAmount = 0;
+    //       for (const idsChunk of chunkArray(ids, 300)) {
+    //         const tokensQuery = `query Query {
+    //         tokenTransactions(
+    //           filter: {token: {index: {in: [${idsChunk.map(
+    //             (i) => `"${i}"`
+    //           )}]}}, from: {equalTo: ""}}
+    //         ) {
+    //           aggregates {
+    //             sum {
+    //               amount
+    //             }
+    //           }
+    //         }
+    //       }`;
+    //         const tokensAmount = await gqlQuery<{
+    //           data: {
+    //             tokenTransactions: {
+    //               aggregates: {
+    //                 sum: {
+    //                   amount: string;
+    //                 };
+    //               };
+    //             };
+    //           };
+    //         }>("https://blocksync-graphql.ixo.earth", tokensQuery);
+    //         if (
+    //           tokensAmount.data?.data.tokenTransactions.aggregates.sum.amount ==
+    //           undefined
+    //         ) {
+    //           console.error("No tokens found for ids: ", idsChunk);
+    //         }
+    //         totalAmount += Number(
+    //           tokensAmount.data?.data.tokenTransactions.aggregates.sum.amount ||
+    //             0
+    //         );
+    //       }
+    //       tokenAmountsPerDate[date] = totalAmount;
+    //     }
+    //   }
+
+    //   // save all CER Claims to file
+    //   saveFileToPath(
+    //     ["documents", "emerging", "claims_analysis.json"],
+    //     JSON.stringify(
+    //       {
+    //         totalSuccessClaims: claims.length,
+    //         totalTokensMinted: Object.values(tokenAmountsPerDate).reduce(
+    //           (acc: number, a: any) => acc + a,
+    //           0
+    //         ),
+    //         groupedClaimsLengths: Object.keys(groupedClaims).reduce(
+    //           (acc, g) => {
+    //             acc[g] = includeTokensAmount
+    //               ? {
+    //                   count: groupedClaims[g].length,
+    //                   tokens: tokenAmountsPerDate[g],
+    //                 }
+    //               : groupedClaims[g].length;
+    //             return acc;
+    //           },
+    //           {}
+    //         ),
+    //       },
+    //       null,
+    //       2
+    //     )
+    //   );
+
+    //   expect(claims).toBeTruthy();
     // });
   });
 

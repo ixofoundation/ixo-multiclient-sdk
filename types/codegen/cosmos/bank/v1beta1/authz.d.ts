@@ -8,6 +8,13 @@ import * as _m0 from "protobufjs/minimal";
  */
 export interface SendAuthorization {
     spendLimit: Coin[];
+    /**
+     * allow_list specifies an optional list of addresses to whom the grantee can send tokens on behalf of the
+     * granter. If omitted, any recipient is allowed.
+     *
+     * Since: cosmos-sdk 0.47
+     */
+    allowList: string[];
 }
 /**
  * SendAuthorization allows the grantee to spend up to spend_limit coins from
@@ -17,6 +24,7 @@ export interface SendAuthorization {
  */
 export interface SendAuthorizationSDKType {
     spend_limit: CoinSDKType[];
+    allow_list: string[];
 }
 export declare const SendAuthorization: {
     encode(message: SendAuthorization, writer?: _m0.Writer): _m0.Writer;

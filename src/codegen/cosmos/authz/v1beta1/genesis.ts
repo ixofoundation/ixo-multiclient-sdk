@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { GrantAuthorization, GrantAuthorizationSDKType } from "./authz";
 import * as _m0 from "protobufjs/minimal";
 /** GenesisState defines the authz module's genesis state. */
