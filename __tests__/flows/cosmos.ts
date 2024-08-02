@@ -20,7 +20,7 @@ export const bankBasic = () =>
   describe("Testing the cosmos bank module", () => {
     testMsg("/cosmos.bank.v1beta1.MsgSend", async () => {
       const res = await Cosmos.BankSendTrx(
-        100,
+        undefined,
         WalletUsers.tester,
         WalletUsers.alice,
         "secp",
@@ -29,17 +29,17 @@ export const bankBasic = () =>
       );
       return res;
     });
-    // testMsg("/cosmos.bank.v1beta1.MsgSend", async () => {
-    //   const res = await Cosmos.BankSendTrx(
-    //     10000,
-    //     WalletUsers.alice,
-    //     WalletUsers.alice,
-    //     "ed",
-    //     "secp"
-    //     // "ixo1kaluffrp0ncy3dlrerla3nd8v6zxwzmega3v7g"
-    //   );
-    //   return res;
-    // });
+    testMsg("/cosmos.bank.v1beta1.MsgSend", async () => {
+      const res = await Cosmos.BankSendTrx(
+        10000,
+        WalletUsers.alice,
+        WalletUsers.alice,
+        "ed",
+        "secp"
+        // "ixo1kaluffrp0ncy3dlrerla3nd8v6zxwzmega3v7g"
+      );
+      return res;
+    });
   });
 
 export const textProposalBasic = () =>
