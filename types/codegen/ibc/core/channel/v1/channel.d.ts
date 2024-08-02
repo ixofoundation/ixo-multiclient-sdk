@@ -3,7 +3,7 @@ import { Long } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /**
  * State defines if a channel is in one of the following states:
- * CLOSED, INIT, TRYOPEN, OPEN or UNINITIALIZED.
+ * CLOSED, INIT, TRYOPEN, OPEN, FLUSHING, FLUSHCOMPLETE or UNINITIALIZED.
  */
 export declare enum State {
     /** STATE_UNINITIALIZED_UNSPECIFIED - Default State */
@@ -22,6 +22,10 @@ export declare enum State {
      * packets.
      */
     STATE_CLOSED = 4,
+    /** STATE_FLUSHING - A channel has just accepted the upgrade handshake attempt and is flushing in-flight packets. */
+    STATE_FLUSHING = 5,
+    /** STATE_FLUSHCOMPLETE - A channel has just completed flushing any in-flight packets. */
+    STATE_FLUSHCOMPLETE = 6,
     UNRECOGNIZED = -1
 }
 export declare const StateSDKType: typeof State;
@@ -62,6 +66,11 @@ export interface Channel {
     connectionHops: string[];
     /** opaque channel version, which is agreed upon during the handshake */
     version: string;
+    /**
+     * upgrade sequence indicates the latest upgrade attempt performed by this channel
+     * the value of 0 indicates the channel has never been upgraded
+     */
+    upgradeSequence: Long;
 }
 /**
  * Channel defines pipeline for exactly-once packet delivery between specific
@@ -74,6 +83,7 @@ export interface ChannelSDKType {
     counterparty?: CounterpartySDKType;
     connection_hops: string[];
     version: string;
+    upgrade_sequence: Long;
 }
 /**
  * IdentifiedChannel defines a channel with additional port and channel
@@ -97,6 +107,11 @@ export interface IdentifiedChannel {
     portId: string;
     /** channel identifier */
     channelId: string;
+    /**
+     * upgrade sequence indicates the latest upgrade attempt performed by this channel
+     * the value of 0 indicates the channel has never been upgraded
+     */
+    upgradeSequence: Long;
 }
 /**
  * IdentifiedChannel defines a channel with additional port and channel
@@ -110,6 +125,7 @@ export interface IdentifiedChannelSDKType {
     version: string;
     port_id: string;
     channel_id: string;
+    upgrade_sequence: Long;
 }
 /** Counterparty defines a channel end counterparty */
 export interface Counterparty {
@@ -234,6 +250,35 @@ export interface AcknowledgementSDKType {
     result?: Uint8Array;
     error?: string;
 }
+/**
+ * Timeout defines an execution deadline structure for 04-channel handlers.
+ * This includes packet lifecycle handlers as well as the upgrade handshake handlers.
+ * A valid Timeout contains either one or both of a timestamp and block height (sequence).
+ */
+export interface Timeout {
+    /** block height after which the packet or upgrade times out */
+    height?: Height;
+    /** block timestamp (in nanoseconds) after which the packet or upgrade times out */
+    timestamp: Long;
+}
+/**
+ * Timeout defines an execution deadline structure for 04-channel handlers.
+ * This includes packet lifecycle handlers as well as the upgrade handshake handlers.
+ * A valid Timeout contains either one or both of a timestamp and block height (sequence).
+ */
+export interface TimeoutSDKType {
+    height?: HeightSDKType;
+    timestamp: Long;
+}
+/** Params defines the set of IBC channel parameters. */
+export interface Params {
+    /** the relative timeout after which channel upgrades will time out. */
+    upgradeTimeout?: Timeout;
+}
+/** Params defines the set of IBC channel parameters. */
+export interface ParamsSDKType {
+    upgrade_timeout?: TimeoutSDKType;
+}
 export declare const Channel: {
     encode(message: Channel, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): Channel;
@@ -282,4 +327,18 @@ export declare const Acknowledgement: {
     fromJSON(object: any): Acknowledgement;
     toJSON(message: Acknowledgement): unknown;
     fromPartial(object: Partial<Acknowledgement>): Acknowledgement;
+};
+export declare const Timeout: {
+    encode(message: Timeout, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): Timeout;
+    fromJSON(object: any): Timeout;
+    toJSON(message: Timeout): unknown;
+    fromPartial(object: Partial<Timeout>): Timeout;
+};
+export declare const Params: {
+    encode(message: Params, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): Params;
+    fromJSON(object: any): Params;
+    toJSON(message: Params): unknown;
+    fromPartial(object: Partial<Params>): Params;
 };

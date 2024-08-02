@@ -1,5 +1,6 @@
 import { Any, AnySDKType } from "../../../../google/protobuf/any";
 import { Event, EventSDKType } from "../../../../tendermint/abci/types";
+import { Block, BlockSDKType } from "../../../../tendermint/types/block";
 import { Long } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /**
@@ -41,7 +42,7 @@ export interface TxResponse {
     /**
      * Events defines all the events emitted by processing a transaction. Note,
      * these events include those emitted by processing all the messages and those
-     * emitted from the ante handler. Whereas Logs contains the events, with
+     * emitted from the ante. Whereas Logs contains the events, with
      * additional metadata, emitted only by processing the messages.
      *
      * Since: cosmos-sdk 0.42.11, 0.44.5, 0.45
@@ -241,6 +242,30 @@ export interface SearchTxsResultSDKType {
     limit: Long;
     txs: TxResponseSDKType[];
 }
+/** SearchBlocksResult defines a structure for querying blocks pageable */
+export interface SearchBlocksResult {
+    /** Count of all blocks */
+    totalCount: Long;
+    /** Count of blocks in current page */
+    count: Long;
+    /** Index of current page, start from 1 */
+    pageNumber: Long;
+    /** Count of total pages */
+    pageTotal: Long;
+    /** Max count blocks per page */
+    limit: Long;
+    /** List of blocks in current page */
+    blocks: Block[];
+}
+/** SearchBlocksResult defines a structure for querying blocks pageable */
+export interface SearchBlocksResultSDKType {
+    total_count: Long;
+    count: Long;
+    page_number: Long;
+    page_total: Long;
+    limit: Long;
+    blocks: BlockSDKType[];
+}
 export declare const TxResponse: {
     encode(message: TxResponse, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): TxResponse;
@@ -310,4 +335,11 @@ export declare const SearchTxsResult: {
     fromJSON(object: any): SearchTxsResult;
     toJSON(message: SearchTxsResult): unknown;
     fromPartial(object: Partial<SearchTxsResult>): SearchTxsResult;
+};
+export declare const SearchBlocksResult: {
+    encode(message: SearchBlocksResult, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): SearchBlocksResult;
+    fromJSON(object: any): SearchBlocksResult;
+    toJSON(message: SearchBlocksResult): unknown;
+    fromPartial(object: Partial<SearchBlocksResult>): SearchBlocksResult;
 };

@@ -115,10 +115,8 @@ export interface SignDocDirectAux {
     accountNumber: Long;
     /** sequence is the sequence number of the signing account. */
     sequence: Long;
-    /**
-     * Tip is the optional tip used for meta-transactions. It should be left
-     * empty if the signer is not the tipper for this transaction.
-     */
+    /** tips have been depreacted and should not be used */
+    /** @deprecated */
     tip?: Tip;
 }
 /**
@@ -133,6 +131,7 @@ export interface SignDocDirectAuxSDKType {
     chain_id: string;
     account_number: Long;
     sequence: Long;
+    /** @deprecated */
     tip?: TipSDKType;
 }
 /** TxBody is the body of a transaction that all signers sign over. */
@@ -199,10 +198,14 @@ export interface AuthInfo {
      */
     fee?: Fee;
     /**
-     * Tip is the optional tip used for meta-transactions.
+     * Tip is the optional tip used for transactions fees paid in another denom.
+     *
+     * This field is ignored if the chain didn't enable tips, i.e. didn't add the
+     * `TipDecorator` in its posthandler.
      *
      * Since: cosmos-sdk 0.46
      */
+    /** @deprecated */
     tip?: Tip;
 }
 /**
@@ -212,6 +215,7 @@ export interface AuthInfo {
 export interface AuthInfoSDKType {
     signer_infos: SignerInfoSDKType[];
     fee?: FeeSDKType;
+    /** @deprecated */
     tip?: TipSDKType;
 }
 /**
@@ -332,6 +336,7 @@ export interface FeeSDKType {
  *
  * Since: cosmos-sdk 0.46
  */
+/** @deprecated */
 export interface Tip {
     /** amount is the amount of the tip */
     amount: Coin[];
@@ -343,6 +348,7 @@ export interface Tip {
  *
  * Since: cosmos-sdk 0.46
  */
+/** @deprecated */
 export interface TipSDKType {
     amount: CoinSDKType[];
     tipper: string;
@@ -363,12 +369,12 @@ export interface AuxSignerData {
      */
     address: string;
     /**
-     * sign_doc is the SIGN_MOD_DIRECT_AUX sign doc that the auxiliary signer
+     * sign_doc is the SIGN_MODE_DIRECT_AUX sign doc that the auxiliary signer
      * signs. Note: we use the same sign doc even if we're signing with
      * LEGACY_AMINO_JSON.
      */
     signDoc?: SignDocDirectAux;
-    /** mode is the signing mode of the single signer */
+    /** mode is the signing mode of the single signer. */
     mode: SignMode;
     /** sig is the signature of the sign doc. */
     sig: Uint8Array;

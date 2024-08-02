@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { MerklePrefix, MerklePrefixSDKType } from "../../commitment/v1/commitment";
 import { Long, isSet } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";

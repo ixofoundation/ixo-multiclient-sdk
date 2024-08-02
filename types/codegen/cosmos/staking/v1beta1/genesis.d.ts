@@ -3,7 +3,7 @@ import { Long } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /** GenesisState defines the staking module's genesis state. */
 export interface GenesisState {
-    /** params defines all the paramaters of related to deposit. */
+    /** params defines all the parameters of related to deposit. */
     params?: Params;
     /**
      * last_total_power tracks the total amounts of bonded tokens recorded during
@@ -15,7 +15,7 @@ export interface GenesisState {
      * of the last-block's bonded validators.
      */
     lastValidatorPowers: LastValidatorPower[];
-    /** delegations defines the validator set at genesis. */
+    /** validators defines the validator set at genesis. */
     validators: Validator[];
     /** delegations defines the delegations active at genesis. */
     delegations: Delegation[];
@@ -23,6 +23,7 @@ export interface GenesisState {
     unbondingDelegations: UnbondingDelegation[];
     /** redelegations defines the redelegations active at genesis. */
     redelegations: Redelegation[];
+    /** exported defines a bool to identify whether the chain dealing with exported or initialized genesis. */
     exported: boolean;
 }
 /** GenesisState defines the staking module's genesis state. */

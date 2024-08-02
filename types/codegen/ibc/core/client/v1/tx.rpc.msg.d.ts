@@ -1,5 +1,5 @@
 import { Rpc } from "../../../../helpers";
-import { MsgCreateClient, MsgCreateClientResponse, MsgUpdateClient, MsgUpdateClientResponse, MsgUpgradeClient, MsgUpgradeClientResponse, MsgSubmitMisbehaviour, MsgSubmitMisbehaviourResponse } from "./tx";
+import { MsgCreateClient, MsgCreateClientResponse, MsgUpdateClient, MsgUpdateClientResponse, MsgUpgradeClient, MsgUpgradeClientResponse, MsgSubmitMisbehaviour, MsgSubmitMisbehaviourResponse, MsgRecoverClient, MsgRecoverClientResponse, MsgIBCSoftwareUpgrade, MsgIBCSoftwareUpgradeResponse, MsgUpdateParams, MsgUpdateParamsResponse } from "./tx";
 /** Msg defines the ibc/client Msg service. */
 export interface Msg {
     /** CreateClient defines a rpc handler method for MsgCreateClient. */
@@ -10,6 +10,12 @@ export interface Msg {
     upgradeClient(request: MsgUpgradeClient): Promise<MsgUpgradeClientResponse>;
     /** SubmitMisbehaviour defines a rpc handler method for MsgSubmitMisbehaviour. */
     submitMisbehaviour(request: MsgSubmitMisbehaviour): Promise<MsgSubmitMisbehaviourResponse>;
+    /** RecoverClient defines a rpc handler method for MsgRecoverClient. */
+    recoverClient(request: MsgRecoverClient): Promise<MsgRecoverClientResponse>;
+    /** IBCSoftwareUpgrade defines a rpc handler method for MsgIBCSoftwareUpgrade. */
+    iBCSoftwareUpgrade(request: MsgIBCSoftwareUpgrade): Promise<MsgIBCSoftwareUpgradeResponse>;
+    /** UpdateClientParams defines a rpc handler method for MsgUpdateParams. */
+    updateClientParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
 }
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
@@ -18,4 +24,7 @@ export declare class MsgClientImpl implements Msg {
     updateClient(request: MsgUpdateClient): Promise<MsgUpdateClientResponse>;
     upgradeClient(request: MsgUpgradeClient): Promise<MsgUpgradeClientResponse>;
     submitMisbehaviour(request: MsgSubmitMisbehaviour): Promise<MsgSubmitMisbehaviourResponse>;
+    recoverClient(request: MsgRecoverClient): Promise<MsgRecoverClientResponse>;
+    iBCSoftwareUpgrade(request: MsgIBCSoftwareUpgrade): Promise<MsgIBCSoftwareUpgradeResponse>;
+    updateClientParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
 }

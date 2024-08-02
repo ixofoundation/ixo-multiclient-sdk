@@ -1,6 +1,6 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { Input, InputSDKType, Output, OutputSDKType } from "./cosmos";
+import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
 import { PaymentType, Contract1155Payment, Contract1155PaymentSDKType } from "./claims";
 import { Long } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";

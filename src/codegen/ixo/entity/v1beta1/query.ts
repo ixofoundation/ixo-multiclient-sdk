@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
 import { Params, ParamsSDKType, Entity, EntitySDKType } from "./entity";
 import { IidDocument, IidDocumentSDKType } from "../../iid/v1beta1/iid";

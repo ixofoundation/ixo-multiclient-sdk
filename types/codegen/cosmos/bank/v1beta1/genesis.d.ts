@@ -1,9 +1,9 @@
-import { Params, ParamsSDKType, Metadata, MetadataSDKType } from "./bank";
+import { Params, ParamsSDKType, Metadata, MetadataSDKType, SendEnabled, SendEnabledSDKType } from "./bank";
 import { Coin, CoinSDKType } from "../../base/v1beta1/coin";
 import * as _m0 from "protobufjs/minimal";
 /** GenesisState defines the bank module's genesis state. */
 export interface GenesisState {
-    /** params defines all the paramaters of the module. */
+    /** params defines all the parameters of the module. */
     params?: Params;
     /** balances is an array containing the balances of all the accounts. */
     balances: Balance[];
@@ -12,8 +12,14 @@ export interface GenesisState {
      * balances. Otherwise, it will be used to validate that the sum of the balances equals this amount.
      */
     supply: Coin[];
-    /** denom_metadata defines the metadata of the differents coins. */
+    /** denom_metadata defines the metadata of the different coins. */
     denomMetadata: Metadata[];
+    /**
+     * send_enabled defines the denoms where send is enabled or disabled.
+     *
+     * Since: cosmos-sdk 0.47
+     */
+    sendEnabled: SendEnabled[];
 }
 /** GenesisState defines the bank module's genesis state. */
 export interface GenesisStateSDKType {
@@ -21,6 +27,7 @@ export interface GenesisStateSDKType {
     balances: BalanceSDKType[];
     supply: CoinSDKType[];
     denom_metadata: MetadataSDKType[];
+    send_enabled: SendEnabledSDKType[];
 }
 /**
  * Balance defines an account address and balance pair used in the bank module's

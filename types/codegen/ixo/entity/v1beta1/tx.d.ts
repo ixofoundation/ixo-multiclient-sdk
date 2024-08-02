@@ -1,7 +1,7 @@
 import { Context, ContextSDKType, Service, ServiceSDKType, AccordedRight, AccordedRightSDKType, LinkedResource, LinkedResourceSDKType, LinkedEntity, LinkedEntitySDKType, LinkedClaim, LinkedClaimSDKType } from "../../iid/v1beta1/types";
 import { Verification, VerificationSDKType } from "../../iid/v1beta1/tx";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
-import { Grant, GrantSDKType } from "./cosmos";
+import { Grant, GrantSDKType } from "../../../cosmos/authz/v1beta1/authz";
 import * as _m0 from "protobufjs/minimal";
 export interface MsgCreateEntity {
     /** An Entity Type as defined by the implementer */

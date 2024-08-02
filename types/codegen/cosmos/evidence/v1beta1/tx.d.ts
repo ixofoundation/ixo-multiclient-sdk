@@ -5,7 +5,9 @@ import * as _m0 from "protobufjs/minimal";
  * Evidence of misbehavior such as equivocation or counterfactual signing.
  */
 export interface MsgSubmitEvidence {
+    /** submitter is the signer account address of evidence. */
     submitter: string;
+    /** evidence defines the evidence of misbehavior. */
     evidence?: Any;
 }
 /**

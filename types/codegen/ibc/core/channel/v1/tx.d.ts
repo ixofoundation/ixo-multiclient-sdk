@@ -1,5 +1,6 @@
-import { Channel, ChannelSDKType, Packet, PacketSDKType } from "./channel";
-import { Height, HeightSDKType } from "../../client/v1/client";
+import { Channel, ChannelSDKType, Packet, PacketSDKType, State } from "./channel";
+import { Height, HeightSDKType, Params, ParamsSDKType } from "../../client/v1/client";
+import { UpgradeFields, UpgradeFieldsSDKType, Upgrade, UpgradeSDKType, ErrorReceipt, ErrorReceiptSDKType } from "./upgrade";
 import { Long } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /** ResponseResultType defines the possible outcomes of the execution of a message */
@@ -10,6 +11,8 @@ export declare enum ResponseResultType {
     RESPONSE_RESULT_TYPE_NOOP = 1,
     /** RESPONSE_RESULT_TYPE_SUCCESS - The message was executed successfully */
     RESPONSE_RESULT_TYPE_SUCCESS = 2,
+    /** RESPONSE_RESULT_TYPE_FAILURE - The message was executed unsuccessfully */
+    RESPONSE_RESULT_TYPE_FAILURE = 3,
     UNRECOGNIZED = -1
 }
 export declare const ResponseResultTypeSDKType: typeof ResponseResultType;
@@ -78,14 +81,19 @@ export interface MsgChannelOpenTrySDKType {
 /** MsgChannelOpenTryResponse defines the Msg/ChannelOpenTry response type. */
 export interface MsgChannelOpenTryResponse {
     version: string;
+    channelId: string;
 }
 /** MsgChannelOpenTryResponse defines the Msg/ChannelOpenTry response type. */
 export interface MsgChannelOpenTryResponseSDKType {
     version: string;
+    channel_id: string;
 }
 /**
  * MsgChannelOpenAck defines a msg sent by a Relayer to Chain A to acknowledge
  * the change of channel state to TRYOPEN on Chain B.
+ * WARNING: a channel upgrade MUST NOT initialize an upgrade for this channel
+ * in the same block as executing this message otherwise the counterparty will
+ * be incapable of opening.
  */
 export interface MsgChannelOpenAck {
     portId: string;
@@ -99,6 +107,9 @@ export interface MsgChannelOpenAck {
 /**
  * MsgChannelOpenAck defines a msg sent by a Relayer to Chain A to acknowledge
  * the change of channel state to TRYOPEN on Chain B.
+ * WARNING: a channel upgrade MUST NOT initialize an upgrade for this channel
+ * in the same block as executing this message otherwise the counterparty will
+ * be incapable of opening.
  */
 export interface MsgChannelOpenAckSDKType {
     port_id: string;
@@ -183,6 +194,7 @@ export interface MsgChannelCloseConfirm {
     proofInit: Uint8Array;
     proofHeight?: Height;
     signer: string;
+    counterpartyUpgradeSequence: Long;
 }
 /**
  * MsgChannelCloseConfirm defines a msg sent by a Relayer to Chain B
@@ -194,6 +206,7 @@ export interface MsgChannelCloseConfirmSDKType {
     proof_init: Uint8Array;
     proof_height?: HeightSDKType;
     signer: string;
+    counterparty_upgrade_sequence: Long;
 }
 /**
  * MsgChannelCloseConfirmResponse defines the Msg/ChannelCloseConfirm response
@@ -261,6 +274,7 @@ export interface MsgTimeoutOnClose {
     proofHeight?: Height;
     nextSequenceRecv: Long;
     signer: string;
+    counterpartyUpgradeSequence: Long;
 }
 /** MsgTimeoutOnClose timed-out packet upon counterparty channel closure. */
 export interface MsgTimeoutOnCloseSDKType {
@@ -270,6 +284,7 @@ export interface MsgTimeoutOnCloseSDKType {
     proof_height?: HeightSDKType;
     next_sequence_recv: Long;
     signer: string;
+    counterparty_upgrade_sequence: Long;
 }
 /** MsgTimeoutOnCloseResponse defines the Msg/TimeoutOnClose response type. */
 export interface MsgTimeoutOnCloseResponse {
@@ -302,6 +317,254 @@ export interface MsgAcknowledgementResponse {
 /** MsgAcknowledgementResponse defines the Msg/Acknowledgement response type. */
 export interface MsgAcknowledgementResponseSDKType {
     result: ResponseResultType;
+}
+/**
+ * MsgChannelUpgradeInit defines the request type for the ChannelUpgradeInit rpc
+ * WARNING: Initializing a channel upgrade in the same block as opening the channel
+ * may result in the counterparty being incapable of opening.
+ */
+export interface MsgChannelUpgradeInit {
+    portId: string;
+    channelId: string;
+    fields?: UpgradeFields;
+    signer: string;
+}
+/**
+ * MsgChannelUpgradeInit defines the request type for the ChannelUpgradeInit rpc
+ * WARNING: Initializing a channel upgrade in the same block as opening the channel
+ * may result in the counterparty being incapable of opening.
+ */
+export interface MsgChannelUpgradeInitSDKType {
+    port_id: string;
+    channel_id: string;
+    fields?: UpgradeFieldsSDKType;
+    signer: string;
+}
+/** MsgChannelUpgradeInitResponse defines the MsgChannelUpgradeInit response type */
+export interface MsgChannelUpgradeInitResponse {
+    upgrade?: Upgrade;
+    upgradeSequence: Long;
+}
+/** MsgChannelUpgradeInitResponse defines the MsgChannelUpgradeInit response type */
+export interface MsgChannelUpgradeInitResponseSDKType {
+    upgrade?: UpgradeSDKType;
+    upgrade_sequence: Long;
+}
+/** MsgChannelUpgradeTry defines the request type for the ChannelUpgradeTry rpc */
+export interface MsgChannelUpgradeTry {
+    portId: string;
+    channelId: string;
+    proposedUpgradeConnectionHops: string[];
+    counterpartyUpgradeFields?: UpgradeFields;
+    counterpartyUpgradeSequence: Long;
+    proofChannel: Uint8Array;
+    proofUpgrade: Uint8Array;
+    proofHeight?: Height;
+    signer: string;
+}
+/** MsgChannelUpgradeTry defines the request type for the ChannelUpgradeTry rpc */
+export interface MsgChannelUpgradeTrySDKType {
+    port_id: string;
+    channel_id: string;
+    proposed_upgrade_connection_hops: string[];
+    counterparty_upgrade_fields?: UpgradeFieldsSDKType;
+    counterparty_upgrade_sequence: Long;
+    proof_channel: Uint8Array;
+    proof_upgrade: Uint8Array;
+    proof_height?: HeightSDKType;
+    signer: string;
+}
+/** MsgChannelUpgradeTryResponse defines the MsgChannelUpgradeTry response type */
+export interface MsgChannelUpgradeTryResponse {
+    upgrade?: Upgrade;
+    upgradeSequence: Long;
+    result: ResponseResultType;
+}
+/** MsgChannelUpgradeTryResponse defines the MsgChannelUpgradeTry response type */
+export interface MsgChannelUpgradeTryResponseSDKType {
+    upgrade?: UpgradeSDKType;
+    upgrade_sequence: Long;
+    result: ResponseResultType;
+}
+/** MsgChannelUpgradeAck defines the request type for the ChannelUpgradeAck rpc */
+export interface MsgChannelUpgradeAck {
+    portId: string;
+    channelId: string;
+    counterpartyUpgrade?: Upgrade;
+    proofChannel: Uint8Array;
+    proofUpgrade: Uint8Array;
+    proofHeight?: Height;
+    signer: string;
+}
+/** MsgChannelUpgradeAck defines the request type for the ChannelUpgradeAck rpc */
+export interface MsgChannelUpgradeAckSDKType {
+    port_id: string;
+    channel_id: string;
+    counterparty_upgrade?: UpgradeSDKType;
+    proof_channel: Uint8Array;
+    proof_upgrade: Uint8Array;
+    proof_height?: HeightSDKType;
+    signer: string;
+}
+/** MsgChannelUpgradeAckResponse defines MsgChannelUpgradeAck response type */
+export interface MsgChannelUpgradeAckResponse {
+    result: ResponseResultType;
+}
+/** MsgChannelUpgradeAckResponse defines MsgChannelUpgradeAck response type */
+export interface MsgChannelUpgradeAckResponseSDKType {
+    result: ResponseResultType;
+}
+/** MsgChannelUpgradeConfirm defines the request type for the ChannelUpgradeConfirm rpc */
+export interface MsgChannelUpgradeConfirm {
+    portId: string;
+    channelId: string;
+    counterpartyChannelState: State;
+    counterpartyUpgrade?: Upgrade;
+    proofChannel: Uint8Array;
+    proofUpgrade: Uint8Array;
+    proofHeight?: Height;
+    signer: string;
+}
+/** MsgChannelUpgradeConfirm defines the request type for the ChannelUpgradeConfirm rpc */
+export interface MsgChannelUpgradeConfirmSDKType {
+    port_id: string;
+    channel_id: string;
+    counterparty_channel_state: State;
+    counterparty_upgrade?: UpgradeSDKType;
+    proof_channel: Uint8Array;
+    proof_upgrade: Uint8Array;
+    proof_height?: HeightSDKType;
+    signer: string;
+}
+/** MsgChannelUpgradeConfirmResponse defines MsgChannelUpgradeConfirm response type */
+export interface MsgChannelUpgradeConfirmResponse {
+    result: ResponseResultType;
+}
+/** MsgChannelUpgradeConfirmResponse defines MsgChannelUpgradeConfirm response type */
+export interface MsgChannelUpgradeConfirmResponseSDKType {
+    result: ResponseResultType;
+}
+/** MsgChannelUpgradeOpen defines the request type for the ChannelUpgradeOpen rpc */
+export interface MsgChannelUpgradeOpen {
+    portId: string;
+    channelId: string;
+    counterpartyChannelState: State;
+    counterpartyUpgradeSequence: Long;
+    proofChannel: Uint8Array;
+    proofHeight?: Height;
+    signer: string;
+}
+/** MsgChannelUpgradeOpen defines the request type for the ChannelUpgradeOpen rpc */
+export interface MsgChannelUpgradeOpenSDKType {
+    port_id: string;
+    channel_id: string;
+    counterparty_channel_state: State;
+    counterparty_upgrade_sequence: Long;
+    proof_channel: Uint8Array;
+    proof_height?: HeightSDKType;
+    signer: string;
+}
+/** MsgChannelUpgradeOpenResponse defines the MsgChannelUpgradeOpen response type */
+export interface MsgChannelUpgradeOpenResponse {
+}
+/** MsgChannelUpgradeOpenResponse defines the MsgChannelUpgradeOpen response type */
+export interface MsgChannelUpgradeOpenResponseSDKType {
+}
+/** MsgChannelUpgradeTimeout defines the request type for the ChannelUpgradeTimeout rpc */
+export interface MsgChannelUpgradeTimeout {
+    portId: string;
+    channelId: string;
+    counterpartyChannel?: Channel;
+    proofChannel: Uint8Array;
+    proofHeight?: Height;
+    signer: string;
+}
+/** MsgChannelUpgradeTimeout defines the request type for the ChannelUpgradeTimeout rpc */
+export interface MsgChannelUpgradeTimeoutSDKType {
+    port_id: string;
+    channel_id: string;
+    counterparty_channel?: ChannelSDKType;
+    proof_channel: Uint8Array;
+    proof_height?: HeightSDKType;
+    signer: string;
+}
+/** MsgChannelUpgradeTimeoutRepsonse defines the MsgChannelUpgradeTimeout response type */
+export interface MsgChannelUpgradeTimeoutResponse {
+}
+/** MsgChannelUpgradeTimeoutRepsonse defines the MsgChannelUpgradeTimeout response type */
+export interface MsgChannelUpgradeTimeoutResponseSDKType {
+}
+/** MsgChannelUpgradeCancel defines the request type for the ChannelUpgradeCancel rpc */
+export interface MsgChannelUpgradeCancel {
+    portId: string;
+    channelId: string;
+    errorReceipt?: ErrorReceipt;
+    proofErrorReceipt: Uint8Array;
+    proofHeight?: Height;
+    signer: string;
+}
+/** MsgChannelUpgradeCancel defines the request type for the ChannelUpgradeCancel rpc */
+export interface MsgChannelUpgradeCancelSDKType {
+    port_id: string;
+    channel_id: string;
+    error_receipt?: ErrorReceiptSDKType;
+    proof_error_receipt: Uint8Array;
+    proof_height?: HeightSDKType;
+    signer: string;
+}
+/** MsgChannelUpgradeCancelResponse defines the MsgChannelUpgradeCancel response type */
+export interface MsgChannelUpgradeCancelResponse {
+}
+/** MsgChannelUpgradeCancelResponse defines the MsgChannelUpgradeCancel response type */
+export interface MsgChannelUpgradeCancelResponseSDKType {
+}
+/** MsgUpdateParams is the MsgUpdateParams request type. */
+export interface MsgUpdateParams {
+    /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
+    authority: string;
+    /**
+     * params defines the channel parameters to update.
+     *
+     * NOTE: All parameters must be supplied.
+     */
+    params?: Params;
+}
+/** MsgUpdateParams is the MsgUpdateParams request type. */
+export interface MsgUpdateParamsSDKType {
+    authority: string;
+    params?: ParamsSDKType;
+}
+/** MsgUpdateParamsResponse defines the MsgUpdateParams response type. */
+export interface MsgUpdateParamsResponse {
+}
+/** MsgUpdateParamsResponse defines the MsgUpdateParams response type. */
+export interface MsgUpdateParamsResponseSDKType {
+}
+/** MsgPruneAcknowledgements defines the request type for the PruneAcknowledgements rpc. */
+export interface MsgPruneAcknowledgements {
+    portId: string;
+    channelId: string;
+    limit: Long;
+    signer: string;
+}
+/** MsgPruneAcknowledgements defines the request type for the PruneAcknowledgements rpc. */
+export interface MsgPruneAcknowledgementsSDKType {
+    port_id: string;
+    channel_id: string;
+    limit: Long;
+    signer: string;
+}
+/** MsgPruneAcknowledgementsResponse defines the response type for the PruneAcknowledgements rpc. */
+export interface MsgPruneAcknowledgementsResponse {
+    /** Number of sequences pruned (includes both packet acknowledgements and packet receipts where appropriate). */
+    totalPrunedSequences: Long;
+    /** Number of sequences left after pruning. */
+    totalRemainingSequences: Long;
+}
+/** MsgPruneAcknowledgementsResponse defines the response type for the PruneAcknowledgements rpc. */
+export interface MsgPruneAcknowledgementsResponseSDKType {
+    total_pruned_sequences: Long;
+    total_remaining_sequences: Long;
 }
 export declare const MsgChannelOpenInit: {
     encode(message: MsgChannelOpenInit, writer?: _m0.Writer): _m0.Writer;
@@ -442,4 +705,130 @@ export declare const MsgAcknowledgementResponse: {
     fromJSON(object: any): MsgAcknowledgementResponse;
     toJSON(message: MsgAcknowledgementResponse): unknown;
     fromPartial(object: Partial<MsgAcknowledgementResponse>): MsgAcknowledgementResponse;
+};
+export declare const MsgChannelUpgradeInit: {
+    encode(message: MsgChannelUpgradeInit, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelUpgradeInit;
+    fromJSON(object: any): MsgChannelUpgradeInit;
+    toJSON(message: MsgChannelUpgradeInit): unknown;
+    fromPartial(object: Partial<MsgChannelUpgradeInit>): MsgChannelUpgradeInit;
+};
+export declare const MsgChannelUpgradeInitResponse: {
+    encode(message: MsgChannelUpgradeInitResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelUpgradeInitResponse;
+    fromJSON(object: any): MsgChannelUpgradeInitResponse;
+    toJSON(message: MsgChannelUpgradeInitResponse): unknown;
+    fromPartial(object: Partial<MsgChannelUpgradeInitResponse>): MsgChannelUpgradeInitResponse;
+};
+export declare const MsgChannelUpgradeTry: {
+    encode(message: MsgChannelUpgradeTry, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelUpgradeTry;
+    fromJSON(object: any): MsgChannelUpgradeTry;
+    toJSON(message: MsgChannelUpgradeTry): unknown;
+    fromPartial(object: Partial<MsgChannelUpgradeTry>): MsgChannelUpgradeTry;
+};
+export declare const MsgChannelUpgradeTryResponse: {
+    encode(message: MsgChannelUpgradeTryResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelUpgradeTryResponse;
+    fromJSON(object: any): MsgChannelUpgradeTryResponse;
+    toJSON(message: MsgChannelUpgradeTryResponse): unknown;
+    fromPartial(object: Partial<MsgChannelUpgradeTryResponse>): MsgChannelUpgradeTryResponse;
+};
+export declare const MsgChannelUpgradeAck: {
+    encode(message: MsgChannelUpgradeAck, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelUpgradeAck;
+    fromJSON(object: any): MsgChannelUpgradeAck;
+    toJSON(message: MsgChannelUpgradeAck): unknown;
+    fromPartial(object: Partial<MsgChannelUpgradeAck>): MsgChannelUpgradeAck;
+};
+export declare const MsgChannelUpgradeAckResponse: {
+    encode(message: MsgChannelUpgradeAckResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelUpgradeAckResponse;
+    fromJSON(object: any): MsgChannelUpgradeAckResponse;
+    toJSON(message: MsgChannelUpgradeAckResponse): unknown;
+    fromPartial(object: Partial<MsgChannelUpgradeAckResponse>): MsgChannelUpgradeAckResponse;
+};
+export declare const MsgChannelUpgradeConfirm: {
+    encode(message: MsgChannelUpgradeConfirm, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelUpgradeConfirm;
+    fromJSON(object: any): MsgChannelUpgradeConfirm;
+    toJSON(message: MsgChannelUpgradeConfirm): unknown;
+    fromPartial(object: Partial<MsgChannelUpgradeConfirm>): MsgChannelUpgradeConfirm;
+};
+export declare const MsgChannelUpgradeConfirmResponse: {
+    encode(message: MsgChannelUpgradeConfirmResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelUpgradeConfirmResponse;
+    fromJSON(object: any): MsgChannelUpgradeConfirmResponse;
+    toJSON(message: MsgChannelUpgradeConfirmResponse): unknown;
+    fromPartial(object: Partial<MsgChannelUpgradeConfirmResponse>): MsgChannelUpgradeConfirmResponse;
+};
+export declare const MsgChannelUpgradeOpen: {
+    encode(message: MsgChannelUpgradeOpen, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelUpgradeOpen;
+    fromJSON(object: any): MsgChannelUpgradeOpen;
+    toJSON(message: MsgChannelUpgradeOpen): unknown;
+    fromPartial(object: Partial<MsgChannelUpgradeOpen>): MsgChannelUpgradeOpen;
+};
+export declare const MsgChannelUpgradeOpenResponse: {
+    encode(_: MsgChannelUpgradeOpenResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelUpgradeOpenResponse;
+    fromJSON(_: any): MsgChannelUpgradeOpenResponse;
+    toJSON(_: MsgChannelUpgradeOpenResponse): unknown;
+    fromPartial(_: Partial<MsgChannelUpgradeOpenResponse>): MsgChannelUpgradeOpenResponse;
+};
+export declare const MsgChannelUpgradeTimeout: {
+    encode(message: MsgChannelUpgradeTimeout, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelUpgradeTimeout;
+    fromJSON(object: any): MsgChannelUpgradeTimeout;
+    toJSON(message: MsgChannelUpgradeTimeout): unknown;
+    fromPartial(object: Partial<MsgChannelUpgradeTimeout>): MsgChannelUpgradeTimeout;
+};
+export declare const MsgChannelUpgradeTimeoutResponse: {
+    encode(_: MsgChannelUpgradeTimeoutResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelUpgradeTimeoutResponse;
+    fromJSON(_: any): MsgChannelUpgradeTimeoutResponse;
+    toJSON(_: MsgChannelUpgradeTimeoutResponse): unknown;
+    fromPartial(_: Partial<MsgChannelUpgradeTimeoutResponse>): MsgChannelUpgradeTimeoutResponse;
+};
+export declare const MsgChannelUpgradeCancel: {
+    encode(message: MsgChannelUpgradeCancel, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelUpgradeCancel;
+    fromJSON(object: any): MsgChannelUpgradeCancel;
+    toJSON(message: MsgChannelUpgradeCancel): unknown;
+    fromPartial(object: Partial<MsgChannelUpgradeCancel>): MsgChannelUpgradeCancel;
+};
+export declare const MsgChannelUpgradeCancelResponse: {
+    encode(_: MsgChannelUpgradeCancelResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgChannelUpgradeCancelResponse;
+    fromJSON(_: any): MsgChannelUpgradeCancelResponse;
+    toJSON(_: MsgChannelUpgradeCancelResponse): unknown;
+    fromPartial(_: Partial<MsgChannelUpgradeCancelResponse>): MsgChannelUpgradeCancelResponse;
+};
+export declare const MsgUpdateParams: {
+    encode(message: MsgUpdateParams, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams;
+    fromJSON(object: any): MsgUpdateParams;
+    toJSON(message: MsgUpdateParams): unknown;
+    fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams;
+};
+export declare const MsgUpdateParamsResponse: {
+    encode(_: MsgUpdateParamsResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse;
+    fromJSON(_: any): MsgUpdateParamsResponse;
+    toJSON(_: MsgUpdateParamsResponse): unknown;
+    fromPartial(_: Partial<MsgUpdateParamsResponse>): MsgUpdateParamsResponse;
+};
+export declare const MsgPruneAcknowledgements: {
+    encode(message: MsgPruneAcknowledgements, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgPruneAcknowledgements;
+    fromJSON(object: any): MsgPruneAcknowledgements;
+    toJSON(message: MsgPruneAcknowledgements): unknown;
+    fromPartial(object: Partial<MsgPruneAcknowledgements>): MsgPruneAcknowledgements;
+};
+export declare const MsgPruneAcknowledgementsResponse: {
+    encode(message: MsgPruneAcknowledgementsResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgPruneAcknowledgementsResponse;
+    fromJSON(object: any): MsgPruneAcknowledgementsResponse;
+    toJSON(message: MsgPruneAcknowledgementsResponse): unknown;
+    fromPartial(object: Partial<MsgPruneAcknowledgementsResponse>): MsgPruneAcknowledgementsResponse;
 };

@@ -19,13 +19,11 @@ export interface MsgGrantSDKType {
     grantee: string;
     grant?: GrantSDKType;
 }
-/** MsgExecResponse defines the Msg/MsgExecResponse response type. */
-export interface MsgExecResponse {
-    results: Uint8Array[];
+/** MsgGrantResponse defines the Msg/MsgGrant response type. */
+export interface MsgGrantResponse {
 }
-/** MsgExecResponse defines the Msg/MsgExecResponse response type. */
-export interface MsgExecResponseSDKType {
-    results: Uint8Array[];
+/** MsgGrantResponse defines the Msg/MsgGrant response type. */
+export interface MsgGrantResponseSDKType {
 }
 /**
  * MsgExec attempts to execute the provided messages using
@@ -35,7 +33,7 @@ export interface MsgExecResponseSDKType {
 export interface MsgExec {
     grantee: string;
     /**
-     * Authorization Msg requests to execute. Each msg must implement Authorization interface
+     * Execute Msg.
      * The x/authz will try to find a grant matching (msg.signers[0], grantee, MsgTypeURL(msg))
      * triple and validate it.
      */
@@ -50,11 +48,13 @@ export interface MsgExecSDKType {
     grantee: string;
     msgs: AnySDKType[];
 }
-/** MsgGrantResponse defines the Msg/MsgGrant response type. */
-export interface MsgGrantResponse {
+/** MsgExecResponse defines the Msg/MsgExecResponse response type. */
+export interface MsgExecResponse {
+    results: Uint8Array[];
 }
-/** MsgGrantResponse defines the Msg/MsgGrant response type. */
-export interface MsgGrantResponseSDKType {
+/** MsgExecResponse defines the Msg/MsgExecResponse response type. */
+export interface MsgExecResponseSDKType {
+    results: Uint8Array[];
 }
 /**
  * MsgRevoke revokes any authorization with the provided sdk.Msg type on the
@@ -87,12 +87,12 @@ export declare const MsgGrant: {
     toJSON(message: MsgGrant): unknown;
     fromPartial(object: Partial<MsgGrant>): MsgGrant;
 };
-export declare const MsgExecResponse: {
-    encode(message: MsgExecResponse, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): MsgExecResponse;
-    fromJSON(object: any): MsgExecResponse;
-    toJSON(message: MsgExecResponse): unknown;
-    fromPartial(object: Partial<MsgExecResponse>): MsgExecResponse;
+export declare const MsgGrantResponse: {
+    encode(_: MsgGrantResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgGrantResponse;
+    fromJSON(_: any): MsgGrantResponse;
+    toJSON(_: MsgGrantResponse): unknown;
+    fromPartial(_: Partial<MsgGrantResponse>): MsgGrantResponse;
 };
 export declare const MsgExec: {
     encode(message: MsgExec, writer?: _m0.Writer): _m0.Writer;
@@ -101,12 +101,12 @@ export declare const MsgExec: {
     toJSON(message: MsgExec): unknown;
     fromPartial(object: Partial<MsgExec>): MsgExec;
 };
-export declare const MsgGrantResponse: {
-    encode(_: MsgGrantResponse, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): MsgGrantResponse;
-    fromJSON(_: any): MsgGrantResponse;
-    toJSON(_: MsgGrantResponse): unknown;
-    fromPartial(_: Partial<MsgGrantResponse>): MsgGrantResponse;
+export declare const MsgExecResponse: {
+    encode(message: MsgExecResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgExecResponse;
+    fromJSON(object: any): MsgExecResponse;
+    toJSON(message: MsgExecResponse): unknown;
+    fromPartial(object: Partial<MsgExecResponse>): MsgExecResponse;
 };
 export declare const MsgRevoke: {
     encode(message: MsgRevoke, writer?: _m0.Writer): _m0.Writer;

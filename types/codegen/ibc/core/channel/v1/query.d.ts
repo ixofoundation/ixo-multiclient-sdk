@@ -1,7 +1,8 @@
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../../cosmos/base/query/v1beta1/pagination";
 import { Channel, ChannelSDKType, IdentifiedChannel, IdentifiedChannelSDKType, PacketState, PacketStateSDKType } from "./channel";
-import { Height, HeightSDKType, IdentifiedClientState, IdentifiedClientStateSDKType } from "../../client/v1/client";
+import { Height, HeightSDKType, IdentifiedClientState, IdentifiedClientStateSDKType, Params, ParamsSDKType } from "../../client/v1/client";
 import { Any, AnySDKType } from "../../../../google/protobuf/any";
+import { ErrorReceipt, ErrorReceiptSDKType, Upgrade, UpgradeSDKType } from "./upgrade";
 import { Long } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /** QueryChannelRequest is the request type for the Query/Channel RPC method */
@@ -503,7 +504,7 @@ export interface QueryNextSequenceReceiveRequestSDKType {
     channel_id: string;
 }
 /**
- * QuerySequenceResponse is the request type for the
+ * QuerySequenceResponse is the response type for the
  * Query/QueryNextSequenceReceiveResponse RPC method
  */
 export interface QueryNextSequenceReceiveResponse {
@@ -515,13 +516,115 @@ export interface QueryNextSequenceReceiveResponse {
     proofHeight?: Height;
 }
 /**
- * QuerySequenceResponse is the request type for the
+ * QuerySequenceResponse is the response type for the
  * Query/QueryNextSequenceReceiveResponse RPC method
  */
 export interface QueryNextSequenceReceiveResponseSDKType {
     next_sequence_receive: Long;
     proof: Uint8Array;
     proof_height?: HeightSDKType;
+}
+/**
+ * QueryNextSequenceSendRequest is the request type for the
+ * Query/QueryNextSequenceSend RPC method
+ */
+export interface QueryNextSequenceSendRequest {
+    /** port unique identifier */
+    portId: string;
+    /** channel unique identifier */
+    channelId: string;
+}
+/**
+ * QueryNextSequenceSendRequest is the request type for the
+ * Query/QueryNextSequenceSend RPC method
+ */
+export interface QueryNextSequenceSendRequestSDKType {
+    port_id: string;
+    channel_id: string;
+}
+/**
+ * QueryNextSequenceSendResponse is the request type for the
+ * Query/QueryNextSequenceSend RPC method
+ */
+export interface QueryNextSequenceSendResponse {
+    /** next sequence send number */
+    nextSequenceSend: Long;
+    /** merkle proof of existence */
+    proof: Uint8Array;
+    /** height at which the proof was retrieved */
+    proofHeight?: Height;
+}
+/**
+ * QueryNextSequenceSendResponse is the request type for the
+ * Query/QueryNextSequenceSend RPC method
+ */
+export interface QueryNextSequenceSendResponseSDKType {
+    next_sequence_send: Long;
+    proof: Uint8Array;
+    proof_height?: HeightSDKType;
+}
+/** QueryUpgradeErrorRequest is the request type for the Query/QueryUpgradeError RPC method */
+export interface QueryUpgradeErrorRequest {
+    portId: string;
+    channelId: string;
+}
+/** QueryUpgradeErrorRequest is the request type for the Query/QueryUpgradeError RPC method */
+export interface QueryUpgradeErrorRequestSDKType {
+    port_id: string;
+    channel_id: string;
+}
+/** QueryUpgradeErrorResponse is the response type for the Query/QueryUpgradeError RPC method */
+export interface QueryUpgradeErrorResponse {
+    errorReceipt?: ErrorReceipt;
+    /** merkle proof of existence */
+    proof: Uint8Array;
+    /** height at which the proof was retrieved */
+    proofHeight?: Height;
+}
+/** QueryUpgradeErrorResponse is the response type for the Query/QueryUpgradeError RPC method */
+export interface QueryUpgradeErrorResponseSDKType {
+    error_receipt?: ErrorReceiptSDKType;
+    proof: Uint8Array;
+    proof_height?: HeightSDKType;
+}
+/** QueryUpgradeRequest is the request type for the QueryUpgradeRequest RPC method */
+export interface QueryUpgradeRequest {
+    portId: string;
+    channelId: string;
+}
+/** QueryUpgradeRequest is the request type for the QueryUpgradeRequest RPC method */
+export interface QueryUpgradeRequestSDKType {
+    port_id: string;
+    channel_id: string;
+}
+/** QueryUpgradeResponse is the response type for the QueryUpgradeResponse RPC method */
+export interface QueryUpgradeResponse {
+    upgrade?: Upgrade;
+    /** merkle proof of existence */
+    proof: Uint8Array;
+    /** height at which the proof was retrieved */
+    proofHeight?: Height;
+}
+/** QueryUpgradeResponse is the response type for the QueryUpgradeResponse RPC method */
+export interface QueryUpgradeResponseSDKType {
+    upgrade?: UpgradeSDKType;
+    proof: Uint8Array;
+    proof_height?: HeightSDKType;
+}
+/** QueryChannelParamsRequest is the request type for the Query/ChannelParams RPC method. */
+export interface QueryChannelParamsRequest {
+}
+/** QueryChannelParamsRequest is the request type for the Query/ChannelParams RPC method. */
+export interface QueryChannelParamsRequestSDKType {
+}
+/** QueryChannelParamsResponse is the response type for the Query/ChannelParams RPC method. */
+export interface QueryChannelParamsResponse {
+    /** params defines the parameters of the module. */
+    params?: Params;
+}
+/** QueryChannelParamsResponse is the response type for the Query/ChannelParams RPC method. */
+export interface QueryChannelParamsResponseSDKType {
+    params?: ParamsSDKType;
 }
 export declare const QueryChannelRequest: {
     encode(message: QueryChannelRequest, writer?: _m0.Writer): _m0.Writer;
@@ -704,4 +807,60 @@ export declare const QueryNextSequenceReceiveResponse: {
     fromJSON(object: any): QueryNextSequenceReceiveResponse;
     toJSON(message: QueryNextSequenceReceiveResponse): unknown;
     fromPartial(object: Partial<QueryNextSequenceReceiveResponse>): QueryNextSequenceReceiveResponse;
+};
+export declare const QueryNextSequenceSendRequest: {
+    encode(message: QueryNextSequenceSendRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryNextSequenceSendRequest;
+    fromJSON(object: any): QueryNextSequenceSendRequest;
+    toJSON(message: QueryNextSequenceSendRequest): unknown;
+    fromPartial(object: Partial<QueryNextSequenceSendRequest>): QueryNextSequenceSendRequest;
+};
+export declare const QueryNextSequenceSendResponse: {
+    encode(message: QueryNextSequenceSendResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryNextSequenceSendResponse;
+    fromJSON(object: any): QueryNextSequenceSendResponse;
+    toJSON(message: QueryNextSequenceSendResponse): unknown;
+    fromPartial(object: Partial<QueryNextSequenceSendResponse>): QueryNextSequenceSendResponse;
+};
+export declare const QueryUpgradeErrorRequest: {
+    encode(message: QueryUpgradeErrorRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryUpgradeErrorRequest;
+    fromJSON(object: any): QueryUpgradeErrorRequest;
+    toJSON(message: QueryUpgradeErrorRequest): unknown;
+    fromPartial(object: Partial<QueryUpgradeErrorRequest>): QueryUpgradeErrorRequest;
+};
+export declare const QueryUpgradeErrorResponse: {
+    encode(message: QueryUpgradeErrorResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryUpgradeErrorResponse;
+    fromJSON(object: any): QueryUpgradeErrorResponse;
+    toJSON(message: QueryUpgradeErrorResponse): unknown;
+    fromPartial(object: Partial<QueryUpgradeErrorResponse>): QueryUpgradeErrorResponse;
+};
+export declare const QueryUpgradeRequest: {
+    encode(message: QueryUpgradeRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryUpgradeRequest;
+    fromJSON(object: any): QueryUpgradeRequest;
+    toJSON(message: QueryUpgradeRequest): unknown;
+    fromPartial(object: Partial<QueryUpgradeRequest>): QueryUpgradeRequest;
+};
+export declare const QueryUpgradeResponse: {
+    encode(message: QueryUpgradeResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryUpgradeResponse;
+    fromJSON(object: any): QueryUpgradeResponse;
+    toJSON(message: QueryUpgradeResponse): unknown;
+    fromPartial(object: Partial<QueryUpgradeResponse>): QueryUpgradeResponse;
+};
+export declare const QueryChannelParamsRequest: {
+    encode(_: QueryChannelParamsRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryChannelParamsRequest;
+    fromJSON(_: any): QueryChannelParamsRequest;
+    toJSON(_: QueryChannelParamsRequest): unknown;
+    fromPartial(_: Partial<QueryChannelParamsRequest>): QueryChannelParamsRequest;
+};
+export declare const QueryChannelParamsResponse: {
+    encode(message: QueryChannelParamsResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryChannelParamsResponse;
+    fromJSON(object: any): QueryChannelParamsResponse;
+    toJSON(message: QueryChannelParamsResponse): unknown;
+    fromPartial(object: Partial<QueryChannelParamsResponse>): QueryChannelParamsResponse;
 };

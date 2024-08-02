@@ -1,5 +1,5 @@
 import { Ed25519, sha256 } from "@cosmjs/crypto";
-import { toUtf8, Bech32, toBase64 } from "@cosmjs/encoding";
+import { toUtf8, toBase64, toBech32 } from "@cosmjs/encoding";
 import { makeSignBytes } from "@cosmjs/proto-signing";
 import { decode } from "bs58";
 import sovrin from "sovrin-did";
@@ -18,7 +18,7 @@ export const getEdClient = (mnemonic: string) => {
         {
           algo: "ed25519-sha-256",
           pubkey: Uint8Array.from(decode(didDoc.verifyKey)),
-          address: Bech32.encode(
+          address: toBech32(
             "ixo",
             sha256(decode(didDoc.verifyKey)).slice(0, 20)
           ),

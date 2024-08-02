@@ -37,10 +37,10 @@ export declare enum PaymentStatus {
     NO_PAYMENT = 0,
     PROMISED = 1,
     AUTHORIZED = 2,
-    GAURANTEED = 3,
+    GUARANTEED = 3,
     PAID = 4,
     FAILED = 5,
-    DISPUTED = 6,
+    DISPUTED_PAYMENT = 6,
     UNRECOGNIZED = -1
 }
 export declare const PaymentStatusSDKType: typeof PaymentStatus;
@@ -154,7 +154,7 @@ export interface Payment {
     contract_1155Payment?: Contract1155Payment;
     /**
      * timeout after claim/evaluation to create authZ for payment, if 0 then
-     * immidiate direct payment
+     * immediate direct payment
      */
     timeoutNs?: Duration;
 }

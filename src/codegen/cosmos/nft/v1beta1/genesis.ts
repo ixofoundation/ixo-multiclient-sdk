@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Class, ClassSDKType, NFT, NFTSDKType } from "./nft";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
@@ -5,6 +6,7 @@ import { isSet } from "../../../helpers";
 export interface GenesisState {
   /** class defines the class of the nft type. */
   classes: Class[];
+  /** entry defines all nft owned by a person. */
   entries: Entry[];
 }
 /** GenesisState defines the nft module's genesis state. */

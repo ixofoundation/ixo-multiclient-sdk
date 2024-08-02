@@ -24,18 +24,24 @@ export interface QueryParamsResponseSDKType {
 /**
  * QuerySubspacesRequest defines a request type for querying for all registered
  * subspaces and all keys for a subspace.
+ *
+ * Since: cosmos-sdk 0.46
  */
 export interface QuerySubspacesRequest {
 }
 /**
  * QuerySubspacesRequest defines a request type for querying for all registered
  * subspaces and all keys for a subspace.
+ *
+ * Since: cosmos-sdk 0.46
  */
 export interface QuerySubspacesRequestSDKType {
 }
 /**
  * QuerySubspacesResponse defines the response types for querying for all
  * registered subspaces and all keys for a subspace.
+ *
+ * Since: cosmos-sdk 0.46
  */
 export interface QuerySubspacesResponse {
     subspaces: Subspace[];
@@ -43,6 +49,8 @@ export interface QuerySubspacesResponse {
 /**
  * QuerySubspacesResponse defines the response types for querying for all
  * registered subspaces and all keys for a subspace.
+ *
+ * Since: cosmos-sdk 0.46
  */
 export interface QuerySubspacesResponseSDKType {
     subspaces: SubspaceSDKType[];
@@ -50,6 +58,8 @@ export interface QuerySubspacesResponseSDKType {
 /**
  * Subspace defines a parameter subspace name and all the keys that exist for
  * the subspace.
+ *
+ * Since: cosmos-sdk 0.46
  */
 export interface Subspace {
     subspace: string;
@@ -58,6 +68,8 @@ export interface Subspace {
 /**
  * Subspace defines a parameter subspace name and all the keys that exist for
  * the subspace.
+ *
+ * Since: cosmos-sdk 0.46
  */
 export interface SubspaceSDKType {
     subspace: string;

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Grant, GrantSDKType } from "./feegrant";
 import * as _m0 from "protobufjs/minimal";
 /** GenesisState contains a set of fee allowances, persisted from the store */

@@ -1,6 +1,8 @@
+//@ts-nocheck
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../../cosmos/base/query/v1beta1/pagination";
-import { Any, AnySDKType } from "../../../../google/protobuf/any";
 import { Height, HeightSDKType, IdentifiedClientState, IdentifiedClientStateSDKType, ConsensusStateWithHeight, ConsensusStateWithHeightSDKType, Params, ParamsSDKType } from "./client";
+import { MerklePath, MerklePathSDKType } from "../../commitment/v1/commitment";
+import { Any, AnySDKType } from "../../../../google/protobuf/any";
 import { Long, isSet, bytesFromBase64, base64FromBytes } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /**
@@ -299,6 +301,42 @@ export interface QueryUpgradedConsensusStateResponse {
  */
 export interface QueryUpgradedConsensusStateResponseSDKType {
   upgraded_consensus_state?: AnySDKType;
+}
+/** QueryVerifyMembershipRequest is the request type for the Query/VerifyMembership RPC method */
+export interface QueryVerifyMembershipRequest {
+  /** client unique identifier. */
+  clientId: string;
+  /** the proof to be verified by the client. */
+  proof: Uint8Array;
+  /** the height of the commitment root at which the proof is verified. */
+  proofHeight?: Height;
+  /** the commitment key path. */
+  merklePath?: MerklePath;
+  /** the value which is proven. */
+  value: Uint8Array;
+  /** optional time delay */
+  timeDelay: Long;
+  /** optional block delay */
+  blockDelay: Long;
+}
+/** QueryVerifyMembershipRequest is the request type for the Query/VerifyMembership RPC method */
+export interface QueryVerifyMembershipRequestSDKType {
+  client_id: string;
+  proof: Uint8Array;
+  proof_height?: HeightSDKType;
+  merkle_path?: MerklePathSDKType;
+  value: Uint8Array;
+  time_delay: Long;
+  block_delay: Long;
+}
+/** QueryVerifyMembershipResponse is the response type for the Query/VerifyMembership RPC method */
+export interface QueryVerifyMembershipResponse {
+  /** boolean indicating success or failure of proof verification. */
+  success: boolean;
+}
+/** QueryVerifyMembershipResponse is the response type for the Query/VerifyMembership RPC method */
+export interface QueryVerifyMembershipResponseSDKType {
+  success: boolean;
 }
 function createBaseQueryClientStateRequest(): QueryClientStateRequest {
   return {
@@ -1203,6 +1241,156 @@ export const QueryUpgradedConsensusStateResponse = {
   fromPartial(object: Partial<QueryUpgradedConsensusStateResponse>): QueryUpgradedConsensusStateResponse {
     const message = createBaseQueryUpgradedConsensusStateResponse();
     message.upgradedConsensusState = object.upgradedConsensusState !== undefined && object.upgradedConsensusState !== null ? Any.fromPartial(object.upgradedConsensusState) : undefined;
+    return message;
+  }
+};
+function createBaseQueryVerifyMembershipRequest(): QueryVerifyMembershipRequest {
+  return {
+    clientId: "",
+    proof: new Uint8Array(),
+    proofHeight: undefined,
+    merklePath: undefined,
+    value: new Uint8Array(),
+    timeDelay: Long.UZERO,
+    blockDelay: Long.UZERO
+  };
+}
+export const QueryVerifyMembershipRequest = {
+  encode(message: QueryVerifyMembershipRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.clientId !== "") {
+      writer.uint32(10).string(message.clientId);
+    }
+    if (message.proof.length !== 0) {
+      writer.uint32(18).bytes(message.proof);
+    }
+    if (message.proofHeight !== undefined) {
+      Height.encode(message.proofHeight, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.merklePath !== undefined) {
+      MerklePath.encode(message.merklePath, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.value.length !== 0) {
+      writer.uint32(42).bytes(message.value);
+    }
+    if (!message.timeDelay.isZero()) {
+      writer.uint32(48).uint64(message.timeDelay);
+    }
+    if (!message.blockDelay.isZero()) {
+      writer.uint32(56).uint64(message.blockDelay);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryVerifyMembershipRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryVerifyMembershipRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.clientId = reader.string();
+          break;
+        case 2:
+          message.proof = reader.bytes();
+          break;
+        case 3:
+          message.proofHeight = Height.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.merklePath = MerklePath.decode(reader, reader.uint32());
+          break;
+        case 5:
+          message.value = reader.bytes();
+          break;
+        case 6:
+          message.timeDelay = (reader.uint64() as Long);
+          break;
+        case 7:
+          message.blockDelay = (reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryVerifyMembershipRequest {
+    return {
+      clientId: isSet(object.clientId) ? String(object.clientId) : "",
+      proof: isSet(object.proof) ? bytesFromBase64(object.proof) : new Uint8Array(),
+      proofHeight: isSet(object.proofHeight) ? Height.fromJSON(object.proofHeight) : undefined,
+      merklePath: isSet(object.merklePath) ? MerklePath.fromJSON(object.merklePath) : undefined,
+      value: isSet(object.value) ? bytesFromBase64(object.value) : new Uint8Array(),
+      timeDelay: isSet(object.timeDelay) ? Long.fromValue(object.timeDelay) : Long.UZERO,
+      blockDelay: isSet(object.blockDelay) ? Long.fromValue(object.blockDelay) : Long.UZERO
+    };
+  },
+  toJSON(message: QueryVerifyMembershipRequest): unknown {
+    const obj: any = {};
+    message.clientId !== undefined && (obj.clientId = message.clientId);
+    message.proof !== undefined && (obj.proof = base64FromBytes(message.proof !== undefined ? message.proof : new Uint8Array()));
+    message.proofHeight !== undefined && (obj.proofHeight = message.proofHeight ? Height.toJSON(message.proofHeight) : undefined);
+    message.merklePath !== undefined && (obj.merklePath = message.merklePath ? MerklePath.toJSON(message.merklePath) : undefined);
+    message.value !== undefined && (obj.value = base64FromBytes(message.value !== undefined ? message.value : new Uint8Array()));
+    message.timeDelay !== undefined && (obj.timeDelay = (message.timeDelay || Long.UZERO).toString());
+    message.blockDelay !== undefined && (obj.blockDelay = (message.blockDelay || Long.UZERO).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<QueryVerifyMembershipRequest>): QueryVerifyMembershipRequest {
+    const message = createBaseQueryVerifyMembershipRequest();
+    message.clientId = object.clientId ?? "";
+    message.proof = object.proof ?? new Uint8Array();
+    message.proofHeight = object.proofHeight !== undefined && object.proofHeight !== null ? Height.fromPartial(object.proofHeight) : undefined;
+    message.merklePath = object.merklePath !== undefined && object.merklePath !== null ? MerklePath.fromPartial(object.merklePath) : undefined;
+    message.value = object.value ?? new Uint8Array();
+    message.timeDelay = object.timeDelay !== undefined && object.timeDelay !== null ? Long.fromValue(object.timeDelay) : Long.UZERO;
+    message.blockDelay = object.blockDelay !== undefined && object.blockDelay !== null ? Long.fromValue(object.blockDelay) : Long.UZERO;
+    return message;
+  }
+};
+function createBaseQueryVerifyMembershipResponse(): QueryVerifyMembershipResponse {
+  return {
+    success: false
+  };
+}
+export const QueryVerifyMembershipResponse = {
+  encode(message: QueryVerifyMembershipResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success === true) {
+      writer.uint32(8).bool(message.success);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryVerifyMembershipResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryVerifyMembershipResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.success = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryVerifyMembershipResponse {
+    return {
+      success: isSet(object.success) ? Boolean(object.success) : false
+    };
+  },
+  toJSON(message: QueryVerifyMembershipResponse): unknown {
+    const obj: any = {};
+    message.success !== undefined && (obj.success = message.success);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryVerifyMembershipResponse>): QueryVerifyMembershipResponse {
+    const message = createBaseQueryVerifyMembershipResponse();
+    message.success = object.success ?? false;
     return message;
   }
 };

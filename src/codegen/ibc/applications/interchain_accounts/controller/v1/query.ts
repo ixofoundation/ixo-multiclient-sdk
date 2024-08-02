@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Params, ParamsSDKType } from "./controller";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../../../helpers";

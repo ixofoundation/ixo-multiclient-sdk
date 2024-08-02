@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Params, ParamsSDKType, Token, TokenSDKType, TokenProperties, TokenPropertiesSDKType } from "./token";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";

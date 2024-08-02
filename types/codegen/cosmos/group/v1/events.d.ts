@@ -1,4 +1,4 @@
-import { ProposalExecutorResult } from "./types";
+import { ProposalExecutorResult, ProposalStatus, TallyResult, TallyResultSDKType } from "./types";
 import { Long } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /** EventCreateGroup is an event emitted when a group is created. */
@@ -70,11 +70,14 @@ export interface EventExec {
     proposalId: Long;
     /** result is the proposal execution result. */
     result: ProposalExecutorResult;
+    /** logs contains error logs in case the execution result is FAILURE. */
+    logs: string;
 }
 /** EventExec is an event emitted when a proposal is executed. */
 export interface EventExecSDKType {
     proposal_id: Long;
     result: ProposalExecutorResult;
+    logs: string;
 }
 /** EventLeaveGroup is an event emitted when group member leaves the group. */
 export interface EventLeaveGroup {
@@ -87,6 +90,21 @@ export interface EventLeaveGroup {
 export interface EventLeaveGroupSDKType {
     group_id: Long;
     address: string;
+}
+/** EventProposalPruned is an event emitted when a proposal is pruned. */
+export interface EventProposalPruned {
+    /** proposal_id is the unique ID of the proposal. */
+    proposalId: Long;
+    /** status is the proposal status (UNSPECIFIED, SUBMITTED, ACCEPTED, REJECTED, ABORTED, WITHDRAWN). */
+    status: ProposalStatus;
+    /** tally_result is the proposal tally result (when applicable). */
+    tallyResult?: TallyResult;
+}
+/** EventProposalPruned is an event emitted when a proposal is pruned. */
+export interface EventProposalPrunedSDKType {
+    proposal_id: Long;
+    status: ProposalStatus;
+    tally_result?: TallyResultSDKType;
 }
 export declare const EventCreateGroup: {
     encode(message: EventCreateGroup, writer?: _m0.Writer): _m0.Writer;
@@ -150,4 +168,11 @@ export declare const EventLeaveGroup: {
     fromJSON(object: any): EventLeaveGroup;
     toJSON(message: EventLeaveGroup): unknown;
     fromPartial(object: Partial<EventLeaveGroup>): EventLeaveGroup;
+};
+export declare const EventProposalPruned: {
+    encode(message: EventProposalPruned, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): EventProposalPruned;
+    fromJSON(object: any): EventProposalPruned;
+    toJSON(message: EventProposalPruned): unknown;
+    fromPartial(object: Partial<EventProposalPruned>): EventProposalPruned;
 };

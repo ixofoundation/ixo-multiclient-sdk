@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Bond, BondSDKType, Batch, BatchSDKType, Params, ParamsSDKType } from "./bonds";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";

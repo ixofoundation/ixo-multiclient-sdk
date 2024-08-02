@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { IidDocument, IidDocumentSDKType } from "./iid";
 import * as _m0 from "protobufjs/minimal";
 /** GenesisState defines the did module's genesis state. */

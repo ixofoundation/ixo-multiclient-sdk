@@ -1,5 +1,6 @@
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../../cosmos/base/query/v1beta1/pagination";
 import { DenomTrace, DenomTraceSDKType, Params, ParamsSDKType } from "./transfer";
+import { Coin, CoinSDKType } from "../../../../cosmos/base/v1beta1/coin";
 import * as _m0 from "protobufjs/minimal";
 /**
  * QueryDenomTraceRequest is the request type for the Query/DenomTrace RPC
@@ -130,6 +131,22 @@ export interface QueryEscrowAddressResponse {
 export interface QueryEscrowAddressResponseSDKType {
     escrow_address: string;
 }
+/** QueryTotalEscrowForDenomRequest is the request type for TotalEscrowForDenom RPC method. */
+export interface QueryTotalEscrowForDenomRequest {
+    denom: string;
+}
+/** QueryTotalEscrowForDenomRequest is the request type for TotalEscrowForDenom RPC method. */
+export interface QueryTotalEscrowForDenomRequestSDKType {
+    denom: string;
+}
+/** QueryTotalEscrowForDenomResponse is the response type for TotalEscrowForDenom RPC method. */
+export interface QueryTotalEscrowForDenomResponse {
+    amount?: Coin;
+}
+/** QueryTotalEscrowForDenomResponse is the response type for TotalEscrowForDenom RPC method. */
+export interface QueryTotalEscrowForDenomResponseSDKType {
+    amount?: CoinSDKType;
+}
 export declare const QueryDenomTraceRequest: {
     encode(message: QueryDenomTraceRequest, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): QueryDenomTraceRequest;
@@ -199,4 +216,18 @@ export declare const QueryEscrowAddressResponse: {
     fromJSON(object: any): QueryEscrowAddressResponse;
     toJSON(message: QueryEscrowAddressResponse): unknown;
     fromPartial(object: Partial<QueryEscrowAddressResponse>): QueryEscrowAddressResponse;
+};
+export declare const QueryTotalEscrowForDenomRequest: {
+    encode(message: QueryTotalEscrowForDenomRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryTotalEscrowForDenomRequest;
+    fromJSON(object: any): QueryTotalEscrowForDenomRequest;
+    toJSON(message: QueryTotalEscrowForDenomRequest): unknown;
+    fromPartial(object: Partial<QueryTotalEscrowForDenomRequest>): QueryTotalEscrowForDenomRequest;
+};
+export declare const QueryTotalEscrowForDenomResponse: {
+    encode(message: QueryTotalEscrowForDenomResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryTotalEscrowForDenomResponse;
+    fromJSON(object: any): QueryTotalEscrowForDenomResponse;
+    toJSON(message: QueryTotalEscrowForDenomResponse): unknown;
+    fromPartial(object: Partial<QueryTotalEscrowForDenomResponse>): QueryTotalEscrowForDenomResponse;
 };

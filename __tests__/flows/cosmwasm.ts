@@ -740,11 +740,11 @@ export const swapContract = () => {
 
       const start = Date.now();
 
-      const txHashes: BroadcastTxSyncResponse[] = [];
+      const txHashes: string[] = [];
       for (let i = 0; i < txList.length - 1; i++) {
         const txRaw: TxRaw = txList[i];
         txHashes.push(
-          await client.tmBroadcastTxSync(TxRaw.encode(txRaw).finish())
+          await client.broadcastTxSync(TxRaw.encode(txRaw).finish())
         );
       }
       const lastTx: DeliverTxResponse = await client.broadcastTx(
@@ -755,7 +755,7 @@ export const swapContract = () => {
 
       const swapResponses: DeliverTxResponse[] = [];
       for (const hash of txHashes) {
-        const res = await client.getTx(toHex(hash.hash));
+        const res = await client.getTx(hash);
         swapResponses.push(res as unknown as DeliverTxResponse);
       }
       swapResponses.push(lastTx);

@@ -1,7 +1,7 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { CollectionState, Payments, PaymentsSDKType, EvaluationStatus, DisputeData, DisputeDataSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType } from "./claims";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { Input, InputSDKType, Output, OutputSDKType } from "./cosmos";
+import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
 import { Long } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface MsgCreateCollection {
@@ -121,7 +121,7 @@ export interface MsgDisputeClaim {
      */
     subjectId: string;
     /**
-     * agent is the DID of the agent disputing the claim, agent detials wont be
+     * agent is the DID of the agent disputing the claim, agent details won't be
      * saved in kvStore
      */
     agentDid: string;
