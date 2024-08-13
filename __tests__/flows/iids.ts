@@ -297,7 +297,7 @@ export const generateBlockchainTestUsers = () => {
     generateNewWallet(
       WalletUsers.tester, // Miguel
       "jungle brave person inmate dirt upset try rotate twin fossil grid border"
-      // process.env.ROOT_ECS!
+      // process.env.ROOT_FEEGRANT!
     )
   );
   beforeAll(() =>

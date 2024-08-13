@@ -32,6 +32,7 @@ import { contracts } from "../../src/custom_queries/contract.constants";
 import { getSignerData } from "../../src/stargate_client/store";
 import { Uint8ArrayTob64, b64toJson } from "../../src/utils/conversions";
 import { dids } from "../setup/constants";
+// @ts-ignore
 import Long from "long";
 
 export const wasmBasic = () =>

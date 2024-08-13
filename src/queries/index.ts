@@ -33,6 +33,9 @@ export const createQueryClient = async (rpcEndpoint: string) => {
       token: {
         v1beta1: new ixo.token.v1beta1.QueryClientImpl(rpc),
       },
+      smartaccount: {
+        v1beta1: new ixo.smartaccount.v1beta1.QueryClientImpl(rpc),
+      },
     },
     // IBC modules
     // ================================================

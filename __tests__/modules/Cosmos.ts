@@ -10,6 +10,7 @@ import {
   getFileFromPath,
   timeout,
 } from "../helpers/common";
+// @ts-ignore
 import Long from "long";
 
 export const BankSendTrx = async (

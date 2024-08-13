@@ -11,6 +11,7 @@ import {
 import * as Cosmos from "../modules/Cosmos";
 import * as Authz from "../modules/Authz";
 import { WalletUsers } from "../helpers/constants";
+// @ts-ignore
 import Long from "long";
 import { Grant } from "../../src/codegen/cosmos/feegrant/v1beta1/feegrant";
 import { createRegistry } from "../../src";

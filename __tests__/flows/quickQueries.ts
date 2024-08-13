@@ -20,6 +20,7 @@ import { fromTimestamp } from "../../src/codegen/helpers";
 import axios from "axios";
 import { claims_mainnet, claims_testnet } from "../constants/claims";
 import { EcsCredentialsWorkerUrl } from "../setup/constants";
+// @ts-ignore
 import Long from "long";
 
 export const quickQueries = () =>
