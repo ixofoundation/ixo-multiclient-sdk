@@ -1,4 +1,3 @@
-import Long from "long";
 import { WithdrawPaymentConstraints } from "../../src/codegen/ixo/claims/v1beta1/authz";
 import {
   addDays,
@@ -10,6 +9,8 @@ import {
   queryClient,
 } from "../helpers/common";
 import { fee, WalletUsers } from "../helpers/constants";
+// @ts-ignore
+import Long from "long";
 
 export const CreateCollection = async (
   entityDid: string,

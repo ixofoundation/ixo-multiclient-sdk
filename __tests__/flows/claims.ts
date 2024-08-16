@@ -760,13 +760,30 @@ export const supamotoClaims3 = () =>
     // });
 
     test("Generate Fuel Purchase claims and evaluate them", async () => {
-      type CollectionType = "Legacy" | "Genesis";
-      let collectionToUse: CollectionType;
-      collectionToUse = "Genesis";
+      type CollectionType = "Legacy" | "Genesis" | "ai4g";
+      type NetworkType = "mainnet" | "testnet";
 
-      const collectionId = "1"; // testnet and mainnet genesis fuelpurchases
-      // const collectionId = "5"; // mainnet legacy fuelpurchases
-      // const collectionId = "8"; // testnet legacy fuelpurchases
+      let networkToUse: NetworkType = "mainnet";
+      let collectionToUse: CollectionType = "ai4g";
+
+      const collectionToNetworkMapping = {
+        Genesis: {
+          mainnet: "1",
+          testnet: "1",
+        },
+        Legacy: {
+          mainnet: "5",
+          testnet: "8",
+        },
+        ai4g: {
+          mainnet: "32",
+          testnet: "42",
+        },
+      };
+      console.log(
+        "collection to use: ",
+        collectionToNetworkMapping[collectionToUse][networkToUse]
+      );
 
       // first load previous purchases and get only id, then load latest and remove all previous purchases
       let previousPurchases: string[] = [];
@@ -844,6 +861,11 @@ export const supamotoClaims3 = () =>
           ? require("../../assets/documents/emerging/stoves_legacy_collection.json").map(
               (s: any) => s.externalId
             )
+          : // @ts-ignore
+          collectionToUse === "ai4g"
+          ? require("../../assets/documents/emerging/stoves_ai4g_collection.json").map(
+              (s: any) => s.externalId
+            )
           : require("../../assets/documents/emerging/stoves_genesis_collection.json").map(
               (s: any) => s.externalId
             );
@@ -914,7 +936,7 @@ export const supamotoClaims3 = () =>
       console.time("claims");
       for (const stovePurchases of purchaseData) {
         index++;
-        // if (index < 6) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
+        // if (index <= 10) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
 
         console.log(
           "starting batch " +
@@ -933,7 +955,8 @@ export const supamotoClaims3 = () =>
           EcsCredentialsWorkerUrl + "claims/create",
           {
             type: "fuelPurchase",
-            collectionId: collectionId,
+            collectionId:
+              collectionToNetworkMapping[collectionToUse][networkToUse],
             storage: "cellnode",
             generate: {
               type: "FuelPurchaseSupamotoZambia",
@@ -946,13 +969,15 @@ export const supamotoClaims3 = () =>
                 amount: Number(p.Mass), // amount pellets that bought in kg
                 deviceId: p.Device_ID, // device id
                 protocolDid:
+                  // only legacy has special protocol, rest use Clean Cooking Protocol
                   // @ts-ignore
                   collectionToUse === "Legacy"
                     ? dids.legacyCookingProtocol
                     : null, // custom protocol
                 projectDid:
                   // @ts-ignore
-                  collectionToUse === "Legacy" ? dids.ecsProject : null, // custom project
+                  // collectionToUse === "Legacy" ? dids.ecsProject : null, // custom project
+                  dids.ecsProject,
               })),
             },
           },
