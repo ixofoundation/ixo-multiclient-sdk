@@ -193,6 +193,32 @@ export const claimsBasic = () =>
     );
   });
 
+export const claimsUpdateCollectionPayments = () =>
+  describe("Testing the Claims module", () => {
+    beforeAll(() =>
+      Promise.all([generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS)])
+    );
+
+    let collection = "did:ixo:entity:9f8749d749af260d185f3df6f2206b63";
+    let adminAccount = "ixo14x5r6stdxua49tc90jngj7k7xuwhgp9vlm5tc8";
+    let collectionId = "6";
+
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz MsgUpdateCollectionPayments",
+      () =>
+        Entity.GrantEntityAccountAuthz(
+          collection,
+          "admin",
+          WalletUsers.tester,
+          undefined,
+          "/ixo.claims.v1beta1.MsgUpdateCollectionPayments"
+        )
+    );
+    testMsg("/ixo.claims.v1beta1.MsgUpdateCollectionState", () =>
+      Claims.UpdateCollectionPayments(collectionId, adminAccount, adminAccount)
+    );
+  });
+
 // ------------------------------------------------------------
 // flow to run after devnet was reset, please dont change
 // ------------------------------------------------------------

@@ -58,6 +58,7 @@ IID.generateBlockchainTestUsers();
 // );
 // Entity.enititiesSetStatus();
 // Claims.supamotoClaims2();
+// Claims.claimsUpdateCollectionPayments();
 // CosmWasm.swapBasic();
 // CosmWasm.swapContract();
 // Cosmos.feegrantAllCurrentUsers();
