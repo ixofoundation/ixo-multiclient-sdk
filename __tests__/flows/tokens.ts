@@ -309,6 +309,8 @@ export const supamotoTokensFarm = () =>
     );
 
     const blocksyncUrlGraphql = "https://blocksync-graphql.ixo.earth";
+    const collectionToFarm = dids.ai4gCollection;
+    const collTokensToUseForTopup = dids.legacyCollection;
 
     testMsg("Farm tokens", async () => {
       const tester = (await getUser(WalletUsers.tester).getAccounts())[0]
@@ -320,7 +322,7 @@ export const supamotoTokensFarm = () =>
             owner: { equalTo: "${tester}" }
             type: { equalTo: "asset/device" }
             iidById: {
-              context: { contains: [{ key: "class", val: "${dids.ai4gCollection}" }] }
+              context: { contains: [{ key: "class", val: "${collectionToFarm}" }] }
             }
           }
         ) {
@@ -338,11 +340,15 @@ export const supamotoTokensFarm = () =>
       // const colEntities = (res.data?.data?.entities?.nodes ?? []).slice(0, 2); // if want to test with limited entities
       console.log("colEntities", colEntities.length);
 
+      // console.log(colEntities.map((e) => e.id).slice(0, 70));
+      // console.log(colEntities.map((e) => e.id).slice(70));
+      // if (!!1) throw new Error("stop");
+
       const farm = false;
-      const topup = true;
-      const amountBalance = 1000;
-      const chunkSize = 20;
-      let totalAmounts: number[] = [];
+      const topup = false;
+      const amountBalance = 0;
+      const chunkSize = 10;
+      let totalAmounts: { did: string; amount: number }[] = [];
       let index = 0;
 
       const getAccountTokensQuery = (address: string) => `query Query {
@@ -372,10 +378,9 @@ export const supamotoTokensFarm = () =>
       //   ],
       // ];
 
-      const collTokensToUse = dids.legacyCollection;
       // filter out userTokens to only use ones with specific collection
       userTokens = userTokens.filter(
-        (t) => (t[1] as any).collection === collTokensToUse
+        (t) => (t[1] as any).collection === collTokensToUseForTopup
       );
 
       // if (!!1) throw new Error("haha");
@@ -399,12 +404,12 @@ export const supamotoTokensFarm = () =>
           const adminAddress = entity.accounts.find(
             (a) => a.name === "admin"
           )?.address;
-          // console.log(
-          //   "farming/topup for entity ",
-          //   entity.id,
-          //   adminAddress,
-          //   index
-          // );
+          console.log(
+            "farming/topup for entity ",
+            entity.id,
+            adminAddress,
+            index
+          );
 
           const tokensRes = await getAccountTokens(adminAddress);
           const tokens = Object.entries(
@@ -416,7 +421,7 @@ export const supamotoTokensFarm = () =>
             (r: any, t: any) => r + (t[1].amount ?? 0),
             0
           ) as number;
-          totalAmounts.push(totalAmount);
+          totalAmounts.push({ did: entity.id, amount: totalAmount });
 
           if (farm && totalAmount > amountBalance) {
             let amountToFarm = totalAmount - amountBalance;
@@ -500,6 +505,9 @@ export const supamotoTokensFarm = () =>
           }
         }
       }
+
+      // sort totalAmounts by amount, highest first
+      totalAmounts.sort((a, b) => b.amount - a.amount);
 
       console.log("Create file to save tokens");
       saveFileToPath(
