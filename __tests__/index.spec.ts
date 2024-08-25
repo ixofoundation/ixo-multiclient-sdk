@@ -43,6 +43,8 @@ IID.generateBlockchainTestUsers();
 // IID.iidReplaceLinkedResource();
 // IBC.ibcBasic();
 // Cosmos.govDeposit();
+// Cosmos.stakeBasic();
+// Cosmos.updateParamsProposal();
 // CosmWasm.wasmBasic();
 // Cosmos.feegrantBasic();
 // Proposals.cwUploadProposal();

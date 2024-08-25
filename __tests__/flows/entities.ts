@@ -74,11 +74,11 @@ export const transferEntities = (mnemonic?: string) =>
       ])
     );
 
-    const recipient = "did:x:zQ3shfMjpKv9etiUbEy8aoet5ZRj7MveK5emNfDrv8tcixNwT";
+    const recipient = "did:x:zQ3sheymdo5FLT64zGESnj6i7uhdXdgoELA5z3JW9ayVNcF6L";
     const stovesCollection = require("../../assets/documents/emerging/stoves_genesis_collection.json");
 
     // can provide static dids of entities to transfer
-    let entities = ["did:ixo:entity:091ffc2c61e589f3a6c67f68e9b6919d"];
+    let entities = ["did:ixo:entity:fd353f85b5114b518235deda41bc8622"];
 
     // or provide static ids of stoves to transfer, if this list is empty then will use the dids above
     // the stoves here must be from the stovesCollection imported above

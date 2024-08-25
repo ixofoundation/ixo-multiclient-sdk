@@ -43,15 +43,15 @@ export const adminEntityAccounts = {
   ai4gCollection: "",
 };
 
-// // export const EcsCredentialsWorkerUrl = "http://localhost:3000/";
-// export const EcsCredentialsWorkerUrl =
-//   "https://ecs.credentials.devnet.ixo.earth/";
-// export const ProspectCredentialsWorkerUrl =
-//   "https://prospect.credentials.devnet.ixo.earth/";
-// export const CarbonCredentialsWorkerUrl =
-//   "https://carbon.credentials.devnet.ixo.earth/";
-// export const UmuziCredentialsWorkerUrl =
-//   "https://umuzi.credentials.devnet.ixo.earth/";
+// export const EcsCredentialsWorkerUrl = "http://localhost:3000/";
+export const EcsCredentialsWorkerUrl =
+  "https://ecs.credentials.devnet.ixo.earth/";
+export const ProspectCredentialsWorkerUrl =
+  "https://prospect.credentials.devnet.ixo.earth/";
+export const CarbonCredentialsWorkerUrl =
+  "https://carbon.credentials.devnet.ixo.earth/";
+export const UmuziCredentialsWorkerUrl =
+  "https://umuzi.credentials.devnet.ixo.earth/";
 
 // TESTNET
 // ========================================

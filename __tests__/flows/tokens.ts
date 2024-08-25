@@ -309,7 +309,7 @@ export const supamotoTokensFarm = () =>
     );
 
     const blocksyncUrlGraphql = "https://blocksync-graphql.ixo.earth";
-    const collectionToFarm = dids.ai4gCollection;
+    const collectionToFarm = dids.assetCollection;
     const collTokensToUseForTopup = dids.legacyCollection;
 
     testMsg("Farm tokens", async () => {
@@ -508,6 +508,15 @@ export const supamotoTokensFarm = () =>
 
       // sort totalAmounts by amount, highest first
       totalAmounts.sort((a, b) => b.amount - a.amount);
+      // // get total amounts of first 50 stoves
+      // const first50StovesAmounts = totalAmounts
+      //   .slice(0, 55)
+      //   .reduce((acc, curr) => {
+      //     acc += curr.amount;
+      //     return acc;
+      //   }, 0);
+      // console.log({ first50StovesAmounts });
+      // console.log(totalAmounts.slice(0, 55).map((t) => t.did));
 
       console.log("Create file to save tokens");
       saveFileToPath(
