@@ -38,7 +38,8 @@
     "test:supamoto": "jest __tests__/specs/supamoto --forceExit",
     "test:ai4g": "jest __tests__/specs/ai4g --forceExit",
     "test:umuzi": "jest __tests__/specs/umuzi --forceExit",
-    "test:idcc": "jest __tests__/specs/idcc --forceExit"
+    "test:idcc": "jest __tests__/specs/idcc --forceExit",
+    "test:protocols": "jest __tests__/specs/protocols --forceExit"
   },
   "publishConfig": {
     "access": "public"
