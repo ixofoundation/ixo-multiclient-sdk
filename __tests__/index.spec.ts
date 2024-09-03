@@ -32,13 +32,14 @@ beforeAll(() => {
 // Bonds.bondsBasic();
 // Entity.enititiesBasic();
 // Token.tokenBasic();
+Claims.updateCollectionState(36);
 // Claims.claimsBasic();
 // CosmWasm.daoCore();
 // Cosmos.sendTokens();
 // IID.iidAddEdKeys();
 // Bonds.bondsSellsDisabled();
 // Bonds.bondsSellsEnabled();
-IID.deleteLinkedClaims();
+// IID.deleteLinkedClaims();
 // IID.iidDeleteLinkedResource();
 // IID.iidReplaceLinkedResourcesArrayOfDIDs(
 //   [
@@ -66,7 +67,7 @@ IID.deleteLinkedClaims();
 // Entity.enititiesSetStatus();
 // Claims.supamotoClaims2();
 // CosmWasm.swapBasic();
-// CosmWasm.swapContract();
+//CosmWasm.swapContract();
 // Cosmos.feegrantAllCurrentUsers();
 // Claims.supamotoEvaluateFuelPurchases();
 // Claims.supamotoCreateCollection();

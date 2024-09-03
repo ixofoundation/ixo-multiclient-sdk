@@ -32,6 +32,14 @@ axiosRetry(axios, {
   retryDelay: () => 1000,
 });
 
+export const updateCollectionState = (collectionId) =>
+  describe("Testing MsgUpdateCollectionState", () => {
+    let adminAccount = "ixo164w0t3gqfh8quxmttuf6ahfexvxc6quj9uqend"; //Testnet Impacts Exchange DAO
+    testMsg("/ixo.claims.v1beta1.MsgUpdateCollectionState", () =>
+      Claims.UpdateCollectionState(collectionId, adminAccount)
+    );
+  });
+
 export const claimsBasic = () =>
   describe("Testing the Claims module", () => {
     // Create protocol
@@ -527,7 +535,7 @@ export const supamotoClaims2 = () =>
               // Custom date transformation to match json schema format
               time_paid: new Date(
                 item.Transaction_date.replaceAll("/", "-").replace(" ", "T") +
-                  "Z"
+                "Z"
               ),
             };
           return aggObj;
@@ -803,7 +811,7 @@ export const supamotoClaims3 = () =>
               // Custom date transformation to match json schema format
               time_paid: new Date(
                 item["Creation date"].replaceAll("/", "-").replace(" ", "T") +
-                  "Z"
+                "Z"
               ),
             };
           } else {
@@ -842,11 +850,11 @@ export const supamotoClaims3 = () =>
         // @ts-ignore
         collectionToUse === "Legacy"
           ? require("../../assets/documents/emerging/stoves_legacy_collection.json").map(
-              (s: any) => s.externalId
-            )
+            (s: any) => s.externalId
+          )
           : require("../../assets/documents/emerging/stoves_genesis_collection.json").map(
-              (s: any) => s.externalId
-            );
+            (s: any) => s.externalId
+          );
 
       Object.keys(purchaseData).forEach((k) => {
         // purchaseData[k].sort((a, b) => a.time_paid - b.time_paid);
@@ -918,12 +926,12 @@ export const supamotoClaims3 = () =>
 
         console.log(
           "starting batch " +
-            (index + 1) +
-            " of " +
-            purchaseData.length +
-            " with " +
-            stovePurchases.flat(1).length +
-            " purchases"
+          (index + 1) +
+          " of " +
+          purchaseData.length +
+          " with " +
+          stovePurchases.flat(1).length +
+          " purchases"
         );
         // add wait for ipfs rate limit
         if (index) await timeout(1000 * 5);
@@ -1119,9 +1127,9 @@ export const supamotoClaimsRedoRejected = () =>
           let endDate =
             period > 30
               ? addDays(
-                  new Date(claimData.credentialSubject.claim.period.startDate),
-                  30
-                ).toISOString()
+                new Date(claimData.credentialSubject.claim.period.startDate),
+                30
+              ).toISOString()
               : claimData.credentialSubject.claim.period.endDate;
 
           // fetch cooking sessions for the period of CER
