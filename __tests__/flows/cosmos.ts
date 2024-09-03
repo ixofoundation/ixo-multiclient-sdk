@@ -24,6 +24,17 @@ export const bankBasic = () =>
         WalletUsers.tester,
         WalletUsers.alice,
         "secp",
+        "ed"
+        // "ixo1kaluffrp0ncy3dlrerla3nd8v6zxwzmega3v7g"
+      );
+      return res;
+    });
+    testMsg("/cosmos.bank.v1beta1.MsgSend", async () => {
+      const res = await Cosmos.BankSendTrx(
+        10000,
+        WalletUsers.alice,
+        WalletUsers.alice,
+        "ed",
         "secp"
         // "ixo1kaluffrp0ncy3dlrerla3nd8v6zxwzmega3v7g"
       );

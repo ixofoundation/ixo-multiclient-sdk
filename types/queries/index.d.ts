@@ -19,9 +19,6 @@ export declare const createQueryClient: (rpcEndpoint: string) => Promise<{
             v1beta1: import("../codegen/ixo/token/v1beta1/query.rpc.Query").QueryClientImpl;
         };
     };
-    ica: {
-        intertx: import("../codegen/ica/intertx/query.rpc.Query").QueryClientImpl;
-    };
     ibc: {
         applications: {
             fee: {
@@ -73,6 +70,15 @@ export declare const createQueryClient: (rpcEndpoint: string) => Promise<{
             tendermint: {
                 v1beta1: import("../codegen/cosmos/base/tendermint/v1beta1/query.rpc.Service").ServiceClientImpl;
             };
+            node: {
+                v1beta1: import("../codegen/cosmos/base/node/v1beta1/query.rpc.Service").ServiceClientImpl;
+            };
+        };
+        circuit: {
+            v1: import("../codegen/cosmos/circuit/v1/query.rpc.Query").QueryClientImpl;
+        };
+        consensus: {
+            v1: import("../codegen/cosmos/consensus/v1/query.rpc.Query").QueryClientImpl;
         };
         distribution: {
             v1beta1: import("../codegen/cosmos/distribution/v1beta1/query.rpc.Query").QueryClientImpl;
@@ -87,14 +93,8 @@ export declare const createQueryClient: (rpcEndpoint: string) => Promise<{
             v1: import("../codegen/cosmos/gov/v1/query.rpc.Query").QueryClientImpl;
             v1beta1: import("../codegen/cosmos/gov/v1beta1/query.rpc.Query").QueryClientImpl;
         };
-        group: {
-            v1: import("../codegen/cosmos/group/v1/query.rpc.Query").QueryClientImpl;
-        };
         mint: {
             v1beta1: import("../codegen/cosmos/mint/v1beta1/query.rpc.Query").QueryClientImpl;
-        };
-        nft: {
-            v1beta1: import("../codegen/cosmos/nft/v1beta1/query.rpc.Query").QueryClientImpl;
         };
         params: {
             v1beta1: import("../codegen/cosmos/params/v1beta1/query.rpc.Query").QueryClientImpl;

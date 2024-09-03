@@ -1,4 +1,4 @@
-import { IdentifiedChannel, IdentifiedChannelSDKType, PacketState, PacketStateSDKType } from "./channel";
+import { IdentifiedChannel, IdentifiedChannelSDKType, PacketState, PacketStateSDKType, Params, ParamsSDKType } from "./channel";
 import { Long } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /** GenesisState defines the ibc channel submodule's genesis state. */
@@ -12,6 +12,7 @@ export interface GenesisState {
     ackSequences: PacketSequence[];
     /** the sequence for the next generated channel identifier */
     nextChannelSequence: Long;
+    params?: Params;
 }
 /** GenesisState defines the ibc channel submodule's genesis state. */
 export interface GenesisStateSDKType {
@@ -23,6 +24,7 @@ export interface GenesisStateSDKType {
     recv_sequences: PacketSequenceSDKType[];
     ack_sequences: PacketSequenceSDKType[];
     next_channel_sequence: Long;
+    params?: ParamsSDKType;
 }
 /**
  * PacketSequence defines the genesis type necessary to retrieve and store

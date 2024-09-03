@@ -14,12 +14,14 @@ import { getFee, WalletUsers } from "../helpers/constants";
 export const MsgGrantSend = async (
   amount = "10000000",
   granter = WalletUsers.tester,
-  grantee = WalletUsers.alice
+  grantee = WalletUsers.alice,
+  granteeeAddress?: string
 ) => {
   const client = await createClient(getUser(granter));
 
   const granterAddress = (await getUser(granter).getAccounts())[0].address;
-  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
+  const granteeAddress =
+    granteeeAddress || (await getUser(grantee).getAccounts())[0].address;
 
   const message = {
     typeUrl: "/cosmos.authz.v1beta1.MsgGrant",

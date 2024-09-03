@@ -11,9 +11,11 @@ export const bondsBasic = () =>
 
     testMsg("/ixo.bonds.v1beta1.MsgCreateBond", () => Bond.CreateBond(false));
     testMsg("/ixo.bonds.v1beta1.MsgEditBond", () => Bond.EditBond());
-    testMsg("/ixo.bonds.v1beta1.MsgBuy", () =>
-      Bond.Buy(WalletUsers.tester, 1000)
-    ); // Buy 1000 token first to hatch bond
+    testMsg("/ixo.bonds.v1beta1.MsgBuy", async () => {
+      const res = await Bond.Buy(WalletUsers.tester, 1000);
+      // console.dir(res, { depth: null });
+      return res;
+    }); // Buy 1000 token first to hatch bond
     testMsg("/ixo.bonds.v1beta1.MsgSetNextAlpha", async () => {
       console.log(
         "waiting 8 seconds to ensure 1 batchBlocks bonds has passed 1 block to change state from HATCH to OPEN"

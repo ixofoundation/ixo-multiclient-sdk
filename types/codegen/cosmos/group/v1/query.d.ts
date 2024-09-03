@@ -13,7 +13,7 @@ export interface QueryGroupInfoRequestSDKType {
 }
 /** QueryGroupInfoResponse is the Query/GroupInfo response type. */
 export interface QueryGroupInfoResponse {
-    /** info is the GroupInfo for the group. */
+    /** info is the GroupInfo of the group. */
     info?: GroupInfo;
 }
 /** QueryGroupInfoResponse is the Query/GroupInfo response type. */
@@ -31,7 +31,7 @@ export interface QueryGroupPolicyInfoRequestSDKType {
 }
 /** QueryGroupPolicyInfoResponse is the Query/GroupPolicyInfo response type. */
 export interface QueryGroupPolicyInfoResponse {
-    /** info is the GroupPolicyInfo for the group policy. */
+    /** info is the GroupPolicyInfo of the group policy. */
     info?: GroupPolicyInfo;
 }
 /** QueryGroupPolicyInfoResponse is the Query/GroupPolicyInfo response type. */
@@ -287,6 +287,43 @@ export interface QueryTallyResultResponse {
 export interface QueryTallyResultResponseSDKType {
     tally?: TallyResultSDKType;
 }
+/**
+ * QueryGroupsRequest is the Query/Groups request type.
+ *
+ * Since: cosmos-sdk 0.47.1
+ */
+export interface QueryGroupsRequest {
+    /** pagination defines an optional pagination for the request. */
+    pagination?: PageRequest;
+}
+/**
+ * QueryGroupsRequest is the Query/Groups request type.
+ *
+ * Since: cosmos-sdk 0.47.1
+ */
+export interface QueryGroupsRequestSDKType {
+    pagination?: PageRequestSDKType;
+}
+/**
+ * QueryGroupsResponse is the Query/Groups response type.
+ *
+ * Since: cosmos-sdk 0.47.1
+ */
+export interface QueryGroupsResponse {
+    /** `groups` is all the groups present in state. */
+    groups: GroupInfo[];
+    /** pagination defines the pagination in the response. */
+    pagination?: PageResponse;
+}
+/**
+ * QueryGroupsResponse is the Query/Groups response type.
+ *
+ * Since: cosmos-sdk 0.47.1
+ */
+export interface QueryGroupsResponseSDKType {
+    groups: GroupInfoSDKType[];
+    pagination?: PageResponseSDKType;
+}
 export declare const QueryGroupInfoRequest: {
     encode(message: QueryGroupInfoRequest, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): QueryGroupInfoRequest;
@@ -468,4 +505,18 @@ export declare const QueryTallyResultResponse: {
     fromJSON(object: any): QueryTallyResultResponse;
     toJSON(message: QueryTallyResultResponse): unknown;
     fromPartial(object: Partial<QueryTallyResultResponse>): QueryTallyResultResponse;
+};
+export declare const QueryGroupsRequest: {
+    encode(message: QueryGroupsRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryGroupsRequest;
+    fromJSON(object: any): QueryGroupsRequest;
+    toJSON(message: QueryGroupsRequest): unknown;
+    fromPartial(object: Partial<QueryGroupsRequest>): QueryGroupsRequest;
+};
+export declare const QueryGroupsResponse: {
+    encode(message: QueryGroupsResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryGroupsResponse;
+    fromJSON(object: any): QueryGroupsResponse;
+    toJSON(message: QueryGroupsResponse): unknown;
+    fromPartial(object: Partial<QueryGroupsResponse>): QueryGroupsResponse;
 };

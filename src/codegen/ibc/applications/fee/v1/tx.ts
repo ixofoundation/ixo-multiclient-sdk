@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Fee, FeeSDKType, PacketFee, PacketFeeSDKType } from "./fee";
 import { PacketId, PacketIdSDKType } from "../../../core/channel/v1/channel";
 import * as _m0 from "protobufjs/minimal";

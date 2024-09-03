@@ -1,13 +1,13 @@
 syntax = "proto3";
 package ixo.claims.v1beta1;
 
-option go_package = "github.com/ixofoundation/ixo-blockchain/v2/x/claims/types";
+option go_package = "github.com/ixofoundation/ixo-blockchain/v3/x/claims/types";
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
 import "ixo/claims/v1beta1/claims.proto";
 import "cosmos/base/v1beta1/coin.proto";
-import "ixo/claims/v1beta1/cosmos.proto";
+import "cosmos/bank/v1beta1/bank.proto";
 
 // Msg defines the Msg service.
 service Msg {
@@ -56,7 +56,7 @@ message MsgSubmitClaim {
   // agent is the DID of the agent submitting the claim
   string agent_did = 3 [
     (gogoproto.casttype) =
-        "github.com/ixofoundation/ixo-blockchain/v2/x/iid/types.DIDFragment"
+        "github.com/ixofoundation/ixo-blockchain/v3/x/iid/types.DIDFragment"
   ];
   string agent_address = 4;
   // admin address used to sign this message, validated against Collection Admin
@@ -75,7 +75,7 @@ message MsgEvaluateClaim {
   // agent is the DID of the agent that submits the evaluation
   string agent_did = 4 [
     (gogoproto.casttype) =
-        "github.com/ixofoundation/ixo-blockchain/v2/x/iid/types.DIDFragment"
+        "github.com/ixofoundation/ixo-blockchain/v3/x/iid/types.DIDFragment"
   ];
   string agent_address = 5;
   // admin address used to sign this message, validated against Collection Admin
@@ -104,11 +104,11 @@ message MsgDisputeClaim {
   // subject_id for which this dispute is against, for now can only lay disputes
   // against claims
   string subject_id = 1;
-  // agent is the DID of the agent disputing the claim, agent detials wont be
+  // agent is the DID of the agent disputing the claim, agent details won't be
   // saved in kvStore
   string agent_did = 2 [
     (gogoproto.casttype) =
-        "github.com/ixofoundation/ixo-blockchain/v2/x/iid/types.DIDFragment"
+        "github.com/ixofoundation/ixo-blockchain/v3/x/iid/types.DIDFragment"
   ];
   string agent_address = 3;
   // type is expressed as an integer, interpreted by the client
@@ -122,15 +122,11 @@ message MsgWithdrawPayment {
   // claim_id the withdrawal is for
   string claim_id = 1;
   // Inputs to the multisend tx to run to withdraw payment
-  repeated Input inputs = 2 [
-    (gogoproto.nullable) = false,
-    (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/x/bank/types.Input"
-  ];
+  repeated cosmos.bank.v1beta1.Input inputs = 2
+      [ (gogoproto.nullable) = false ];
   // Outputs for the multisend tx to run to withdraw payment
-  repeated Output outputs = 3 [
-    (gogoproto.nullable) = false,
-    (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/x/bank/types.Output"
-  ];
+  repeated cosmos.bank.v1beta1.Output outputs = 3
+      [ (gogoproto.nullable) = false ];
   // payment type to keep track what payment is for and mark claim payment
   // accordingly
   PaymentType payment_type = 4;

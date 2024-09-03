@@ -22,7 +22,7 @@ export declare namespace utils {
         generateMnemonic: (length?: 12 | 15 | 18 | 21 | 24) => string;
     };
     const address: {
-        pubKeyToAddress: (type: "ed25519" | "secp256k1", pubKey: string | Uint8Array, prefix?: string) => string;
+        pubKeyToAddress: (type: "secp256k1" | "ed25519", pubKey: string | Uint8Array, prefix?: string) => string;
     };
     const common: {
         generateId: (length?: number) => string;

@@ -1,4 +1,5 @@
-import { ProposalExecutorResult, proposalExecutorResultFromJSON, proposalExecutorResultToJSON } from "./types";
+//@ts-nocheck
+import { ProposalExecutorResult, ProposalStatus, TallyResult, TallyResultSDKType, proposalExecutorResultFromJSON, proposalExecutorResultToJSON, proposalStatusFromJSON, proposalStatusToJSON } from "./types";
 import { Long, isSet } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 /** EventCreateGroup is an event emitted when a group is created. */
@@ -70,11 +71,14 @@ export interface EventExec {
   proposalId: Long;
   /** result is the proposal execution result. */
   result: ProposalExecutorResult;
+  /** logs contains error logs in case the execution result is FAILURE. */
+  logs: string;
 }
 /** EventExec is an event emitted when a proposal is executed. */
 export interface EventExecSDKType {
   proposal_id: Long;
   result: ProposalExecutorResult;
+  logs: string;
 }
 /** EventLeaveGroup is an event emitted when group member leaves the group. */
 export interface EventLeaveGroup {
@@ -87,6 +91,21 @@ export interface EventLeaveGroup {
 export interface EventLeaveGroupSDKType {
   group_id: Long;
   address: string;
+}
+/** EventProposalPruned is an event emitted when a proposal is pruned. */
+export interface EventProposalPruned {
+  /** proposal_id is the unique ID of the proposal. */
+  proposalId: Long;
+  /** status is the proposal status (UNSPECIFIED, SUBMITTED, ACCEPTED, REJECTED, ABORTED, WITHDRAWN). */
+  status: ProposalStatus;
+  /** tally_result is the proposal tally result (when applicable). */
+  tallyResult?: TallyResult;
+}
+/** EventProposalPruned is an event emitted when a proposal is pruned. */
+export interface EventProposalPrunedSDKType {
+  proposal_id: Long;
+  status: ProposalStatus;
+  tally_result?: TallyResultSDKType;
 }
 function createBaseEventCreateGroup(): EventCreateGroup {
   return {
@@ -406,7 +425,8 @@ export const EventVote = {
 function createBaseEventExec(): EventExec {
   return {
     proposalId: Long.UZERO,
-    result: 0
+    result: 0,
+    logs: ""
   };
 }
 export const EventExec = {
@@ -416,6 +436,9 @@ export const EventExec = {
     }
     if (message.result !== 0) {
       writer.uint32(16).int32(message.result);
+    }
+    if (message.logs !== "") {
+      writer.uint32(26).string(message.logs);
     }
     return writer;
   },
@@ -432,6 +455,9 @@ export const EventExec = {
         case 2:
           message.result = (reader.int32() as any);
           break;
+        case 3:
+          message.logs = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -442,19 +468,22 @@ export const EventExec = {
   fromJSON(object: any): EventExec {
     return {
       proposalId: isSet(object.proposalId) ? Long.fromValue(object.proposalId) : Long.UZERO,
-      result: isSet(object.result) ? proposalExecutorResultFromJSON(object.result) : 0
+      result: isSet(object.result) ? proposalExecutorResultFromJSON(object.result) : 0,
+      logs: isSet(object.logs) ? String(object.logs) : ""
     };
   },
   toJSON(message: EventExec): unknown {
     const obj: any = {};
     message.proposalId !== undefined && (obj.proposalId = (message.proposalId || Long.UZERO).toString());
     message.result !== undefined && (obj.result = proposalExecutorResultToJSON(message.result));
+    message.logs !== undefined && (obj.logs = message.logs);
     return obj;
   },
   fromPartial(object: Partial<EventExec>): EventExec {
     const message = createBaseEventExec();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? Long.fromValue(object.proposalId) : Long.UZERO;
     message.result = object.result ?? 0;
+    message.logs = object.logs ?? "";
     return message;
   }
 };
@@ -510,6 +539,71 @@ export const EventLeaveGroup = {
     const message = createBaseEventLeaveGroup();
     message.groupId = object.groupId !== undefined && object.groupId !== null ? Long.fromValue(object.groupId) : Long.UZERO;
     message.address = object.address ?? "";
+    return message;
+  }
+};
+function createBaseEventProposalPruned(): EventProposalPruned {
+  return {
+    proposalId: Long.UZERO,
+    status: 0,
+    tallyResult: undefined
+  };
+}
+export const EventProposalPruned = {
+  encode(message: EventProposalPruned, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (!message.proposalId.isZero()) {
+      writer.uint32(8).uint64(message.proposalId);
+    }
+    if (message.status !== 0) {
+      writer.uint32(16).int32(message.status);
+    }
+    if (message.tallyResult !== undefined) {
+      TallyResult.encode(message.tallyResult, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): EventProposalPruned {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEventProposalPruned();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.proposalId = (reader.uint64() as Long);
+          break;
+        case 2:
+          message.status = (reader.int32() as any);
+          break;
+        case 3:
+          message.tallyResult = TallyResult.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): EventProposalPruned {
+    return {
+      proposalId: isSet(object.proposalId) ? Long.fromValue(object.proposalId) : Long.UZERO,
+      status: isSet(object.status) ? proposalStatusFromJSON(object.status) : 0,
+      tallyResult: isSet(object.tallyResult) ? TallyResult.fromJSON(object.tallyResult) : undefined
+    };
+  },
+  toJSON(message: EventProposalPruned): unknown {
+    const obj: any = {};
+    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || Long.UZERO).toString());
+    message.status !== undefined && (obj.status = proposalStatusToJSON(message.status));
+    message.tallyResult !== undefined && (obj.tallyResult = message.tallyResult ? TallyResult.toJSON(message.tallyResult) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<EventProposalPruned>): EventProposalPruned {
+    const message = createBaseEventProposalPruned();
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? Long.fromValue(object.proposalId) : Long.UZERO;
+    message.status = object.status ?? 0;
+    message.tallyResult = object.tallyResult !== undefined && object.tallyResult !== null ? TallyResult.fromPartial(object.tallyResult) : undefined;
     return message;
   }
 };

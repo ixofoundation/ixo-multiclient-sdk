@@ -1,4 +1,5 @@
 import { DeliverTxResponse } from "@cosmjs/stargate";
+import { EventAttribute, EventSDKType } from "../codegen/tendermint/abci/types";
 
 export const generateId = (length: number = 12) => {
   var result = "";
@@ -20,10 +21,39 @@ export const getValueFromEvents = (
   messageIndex = 0
 ) => {
   try {
-    const value = JSON.parse(res.rawLog!)
-      [messageIndex]["events"].find((e: any) => e.type === event)
-      ["attributes"].find((e: any) => e.key === attribute)["value"];
-    // ["value"].replaceAll('"', "");
+    let value: any;
+    // from cosmos-sdk v0.50 onwards, rawLog is not available, events is seperate
+    if (res.events) {
+      value = res.events
+        .find((e: EventSDKType) => {
+          // first check if type is correct
+          const isType = e.type === event;
+          if (!isType) return false;
+
+          // then check if attributes contains correct msg_index
+          const msgIndexAttribute = e.attributes.find(
+            (a: EventAttribute) => a.key === "msg_index"
+          )?.value;
+          if (
+            msgIndexAttribute === undefined ||
+            msgIndexAttribute !== messageIndex.toString()
+          )
+            return false;
+
+          // finally check if attribute is present
+          const isAttribute = e.attributes.find(
+            (a: EventAttribute) => a.key === attribute
+          )?.value;
+          if (isAttribute === undefined) return false;
+          return true;
+        })
+        ?.attributes?.find((a: EventAttribute) => a.key === attribute).value;
+    } else {
+      value = JSON.parse(res.rawLog)
+        [messageIndex]?.events?.find((e: EventSDKType) => e.type === event)
+        ?.attributes?.find((e: EventAttribute) => e.key === attribute)?.value;
+    }
+
     let filteredValue;
     try {
       filteredValue = filterFunc(JSON.parse(value));
@@ -32,7 +62,7 @@ export const getValueFromEvents = (
     }
     return filteredValue;
   } catch (error) {
-    if (logError) console.log({ error, res });
+    if (logError) console.error({ error, res });
     if (throwError) throw error;
   }
 };

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { IdentifiedConnection, IdentifiedConnectionSDKType, ConnectionPaths, ConnectionPathsSDKType, Params, ParamsSDKType } from "./connection";
 import { Long, isSet } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";

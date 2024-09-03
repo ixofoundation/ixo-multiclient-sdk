@@ -45,6 +45,37 @@ export interface MsgRevokeAllowanceResponse {
 /** MsgRevokeAllowanceResponse defines the Msg/RevokeAllowanceResponse response type. */
 export interface MsgRevokeAllowanceResponseSDKType {
 }
+/**
+ * MsgPruneAllowances prunes expired fee allowances.
+ *
+ * Since cosmos-sdk 0.50
+ */
+export interface MsgPruneAllowances {
+    /** pruner is the address of the user pruning expired allowances. */
+    pruner: string;
+}
+/**
+ * MsgPruneAllowances prunes expired fee allowances.
+ *
+ * Since cosmos-sdk 0.50
+ */
+export interface MsgPruneAllowancesSDKType {
+    pruner: string;
+}
+/**
+ * MsgPruneAllowancesResponse defines the Msg/PruneAllowancesResponse response type.
+ *
+ * Since cosmos-sdk 0.50
+ */
+export interface MsgPruneAllowancesResponse {
+}
+/**
+ * MsgPruneAllowancesResponse defines the Msg/PruneAllowancesResponse response type.
+ *
+ * Since cosmos-sdk 0.50
+ */
+export interface MsgPruneAllowancesResponseSDKType {
+}
 export declare const MsgGrantAllowance: {
     encode(message: MsgGrantAllowance, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): MsgGrantAllowance;
@@ -72,4 +103,18 @@ export declare const MsgRevokeAllowanceResponse: {
     fromJSON(_: any): MsgRevokeAllowanceResponse;
     toJSON(_: MsgRevokeAllowanceResponse): unknown;
     fromPartial(_: Partial<MsgRevokeAllowanceResponse>): MsgRevokeAllowanceResponse;
+};
+export declare const MsgPruneAllowances: {
+    encode(message: MsgPruneAllowances, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgPruneAllowances;
+    fromJSON(object: any): MsgPruneAllowances;
+    toJSON(message: MsgPruneAllowances): unknown;
+    fromPartial(object: Partial<MsgPruneAllowances>): MsgPruneAllowances;
+};
+export declare const MsgPruneAllowancesResponse: {
+    encode(_: MsgPruneAllowancesResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgPruneAllowancesResponse;
+    fromJSON(_: any): MsgPruneAllowancesResponse;
+    toJSON(_: MsgPruneAllowancesResponse): unknown;
+    fromPartial(_: Partial<MsgPruneAllowancesResponse>): MsgPruneAllowancesResponse;
 };

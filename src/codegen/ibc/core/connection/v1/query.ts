@@ -1,6 +1,7 @@
+//@ts-nocheck
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../../cosmos/base/query/v1beta1/pagination";
 import { ConnectionEnd, ConnectionEndSDKType, IdentifiedConnection, IdentifiedConnectionSDKType } from "./connection";
-import { Height, HeightSDKType, IdentifiedClientState, IdentifiedClientStateSDKType } from "../../client/v1/client";
+import { Height, HeightSDKType, IdentifiedClientState, IdentifiedClientStateSDKType, Params, ParamsSDKType } from "../../client/v1/client";
 import { Any, AnySDKType } from "../../../../google/protobuf/any";
 import { Long, isSet, bytesFromBase64, base64FromBytes } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";
@@ -191,6 +192,19 @@ export interface QueryConnectionConsensusStateResponseSDKType {
   client_id: string;
   proof: Uint8Array;
   proof_height?: HeightSDKType;
+}
+/** QueryConnectionParamsRequest is the request type for the Query/ConnectionParams RPC method. */
+export interface QueryConnectionParamsRequest {}
+/** QueryConnectionParamsRequest is the request type for the Query/ConnectionParams RPC method. */
+export interface QueryConnectionParamsRequestSDKType {}
+/** QueryConnectionParamsResponse is the response type for the Query/ConnectionParams RPC method. */
+export interface QueryConnectionParamsResponse {
+  /** params defines the parameters of the module. */
+  params?: Params;
+}
+/** QueryConnectionParamsResponse is the response type for the Query/ConnectionParams RPC method. */
+export interface QueryConnectionParamsResponseSDKType {
+  params?: ParamsSDKType;
 }
 function createBaseQueryConnectionRequest(): QueryConnectionRequest {
   return {
@@ -777,6 +791,84 @@ export const QueryConnectionConsensusStateResponse = {
     message.clientId = object.clientId ?? "";
     message.proof = object.proof ?? new Uint8Array();
     message.proofHeight = object.proofHeight !== undefined && object.proofHeight !== null ? Height.fromPartial(object.proofHeight) : undefined;
+    return message;
+  }
+};
+function createBaseQueryConnectionParamsRequest(): QueryConnectionParamsRequest {
+  return {};
+}
+export const QueryConnectionParamsRequest = {
+  encode(_: QueryConnectionParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryConnectionParamsRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryConnectionParamsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): QueryConnectionParamsRequest {
+    return {};
+  },
+  toJSON(_: QueryConnectionParamsRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<QueryConnectionParamsRequest>): QueryConnectionParamsRequest {
+    const message = createBaseQueryConnectionParamsRequest();
+    return message;
+  }
+};
+function createBaseQueryConnectionParamsResponse(): QueryConnectionParamsResponse {
+  return {
+    params: undefined
+  };
+}
+export const QueryConnectionParamsResponse = {
+  encode(message: QueryConnectionParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryConnectionParamsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryConnectionParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.params = Params.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryConnectionParamsResponse {
+    return {
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined
+    };
+  },
+  toJSON(message: QueryConnectionParamsResponse): unknown {
+    const obj: any = {};
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryConnectionParamsResponse>): QueryConnectionParamsResponse {
+    const message = createBaseQueryConnectionParamsResponse();
+    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
   }
 };

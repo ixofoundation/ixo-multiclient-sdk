@@ -20,6 +20,7 @@ import { fromTimestamp } from "../../src/codegen/helpers";
 import axios from "axios";
 import { claims_mainnet, claims_testnet } from "../constants/claims";
 import { EcsCredentialsWorkerUrl } from "../setup/constants";
+import Long from "long";
 
 export const quickQueries = () =>
   describe("Quick queries to see states", () => {
@@ -258,7 +259,7 @@ export const quickQueries = () =>
 
     // test("Query proposal by id", async () => {
     //   const res = await queryClient.cosmos.gov.v1beta1.proposal({
-    //     proposalId: Long.fromNumber(69),
+    //     proposalId: Long.fromNumber(12),
     //   });
     //   console.log(res.proposal);
     //   expect(res).toBeTruthy();
@@ -280,6 +281,7 @@ export const quickQueries = () =>
     //     .address;
     //   const res = await queryClient.cosmos.bank.v1beta1.allBalances({
     //     address,
+    //     resolveDenom: false,
     //   });
     //   console.log(res.balances);
     //   expect(res).toBeTruthy();
