@@ -174,7 +174,7 @@ export const contracts = [
   },
   {
     name: "ixoswap",
-    path: ["contracts", "ixo", "ixoswap.wasm"],
+    path: ["contracts", "ixo", "ixoswap", "ixoswap.wasm"],
     category: "ixo",
     code: { devnet: 31, testnet: 30, mainnet: 29 },
   },

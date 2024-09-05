@@ -17,7 +17,7 @@ export const tokenBasic = () =>
   describe("Testing the Token module", () => {
     let name = "TEST";
     let description = "Test credits";
-    let cap = 2000000;
+    let cap = 20000000000000;
 
     // Create token class
     let tokenClass = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
@@ -42,7 +42,7 @@ export const tokenBasic = () =>
     });
 
     let index = "1";
-    let amount = 50;
+    let amount = 20000000000;
     let collectionDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14"; // Did of collection
     let nftDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14"; // Did of entity to map token to
     let tokenData = [
@@ -71,13 +71,19 @@ export const tokenBasic = () =>
       return res;
     });
 
-    testMsg("/ixo.token.v1beta1.MsgTransferToken", () =>
-      Token.TransferToken([
-        {
-          id: tokenId,
-          amount: 1,
-        },
-      ])
+    // few more mint tokens
+    new Array(30).fill(0).map((_, i) =>
+      testMsg("/ixo.token.v1beta1.MsgMintToken", () =>
+        Token.MintToken(contractAddress1155, [
+          {
+            name,
+            index: (i + 3).toString(),
+            amount,
+            collection: collectionDid,
+            tokenData,
+          },
+        ])
+      )
     );
 
     testMsg("/ixo.token.v1beta1.MsgCancelToken", () =>
@@ -106,7 +112,7 @@ export const tokenBasic = () =>
     //   Token.StopToken(contractAddress1155)
     // );
 
-    let authzIndex = "2";
+    let authzIndex = "999999";
     testMsg("/cosmos.authz.v1beta1.MsgGrant mint token", () =>
       Token.MsgGrantContract(
         contractAddress1155,
@@ -309,7 +315,7 @@ export const supamotoTokensFarm = () =>
     );
 
     const blocksyncUrlGraphql = "https://blocksync-graphql.ixo.earth";
-    const collectionToFarm = dids.assetCollection;
+    const collectionToFarm = dids.ai4gCollection;
     const collTokensToUseForTopup = dids.legacyCollection;
 
     testMsg("Farm tokens", async () => {
@@ -521,6 +527,11 @@ export const supamotoTokensFarm = () =>
       console.log("Create file to save tokens");
       saveFileToPath(
         ["documents", "emerging", "tokenData.json"],
+        // JSON.stringify(
+        //   totalAmounts.map((t) => t.did),
+        //   null,
+        //   2
+        // )
         JSON.stringify({ totalAmounts }, null, 2)
       );
 

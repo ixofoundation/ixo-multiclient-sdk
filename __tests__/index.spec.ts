@@ -62,7 +62,7 @@ IID.generateBlockchainTestUsers();
 // Claims.supamotoClaims2();
 // Claims.claimsUpdateCollectionPayments();
 // CosmWasm.swapBasic();
-// CosmWasm.swapContract();
+CosmWasm.swapContract();
 // Cosmos.feegrantAllCurrentUsers();
 // Claims.supamotoEvaluateFuelPurchases();
 // Claims.supamotoCreateCollection();

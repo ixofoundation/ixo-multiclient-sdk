@@ -123,19 +123,19 @@ export const iidReplaceLinkedResource = () =>
     //   return remove as any;
     // });
 
-    testMsg("/ixo.iid.v1beta1.MsgAddService", async () => {
-      const entityDid = dids.legacyCollection;
-      const resource = ixo.iid.v1beta1.Service.fromPartial({
-        id: "{id}#cellnode",
-        type: "Cellnode",
-        serviceEndpoint: "https://cellnode-pandora.ixo.earth",
-      });
+    // testMsg("/ixo.iid.v1beta1.MsgAddService", async () => {
+    //   const entityDid = dids.legacyCollection;
+    //   const resource = ixo.iid.v1beta1.Service.fromPartial({
+    //     id: "{id}#cellnode",
+    //     type: "Cellnode",
+    //     serviceEndpoint: "https://cellnode-pandora.ixo.earth",
+    //   });
 
-      const remove = await Iid.DeleteService(entityDid, resource.id);
-      const add = await Iid.AddService(entityDid, resource);
+    //   const remove = await Iid.DeleteService(entityDid, resource.id);
+    //   const add = await Iid.AddService(entityDid, resource);
 
-      return remove as any;
-    });
+    //   return remove as any;
+    // });
 
     // testMsg("/ixo.iid.v1beta1.AddLinkedClaim", async () => {
     //   const entityDid = dids.legacyCollection;
@@ -156,48 +156,47 @@ export const iidReplaceLinkedResource = () =>
     //   return remove as any;
     // });
 
-    // testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
-    //   const getResource = (externalId: string) =>
-    //     ixo.iid.v1beta1.LinkedResource.fromPartial({
-    //       id: `{id}#profile`,
-    //       type: "Settings",
-    //       description: "Profile",
-    //       mediaType: "application/ld+json",
-    //       serviceEndpoint:
-    //         "ipfs:bafkreigx7val5mfeghm636jcso6kt7wqpieh7h7hgdkcn64xxyy7ihp2q4",
-    //       proof: "bafkreigx7val5mfeghm636jcso6kt7wqpieh7h7hgdkcn64xxyy7ihp2q4",
-    //       encrypted: "false",
-    //       right: "",
-    //     });
+    testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
+      const getResource = (externalId?: string) =>
+        ixo.iid.v1beta1.LinkedResource.fromPartial({
+          id: `{id}#profile`,
+          type: "Settings",
+          description: "Profile",
+          mediaType: "application/ld+json",
+          serviceEndpoint:
+            "ipfs:bafkreigbt6tid3xv5lm23e2wgbbfpdcqmhdjf33iffmih4wcr6x5zzxipy",
+          proof: "bafkreigbt6tid3xv5lm23e2wgbbfpdcqmhdjf33iffmih4wcr6x5zzxipy",
+          encrypted: "false",
+          right: "",
+        });
 
-    //   const collections = await axios.get(
-    //     "https://blocksync.ixo.earth/api/entity/collectionsByOwnerAddress/ixo1lgelskjkjjasl860n6kmevlflanqj5vh8l8p5w"
-    //   );
-    //   const allEntities = collections.data[0].entities;
-    //   // console.log(allEntities);
+      const allEntities = [
+        "did:ixo:entity:3a139d17d1911cb3e5dedd6aa7a88ad9",
+        "did:ixo:entity:ffb6b788b6d6a2e7266d5a3eb7074816",
+      ];
 
-    //   const chunkSize = 100;
-    //   let index = 0;
-    //   for (const entities of chunkArray(allEntities, chunkSize)) {
-    //     index++;
-    //     console.log("replacing linked resource for batch", index);
-    //     try {
-    //       await Iid.DeleteLinkedResources(
-    //         entities.map((e: any) => ({
-    //           did: e.id,
-    //           resourceId: `{id}#profile`,
-    //         }))
-    //       );
-    //     } catch (error) {}
-    //     await Iid.AddLinkedResources(
-    //       entities.map((e: any) => ({
-    //         did: e.id,
-    //         linkedResource: getResource(e.externalId),
-    //       }))
-    //     );
-    //   }
-    //   return true as any;
-    // });
+      const chunkSize = 30;
+      let index = 0;
+      for (const entities of chunkArray(allEntities, chunkSize)) {
+        index++;
+        console.log("replacing linked resource for batch", index);
+        try {
+          await Iid.DeleteLinkedResources(
+            entities.map((e: string) => ({
+              did: e,
+              resourceId: `{id}#profile`,
+            }))
+          );
+        } catch (error) {}
+        await Iid.AddLinkedResources(
+          entities.map((e: string) => ({
+            did: e,
+            linkedResource: getResource(),
+          }))
+        );
+      }
+      return true as any;
+    });
 
     // testMsg("/ixo.entity.v1beta1.MsgUpdateEntity", () =>
     //   Entity.UpdateEntity(

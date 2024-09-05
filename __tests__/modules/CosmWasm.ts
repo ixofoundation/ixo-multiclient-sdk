@@ -1,5 +1,4 @@
 import { SignerData } from "@cosmjs/stargate";
-import Long from "long";
 import { getFee, WalletUsers } from "../helpers/constants";
 import {
   createClient,
@@ -10,6 +9,8 @@ import {
   getFileFromPath,
 } from "../helpers/common";
 import { SigningStargateClient } from "../../src";
+// @ts-ignore
+import Long from "long";
 
 export const WasmStoreTrx = async (
   contract: string = "cw721",
