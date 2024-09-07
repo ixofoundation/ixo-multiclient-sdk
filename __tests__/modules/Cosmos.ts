@@ -19,7 +19,8 @@ export const BankSendTrx = async (
   toUser = WalletUsers.tester,
   fromWalletKeyType: KeyTypes = "secp",
   toWalletKeyType: KeyTypes = "secp",
-  toAddresss?: string
+  toAddresss?: string,
+  denom = "uixo"
 ) => {
   const client = await createClient(getUser(fromUser, fromWalletKeyType));
 
@@ -38,7 +39,7 @@ export const BankSendTrx = async (
       amount: [
         cosmos.base.v1beta1.Coin.fromPartial({
           amount: amount.toString(),
-          denom: "uixo",
+          denom: denom,
         }),
       ],
     }),

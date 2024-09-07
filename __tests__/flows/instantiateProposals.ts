@@ -186,7 +186,7 @@ export const cwUploadProposal = () =>
       "/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract",
       async () => {
         const name = "ixoswap";
-        const res = await Cosmos.MsgSubmitProposalStoreCW(`custom ${name}`, [
+        const res = await Cosmos.MsgSubmitProposalStoreCWOld(`custom ${name}`, [
           "contracts",
           "ixo",
           `${name}.wasm`,

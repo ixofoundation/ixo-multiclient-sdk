@@ -618,164 +618,238 @@ export const swapContract = () => {
     // );
 
     let cw20ContractAddress: string =
-      "ixo1r4azksxfmfn3wx6tlazcu5acreymnvyacnu3q33532zdt6ypwmxqnystvl";
-    // testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
-    //   const tester = (await getUser(WalletUsers.bob).getAccounts())[0].address;
-    //   const msg = {
-    //     decimals: 6,
-    //     initial_balances: [
-    //       {
-    //         address: tester,
-    //         amount: "30000000000000",
-    //       },
-    //     ],
-    //     name: "CW20",
-    //     symbol: "HAHA",
-    //   };
+      "ixo1jmr5uttywk0qgzhcme5z4tfy7kg6aprz9wyrdr9tekx25f0lck2q8lk60t";
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
+      const tester = (await getUser(WalletUsers.tester).getAccounts())[0]
+        .address;
+      const msg = {
+        decimals: 6,
+        initial_balances: [
+          {
+            address: tester,
+            amount: "30000000000000",
+          },
+        ],
+        mint: {
+          minter: tester,
+        },
+        name: "CW20",
+        symbol: "HAHA",
+      };
 
-    //   const res = await Wasm.WasmInstantiateTrx(25, JSON.stringify(msg));
-    //   cw20ContractAddress = utils.common.getValueFromEvents(
-    //     res,
-    //     "instantiate",
-    //     "_contract_address"
-    //   );
-    //   console.log({ cw20ContractAddress });
-    //   return res;
-    // });
-
-    // change token2 value here if want to use cw20 rather than native
-    type token2 = "cw20" | "native";
-    const tokenType: token2 = "native";
+      const res = await Wasm.WasmInstantiateTrx(25, JSON.stringify(msg));
+      cw20ContractAddress = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ cw20ContractAddress });
+      return res;
+    });
 
     let swapContractAddress: string =
-      "ixo1k3dmfjc8xnm7q0ay58d8lu029t6m7ezt73yestsc4j8jx0dxmd7sllqg77";
+      "ixo1p5nwq2ut6344qwlvjv42ayqhvarl46lnqfmnrgjnh2cwahl54g2qpg4y8y";
     let swapContractAddress2: string =
-      "ixo1e9yw6r5rrcuxygse9egz6xcmcvkt7dhdkupmmaazrwztvv7efywq9q3a00";
-    // testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
-    //   const tester = (await getUser(WalletUsers.bob).getAccounts())[0].address;
-    //   const msg = {
-    //     token1155_denom: { cw1155: [tokenContractAddress, "TEST"] },
-    //     token2_denom: { native: "uixo" },
-    //     lp_token_code_id: 25,
-    //     max_slippage_percent: "0.3",
-    //     protocol_fee_recipient: tester,
-    //     protocol_fee_percent: "0.1",
-    //     lp_fee_percent: "0.2",
-    //   };
+      "ixo1hpxqzff8wwn87e4qt7hfy9rvmf04lm7s03qfj4t05jfg0ayptlws6d8eq5";
+    let swapContractAddress3: string =
+      "ixo1mfxffyrda922hpt23f7hpf8t50sadcwavkt54cuyl3w6p4zwz36s0ednpm";
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
+      const tester = (await getUser(WalletUsers.bob).getAccounts())[0].address;
+      const msg = {
+        token1155_denom: { cw1155: [tokenContractAddress, "TEST"] },
+        token2_denom: { native: "uixo" },
+        lp_token_code_id: 25,
+        max_slippage_percent: "10",
+        protocol_fee_recipient: tester,
+        protocol_fee_percent: "0.1",
+        lp_fee_percent: "0.2",
+      };
 
-    //   const res = await Wasm.WasmInstantiateTrx(30, JSON.stringify(msg));
-    //   swapContractAddress = utils.common.getValueFromEvents(
-    //     res,
-    //     "instantiate",
-    //     "_contract_address"
-    //   );
-    //   console.log({ swapContractAddress });
-    //   return res;
-    // });
-    // testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract 2", async () => {
-    //   const tester = (await getUser(WalletUsers.bob).getAccounts())[0].address;
-    //   const msg = {
-    //     token1155_denom: { cw1155: [tokenContractAddress, "TEST"] },
-    //     token2_denom: { native: "uixo" },
-    //     lp_token_code_id: 25,
-    //     max_slippage_percent: "0.3",
-    //     protocol_fee_recipient: tester,
-    //     protocol_fee_percent: "2",
-    //     lp_fee_percent: "1",
-    //   };
+      const res = await Wasm.WasmInstantiateTrx(29, JSON.stringify(msg));
+      swapContractAddress = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ swapContractAddress });
+      return res;
+    });
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract 2", async () => {
+      const tester = (await getUser(WalletUsers.bob).getAccounts())[0].address;
+      const msg = {
+        token1155_denom: { cw1155: [tokenContractAddress, "TEST"] },
+        token2_denom: { native: "uixo" },
+        lp_token_code_id: 25,
+        max_slippage_percent: "10",
+        protocol_fee_recipient: tester,
+        protocol_fee_percent: "2",
+        lp_fee_percent: "1",
+      };
 
-    //   const res = await Wasm.WasmInstantiateTrx(30, JSON.stringify(msg));
-    //   swapContractAddress2 = utils.common.getValueFromEvents(
-    //     res,
-    //     "instantiate",
-    //     "_contract_address"
-    //   );
-    //   console.log({ swapContractAddress2 });
-    //   return res;
-    // });
+      const res = await Wasm.WasmInstantiateTrx(29, JSON.stringify(msg));
+      swapContractAddress2 = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ swapContractAddress2 });
+      return res;
+    });
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract 3", async () => {
+      const tester = (await getUser(WalletUsers.bob).getAccounts())[0].address;
+      const msg = {
+        token1155_denom: { cw1155: [tokenContractAddress, "TEST"] },
+        token2_denom: { cw20: cw20ContractAddress },
+        lp_token_code_id: 25,
+        max_slippage_percent: "10",
+        protocol_fee_recipient: tester,
+        protocol_fee_percent: "2",
+        lp_fee_percent: "1",
+      };
 
-    // testMsg(
-    //   "/cosmwasm.wasm.v1.MsgExecuteContract approve swap contract for token",
-    //   async () =>
-    //     await Wasm.WasmExecuteTrx(
-    //       tokenContractAddress,
-    //       JSON.stringify({
-    //         approve_all: {
-    //           operator: swapContractAddress,
-    //         },
-    //       }),
-    //       WalletUsers.tester
-    //     )
-    // );
-    // testMsg(
-    //   "/cosmwasm.wasm.v1.MsgExecuteContract approve swap contract 2 for token",
-    //   async () =>
-    //     await Wasm.WasmExecuteTrx(
-    //       tokenContractAddress,
-    //       JSON.stringify({
-    //         approve_all: {
-    //           operator: swapContractAddress2,
-    //         },
-    //       }),
-    //       WalletUsers.tester
-    //     )
-    // );
+      const res = await Wasm.WasmInstantiateTrx(29, JSON.stringify(msg));
+      swapContractAddress3 = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ swapContractAddress3 });
+      return res;
+    });
 
-    // testMsg("/cosmwasm.wasm.v1.MsgExecuteContract add liquidity", async () => {
-    //   console.log({ tokenIds });
-    //   const msg = {
-    //     add_liquidity: {
-    //       token1155_amounts: {
-    //         ...tokenIds.reduce((acc, id) => {
-    //           acc[id] = "10000000000";
-    //           return acc;
-    //         }, {}),
-    //       },
-    //       min_liquidity: "300000000000",
-    //       max_token2: "300000000000",
-    //     },
-    //   };
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract approve swap contract for token",
+      async () =>
+        await Wasm.WasmExecuteTrx(
+          tokenContractAddress,
+          JSON.stringify({
+            approve_all: {
+              operator: swapContractAddress,
+            },
+          }),
+          WalletUsers.tester
+        )
+    );
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract approve swap contract 2 for token",
+      async () =>
+        await Wasm.WasmExecuteTrx(
+          tokenContractAddress,
+          JSON.stringify({
+            approve_all: {
+              operator: swapContractAddress2,
+            },
+          }),
+          WalletUsers.tester
+        )
+    );
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract approve swap contract 3 for token",
+      async () =>
+        await Wasm.WasmExecuteTrx(
+          tokenContractAddress,
+          JSON.stringify({
+            approve_all: {
+              operator: swapContractAddress3,
+            },
+          }),
+          WalletUsers.tester
+        )
+    );
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract approve swap cw20 contract 3 for token",
+      async () =>
+        await Wasm.WasmExecuteTrx(
+          cw20ContractAddress,
+          JSON.stringify({
+            increase_allowance: {
+              amount: "3000000000",
+              spender: swapContractAddress3,
+            },
+          }),
+          WalletUsers.tester
+        )
+    );
 
-    //   const res = await Wasm.WasmExecuteTrx(
-    //     swapContractAddress,
-    //     JSON.stringify(msg),
-    //     WalletUsers.tester,
-    //     { amount: "300000000000", denom: "uixo" }
-    //   );
-    //   return res;
-    // });
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract add liquidity", async () => {
+      console.log({ tokenIds });
+      const msg = {
+        add_liquidity: {
+          token1155_amounts: {
+            ...tokenIds.reduce((acc, id) => {
+              acc[id] = "10000000000";
+              return acc;
+            }, {}),
+          },
+          min_liquidity: "300000000000",
+          max_token2: "300000000000",
+        },
+      };
 
-    // testMsg(
-    //   "/cosmwasm.wasm.v1.MsgExecuteContract add liquidity 2",
-    //   async () => {
-    //     console.log({ tokenIds });
-    //     const msg = {
-    //       add_liquidity: {
-    //         token1155_amounts: {
-    //           ...tokenIds.reduce((acc, id) => {
-    //             acc[id] = "10000000";
-    //             return acc;
-    //           }, {}),
-    //         },
-    //         min_liquidity: "300000000",
-    //         max_token2: "300000000",
-    //       },
-    //     };
+      const res = await Wasm.WasmExecuteTrx(
+        swapContractAddress,
+        JSON.stringify(msg),
+        WalletUsers.tester,
+        { amount: "300000000000", denom: "uixo" }
+      );
+      return res;
+    });
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract add liquidity 2",
+      async () => {
+        console.log({ tokenIds });
+        const msg = {
+          add_liquidity: {
+            token1155_amounts: {
+              ...tokenIds.reduce((acc, id) => {
+                acc[id] = "10000000";
+                return acc;
+              }, {}),
+            },
+            min_liquidity: "300000000",
+            max_token2: "300000000",
+          },
+        };
 
-    //     const res = await Wasm.WasmExecuteTrx(
-    //       swapContractAddress2,
-    //       JSON.stringify(msg),
-    //       WalletUsers.tester,
-    //       { amount: "300000000", denom: "uixo" }
-    //     );
-    //     return res;
-    //   }
-    // );
+        const res = await Wasm.WasmExecuteTrx(
+          swapContractAddress2,
+          JSON.stringify(msg),
+          WalletUsers.tester,
+          { amount: "300000000", denom: "uixo" }
+        );
+        return res;
+      }
+    );
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract add liquidity 3",
+      async () => {
+        console.log({ tokenIds });
+        const msg = {
+          add_liquidity: {
+            token1155_amounts: {
+              ...tokenIds.reduce((acc, id) => {
+                acc[id] = "10000000";
+                return acc;
+              }, {}),
+            },
+            min_liquidity: "300000000",
+            max_token2: "300000000",
+          },
+        };
+
+        const res = await Wasm.WasmExecuteTrx(
+          swapContractAddress3,
+          JSON.stringify(msg),
+          WalletUsers.tester
+        );
+        return res;
+      }
+    );
 
     testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () => {
-      if (1) throw new Error("stop"); // helper to not run this without having to comment out
+      // if (1) throw new Error("stop"); // helper to not run this without having to comment out
       const numberOfTests = 15;
-      const slippage = 20;
+      const slippage = 8;
       const txList: TxRaw[] = [];
       const user = getUser(WalletUsers.tester);
       const client = await createClient(user);
@@ -892,92 +966,122 @@ export const swapContract = () => {
       return swapResponses![0];
     });
 
-    // testMsg("/cosmwasm.wasm.v1.MsgExecuteContract freeze deposits", async () =>
-    //   Wasm.WasmExecuteTrx(
-    //     swapContractAddress,
-    //     JSON.stringify({
-    //       freeze_deposits: {
-    //         freeze: true,
-    //       },
-    //     })
-    //   )
-    // );
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract freeze deposits", async () =>
+      Wasm.WasmExecuteTrx(
+        swapContractAddress,
+        JSON.stringify({
+          freeze_deposits: {
+            freeze: true,
+          },
+        })
+      )
+    );
 
-    // testMsg(
-    //   "/cosmwasm.wasm.v1.MsgExecuteContract swap should fail for frozen",
-    //   async () =>
-    //     Wasm.WasmExecuteTrx(
-    //       swapContractAddress,
-    //       JSON.stringify({
-    //         swap: {
-    //           input_token: TokenType.Token1155,
-    //           input_amount: {
-    //             multiple: {
-    //               [tokenIds[0]]: "100",
-    //             },
-    //           },
-    //           min_output: {
-    //             single: "70",
-    //           },
-    //         },
-    //       })
-    //     ),
-    //   undefined,
-    //   false
-    // );
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract swap should fail for frozen",
+      async () =>
+        Wasm.WasmExecuteTrx(
+          swapContractAddress,
+          JSON.stringify({
+            swap: {
+              input_token: TokenType.Token1155,
+              input_amount: {
+                multiple: {
+                  [tokenIds[0]]: "100",
+                },
+              },
+              min_output: {
+                single: "70",
+              },
+            },
+          })
+        ),
+      undefined,
+      false
+    );
 
-    // testMsg(
-    //   "/cosmwasm.wasm.v1.MsgExecuteContract unfreeze freeze deposits",
-    //   async () =>
-    //     Wasm.WasmExecuteTrx(
-    //       swapContractAddress,
-    //       JSON.stringify({
-    //         freeze_deposits: {
-    //           freeze: false,
-    //         },
-    //       })
-    //     )
-    // );
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract unfreeze freeze deposits",
+      async () =>
+        Wasm.WasmExecuteTrx(
+          swapContractAddress,
+          JSON.stringify({
+            freeze_deposits: {
+              freeze: false,
+            },
+          })
+        )
+    );
 
-    // testMsg("/cosmwasm.wasm.v1.MsgExecuteContract update slippage", async () =>
-    //   Wasm.WasmExecuteTrx(
-    //     swapContractAddress,
-    //     JSON.stringify({
-    //       update_slippage: {
-    //         max_slippage_percent: "2",
-    //       },
-    //     })
-    //   )
-    // );
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract update slippage", async () =>
+      Wasm.WasmExecuteTrx(
+        swapContractAddress,
+        JSON.stringify({
+          update_slippage: {
+            max_slippage_percent: "2",
+          },
+        })
+      )
+    );
 
-    // testMsg(
-    //   "/cosmwasm.wasm.v1.MsgExecuteContract transfer ownership",
-    //   async () => {
-    //     const alice = getUser(WalletUsers.alice);
-    //     const aliceAddress = (await alice.getAccounts())[0].address;
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract transfer ownership",
+      async () => {
+        const alice = getUser(WalletUsers.alice);
+        const aliceAddress = (await alice.getAccounts())[0].address;
 
-    //     const res = Wasm.WasmExecuteTrx(
-    //       swapContractAddress,
-    //       JSON.stringify({
-    //         transfer_ownership: {
-    //           owner: aliceAddress,
-    //         },
-    //       })
-    //     );
-    //     return res;
-    //   }
-    // );
+        const res = Wasm.WasmExecuteTrx(
+          swapContractAddress,
+          JSON.stringify({
+            transfer_ownership: {
+              owner: aliceAddress,
+            },
+          })
+        );
+        return res;
+      }
+    );
 
-    // testMsg("/cosmwasm.wasm.v1.MsgExecuteContract claim ownership", async () =>
-    //   Wasm.WasmExecuteTrx(
-    //     swapContractAddress,
-    //     JSON.stringify({
-    //       claim_ownership: {},
-    //     }),
-    //     WalletUsers.alice
-    //   )
-    // );
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract claim ownership", async () =>
+      Wasm.WasmExecuteTrx(
+        swapContractAddress,
+        JSON.stringify({
+          claim_ownership: {},
+        }),
+        WalletUsers.alice
+      )
+    );
 
+    let swapContractLPAddress: string = "";
+    test("Query swapContractLPAddress", async () => {
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: swapContractAddress,
+        queryData: utils.conversions.JsonToArray(
+          JSON.stringify({
+            info: {},
+          })
+        ),
+      });
+      swapContractLPAddress = JSON.parse(
+        utils.conversions.Uint8ArrayToJS(res.data)
+      ).lp_token_address;
+      console.log({ swapContractLPAddress });
+      expect(res).toBeTruthy();
+    });
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract approve swap LP contract for token",
+      async () =>
+        await Wasm.WasmExecuteTrx(
+          swapContractLPAddress,
+          JSON.stringify({
+            increase_allowance: {
+              amount: "200",
+              spender: swapContractAddress,
+            },
+          }),
+          WalletUsers.tester
+        )
+    );
     testMsg("/cosmwasm.wasm.v1.MsgExecuteContract remove liquidity", async () =>
       Wasm.WasmExecuteTrx(
         swapContractAddress,
@@ -985,61 +1089,353 @@ export const swapContract = () => {
           remove_liquidity: {
             amount: "200",
             min_token1155: {
-              single: "150",
+              single: "196",
             },
-            min_token2: "150",
+            min_token2: "196",
           },
         })
       )
     );
 
-    // testMsg(
-    //   "/cosmwasm.wasm.v1.MsgExecuteContract new owner update fee",
-    //   async () => {
-    //     const alice = (await getUser(WalletUsers.alice).getAccounts())[0]
-    //       .address;
-    //     const res = await Wasm.WasmExecuteTrx(
-    //       swapContractAddress,
-    //       JSON.stringify({
-    //         update_fee: {
-    //           lp_fee_percent: "0.01",
-    //           protocol_fee_percent: "0.01",
-    //           protocol_fee_recipient: alice,
-    //         },
-    //       }),
-    //       WalletUsers.alice
-    //     );
-    //     return res;
-    //   }
-    // );
+    let swapContractLPAddress3: string = "";
+    test("Query swapContractLPAddress", async () => {
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: swapContractAddress3,
+        queryData: utils.conversions.JsonToArray(
+          JSON.stringify({
+            info: {},
+          })
+        ),
+      });
+      swapContractLPAddress3 = JSON.parse(
+        utils.conversions.Uint8ArrayToJS(res.data)
+      ).lp_token_address;
+      console.log({ swapContractLPAddress3 });
+      expect(res).toBeTruthy();
+    });
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract approve swap LP contract 3 for token",
+      async () =>
+        await Wasm.WasmExecuteTrx(
+          swapContractLPAddress3,
+          JSON.stringify({
+            increase_allowance: {
+              amount: "200",
+              spender: swapContractAddress3,
+            },
+          }),
+          WalletUsers.tester
+        )
+    );
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract remove liquidity 3",
+      async () =>
+        Wasm.WasmExecuteTrx(
+          swapContractAddress3,
+          JSON.stringify({
+            remove_liquidity: {
+              amount: "200",
+              min_token1155: {
+                single: "180",
+              },
+              min_token2: "180",
+            },
+          })
+        )
+    );
 
-    // testMsg(
-    //   "/cosmwasm.wasm.v1.MsgExecuteContract test swap send to",
-    //   async () => {
-    //     const charlie = (await getUser(WalletUsers.charlie).getAccounts())[0]
-    //       .address;
-    //     const msg = {
-    //       swap_and_send_to: {
-    //         input_token: TokenType.Token2,
-    //         input_amount: {
-    //           single: "100000",
-    //         },
-    //         min_token: {
-    //           single: "90000",
-    //         },
-    //         recipient: charlie,
-    //       },
-    //     };
-    //     console.dir(msg, { depth: null });
-    //     const res = await Wasm.WasmExecuteTrx(
-    //       swapContractAddress,
-    //       JSON.stringify(msg),
-    //       WalletUsers.tester,
-    //       { amount: "100000", denom: "uixo" }
-    //     );
-    //     return res;
-    //   }
-    // );
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract new owner update fee",
+      async () => {
+        const alice = (await getUser(WalletUsers.alice).getAccounts())[0]
+          .address;
+        const res = await Wasm.WasmExecuteTrx(
+          swapContractAddress,
+          JSON.stringify({
+            update_fee: {
+              lp_fee_percent: "0.01",
+              protocol_fee_percent: "0.01",
+              protocol_fee_recipient: alice,
+            },
+          }),
+          WalletUsers.alice
+        );
+        return res;
+      }
+    );
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract test swap send to",
+      async () => {
+        const charlie = (await getUser(WalletUsers.charlie).getAccounts())[0]
+          .address;
+        const msg = {
+          swap_and_send_to: {
+            input_token: TokenType.Token2,
+            input_amount: {
+              single: "100000",
+            },
+            min_token: {
+              single: "98500",
+            },
+            recipient: charlie,
+          },
+        };
+        const res = await Wasm.WasmExecuteTrx(
+          swapContractAddress,
+          JSON.stringify(msg),
+          WalletUsers.tester,
+          { amount: "100000", denom: "uixo" }
+        );
+        return res;
+      }
+    );
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap 3", async () =>
+      Wasm.WasmExecuteTrx(
+        swapContractAddress3,
+        JSON.stringify({
+          swap: {
+            input_token: TokenType.Token1155,
+            input_amount: {
+              multiple: {
+                [tokenIds[0]]: "100",
+              },
+            },
+            min_output: {
+              single: "90",
+            },
+          },
+        })
+      )
+    );
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap 3", async () =>
+      Wasm.WasmExecuteTrx(
+        swapContractAddress3,
+        JSON.stringify({
+          swap: {
+            input_token: TokenType.Token2,
+            input_amount: {
+              single: "100",
+            },
+            min_output: {
+              single: "90",
+            },
+          },
+        })
+      )
+    );
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract test pass_through_swap",
+      async () => {
+        const msg = {
+          pass_through_swap: {
+            input_token: TokenType.Token1155,
+            input_token_amount: {
+              multiple: {
+                [tokenIds[0]]: "100",
+              },
+            },
+            output_min_token: {
+              single: "95",
+            },
+            output_amm_address: swapContractAddress2,
+          },
+        };
+        const res = await Wasm.WasmExecuteTrx(
+          swapContractAddress,
+          JSON.stringify(msg),
+          WalletUsers.tester
+        );
+        console.dir(res, { depth: null });
+        return res;
+      }
+    );
+  });
+};
+
+export const swapContractTestnet = () => {
+  describe("Testing swaps on contract", () => {
+    // must be existing token module contract, ixoswap smart contract does validation
+    let tokenContractAddress: string =
+      "ixo1z6wep7u638fmyehatcyc7j7tjxl8lw4dk3jlzkq90yfxfq66vsnsyzzecj";
+
+    let tokenIds: string[] = new Array(30).fill(0).map((_, i) => i.toString());
+    test("Query token ids", async () => {
+      const contractAddress1155 =
+        "ixo1z6wep7u638fmyehatcyc7j7tjxl8lw4dk3jlzkq90yfxfq66vsnsyzzecj";
+      const tester = (await getUser().getAccounts())[0].address;
+
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: contractAddress1155,
+        queryData: utils.conversions.JsonToArray(
+          JSON.stringify({
+            tokens: {
+              owner: tester,
+              limit: 30,
+            },
+          })
+        ),
+      });
+      tokenIds = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data)).tokens;
+      console.log(tokenIds);
+      expect(res).toBeTruthy();
+    });
+
+    let swapContractAddress: string =
+      "ixo1dplwzdatv7wzuqrwsz274f9s86d88takhlg8p867qgjelsf09tks409lx7";
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
+      const tester = (await getUser(WalletUsers.bob).getAccounts())[0].address;
+      const msg = {
+        token1155_denom: { cw1155: [tokenContractAddress, "CARBON"] },
+        token2_denom: {
+          native:
+            "ibc/376222D6D9DAE23092E29740E56B758580935A6D77C24C2ABD57A6A78A1F3955",
+        },
+        lp_token_code_id: 25,
+        max_slippage_percent: "10",
+        protocol_fee_recipient: tester,
+        protocol_fee_percent: "0.1",
+        lp_fee_percent: "0.2",
+      };
+
+      const res = await Wasm.WasmInstantiateTrx(31, JSON.stringify(msg));
+      swapContractAddress = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ swapContractAddress });
+      return res;
+    });
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract approve swap contract for token",
+      async () =>
+        await Wasm.WasmExecuteTrx(
+          tokenContractAddress,
+          JSON.stringify({
+            approve_all: {
+              operator: swapContractAddress,
+            },
+          }),
+          WalletUsers.tester
+        )
+    );
+
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract add liquidity", async () => {
+      console.log({ tokenIds });
+      const msg = {
+        add_liquidity: {
+          token1155_amounts: {
+            ...tokenIds.reduce((acc, id) => {
+              acc[id] = "10";
+              return acc;
+            }, {}),
+          },
+          min_liquidity: "20",
+          max_token2: "1000",
+        },
+      };
+
+      const res = await Wasm.WasmExecuteTrx(
+        swapContractAddress,
+        JSON.stringify(msg),
+        WalletUsers.tester,
+        {
+          amount: "1000",
+          denom:
+            "ibc/376222D6D9DAE23092E29740E56B758580935A6D77C24C2ABD57A6A78A1F3955",
+        }
+      );
+      return res;
+    });
+
+    let swapContractLPAddress: string = "";
+    test("Query swapContractLPAddress", async () => {
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: swapContractAddress,
+        queryData: utils.conversions.JsonToArray(
+          JSON.stringify({
+            info: {},
+          })
+        ),
+      });
+      swapContractLPAddress = JSON.parse(
+        utils.conversions.Uint8ArrayToJS(res.data)
+      ).lp_token_address;
+      console.log({ swapContractLPAddress });
+      expect(res).toBeTruthy();
+    });
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract approve swap LP contract for token",
+      async () =>
+        await Wasm.WasmExecuteTrx(
+          swapContractLPAddress,
+          JSON.stringify({
+            increase_allowance: {
+              amount: "200",
+              spender: swapContractAddress,
+            },
+          }),
+          WalletUsers.tester
+        )
+    );
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract remove liquidity", async () =>
+      Wasm.WasmExecuteTrx(
+        swapContractAddress,
+        JSON.stringify({
+          remove_liquidity: {
+            amount: "2",
+            min_token1155: {
+              single: "1",
+            },
+            min_token2: "96",
+          },
+        })
+      )
+    );
+
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () =>
+      Wasm.WasmExecuteTrx(
+        swapContractAddress,
+        JSON.stringify({
+          swap: {
+            input_token: TokenType.Token1155,
+            input_amount: {
+              multiple: {
+                [tokenIds[0]]: "2",
+              },
+            },
+            min_output: {
+              single: "88",
+            },
+          },
+        })
+      )
+    );
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract swap", async () =>
+      Wasm.WasmExecuteTrx(
+        swapContractAddress,
+        JSON.stringify({
+          swap: {
+            input_token: TokenType.Token2,
+            input_amount: {
+              single: "100",
+            },
+            min_output: {
+              single: "2",
+            },
+          },
+        }),
+        undefined,
+        {
+          amount: "100",
+          denom:
+            "ibc/376222D6D9DAE23092E29740E56B758580935A6D77C24C2ABD57A6A78A1F3955",
+        }
+      )
+    );
   });
 };
 
