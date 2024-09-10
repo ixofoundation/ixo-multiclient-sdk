@@ -35,6 +35,7 @@ export const dids = {
   educationAssetDid: "did:ixo:entity:4af7faf72e47f4b91a38750cb6e359a7",
   ai4gCollection: "",
   didOracle: "",
+  aquaminerCollection: "did:ixo:entity:323dd1f9999c20142789010dae287a65",
 };
 
 export const adminEntityAccounts = {

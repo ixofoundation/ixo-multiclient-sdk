@@ -1,0 +1,405 @@
+{
+  "assetInstanceDids": [
+    {
+      "id": "AM001",
+      "did": "did:ixo:entity:995357578210f7a63642c4b73d8be729"
+    },
+    {
+      "id": "AM002",
+      "did": "did:ixo:entity:46e64c4d6b5d37299b19b2474744eb5e"
+    },
+    {
+      "id": "AM003",
+      "did": "did:ixo:entity:4c0055f42fe17f718b48610d6db86894"
+    },
+    {
+      "id": "AM004",
+      "did": "did:ixo:entity:7bb6a8a8fdf6532aa655ae54e9dfb20d"
+    },
+    {
+      "id": "AM005",
+      "did": "did:ixo:entity:fc3182f82fa68d7f422915e33e25d688"
+    },
+    {
+      "id": "AM006",
+      "did": "did:ixo:entity:7f8081db793e8fff2b22e8939bbcad50"
+    },
+    {
+      "id": "AM007",
+      "did": "did:ixo:entity:963bbe86749229a2f373dc7cfb576018"
+    },
+    {
+      "id": "AM008",
+      "did": "did:ixo:entity:a181682a00b8e9e810b6809ad81394cc"
+    },
+    {
+      "id": "AM009",
+      "did": "did:ixo:entity:3b6a0dc012601442a410ef8695d245ff"
+    },
+    {
+      "id": "AM010",
+      "did": "did:ixo:entity:81fc4fc3901a96cae7b9d4ca6a5c6f55"
+    },
+    {
+      "id": "AM011",
+      "did": "did:ixo:entity:fb746d42cc12b5244fc5b0ef9bcb8b30"
+    },
+    {
+      "id": "AM012",
+      "did": "did:ixo:entity:e62dea9c8412e55f7663d398e5f2f2d7"
+    },
+    {
+      "id": "AM013",
+      "did": "did:ixo:entity:d5329c34561d56b896a694af76a2865f"
+    },
+    {
+      "id": "AM014",
+      "did": "did:ixo:entity:f4521c6a9a9bc5ab5d43381c7b1bee0f"
+    },
+    {
+      "id": "AM015",
+      "did": "did:ixo:entity:2442d6b9f2e7b07a600b7b374bd328ee"
+    },
+    {
+      "id": "AM016",
+      "did": "did:ixo:entity:cde7992db72e546177c1598ef02f6f05"
+    },
+    {
+      "id": "AM017",
+      "did": "did:ixo:entity:691c167c52a6d50f12e1aace19351faa"
+    },
+    {
+      "id": "AM018",
+      "did": "did:ixo:entity:c72b0ce9f4b47a6bfb366a2dd5e81305"
+    },
+    {
+      "id": "AM019",
+      "did": "did:ixo:entity:123d410c9d91a80dabbafed0b463e4b2"
+    },
+    {
+      "id": "AM020",
+      "did": "did:ixo:entity:160ce8c74d7aec18e17fb09a01849eb4"
+    },
+    {
+      "id": "AM021",
+      "did": "did:ixo:entity:0c1ce701a4023425d16e2204463d83f2"
+    },
+    {
+      "id": "AM022",
+      "did": "did:ixo:entity:2595cbf3ccb447e2c33bc28375393cb4"
+    },
+    {
+      "id": "AM023",
+      "did": "did:ixo:entity:4d131c472dfeda078d5097325c7af408"
+    },
+    {
+      "id": "AM024",
+      "did": "did:ixo:entity:8793cc1deab6b561ca2bcd01a06407f3"
+    },
+    {
+      "id": "AM025",
+      "did": "did:ixo:entity:ab8f8978b28b7c1000b5e5ae454f5d9b"
+    },
+    {
+      "id": "AM026",
+      "did": "did:ixo:entity:d902733bacc2add8b6eb1cf65c425532"
+    },
+    {
+      "id": "AM027",
+      "did": "did:ixo:entity:075b7d621be81809cdc838c73ee10eda"
+    },
+    {
+      "id": "AM028",
+      "did": "did:ixo:entity:1134ebafd2d2a7d2d1889907dbd6d9d8"
+    },
+    {
+      "id": "AM029",
+      "did": "did:ixo:entity:bf110d7dde6aa28ef6d5db338c33e3e5"
+    },
+    {
+      "id": "AM030",
+      "did": "did:ixo:entity:a5ca1933f8da509093c8516c8271f349"
+    },
+    {
+      "id": "AM031",
+      "did": "did:ixo:entity:e1a3a889bf1948444dde4b80498693a8"
+    },
+    {
+      "id": "AM032",
+      "did": "did:ixo:entity:16390f1d24dee1454c19b526ac7a30d9"
+    },
+    {
+      "id": "AM033",
+      "did": "did:ixo:entity:4954f0358b40a8b3a42f44a16f51db59"
+    },
+    {
+      "id": "AM034",
+      "did": "did:ixo:entity:af1eb980abb78f09fa14929d5f91af02"
+    },
+    {
+      "id": "AM035",
+      "did": "did:ixo:entity:c3d1727d1076822bd5ee17a023b244cf"
+    },
+    {
+      "id": "AM036",
+      "did": "did:ixo:entity:09823070c8d237c7e3bf92643ffb2b8a"
+    },
+    {
+      "id": "AM037",
+      "did": "did:ixo:entity:1270b33a6b4f4fb1eebf2095c484317d"
+    },
+    {
+      "id": "AM038",
+      "did": "did:ixo:entity:2e4af1056cf5ee404e07e819c690d834"
+    },
+    {
+      "id": "AM039",
+      "did": "did:ixo:entity:c587a208f8b108c21647d5d0563075f2"
+    },
+    {
+      "id": "AM040",
+      "did": "did:ixo:entity:ebe6afe44f6aeea9a60cb7ed02ed96b2"
+    },
+    {
+      "id": "AM041",
+      "did": "did:ixo:entity:27d36161eb4c90a9d49fa867eccc86a1"
+    },
+    {
+      "id": "AM042",
+      "did": "did:ixo:entity:117e4c0ecde7a189ba2d41aa0305d680"
+    },
+    {
+      "id": "AM043",
+      "did": "did:ixo:entity:bbd0904e069eba3f000e2632def310c5"
+    },
+    {
+      "id": "AM044",
+      "did": "did:ixo:entity:3bd318c94b48cd41a8baf9795f78c7ce"
+    },
+    {
+      "id": "AM045",
+      "did": "did:ixo:entity:45b6472563fd2e27e9fee5f995443918"
+    },
+    {
+      "id": "AM046",
+      "did": "did:ixo:entity:604d3cc7775cde2da0df4f1d82611ee5"
+    },
+    {
+      "id": "AM047",
+      "did": "did:ixo:entity:eb6d9b40f1fb2a16097181f2d3a034e7"
+    },
+    {
+      "id": "AM048",
+      "did": "did:ixo:entity:c2c829533573af6393f5ed4ae2cd0cc1"
+    },
+    {
+      "id": "AM049",
+      "did": "did:ixo:entity:fba55f5f9ad5ebcf4726bba0b929e25a"
+    },
+    {
+      "id": "AM050",
+      "did": "did:ixo:entity:f04a64b594fb8abaf1b753da40394ced"
+    },
+    {
+      "id": "AM051",
+      "did": "did:ixo:entity:377415dbdf608450c4d4b46cf312a9c4"
+    },
+    {
+      "id": "AM052",
+      "did": "did:ixo:entity:b48456f9d18108f7c1d77f500b5434f0"
+    },
+    {
+      "id": "AM053",
+      "did": "did:ixo:entity:53849aca59c988ab13a84715b9745910"
+    },
+    {
+      "id": "AM054",
+      "did": "did:ixo:entity:9e8fe7aadded9dd4b437d6f06743edae"
+    },
+    {
+      "id": "AM055",
+      "did": "did:ixo:entity:2e4988bdcf7709abed1ce45cb9727ee5"
+    },
+    {
+      "id": "AM056",
+      "did": "did:ixo:entity:e8e8b5ded461627797f7176f0c427e74"
+    },
+    {
+      "id": "AM057",
+      "did": "did:ixo:entity:9d435c1ba275273c7096ef31c5f01af8"
+    },
+    {
+      "id": "AM058",
+      "did": "did:ixo:entity:03d24687d139f8eedf16681600596c84"
+    },
+    {
+      "id": "AM059",
+      "did": "did:ixo:entity:2b961f92d66f5f24eb8042d27d04807d"
+    },
+    {
+      "id": "AM060",
+      "did": "did:ixo:entity:5d43a68d18a94ad40ad777c1c1904d8d"
+    },
+    {
+      "id": "AM061",
+      "did": "did:ixo:entity:e89af367f00315ad7c994b91da15d59f"
+    },
+    {
+      "id": "AM062",
+      "did": "did:ixo:entity:82c4a165b8f019d89dbdc6126615d8ec"
+    },
+    {
+      "id": "AM063",
+      "did": "did:ixo:entity:f9caccfad01c1848ec539c607180ba74"
+    },
+    {
+      "id": "AM064",
+      "did": "did:ixo:entity:2141c4a1cec39fdd82f12e65a7aad397"
+    },
+    {
+      "id": "AM065",
+      "did": "did:ixo:entity:969a286eec384cc4564ab28571d0db6a"
+    },
+    {
+      "id": "AM066",
+      "did": "did:ixo:entity:921dfc39a5d6aea9a233e9394bcaef0f"
+    },
+    {
+      "id": "AM067",
+      "did": "did:ixo:entity:3a512023fa50102d797a9981bef63b48"
+    },
+    {
+      "id": "AM068",
+      "did": "did:ixo:entity:8dd9396ec9298f0b7ffab77e9980b8f5"
+    },
+    {
+      "id": "AM069",
+      "did": "did:ixo:entity:c551959c8c5168a547266d528d00f33f"
+    },
+    {
+      "id": "AM070",
+      "did": "did:ixo:entity:21ad69a450cc3b2e15782afcd46ace64"
+    },
+    {
+      "id": "AM071",
+      "did": "did:ixo:entity:70a14610dfdcb45c7c73e5e43a6279ba"
+    },
+    {
+      "id": "AM072",
+      "did": "did:ixo:entity:da8c151d6c95444ba760e9af67d07939"
+    },
+    {
+      "id": "AM073",
+      "did": "did:ixo:entity:17831157cc20a842ed6ce9f84af826fe"
+    },
+    {
+      "id": "AM074",
+      "did": "did:ixo:entity:2cafdbce89a55dd192be1e7d734f8e18"
+    },
+    {
+      "id": "AM075",
+      "did": "did:ixo:entity:79bdae6cc8190148180ec17a64c76004"
+    },
+    {
+      "id": "AM076",
+      "did": "did:ixo:entity:cd49cbc17e436b6a7709b179d48a6929"
+    },
+    {
+      "id": "AM077",
+      "did": "did:ixo:entity:d9520317b392b8a618bf0fe9fa4aca46"
+    },
+    {
+      "id": "AM078",
+      "did": "did:ixo:entity:ff9e22299056cae7067b3339d24bb8b7"
+    },
+    {
+      "id": "AM079",
+      "did": "did:ixo:entity:8e2824adc226709817336d644bd2ff09"
+    },
+    {
+      "id": "AM080",
+      "did": "did:ixo:entity:35df4e92b86b7cffc8ad9780a25e1456"
+    },
+    {
+      "id": "AM081",
+      "did": "did:ixo:entity:f8fd4726f348e671499d96475afe8b01"
+    },
+    {
+      "id": "AM082",
+      "did": "did:ixo:entity:63264e830c4690850afaec2818da4b9a"
+    },
+    {
+      "id": "AM083",
+      "did": "did:ixo:entity:139ea59924ca0f7c3477bf29d23fe249"
+    },
+    {
+      "id": "AM084",
+      "did": "did:ixo:entity:a4b661a313fb1dcc83a412a77ab04af0"
+    },
+    {
+      "id": "AM085",
+      "did": "did:ixo:entity:fe04b8b1e4c2d909e09efbaeb039cf58"
+    },
+    {
+      "id": "AM086",
+      "did": "did:ixo:entity:075481452354fbfa6e2266a3bef7d499"
+    },
+    {
+      "id": "AM087",
+      "did": "did:ixo:entity:89e360c7e88f0c34d6b48770769204ab"
+    },
+    {
+      "id": "AM088",
+      "did": "did:ixo:entity:de78edfd3a841e7aec44df47e5811f11"
+    },
+    {
+      "id": "AM089",
+      "did": "did:ixo:entity:5b2155e3d7760f8999615054d5030a24"
+    },
+    {
+      "id": "AM090",
+      "did": "did:ixo:entity:74599a07e253accb5141b3883e52198e"
+    },
+    {
+      "id": "AM091",
+      "did": "did:ixo:entity:2dff5077ab5c480da1d3ec7de7f158e9"
+    },
+    {
+      "id": "AM092",
+      "did": "did:ixo:entity:0296ee8199ec3018a19931fb02c921aa"
+    },
+    {
+      "id": "AM093",
+      "did": "did:ixo:entity:4d9c6a411a1129b1f6b96dd6a6dfa5c0"
+    },
+    {
+      "id": "AM094",
+      "did": "did:ixo:entity:1478d8eee7bfb9d26fc17e04a58dcea5"
+    },
+    {
+      "id": "AM095",
+      "did": "did:ixo:entity:8631320ac43426446d1faea6de61b982"
+    },
+    {
+      "id": "AM096",
+      "did": "did:ixo:entity:e2b94e92459b1472a4e87383fe89a71f"
+    },
+    {
+      "id": "AM097",
+      "did": "did:ixo:entity:e75f7894c955d381f4c0467e6f0fc057"
+    },
+    {
+      "id": "AM098",
+      "did": "did:ixo:entity:7be46b4f7713d31ae7878ecd3bebc064"
+    },
+    {
+      "id": "AM099",
+      "did": "did:ixo:entity:7ee8b63adea4549b3a0b9b81372173f2"
+    },
+    {
+      "id": "AM100",
+      "did": "did:ixo:entity:0591b1d636637596428878c319de17d8"
+    }
+  ],
+  "assetsFailed": []
+}

@@ -39,7 +39,8 @@
     "test:ai4g": "jest __tests__/specs/ai4g --forceExit",
     "test:umuzi": "jest __tests__/specs/umuzi --forceExit",
     "test:idcc": "jest __tests__/specs/idcc --forceExit",
-    "test:protocols": "jest __tests__/specs/protocols --forceExit"
+    "test:protocols": "jest __tests__/specs/protocols --forceExit",
+    "test:aquaminer": "jest __tests__/specs/aquaminer --forceExit"
   },
   "publishConfig": {
     "access": "public"
