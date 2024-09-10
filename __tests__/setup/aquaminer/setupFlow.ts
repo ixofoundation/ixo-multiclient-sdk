@@ -81,7 +81,7 @@ export const uploadCellnodeData = () =>
             id: "ixo:entity#profile",
             type: "profile",
             orgName: "Aquaminer",
-            name: "Aquaminer Genesis #1",
+            name: "Aquaminer Genesis",
             image:
               "https://cellnode-pandora.ixo.earth/public/bafybeicquubtk3t6usv655aqyzbmbpd3d3q4mkky3rt72h4wjimwloyaki",
             logo: "https://cellnode-pandora.ixo.earth/public/bafkreigsemr3qolehoziehscgqrbchqekufq2qylymipbs3mfha64d6poy",

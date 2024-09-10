@@ -16,6 +16,7 @@ import { setAndLedgerUser } from "../setup/helpers";
 import { toTimestamp } from "../../src/codegen/helpers";
 import axios from "axios";
 import { dids } from "../setup/constants";
+import { aquaminerAssets } from "../setup/aquaminer/assets";
 
 export const registerIids = () =>
   describe("Testing the faucet and creation of Iids", () => {
@@ -52,7 +53,7 @@ export const registerIids = () =>
 export const iidReplaceLinkedResource = () =>
   describe("Testing the iid module", () => {
     beforeAll(() =>
-      generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS!)
+      generateNewWallet(WalletUsers.tester, process.env.ROOT_AQUAMINER!)
     );
 
     // test("upload file to cellnode", async () => {
@@ -164,16 +165,13 @@ export const iidReplaceLinkedResource = () =>
           description: "Profile",
           mediaType: "application/ld+json",
           serviceEndpoint:
-            "ipfs:bafkreigbt6tid3xv5lm23e2wgbbfpdcqmhdjf33iffmih4wcr6x5zzxipy",
-          proof: "bafkreigbt6tid3xv5lm23e2wgbbfpdcqmhdjf33iffmih4wcr6x5zzxipy",
+            "cellnode:bafkreibtzbsecftnodq4do5sfzz77kst6cseqy3nob3nmfhudws4rweqdi",
+          proof: "bafkreibtzbsecftnodq4do5sfzz77kst6cseqy3nob3nmfhudws4rweqdi",
           encrypted: "false",
           right: "",
         });
 
-      const allEntities = [
-        "did:ixo:entity:3a139d17d1911cb3e5dedd6aa7a88ad9",
-        "did:ixo:entity:ffb6b788b6d6a2e7266d5a3eb7074816",
-      ];
+      const allEntities = aquaminerAssets.map((e) => e.did);
 
       const chunkSize = 30;
       let index = 0;

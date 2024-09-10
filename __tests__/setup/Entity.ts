@@ -588,8 +588,8 @@ export const CreateEntityAssetAquaminerInstance = async (
           description: "Profile",
           mediaType: "application/ld+json",
           serviceEndpoint:
-            "cellnode:bafkreigrskj3ptezvp23uqjeamc5xi3h65oernpamzqyllot4nmbzfbave",
-          proof: "bafkreigrskj3ptezvp23uqjeamc5xi3h65oernpamzqyllot4nmbzfbave",
+            "cellnode:bafkreibtzbsecftnodq4do5sfzz77kst6cseqy3nob3nmfhudws4rweqdi",
+          proof: "bafkreibtzbsecftnodq4do5sfzz77kst6cseqy3nob3nmfhudws4rweqdi",
           encrypted: "false",
           right: "",
         },
