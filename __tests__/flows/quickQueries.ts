@@ -456,20 +456,17 @@ export const quickQueries = () =>
     // test("query grants by grantee", async () => {
     //   const user = (await getUser(WalletUsers.alice).getAccounts())[0].address;
     //   const res = await queryClient.cosmos.authz.v1beta1.granteeGrants({
-    //     grantee: user,
+    //     grantee: "ixo1vt8w6g0k2xjkdnmtm4tz527cjn9fkp6exycw93",
     //   });
     //   if (res.grants.length > 0) {
-    //     console.log(
-    //       res.grants.map((g) => {
-    //         g.expiration = g.expiration?.seconds as any;
-    //         return g;
-    //       })
-    //     );
-    //     console.log(
+    //     console.dir(
     //       res.grants.map((g) => {
     //         const auth = createRegistry().decode(g.authorization!);
-    //         return auth.constraints || auth;
-    //       })
+    //         g.expiration = g.expiration?.seconds as any;
+    //         g.authorization!.value = auth;
+    //         return g;
+    //       }),
+    //       { depth: null }
     //     );
     //   }
     //   expect(res).toBeTruthy();
