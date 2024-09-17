@@ -22,7 +22,11 @@ export const web3Storage = () =>
     // });
 
     // test("upload file image", async () => {
-    //   const file = getFileFromPath(["documents", "emerging", "kado_cooks.jpg"]);
+    //   const file = getFileFromPath([
+    //     "documents",
+    //     "emerging",
+    //     "supamoto_special_collection.jpg",
+    //   ]);
     //   const cid = await storeWeb3(
     //     "Supamoto Kado cooks Logo",
     //     ContentTypes.jpg,
@@ -61,9 +65,9 @@ export const web3Storage = () =>
         ],
         id: "{id}#profile",
         type: "ixo:Profile",
-        name: "MimiMoto",
+        name: "Special Edition",
         image:
-          "web3:bafkreieyxve4fjijiteea3p3vtizdlnmcje7xb4krhizxva5vbsvbrldwe",
+          "web3:bafkreihs7m7tf3aol46h6xgdcuvdohufyb42y5b5tfftdw5dfaehr6do44",
         logo: "web3:bafkreigaewz4n3wqpajmwvt3deeolux3vyklbwd3s6dpzy74jcf6amk54m",
         brand: "SupaMoto",
         location: "ZM",

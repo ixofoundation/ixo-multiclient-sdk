@@ -78,6 +78,7 @@ export const UmuziCredentialsWorkerUrl =
 //   legacyCollection: "did:ixo:entity:314d8d02428debb5584d975910797121",
 //   ai4gCollection: "did:ixo:entity:4ce80421effb121662866edf66d1cc21",
 //   didOracle: "did:ixo:entity:504a8255ca35e103bc8e3e78f62a5231",
+//   aquaminerCollection: "",
 // };
 
 // export const adminEntityAccounts = {
@@ -118,6 +119,7 @@ export const UmuziCredentialsWorkerUrl =
 //   claimFormObjectsProtocol: "did:ixo:entity:c781ca0a76beae419441dbe27881e44e",
 //   ai4gCollection: "did:ixo:entity:3448d91ccb919450342958bb187f7eee",
 //   didOracle: "did:ixo:entity:a6e2f215dcfa4131dd299c958fdf1a03",
+//   aquaminerCollection: "",
 // };
 
 // export const adminEntityAccounts = {

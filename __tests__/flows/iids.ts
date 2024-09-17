@@ -17,6 +17,7 @@ import { toTimestamp } from "../../src/codegen/helpers";
 import axios from "axios";
 import { dids } from "../setup/constants";
 import { aquaminerAssets } from "../setup/aquaminer/assets";
+import { remove } from "store";
 
 export const registerIids = () =>
   describe("Testing the faucet and creation of Iids", () => {
@@ -53,9 +54,10 @@ export const registerIids = () =>
 export const iidReplaceLinkedResource = () =>
   describe("Testing the iid module", () => {
     beforeAll(() =>
-      generateNewWallet(WalletUsers.tester, process.env.ROOT_AQUAMINER!)
+      generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS!)
     );
 
+    // let cid: string;
     // test("upload file to cellnode", async () => {
     //   const file = getFileFromPath([
     //     "documents",
@@ -63,36 +65,23 @@ export const iidReplaceLinkedResource = () =>
     //     "ImpactsDao_page.png",
     //   ]);
     //   const json = {
-    //     "@context": [
-    //       "https://w3id.org/ixo/context/v1",
-    //       {
-    //         ixo: "https://w3id.org/ixo/vocab/v1",
-    //         web3: "https://ipfs.io/ipfs/",
-    //         id: "@id",
-    //         type: "@type",
-    //         "@protected": true,
-    //       },
-    //     ],
-    //     id: "{id}#claims",
-    //     type: "ixo:Claims",
-    //     entityClaims: [
-    //       {
-    //         template: {
-    //           id: "did:ixo:entity:9dc2f06bf379c922d2aa8703ba276bc3#CER",
-    //           title: "Carbon Emission Reduction",
-    //           description:
-    //             "Claimed Amount of Carbon Emissions reduced through the use of an energy-efficient clean cookstove.",
-    //         },
-    //         submissions: {
-    //           maximum: null,
-    //           startDate: "",
-    //           endDate: "",
-    //         },
-    //       },
+    //     "@context": {
+    //       ixo: "https://w3id.org/ixo/ns/protocol/",
+    //       "@id": "@type",
+    //       type: "@type",
+    //       "@protected": true,
+    //     },
+    //     type: "ixo:entity#tags",
+    //     entityTags: [
+    //       { category: "Entity", tags: ["Asset"], readonly: true },
+    //       { category: "Claim Type", tags: [""], readonly: true },
+    //       { category: "Type", tags: ["Coin"], readonly: true },
+    //       { category: "Token Class", tags: ["Unspecified"], readonly: true },
     //     ],
     //   };
 
-    //   const cellnode = await customQueries.cellnode.uploadPublicDoc(
+    //   const cellnode = await customQueries.cellnode.uploadWeb3Doc(
+    //     "name",
     //     // "image/png",
     //     "application/ld+json",
     //     // file,
@@ -100,20 +89,23 @@ export const iidReplaceLinkedResource = () =>
     //     undefined,
     //     "testnet"
     //   );
-    //   console.log({ cellnode });
+    //   cid = cellnode.cid; /// ipfs
+    //   // cid = cellnode.key; // cellnode
+    //   console.log({ cid });
     //   return expect(true).toBeTruthy();
     // });
 
     // testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
-    //   const entityDid = dids.legacyCollection;
+    //   if (!cid) throw new Error("no cid"); // if using cid from above,otherwise comment out
+    //   // const entityDid = "did:ixo:entity:a033a255d0001d4ba7a2d6fdf47309a9";
+    //   const entityDid = "did:ixo:entity:7e317b06a650da5ec35ce8fbbbc0b0c7";
     //   const resource = ixo.iid.v1beta1.LinkedResource.fromPartial({
     //     type: "Settings",
-    //     id: "{id}#profile",
-    //     description: "Profile",
+    //     id: "{id}#tags",
+    //     description: "Tags",
     //     mediaType: "application/ld+json",
-    //     serviceEndpoint:
-    //       "ipfs:bafkreidspm2panubcmtt4cybpggdiqeup4lfd7qlhsqr4kbqsvat2ui4yy",
-    //     proof: "bafkreidspm2panubcmtt4cybpggdiqeup4lfd7qlhsqr4kbqsvat2ui4yy",
+    //     serviceEndpoint: `ipfs:${cid}`,
+    //     proof: cid,
     //     encrypted: "false",
     //     right: "",
     //   });
@@ -125,17 +117,38 @@ export const iidReplaceLinkedResource = () =>
     // });
 
     // testMsg("/ixo.iid.v1beta1.MsgAddService", async () => {
-    //   const entityDid = dids.legacyCollection;
+    //   const entityDid = "did:ixo:entity:7e317b06a650da5ec35ce8fbbbc0b0c7";
     //   const resource = ixo.iid.v1beta1.Service.fromPartial({
-    //     id: "{id}#cellnode",
-    //     type: "Cellnode",
-    //     serviceEndpoint: "https://cellnode-pandora.ixo.earth",
+    //     id: "{id}#ipfs",
+    //     type: "Ipfs",
+    //     serviceEndpoint:
+    //       "https://testnet-blocksync-graphql.ixo.earth/api/ipfs/",
     //   });
 
-    //   const remove = await Iid.DeleteService(entityDid, resource.id);
+    //   try {
+    //     await Iid.DeleteService(entityDid, resource.id);
+    //   } catch (error) {}
     //   const add = await Iid.AddService(entityDid, resource);
 
-    //   return remove as any;
+    //   return add as any;
+    // });
+
+    // testMsg("/ixo.iid.v1beta1.MsgAddAccordedRight", async () => {
+    //   const entityDid = "did:ixo:entity:7e317b06a650da5ec35ce8fbbbc0b0c7";
+    //   const right = ixo.iid.v1beta1.AccordedRight.fromPartial({
+    //     id: "{id}#transferToken",
+    //     type: "capability/ibcTransfer",
+    //     message: "MsgTransfer",
+    //     service: "ixo",
+    //     mechanism: "ibc.applications.transfer.v1.MsgTransfer",
+    //   });
+
+    //   try {
+    //     await Iid.DeleteAccordedRight(entityDid, right.id);
+    //   } catch (error) {}
+    //   const add = await Iid.AddAccordedRight(entityDid, right);
+
+    //   return add as any;
     // });
 
     // testMsg("/ixo.iid.v1beta1.AddLinkedClaim", async () => {
@@ -165,18 +178,19 @@ export const iidReplaceLinkedResource = () =>
           description: "Profile",
           mediaType: "application/ld+json",
           serviceEndpoint:
-            "cellnode:bafkreibtzbsecftnodq4do5sfzz77kst6cseqy3nob3nmfhudws4rweqdi",
-          proof: "bafkreibtzbsecftnodq4do5sfzz77kst6cseqy3nob3nmfhudws4rweqdi",
+            "ipfs:bafkreibxaigyds2465ubjudeat63pk7rdm4ditxxslh4epcqrwkp44h7na",
+          proof: "bafkreibxaigyds2465ubjudeat63pk7rdm4ditxxslh4epcqrwkp44h7na",
           encrypted: "false",
           right: "",
         });
 
-      const allEntities = aquaminerAssets.map((e) => e.did);
+      const allEntities = aquaminerAssets.map((e) => e.id);
 
       const chunkSize = 30;
       let index = 0;
       for (const entities of chunkArray(allEntities, chunkSize)) {
         index++;
+        if (index < 4) continue; // for skipping certain batches
         console.log("replacing linked resource for batch", index);
         try {
           await Iid.DeleteLinkedResources(
