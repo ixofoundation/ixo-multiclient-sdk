@@ -305,12 +305,15 @@ export interface Payment {
    * immediate direct payment
    */
   timeoutNs?: Duration;
+  /** cw20 payments, can be empty or multiple */
+  cw20Payment: CW20Payment[];
 }
 export interface PaymentSDKType {
   account: string;
   amount: CoinSDKType[];
   contract_1155_payment?: Contract1155PaymentSDKType;
   timeout_ns?: DurationSDKType;
+  cw20_payment: CW20PaymentSDKType[];
 }
 export interface Contract1155Payment {
   address: string;
@@ -321,6 +324,18 @@ export interface Contract1155PaymentSDKType {
   address: string;
   token_id: string;
   amount: number;
+}
+export interface CW20Payment {
+  address: string;
+  /**
+   * chose uint64 for now as amounts should be small enough to fit in a
+   * uint64(max 18446744073709551615)
+   */
+  amount: Long;
+}
+export interface CW20PaymentSDKType {
+  address: string;
+  amount: Long;
 }
 export interface Claim {
   /** collection_id indicates to which Collection this claim belongs */
@@ -779,7 +794,8 @@ function createBasePayment(): Payment {
     account: "",
     amount: [],
     contract_1155Payment: undefined,
-    timeoutNs: undefined
+    timeoutNs: undefined,
+    cw20Payment: []
   };
 }
 export const Payment = {
@@ -795,6 +811,9 @@ export const Payment = {
     }
     if (message.timeoutNs !== undefined) {
       Duration.encode(message.timeoutNs, writer.uint32(34).fork()).ldelim();
+    }
+    for (const v of message.cw20Payment) {
+      CW20Payment.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -817,6 +836,9 @@ export const Payment = {
         case 4:
           message.timeoutNs = Duration.decode(reader, reader.uint32());
           break;
+        case 5:
+          message.cw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -829,7 +851,8 @@ export const Payment = {
       account: isSet(object.account) ? String(object.account) : "",
       amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
       contract_1155Payment: isSet(object.contract_1155Payment) ? Contract1155Payment.fromJSON(object.contract_1155Payment) : undefined,
-      timeoutNs: isSet(object.timeoutNs) ? Duration.fromJSON(object.timeoutNs) : undefined
+      timeoutNs: isSet(object.timeoutNs) ? Duration.fromJSON(object.timeoutNs) : undefined,
+      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: Payment): unknown {
@@ -842,6 +865,11 @@ export const Payment = {
     }
     message.contract_1155Payment !== undefined && (obj.contract_1155Payment = message.contract_1155Payment ? Contract1155Payment.toJSON(message.contract_1155Payment) : undefined);
     message.timeoutNs !== undefined && (obj.timeoutNs = message.timeoutNs ? Duration.toJSON(message.timeoutNs) : undefined);
+    if (message.cw20Payment) {
+      obj.cw20Payment = message.cw20Payment.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw20Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<Payment>): Payment {
@@ -850,6 +878,7 @@ export const Payment = {
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     message.contract_1155Payment = object.contract_1155Payment !== undefined && object.contract_1155Payment !== null ? Contract1155Payment.fromPartial(object.contract_1155Payment) : undefined;
     message.timeoutNs = object.timeoutNs !== undefined && object.timeoutNs !== null ? Duration.fromPartial(object.timeoutNs) : undefined;
+    message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -915,6 +944,61 @@ export const Contract1155Payment = {
     message.address = object.address ?? "";
     message.tokenId = object.tokenId ?? "";
     message.amount = object.amount ?? 0;
+    return message;
+  }
+};
+function createBaseCW20Payment(): CW20Payment {
+  return {
+    address: "",
+    amount: Long.UZERO
+  };
+}
+export const CW20Payment = {
+  encode(message: CW20Payment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    if (!message.amount.isZero()) {
+      writer.uint32(24).uint64(message.amount);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): CW20Payment {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCW20Payment();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        case 3:
+          message.amount = (reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): CW20Payment {
+    return {
+      address: isSet(object.address) ? String(object.address) : "",
+      amount: isSet(object.amount) ? Long.fromValue(object.amount) : Long.UZERO
+    };
+  },
+  toJSON(message: CW20Payment): unknown {
+    const obj: any = {};
+    message.address !== undefined && (obj.address = message.address);
+    message.amount !== undefined && (obj.amount = (message.amount || Long.UZERO).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<CW20Payment>): CW20Payment {
+    const message = createBaseCW20Payment();
+    message.address = object.address ?? "";
+    message.amount = object.amount !== undefined && object.amount !== null ? Long.fromValue(object.amount) : Long.UZERO;
     return message;
   }
 };

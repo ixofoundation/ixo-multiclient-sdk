@@ -717,6 +717,21 @@ export const swapContract = () => {
       return res;
     });
 
+    // testMsg(
+    //   "/cosmwasm.wasm.v1.MsgExecuteContract approve swap contract for token",
+    //   async () =>
+    //     await Wasm.WasmExecuteTrxThroughAuthz(
+    //       tokenContractAddress,
+    //       JSON.stringify({
+    //         approve_all: {
+    //           operator: swapContractAddress,
+    //         },
+    //       }),
+    //       WalletUsers.tester,
+    //       undefined,
+    //       "ixo1wc43xczdzlc623e9ssxkndpqnvgk2vq4hheyq2"
+    //     )
+    // );
     testMsg(
       "/cosmwasm.wasm.v1.MsgExecuteContract approve swap contract for token",
       async () =>
@@ -771,6 +786,47 @@ export const swapContract = () => {
         )
     );
 
+    // const tokens = {
+    //   ccb7c87553adac528f1cbd8303f21dcf: {
+    //     collection: "did:ixo:entity:9f8749d749af260d185f3df6f2206b63",
+    //     amount: 984,
+    //     minted: 0,
+    //     retired: 0,
+    //   },
+    // };
+    // console.log(
+    //   "total tokens",
+    //   Object.values(tokens).reduce((acc, t) => acc + t.amount, 0)
+    // );
+    // console.log("length", Object.keys(tokens).length);
+
+    // testMsg("/cosmwasm.wasm.v1.MsgExecuteContract add liquidity", async () => {
+    //   const msg = {
+    //     add_liquidity: {
+    //       token1155_amounts: {
+    //         ...Object.keys(tokens).reduce((acc, id) => {
+    //           acc[id] = tokens[id].amount.toString();
+    //           return acc;
+    //         }, {}),
+    //       },
+    //       min_liquidity: "250000", // token 1 amount total
+    //       max_token2: "5000000000",
+    //     },
+    //   };
+
+    //   const res = await Wasm.WasmExecuteTrxThroughAuthz(
+    //     swapContractAddress,
+    //     JSON.stringify(msg),
+    //     WalletUsers.tester,
+    //     {
+    //       amount: "5000000000",
+    //       denom:
+    //         "ibc/6BBE9BD4246F8E04948D5A4EEE7164B2630263B9EBB5E7DC5F0A46C62A2FF97B",
+    //     },
+    //     "ixo1wc43xczdzlc623e9ssxkndpqnvgk2vq4hheyq2"
+    //   );
+    //   return res;
+    // });
     testMsg("/cosmwasm.wasm.v1.MsgExecuteContract add liquidity", async () => {
       console.log({ tokenIds });
       const msg = {

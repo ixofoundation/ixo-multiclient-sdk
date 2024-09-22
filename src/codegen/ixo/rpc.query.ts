@@ -92,8 +92,14 @@ export const createRPCQueryClient = async ({
       entity: {
         v1beta1: (await import("./entity/v1beta1/query.rpc.Query")).createRpcQueryExtension(client)
       },
+      epochs: {
+        v1beta1: (await import("./epochs/v1beta1/query.rpc.Query")).createRpcQueryExtension(client)
+      },
       iid: {
         v1beta1: (await import("./iid/v1beta1/query.rpc.Query")).createRpcQueryExtension(client)
+      },
+      mint: {
+        v1beta1: (await import("./mint/v1beta1/query.rpc.Query")).createRpcQueryExtension(client)
       },
       smartaccount: {
         v1beta1: (await import("./smartaccount/v1beta1/query.rpc.Query")).createRpcQueryExtension(client)

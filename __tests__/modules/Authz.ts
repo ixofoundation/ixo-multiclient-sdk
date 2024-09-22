@@ -306,12 +306,14 @@ export const MsgRevokeAllowance = async (
 export const MsgGrantAuthz = async (
   msgTypeUrl = "/cosmos.authz.v1beta1.MsgGrant",
   granter = WalletUsers.tester,
-  grantee = WalletUsers.alice
+  grantee = WalletUsers.alice,
+  granteeeAddress?: string
 ) => {
   const client = await createClient(getUser(granter));
 
   const granterAddress = (await getUser(granter).getAccounts())[0].address;
-  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
+  const granteeAddress =
+    granteeeAddress || (await getUser(grantee).getAccounts())[0].address;
 
   const message = {
     typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
@@ -327,7 +329,7 @@ export const MsgGrantAuthz = async (
             })
           ).finish(),
         },
-        expiration: utils.proto.toTimestamp(addDays(new Date(), 365)),
+        expiration: utils.proto.toTimestamp(addDays(new Date(), 365 * 10)),
       }),
     }),
   };

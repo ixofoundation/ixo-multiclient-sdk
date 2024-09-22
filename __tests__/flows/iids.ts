@@ -178,8 +178,8 @@ export const iidReplaceLinkedResource = () =>
           description: "Profile",
           mediaType: "application/ld+json",
           serviceEndpoint:
-            "ipfs:bafkreibxaigyds2465ubjudeat63pk7rdm4ditxxslh4epcqrwkp44h7na",
-          proof: "bafkreibxaigyds2465ubjudeat63pk7rdm4ditxxslh4epcqrwkp44h7na",
+            "ipfs:bafkreihkrftb62kfrk7zor6lgu34gew7jmyt4j6itfnjjrmdyqudgr54ta",
+          proof: "bafkreihkrftb62kfrk7zor6lgu34gew7jmyt4j6itfnjjrmdyqudgr54ta",
           encrypted: "false",
           right: "",
         });
@@ -190,7 +190,7 @@ export const iidReplaceLinkedResource = () =>
       let index = 0;
       for (const entities of chunkArray(allEntities, chunkSize)) {
         index++;
-        if (index < 4) continue; // for skipping certain batches
+        // if (index < 4) continue; // for skipping certain batches
         console.log("replacing linked resource for batch", index);
         try {
           await Iid.DeleteLinkedResources(

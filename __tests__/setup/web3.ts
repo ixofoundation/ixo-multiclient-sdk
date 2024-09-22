@@ -65,7 +65,7 @@ export const web3Storage = () =>
         ],
         id: "{id}#profile",
         type: "ixo:Profile",
-        name: "Special Edition",
+        name: "SupaMoto",
         image:
           "web3:bafkreihs7m7tf3aol46h6xgdcuvdohufyb42y5b5tfftdw5dfaehr6do44",
         logo: "web3:bafkreigaewz4n3wqpajmwvt3deeolux3vyklbwd3s6dpzy74jcf6amk54m",

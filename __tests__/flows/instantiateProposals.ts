@@ -15,8 +15,8 @@ export const instantiateModulesProposals = () =>
           i + 1
         } of ${contracts.length}`,
         async () => {
-          const res = await Cosmos.MsgSubmitProposalStoreCWOld(c.name, c.path);
-          // const res = await Cosmos.MsgSubmitProposalStoreCW(c.name, c.path);
+          // const res = await Cosmos.MsgSubmitProposalStoreCWOld(c.name, c.path);
+          const res = await Cosmos.MsgSubmitProposalStoreCW(c.name, c.path);
           proposalId = utils.common.getValueFromEvents(
             res,
             "submit_proposal",

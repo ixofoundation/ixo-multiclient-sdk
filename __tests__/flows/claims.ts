@@ -9,6 +9,8 @@ import {
   saveFileToPath,
   addDays,
   addMinutesToDate,
+  getUser,
+  cosmos,
 } from "../helpers/common";
 import * as Claims from "../modules/Claims";
 import * as Cosmos from "../modules/Cosmos";
@@ -23,9 +25,12 @@ import {
 } from "../setup/constants";
 import axios from "axios";
 import axiosRetry from "axios-retry";
+import * as Wasm from "../modules/CosmWasm";
 import { cookstoveIds } from "../setup/supamoto/stoves";
 import { assertIsDeliverTxSuccess } from "@cosmjs/stargate";
 import { legacyCookstoveIds } from "../setup/emerging/legacy";
+// @ts-ignore
+import Long from "long";
 
 axiosRetry(axios, {
   retries: 3,
@@ -34,9 +39,19 @@ axiosRetry(axios, {
 
 export const claimsBasic = () =>
   describe("Testing the Claims module", () => {
+    // beforeAll(() =>
+    //   Promise.all([
+    //     generateNewWallet(
+    //       WalletUsers.tester,
+    //       process.env.ASSERT_USER_CARBON_ORACLE
+    //     ),
+    //   ])
+    // );
+
     // Create protocol
     let protocol = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
     let adminAccount = "ixo1kqmtxkggcqa9u34lnr6shy0euvclgatw4f9zz5";
+
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity protocol", async () => {
       const res = await Entity.CreateEntity(
         "protocol",
@@ -67,13 +82,49 @@ export const claimsBasic = () =>
       )
     );
 
-    let collectionId = "1";
-    let claimId = "1";
+    let cw20ContractAddress: string =
+      "ixo1747e2jlnmk6lzqe2pcpq4x0fxys4e7puadx7np78s9ygqed24cxshj2xuc";
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
+      const tester = (await getUser(WalletUsers.tester).getAccounts())[0]
+        .address;
+      const msg = {
+        decimals: 6,
+        initial_balances: [
+          {
+            address: tester,
+            amount: "3000000000000",
+          },
+          {
+            address: adminAccount,
+            amount: "3000000000000",
+          },
+        ],
+        mint: {
+          minter: tester,
+        },
+        name: "CW20",
+        symbol: "HAHA",
+      };
+
+      const res = await Wasm.WasmInstantiateTrx(25, JSON.stringify(msg));
+      cw20ContractAddress = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ cw20ContractAddress });
+      return res;
+    });
+
+    let collectionId = "5";
+
     testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
       const res = await Claims.CreateCollection(
         protocol,
         protocol,
-        adminAccount
+        adminAccount,
+        undefined,
+        cw20ContractAddress
       );
       collectionId = utils.common.getValueFromEvents(
         res,
@@ -127,7 +178,13 @@ export const claimsBasic = () =>
         )
     );
     testMsg("/ixo.claims.v1beta1.MsgUpdateCollectionState", () =>
-      Claims.UpdateCollectionPayments(collectionId, adminAccount, adminAccount)
+      Claims.UpdateCollectionPayments(
+        collectionId,
+        adminAccount,
+        adminAccount,
+        undefined,
+        cw20ContractAddress
+      )
     );
 
     testMsg("/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent submit", () =>
@@ -136,9 +193,9 @@ export const claimsBasic = () =>
         "admin",
         adminAccount,
         collectionId,
-        10,
+        100,
         false,
-        WalletUsers.tester
+        WalletUsers.alice
       )
     );
 
@@ -151,21 +208,88 @@ export const claimsBasic = () =>
           adminAccount,
           collectionId,
           [],
-          10,
+          100,
           false,
-          WalletUsers.tester
+          WalletUsers.tester,
+          undefined,
+          cw20ContractAddress
         )
     );
 
+    // // message to grant eval authz through authz as delegate
+    // testMsg(
+    //   "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent evaluate",
+    //   () =>
+    //     Claims.GrantEntityAccountClaimsEvaluateAuthzThroughAuthz(
+    //       "did:ixo:entity:f14981f859bc93c6807c8c252ab54937",
+    //       "admin",
+    //       "ixo14vcgnl89u2hshuv4yucae8m6cazz92fkn3x74w",
+    //       "44",
+    //       [],
+    //       1000000,
+    //       false,
+    //       WalletUsers.tester,
+    //       WalletUsers.tester,
+    //       "ixo164w0t3gqfh8quxmttuf6ahfexvxc6quj9uqend"
+    //     )
+    // );
+
+    // test claim and eval with custom amount and cw20 payment
+    let claimId = "100001";
     testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", () =>
       Claims.MsgExecAgentSubmit(
         claimId,
         collectionId,
         adminAccount,
-        WalletUsers.tester
+        WalletUsers.alice
       )
     );
+    testMsg("/cosmos.authz.v1beta1.MsgExec agent evaluate", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimId,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.APPROVED,
+        WalletUsers.tester,
+        [
+          cosmos.base.v1beta1.Coin.fromPartial({
+            amount: "2000000",
+            denom: "uixo",
+          }),
+        ],
+        [
+          ixo.claims.v1beta1.CW20Payment.fromPartial({
+            address: cw20ContractAddress,
+            amount: Long.fromNumber(15),
+          }),
+        ]
+      )
+    );
+    testMsg("/cosmos.authz.v1beta1.MsgExec withdraw payment", async () => {
+      // Wait 30 seconds to make sure submission release date for withdrawal auth constraint passed
+      await timeout(35 * 1000);
+      const res = await Claims.MsgExecWithdrawal(
+        claimId,
+        adminAccount,
+        ixo.claims.v1beta1.PaymentType.SUBMISSION,
+        WalletUsers.alice
+      );
+      return res;
+    });
+    testMsg("/ixo.claims.v1beta1.MsgDisputeClaim", () =>
+      Claims.DisputeClaim(claimId, "proof1")
+    );
 
+    // test claim and eval with no custom amount and cw20 payment
+    testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", async () => {
+      claimId = "100002";
+      return Claims.MsgExecAgentSubmit(
+        claimId,
+        collectionId,
+        adminAccount,
+        WalletUsers.alice
+      );
+    });
     testMsg("/cosmos.authz.v1beta1.MsgExec agent evaluate", () =>
       Claims.MsgExecAgentEvaluate(
         claimId,
@@ -176,20 +300,44 @@ export const claimsBasic = () =>
       )
     );
 
-    testMsg("/cosmos.authz.v1beta1.MsgExec withdraw payment", async () => {
-      // Wait 30 seconds to make sure submission release date for withdrawal auth constraint passed
-      await timeout(35 * 1000);
-      const res = await Claims.MsgExecWithdrawal(
+    // test claim and eval reject
+    testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", async () => {
+      claimId = "100003";
+      return Claims.MsgExecAgentSubmit(
         claimId,
+        collectionId,
         adminAccount,
-        ixo.claims.v1beta1.PaymentType.SUBMISSION,
-        WalletUsers.tester
+        WalletUsers.alice
       );
-      return res;
     });
+    testMsg("/cosmos.authz.v1beta1.MsgExec agent evaluate", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimId,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.REJECTED,
+        WalletUsers.tester
+      )
+    );
 
-    testMsg("/ixo.claims.v1beta1.MsgDisputeClaim", () =>
-      Claims.DisputeClaim(claimId, "proof1")
+    // test claim and eval dispute
+    testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", async () => {
+      claimId = "100004";
+      return Claims.MsgExecAgentSubmit(
+        claimId,
+        collectionId,
+        adminAccount,
+        WalletUsers.alice
+      );
+    });
+    testMsg("/cosmos.authz.v1beta1.MsgExec agent evaluate", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimId,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.DISPUTED,
+        WalletUsers.tester
+      )
     );
   });
 

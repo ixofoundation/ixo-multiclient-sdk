@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
-import { CollectionState, Payments, PaymentsSDKType, EvaluationStatus, DisputeData, DisputeDataSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType, collectionStateFromJSON, collectionStateToJSON, evaluationStatusFromJSON, evaluationStatusToJSON, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
+import { CollectionState, Payments, PaymentsSDKType, EvaluationStatus, CW20Payment, CW20PaymentSDKType, DisputeData, DisputeDataSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType, collectionStateFromJSON, collectionStateToJSON, evaluationStatusFromJSON, evaluationStatusToJSON, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
 import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
@@ -90,6 +90,11 @@ export interface MsgEvaluateClaim {
    * use default by Collection
    */
   amount: Coin[];
+  /**
+   * custom cw20 payments specified by evaluator for claim approval, if empty
+   * list then use default by Collection
+   */
+  cw20Payment: CW20Payment[];
 }
 export interface MsgEvaluateClaimSDKType {
   claim_id: string;
@@ -102,6 +107,7 @@ export interface MsgEvaluateClaimSDKType {
   reason: number;
   verification_proof: string;
   amount: CoinSDKType[];
+  cw20_payment: CW20PaymentSDKType[];
 }
 export interface MsgEvaluateClaimResponse {}
 export interface MsgEvaluateClaimResponseSDKType {}
@@ -163,6 +169,8 @@ export interface MsgWithdrawPayment {
   releaseDate?: Timestamp;
   /** admin address used to sign this message, validated against Collection Admin */
   adminAddress: string;
+  /** cw20 payments, can be empty or multiple */
+  cw20Payment: CW20Payment[];
 }
 export interface MsgWithdrawPaymentSDKType {
   claim_id: string;
@@ -174,6 +182,7 @@ export interface MsgWithdrawPaymentSDKType {
   fromAddress: string;
   release_date?: TimestampSDKType;
   admin_address: string;
+  cw20_payment: CW20PaymentSDKType[];
 }
 export interface MsgWithdrawPaymentResponse {}
 export interface MsgWithdrawPaymentResponseSDKType {}
@@ -511,7 +520,8 @@ function createBaseMsgEvaluateClaim(): MsgEvaluateClaim {
     status: 0,
     reason: 0,
     verificationProof: "",
-    amount: []
+    amount: [],
+    cw20Payment: []
   };
 }
 export const MsgEvaluateClaim = {
@@ -545,6 +555,9 @@ export const MsgEvaluateClaim = {
     }
     for (const v of message.amount) {
       Coin.encode(v!, writer.uint32(82).fork()).ldelim();
+    }
+    for (const v of message.cw20Payment) {
+      CW20Payment.encode(v!, writer.uint32(90).fork()).ldelim();
     }
     return writer;
   },
@@ -585,6 +598,9 @@ export const MsgEvaluateClaim = {
         case 10:
           message.amount.push(Coin.decode(reader, reader.uint32()));
           break;
+        case 11:
+          message.cw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -603,7 +619,8 @@ export const MsgEvaluateClaim = {
       status: isSet(object.status) ? evaluationStatusFromJSON(object.status) : 0,
       reason: isSet(object.reason) ? Number(object.reason) : 0,
       verificationProof: isSet(object.verificationProof) ? String(object.verificationProof) : "",
-      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : []
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
+      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgEvaluateClaim): unknown {
@@ -622,6 +639,11 @@ export const MsgEvaluateClaim = {
     } else {
       obj.amount = [];
     }
+    if (message.cw20Payment) {
+      obj.cw20Payment = message.cw20Payment.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw20Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgEvaluateClaim>): MsgEvaluateClaim {
@@ -636,6 +658,7 @@ export const MsgEvaluateClaim = {
     message.reason = object.reason ?? 0;
     message.verificationProof = object.verificationProof ?? "";
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
+    message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -800,7 +823,8 @@ function createBaseMsgWithdrawPayment(): MsgWithdrawPayment {
     toAddress: "",
     fromAddress: "",
     releaseDate: undefined,
-    adminAddress: ""
+    adminAddress: "",
+    cw20Payment: []
   };
 }
 export const MsgWithdrawPayment = {
@@ -831,6 +855,9 @@ export const MsgWithdrawPayment = {
     }
     if (message.adminAddress !== "") {
       writer.uint32(74).string(message.adminAddress);
+    }
+    for (const v of message.cw20Payment) {
+      CW20Payment.encode(v!, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -868,6 +895,9 @@ export const MsgWithdrawPayment = {
         case 9:
           message.adminAddress = reader.string();
           break;
+        case 10:
+          message.cw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -885,7 +915,8 @@ export const MsgWithdrawPayment = {
       toAddress: isSet(object.toAddress) ? String(object.toAddress) : "",
       fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
       releaseDate: isSet(object.releaseDate) ? fromJsonTimestamp(object.releaseDate) : undefined,
-      adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : ""
+      adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : "",
+      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgWithdrawPayment): unknown {
@@ -907,6 +938,11 @@ export const MsgWithdrawPayment = {
     message.fromAddress !== undefined && (obj.fromAddress = message.fromAddress);
     message.releaseDate !== undefined && (obj.releaseDate = fromTimestamp(message.releaseDate).toISOString());
     message.adminAddress !== undefined && (obj.adminAddress = message.adminAddress);
+    if (message.cw20Payment) {
+      obj.cw20Payment = message.cw20Payment.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw20Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgWithdrawPayment>): MsgWithdrawPayment {
@@ -920,6 +956,7 @@ export const MsgWithdrawPayment = {
     message.fromAddress = object.fromAddress ?? "";
     message.releaseDate = object.releaseDate !== undefined && object.releaseDate !== null ? Timestamp.fromPartial(object.releaseDate) : undefined;
     message.adminAddress = object.adminAddress ?? "";
+    message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     return message;
   }
 };
