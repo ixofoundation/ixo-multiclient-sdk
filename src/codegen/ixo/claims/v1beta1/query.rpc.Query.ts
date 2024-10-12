@@ -2,7 +2,7 @@
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { QueryParamsRequest, QueryParamsResponse, QueryCollectionRequest, QueryCollectionResponse, QueryCollectionListRequest, QueryCollectionListResponse, QueryClaimRequest, QueryClaimResponse, QueryClaimListRequest, QueryClaimListResponse, QueryDisputeRequest, QueryDisputeResponse, QueryDisputeListRequest, QueryDisputeListResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryCollectionRequest, QueryCollectionResponse, QueryCollectionListRequest, QueryCollectionListResponse, QueryClaimRequest, QueryClaimResponse, QueryClaimListRequest, QueryClaimListResponse, QueryDisputeRequest, QueryDisputeResponse, QueryDisputeListRequest, QueryDisputeListResponse, QueryIntentRequest, QueryIntentResponse, QueryIntentListRequest, QueryIntentListResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -13,6 +13,8 @@ export interface Query {
   claimList(request?: QueryClaimListRequest): Promise<QueryClaimListResponse>;
   dispute(request: QueryDisputeRequest): Promise<QueryDisputeResponse>;
   disputeList(request?: QueryDisputeListRequest): Promise<QueryDisputeListResponse>;
+  intent(request: QueryIntentRequest): Promise<QueryIntentResponse>;
+  intentList(request?: QueryIntentListRequest): Promise<QueryIntentListResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -25,6 +27,8 @@ export class QueryClientImpl implements Query {
     this.claimList = this.claimList.bind(this);
     this.dispute = this.dispute.bind(this);
     this.disputeList = this.disputeList.bind(this);
+    this.intent = this.intent.bind(this);
+    this.intentList = this.intentList.bind(this);
   }
   params(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -67,6 +71,18 @@ export class QueryClientImpl implements Query {
     const promise = this.rpc.request("ixo.claims.v1beta1.Query", "DisputeList", data);
     return promise.then(data => QueryDisputeListResponse.decode(new _m0.Reader(data)));
   }
+  intent(request: QueryIntentRequest): Promise<QueryIntentResponse> {
+    const data = QueryIntentRequest.encode(request).finish();
+    const promise = this.rpc.request("ixo.claims.v1beta1.Query", "Intent", data);
+    return promise.then(data => QueryIntentResponse.decode(new _m0.Reader(data)));
+  }
+  intentList(request: QueryIntentListRequest = {
+    pagination: undefined
+  }): Promise<QueryIntentListResponse> {
+    const data = QueryIntentListRequest.encode(request).finish();
+    const promise = this.rpc.request("ixo.claims.v1beta1.Query", "IntentList", data);
+    return promise.then(data => QueryIntentListResponse.decode(new _m0.Reader(data)));
+  }
 }
 export const createRpcQueryExtension = (base: QueryClient) => {
   const rpc = createProtobufRpcClient(base);
@@ -92,6 +108,12 @@ export const createRpcQueryExtension = (base: QueryClient) => {
     },
     disputeList(request?: QueryDisputeListRequest): Promise<QueryDisputeListResponse> {
       return queryService.disputeList(request);
+    },
+    intent(request: QueryIntentRequest): Promise<QueryIntentResponse> {
+      return queryService.intent(request);
+    },
+    intentList(request?: QueryIntentListRequest): Promise<QueryIntentListResponse> {
+      return queryService.intentList(request);
     }
   };
 };

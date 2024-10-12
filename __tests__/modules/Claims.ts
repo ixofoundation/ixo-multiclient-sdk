@@ -51,6 +51,7 @@ export const CreateCollection = async (
               amount: Long.fromNumber(10),
             }),
           ],
+          isOraclePayment: false,
         }),
         submission: ixo.claims.v1beta1.Payment.fromPartial({
           account: paymentsAccount,
@@ -124,6 +125,38 @@ export const UpdateCollectionState = async (
   return response;
 };
 
+export const UpdateCollectionIntents = async (
+  collectionId: string,
+  adminAddress: string,
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = (await getUser(signer).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+      grantee: tester,
+      msgs: [
+        {
+          typeUrl: "/ixo.claims.v1beta1.MsgUpdateCollectionIntents",
+          value: ixo.claims.v1beta1.MsgUpdateCollectionIntents.encode(
+            ixo.claims.v1beta1.MsgUpdateCollectionIntents.fromPartial({
+              collectionId,
+              adminAddress: adminAddress,
+              intents: ixo.claims.v1beta1.CollectionIntentOptions.ALLOW,
+            })
+          ).finish(),
+        },
+      ],
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
 export const UpdateCollectionDates = async (
   collectionId: string,
   adminAddress: string,
@@ -162,7 +195,8 @@ export const UpdateCollectionPayments = async (
   paymentsAccount: string,
   adminAddress: string,
   signer: WalletUsers = WalletUsers.tester,
-  cw20Address: string = "ixo1747e2jlnmk6lzqe2pcpq4x0fxys4e7puadx7np78s9ygqed24cxshj2xuc"
+  cw20Address: string = "ixo1747e2jlnmk6lzqe2pcpq4x0fxys4e7puadx7np78s9ygqed24cxshj2xuc",
+  isOraclePayment = false
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -191,6 +225,7 @@ export const UpdateCollectionPayments = async (
                   timeoutNs: utils.proto.toDuration(
                     (1000000000 * 60 * 0).toString()
                   ), // ns * seconds * minutes
+                  isOraclePayment,
                 }),
                 submission: ixo.claims.v1beta1.Payment.fromPartial({
                   account: paymentsAccount,
@@ -279,7 +314,10 @@ export const GrantEntityAccountClaimsSubmitAuthz = async (
   agentQuota = 100,
   overrideCurrentGrants = false,
   grantee: WalletUsers = WalletUsers.alice,
-  signer: WalletUsers = WalletUsers.tester
+  signer: WalletUsers = WalletUsers.tester,
+  maxAmount: Coin[] = [],
+  maxCw20Payment: CW20Payment[] = [],
+  intentDurationSeconds = 0
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -317,6 +355,11 @@ export const GrantEntityAccountClaimsSubmitAuthz = async (
                 ixo.claims.v1beta1.SubmitClaimConstraints.fromPartial({
                   collectionId,
                   agentQuota: Long.fromNumber(agentQuota),
+                  maxAmount,
+                  maxCw20Payment,
+                  intentDurationNs: utils.proto.toDuration(
+                    (1000000000 * intentDurationSeconds).toString()
+                  ),
                 }),
                 ...granteeCurrentAuthConstraints,
               ],
@@ -332,11 +375,44 @@ export const GrantEntityAccountClaimsSubmitAuthz = async (
   return response;
 };
 
+export const MsgClaimIntent = async (
+  collectionId: string,
+  amount: Coin[] = [],
+  cw20Payment: CW20Payment[] = [],
+  signer = WalletUsers.alice
+) => {
+  const client = await createClient(getUser(signer));
+
+  const granteee = getUser(signer);
+  const granteeAddress = (await getUser(signer).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/ixo.claims.v1beta1.MsgClaimIntent",
+    value: ixo.claims.v1beta1.MsgClaimIntent.fromPartial({
+      agentAddress: granteeAddress,
+      agentDid: granteee.did,
+      collectionId,
+      amount,
+      cw20Payment,
+    }),
+  };
+
+  const response = await client.signAndBroadcast(
+    granteeAddress,
+    [message],
+    fee
+  );
+  return response;
+};
+
 export const MsgExecAgentSubmit = async (
   claimId: string,
   collectionId: string,
   adminAddress: string,
-  grantee = WalletUsers.alice
+  grantee = WalletUsers.alice,
+  useIntent = false,
+  amount: Coin[] = [],
+  cw20Payment: CW20Payment[] = []
 ) => {
   const client = await createClient(getUser(grantee));
 
@@ -357,6 +433,9 @@ export const MsgExecAgentSubmit = async (
               agentDid: granteee.did,
               claimId,
               collectionId,
+              useIntent,
+              amount,
+              cw20Payment,
             })
           ).finish(),
         },

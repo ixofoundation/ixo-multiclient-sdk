@@ -1,7 +1,8 @@
 //@ts-nocheck
-import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { CW20Payment, CW20PaymentSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
+import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
+import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
 import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
@@ -18,10 +19,28 @@ export interface SubmitClaimConstraints {
   /** collection_id indicates to which Collection this claim belongs */
   collectionId: string;
   agentQuota: Long;
+  /**
+   * custom max_amount allowed to be specified by service agent for claim
+   * approval, if empty then no custom amount is allowed
+   */
+  maxAmount: Coin[];
+  /**
+   * custom max_cw20_payment allowed to be specified by service agent for claim
+   * approval, if empty then no custom amount is allowed
+   */
+  maxCw20Payment: CW20Payment[];
+  /**
+   * intent_duration_ns is the duration for which the intent is active, after
+   * which it will expire (in nanoseconds)
+   */
+  intentDurationNs?: Duration;
 }
 export interface SubmitClaimConstraintsSDKType {
   collection_id: string;
   agent_quota: Long;
+  max_amount: CoinSDKType[];
+  max_cw20_payment: CW20PaymentSDKType[];
+  intent_duration_ns?: DurationSDKType;
 }
 export interface EvaluateClaimAuthorization {
   /** address of admin */
@@ -167,7 +186,10 @@ export const SubmitClaimAuthorization = {
 function createBaseSubmitClaimConstraints(): SubmitClaimConstraints {
   return {
     collectionId: "",
-    agentQuota: Long.UZERO
+    agentQuota: Long.UZERO,
+    maxAmount: [],
+    maxCw20Payment: [],
+    intentDurationNs: undefined
   };
 }
 export const SubmitClaimConstraints = {
@@ -177,6 +199,15 @@ export const SubmitClaimConstraints = {
     }
     if (!message.agentQuota.isZero()) {
       writer.uint32(16).uint64(message.agentQuota);
+    }
+    for (const v of message.maxAmount) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.maxCw20Payment) {
+      CW20Payment.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.intentDurationNs !== undefined) {
+      Duration.encode(message.intentDurationNs, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -193,6 +224,15 @@ export const SubmitClaimConstraints = {
         case 2:
           message.agentQuota = (reader.uint64() as Long);
           break;
+        case 3:
+          message.maxAmount.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 4:
+          message.maxCw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
+        case 5:
+          message.intentDurationNs = Duration.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -203,19 +243,36 @@ export const SubmitClaimConstraints = {
   fromJSON(object: any): SubmitClaimConstraints {
     return {
       collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
-      agentQuota: isSet(object.agentQuota) ? Long.fromValue(object.agentQuota) : Long.UZERO
+      agentQuota: isSet(object.agentQuota) ? Long.fromValue(object.agentQuota) : Long.UZERO,
+      maxAmount: Array.isArray(object?.maxAmount) ? object.maxAmount.map((e: any) => Coin.fromJSON(e)) : [],
+      maxCw20Payment: Array.isArray(object?.maxCw20Payment) ? object.maxCw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      intentDurationNs: isSet(object.intentDurationNs) ? Duration.fromJSON(object.intentDurationNs) : undefined
     };
   },
   toJSON(message: SubmitClaimConstraints): unknown {
     const obj: any = {};
     message.collectionId !== undefined && (obj.collectionId = message.collectionId);
     message.agentQuota !== undefined && (obj.agentQuota = (message.agentQuota || Long.UZERO).toString());
+    if (message.maxAmount) {
+      obj.maxAmount = message.maxAmount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.maxAmount = [];
+    }
+    if (message.maxCw20Payment) {
+      obj.maxCw20Payment = message.maxCw20Payment.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.maxCw20Payment = [];
+    }
+    message.intentDurationNs !== undefined && (obj.intentDurationNs = message.intentDurationNs ? Duration.toJSON(message.intentDurationNs) : undefined);
     return obj;
   },
   fromPartial(object: Partial<SubmitClaimConstraints>): SubmitClaimConstraints {
     const message = createBaseSubmitClaimConstraints();
     message.collectionId = object.collectionId ?? "";
     message.agentQuota = object.agentQuota !== undefined && object.agentQuota !== null ? Long.fromValue(object.agentQuota) : Long.UZERO;
+    message.maxAmount = object.maxAmount?.map(e => Coin.fromPartial(e)) || [];
+    message.maxCw20Payment = object.maxCw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.intentDurationNs = object.intentDurationNs !== undefined && object.intentDurationNs !== null ? Duration.fromPartial(object.intentDurationNs) : undefined;
     return message;
   }
 };

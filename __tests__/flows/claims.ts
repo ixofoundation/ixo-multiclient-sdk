@@ -49,8 +49,8 @@ export const claimsBasic = () =>
     // );
 
     // Create protocol
-    let protocol = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
-    let adminAccount = "ixo1kqmtxkggcqa9u34lnr6shy0euvclgatw4f9zz5";
+    let protocol = "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b";
+    let adminAccount = "ixo14p4eh3hvunmlvegyysfp5lg8gf6cp6suxxx672";
 
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity protocol", async () => {
       const res = await Entity.CreateEntity(
@@ -83,7 +83,7 @@ export const claimsBasic = () =>
     );
 
     let cw20ContractAddress: string =
-      "ixo1747e2jlnmk6lzqe2pcpq4x0fxys4e7puadx7np78s9ygqed24cxshj2xuc";
+      "ixo1svqw226fkt7pkaq2mwx6958pykdp009tvtjft9n9q6un7efnfueqqtwjdm";
     testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
       const tester = (await getUser(WalletUsers.tester).getAccounts())[0]
         .address;
@@ -116,7 +116,7 @@ export const claimsBasic = () =>
       return res;
     });
 
-    let collectionId = "5";
+    let collectionId = "1";
 
     testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
       const res = await Claims.CreateCollection(
@@ -183,8 +183,24 @@ export const claimsBasic = () =>
         adminAccount,
         adminAccount,
         undefined,
-        cw20ContractAddress
+        cw20ContractAddress,
+        false
       )
+    );
+
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz MsgUpdateCollectionIntents",
+      () =>
+        Entity.GrantEntityAccountAuthz(
+          protocol,
+          "admin",
+          WalletUsers.tester,
+          undefined,
+          "/ixo.claims.v1beta1.MsgUpdateCollectionIntents"
+        )
+    );
+    testMsg("/ixo.claims.v1beta1.MsgUpdateCollectionIntents", () =>
+      Claims.UpdateCollectionIntents(collectionId, adminAccount)
     );
 
     testMsg("/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent submit", () =>
@@ -195,7 +211,21 @@ export const claimsBasic = () =>
         collectionId,
         100,
         false,
-        WalletUsers.alice
+        WalletUsers.alice,
+        WalletUsers.tester,
+        [
+          {
+            amount: "1000000",
+            denom: "uixo",
+          },
+        ],
+        [
+          {
+            address: cw20ContractAddress,
+            amount: Long.fromNumber(10),
+          },
+        ],
+        60
       )
     );
 
@@ -236,12 +266,43 @@ export const claimsBasic = () =>
 
     // test claim and eval with custom amount and cw20 payment
     let claimId = "100001";
+    testMsg("/ixo.claims.v1beta1.MsgClaimIntent agent submit intent", () =>
+      Claims.MsgClaimIntent(
+        collectionId,
+        [
+          {
+            amount: "1000000",
+            denom: "uixo",
+          },
+        ],
+        [
+          {
+            address: cw20ContractAddress,
+            amount: Long.fromNumber(10),
+          },
+        ],
+        WalletUsers.alice
+      )
+    );
     testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", () =>
       Claims.MsgExecAgentSubmit(
         claimId,
         collectionId,
         adminAccount,
-        WalletUsers.alice
+        WalletUsers.alice,
+        true,
+        [
+          {
+            amount: "100000",
+            denom: "uixo",
+          },
+        ],
+        [
+          {
+            address: cw20ContractAddress,
+            amount: Long.fromNumber(5),
+          },
+        ]
       )
     );
     testMsg("/cosmos.authz.v1beta1.MsgExec agent evaluate", () =>

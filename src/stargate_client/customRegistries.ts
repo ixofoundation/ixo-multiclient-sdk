@@ -537,6 +537,14 @@ export const createRegistry = (): Registry => {
     "/ixo.claims.v1beta1.MsgUpdateCollectionPayments",
     ixo.claims.v1beta1.MsgUpdateCollectionPayments
   );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgUpdateCollectionIntents",
+    ixo.claims.v1beta1.MsgUpdateCollectionIntents
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgClaimIntent",
+    ixo.claims.v1beta1.MsgClaimIntent
+  );
 
   // Ixo Smart Account module
   // -----------------------------------------------------------------------------

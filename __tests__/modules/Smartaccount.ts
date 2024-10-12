@@ -127,6 +127,14 @@ export const MsgSendWithAuthenticator = async () => {
         ],
       }),
     },
+    // {
+    //   typeUrl: "/ixo.claims.v1beta1.MsgClaimIntent",
+    //   value: ixo.claims.v1beta1.MsgClaimIntent.fromPartial({
+    //     agentAddress: myAddress,
+    //     agentDid: tester.did,
+    //     collectionId: "3",
+    //   }),
+    // },
   ];
 
   // get fee
