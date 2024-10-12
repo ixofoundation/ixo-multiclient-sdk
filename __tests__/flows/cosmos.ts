@@ -115,6 +115,12 @@ export const feegrantBasic = () =>
 
 export const feegrantAllCurrentUsers = () =>
   describe("Refreshing feegrant for all current users", () => {
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(WalletUsers.tester, process.env.ROOT_FEEGRANT),
+      ])
+    );
+
     testMsg("/cosmos.feegrant.v1beta1.MsgGrantAllowance", async () => {
       const address = (await getUser(WalletUsers.tester).getAccounts())[0]
         .address;
