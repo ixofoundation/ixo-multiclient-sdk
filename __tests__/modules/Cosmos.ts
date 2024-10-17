@@ -488,12 +488,18 @@ export const MsgSubmitProposalUpdateParams = async () => {
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
 
-  const subspace = "mint";
-  const key = "ImpactRewardsReceivers";
-  const value = JSON.stringify([
-    { address: "ixo1jtlkhddkfvzu4p2vl4dvlszzkqvlthghee44jz", weight: "0.5" },
-    { address: "ixo1ruwxxfsp6jgdk88fmyzyp7s3hs20vqmg5f3htp", weight: "0.5" },
-  ]);
+  // const subspace = "mint";
+  // const key = "ImpactRewardsReceivers";
+  // const value = JSON.stringify([
+  //   { address: "ixo1jtlkhddkfvzu4p2vl4dvlszzkqvlthghee44jz", weight: "0.5" },
+  //   { address: "ixo1ruwxxfsp6jgdk88fmyzyp7s3hs20vqmg5f3htp", weight: "0.5" },
+  // ]);
+
+  const subspace = "smartaccount";
+  // const key = "IsSmartAccountActive";
+  // const value = JSON.stringify(false);
+  const key = "CircuitBreakerControllers";
+  const value = JSON.stringify(["ixo1jtlkhddkfvzu4p2vl4dvlszzkqvlthghee44jz"]);
 
   const message = {
     typeUrl: "/cosmos.gov.v1beta1.MsgSubmitProposal",
