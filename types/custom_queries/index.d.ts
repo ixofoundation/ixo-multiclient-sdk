@@ -13,8 +13,17 @@ export declare namespace customQueries {
                 entity: {
                     v1beta1: import("../codegen/ixo/entity/v1beta1/query.rpc.Query").QueryClientImpl;
                 };
+                epochs: {
+                    v1beta1: import("../codegen/ixo/epochs/v1beta1/query.rpc.Query").QueryClientImpl;
+                };
                 iid: {
                     v1beta1: import("../codegen/ixo/iid/v1beta1/query.rpc.Query").QueryClientImpl;
+                };
+                mint: {
+                    v1beta1: import("../codegen/ixo/mint/v1beta1/query.rpc.Query").QueryClientImpl;
+                };
+                smartaccount: {
+                    v1beta1: import("../codegen/ixo/smartaccount/v1beta1/query.rpc.Query").QueryClientImpl;
                 };
                 token: {
                     v1beta1: import("../codegen/ixo/token/v1beta1/query.rpc.Query").QueryClientImpl;
@@ -125,8 +134,17 @@ export declare namespace customQueries {
                 entity: {
                     v1beta1: import("../codegen/ixo/entity/v1beta1/query.rpc.Query").QueryClientImpl;
                 };
+                epochs: {
+                    v1beta1: import("../codegen/ixo/epochs/v1beta1/query.rpc.Query").QueryClientImpl;
+                };
                 iid: {
                     v1beta1: import("../codegen/ixo/iid/v1beta1/query.rpc.Query").QueryClientImpl;
+                };
+                mint: {
+                    v1beta1: import("../codegen/ixo/mint/v1beta1/query.rpc.Query").QueryClientImpl;
+                };
+                smartaccount: {
+                    v1beta1: import("../codegen/ixo/smartaccount/v1beta1/query.rpc.Query").QueryClientImpl;
                 };
                 token: {
                     v1beta1: import("../codegen/ixo/token/v1beta1/query.rpc.Query").QueryClientImpl;

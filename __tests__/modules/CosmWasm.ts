@@ -1,5 +1,4 @@
 import { SignerData } from "@cosmjs/stargate";
-import Long from "long";
 import { getFee, WalletUsers } from "../helpers/constants";
 import {
   createClient,
@@ -10,6 +9,8 @@ import {
   getFileFromPath,
 } from "../helpers/common";
 import { SigningStargateClient } from "../../src";
+// @ts-ignore
+import Long from "long";
 
 export const WasmStoreTrx = async (
   contract: string = "cw721",
@@ -133,6 +134,50 @@ export const WasmExecuteTrx = async (
       funds: [cosmos.base.v1beta1.Coin.fromPartial(funds)],
       msg: utils.conversions.JsonToArray(msg),
       sender: myAddress,
+    }),
+  };
+
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
+  return response;
+};
+
+export const WasmExecuteTrxThroughAuthz = async (
+  contractAddress: string,
+  msg: string,
+  signer: WalletUsers = WalletUsers.tester,
+  funds = {
+    amount: "1",
+    denom: "uixo",
+  },
+  granterAddress: string
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = getUser(signer);
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const authzMessage = {
+    typeUrl: "/cosmwasm.wasm.v1.MsgExecuteContract",
+    value: cosmwasm.wasm.v1.MsgExecuteContract.encode(
+      cosmwasm.wasm.v1.MsgExecuteContract.fromPartial({
+        contract: contractAddress,
+        funds: [cosmos.base.v1beta1.Coin.fromPartial(funds)],
+        msg: utils.conversions.JsonToArray(msg),
+        sender: granterAddress,
+      })
+    ).finish(),
+  };
+
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+      grantee: myAddress,
+      msgs: [authzMessage],
     }),
   };
 

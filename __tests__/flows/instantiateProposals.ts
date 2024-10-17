@@ -15,6 +15,7 @@ export const instantiateModulesProposals = () =>
           i + 1
         } of ${contracts.length}`,
         async () => {
+          // const res = await Cosmos.MsgSubmitProposalStoreCWOld(c.name, c.path);
           const res = await Cosmos.MsgSubmitProposalStoreCW(c.name, c.path);
           proposalId = utils.common.getValueFromEvents(
             res,
@@ -185,7 +186,7 @@ export const cwUploadProposal = () =>
       "/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract",
       async () => {
         const name = "ixoswap";
-        const res = await Cosmos.MsgSubmitProposalStoreCW(`custom ${name}`, [
+        const res = await Cosmos.MsgSubmitProposalStoreCWOld(`custom ${name}`, [
           "contracts",
           "ixo",
           `${name}.wasm`,

@@ -48,6 +48,24 @@ export const getValueFromEvents = (
           return true;
         })
         ?.attributes?.find((a: EventAttribute) => a.key === attribute).value;
+
+      // if no value it could be for chain pre v0.50 where events doesnt include msgIndex
+      if (!value) {
+        value = res.events
+          .find((e: EventSDKType) => {
+            // first check if type is correct
+            const isType = e.type === event;
+            if (!isType) return false;
+
+            // finally check if attribute is present
+            const isAttribute = e.attributes.find(
+              (a: EventAttribute) => a.key === attribute
+            )?.value;
+            if (isAttribute === undefined) return false;
+            return true;
+          })
+          ?.attributes?.find((a: EventAttribute) => a.key === attribute).value;
+      }
     } else {
       value = JSON.parse(res.rawLog)
         [messageIndex]?.events?.find((e: EventSDKType) => e.type === event)

@@ -6,6 +6,7 @@ import "ixo/iid/v1beta1/iid.proto";
 import "cosmos_proto/cosmos.proto";
 import "ixo/token/v1beta1/token.proto";
 import "google/protobuf/timestamp.proto";
+import "cosmos/msg/v1/msg.proto";
 
 option go_package = "github.com/ixofoundation/ixo-blockchain/v3/x/token/types";
 
@@ -21,6 +22,8 @@ service Msg {
 }
 
 message MsgCreateToken {
+  option (cosmos.msg.v1.signer) = "minter";
+
   // address of minter
   string minter = 1;
   // class is the token protocol entity DID (validated)
@@ -48,6 +51,8 @@ message MsgCreateToken {
 message MsgCreateTokenResponse {}
 
 message MsgMintToken {
+  option (cosmos.msg.v1.signer) = "minter";
+
   // address of minter
   string minter = 1;
   string contract_address = 2;
@@ -80,6 +85,8 @@ message MintBatch {
 message MsgMintTokenResponse {}
 
 message MsgTransferToken {
+  option (cosmos.msg.v1.signer) = "owner";
+
   // address of owner
   string owner = 1;
   // address of receiver
@@ -104,6 +111,8 @@ message TokenBatch {
 }
 
 message MsgRetireToken {
+  option (cosmos.msg.v1.signer) = "owner";
+
   // address of owner
   string owner = 1;
   // tokens to retire, all tokens must be in same smart contract
@@ -124,6 +133,8 @@ message MsgRetireToken {
 message MsgRetireTokenResponse {}
 
 message MsgCancelToken {
+  option (cosmos.msg.v1.signer) = "owner";
+
   // address of owner
   string owner = 1;
   // tokens to retire, all tokens must be in same smart contract
@@ -136,6 +147,8 @@ message MsgCancelToken {
 message MsgCancelTokenResponse {}
 
 message MsgPauseToken {
+  option (cosmos.msg.v1.signer) = "minter";
+
   // address of minter
   string minter = 1;
   string contract_address = 2;
@@ -146,6 +159,8 @@ message MsgPauseToken {
 message MsgPauseTokenResponse {}
 
 message MsgStopToken {
+  option (cosmos.msg.v1.signer) = "minter";
+
   // address of minter
   string minter = 1;
   string contract_address = 2;

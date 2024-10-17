@@ -1,10 +1,17 @@
-import { testMsg, utils } from "../helpers/common";
+import { generateNewWallet, testMsg, utils } from "../helpers/common";
 import * as Authz from "../modules/Authz";
 import * as Entity from "../modules/Entity";
 import * as Claims from "../modules/Claims";
+import { WalletUsers } from "../helpers/constants";
 
 export const authzBasic = () =>
   describe("Testing the cosmos authz module", () => {
+    // beforeAll(() =>
+    //   Promise.all([
+    //     generateNewWallet(WalletUsers.tester, process.env.ROOT_IMPACTS),
+    //   ])
+    // );
+
     // tester creates entity
     let entityDid = "";
     let adminAccount = "";

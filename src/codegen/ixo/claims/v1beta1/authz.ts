@@ -1,8 +1,9 @@
 //@ts-nocheck
-import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { CW20Payment, CW20PaymentSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
+import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
+import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
-import { PaymentType, Contract1155Payment, Contract1155PaymentSDKType, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
 import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface SubmitClaimAuthorization {
@@ -18,10 +19,28 @@ export interface SubmitClaimConstraints {
   /** collection_id indicates to which Collection this claim belongs */
   collectionId: string;
   agentQuota: Long;
+  /**
+   * custom max_amount allowed to be specified by service agent for claim
+   * approval, if empty then no custom amount is allowed
+   */
+  maxAmount: Coin[];
+  /**
+   * custom max_cw20_payment allowed to be specified by service agent for claim
+   * approval, if empty then no custom amount is allowed
+   */
+  maxCw20Payment: CW20Payment[];
+  /**
+   * intent_duration_ns is the duration for which the intent is active, after
+   * which it will expire (in nanoseconds)
+   */
+  intentDurationNs?: Duration;
 }
 export interface SubmitClaimConstraintsSDKType {
   collection_id: string;
   agent_quota: Long;
+  max_amount: CoinSDKType[];
+  max_cw20_payment: CW20PaymentSDKType[];
+  intent_duration_ns?: DurationSDKType;
 }
 export interface EvaluateClaimAuthorization {
   /** address of admin */
@@ -45,6 +64,11 @@ export interface EvaluateClaimConstraints {
    * defined in Token payments
    */
   maxCustomAmount: Coin[];
+  /**
+   * max custom cw20 payment evaluator can change, if empty list must use amount
+   * defined in Token payments
+   */
+  maxCustomCw20Payment: CW20Payment[];
 }
 export interface EvaluateClaimConstraintsSDKType {
   collection_id: string;
@@ -52,6 +76,7 @@ export interface EvaluateClaimConstraintsSDKType {
   agent_quota: Long;
   before_date?: TimestampSDKType;
   max_custom_amount: CoinSDKType[];
+  max_custom_cw20_payment: CW20PaymentSDKType[];
 }
 export interface WithdrawPaymentAuthorization {
   /** address of admin */
@@ -85,6 +110,8 @@ export interface WithdrawPaymentConstraints {
    * plus the timeout on Collection payments, if null then none
    */
   releaseDate?: Timestamp;
+  /** cw20 payments, can be empty or multiple */
+  cw20Payment: CW20Payment[];
 }
 export interface WithdrawPaymentConstraintsSDKType {
   claim_id: string;
@@ -95,6 +122,7 @@ export interface WithdrawPaymentConstraintsSDKType {
   toAddress: string;
   fromAddress: string;
   release_date?: TimestampSDKType;
+  cw20_payment: CW20PaymentSDKType[];
 }
 function createBaseSubmitClaimAuthorization(): SubmitClaimAuthorization {
   return {
@@ -158,7 +186,10 @@ export const SubmitClaimAuthorization = {
 function createBaseSubmitClaimConstraints(): SubmitClaimConstraints {
   return {
     collectionId: "",
-    agentQuota: Long.UZERO
+    agentQuota: Long.UZERO,
+    maxAmount: [],
+    maxCw20Payment: [],
+    intentDurationNs: undefined
   };
 }
 export const SubmitClaimConstraints = {
@@ -168,6 +199,15 @@ export const SubmitClaimConstraints = {
     }
     if (!message.agentQuota.isZero()) {
       writer.uint32(16).uint64(message.agentQuota);
+    }
+    for (const v of message.maxAmount) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.maxCw20Payment) {
+      CW20Payment.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.intentDurationNs !== undefined) {
+      Duration.encode(message.intentDurationNs, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -184,6 +224,15 @@ export const SubmitClaimConstraints = {
         case 2:
           message.agentQuota = (reader.uint64() as Long);
           break;
+        case 3:
+          message.maxAmount.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 4:
+          message.maxCw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
+        case 5:
+          message.intentDurationNs = Duration.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -194,19 +243,36 @@ export const SubmitClaimConstraints = {
   fromJSON(object: any): SubmitClaimConstraints {
     return {
       collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
-      agentQuota: isSet(object.agentQuota) ? Long.fromValue(object.agentQuota) : Long.UZERO
+      agentQuota: isSet(object.agentQuota) ? Long.fromValue(object.agentQuota) : Long.UZERO,
+      maxAmount: Array.isArray(object?.maxAmount) ? object.maxAmount.map((e: any) => Coin.fromJSON(e)) : [],
+      maxCw20Payment: Array.isArray(object?.maxCw20Payment) ? object.maxCw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      intentDurationNs: isSet(object.intentDurationNs) ? Duration.fromJSON(object.intentDurationNs) : undefined
     };
   },
   toJSON(message: SubmitClaimConstraints): unknown {
     const obj: any = {};
     message.collectionId !== undefined && (obj.collectionId = message.collectionId);
     message.agentQuota !== undefined && (obj.agentQuota = (message.agentQuota || Long.UZERO).toString());
+    if (message.maxAmount) {
+      obj.maxAmount = message.maxAmount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.maxAmount = [];
+    }
+    if (message.maxCw20Payment) {
+      obj.maxCw20Payment = message.maxCw20Payment.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.maxCw20Payment = [];
+    }
+    message.intentDurationNs !== undefined && (obj.intentDurationNs = message.intentDurationNs ? Duration.toJSON(message.intentDurationNs) : undefined);
     return obj;
   },
   fromPartial(object: Partial<SubmitClaimConstraints>): SubmitClaimConstraints {
     const message = createBaseSubmitClaimConstraints();
     message.collectionId = object.collectionId ?? "";
     message.agentQuota = object.agentQuota !== undefined && object.agentQuota !== null ? Long.fromValue(object.agentQuota) : Long.UZERO;
+    message.maxAmount = object.maxAmount?.map(e => Coin.fromPartial(e)) || [];
+    message.maxCw20Payment = object.maxCw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.intentDurationNs = object.intentDurationNs !== undefined && object.intentDurationNs !== null ? Duration.fromPartial(object.intentDurationNs) : undefined;
     return message;
   }
 };
@@ -275,7 +341,8 @@ function createBaseEvaluateClaimConstraints(): EvaluateClaimConstraints {
     claimIds: [],
     agentQuota: Long.UZERO,
     beforeDate: undefined,
-    maxCustomAmount: []
+    maxCustomAmount: [],
+    maxCustomCw20Payment: []
   };
 }
 export const EvaluateClaimConstraints = {
@@ -294,6 +361,9 @@ export const EvaluateClaimConstraints = {
     }
     for (const v of message.maxCustomAmount) {
       Coin.encode(v!, writer.uint32(82).fork()).ldelim();
+    }
+    for (const v of message.maxCustomCw20Payment) {
+      CW20Payment.encode(v!, writer.uint32(90).fork()).ldelim();
     }
     return writer;
   },
@@ -319,6 +389,9 @@ export const EvaluateClaimConstraints = {
         case 10:
           message.maxCustomAmount.push(Coin.decode(reader, reader.uint32()));
           break;
+        case 11:
+          message.maxCustomCw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -332,7 +405,8 @@ export const EvaluateClaimConstraints = {
       claimIds: Array.isArray(object?.claimIds) ? object.claimIds.map((e: any) => String(e)) : [],
       agentQuota: isSet(object.agentQuota) ? Long.fromValue(object.agentQuota) : Long.UZERO,
       beforeDate: isSet(object.beforeDate) ? fromJsonTimestamp(object.beforeDate) : undefined,
-      maxCustomAmount: Array.isArray(object?.maxCustomAmount) ? object.maxCustomAmount.map((e: any) => Coin.fromJSON(e)) : []
+      maxCustomAmount: Array.isArray(object?.maxCustomAmount) ? object.maxCustomAmount.map((e: any) => Coin.fromJSON(e)) : [],
+      maxCustomCw20Payment: Array.isArray(object?.maxCustomCw20Payment) ? object.maxCustomCw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: EvaluateClaimConstraints): unknown {
@@ -350,6 +424,11 @@ export const EvaluateClaimConstraints = {
     } else {
       obj.maxCustomAmount = [];
     }
+    if (message.maxCustomCw20Payment) {
+      obj.maxCustomCw20Payment = message.maxCustomCw20Payment.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.maxCustomCw20Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<EvaluateClaimConstraints>): EvaluateClaimConstraints {
@@ -359,6 +438,7 @@ export const EvaluateClaimConstraints = {
     message.agentQuota = object.agentQuota !== undefined && object.agentQuota !== null ? Long.fromValue(object.agentQuota) : Long.UZERO;
     message.beforeDate = object.beforeDate !== undefined && object.beforeDate !== null ? Timestamp.fromPartial(object.beforeDate) : undefined;
     message.maxCustomAmount = object.maxCustomAmount?.map(e => Coin.fromPartial(e)) || [];
+    message.maxCustomCw20Payment = object.maxCustomCw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -430,7 +510,8 @@ function createBaseWithdrawPaymentConstraints(): WithdrawPaymentConstraints {
     contract_1155Payment: undefined,
     toAddress: "",
     fromAddress: "",
-    releaseDate: undefined
+    releaseDate: undefined,
+    cw20Payment: []
   };
 }
 export const WithdrawPaymentConstraints = {
@@ -458,6 +539,9 @@ export const WithdrawPaymentConstraints = {
     }
     if (message.releaseDate !== undefined) {
       Timestamp.encode(message.releaseDate, writer.uint32(66).fork()).ldelim();
+    }
+    for (const v of message.cw20Payment) {
+      CW20Payment.encode(v!, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -492,6 +576,9 @@ export const WithdrawPaymentConstraints = {
         case 8:
           message.releaseDate = Timestamp.decode(reader, reader.uint32());
           break;
+        case 9:
+          message.cw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -508,7 +595,8 @@ export const WithdrawPaymentConstraints = {
       contract_1155Payment: isSet(object.contract_1155Payment) ? Contract1155Payment.fromJSON(object.contract_1155Payment) : undefined,
       toAddress: isSet(object.toAddress) ? String(object.toAddress) : "",
       fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
-      releaseDate: isSet(object.releaseDate) ? fromJsonTimestamp(object.releaseDate) : undefined
+      releaseDate: isSet(object.releaseDate) ? fromJsonTimestamp(object.releaseDate) : undefined,
+      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: WithdrawPaymentConstraints): unknown {
@@ -529,6 +617,11 @@ export const WithdrawPaymentConstraints = {
     message.toAddress !== undefined && (obj.toAddress = message.toAddress);
     message.fromAddress !== undefined && (obj.fromAddress = message.fromAddress);
     message.releaseDate !== undefined && (obj.releaseDate = fromTimestamp(message.releaseDate).toISOString());
+    if (message.cw20Payment) {
+      obj.cw20Payment = message.cw20Payment.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw20Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<WithdrawPaymentConstraints>): WithdrawPaymentConstraints {
@@ -541,6 +634,7 @@ export const WithdrawPaymentConstraints = {
     message.toAddress = object.toAddress ?? "";
     message.fromAddress = object.fromAddress ?? "";
     message.releaseDate = object.releaseDate !== undefined && object.releaseDate !== null ? Timestamp.fromPartial(object.releaseDate) : undefined;
+    message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     return message;
   }
 };
