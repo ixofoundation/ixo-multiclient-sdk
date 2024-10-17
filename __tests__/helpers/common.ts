@@ -152,7 +152,7 @@ export const checkSuccessMsg = (
   logRawlog = false,
   succeed: boolean
 ) => {
-  if (logRawlog) console.log(res.rawLog);
+  if (logRawlog) console.dir(res, { depth: null });
   let isSuccess = true;
   try {
     assertIsDeliverTxSuccess(res);

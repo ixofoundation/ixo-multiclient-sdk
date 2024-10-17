@@ -181,15 +181,15 @@ export const quickQueries = () =>
     // test("Query block results from Tendermint Clint", async () => {
     //   const res = await (
     //     await Tendermint34Client.connect(RPC_URL)
-    //   ).blockResults(187175);
+    //   ).blockResults(2401);
 
     //   const ignoreList = [
     //     "coin_received",
     //     "rewards",
     //     "commission",
-    //     "transfer",
-    //     "coin_spent",
-    //     "mint",
+    //     // "transfer",
+    //     // "coin_spent",
+    //     // "mint",
     //   ];
     //   console.dir(
     //     {

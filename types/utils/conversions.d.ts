@@ -8,8 +8,12 @@ export declare const jsonStringToBase64: (jsonString: string) => string;
 export declare const jsonToBase64: (json: unknown) => string;
 /**
  * encode a multibase base58-btc multicodec key
- *
  * @param header Uint8Array header for multicodec encoding
  * @param key Uint8Array of key encoding
  */
 export declare const encodeMbKey: (header: Uint8Array, key: Uint8Array) => string;
+/**
+ * decode a multibase base58-btc multicodec key
+ * @param mbKey string multibase base58-btc multicodec key
+ */
+export declare const decodeMbKey: (header: Uint8Array, mbKey: string) => Uint8Array;

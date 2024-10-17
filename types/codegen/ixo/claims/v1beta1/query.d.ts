@@ -1,5 +1,5 @@
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType } from "./claims";
+import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType } from "./claims";
 import * as _m0 from "protobufjs/minimal";
 export interface QueryParamsRequest {
 }
@@ -88,6 +88,36 @@ export interface QueryDisputeListResponse {
 }
 export interface QueryDisputeListResponseSDKType {
     disputes: DisputeSDKType[];
+    pagination?: PageResponseSDKType;
+}
+export interface QueryIntentRequest {
+    id: string;
+    agentAddress: string;
+    collectionId: string;
+}
+export interface QueryIntentRequestSDKType {
+    id: string;
+    agentAddress: string;
+    collectionId: string;
+}
+export interface QueryIntentResponse {
+    intent?: Intent;
+}
+export interface QueryIntentResponseSDKType {
+    intent?: IntentSDKType;
+}
+export interface QueryIntentListRequest {
+    pagination?: PageRequest;
+}
+export interface QueryIntentListRequestSDKType {
+    pagination?: PageRequestSDKType;
+}
+export interface QueryIntentListResponse {
+    intents: Intent[];
+    pagination?: PageResponse;
+}
+export interface QueryIntentListResponseSDKType {
+    intents: IntentSDKType[];
     pagination?: PageResponseSDKType;
 }
 export declare const QueryParamsRequest: {
@@ -187,4 +217,32 @@ export declare const QueryDisputeListResponse: {
     fromJSON(object: any): QueryDisputeListResponse;
     toJSON(message: QueryDisputeListResponse): unknown;
     fromPartial(object: Partial<QueryDisputeListResponse>): QueryDisputeListResponse;
+};
+export declare const QueryIntentRequest: {
+    encode(message: QueryIntentRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryIntentRequest;
+    fromJSON(object: any): QueryIntentRequest;
+    toJSON(message: QueryIntentRequest): unknown;
+    fromPartial(object: Partial<QueryIntentRequest>): QueryIntentRequest;
+};
+export declare const QueryIntentResponse: {
+    encode(message: QueryIntentResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryIntentResponse;
+    fromJSON(object: any): QueryIntentResponse;
+    toJSON(message: QueryIntentResponse): unknown;
+    fromPartial(object: Partial<QueryIntentResponse>): QueryIntentResponse;
+};
+export declare const QueryIntentListRequest: {
+    encode(message: QueryIntentListRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryIntentListRequest;
+    fromJSON(object: any): QueryIntentListRequest;
+    toJSON(message: QueryIntentListRequest): unknown;
+    fromPartial(object: Partial<QueryIntentListRequest>): QueryIntentListRequest;
+};
+export declare const QueryIntentListResponse: {
+    encode(message: QueryIntentListResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryIntentListResponse;
+    fromJSON(object: any): QueryIntentListResponse;
+    toJSON(message: QueryIntentListResponse): unknown;
+    fromPartial(object: Partial<QueryIntentListResponse>): QueryIntentListResponse;
 };
