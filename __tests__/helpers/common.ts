@@ -29,6 +29,12 @@ const path = require("path");
 
 export { ixo, cosmos, utils, ibc, customMessages, cosmwasm, customQueries };
 
+// patch for bigint to json
+// @ts-ignore
+BigInt.prototype.toJSON = function () {
+  return this.toString();
+};
+
 export const sendFaucet = async (address: string) => {
   const faucetUrl = RPC_URL.includes("devnet")
     ? `https://faucet.devnet.ixo.earth/send/${address}`
@@ -146,7 +152,7 @@ export const checkSuccessMsg = (
   logRawlog = false,
   succeed: boolean
 ) => {
-  if (logRawlog) console.log(res.rawLog);
+  if (logRawlog) console.dir(res, { depth: null });
   let isSuccess = true;
   try {
     assertIsDeliverTxSuccess(res);

@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
-import { CollectionState, Payments, PaymentsSDKType, EvaluationStatus, DisputeData, DisputeDataSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType, collectionStateFromJSON, collectionStateToJSON, evaluationStatusFromJSON, evaluationStatusToJSON, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
+import { CollectionState, Payments, PaymentsSDKType, CollectionIntentOptions, CW20Payment, CW20PaymentSDKType, EvaluationStatus, DisputeData, DisputeDataSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType, collectionStateFromJSON, collectionIntentOptionsFromJSON, collectionStateToJSON, collectionIntentOptionsToJSON, evaluationStatusFromJSON, evaluationStatusToJSON, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
 import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
@@ -28,6 +28,11 @@ export interface MsgCreateCollection {
    * rejection
    */
   payments?: Payments;
+  /**
+   * intents is the option for intents for this collection (allow, deny,
+   * required)
+   */
+  intents: CollectionIntentOptions;
 }
 export interface MsgCreateCollectionSDKType {
   entity: string;
@@ -38,6 +43,7 @@ export interface MsgCreateCollectionSDKType {
   quota: Long;
   state: CollectionState;
   payments?: PaymentsSDKType;
+  intents: CollectionIntentOptions;
 }
 export interface MsgCreateCollectionResponse {}
 export interface MsgCreateCollectionResponseSDKType {}
@@ -51,6 +57,24 @@ export interface MsgSubmitClaim {
   agentAddress: string;
   /** admin address used to sign this message, validated against Collection Admin */
   adminAddress: string;
+  /**
+   * use_intent is the option for using intent for this claim if it exists and
+   * is active. NOTE: if use_intent is true then amount and cw20 amount are
+   * ignored and overriden with intent amounts. NOTE: if use_intent is true and
+   * there is no active intent then will error
+   */
+  useIntent: boolean;
+  /**
+   * NOTE: if both amount and cw20_payment are empty then use default by
+   * Collection custom amount specified by service agent for claim approval
+   */
+  amount: Coin[];
+  /**
+   * NOTE: if both amount and cw20 amount are empty then use default by
+   * Collection custom cw20 payments specified by service agent for claim
+   * approval
+   */
+  cw20Payment: CW20Payment[];
 }
 export interface MsgSubmitClaimSDKType {
   collection_id: string;
@@ -58,6 +82,9 @@ export interface MsgSubmitClaimSDKType {
   agent_did: string;
   agent_address: string;
   admin_address: string;
+  use_intent: boolean;
+  amount: CoinSDKType[];
+  cw20_payment: CW20PaymentSDKType[];
 }
 export interface MsgSubmitClaimResponse {}
 export interface MsgSubmitClaimResponseSDKType {}
@@ -86,10 +113,15 @@ export interface MsgEvaluateClaim {
   /** verificationProof is the cid of the evaluation Verfiable Credential */
   verificationProof: string;
   /**
-   * custom amount specified by evaluator for claim approval, if empty list then
-   * use default by Collection
+   * NOTE: if both amount and cw20 amount are empty then use collection default
+   * custom amount specified by evaluator for claim approval
    */
   amount: Coin[];
+  /**
+   * NOTE: if both amount and cw20 amount are empty then use collection default
+   * custom cw20 payments specified by evaluator for claim approval
+   */
+  cw20Payment: CW20Payment[];
 }
 export interface MsgEvaluateClaimSDKType {
   claim_id: string;
@@ -102,6 +134,7 @@ export interface MsgEvaluateClaimSDKType {
   reason: number;
   verification_proof: string;
   amount: CoinSDKType[];
+  cw20_payment: CW20PaymentSDKType[];
 }
 export interface MsgEvaluateClaimResponse {}
 export interface MsgEvaluateClaimResponseSDKType {}
@@ -163,6 +196,8 @@ export interface MsgWithdrawPayment {
   releaseDate?: Timestamp;
   /** admin address used to sign this message, validated against Collection Admin */
   adminAddress: string;
+  /** cw20 payments, can be empty or multiple */
+  cw20Payment: CW20Payment[];
 }
 export interface MsgWithdrawPaymentSDKType {
   claim_id: string;
@@ -174,6 +209,7 @@ export interface MsgWithdrawPaymentSDKType {
   fromAddress: string;
   release_date?: TimestampSDKType;
   admin_address: string;
+  cw20_payment: CW20PaymentSDKType[];
 }
 export interface MsgWithdrawPaymentResponse {}
 export interface MsgWithdrawPaymentResponseSDKType {}
@@ -234,6 +270,64 @@ export interface MsgUpdateCollectionPaymentsSDKType {
 }
 export interface MsgUpdateCollectionPaymentsResponse {}
 export interface MsgUpdateCollectionPaymentsResponseSDKType {}
+export interface MsgUpdateCollectionIntents {
+  /** collection_id indicates which Collection to update */
+  collectionId: string;
+  /**
+   * intents is the option for intents for this collection (allow, deny,
+   * required)
+   */
+  intents: CollectionIntentOptions;
+  /** admin address used to sign this message, validated against Collection Admin */
+  adminAddress: string;
+}
+export interface MsgUpdateCollectionIntentsSDKType {
+  collection_id: string;
+  intents: CollectionIntentOptions;
+  admin_address: string;
+}
+export interface MsgUpdateCollectionIntentsResponse {}
+export interface MsgUpdateCollectionIntentsResponseSDKType {}
+export interface MsgClaimIntent {
+  /** The service agent's DID (Decentralized Identifier). */
+  agentDid: string;
+  /** The service agent's address (who submits this message). */
+  agentAddress: string;
+  /** The id of the collection this intent is linked to. */
+  collectionId: string;
+  /**
+   * NOTE: if both amount and cw20 amount are empty then default by Collection
+   * is used (APPROVAL payment). The desired claim amount, if any.
+   */
+  amount: Coin[];
+  /**
+   * NOTE: if both amount and cw20 amount are empty then default by Collection
+   * is used (APPROVAL payment). The custom CW20 payment, if any.
+   */
+  cw20Payment: CW20Payment[];
+}
+export interface MsgClaimIntentSDKType {
+  agent_did: string;
+  agent_address: string;
+  collection_id: string;
+  amount: CoinSDKType[];
+  cw20_payment: CW20PaymentSDKType[];
+}
+/** MsgClaimIntentResponse defines the response after submitting an intent. */
+export interface MsgClaimIntentResponse {
+  /** Resulting intent id. */
+  intentId: string;
+  /**
+   * Timeout period for the intent. If the claim is not submitted by this time,
+   * the intent expires.
+   */
+  expireAt?: Timestamp;
+}
+/** MsgClaimIntentResponse defines the response after submitting an intent. */
+export interface MsgClaimIntentResponseSDKType {
+  intent_id: string;
+  expire_at?: TimestampSDKType;
+}
 function createBaseMsgCreateCollection(): MsgCreateCollection {
   return {
     entity: "",
@@ -243,7 +337,8 @@ function createBaseMsgCreateCollection(): MsgCreateCollection {
     endDate: undefined,
     quota: Long.UZERO,
     state: 0,
-    payments: undefined
+    payments: undefined,
+    intents: 0
   };
 }
 export const MsgCreateCollection = {
@@ -271,6 +366,9 @@ export const MsgCreateCollection = {
     }
     if (message.payments !== undefined) {
       Payments.encode(message.payments, writer.uint32(66).fork()).ldelim();
+    }
+    if (message.intents !== 0) {
+      writer.uint32(72).int32(message.intents);
     }
     return writer;
   },
@@ -305,6 +403,9 @@ export const MsgCreateCollection = {
         case 8:
           message.payments = Payments.decode(reader, reader.uint32());
           break;
+        case 9:
+          message.intents = (reader.int32() as any);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -321,7 +422,8 @@ export const MsgCreateCollection = {
       endDate: isSet(object.endDate) ? fromJsonTimestamp(object.endDate) : undefined,
       quota: isSet(object.quota) ? Long.fromValue(object.quota) : Long.UZERO,
       state: isSet(object.state) ? collectionStateFromJSON(object.state) : 0,
-      payments: isSet(object.payments) ? Payments.fromJSON(object.payments) : undefined
+      payments: isSet(object.payments) ? Payments.fromJSON(object.payments) : undefined,
+      intents: isSet(object.intents) ? collectionIntentOptionsFromJSON(object.intents) : 0
     };
   },
   toJSON(message: MsgCreateCollection): unknown {
@@ -334,6 +436,7 @@ export const MsgCreateCollection = {
     message.quota !== undefined && (obj.quota = (message.quota || Long.UZERO).toString());
     message.state !== undefined && (obj.state = collectionStateToJSON(message.state));
     message.payments !== undefined && (obj.payments = message.payments ? Payments.toJSON(message.payments) : undefined);
+    message.intents !== undefined && (obj.intents = collectionIntentOptionsToJSON(message.intents));
     return obj;
   },
   fromPartial(object: Partial<MsgCreateCollection>): MsgCreateCollection {
@@ -346,6 +449,7 @@ export const MsgCreateCollection = {
     message.quota = object.quota !== undefined && object.quota !== null ? Long.fromValue(object.quota) : Long.UZERO;
     message.state = object.state ?? 0;
     message.payments = object.payments !== undefined && object.payments !== null ? Payments.fromPartial(object.payments) : undefined;
+    message.intents = object.intents ?? 0;
     return message;
   }
 };
@@ -388,7 +492,10 @@ function createBaseMsgSubmitClaim(): MsgSubmitClaim {
     claimId: "",
     agentDid: "",
     agentAddress: "",
-    adminAddress: ""
+    adminAddress: "",
+    useIntent: false,
+    amount: [],
+    cw20Payment: []
   };
 }
 export const MsgSubmitClaim = {
@@ -407,6 +514,15 @@ export const MsgSubmitClaim = {
     }
     if (message.adminAddress !== "") {
       writer.uint32(42).string(message.adminAddress);
+    }
+    if (message.useIntent === true) {
+      writer.uint32(48).bool(message.useIntent);
+    }
+    for (const v of message.amount) {
+      Coin.encode(v!, writer.uint32(58).fork()).ldelim();
+    }
+    for (const v of message.cw20Payment) {
+      CW20Payment.encode(v!, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -432,6 +548,15 @@ export const MsgSubmitClaim = {
         case 5:
           message.adminAddress = reader.string();
           break;
+        case 6:
+          message.useIntent = reader.bool();
+          break;
+        case 7:
+          message.amount.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 8:
+          message.cw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -445,7 +570,10 @@ export const MsgSubmitClaim = {
       claimId: isSet(object.claimId) ? String(object.claimId) : "",
       agentDid: isSet(object.agentDid) ? String(object.agentDid) : "",
       agentAddress: isSet(object.agentAddress) ? String(object.agentAddress) : "",
-      adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : ""
+      adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : "",
+      useIntent: isSet(object.useIntent) ? Boolean(object.useIntent) : false,
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
+      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgSubmitClaim): unknown {
@@ -455,6 +583,17 @@ export const MsgSubmitClaim = {
     message.agentDid !== undefined && (obj.agentDid = message.agentDid);
     message.agentAddress !== undefined && (obj.agentAddress = message.agentAddress);
     message.adminAddress !== undefined && (obj.adminAddress = message.adminAddress);
+    message.useIntent !== undefined && (obj.useIntent = message.useIntent);
+    if (message.amount) {
+      obj.amount = message.amount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amount = [];
+    }
+    if (message.cw20Payment) {
+      obj.cw20Payment = message.cw20Payment.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw20Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgSubmitClaim>): MsgSubmitClaim {
@@ -464,6 +603,9 @@ export const MsgSubmitClaim = {
     message.agentDid = object.agentDid ?? "";
     message.agentAddress = object.agentAddress ?? "";
     message.adminAddress = object.adminAddress ?? "";
+    message.useIntent = object.useIntent ?? false;
+    message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
+    message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -511,7 +653,8 @@ function createBaseMsgEvaluateClaim(): MsgEvaluateClaim {
     status: 0,
     reason: 0,
     verificationProof: "",
-    amount: []
+    amount: [],
+    cw20Payment: []
   };
 }
 export const MsgEvaluateClaim = {
@@ -545,6 +688,9 @@ export const MsgEvaluateClaim = {
     }
     for (const v of message.amount) {
       Coin.encode(v!, writer.uint32(82).fork()).ldelim();
+    }
+    for (const v of message.cw20Payment) {
+      CW20Payment.encode(v!, writer.uint32(90).fork()).ldelim();
     }
     return writer;
   },
@@ -585,6 +731,9 @@ export const MsgEvaluateClaim = {
         case 10:
           message.amount.push(Coin.decode(reader, reader.uint32()));
           break;
+        case 11:
+          message.cw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -603,7 +752,8 @@ export const MsgEvaluateClaim = {
       status: isSet(object.status) ? evaluationStatusFromJSON(object.status) : 0,
       reason: isSet(object.reason) ? Number(object.reason) : 0,
       verificationProof: isSet(object.verificationProof) ? String(object.verificationProof) : "",
-      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : []
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
+      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgEvaluateClaim): unknown {
@@ -622,6 +772,11 @@ export const MsgEvaluateClaim = {
     } else {
       obj.amount = [];
     }
+    if (message.cw20Payment) {
+      obj.cw20Payment = message.cw20Payment.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw20Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgEvaluateClaim>): MsgEvaluateClaim {
@@ -636,6 +791,7 @@ export const MsgEvaluateClaim = {
     message.reason = object.reason ?? 0;
     message.verificationProof = object.verificationProof ?? "";
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
+    message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -800,7 +956,8 @@ function createBaseMsgWithdrawPayment(): MsgWithdrawPayment {
     toAddress: "",
     fromAddress: "",
     releaseDate: undefined,
-    adminAddress: ""
+    adminAddress: "",
+    cw20Payment: []
   };
 }
 export const MsgWithdrawPayment = {
@@ -831,6 +988,9 @@ export const MsgWithdrawPayment = {
     }
     if (message.adminAddress !== "") {
       writer.uint32(74).string(message.adminAddress);
+    }
+    for (const v of message.cw20Payment) {
+      CW20Payment.encode(v!, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -868,6 +1028,9 @@ export const MsgWithdrawPayment = {
         case 9:
           message.adminAddress = reader.string();
           break;
+        case 10:
+          message.cw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -885,7 +1048,8 @@ export const MsgWithdrawPayment = {
       toAddress: isSet(object.toAddress) ? String(object.toAddress) : "",
       fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
       releaseDate: isSet(object.releaseDate) ? fromJsonTimestamp(object.releaseDate) : undefined,
-      adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : ""
+      adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : "",
+      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgWithdrawPayment): unknown {
@@ -907,6 +1071,11 @@ export const MsgWithdrawPayment = {
     message.fromAddress !== undefined && (obj.fromAddress = message.fromAddress);
     message.releaseDate !== undefined && (obj.releaseDate = fromTimestamp(message.releaseDate).toISOString());
     message.adminAddress !== undefined && (obj.adminAddress = message.adminAddress);
+    if (message.cw20Payment) {
+      obj.cw20Payment = message.cw20Payment.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw20Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgWithdrawPayment>): MsgWithdrawPayment {
@@ -920,6 +1089,7 @@ export const MsgWithdrawPayment = {
     message.fromAddress = object.fromAddress ?? "";
     message.releaseDate = object.releaseDate !== undefined && object.releaseDate !== null ? Timestamp.fromPartial(object.releaseDate) : undefined;
     message.adminAddress = object.adminAddress ?? "";
+    message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -1257,6 +1427,252 @@ export const MsgUpdateCollectionPaymentsResponse = {
   },
   fromPartial(_: Partial<MsgUpdateCollectionPaymentsResponse>): MsgUpdateCollectionPaymentsResponse {
     const message = createBaseMsgUpdateCollectionPaymentsResponse();
+    return message;
+  }
+};
+function createBaseMsgUpdateCollectionIntents(): MsgUpdateCollectionIntents {
+  return {
+    collectionId: "",
+    intents: 0,
+    adminAddress: ""
+  };
+}
+export const MsgUpdateCollectionIntents = {
+  encode(message: MsgUpdateCollectionIntents, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.collectionId !== "") {
+      writer.uint32(10).string(message.collectionId);
+    }
+    if (message.intents !== 0) {
+      writer.uint32(16).int32(message.intents);
+    }
+    if (message.adminAddress !== "") {
+      writer.uint32(26).string(message.adminAddress);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionIntents {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateCollectionIntents();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.collectionId = reader.string();
+          break;
+        case 2:
+          message.intents = (reader.int32() as any);
+          break;
+        case 3:
+          message.adminAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUpdateCollectionIntents {
+    return {
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      intents: isSet(object.intents) ? collectionIntentOptionsFromJSON(object.intents) : 0,
+      adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : ""
+    };
+  },
+  toJSON(message: MsgUpdateCollectionIntents): unknown {
+    const obj: any = {};
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.intents !== undefined && (obj.intents = collectionIntentOptionsToJSON(message.intents));
+    message.adminAddress !== undefined && (obj.adminAddress = message.adminAddress);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgUpdateCollectionIntents>): MsgUpdateCollectionIntents {
+    const message = createBaseMsgUpdateCollectionIntents();
+    message.collectionId = object.collectionId ?? "";
+    message.intents = object.intents ?? 0;
+    message.adminAddress = object.adminAddress ?? "";
+    return message;
+  }
+};
+function createBaseMsgUpdateCollectionIntentsResponse(): MsgUpdateCollectionIntentsResponse {
+  return {};
+}
+export const MsgUpdateCollectionIntentsResponse = {
+  encode(_: MsgUpdateCollectionIntentsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionIntentsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateCollectionIntentsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgUpdateCollectionIntentsResponse {
+    return {};
+  },
+  toJSON(_: MsgUpdateCollectionIntentsResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgUpdateCollectionIntentsResponse>): MsgUpdateCollectionIntentsResponse {
+    const message = createBaseMsgUpdateCollectionIntentsResponse();
+    return message;
+  }
+};
+function createBaseMsgClaimIntent(): MsgClaimIntent {
+  return {
+    agentDid: "",
+    agentAddress: "",
+    collectionId: "",
+    amount: [],
+    cw20Payment: []
+  };
+}
+export const MsgClaimIntent = {
+  encode(message: MsgClaimIntent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.agentDid !== "") {
+      writer.uint32(10).string(message.agentDid);
+    }
+    if (message.agentAddress !== "") {
+      writer.uint32(18).string(message.agentAddress);
+    }
+    if (message.collectionId !== "") {
+      writer.uint32(26).string(message.collectionId);
+    }
+    for (const v of message.amount) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    for (const v of message.cw20Payment) {
+      CW20Payment.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgClaimIntent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgClaimIntent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.agentDid = reader.string();
+          break;
+        case 2:
+          message.agentAddress = reader.string();
+          break;
+        case 3:
+          message.collectionId = reader.string();
+          break;
+        case 4:
+          message.amount.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 5:
+          message.cw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgClaimIntent {
+    return {
+      agentDid: isSet(object.agentDid) ? String(object.agentDid) : "",
+      agentAddress: isSet(object.agentAddress) ? String(object.agentAddress) : "",
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
+      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: MsgClaimIntent): unknown {
+    const obj: any = {};
+    message.agentDid !== undefined && (obj.agentDid = message.agentDid);
+    message.agentAddress !== undefined && (obj.agentAddress = message.agentAddress);
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    if (message.amount) {
+      obj.amount = message.amount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amount = [];
+    }
+    if (message.cw20Payment) {
+      obj.cw20Payment = message.cw20Payment.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw20Payment = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<MsgClaimIntent>): MsgClaimIntent {
+    const message = createBaseMsgClaimIntent();
+    message.agentDid = object.agentDid ?? "";
+    message.agentAddress = object.agentAddress ?? "";
+    message.collectionId = object.collectionId ?? "";
+    message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
+    message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
+    return message;
+  }
+};
+function createBaseMsgClaimIntentResponse(): MsgClaimIntentResponse {
+  return {
+    intentId: "",
+    expireAt: undefined
+  };
+}
+export const MsgClaimIntentResponse = {
+  encode(message: MsgClaimIntentResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.intentId !== "") {
+      writer.uint32(10).string(message.intentId);
+    }
+    if (message.expireAt !== undefined) {
+      Timestamp.encode(message.expireAt, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgClaimIntentResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgClaimIntentResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.intentId = reader.string();
+          break;
+        case 2:
+          message.expireAt = Timestamp.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgClaimIntentResponse {
+    return {
+      intentId: isSet(object.intentId) ? String(object.intentId) : "",
+      expireAt: isSet(object.expireAt) ? fromJsonTimestamp(object.expireAt) : undefined
+    };
+  },
+  toJSON(message: MsgClaimIntentResponse): unknown {
+    const obj: any = {};
+    message.intentId !== undefined && (obj.intentId = message.intentId);
+    message.expireAt !== undefined && (obj.expireAt = fromTimestamp(message.expireAt).toISOString());
+    return obj;
+  },
+  fromPartial(object: Partial<MsgClaimIntentResponse>): MsgClaimIntentResponse {
+    const message = createBaseMsgClaimIntentResponse();
+    message.intentId = object.intentId ?? "";
+    message.expireAt = object.expireAt !== undefined && object.expireAt !== null ? Timestamp.fromPartial(object.expireAt) : undefined;
     return message;
   }
 };

@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { MsgCreateCollection, MsgCreateCollectionResponse, MsgSubmitClaim, MsgSubmitClaimResponse, MsgEvaluateClaim, MsgEvaluateClaimResponse, MsgDisputeClaim, MsgDisputeClaimResponse, MsgWithdrawPayment, MsgWithdrawPaymentResponse, MsgUpdateCollectionState, MsgUpdateCollectionStateResponse, MsgUpdateCollectionDates, MsgUpdateCollectionDatesResponse, MsgUpdateCollectionPayments, MsgUpdateCollectionPaymentsResponse } from "./tx";
+import { MsgCreateCollection, MsgCreateCollectionResponse, MsgSubmitClaim, MsgSubmitClaimResponse, MsgEvaluateClaim, MsgEvaluateClaimResponse, MsgDisputeClaim, MsgDisputeClaimResponse, MsgWithdrawPayment, MsgWithdrawPaymentResponse, MsgUpdateCollectionState, MsgUpdateCollectionStateResponse, MsgUpdateCollectionDates, MsgUpdateCollectionDatesResponse, MsgUpdateCollectionPayments, MsgUpdateCollectionPaymentsResponse, MsgUpdateCollectionIntents, MsgUpdateCollectionIntentsResponse, MsgClaimIntent, MsgClaimIntentResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
   createCollection(request: MsgCreateCollection): Promise<MsgCreateCollectionResponse>;
@@ -12,6 +12,8 @@ export interface Msg {
   updateCollectionState(request: MsgUpdateCollectionState): Promise<MsgUpdateCollectionStateResponse>;
   updateCollectionDates(request: MsgUpdateCollectionDates): Promise<MsgUpdateCollectionDatesResponse>;
   updateCollectionPayments(request: MsgUpdateCollectionPayments): Promise<MsgUpdateCollectionPaymentsResponse>;
+  updateCollectionIntents(request: MsgUpdateCollectionIntents): Promise<MsgUpdateCollectionIntentsResponse>;
+  claimIntent(request: MsgClaimIntent): Promise<MsgClaimIntentResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -25,6 +27,8 @@ export class MsgClientImpl implements Msg {
     this.updateCollectionState = this.updateCollectionState.bind(this);
     this.updateCollectionDates = this.updateCollectionDates.bind(this);
     this.updateCollectionPayments = this.updateCollectionPayments.bind(this);
+    this.updateCollectionIntents = this.updateCollectionIntents.bind(this);
+    this.claimIntent = this.claimIntent.bind(this);
   }
   createCollection(request: MsgCreateCollection): Promise<MsgCreateCollectionResponse> {
     const data = MsgCreateCollection.encode(request).finish();
@@ -65,5 +69,15 @@ export class MsgClientImpl implements Msg {
     const data = MsgUpdateCollectionPayments.encode(request).finish();
     const promise = this.rpc.request("ixo.claims.v1beta1.Msg", "UpdateCollectionPayments", data);
     return promise.then(data => MsgUpdateCollectionPaymentsResponse.decode(new _m0.Reader(data)));
+  }
+  updateCollectionIntents(request: MsgUpdateCollectionIntents): Promise<MsgUpdateCollectionIntentsResponse> {
+    const data = MsgUpdateCollectionIntents.encode(request).finish();
+    const promise = this.rpc.request("ixo.claims.v1beta1.Msg", "UpdateCollectionIntents", data);
+    return promise.then(data => MsgUpdateCollectionIntentsResponse.decode(new _m0.Reader(data)));
+  }
+  claimIntent(request: MsgClaimIntent): Promise<MsgClaimIntentResponse> {
+    const data = MsgClaimIntent.encode(request).finish();
+    const promise = this.rpc.request("ixo.claims.v1beta1.Msg", "ClaimIntent", data);
+    return promise.then(data => MsgClaimIntentResponse.decode(new _m0.Reader(data)));
   }
 }

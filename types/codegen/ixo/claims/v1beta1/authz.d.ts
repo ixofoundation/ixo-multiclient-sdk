@@ -1,7 +1,8 @@
-import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { CW20Payment, CW20PaymentSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType } from "./claims";
+import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
+import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
-import { PaymentType, Contract1155Payment, Contract1155PaymentSDKType } from "./claims";
 import { Long } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface SubmitClaimAuthorization {
@@ -17,10 +18,28 @@ export interface SubmitClaimConstraints {
     /** collection_id indicates to which Collection this claim belongs */
     collectionId: string;
     agentQuota: Long;
+    /**
+     * custom max_amount allowed to be specified by service agent for claim
+     * approval, if empty then no custom amount is allowed
+     */
+    maxAmount: Coin[];
+    /**
+     * custom max_cw20_payment allowed to be specified by service agent for claim
+     * approval, if empty then no custom amount is allowed
+     */
+    maxCw20Payment: CW20Payment[];
+    /**
+     * intent_duration_ns is the duration for which the intent is active, after
+     * which it will expire (in nanoseconds)
+     */
+    intentDurationNs?: Duration;
 }
 export interface SubmitClaimConstraintsSDKType {
     collection_id: string;
     agent_quota: Long;
+    max_amount: CoinSDKType[];
+    max_cw20_payment: CW20PaymentSDKType[];
+    intent_duration_ns?: DurationSDKType;
 }
 export interface EvaluateClaimAuthorization {
     /** address of admin */
@@ -44,6 +63,11 @@ export interface EvaluateClaimConstraints {
      * defined in Token payments
      */
     maxCustomAmount: Coin[];
+    /**
+     * max custom cw20 payment evaluator can change, if empty list must use amount
+     * defined in Token payments
+     */
+    maxCustomCw20Payment: CW20Payment[];
 }
 export interface EvaluateClaimConstraintsSDKType {
     collection_id: string;
@@ -51,6 +75,7 @@ export interface EvaluateClaimConstraintsSDKType {
     agent_quota: Long;
     before_date?: TimestampSDKType;
     max_custom_amount: CoinSDKType[];
+    max_custom_cw20_payment: CW20PaymentSDKType[];
 }
 export interface WithdrawPaymentAuthorization {
     /** address of admin */
@@ -84,6 +109,8 @@ export interface WithdrawPaymentConstraints {
      * plus the timeout on Collection payments, if null then none
      */
     releaseDate?: Timestamp;
+    /** cw20 payments, can be empty or multiple */
+    cw20Payment: CW20Payment[];
 }
 export interface WithdrawPaymentConstraintsSDKType {
     claim_id: string;
@@ -94,6 +121,7 @@ export interface WithdrawPaymentConstraintsSDKType {
     toAddress: string;
     fromAddress: string;
     release_date?: TimestampSDKType;
+    cw20_payment: CW20PaymentSDKType[];
 }
 export declare const SubmitClaimAuthorization: {
     encode(message: SubmitClaimAuthorization, writer?: _m0.Writer): _m0.Writer;

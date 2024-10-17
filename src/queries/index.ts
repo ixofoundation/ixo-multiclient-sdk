@@ -27,8 +27,17 @@ export const createQueryClient = async (rpcEndpoint: string) => {
       entity: {
         v1beta1: new ixo.entity.v1beta1.QueryClientImpl(rpc),
       },
+      epochs: {
+        v1beta1: new ixo.epochs.v1beta1.QueryClientImpl(rpc),
+      },
       iid: {
         v1beta1: new ixo.iid.v1beta1.QueryClientImpl(rpc),
+      },
+      mint: {
+        v1beta1: new ixo.mint.v1beta1.QueryClientImpl(rpc),
+      },
+      smartaccount: {
+        v1beta1: new ixo.smartaccount.v1beta1.QueryClientImpl(rpc),
       },
       token: {
         v1beta1: new ixo.token.v1beta1.QueryClientImpl(rpc),

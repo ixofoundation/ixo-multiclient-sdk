@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType } from "./claims";
+import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType } from "./claims";
 import { WithdrawPaymentConstraints, WithdrawPaymentConstraintsSDKType } from "./authz";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
@@ -74,6 +74,24 @@ export interface PaymentWithdrawCreatedEvent {
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface PaymentWithdrawCreatedEventSDKType {
   withdraw?: WithdrawPaymentConstraintsSDKType;
+}
+/** IntentSubmittedEvent is an event triggered on an Intent submission */
+export interface IntentSubmittedEvent {
+  /** IntentSubmittedEvent is an event triggered on an Intent submission */
+  intent?: Intent;
+}
+/** IntentSubmittedEvent is an event triggered on an Intent submission */
+export interface IntentSubmittedEventSDKType {
+  intent?: IntentSDKType;
+}
+/** IntentUpdatedEvent is an event triggered on an Intent update */
+export interface IntentUpdatedEvent {
+  /** IntentUpdatedEvent is an event triggered on an Intent update */
+  intent?: Intent;
+}
+/** IntentUpdatedEvent is an event triggered on an Intent update */
+export interface IntentUpdatedEventSDKType {
+  intent?: IntentSDKType;
 }
 function createBaseCollectionCreatedEvent(): CollectionCreatedEvent {
   return {
@@ -432,6 +450,96 @@ export const PaymentWithdrawCreatedEvent = {
   fromPartial(object: Partial<PaymentWithdrawCreatedEvent>): PaymentWithdrawCreatedEvent {
     const message = createBasePaymentWithdrawCreatedEvent();
     message.withdraw = object.withdraw !== undefined && object.withdraw !== null ? WithdrawPaymentConstraints.fromPartial(object.withdraw) : undefined;
+    return message;
+  }
+};
+function createBaseIntentSubmittedEvent(): IntentSubmittedEvent {
+  return {
+    intent: undefined
+  };
+}
+export const IntentSubmittedEvent = {
+  encode(message: IntentSubmittedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.intent !== undefined) {
+      Intent.encode(message.intent, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): IntentSubmittedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseIntentSubmittedEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.intent = Intent.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): IntentSubmittedEvent {
+    return {
+      intent: isSet(object.intent) ? Intent.fromJSON(object.intent) : undefined
+    };
+  },
+  toJSON(message: IntentSubmittedEvent): unknown {
+    const obj: any = {};
+    message.intent !== undefined && (obj.intent = message.intent ? Intent.toJSON(message.intent) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<IntentSubmittedEvent>): IntentSubmittedEvent {
+    const message = createBaseIntentSubmittedEvent();
+    message.intent = object.intent !== undefined && object.intent !== null ? Intent.fromPartial(object.intent) : undefined;
+    return message;
+  }
+};
+function createBaseIntentUpdatedEvent(): IntentUpdatedEvent {
+  return {
+    intent: undefined
+  };
+}
+export const IntentUpdatedEvent = {
+  encode(message: IntentUpdatedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.intent !== undefined) {
+      Intent.encode(message.intent, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): IntentUpdatedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseIntentUpdatedEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.intent = Intent.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): IntentUpdatedEvent {
+    return {
+      intent: isSet(object.intent) ? Intent.fromJSON(object.intent) : undefined
+    };
+  },
+  toJSON(message: IntentUpdatedEvent): unknown {
+    const obj: any = {};
+    message.intent !== undefined && (obj.intent = message.intent ? Intent.toJSON(message.intent) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<IntentUpdatedEvent>): IntentUpdatedEvent {
+    const message = createBaseIntentUpdatedEvent();
+    message.intent = object.intent !== undefined && object.intent !== null ? Intent.fromPartial(object.intent) : undefined;
     return message;
   }
 };

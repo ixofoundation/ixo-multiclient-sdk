@@ -11,9 +11,10 @@ import {
 import * as Cosmos from "../modules/Cosmos";
 import * as Authz from "../modules/Authz";
 import { WalletUsers } from "../helpers/constants";
+// @ts-ignore
 import Long from "long";
 import { Grant } from "../../src/codegen/cosmos/feegrant/v1beta1/feegrant";
-import { createRegistry } from "../../src";
+import { createRegistry, utils } from "../../src";
 import { fromTimestamp } from "../../src/codegen/helpers";
 
 export const bankBasic = () =>
@@ -114,6 +115,12 @@ export const feegrantBasic = () =>
 
 export const feegrantAllCurrentUsers = () =>
   describe("Refreshing feegrant for all current users", () => {
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(WalletUsers.tester, process.env.ROOT_FEEGRANT),
+      ])
+    );
+
     testMsg("/cosmos.feegrant.v1beta1.MsgGrantAllowance", async () => {
       const address = (await getUser(WalletUsers.tester).getAccounts())[0]
         .address;
@@ -185,4 +192,29 @@ export const feegrantAllCurrentUsers = () =>
 
       return true as any;
     });
+  });
+
+export const stakeBasic = () =>
+  describe("Testing stake funds and rewards", () => {
+    testMsg("/cosmos.staking.v1beta1.MsgDelegate", () => Cosmos.MsgStake());
+  });
+
+// ------------------------------------------------------------
+// flow to update a modules params, then need to vote on it
+// ------------------------------------------------------------
+export const updateParamsProposal = () =>
+  describe("Testing the gov module", () => {
+    let proposalId: number;
+
+    testMsg("/cosmos.gov.v1beta1.MsgSubmitProposal update params", async () => {
+      const res = await Cosmos.MsgSubmitProposalUpdateParams();
+      proposalId = utils.common.getValueFromEvents(
+        res,
+        "submit_proposal",
+        "proposal_id"
+      );
+      console.log({ proposalId });
+      return res;
+    });
+    testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(proposalId));
   });
