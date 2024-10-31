@@ -5,7 +5,7 @@ import { ChainNetwork } from "../../src/custom_queries/chain.types";
 
 // DEVNET
 // ========================================
-export const chainNetwork: ChainNetwork = "devnet";
+export const chainNetwork: ChainNetwork = "testnet";
 
 export const dids = {
   // impactsRootUserDid: "did:x:zQ3shj4dPHhbsSXYcmsZLoDkiPJxkHhWYZpihWSQn95fuos2y",

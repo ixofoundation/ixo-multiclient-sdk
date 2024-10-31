@@ -534,6 +534,35 @@ export const swapBasic = () => {
   });
 };
 
+export const updateSwapContract = () => {
+  describe("Updating swaps on contract", () => {
+    // Set tester as ROOT_IMPACTS, i.e. account that instantiated the contract
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(
+          WalletUsers.tester,
+          process.env.ROOT_IMPACTS_EXCHANGE
+        ),
+      ])
+    );
+
+    let swapContractAddress: string = "ixo17hvvkpuvrgr7zqjv4sg87dgsekxpynwgv6c6ggcv5xy7kt9tt86qmc5dnj"; //contract 31 on Testnet
+
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract update slippage", async () =>
+      Wasm.WasmExecuteTrx(
+        swapContractAddress,
+        JSON.stringify({
+          update_slippage: {
+            max_slippage_percent: "10",
+          },
+        })
+      )
+    );
+  }
+
+  )
+}
+
 export const swapContract = () => {
   describe("Testing swaps on contract", () => {
     // Set tester as carbon oracle user as that user owns the carbon tokens
@@ -630,7 +659,7 @@ export const swapContract = () => {
     //   }
     // );
 
-    let swapContractAddress: string = "ixo1du360k5klx3ch8lv97p4rl8c6upu4wdquttn5jt8m3e82aw4qpts3q9g8g"; //contract 30 on Testnet
+    let swapContractAddress: string = "ixo17hvvkpuvrgr7zqjv4sg87dgsekxpynwgv6c6ggcv5xy7kt9tt86qmc5dnj"; //contract 31 on Testnet
     // testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
     //   const tester = (await getUser().getAccounts())[0].address;
     //   const msg = {
@@ -671,7 +700,7 @@ export const swapContract = () => {
       }
     );
 
-    //token2 = IXO liquidity = CARBON
+    //min_liquidity=CARBON max_token2=uixo Aim for 0.02, i.e. 1:20000 ratio
     testMsg("/cosmwasm.wasm.v1.MsgExecuteContract add liquidity", async () => {
       const msg = {
         add_liquidity: {
@@ -681,16 +710,18 @@ export const swapContract = () => {
               return acc;
             }, {}),
           },
-          min_liquidity: "600",
-          max_token2: "60000000000",
+          min_liquidity: "2107",
+          max_token2: "42140000",
         },
       };
+
+      console.log("msg = ", msg);
 
       const res = await Wasm.WasmExecuteTrx(
         swapContractAddress,
         JSON.stringify(msg),
         WalletUsers.tester,
-        { amount: "60000000000", denom: "uixo" }
+        { amount: "42140000", denom: "uixo" }
       );
       return res;
     });

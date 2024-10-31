@@ -34,7 +34,15 @@ axiosRetry(axios, {
 
 export const updateCollectionState = (collectionId) =>
   describe("Testing MsgUpdateCollectionState", () => {
-    let adminAccount = "ixo164w0t3gqfh8quxmttuf6ahfexvxc6quj9uqend"; //Testnet Impacts Exchange DAO
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(
+          WalletUsers.tester,
+          process.env.ROOT_IMPACTS_EXCHANGE
+        ),
+      ])
+    );
+    let adminAccount = "ixo14vcgnl89u2hshuv4yucae8m6cazz92fkn3x74w"; //ClaimCollection 36
     testMsg("/ixo.claims.v1beta1.MsgUpdateCollectionState", () =>
       Claims.UpdateCollectionState(collectionId, adminAccount)
     );

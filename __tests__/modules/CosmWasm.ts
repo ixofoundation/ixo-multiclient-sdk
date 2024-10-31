@@ -136,6 +136,10 @@ export const WasmExecuteTrx = async (
     }),
   };
 
+  console.log("msg = ", msg);
+  console.log("funds = ", cosmos.base.v1beta1.Coin.fromPartial(funds));
+  console.log("message = ", message);
+
   const response = await client.signAndBroadcast(
     myAddress,
     [message],

@@ -25,6 +25,9 @@ beforeAll(() => {
 // To generate mapping of blockchain test users to sdk test users with set mnemonics
 // IID.generateBlockchainTestUsers();
 
+// alwyn's tests
+// Claims.updateCollectionState("36");
+
 // IID.registerIids();
 // Proposals.instantiateModulesProposals();
 // Cosmos.bankBasic();
@@ -32,7 +35,6 @@ beforeAll(() => {
 // Bonds.bondsBasic();
 // Entity.enititiesBasic();
 // Token.tokenBasic();
-Claims.updateCollectionState(36);
 // Claims.claimsBasic();
 // CosmWasm.daoCore();
 // Cosmos.sendTokens();
@@ -67,7 +69,8 @@ Claims.updateCollectionState(36);
 // Entity.enititiesSetStatus();
 // Claims.supamotoClaims2();
 // CosmWasm.swapBasic();
-//CosmWasm.swapContract();
+// CosmWasm.swapContract();
+// CosmWasm.updateSwapContract();
 // Cosmos.feegrantAllCurrentUsers();
 // Claims.supamotoEvaluateFuelPurchases();
 // Claims.supamotoCreateCollection();
