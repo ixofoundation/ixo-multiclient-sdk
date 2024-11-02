@@ -999,7 +999,7 @@ export const supamotoClaims3 = () =>
       type NetworkType = "mainnet" | "testnet";
 
       let networkToUse: NetworkType = "mainnet";
-      let collectionToUse: CollectionType = "ai4g";
+      let collectionToUse: CollectionType = "Legacy";
 
       const collectionToNetworkMapping = {
         Genesis: {
@@ -1118,7 +1118,7 @@ export const supamotoClaims3 = () =>
         .map((p: any) => Number(p.Mass));
       const amountsKgs = Object.values(purchaseData)
         .flat(1)
-        .map((p: any) => Number(p.Mass) * 10.94);
+        .map((p: any) => Number(p.Mass) * 9.11);
       saveFileToPath(
         ["documents", "emerging", "fuelPurchases_data.json"],
         JSON.stringify(
@@ -1171,7 +1171,7 @@ export const supamotoClaims3 = () =>
       console.time("claims");
       for (const stovePurchases of purchaseData) {
         index++;
-        // if (index <= 10) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
+        // if (index < 108) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
 
         console.log(
           "starting batch " +
@@ -1183,7 +1183,7 @@ export const supamotoClaims3 = () =>
             " purchases"
         );
         // add wait for ipfs rate limit
-        if (index) await timeout(1000 * 5);
+        if (index) await timeout(1000 * 60);
 
         // create fuelPurchase claims for each purchase
         const fpClaims = await axios.post(

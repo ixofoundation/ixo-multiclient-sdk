@@ -206,7 +206,7 @@ export const CreateEntityAssetSupamotoInstance = async (
       controller: [did],
       service: [],
       startDate: utils.proto.toTimestamp(new Date()),
-      endDate: utils.proto.toTimestamp(new Date("2024-07-31T23:59:59Z")),
+      // endDate: utils.proto.toTimestamp(new Date("2024-07-31T23:59:59Z")),
       verification: createIidVerificationMethods({
         did,
         pubkey: myPubKey,

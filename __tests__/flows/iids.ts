@@ -170,45 +170,70 @@ export const iidReplaceLinkedResource = () =>
     //   return remove as any;
     // });
 
-    testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
-      const getResource = (externalId?: string) =>
-        ixo.iid.v1beta1.LinkedResource.fromPartial({
-          id: `{id}#profile`,
-          type: "Settings",
-          description: "Profile",
-          mediaType: "application/ld+json",
-          serviceEndpoint:
-            "ipfs:bafkreihkrftb62kfrk7zor6lgu34gew7jmyt4j6itfnjjrmdyqudgr54ta",
-          proof: "bafkreihkrftb62kfrk7zor6lgu34gew7jmyt4j6itfnjjrmdyqudgr54ta",
-          encrypted: "false",
-          right: "",
-        });
-
-      const allEntities = aquaminerAssets.map((e) => e.id);
+    testMsg("/ixo.iid.v1beta1.MsgDeleteIidContext", async () => {
+      const allEntities = [
+        "did:ixo:entity:0a221ea18d7d9c89390b61210e085d43",
+        "did:ixo:entity:157627fa6bd235a9b47742a0e648f298",
+        "did:ixo:entity:0bb81390ab719d43e91daa99e3f636b7",
+        "did:ixo:entity:c8e1e2d3c25bdcf37dbd29662048ef45",
+      ];
 
       const chunkSize = 30;
       let index = 0;
       for (const entities of chunkArray(allEntities, chunkSize)) {
         index++;
         // if (index < 4) continue; // for skipping certain batches
-        console.log("replacing linked resource for batch", index);
-        try {
-          await Iid.DeleteLinkedResources(
-            entities.map((e: string) => ({
-              did: e,
-              resourceId: `{id}#profile`,
-            }))
-          );
-        } catch (error) {}
-        await Iid.AddLinkedResources(
+        console.log("removing contexts for batch", index);
+
+        await Iid.DeleteIidContexts(
           entities.map((e: string) => ({
             did: e,
-            linkedResource: getResource(),
+            key: "class",
           }))
         );
       }
       return true as any;
     });
+
+    // testMsg("/ixo.iid.v1beta1.MsgAddLinkedResource", async () => {
+    //   const getResource = (externalId?: string) =>
+    //     ixo.iid.v1beta1.LinkedResource.fromPartial({
+    //       id: `{id}#profile`,
+    //       type: "Settings",
+    //       description: "Profile",
+    //       mediaType: "application/ld+json",
+    //       serviceEndpoint:
+    //         "ipfs:bafkreihkrftb62kfrk7zor6lgu34gew7jmyt4j6itfnjjrmdyqudgr54ta",
+    //       proof: "bafkreihkrftb62kfrk7zor6lgu34gew7jmyt4j6itfnjjrmdyqudgr54ta",
+    //       encrypted: "false",
+    //       right: "",
+    //     });
+
+    //   const allEntities = aquaminerAssets.map((e) => e.id);
+
+    //   const chunkSize = 30;
+    //   let index = 0;
+    //   for (const entities of chunkArray(allEntities, chunkSize)) {
+    //     index++;
+    //     // if (index < 4) continue; // for skipping certain batches
+    //     console.log("replacing linked resource for batch", index);
+    //     try {
+    //       await Iid.DeleteLinkedResources(
+    //         entities.map((e: string) => ({
+    //           did: e,
+    //           resourceId: `{id}#profile`,
+    //         }))
+    //       );
+    //     } catch (error) {}
+    //     await Iid.AddLinkedResources(
+    //       entities.map((e: string) => ({
+    //         did: e,
+    //         linkedResource: getResource(),
+    //       }))
+    //     );
+    //   }
+    //   return true as any;
+    // });
 
     // testMsg("/ixo.entity.v1beta1.MsgUpdateEntity", () =>
     //   Entity.UpdateEntity(
