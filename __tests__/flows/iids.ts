@@ -256,6 +256,21 @@ export const iidReplaceLinkedResource = () =>
     // });
   });
 
+export const addEdKeysToDid = () =>
+  describe("Testing the iid module", () => {
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(WalletUsers.tester, process.env.LOCAL_USER_MNEMONIC!),
+      ])
+    );
+
+    let entityDid = undefined; // can add did or will sue users from above mnemonic's did
+
+    testMsg("/ixo.entity.v1beta1.MsgUpdateEntity", () =>
+      Iid.AddVerification(undefined, entityDid, "ed")
+    );
+  });
+
 // ------------------------------------------------------------
 // flow to run after devnet was reset, please dont change
 // ------------------------------------------------------------

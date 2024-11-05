@@ -73,6 +73,7 @@ IID.generateBlockchainTestUsers();
 // Claims.supamotoClaims3();
 // Queries.quickQueries();
 // web3Storage();
+// IID.addEdKeysToDid();
 
 // ------------------------------------------
 // Run the below after a devnet reset
