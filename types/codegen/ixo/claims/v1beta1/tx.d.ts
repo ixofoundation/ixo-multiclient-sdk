@@ -1,5 +1,5 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
-import { CollectionState, Payments, PaymentsSDKType, EvaluationStatus, DisputeData, DisputeDataSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType } from "./claims";
+import { CollectionState, Payments, PaymentsSDKType, CollectionIntentOptions, CW20Payment, CW20PaymentSDKType, EvaluationStatus, DisputeData, DisputeDataSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType } from "./claims";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
 import { Long } from "../../../helpers";
@@ -27,6 +27,11 @@ export interface MsgCreateCollection {
      * rejection
      */
     payments?: Payments;
+    /**
+     * intents is the option for intents for this collection (allow, deny,
+     * required)
+     */
+    intents: CollectionIntentOptions;
 }
 export interface MsgCreateCollectionSDKType {
     entity: string;
@@ -37,6 +42,7 @@ export interface MsgCreateCollectionSDKType {
     quota: Long;
     state: CollectionState;
     payments?: PaymentsSDKType;
+    intents: CollectionIntentOptions;
 }
 export interface MsgCreateCollectionResponse {
 }
@@ -52,6 +58,24 @@ export interface MsgSubmitClaim {
     agentAddress: string;
     /** admin address used to sign this message, validated against Collection Admin */
     adminAddress: string;
+    /**
+     * use_intent is the option for using intent for this claim if it exists and
+     * is active. NOTE: if use_intent is true then amount and cw20 amount are
+     * ignored and overriden with intent amounts. NOTE: if use_intent is true and
+     * there is no active intent then will error
+     */
+    useIntent: boolean;
+    /**
+     * NOTE: if both amount and cw20_payment are empty then use default by
+     * Collection custom amount specified by service agent for claim approval
+     */
+    amount: Coin[];
+    /**
+     * NOTE: if both amount and cw20 amount are empty then use default by
+     * Collection custom cw20 payments specified by service agent for claim
+     * approval
+     */
+    cw20Payment: CW20Payment[];
 }
 export interface MsgSubmitClaimSDKType {
     collection_id: string;
@@ -59,6 +83,9 @@ export interface MsgSubmitClaimSDKType {
     agent_did: string;
     agent_address: string;
     admin_address: string;
+    use_intent: boolean;
+    amount: CoinSDKType[];
+    cw20_payment: CW20PaymentSDKType[];
 }
 export interface MsgSubmitClaimResponse {
 }
@@ -89,10 +116,15 @@ export interface MsgEvaluateClaim {
     /** verificationProof is the cid of the evaluation Verfiable Credential */
     verificationProof: string;
     /**
-     * custom amount specified by evaluator for claim approval, if empty list then
-     * use default by Collection
+     * NOTE: if both amount and cw20 amount are empty then use collection default
+     * custom amount specified by evaluator for claim approval
      */
     amount: Coin[];
+    /**
+     * NOTE: if both amount and cw20 amount are empty then use collection default
+     * custom cw20 payments specified by evaluator for claim approval
+     */
+    cw20Payment: CW20Payment[];
 }
 export interface MsgEvaluateClaimSDKType {
     claim_id: string;
@@ -105,6 +137,7 @@ export interface MsgEvaluateClaimSDKType {
     reason: number;
     verification_proof: string;
     amount: CoinSDKType[];
+    cw20_payment: CW20PaymentSDKType[];
 }
 export interface MsgEvaluateClaimResponse {
 }
@@ -170,6 +203,8 @@ export interface MsgWithdrawPayment {
     releaseDate?: Timestamp;
     /** admin address used to sign this message, validated against Collection Admin */
     adminAddress: string;
+    /** cw20 payments, can be empty or multiple */
+    cw20Payment: CW20Payment[];
 }
 export interface MsgWithdrawPaymentSDKType {
     claim_id: string;
@@ -181,6 +216,7 @@ export interface MsgWithdrawPaymentSDKType {
     fromAddress: string;
     release_date?: TimestampSDKType;
     admin_address: string;
+    cw20_payment: CW20PaymentSDKType[];
 }
 export interface MsgWithdrawPaymentResponse {
 }
@@ -248,6 +284,66 @@ export interface MsgUpdateCollectionPaymentsSDKType {
 export interface MsgUpdateCollectionPaymentsResponse {
 }
 export interface MsgUpdateCollectionPaymentsResponseSDKType {
+}
+export interface MsgUpdateCollectionIntents {
+    /** collection_id indicates which Collection to update */
+    collectionId: string;
+    /**
+     * intents is the option for intents for this collection (allow, deny,
+     * required)
+     */
+    intents: CollectionIntentOptions;
+    /** admin address used to sign this message, validated against Collection Admin */
+    adminAddress: string;
+}
+export interface MsgUpdateCollectionIntentsSDKType {
+    collection_id: string;
+    intents: CollectionIntentOptions;
+    admin_address: string;
+}
+export interface MsgUpdateCollectionIntentsResponse {
+}
+export interface MsgUpdateCollectionIntentsResponseSDKType {
+}
+export interface MsgClaimIntent {
+    /** The service agent's DID (Decentralized Identifier). */
+    agentDid: string;
+    /** The service agent's address (who submits this message). */
+    agentAddress: string;
+    /** The id of the collection this intent is linked to. */
+    collectionId: string;
+    /**
+     * NOTE: if both amount and cw20 amount are empty then default by Collection
+     * is used (APPROVAL payment). The desired claim amount, if any.
+     */
+    amount: Coin[];
+    /**
+     * NOTE: if both amount and cw20 amount are empty then default by Collection
+     * is used (APPROVAL payment). The custom CW20 payment, if any.
+     */
+    cw20Payment: CW20Payment[];
+}
+export interface MsgClaimIntentSDKType {
+    agent_did: string;
+    agent_address: string;
+    collection_id: string;
+    amount: CoinSDKType[];
+    cw20_payment: CW20PaymentSDKType[];
+}
+/** MsgClaimIntentResponse defines the response after submitting an intent. */
+export interface MsgClaimIntentResponse {
+    /** Resulting intent id. */
+    intentId: string;
+    /**
+     * Timeout period for the intent. If the claim is not submitted by this time,
+     * the intent expires.
+     */
+    expireAt?: Timestamp;
+}
+/** MsgClaimIntentResponse defines the response after submitting an intent. */
+export interface MsgClaimIntentResponseSDKType {
+    intent_id: string;
+    expire_at?: TimestampSDKType;
 }
 export declare const MsgCreateCollection: {
     encode(message: MsgCreateCollection, writer?: _m0.Writer): _m0.Writer;
@@ -360,4 +456,32 @@ export declare const MsgUpdateCollectionPaymentsResponse: {
     fromJSON(_: any): MsgUpdateCollectionPaymentsResponse;
     toJSON(_: MsgUpdateCollectionPaymentsResponse): unknown;
     fromPartial(_: Partial<MsgUpdateCollectionPaymentsResponse>): MsgUpdateCollectionPaymentsResponse;
+};
+export declare const MsgUpdateCollectionIntents: {
+    encode(message: MsgUpdateCollectionIntents, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionIntents;
+    fromJSON(object: any): MsgUpdateCollectionIntents;
+    toJSON(message: MsgUpdateCollectionIntents): unknown;
+    fromPartial(object: Partial<MsgUpdateCollectionIntents>): MsgUpdateCollectionIntents;
+};
+export declare const MsgUpdateCollectionIntentsResponse: {
+    encode(_: MsgUpdateCollectionIntentsResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionIntentsResponse;
+    fromJSON(_: any): MsgUpdateCollectionIntentsResponse;
+    toJSON(_: MsgUpdateCollectionIntentsResponse): unknown;
+    fromPartial(_: Partial<MsgUpdateCollectionIntentsResponse>): MsgUpdateCollectionIntentsResponse;
+};
+export declare const MsgClaimIntent: {
+    encode(message: MsgClaimIntent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgClaimIntent;
+    fromJSON(object: any): MsgClaimIntent;
+    toJSON(message: MsgClaimIntent): unknown;
+    fromPartial(object: Partial<MsgClaimIntent>): MsgClaimIntent;
+};
+export declare const MsgClaimIntentResponse: {
+    encode(message: MsgClaimIntentResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgClaimIntentResponse;
+    fromJSON(object: any): MsgClaimIntentResponse;
+    toJSON(message: MsgClaimIntentResponse): unknown;
+    fromPartial(object: Partial<MsgClaimIntentResponse>): MsgClaimIntentResponse;
 };

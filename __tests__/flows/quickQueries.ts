@@ -10,7 +10,7 @@ import gqlQuery, {
 import { RPC_URL, WalletUsers } from "../helpers/constants";
 import { AuthInfo, TxBody } from "../../src/codegen/cosmos/tx/v1beta1/tx";
 import { fromHex } from "@cosmjs/encoding";
-import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { connectComet, Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import {
   JsonToArray,
   Uint8ArrayToJS,
@@ -20,6 +20,7 @@ import { fromTimestamp } from "../../src/codegen/helpers";
 import axios from "axios";
 import { claims_mainnet, claims_testnet } from "../constants/claims";
 import { EcsCredentialsWorkerUrl } from "../setup/constants";
+// @ts-ignore
 import Long from "long";
 
 export const quickQueries = () =>
@@ -178,16 +179,15 @@ export const quickQueries = () =>
     // });
 
     // test("Query block results from Tendermint Clint", async () => {
-    //   const res = await (
-    //     await Tendermint34Client.connect(RPC_URL)
-    //   ).blockResults(187175);
+    //   const res = await (await connectComet(RPC_URL)).blockResults(498);
+    //   console.dir(res, { depth: null });
 
     //   const ignoreList = [
-    //     "coin_received",
+    //     // "coin_received",
     //     "rewards",
     //     "commission",
-    //     "transfer",
-    //     "coin_spent",
+    //     // "transfer",
+    //     // "coin_spent",
     //     "mint",
     //   ];
     //   console.dir(
@@ -195,13 +195,32 @@ export const quickQueries = () =>
     //       beginBlockEvents: res.beginBlockEvents.map((e) =>
     //         ignoreList.includes(e.type)
     //           ? null
-    //           : e.attributes.map((a) => ({
-    //               a: Uint8ArrayToJS(a.key),
-    //               b: Uint8ArrayToJS(a.value),
-    //             }))
+    //           : {
+    //               type: e.type,
+    //               attributes: e.attributes.map((a) => ({
+    //                 key:
+    //                   typeof a.key === "string" ? a.key : Uint8ArrayToJS(a.key),
+    //                 value:
+    //                   typeof a.value === "string"
+    //                     ? a.value
+    //                     : Uint8ArrayToJS(a.value),
+    //               })),
+    //             }
     //       ),
     //       endBlockEvents: res.endBlockEvents.map((e) =>
-    //         ignoreList.includes(e.type) ? null : e
+    //         ignoreList.includes(e.type)
+    //           ? null
+    //           : {
+    //               type: e.type,
+    //               attributes: e.attributes.map((a) => ({
+    //                 key:
+    //                   typeof a.key === "string" ? a.key : Uint8ArrayToJS(a.key),
+    //                 value:
+    //                   typeof a.value === "string"
+    //                     ? a.value
+    //                     : Uint8ArrayToJS(a.value),
+    //               })),
+    //             }
     //       ),
     //     },
     //     { depth: null }
@@ -346,14 +365,37 @@ export const quickQueries = () =>
     // });
 
     // test("query wasm contract 1155 state", async () => {
-    //   const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;
+    //   // const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;
+    //   const user = "ixo1xwn45d6xhe3egcz3nqlfc2elpc3h6usy6yw3uk";
     //   const contractAddress =
-    //     "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
-    //   const tokens = [
-    //     "247bf50a1ce28ea7622ef6082e5e559f",
-    //     "3187434c0a27fc17e1f484812e6be90e",
-    //     "32fe8cdc405b2c5828e59c2432eb615a",
-    //   ];
+    //     "ixo15jzyzklz8rq9gy38p4kcall0nqr8exglqg5870gglaq4c976vlxs92x0ga";
+
+    //   const tokens: string[] = [];
+    //   const ownerTokensQuery = {
+    //     tokens: { owner: user, limit: 30, start_after: "" },
+    //   };
+
+    //   while (true) {
+    //     const ownerTokensResponse =
+    //       await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //         address: contractAddress,
+    //         queryData: utils.conversions.JsonToArray(
+    //           JSON.stringify(ownerTokensQuery)
+    //         ),
+    //       });
+    //     const ownerTokenIds: string[] =
+    //       JSON.parse(utils.conversions.Uint8ArrayToJS(ownerTokensResponse.data))
+    //         .tokens ?? [];
+
+    //     tokens.push(...ownerTokenIds);
+
+    //     if (ownerTokenIds.length !== 30) break;
+
+    //     ownerTokensQuery.tokens.start_after =
+    //       ownerTokenIds[ownerTokenIds.length - 1];
+    //   }
+    //   console.log({ tokens });
+
     //   const msg = {
     //     // balance: {
     //     //   owner: "ixo1jacj68c9uffdjt0yw6mumkxzcmup7la2yhfs72",
@@ -362,20 +404,20 @@ export const quickQueries = () =>
     //     // tokens: {
     //     //   owner: "ixo1jacj68c9uffdjt0yw6mumkxzcmup7la2yhfs72",
     //     // },
-    //     // batch_balance: {
-    //     //   owner: user,
-    //     //   token_ids: tokens,
-    //     // },
-    //     token_info: {
-    //       token_id: tokens[0],
+    //     batch_balance: {
+    //       owner: user,
+    //       token_ids: tokens,
     //     },
+    //     // token_info: {
+    //     //   token_id: tokens[0],
+    //     // },
     //   };
     //   const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
     //     address: contractAddress,
     //     queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
     //   });
     //   console.dir(utils.conversions.Uint8ArrayToJS(res.data), { depth: null });
-    //   expect(res).toBeTruthy();
+    //   expect(true).toBeTruthy();
     // });
 
     // test("query wasm store codes", async () => {
@@ -455,20 +497,17 @@ export const quickQueries = () =>
     // test("query grants by grantee", async () => {
     //   const user = (await getUser(WalletUsers.alice).getAccounts())[0].address;
     //   const res = await queryClient.cosmos.authz.v1beta1.granteeGrants({
-    //     grantee: user,
+    //     grantee: "ixo1vt8w6g0k2xjkdnmtm4tz527cjn9fkp6exycw93",
     //   });
     //   if (res.grants.length > 0) {
-    //     console.log(
-    //       res.grants.map((g) => {
-    //         g.expiration = g.expiration?.seconds as any;
-    //         return g;
-    //       })
-    //     );
-    //     console.log(
+    //     console.dir(
     //       res.grants.map((g) => {
     //         const auth = createRegistry().decode(g.authorization!);
-    //         return auth.constraints || auth;
-    //       })
+    //         g.expiration = g.expiration?.seconds as any;
+    //         g.authorization!.value = auth;
+    //         return g;
+    //       }),
+    //       { depth: null }
     //     );
     //   }
     //   expect(res).toBeTruthy();

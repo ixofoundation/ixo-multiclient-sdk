@@ -74,19 +74,29 @@ export const transferEntities = (mnemonic?: string) =>
       ])
     );
 
-    let recipient = "did:x:zQ3shgFA5dLwVfoZKzjk8DkBeF8YDjh7ny9q3MW225828zJno";
+    const recipient = "did:x:zQ3shtUckPKEBN6fWWRTWViBFPpVtCce6DTWPrWHTSwczyLJN";
+
+    // can provide static dids of entities to transfer
     let entities = [
-      "did:ixo:entity:091ffc2c61e589f3a6c67f68e9b6919d",
-      "did:ixo:entity:0be051e4cc6b5bfcf3ff9def61ed456a",
-      "did:ixo:entity:114d77d59451dc34656f369af5b6413d",
-      "did:ixo:entity:135834ccc5f22aa54dcb4febffb90cea",
-      "did:ixo:entity:15d00c57dc5893ec9824666ac87112bd",
-      "did:ixo:entity:1603997de440933e0303b52417e1789f",
-      "did:ixo:entity:1643556ec26f1a14e1091028f1261482",
-      "did:ixo:entity:182c9d25687433d93ea435af565a526e",
-      "did:ixo:entity:1a88c9837ede30f623cb50e622063603",
-      "did:ixo:entity:2069414197644729f4dc8849e416787d",
+      "did:ixo:entity:e0f8c06a5d2798e4c5f461e386de8396",
+      "did:ixo:entity:56d1ea4062745f04706e38f495e2482e",
     ];
+
+    // // or provide static ids of stoves to transfer, if this list is empty then will use the dids above
+    // // the stoves here must be from the stovesCollection imported above
+    // const stovesCollection = require("../../assets/documents/emerging/stoves_genesis_collection.json");
+    // const stoveIds = ["310025325"];
+    // if (stoveIds?.length) {
+    //   entities = stoveIds
+    //     .map((id) => stovesCollection.find((e) => e.externalId === id)?.id)
+    //     ?.filter((e) => !!e);
+    // }
+
+    // // paste all dids of entites belonging to user here, so can filter out entities not belonging to user
+    // const entitiesBelongingToUser: string[] = [];
+    // if (entitiesBelongingToUser?.length) {
+    //   entities = entities.filter((e) => entitiesBelongingToUser.includes(e));
+    // }
 
     // const entitiesToTransfer = usersEntities
     //   .map((e) => {
@@ -97,10 +107,14 @@ export const transferEntities = (mnemonic?: string) =>
     // console.log("entitiesToTransfer", entitiesToTransfer.length);
 
     testMsg("/ixo.entity.v1beta1.MsgTransferEntity", async () => {
+      // console.log(stoveIds.length);
+      // console.log(entities.length);
+      // return true as any;
       const res = await Entity.TransferEntity(
         WalletUsers.tester,
         entities as any,
-        recipient
+        recipient,
+        "ECS to Dormant Account"
       );
       return res;
     });

@@ -13,6 +13,7 @@ import * as CosmWasm from "./flows/cosmwasm";
 import * as Queries from "./flows/quickQueries";
 import * as Claims from "./flows/claims";
 import * as Authz from "./flows/authz";
+import * as Smartaccount from "./flows/smartaccount";
 import { dids } from "./setup/constants";
 import { idcc_constants } from "./setup/idcc/creds";
 import { web3Storage } from "./setup/web3";
@@ -37,6 +38,7 @@ beforeAll(() => {
 // Token.tokenBasic();
 // Claims.claimsBasic();
 // CosmWasm.daoCore();
+// Smartaccount.smartaccountBasic();
 // Cosmos.sendTokens();
 // IID.iidAddEdKeys();
 // Bonds.bondsSellsDisabled();
@@ -53,6 +55,8 @@ beforeAll(() => {
 // IID.iidReplaceService(process.env.ROOT_IMPACTS);
 // IBC.ibcBasic();
 // Cosmos.govDeposit();
+// Cosmos.stakeBasic();
+// Cosmos.updateParamsProposal();
 // CosmWasm.wasmBasic();
 // Cosmos.feegrantBasic();
 // Proposals.cwUploadProposal();
@@ -67,7 +71,7 @@ beforeAll(() => {
 //   false
 // );
 // Entity.enititiesSetStatus();
-// Claims.supamotoClaims2();
+// Claims.claimsUpdateCollectionPayments();
 // CosmWasm.swapBasic();
 // CosmWasm.swapContract();
 // CosmWasm.updateSwapContract();
@@ -82,6 +86,7 @@ beforeAll(() => {
 // Claims.supamotoClaims3();
 // Queries.quickQueries();
 // web3Storage();
+// IID.addEdKeysToDid();
 
 // ------------------------------------------
 // Run the below after a devnet reset

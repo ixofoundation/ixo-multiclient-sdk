@@ -9,6 +9,8 @@ import {
   saveFileToPath,
   addDays,
   addMinutesToDate,
+  getUser,
+  cosmos,
 } from "../helpers/common";
 import * as Claims from "../modules/Claims";
 import * as Cosmos from "../modules/Cosmos";
@@ -23,9 +25,12 @@ import {
 } from "../setup/constants";
 import axios from "axios";
 import axiosRetry from "axios-retry";
+import * as Wasm from "../modules/CosmWasm";
 import { cookstoveIds } from "../setup/supamoto/stoves";
 import { assertIsDeliverTxSuccess } from "@cosmjs/stargate";
 import { legacyCookstoveIds } from "../setup/emerging/legacy";
+// @ts-ignore
+import Long from "long";
 
 axiosRetry(axios, {
   retries: 3,
@@ -48,11 +53,37 @@ export const updateCollectionState = (collectionId) =>
     );
   });
 
+export const updateCollectionState = (collectionId) =>
+  describe("Testing MsgUpdateCollectionState", () => {
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(
+          WalletUsers.tester,
+          process.env.ROOT_IMPACTS_EXCHANGE
+        ),
+      ])
+    );
+    let adminAccount = "ixo14vcgnl89u2hshuv4yucae8m6cazz92fkn3x74w"; //ClaimCollection 36
+    testMsg("/ixo.claims.v1beta1.MsgUpdateCollectionState", () =>
+      Claims.UpdateCollectionState(collectionId, adminAccount)
+    );
+  });
+
 export const claimsBasic = () =>
   describe("Testing the Claims module", () => {
+    // beforeAll(() =>
+    //   Promise.all([
+    //     generateNewWallet(
+    //       WalletUsers.tester,
+    //       process.env.ASSERT_USER_CARBON_ORACLE
+    //     ),
+    //   ])
+    // );
+
     // Create protocol
-    let protocol = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
-    let adminAccount = "ixo1kqmtxkggcqa9u34lnr6shy0euvclgatw4f9zz5";
+    let protocol = "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b";
+    let adminAccount = "ixo14p4eh3hvunmlvegyysfp5lg8gf6cp6suxxx672";
+
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity protocol", async () => {
       const res = await Entity.CreateEntity(
         "protocol",
@@ -83,13 +114,49 @@ export const claimsBasic = () =>
       )
     );
 
+    let cw20ContractAddress: string =
+      "ixo1svqw226fkt7pkaq2mwx6958pykdp009tvtjft9n9q6un7efnfueqqtwjdm";
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
+      const tester = (await getUser(WalletUsers.tester).getAccounts())[0]
+        .address;
+      const msg = {
+        decimals: 6,
+        initial_balances: [
+          {
+            address: tester,
+            amount: "3000000000000",
+          },
+          {
+            address: adminAccount,
+            amount: "3000000000000",
+          },
+        ],
+        mint: {
+          minter: tester,
+        },
+        name: "CW20",
+        symbol: "HAHA",
+      };
+
+      const res = await Wasm.WasmInstantiateTrx(25, JSON.stringify(msg));
+      cw20ContractAddress = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ cw20ContractAddress });
+      return res;
+    });
+
     let collectionId = "1";
-    let claimId = "1";
+
     testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
       const res = await Claims.CreateCollection(
         protocol,
         protocol,
-        adminAccount
+        adminAccount,
+        undefined,
+        cw20ContractAddress
       );
       collectionId = utils.common.getValueFromEvents(
         res,
@@ -143,7 +210,29 @@ export const claimsBasic = () =>
         )
     );
     testMsg("/ixo.claims.v1beta1.MsgUpdateCollectionState", () =>
-      Claims.UpdateCollectionPayments(collectionId, adminAccount, adminAccount)
+      Claims.UpdateCollectionPayments(
+        collectionId,
+        adminAccount,
+        adminAccount,
+        undefined,
+        cw20ContractAddress,
+        false
+      )
+    );
+
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz MsgUpdateCollectionIntents",
+      () =>
+        Entity.GrantEntityAccountAuthz(
+          protocol,
+          "admin",
+          WalletUsers.tester,
+          undefined,
+          "/ixo.claims.v1beta1.MsgUpdateCollectionIntents"
+        )
+    );
+    testMsg("/ixo.claims.v1beta1.MsgUpdateCollectionIntents", () =>
+      Claims.UpdateCollectionIntents(collectionId, adminAccount)
     );
 
     testMsg("/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent submit", () =>
@@ -152,9 +241,23 @@ export const claimsBasic = () =>
         "admin",
         adminAccount,
         collectionId,
-        10,
+        100,
         false,
-        WalletUsers.tester
+        WalletUsers.alice,
+        WalletUsers.tester,
+        [
+          {
+            amount: "1000000",
+            denom: "uixo",
+          },
+        ],
+        [
+          {
+            address: cw20ContractAddress,
+            amount: Long.fromNumber(10),
+          },
+        ],
+        60
       )
     );
 
@@ -167,21 +270,119 @@ export const claimsBasic = () =>
           adminAccount,
           collectionId,
           [],
-          10,
+          100,
           false,
-          WalletUsers.tester
+          WalletUsers.tester,
+          undefined,
+          cw20ContractAddress
         )
     );
 
+    // // message to grant eval authz through authz as delegate
+    // testMsg(
+    //   "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent evaluate",
+    //   () =>
+    //     Claims.GrantEntityAccountClaimsEvaluateAuthzThroughAuthz(
+    //       "did:ixo:entity:f14981f859bc93c6807c8c252ab54937",
+    //       "admin",
+    //       "ixo14vcgnl89u2hshuv4yucae8m6cazz92fkn3x74w",
+    //       "44",
+    //       [],
+    //       1000000,
+    //       false,
+    //       WalletUsers.tester,
+    //       WalletUsers.tester,
+    //       "ixo164w0t3gqfh8quxmttuf6ahfexvxc6quj9uqend"
+    //     )
+    // );
+
+    // test claim and eval with custom amount and cw20 payment
+    let claimId = "100001";
+    testMsg("/ixo.claims.v1beta1.MsgClaimIntent agent submit intent", () =>
+      Claims.MsgClaimIntent(
+        collectionId,
+        [
+          {
+            amount: "1000000",
+            denom: "uixo",
+          },
+        ],
+        [
+          {
+            address: cw20ContractAddress,
+            amount: Long.fromNumber(10),
+          },
+        ],
+        WalletUsers.alice
+      )
+    );
     testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", () =>
       Claims.MsgExecAgentSubmit(
         claimId,
         collectionId,
         adminAccount,
-        WalletUsers.tester
+        WalletUsers.alice,
+        true,
+        [
+          {
+            amount: "100000",
+            denom: "uixo",
+          },
+        ],
+        [
+          {
+            address: cw20ContractAddress,
+            amount: Long.fromNumber(5),
+          },
+        ]
       )
     );
+    testMsg("/cosmos.authz.v1beta1.MsgExec agent evaluate", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimId,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.APPROVED,
+        WalletUsers.tester,
+        [
+          cosmos.base.v1beta1.Coin.fromPartial({
+            amount: "2000000",
+            denom: "uixo",
+          }),
+        ],
+        [
+          ixo.claims.v1beta1.CW20Payment.fromPartial({
+            address: cw20ContractAddress,
+            amount: Long.fromNumber(15),
+          }),
+        ]
+      )
+    );
+    testMsg("/cosmos.authz.v1beta1.MsgExec withdraw payment", async () => {
+      // Wait 30 seconds to make sure submission release date for withdrawal auth constraint passed
+      await timeout(35 * 1000);
+      const res = await Claims.MsgExecWithdrawal(
+        claimId,
+        adminAccount,
+        ixo.claims.v1beta1.PaymentType.SUBMISSION,
+        WalletUsers.alice
+      );
+      return res;
+    });
+    testMsg("/ixo.claims.v1beta1.MsgDisputeClaim", () =>
+      Claims.DisputeClaim(claimId, "proof1")
+    );
 
+    // test claim and eval with no custom amount and cw20 payment
+    testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", async () => {
+      claimId = "100002";
+      return Claims.MsgExecAgentSubmit(
+        claimId,
+        collectionId,
+        adminAccount,
+        WalletUsers.alice
+      );
+    });
     testMsg("/cosmos.authz.v1beta1.MsgExec agent evaluate", () =>
       Claims.MsgExecAgentEvaluate(
         claimId,
@@ -192,20 +393,70 @@ export const claimsBasic = () =>
       )
     );
 
-    testMsg("/cosmos.authz.v1beta1.MsgExec withdraw payment", async () => {
-      // Wait 30 seconds to make sure submission release date for withdrawal auth constraint passed
-      await timeout(35 * 1000);
-      const res = await Claims.MsgExecWithdrawal(
+    // test claim and eval reject
+    testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", async () => {
+      claimId = "100003";
+      return Claims.MsgExecAgentSubmit(
         claimId,
+        collectionId,
         adminAccount,
-        ixo.claims.v1beta1.PaymentType.SUBMISSION,
-        WalletUsers.tester
+        WalletUsers.alice
       );
-      return res;
     });
+    testMsg("/cosmos.authz.v1beta1.MsgExec agent evaluate", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimId,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.REJECTED,
+        WalletUsers.tester
+      )
+    );
 
-    testMsg("/ixo.claims.v1beta1.MsgDisputeClaim", () =>
-      Claims.DisputeClaim(claimId, "proof1")
+    // test claim and eval dispute
+    testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", async () => {
+      claimId = "100004";
+      return Claims.MsgExecAgentSubmit(
+        claimId,
+        collectionId,
+        adminAccount,
+        WalletUsers.alice
+      );
+    });
+    testMsg("/cosmos.authz.v1beta1.MsgExec agent evaluate", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimId,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.DISPUTED,
+        WalletUsers.tester
+      )
+    );
+  });
+
+export const claimsUpdateCollectionPayments = () =>
+  describe("Testing the Claims module", () => {
+    beforeAll(() =>
+      Promise.all([generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS)])
+    );
+
+    let collection = "did:ixo:entity:9f8749d749af260d185f3df6f2206b63";
+    let adminAccount = "ixo14x5r6stdxua49tc90jngj7k7xuwhgp9vlm5tc8";
+    let collectionId = "6";
+
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz MsgUpdateCollectionPayments",
+      () =>
+        Entity.GrantEntityAccountAuthz(
+          collection,
+          "admin",
+          WalletUsers.tester,
+          undefined,
+          "/ixo.claims.v1beta1.MsgUpdateCollectionPayments"
+        )
+    );
+    testMsg("/ixo.claims.v1beta1.MsgUpdateCollectionState", () =>
+      Claims.UpdateCollectionPayments(collectionId, adminAccount, adminAccount)
     );
   });
 
@@ -776,13 +1027,30 @@ export const supamotoClaims3 = () =>
     // });
 
     test("Generate Fuel Purchase claims and evaluate them", async () => {
-      type CollectionType = "Legacy" | "Genesis";
-      let collectionToUse: CollectionType;
-      collectionToUse = "Genesis";
+      type CollectionType = "Legacy" | "Genesis" | "ai4g";
+      type NetworkType = "mainnet" | "testnet";
 
-      const collectionId = "1"; // testnet and mainnet genesis fuelpurchases
-      // const collectionId = "5"; // mainnet legacy fuelpurchases
-      // const collectionId = "8"; // testnet legacy fuelpurchases
+      let networkToUse: NetworkType = "mainnet";
+      let collectionToUse: CollectionType = "Legacy";
+
+      const collectionToNetworkMapping = {
+        Genesis: {
+          mainnet: "1",
+          testnet: "1",
+        },
+        Legacy: {
+          mainnet: "5",
+          testnet: "8",
+        },
+        ai4g: {
+          mainnet: "32",
+          testnet: "42",
+        },
+      };
+      console.log(
+        "collection to use: ",
+        collectionToNetworkMapping[collectionToUse][networkToUse]
+      );
 
       // first load previous purchases and get only id, then load latest and remove all previous purchases
       let previousPurchases: string[] = [];
@@ -877,7 +1145,7 @@ export const supamotoClaims3 = () =>
         .map((p: any) => Number(p.Mass));
       const amountsKgs = Object.values(purchaseData)
         .flat(1)
-        .map((p: any) => Number(p.Mass) * 10.94);
+        .map((p: any) => Number(p.Mass) * 9.11);
       saveFileToPath(
         ["documents", "emerging", "fuelPurchases_data.json"],
         JSON.stringify(
@@ -930,7 +1198,7 @@ export const supamotoClaims3 = () =>
       console.time("claims");
       for (const stovePurchases of purchaseData) {
         index++;
-        // if (index < 6) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
+        // if (index < 108) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
 
         console.log(
           "starting batch " +
@@ -942,14 +1210,15 @@ export const supamotoClaims3 = () =>
           " purchases"
         );
         // add wait for ipfs rate limit
-        if (index) await timeout(1000 * 5);
+        if (index) await timeout(1000 * 60);
 
         // create fuelPurchase claims for each purchase
         const fpClaims = await axios.post(
           EcsCredentialsWorkerUrl + "claims/create",
           {
             type: "fuelPurchase",
-            collectionId: collectionId,
+            collectionId:
+              collectionToNetworkMapping[collectionToUse][networkToUse],
             storage: "cellnode",
             generate: {
               type: "FuelPurchaseSupamotoZambia",
@@ -962,13 +1231,15 @@ export const supamotoClaims3 = () =>
                 amount: Number(p.Mass), // amount pellets that bought in kg
                 deviceId: p.Device_ID, // device id
                 protocolDid:
+                  // only legacy has special protocol, rest use Clean Cooking Protocol
                   // @ts-ignore
                   collectionToUse === "Legacy"
                     ? dids.legacyCookingProtocol
                     : null, // custom protocol
                 projectDid:
                   // @ts-ignore
-                  collectionToUse === "Legacy" ? dids.ecsProject : null, // custom project
+                  // collectionToUse === "Legacy" ? dids.ecsProject : null, // custom project
+                  dids.ecsProject,
               })),
             },
           },

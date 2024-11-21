@@ -11,9 +11,11 @@ export declare namespace utils {
         jsonStringToBase64: (jsonString: string) => string;
         jsonToBase64: (json: unknown) => string;
         encodeMbKey: (header: Uint8Array, key: Uint8Array) => string;
+        decodeMbKey: (header: Uint8Array, mbKey: string) => Uint8Array;
     };
     const did: {
         generateSecpDid(pubkey: string | Uint8Array, prefix?: string): string;
+        extractPubkeyFromDid(did: string): string;
         generateWasmDid(address: string): string;
     };
     const mnemonic: {
@@ -23,6 +25,8 @@ export declare namespace utils {
     };
     const address: {
         pubKeyToAddress: (type: "secp256k1" | "ed25519", pubKey: string | Uint8Array, prefix?: string) => string;
+        didToAddress: (did: string, prefix?: string) => string;
+        didToAddressDid: (did: string, prefix?: string) => string;
     };
     const common: {
         generateId: (length?: number) => string;

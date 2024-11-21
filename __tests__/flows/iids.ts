@@ -16,6 +16,8 @@ import { setAndLedgerUser } from "../setup/helpers";
 import { toTimestamp } from "../../src/codegen/helpers";
 import axios from "axios";
 import { didArrays, intermediaryRegistry } from "../setup/constants";
+import { aquaminerAssets } from "../setup/aquaminer/assets";
+import { remove } from "store";
 
 export const registerIids = () =>
   describe("Testing the faucet and creation of Iids", () => {
@@ -161,6 +163,21 @@ export const deleteLinkedClaims = () => {
   });
 }
 
+export const addEdKeysToDid = () =>
+  describe("Testing the iid module", () => {
+    beforeAll(() =>
+      Promise.all([
+        generateNewWallet(WalletUsers.tester, process.env.LOCAL_USER_MNEMONIC!),
+      ])
+    );
+
+    let entityDid = undefined; // can add did or will sue users from above mnemonic's did
+
+    testMsg("/ixo.entity.v1beta1.MsgUpdateEntity", () =>
+      Iid.AddVerification(undefined, entityDid, "ed")
+    );
+  });
+
 // ------------------------------------------------------------
 // flow to run after devnet was reset, please dont change
 // ------------------------------------------------------------
@@ -238,7 +255,7 @@ export const generateBlockchainTestUsers = () => {
     generateNewWallet(
       WalletUsers.tester, // Miguel
       "jungle brave person inmate dirt upset try rotate twin fossil grid border"
-      // process.env.ROOT_ECS!
+      // process.env.ROOT_FEEGRANT!
     )
   );
   beforeAll(() =>

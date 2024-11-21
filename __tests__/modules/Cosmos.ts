@@ -10,6 +10,7 @@ import {
   getFileFromPath,
   timeout,
 } from "../helpers/common";
+// @ts-ignore
 import Long from "long";
 
 export const BankSendTrx = async (
@@ -18,7 +19,8 @@ export const BankSendTrx = async (
   toUser = WalletUsers.tester,
   fromWalletKeyType: KeyTypes = "secp",
   toWalletKeyType: KeyTypes = "secp",
-  toAddresss?: string
+  toAddresss?: string,
+  denom = "uixo"
 ) => {
   const client = await createClient(getUser(fromUser, fromWalletKeyType));
 
@@ -37,7 +39,7 @@ export const BankSendTrx = async (
       amount: [
         cosmos.base.v1beta1.Coin.fromPartial({
           amount: amount.toString(),
-          denom: "uixo",
+          denom: denom,
         }),
       ],
     }),
@@ -406,6 +408,122 @@ export const MsgProposalText = async () => {
           cosmos.gov.v1beta1.TextProposal.fromPartial({
             title: "Test Proposal",
             description: "Test Proposal Description",
+          })
+        ).finish(),
+      },
+    }),
+  };
+
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
+  return response;
+};
+
+export const MsgStake = async (
+  user = WalletUsers.tester,
+  amount = "10000000000"
+) => {
+  const client = await createClient(getUser(user));
+
+  const tester = getUser(user);
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const validators = await queryClient.cosmos.staking.v1beta1.validators({
+    status: "BOND_STATUS_BONDED",
+  });
+  const firstValidator = validators.validators[0];
+  // console.log(firstValidator);
+  if (!firstValidator) throw new Error("no validators");
+
+  try {
+    const currentDelegations =
+      await queryClient.cosmos.staking.v1beta1.delegation({
+        delegatorAddr: myAddress,
+        validatorAddr: firstValidator.operatorAddress,
+      });
+    // console.dir(currentDelegations, { depth: null });
+    if (!currentDelegations?.delegationResponse)
+      throw new Error("no delegations");
+
+    const currentRewards =
+      await queryClient.cosmos.distribution.v1beta1.delegationRewards({
+        delegatorAddress: myAddress,
+        validatorAddress: firstValidator.operatorAddress,
+      });
+    console.dir(currentRewards, { depth: null });
+    if (!currentRewards?.rewards) throw new Error("no rewards");
+  } catch (error) {
+    console.error(error);
+  }
+  if (!!1) throw new Error("stop");
+
+  const message = {
+    typeUrl: "/cosmos.staking.v1beta1.MsgDelegate",
+    value: cosmos.staking.v1beta1.MsgDelegate.fromPartial({
+      delegatorAddress: firstValidator.operatorAddress,
+      validatorAddress: myAddress,
+      amount: cosmos.base.v1beta1.Coin.fromPartial({
+        amount,
+        denom: "uixo",
+      }),
+    }),
+  };
+
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
+  return response;
+};
+
+export const MsgSubmitProposalUpdateParams = async () => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  // const subspace = "mint";
+  // const key = "ImpactRewardsReceivers";
+  // const value = JSON.stringify([
+  //   { address: "ixo1jtlkhddkfvzu4p2vl4dvlszzkqvlthghee44jz", weight: "0.5" },
+  //   { address: "ixo1ruwxxfsp6jgdk88fmyzyp7s3hs20vqmg5f3htp", weight: "0.5" },
+  // ]);
+
+  const subspace = "smartaccount";
+  // const key = "IsSmartAccountActive";
+  // const value = JSON.stringify(false);
+  const key = "CircuitBreakerControllers";
+  const value = JSON.stringify(["ixo1jtlkhddkfvzu4p2vl4dvlszzkqvlthghee44jz"]);
+
+  const message = {
+    typeUrl: "/cosmos.gov.v1beta1.MsgSubmitProposal",
+    value: cosmos.gov.v1beta1.MsgSubmitProposal.fromPartial({
+      initialDeposit: [
+        cosmos.base.v1beta1.Coin.fromPartial({
+          amount: "10000000",
+          denom: "uixo",
+        }),
+      ],
+      proposer: myAddress,
+      content: {
+        typeUrl: "/cosmos.params.v1beta1.ParameterChangeProposal",
+        value: cosmos.params.v1beta1.ParameterChangeProposal.encode(
+          cosmos.params.v1beta1.ParameterChangeProposal.fromPartial({
+            title: "Update params",
+            description: "Update params",
+            changes: [
+              cosmos.params.v1beta1.ParamChange.fromPartial({
+                subspace: subspace,
+                key: key,
+                value: value,
+              }),
+            ],
           })
         ).finish(),
       },

@@ -523,7 +523,8 @@ export const AddEdKeysVerification = async (entityId: string) => {
   const did = tester.did;
 
   // Add ed keys user to verification method for verification of credentials
-  const edPubKey = (await getUser(WalletUsers.alice).getAccounts())[0].pubkey;
+  const edPubKey = (await getUser(WalletUsers.alice, "ed").getAccounts())[0]
+    .pubkey;
   const pubkeyBase58 = base58.encode(edPubKey);
 
   const message = {
@@ -544,5 +545,97 @@ export const AddEdKeysVerification = async (entityId: string) => {
   };
 
   const response = await client.signAndBroadcast(myAddress, [message], fee);
+  return response;
+};
+
+export const CreateEntityAssetAquaminerInstance = async (
+  inheritEntityDid: string,
+  entities: {
+    deviceId: string | number;
+    index: number;
+    alsoKnownAs: string;
+  }[],
+  relayerDid?: string
+) => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+  const myPubKey = account.pubkey;
+  const did = tester.did;
+
+  const message = entities.map((entity) => ({
+    typeUrl: "/ixo.entity.v1beta1.MsgCreateEntity",
+    value: ixo.entity.v1beta1.MsgCreateEntity.fromPartial({
+      entityType: "asset/device",
+      entityStatus: 0,
+      context: createAgentIidContext([{ key: "class", val: inheritEntityDid }]),
+      controller: [did],
+      service: [],
+      startDate: utils.proto.toTimestamp(new Date()),
+      verification: createIidVerificationMethods({
+        did,
+        pubkey: myPubKey,
+        address: myAddress,
+        controller: did,
+        type: keyType,
+      }),
+      alsoKnownAs: entity.alsoKnownAs,
+      linkedResource: [
+        {
+          id: `{id}#profile`,
+          type: "Settings",
+          description: "Profile",
+          mediaType: "application/ld+json",
+          serviceEndpoint:
+            "cellnode:bafkreibtzbsecftnodq4do5sfzz77kst6cseqy3nob3nmfhudws4rweqdi",
+          proof: "bafkreibtzbsecftnodq4do5sfzz77kst6cseqy3nob3nmfhudws4rweqdi",
+          encrypted: "false",
+          right: "",
+        },
+        {
+          id: `{id}#page`,
+          type: "Settings",
+          description: "Page",
+          mediaType: "application/ld+json",
+          serviceEndpoint:
+            "cellnode:bafkreig3d5ds7ah2lvk5p5fw6txxxi4mn5mvyzicihqhrduxmy6c35n67a",
+          proof: "bafkreig3d5ds7ah2lvk5p5fw6txxxi4mn5mvyzicihqhrduxmy6c35n67a",
+          encrypted: "false",
+          right: "",
+        },
+        {
+          id: `{id}#tags`,
+          type: "Settings",
+          description: "Tags",
+          mediaType: "application/ld+json",
+          serviceEndpoint:
+            "cellnode:bafkreig2ifjtesfb2y2dgic3gzdioojrqknwowmx2b7puib6wri4ti6pky",
+          proof: "bafkreig2ifjtesfb2y2dgic3gzdioojrqknwowmx2b7puib6wri4ti6pky",
+          encrypted: "false",
+          right: "",
+        },
+      ],
+      accordedRight: [],
+      linkedEntity: [
+        ixo.iid.v1beta1.LinkedEntity.fromPartial({
+          id: dids.aquaminerCollection,
+          type: "collection",
+          relationship: "instantiation",
+          service: "ixo",
+        }),
+      ],
+      ownerDid: did,
+      ownerAddress: myAddress,
+      relayerNode: relayerDid || did,
+    }),
+  }));
+
+  const response = await client.signAndBroadcast(
+    myAddress,
+    message,
+    getFee(message.length)
+  );
   return response;
 };

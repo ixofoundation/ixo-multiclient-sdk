@@ -62,7 +62,8 @@ export const CreateEntity = async (
 export const TransferEntity = async (
   signer: WalletUsers = WalletUsers.tester,
   entities: string[],
-  recipientDid?: string
+  recipientDid?: string,
+  memo?: string
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -91,7 +92,7 @@ export const TransferEntity = async (
       messages.length,
       await client.simulate(myAddress, messages, undefined)
     ),
-    "ECS to Sigma"
+    memo || "ECS to Sigma"
   );
   return response;
 };

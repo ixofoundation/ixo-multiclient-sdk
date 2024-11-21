@@ -13,7 +13,7 @@ beforeAll(() => Promise.all([createQueryClient(), generateWallets(false)]));
 // AI4G COLLECTION
 // ------------------------------------------
 // New Protocol creation, set ai4gProtocol in constants.ts
-// AI4G.emergingAi4gProtocolsFlow(); // (skip for event)
+// AI4G.emergingAi4gProtocolsFlow(); // (no need as we can use the Clean Cooking protocol)
 // New Collection creation, set ai4gCollection and adminEntityAccounts.legacyCollection in constants.ts
 // AI4G.ai4gCollectionFlow();
 // New Cookstove minting

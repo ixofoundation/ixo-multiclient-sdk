@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType } from "./claims";
+import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType } from "./claims";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 /** GenesisState defines the claims module's genesis state. */
@@ -8,6 +8,7 @@ export interface GenesisState {
   collections: Collection[];
   claims: Claim[];
   disputes: Dispute[];
+  intents: Intent[];
 }
 /** GenesisState defines the claims module's genesis state. */
 export interface GenesisStateSDKType {
@@ -15,13 +16,15 @@ export interface GenesisStateSDKType {
   collections: CollectionSDKType[];
   claims: ClaimSDKType[];
   disputes: DisputeSDKType[];
+  intents: IntentSDKType[];
 }
 function createBaseGenesisState(): GenesisState {
   return {
     params: undefined,
     collections: [],
     claims: [],
-    disputes: []
+    disputes: [],
+    intents: []
   };
 }
 export const GenesisState = {
@@ -37,6 +40,9 @@ export const GenesisState = {
     }
     for (const v of message.disputes) {
       Dispute.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    for (const v of message.intents) {
+      Intent.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -59,6 +65,9 @@ export const GenesisState = {
         case 4:
           message.disputes.push(Dispute.decode(reader, reader.uint32()));
           break;
+        case 5:
+          message.intents.push(Intent.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -71,7 +80,8 @@ export const GenesisState = {
       params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
       collections: Array.isArray(object?.collections) ? object.collections.map((e: any) => Collection.fromJSON(e)) : [],
       claims: Array.isArray(object?.claims) ? object.claims.map((e: any) => Claim.fromJSON(e)) : [],
-      disputes: Array.isArray(object?.disputes) ? object.disputes.map((e: any) => Dispute.fromJSON(e)) : []
+      disputes: Array.isArray(object?.disputes) ? object.disputes.map((e: any) => Dispute.fromJSON(e)) : [],
+      intents: Array.isArray(object?.intents) ? object.intents.map((e: any) => Intent.fromJSON(e)) : []
     };
   },
   toJSON(message: GenesisState): unknown {
@@ -92,6 +102,11 @@ export const GenesisState = {
     } else {
       obj.disputes = [];
     }
+    if (message.intents) {
+      obj.intents = message.intents.map(e => e ? Intent.toJSON(e) : undefined);
+    } else {
+      obj.intents = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<GenesisState>): GenesisState {
@@ -100,6 +115,7 @@ export const GenesisState = {
     message.collections = object.collections?.map(e => Collection.fromPartial(e)) || [];
     message.claims = object.claims?.map(e => Claim.fromPartial(e)) || [];
     message.disputes = object.disputes?.map(e => Dispute.fromPartial(e)) || [];
+    message.intents = object.intents?.map(e => Intent.fromPartial(e)) || [];
     return message;
   }
 };

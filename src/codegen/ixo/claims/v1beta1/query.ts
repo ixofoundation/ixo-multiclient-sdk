@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType } from "./claims";
+import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType } from "./claims";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 export interface QueryParamsRequest {}
@@ -88,6 +88,36 @@ export interface QueryDisputeListResponse {
 }
 export interface QueryDisputeListResponseSDKType {
   disputes: DisputeSDKType[];
+  pagination?: PageResponseSDKType;
+}
+export interface QueryIntentRequest {
+  id: string;
+  agentAddress: string;
+  collectionId: string;
+}
+export interface QueryIntentRequestSDKType {
+  id: string;
+  agentAddress: string;
+  collectionId: string;
+}
+export interface QueryIntentResponse {
+  intent?: Intent;
+}
+export interface QueryIntentResponseSDKType {
+  intent?: IntentSDKType;
+}
+export interface QueryIntentListRequest {
+  pagination?: PageRequest;
+}
+export interface QueryIntentListRequestSDKType {
+  pagination?: PageRequestSDKType;
+}
+export interface QueryIntentListResponse {
+  intents: Intent[];
+  pagination?: PageResponse;
+}
+export interface QueryIntentListResponseSDKType {
+  intents: IntentSDKType[];
   pagination?: PageResponseSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -746,6 +776,220 @@ export const QueryDisputeListResponse = {
   fromPartial(object: Partial<QueryDisputeListResponse>): QueryDisputeListResponse {
     const message = createBaseQueryDisputeListResponse();
     message.disputes = object.disputes?.map(e => Dispute.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};
+function createBaseQueryIntentRequest(): QueryIntentRequest {
+  return {
+    id: "",
+    agentAddress: "",
+    collectionId: ""
+  };
+}
+export const QueryIntentRequest = {
+  encode(message: QueryIntentRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.agentAddress !== "") {
+      writer.uint32(18).string(message.agentAddress);
+    }
+    if (message.collectionId !== "") {
+      writer.uint32(26).string(message.collectionId);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryIntentRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryIntentRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+        case 2:
+          message.agentAddress = reader.string();
+          break;
+        case 3:
+          message.collectionId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryIntentRequest {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      agentAddress: isSet(object.agentAddress) ? String(object.agentAddress) : "",
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : ""
+    };
+  },
+  toJSON(message: QueryIntentRequest): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.agentAddress !== undefined && (obj.agentAddress = message.agentAddress);
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryIntentRequest>): QueryIntentRequest {
+    const message = createBaseQueryIntentRequest();
+    message.id = object.id ?? "";
+    message.agentAddress = object.agentAddress ?? "";
+    message.collectionId = object.collectionId ?? "";
+    return message;
+  }
+};
+function createBaseQueryIntentResponse(): QueryIntentResponse {
+  return {
+    intent: undefined
+  };
+}
+export const QueryIntentResponse = {
+  encode(message: QueryIntentResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.intent !== undefined) {
+      Intent.encode(message.intent, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryIntentResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryIntentResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.intent = Intent.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryIntentResponse {
+    return {
+      intent: isSet(object.intent) ? Intent.fromJSON(object.intent) : undefined
+    };
+  },
+  toJSON(message: QueryIntentResponse): unknown {
+    const obj: any = {};
+    message.intent !== undefined && (obj.intent = message.intent ? Intent.toJSON(message.intent) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryIntentResponse>): QueryIntentResponse {
+    const message = createBaseQueryIntentResponse();
+    message.intent = object.intent !== undefined && object.intent !== null ? Intent.fromPartial(object.intent) : undefined;
+    return message;
+  }
+};
+function createBaseQueryIntentListRequest(): QueryIntentListRequest {
+  return {
+    pagination: undefined
+  };
+}
+export const QueryIntentListRequest = {
+  encode(message: QueryIntentListRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryIntentListRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryIntentListRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryIntentListRequest {
+    return {
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryIntentListRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryIntentListRequest>): QueryIntentListRequest {
+    const message = createBaseQueryIntentListRequest();
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};
+function createBaseQueryIntentListResponse(): QueryIntentListResponse {
+  return {
+    intents: [],
+    pagination: undefined
+  };
+}
+export const QueryIntentListResponse = {
+  encode(message: QueryIntentListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.intents) {
+      Intent.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryIntentListResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryIntentListResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.intents.push(Intent.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryIntentListResponse {
+    return {
+      intents: Array.isArray(object?.intents) ? object.intents.map((e: any) => Intent.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryIntentListResponse): unknown {
+    const obj: any = {};
+    if (message.intents) {
+      obj.intents = message.intents.map(e => e ? Intent.toJSON(e) : undefined);
+    } else {
+      obj.intents = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryIntentListResponse>): QueryIntentListResponse {
+    const message = createBaseQueryIntentListResponse();
+    message.intents = object.intents?.map(e => Intent.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   }

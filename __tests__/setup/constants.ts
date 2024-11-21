@@ -265,9 +265,9 @@ export const UmuziCredentialsWorkerUrl =
 //   ecsProject: "did:ixo:entity:d9de4952c41124e453f260cfd2c7774a",
 //   legacyCookingProtocol: "did:ixo:entity:9dc2f06bf379c922d2aa8703ba276bc3",
 //   legacyCollection: "did:ixo:entity:314d8d02428debb5584d975910797121",
-//   ai4gProtocol: "",
 //   ai4gCollection: "did:ixo:entity:4ce80421effb121662866edf66d1cc21",
 //   didOracle: "did:ixo:entity:504a8255ca35e103bc8e3e78f62a5231",
+//   aquaminerCollection: "",
 // };
 
 // export const adminEntityAccounts = {
@@ -306,9 +306,9 @@ export const UmuziCredentialsWorkerUrl =
 //   legacyCookingProtocol: "did:ixo:entity:f4427ae632de60a6f7ed47f46da32fa2",
 //   legacyCollection: "did:ixo:entity:9f8749d749af260d185f3df6f2206b63",
 //   claimFormObjectsProtocol: "did:ixo:entity:c781ca0a76beae419441dbe27881e44e",
-//   ai4gProtocol: "",
 //   ai4gCollection: "did:ixo:entity:3448d91ccb919450342958bb187f7eee",
 //   didOracle: "did:ixo:entity:a6e2f215dcfa4131dd299c958fdf1a03",
+//   aquaminerCollection: "",
 // };
 
 // export const adminEntityAccounts = {
@@ -317,8 +317,8 @@ export const UmuziCredentialsWorkerUrl =
 //   ai4gCollection: "ixo1atkdpd2cmh7tfehvsafpk6f6a0rq74ykekr4j9",
 // };
 
-// export const EcsCredentialsWorkerUrl = "http://localhost:3006/";
-// // export const EcsCredentialsWorkerUrl = "https://ecs.credentials.ixo.world/";
+// // export const EcsCredentialsWorkerUrl = "http://localhost:3006/";
+// export const EcsCredentialsWorkerUrl = "https://ecs.credentials.ixo.world/";
 // export const ProspectCredentialsWorkerUrl = "";
 // export const CarbonCredentialsWorkerUrl =
 //   "https://carbon.credentials.ixo.world/";

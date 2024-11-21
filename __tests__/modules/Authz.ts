@@ -1,3 +1,4 @@
+// @ts-ignore
 import Long from "long";
 import {
   createClient,
@@ -306,12 +307,14 @@ export const MsgRevokeAllowance = async (
 export const MsgGrantAuthz = async (
   msgTypeUrl = "/cosmos.authz.v1beta1.MsgGrant",
   granter = WalletUsers.tester,
-  grantee = WalletUsers.alice
+  grantee = WalletUsers.alice,
+  granteeeAddress?: string
 ) => {
   const client = await createClient(getUser(granter));
 
   const granterAddress = (await getUser(granter).getAccounts())[0].address;
-  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
+  const granteeAddress =
+    granteeeAddress || (await getUser(grantee).getAccounts())[0].address;
 
   const message = {
     typeUrl: "/cosmos.authz.v1beta1.MsgGrant",
@@ -327,7 +330,7 @@ export const MsgGrantAuthz = async (
             })
           ).finish(),
         },
-        expiration: utils.proto.toTimestamp(addDays(new Date(), 365)),
+        expiration: utils.proto.toTimestamp(addDays(new Date(), 365 * 10)),
       }),
     }),
   };
@@ -429,6 +432,24 @@ export const MsgExecAuthz = async (
           },
           expiration: utils.proto.toTimestamp(addDays(new Date(), 365 * 3)),
         }),
+      })
+    ).finish(),
+  };
+
+  const executeMessageSend = {
+    typeUrl: "/cosmos.bank.v1beta1.MsgSend",
+    value: cosmos.bank.v1beta1.MsgSend.encode(
+      cosmos.bank.v1beta1.MsgSend.fromPartial({
+        fromAddress: "ixo1wc43xczdzlc623e9ssxkndpqnvgk2vq4hheyq2",
+        toAddress:
+          "ixo1fwk5vjcrq93n6eq8n70k6elxqtgqstk69yxnwp2qc94s5g6v9c3qquafdy",
+        amount: [
+          {
+            denom:
+              "ibc/6BBE9BD4246F8E04948D5A4EEE7164B2630263B9EBB5E7DC5F0A46C62A2FF97B",
+            amount: "5000000000",
+          },
+        ],
       })
     ).finish(),
   };

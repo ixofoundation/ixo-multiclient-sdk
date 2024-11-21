@@ -19,6 +19,7 @@ import {
   LinkedClaim,
   Service,
   VerificationMethod,
+  AccordedRight,
 } from "../../src/codegen/ixo/iid/v1beta1/types";
 
 export const CreateIidDoc = async (
@@ -147,6 +148,32 @@ export const DeleteIidContext = async (did?: string, key?: string) => {
   return response;
 };
 
+export const DeleteIidContexts = async (
+  data: { did: string; key: string }[]
+) => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const messages = data.map(({ did, key }) => ({
+    typeUrl: "/ixo.iid.v1beta1.MsgDeleteIidContext",
+    value: ixo.iid.v1beta1.MsgDeleteIidContext.fromPartial({
+      id: did,
+      contextKey: key,
+      signer: myAddress,
+    }),
+  }));
+
+  const response = await client.signAndBroadcast(
+    myAddress,
+    messages,
+    getFee(messages.length)
+  );
+  return response;
+};
+
 /**
  * @param relationships list with values: 'authentication' | 'assertionMethod' | 'keyAgreement' | 'capabilityInvocation' | 'capabilityDelegation'
  */
@@ -265,25 +292,27 @@ export const RevokeVerification = async (did?: string, methodId?: string) => {
   return response;
 };
 
-export const AddAccordedRight = async () => {
+export const AddAccordedRight = async (did?: string, right?: AccordedRight) => {
   const client = await createClient();
 
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const userDid = tester.did;
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgAddAccordedRight",
     value: ixo.iid.v1beta1.MsgAddAccordedRight.fromPartial({
-      id: did,
-      accordedRight: ixo.iid.v1beta1.AccordedRight.fromPartial({
-        type: "type",
-        id: constants.accordedRightId,
-        mechanism: "mechanism",
-        message: "message",
-        service: "service",
-      }),
+      id: did || userDid,
+      accordedRight:
+        right ||
+        ixo.iid.v1beta1.AccordedRight.fromPartial({
+          type: "type",
+          id: constants.accordedRightId,
+          mechanism: "mechanism",
+          message: "message",
+          service: "service",
+        }),
       signer: myAddress,
     }),
   };
@@ -292,19 +321,19 @@ export const AddAccordedRight = async () => {
   return response;
 };
 
-export const DeleteAccordedRight = async () => {
+export const DeleteAccordedRight = async (did?: string, rightId?: string) => {
   const client = await createClient();
 
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
+  const userDid = tester.did;
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgDeleteAccordedRight",
     value: ixo.iid.v1beta1.MsgDeleteAccordedRight.fromPartial({
-      id: did,
-      rightId: constants.accordedRightId,
+      id: did || userDid,
+      rightId: rightId || constants.accordedRightId,
       signer: myAddress,
     }),
   };

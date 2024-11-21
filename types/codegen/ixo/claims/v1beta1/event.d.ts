@@ -1,4 +1,4 @@
-import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType } from "./claims";
+import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType } from "./claims";
 import { WithdrawPaymentConstraints, WithdrawPaymentConstraintsSDKType } from "./authz";
 import * as _m0 from "protobufjs/minimal";
 /** CollectionCreatedEvent is an event triggered on a Collection creation */
@@ -73,6 +73,24 @@ export interface PaymentWithdrawCreatedEvent {
 export interface PaymentWithdrawCreatedEventSDKType {
     withdraw?: WithdrawPaymentConstraintsSDKType;
 }
+/** IntentSubmittedEvent is an event triggered on an Intent submission */
+export interface IntentSubmittedEvent {
+    /** IntentSubmittedEvent is an event triggered on an Intent submission */
+    intent?: Intent;
+}
+/** IntentSubmittedEvent is an event triggered on an Intent submission */
+export interface IntentSubmittedEventSDKType {
+    intent?: IntentSDKType;
+}
+/** IntentUpdatedEvent is an event triggered on an Intent update */
+export interface IntentUpdatedEvent {
+    /** IntentUpdatedEvent is an event triggered on an Intent update */
+    intent?: Intent;
+}
+/** IntentUpdatedEvent is an event triggered on an Intent update */
+export interface IntentUpdatedEventSDKType {
+    intent?: IntentSDKType;
+}
 export declare const CollectionCreatedEvent: {
     encode(message: CollectionCreatedEvent, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): CollectionCreatedEvent;
@@ -128,4 +146,18 @@ export declare const PaymentWithdrawCreatedEvent: {
     fromJSON(object: any): PaymentWithdrawCreatedEvent;
     toJSON(message: PaymentWithdrawCreatedEvent): unknown;
     fromPartial(object: Partial<PaymentWithdrawCreatedEvent>): PaymentWithdrawCreatedEvent;
+};
+export declare const IntentSubmittedEvent: {
+    encode(message: IntentSubmittedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): IntentSubmittedEvent;
+    fromJSON(object: any): IntentSubmittedEvent;
+    toJSON(message: IntentSubmittedEvent): unknown;
+    fromPartial(object: Partial<IntentSubmittedEvent>): IntentSubmittedEvent;
+};
+export declare const IntentUpdatedEvent: {
+    encode(message: IntentUpdatedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): IntentUpdatedEvent;
+    fromJSON(object: any): IntentUpdatedEvent;
+    toJSON(message: IntentUpdatedEvent): unknown;
+    fromPartial(object: Partial<IntentUpdatedEvent>): IntentUpdatedEvent;
 };

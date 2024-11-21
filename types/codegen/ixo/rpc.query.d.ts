@@ -258,6 +258,8 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
                 claimList(request?: import("./claims/v1beta1/query").QueryClaimListRequest): Promise<import("./claims/v1beta1/query").QueryClaimListResponse>;
                 dispute(request: import("./claims/v1beta1/query").QueryDisputeRequest): Promise<import("./claims/v1beta1/query").QueryDisputeResponse>;
                 disputeList(request?: import("./claims/v1beta1/query").QueryDisputeListRequest): Promise<import("./claims/v1beta1/query").QueryDisputeListResponse>;
+                intent(request: import("./claims/v1beta1/query").QueryIntentRequest): Promise<import("./claims/v1beta1/query").QueryIntentResponse>;
+                intentList(request?: import("./claims/v1beta1/query").QueryIntentListRequest): Promise<import("./claims/v1beta1/query").QueryIntentListResponse>;
             };
         };
         entity: {
@@ -270,10 +272,29 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
                 entityList(request?: import("./entity/v1beta1/query").QueryEntityListRequest): Promise<import("./entity/v1beta1/query").QueryEntityListResponse>;
             };
         };
+        epochs: {
+            v1beta1: {
+                epochInfos(request?: import("./epochs/v1beta1/query").QueryEpochsInfoRequest): Promise<import("./epochs/v1beta1/query").QueryEpochsInfoResponse>;
+                currentEpoch(request: import("./epochs/v1beta1/query").QueryCurrentEpochRequest): Promise<import("./epochs/v1beta1/query").QueryCurrentEpochResponse>;
+            };
+        };
         iid: {
             v1beta1: {
                 iidDocuments(request?: import("./iid/v1beta1/query").QueryIidDocumentsRequest): Promise<import("./iid/v1beta1/query").QueryIidDocumentsResponse>;
                 iidDocument(request: import("./iid/v1beta1/query").QueryIidDocumentRequest): Promise<import("./iid/v1beta1/query").QueryIidDocumentResponse>;
+            };
+        };
+        mint: {
+            v1beta1: {
+                params(request?: import("./mint/v1beta1/query").QueryParamsRequest): Promise<import("./mint/v1beta1/query").QueryParamsResponse>;
+                epochProvisions(request?: import("./mint/v1beta1/query").QueryEpochProvisionsRequest): Promise<import("./mint/v1beta1/query").QueryEpochProvisionsResponse>;
+            };
+        };
+        smartaccount: {
+            v1beta1: {
+                params(request?: import("./smartaccount/v1beta1/query").QueryParamsRequest): Promise<import("./smartaccount/v1beta1/query").QueryParamsResponse>;
+                getAuthenticator(request: import("./smartaccount/v1beta1/query").GetAuthenticatorRequest): Promise<import("./smartaccount/v1beta1/query").GetAuthenticatorResponse>;
+                getAuthenticators(request: import("./smartaccount/v1beta1/query").GetAuthenticatorsRequest): Promise<import("./smartaccount/v1beta1/query").GetAuthenticatorsResponse>;
             };
         };
         token: {

@@ -89,7 +89,6 @@ export const jsonToBase64 = (json: unknown) => {
 
 /**
  * encode a multibase base58-btc multicodec key
- *
  * @param header Uint8Array header for multicodec encoding
  * @param key Uint8Array of key encoding
  */
@@ -98,4 +97,16 @@ export const encodeMbKey = (header: Uint8Array, key: Uint8Array) => {
   mbKey.set(header);
   mbKey.set(key, header.length);
   return MULTIBASE_BASE58BTC_HEADER + base58.encode(mbKey);
+};
+
+/**
+ * decode a multibase base58-btc multicodec key
+ * @param mbKey string multibase base58-btc multicodec key
+ */
+export const decodeMbKey = (header: Uint8Array, mbKey: string) => {
+  const decoded = base58.decode(mbKey.slice(MULTIBASE_BASE58BTC_HEADER.length));
+  if (decoded.slice(0, header.length).toString() !== header.toString()) {
+    throw new Error("Invalid multibase base58-btc multicodec key");
+  }
+  return decoded.slice(header.length);
 };

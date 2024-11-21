@@ -22,10 +22,14 @@ export const web3Storage = () =>
     // });
 
     // test("upload file image", async () => {
-    //   const file = getFileFromPath(["documents", "supamoto_logo.png"]);
+    //   const file = getFileFromPath([
+    //     "documents",
+    //     "emerging",
+    //     "supamoto_special_collection.jpg",
+    //   ]);
     //   const cid = await storeWeb3(
-    //     "Supamoto Project Logo",
-    //     ContentTypes.png,
+    //     "Supamoto Kado cooks Logo",
+    //     ContentTypes.jpg,
     //     file
     //   );
     //   console.log({ cid });
@@ -49,43 +53,54 @@ export const web3Storage = () =>
 
     test("upload json", async () => {
       const json = {
-        "@context": {
-          ixo: "https://w3id.org/ixo/vocab/v1",
-          web3: "https://ipfs.io/ipfs/",
-          id: "@id",
-          type: "@type",
-          "@protected": true,
-        },
+        "@context": [
+          "https://w3id.org/ixo/context/v1",
+          {
+            ixo: "https://w3id.org/ixo/vocab/v1",
+            web3: "https://ipfs.io/ipfs/",
+            id: "@id",
+            type: "@type",
+            "@protected": true,
+          },
+        ],
         id: "{id}#profile",
-        type: "ixo:profile",
-        orgName: "Emerging Cooking Solutions",
-        name: "SupaMoto Zambia",
+        type: "ixo:Profile",
+        name: "SupaMoto",
         image:
-          "https://ipfs.io/ipfs/bafybeicav572xehbpzjfx4zhaqbsdez2h6gr3v4ils6jqqacgl5ohs4mbm",
-        logo: "https://ipfs.io/ipfs/bafkreifkl6w55nasgqid22d2cqyxccjktbciefzmiqvcudlq3eoer2mzhi",
-        brand: "ECS (Sweden)",
-        location: "SE",
-        description: "Clean Cooking with Biomass Gasification in Zambia",
+          "web3:bafkreihs7m7tf3aol46h6xgdcuvdohufyb42y5b5tfftdw5dfaehr6do44",
+        logo: "web3:bafkreigaewz4n3wqpajmwvt3deeolux3vyklbwd3s6dpzy74jcf6amk54m",
+        brand: "SupaMoto",
+        location: "ZM",
+        description:
+          "SupaMoto is a modern energy cooking device that helps households cut carbon emissions while cooking with affordable and renewable biomass fuel. This convenient solution offers a more cost-effective, healthy, and time-saving alternative to traditional cooking methods that typically use hardwood charcoal for fuel.",
         attributes: [
           {
-            key: "Country",
+            key: "Model",
+            value: "MimiMoto",
+            id: "https://mimimoto.nl/",
+          },
+          {
+            key: "Location",
             value: "Zambia",
+            id: "https://maps.app.goo.gl/hYa5qyPWfo5DHgAS8",
           },
           {
-            key: "Implementer",
-            value: "Emerging Cooking Solutions (Zambia) Limited",
+            key: "Fuel",
+            value: "Renewable Biomass Pellets",
+            id: "https://www.nature.com/articles/s41560-022-01126-2",
           },
           {
-            key: "Managing Entity",
-            value: "Emerging Cooking Solutions Sweden AB",
+            key: "Usage",
+            value: "Domestic",
+            id: "https://en.wikipedia.org/wiki/Kitchen_stove",
           },
           {
-            key: "Scale",
-            value: "Microscale",
+            key: "Conversion",
+            value: "1kg = 10.56 credits",
           },
           {
-            key: "Type",
-            value: "Cooking Fuel Switch",
+            key: "Product",
+            value: "CARBON credit tokens",
           },
         ],
         metrics: [],
@@ -103,6 +118,7 @@ export const web3Storage = () =>
 const ContentTypes = {
   svg: "image/svg+xml",
   png: "image/png",
+  jpg: "image/jpeg",
   jsonld: "application/ld+json",
   json: "application/json",
   pdf: "application/pdf",

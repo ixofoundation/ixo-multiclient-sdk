@@ -12,6 +12,24 @@ export declare enum CollectionState {
 export declare const CollectionStateSDKType: typeof CollectionState;
 export declare function collectionStateFromJSON(object: any): CollectionState;
 export declare function collectionStateToJSON(object: CollectionState): string;
+export declare enum CollectionIntentOptions {
+    /**
+     * ALLOW - Allow: Intents can be made for claims, but claims can also be made without
+     * intents.
+     */
+    ALLOW = 0,
+    /** DENY - Deny: Intents cannot be made for claims for the collection. */
+    DENY = 1,
+    /**
+     * REQUIRED - Required: Claims cannot be made without an associated intent. An intent is
+     * mandatory before a claim can be submitted.
+     */
+    REQUIRED = 2,
+    UNRECOGNIZED = -1
+}
+export declare const CollectionIntentOptionsSDKType: typeof CollectionIntentOptions;
+export declare function collectionIntentOptionsFromJSON(object: any): CollectionIntentOptions;
+export declare function collectionIntentOptionsToJSON(object: CollectionIntentOptions): string;
 export declare enum EvaluationStatus {
     PENDING = 0,
     APPROVED = 1,
@@ -23,6 +41,28 @@ export declare enum EvaluationStatus {
 export declare const EvaluationStatusSDKType: typeof EvaluationStatus;
 export declare function evaluationStatusFromJSON(object: any): EvaluationStatus;
 export declare function evaluationStatusToJSON(object: EvaluationStatus): string;
+export declare enum IntentStatus {
+    /**
+     * ACTIVE - Active: Intent is created and active, payments have been transferred to
+     * escrow if there is any
+     */
+    ACTIVE = 0,
+    /**
+     * FULFILLED - Fulfilled: Intent is fulfilled, was used to create a claim and funds will
+     * be released on claim APPROVAL, or funds will be reverted on claim REJECTION
+     * or DISPUTE
+     */
+    FULFILLED = 1,
+    /**
+     * EXPIRED - Expired: Intent has expired, payments have been transferred back out of
+     * escrow
+     */
+    EXPIRED = 2,
+    UNRECOGNIZED = -1
+}
+export declare const IntentStatusSDKType: typeof IntentStatus;
+export declare function intentStatusFromJSON(object: any): IntentStatus;
+export declare function intentStatusToJSON(object: IntentStatus): string;
 export declare enum PaymentType {
     SUBMISSION = 0,
     APPROVAL = 1,
@@ -35,11 +75,17 @@ export declare function paymentTypeFromJSON(object: any): PaymentType;
 export declare function paymentTypeToJSON(object: PaymentType): string;
 export declare enum PaymentStatus {
     NO_PAYMENT = 0,
+    /** PROMISED - Promised: Agent is contracted to receive payment */
     PROMISED = 1,
+    /** AUTHORIZED - Authorized: Authz set up, no guarantee */
     AUTHORIZED = 2,
+    /** GUARANTEED - Guaranteed: Escrow set up with funds blocked */
     GUARANTEED = 3,
+    /** PAID - Paid: Funds have been paid */
     PAID = 4,
+    /** FAILED - Failed: Payment failed, most probably due to insufficient funds */
     FAILED = 5,
+    /** DISPUTED_PAYMENT - DisputedPayment: Payment disputed */
     DISPUTED_PAYMENT = 6,
     UNRECOGNIZED = -1
 }
@@ -51,12 +97,14 @@ export interface Params {
     ixoAccount: string;
     networkFeePercentage: string;
     nodeFeePercentage: string;
+    intentSequence: Long;
 }
 export interface ParamsSDKType {
     collection_sequence: Long;
     ixo_account: string;
     network_fee_percentage: string;
     node_fee_percentage: string;
+    intent_sequence: Long;
 }
 export interface Collection {
     /** collection id is the incremented internal id for the collection of claims */
@@ -115,6 +163,17 @@ export interface Collection {
      * (internally calculated)
      */
     invalidated: Long;
+    /**
+     * escrow_account is the escrow account address for this collection created at
+     * collection creation, current purpose is to transfer payments to escrow
+     * account for GUARANTEED payments through intents
+     */
+    escrowAccount: string;
+    /**
+     * intents is the option for intents for this collection (allow, deny,
+     * required)
+     */
+    intents: CollectionIntentOptions;
 }
 export interface CollectionSDKType {
     id: string;
@@ -133,6 +192,8 @@ export interface CollectionSDKType {
     payments?: PaymentsSDKType;
     signer: string;
     invalidated: Long;
+    escrow_account: string;
+    intents: CollectionIntentOptions;
 }
 export interface Payments {
     submission?: Payment;
@@ -157,12 +218,22 @@ export interface Payment {
      * immediate direct payment
      */
     timeoutNs?: Duration;
+    /** cw20 payments, can be empty or multiple */
+    cw20Payment: CW20Payment[];
+    /**
+     * boolean to indicate if the payment is for oracle payments, aka it will go
+     * through network fees split NOTE: if true the payment can only have amount
+     * values(Native coins), no cw20 payments allowed then
+     */
+    isOraclePayment: boolean;
 }
 export interface PaymentSDKType {
     account: string;
     amount: CoinSDKType[];
     contract_1155_payment?: Contract1155PaymentSDKType;
     timeout_ns?: DurationSDKType;
+    cw20_payment: CW20PaymentSDKType[];
+    is_oracle_payment: boolean;
 }
 export interface Contract1155Payment {
     address: string;
@@ -173,6 +244,18 @@ export interface Contract1155PaymentSDKType {
     address: string;
     token_id: string;
     amount: number;
+}
+export interface CW20Payment {
+    address: string;
+    /**
+     * chose uint64 for now as amounts should be small enough to fit in a
+     * uint64(max 18446744073709551615)
+     */
+    amount: Long;
+}
+export interface CW20PaymentSDKType {
+    address: string;
+    amount: Long;
 }
 export interface Claim {
     /** collection_id indicates to which Collection this claim belongs */
@@ -186,7 +269,21 @@ export interface Claim {
     claimId: string;
     /** evaluation is the result of one or more claim evaluations */
     evaluation?: Evaluation;
+    /** payments_status is the status of the payments for the claim */
     paymentsStatus?: ClaimPayments;
+    /** intent_id is the id of the intent for this claim, if any */
+    useIntent: boolean;
+    /**
+     * NOTE: if both amount and cw20 amount are empty then use default by
+     * Collection custom amount specified by service agent for claim approval
+     */
+    amount: Coin[];
+    /**
+     * NOTE: if both amount and cw20 amount are empty then use default by
+     * Collection custom cw20 payments specified by service agent for claim
+     * approval
+     */
+    cw20Payment: CW20Payment[];
 }
 export interface ClaimSDKType {
     collection_id: string;
@@ -196,6 +293,9 @@ export interface ClaimSDKType {
     claim_id: string;
     evaluation?: EvaluationSDKType;
     payments_status?: ClaimPaymentsSDKType;
+    use_intent: boolean;
+    amount: CoinSDKType[];
+    cw20_payment: CW20PaymentSDKType[];
 }
 export interface ClaimPayments {
     submission: PaymentStatus;
@@ -240,10 +340,12 @@ export interface Evaluation {
      */
     evaluationDate?: Timestamp;
     /**
-     * custom amount specified by evaluator for claim approval, if empty list then
-     * use default by Collection
+     * if both amount and cw20 amount are empty then use default by Collection
+     * custom amount specified by evaluator for claim approval
      */
     amount: Coin[];
+    /** custom cw20 payments specified by evaluator for claim approval */
+    cw20Payment: CW20Payment[];
 }
 export interface EvaluationSDKType {
     claim_id: string;
@@ -256,6 +358,7 @@ export interface EvaluationSDKType {
     verification_proof: string;
     evaluation_date?: TimestampSDKType;
     amount: CoinSDKType[];
+    cw20_payment: CW20PaymentSDKType[];
 }
 export interface Dispute {
     subjectId: string;
@@ -280,6 +383,51 @@ export interface DisputeDataSDKType {
     type: string;
     proof: string;
     encrypted: boolean;
+}
+/** Intent defines the structure for a service agent's claim intent. */
+export interface Intent {
+    /** id is the incremented internal id for the intent */
+    id: string;
+    /** The service agent's DID (Decentralized Identifier). */
+    agentDid: string;
+    /** The service agent's address. */
+    agentAddress: string;
+    /** The id of the collection this intent is linked to. */
+    collectionId: string;
+    /** claim_id (optional, set when claim is submitted) */
+    claimId: string;
+    /** The time the intent was created. */
+    createdAt?: Timestamp;
+    /**
+     * Timeout period for the intent. If the claim is not submitted by this time,
+     * the intent expires.
+     */
+    expireAt?: Timestamp;
+    /** Status of the intent (e.g., "ACTIVE" or "FULFILLED"). */
+    status: IntentStatus;
+    /** The payment amount the agent intends to claim, if any. */
+    amount: Coin[];
+    /** The CW20Payment amount the agent intends to claim, if any. */
+    cw20Payment: CW20Payment[];
+    /** the address the escrow payment came from */
+    fromAddress: string;
+    /** the escrow account address */
+    escrowAddress: string;
+}
+/** Intent defines the structure for a service agent's claim intent. */
+export interface IntentSDKType {
+    id: string;
+    agent_did: string;
+    agent_address: string;
+    collection_id: string;
+    claim_id: string;
+    created_at?: TimestampSDKType;
+    expire_at?: TimestampSDKType;
+    status: IntentStatus;
+    amount: CoinSDKType[];
+    cw20_payment: CW20PaymentSDKType[];
+    from_address: string;
+    escrow_address: string;
 }
 export declare const Params: {
     encode(message: Params, writer?: _m0.Writer): _m0.Writer;
@@ -316,6 +464,13 @@ export declare const Contract1155Payment: {
     toJSON(message: Contract1155Payment): unknown;
     fromPartial(object: Partial<Contract1155Payment>): Contract1155Payment;
 };
+export declare const CW20Payment: {
+    encode(message: CW20Payment, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): CW20Payment;
+    fromJSON(object: any): CW20Payment;
+    toJSON(message: CW20Payment): unknown;
+    fromPartial(object: Partial<CW20Payment>): CW20Payment;
+};
 export declare const Claim: {
     encode(message: Claim, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): Claim;
@@ -350,4 +505,11 @@ export declare const DisputeData: {
     fromJSON(object: any): DisputeData;
     toJSON(message: DisputeData): unknown;
     fromPartial(object: Partial<DisputeData>): DisputeData;
+};
+export declare const Intent: {
+    encode(message: Intent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): Intent;
+    fromJSON(object: any): Intent;
+    toJSON(message: Intent): unknown;
+    fromPartial(object: Partial<Intent>): Intent;
 };
