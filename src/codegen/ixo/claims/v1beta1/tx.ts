@@ -113,13 +113,17 @@ export interface MsgEvaluateClaim {
   /** verificationProof is the cid of the evaluation Verfiable Credential */
   verificationProof: string;
   /**
-   * NOTE: if both amount and cw20 amount are empty then use collection default
-   * custom amount specified by evaluator for claim approval
+   * NOTE: if claim is using intent, then amount and cw20 amount are ignored and
+   * overriden with intent amounts NOTE: if both amount and cw20 amount are
+   * empty then use collection default custom amount specified by evaluator for
+   * claim approval
    */
   amount: Coin[];
   /**
-   * NOTE: if both amount and cw20 amount are empty then use collection default
-   * custom cw20 payments specified by evaluator for claim approval
+   * NOTE: if claim is using intent, then amount and cw20 amount are ignored and
+   * overriden with intent amounts NOTE: if both amount and cw20 amount are
+   * empty then use collection default custom cw20 payments specified by
+   * evaluator for claim approval
    */
   cw20Payment: CW20Payment[];
 }

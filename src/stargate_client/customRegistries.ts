@@ -560,6 +560,33 @@ export const createRegistry = (): Registry => {
     "/ixo.smartaccount.v1beta1.MsgSetActiveState",
     ixo.smartaccount.v1beta1.MsgSetActiveState
   );
+  myRegistry.register(
+    "/ixo.smartaccount.crypto.AuthnPubKey",
+    ixo.smartaccount.crypto.AuthnPubKey
+  );
+
+  // Ixo Liquid Stake module
+  // -----------------------------------------------------------------------------
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgLiquidStake",
+    ixo.liquidstake.v1beta1.MsgLiquidStake
+  );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgLiquidUnstake",
+    ixo.liquidstake.v1beta1.MsgLiquidUnstake
+  );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgUpdateParams",
+    ixo.liquidstake.v1beta1.MsgUpdateParams
+  );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgUpdateWhitelistedValidators",
+    ixo.liquidstake.v1beta1.MsgUpdateWhitelistedValidators
+  );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgLiquidStake",
+    ixo.liquidstake.v1beta1.MsgLiquidStake
+  );
 
   return myRegistry;
 };

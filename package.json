@@ -40,7 +40,8 @@
     "test:umuzi": "jest __tests__/specs/umuzi --forceExit",
     "test:idcc": "jest __tests__/specs/idcc --forceExit",
     "test:protocols": "jest __tests__/specs/protocols --forceExit",
-    "test:aquaminer": "jest __tests__/specs/aquaminer --forceExit"
+    "test:aquaminer": "jest __tests__/specs/aquaminer --forceExit",
+    "test:fairClimate": "jest __tests__/specs/fairClimate --forceExit"
   },
   "publishConfig": {
     "access": "public"

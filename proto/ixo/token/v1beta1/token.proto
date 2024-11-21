@@ -64,6 +64,10 @@ message TokensRetired {
   string owner = 5;
 }
 
+// TODO:
+// TokensTransferred
+// authorizationId
+
 message TokensCancelled {
   option (gogoproto.equal) = true;
 
