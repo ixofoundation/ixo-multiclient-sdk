@@ -490,6 +490,10 @@ export const createRegistry = (): Registry => {
     "/ixo.token.v1beta1.MsgStopToken",
     ixo.token.v1beta1.MsgStopToken
   );
+  myRegistry.register(
+    "/ixo.token.v1beta1.MsgTransferCredit",
+    ixo.token.v1beta1.MsgTransferCredit
+  );
 
   // Ixo Claims module
   // -----------------------------------------------------------------------------
@@ -559,6 +563,37 @@ export const createRegistry = (): Registry => {
   myRegistry.register(
     "/ixo.smartaccount.v1beta1.MsgSetActiveState",
     ixo.smartaccount.v1beta1.MsgSetActiveState
+  );
+  myRegistry.register(
+    "/ixo.smartaccount.crypto.AuthnPubKey",
+    ixo.smartaccount.crypto.AuthnPubKey
+  );
+
+  // Ixo Liquid Stake module
+  // -----------------------------------------------------------------------------
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgLiquidStake",
+    ixo.liquidstake.v1beta1.MsgLiquidStake
+  );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgLiquidUnstake",
+    ixo.liquidstake.v1beta1.MsgLiquidUnstake
+  );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgUpdateParams",
+    ixo.liquidstake.v1beta1.MsgUpdateParams
+  );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgUpdateWhitelistedValidators",
+    ixo.liquidstake.v1beta1.MsgUpdateWhitelistedValidators
+  );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgUpdateWeightedRewardsReceivers",
+    ixo.liquidstake.v1beta1.MsgUpdateWeightedRewardsReceivers
+  );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgSetModulePaused",
+    ixo.liquidstake.v1beta1.MsgSetModulePaused
   );
 
   return myRegistry;

@@ -42,6 +42,11 @@ export interface Token {
      * contract address
      */
     cancelled: TokensCancelled[];
+    /**
+     * credits that has been transferred for this Token with specific name and
+     * contract address
+     */
+    transferred: CreditsTransferred[];
 }
 export interface TokenSDKType {
     minter: string;
@@ -57,6 +62,7 @@ export interface TokenSDKType {
     stopped: boolean;
     retired: TokensRetiredSDKType[];
     cancelled: TokensCancelledSDKType[];
+    transferred: CreditsTransferredSDKType[];
 }
 export interface TokensRetired {
     id: string;
@@ -71,6 +77,22 @@ export interface TokensRetiredSDKType {
     jurisdiction: string;
     amount: string;
     owner: string;
+}
+export interface CreditsTransferred {
+    id: string;
+    reason: string;
+    jurisdiction: string;
+    amount: string;
+    owner: string;
+    authorizationId: string;
+}
+export interface CreditsTransferredSDKType {
+    id: string;
+    reason: string;
+    jurisdiction: string;
+    amount: string;
+    owner: string;
+    authorization_id: string;
 }
 export interface TokensCancelled {
     id: string;
@@ -141,6 +163,13 @@ export declare const TokensRetired: {
     fromJSON(object: any): TokensRetired;
     toJSON(message: TokensRetired): unknown;
     fromPartial(object: Partial<TokensRetired>): TokensRetired;
+};
+export declare const CreditsTransferred: {
+    encode(message: CreditsTransferred, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): CreditsTransferred;
+    fromJSON(object: any): CreditsTransferred;
+    toJSON(message: CreditsTransferred): unknown;
+    fromPartial(object: Partial<CreditsTransferred>): CreditsTransferred;
 };
 export declare const TokensCancelled: {
     encode(message: TokensCancelled, writer?: _m0.Writer): _m0.Writer;

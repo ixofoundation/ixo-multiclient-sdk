@@ -133,6 +133,43 @@ export interface MsgRetireTokenResponse {
 }
 export interface MsgRetireTokenResponseSDKType {
 }
+export interface MsgTransferCredit {
+    /** address of owner */
+    owner: string;
+    /** tokens to retire, all tokens must be in same smart contract */
+    tokens: TokenBatch[];
+    /**
+     * jurisdiction is the jurisdiction of the token owner. A jurisdiction has
+     * the format: <country-code>[-<sub-national-code>[ <postal-code>]]
+     * The country-code must be 2 alphabetic characters, the sub-national-code
+     * can be 1-3 alphanumeric characters, and the postal-code can be up to 64
+     * alphanumeric characters. Only the country-code is required, while the
+     * sub-national-code and postal-code are optional and can be added for
+     * increased precision. See the valid format for this below.
+     */
+    jurisdiction: string;
+    /**
+     * reason is any arbitrary string that specifies the reason for retiring
+     * tokens.
+     */
+    reason: string;
+    /**
+     * authorization_id is the id of the authorization that was used for the
+     * credit transfer
+     */
+    authorizationId: string;
+}
+export interface MsgTransferCreditSDKType {
+    owner: string;
+    tokens: TokenBatchSDKType[];
+    jurisdiction: string;
+    reason: string;
+    authorization_id: string;
+}
+export interface MsgTransferCreditResponse {
+}
+export interface MsgTransferCreditResponseSDKType {
+}
 export interface MsgCancelToken {
     /** address of owner */
     owner: string;
@@ -251,6 +288,20 @@ export declare const MsgRetireTokenResponse: {
     fromJSON(_: any): MsgRetireTokenResponse;
     toJSON(_: MsgRetireTokenResponse): unknown;
     fromPartial(_: Partial<MsgRetireTokenResponse>): MsgRetireTokenResponse;
+};
+export declare const MsgTransferCredit: {
+    encode(message: MsgTransferCredit, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgTransferCredit;
+    fromJSON(object: any): MsgTransferCredit;
+    toJSON(message: MsgTransferCredit): unknown;
+    fromPartial(object: Partial<MsgTransferCredit>): MsgTransferCredit;
+};
+export declare const MsgTransferCreditResponse: {
+    encode(_: MsgTransferCreditResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgTransferCreditResponse;
+    fromJSON(_: any): MsgTransferCreditResponse;
+    toJSON(_: MsgTransferCreditResponse): unknown;
+    fromPartial(_: Partial<MsgTransferCreditResponse>): MsgTransferCreditResponse;
 };
 export declare const MsgCancelToken: {
     encode(message: MsgCancelToken, writer?: _m0.Writer): _m0.Writer;

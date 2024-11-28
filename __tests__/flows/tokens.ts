@@ -104,6 +104,15 @@ export const tokenBasic = () =>
       ])
     );
 
+    testMsg("/ixo.token.v1beta1.MsgTransferCredit", () =>
+      Token.TransferCredit([
+        {
+          id: tokenId,
+          amount: 1,
+        },
+      ])
+    );
+
     // testMsg("/ixo.token.v1beta1.MsgPauseToken", () =>
     //   Token.PauseToken(contractAddress1155, false)
     // );

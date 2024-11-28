@@ -4,7 +4,7 @@ package ixo.token.v1beta1;
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
 
-option go_package = "github.com/ixofoundation/ixo-blockchain/v3/x/token/types";
+option go_package = "github.com/ixofoundation/ixo-blockchain/v4/x/token/types";
 
 message Params { uint64 ixo1155_contract_code = 1; }
 
@@ -48,6 +48,9 @@ message Token {
   // tokens that has been cancelled for this Token with specific name and
   // contract address
   repeated TokensCancelled cancelled = 13;
+  // credits that has been transferred for this Token with specific name and
+  // contract address
+  repeated CreditsTransferred transferred = 14;
 }
 
 message TokensRetired {
@@ -62,6 +65,21 @@ message TokensRetired {
     (gogoproto.nullable) = false
   ];
   string owner = 5;
+}
+
+message CreditsTransferred {
+  option (gogoproto.equal) = true;
+
+  string id = 1;
+  string reason = 2;
+  string jurisdiction = 3;
+  string amount = 4 [
+    (cosmos_proto.scalar) = "cosmos.Uint",
+    (gogoproto.customtype) = "cosmossdk.io/math.Uint",
+    (gogoproto.nullable) = false
+  ];
+  string owner = 5;
+  string authorization_id = 6;
 }
 
 message TokensCancelled {

@@ -8,111 +8,113 @@ import { ChainNetwork } from "../../src/custom_queries/chain.types";
 export const chainNetwork: ChainNetwork = "testnet";
 
 export const dids = {
-  // impactsRootUserDid: "did:x:zQ3shj4dPHhbsSXYcmsZLoDkiPJxkHhWYZpihWSQn95fuos2y",
-  // daoClass: "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14",
-  // oracleClass: "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b",
-  // protocolClass: "did:ixo:entity:61392c571ef644d54d77e4daf611bf89",
-  // assetClass: "did:ixo:entity:4d94f9b6078432648a755203eed50644",
-  // impactsDao: "did:ixo:entity:2f22535f8b179a51d77a0e302e68d35d",
-  // emergingDao: "did:ixo:entity:72a27013b1d2f9c3561145e4a424778a",
-  // carbonOracle: "did:ixo:entity:7889238a0a6a68554f65f5c7da96f13b",
-  // cleanCookingProtocol: "did:ixo:entity:8fcbc757e75c120dd4beae0e5696fd38",
-  // prospectDao: "did:ixo:entity:8e8fc81e088154de379474db2f0aa2a9",
-  // prospectOracle: "did:ixo:entity:f2235630689d4b54a561ca3de57494f6",
-  // ecsDao: "did:ixo:entity:a1fcead81eab2f1158a726597d872413",
-  // assetCollection: "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
-  // carbonAsset: "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
-  // ecsProject: "did:ixo:entity:29198b8a823e183a5e84d7ebf2f0febd",
-  // legacyCookingProtocol: "did:ixo:entity:8ad0c5568aea9632db56a846a7112353",
-  // legacyCollection: "did:ixo:entity:f645a3221d05eba19fefb31f1025f3af",
-  // Yoma/Umuzi
-  // yomaDao: "did:ixo:entity:50a7d92f449ab5752f63c64521adb3cc",
-  // coderByteDao: "did:ixo:entity:8abd3503cbf6717393478117b8df4e6e",
-  // coderByteOracle: "did:ixo:entity:23bc6e04fea6d884b4efc8a0f31bb740",
-  // learnershipProtocol: "did:ixo:entity:0c12012217e08d3da96d33c85e09b9ad",
-  // umuziDao: "did:ixo:entity:0fb18fbac5f4e18c75ced2f23a021fe9",
-  // umuziProjectDid: "did:ixo:entity:b3104e1a5ffcbee06007d29525f3e07b",
-  // umuziAssetCollection: "did:ixo:entity:3e7253499daf46aab546ab7d2b884bde",
-  // educationAssetDid: "did:ixo:entity:4af7faf72e47f4b91a38750cb6e359a7",
+  impactsRootUserDid: "did:x:zQ3shj4dPHhbsSXYcmsZLoDkiPJxkHhWYZpihWSQn95fuos2y",
+  daoClass: "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14",
+  oracleClass: "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b",
+  protocolClass: "did:ixo:entity:61392c571ef644d54d77e4daf611bf89",
+  assetClass: "did:ixo:entity:4d94f9b6078432648a755203eed50644",
+  impactsDao: "did:ixo:entity:2f22535f8b179a51d77a0e302e68d35d",
+  emergingDao: "did:ixo:entity:72a27013b1d2f9c3561145e4a424778a",
+  carbonOracle: "did:ixo:entity:7889238a0a6a68554f65f5c7da96f13b",
+  cleanCookingProtocol: "did:ixo:entity:8fcbc757e75c120dd4beae0e5696fd38",
+  prospectDao: "did:ixo:entity:8e8fc81e088154de379474db2f0aa2a9",
+  prospectOracle: "did:ixo:entity:f2235630689d4b54a561ca3de57494f6",
+  ecsDao: "did:ixo:entity:a1fcead81eab2f1158a726597d872413",
+  assetCollection: "did:ixo:entity:eb98bb2c92a62557b6c88c6f80e8d258",
+  carbonAsset: "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb",
+  ecsProject: "did:ixo:entity:29198b8a823e183a5e84d7ebf2f0febd",
+  legacyCookingProtocol: "did:ixo:entity:8ad0c5568aea9632db56a846a7112353",
+  legacyCollection: "did:ixo:entity:f645a3221d05eba19fefb31f1025f3af",
+  yomaDao: "did:ixo:entity:50a7d92f449ab5752f63c64521adb3cc",
+  coderByteDao: "did:ixo:entity:8abd3503cbf6717393478117b8df4e6e",
+  coderByteOracle: "did:ixo:entity:23bc6e04fea6d884b4efc8a0f31bb740",
+  learnershipProtocol: "did:ixo:entity:0c12012217e08d3da96d33c85e09b9ad",
+  umuziDao: "did:ixo:entity:0fb18fbac5f4e18c75ced2f23a021fe9",
+  umuziProjectDid: "did:ixo:entity:b3104e1a5ffcbee06007d29525f3e07b",
+  umuziAssetCollection: "did:ixo:entity:3e7253499daf46aab546ab7d2b884bde",
+  educationAssetDid: "did:ixo:entity:4af7faf72e47f4b91a38750cb6e359a7",
+  ai4gCollection: "",
+  didOracle: "",
+  aquaminerCollection: "did:ixo:entity:323dd1f9999c20142789010dae287a65",
+  fairClimateCollection: "",
 };
 
 export const intermediaryRegistry = {
-  intermediaries:
-    [
-      // {
-      //   name: "IDCC",
-      //   daoTagsProof: "",
-      //   projectTagsProof: "",
-      //   blockchainAddress: "ixo16xl3c8jqnk2ujk2zyafkrcm2ahkmvll6aduvej",
-      //   did: "did:ixo:entity:ff581af6e2e071758b1f94835933d038",
-      //   mnemonic: process.env.IDCC_DAO,
-      // },
-      // {
-      //   name: "BEHub",
-      //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
-      //   projectTagsProof: "bafkreibe3x5sbkgx7nn7lqjhq6ulic2ubfzubk5oynapipjfj4wvk54yfy",
-      //   blockchainAddress: "ixo1wgngzjv67wk9fr8lumdhllf84s79jm7uw75uen",
-      //   did: "did:ixo:entity:35f09ecb848032333e5b67b38b2e3d53",
-      //   mnemonic: process.env.IDCC_DAO_BEHUB,
-      // },
-      // {
-      //   name: "GoodSeed",
-      //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
-      //   projectTagsProof: "bafkreifflnjauouenjd4vymhekqjbtkzownzpwcn2c7euyzw6ajnt5z3ca",
-      //   blockchainAddress: "ixo1cehfv7xgwmf5ltvzxmkehe7ds7v9s04wsnh6af",
-      //   did: "did:ixo:entity:ffb6b788b6d6a2e7266d5a3eb7074816",
-      //   mnemonic: process.env.IDCC_DAO_GOOD_SEED,
-      // },
-      // {
-      //   name: "DreamImpact",
-      //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
-      //   projectTagsProof: "bafkreigjc3v64kgd3hx5kgejpz6on623bqptx2u752sumaywsvztigayta",
-      //   blockchainAddress: "ixo1jatf2ek6z4vzqwmtaz8jv4e9suaqmcdz6a9dcv",
-      //   did: "did:ixo:entity:7df8533fefe215c83e67107639e360b1",
-      //   mnemonic: process.env.IDCC_DAO_DREAM_IMPACT,
-      // },
-      // {
-      //   name: "CCSG",
-      //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
-      //   projectTagsProof: "bafkreigicuifavotu46uriwveb6po6e7djsmzhoabxalkyqkp6j4bhnjii",
-      //   blockchainAddress: "ixo1928ghdn5suwlv630ly92d7sfqw4e265cvqz6yz",
-      //   did: "did:ixo:entity:6578e65e6de53d873a4b8f7bd0186a9a",
-      //   mnemonic: process.env.IDCC_DAO_CCSG,
-      // },
-      // {
-      //   name: "GravityCapitalPartners",
-      //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
-      //   projectTagsProof: "bafkreicmiukizqf7lbjbfdptisvzysusipvonnzagb3kmxtik4z422lwwa",
-      //   blockchainAddress: "ixo1mf928zs6mstkjk6g0lwpm02nzukjha25d2ds40",
-      //   did: "did:ixo:entity:fa4c60f1648eaac69f0040cb064df648",
-      //   mnemonic: process.env.IDCC_DAO_GCP,
-      // },
-      // {
-      //   name: "CUHKAlumni",
-      //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
-      //   projectTagsProof: "bafkreih3cjysrafkmzgzljlkcdsr6ft5meei7jtybpspwqtobjp3jeea34",
-      //   blockchainAddress: "ixo1x2awez2fvw6cehg8xgk4a2xg8jc8jrw6cvgdx8",
-      //   did: "did:ixo:entity:c92166250fd76210662c71afbc3e4d48",
-      //   mnemonic: process.env.IDCC_DAO_CUHK,
-      // },
-      // {
-      //   name: "ICARE",
-      //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
-      //   projectTagsProof: "bafkreicsbydiasqsrwqe5h4xwraf72xyjl5pheseyxtomivvwptjxncofu",
-      //   blockchainAddress: "ixo1x029j64yjprthxy7jsye6we0sdf8ux5zzpcnr2",
-      //   did: "did:ixo:entity:512d36e9ca4b52760eca61e2dc44d4a8",
-      //   mnemonic: process.env.IDCC_DAO_ICARE,
-      // },
-      // {
-      //   name: "SEBC",
-      //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
-      //   projectTagsProof: "bafkreibz5tr46g6qrfdabz4sbxqgubzhnsz3mz6wa7aldgjjnfz3mhhgwq",
-      //   blockchainAddress: "ixo12kl8felx4e5yae4utzs2z9rtfucktw0c9aes4h",
-      //   did: "did:ixo:entity:410704c1363e61574dfae8446c2e6b77",
-      //   mnemonic: process.env.IDCC_DAO_SEBC,
-      // },
-    ],
-}
+  intermediaries: [
+    // {
+    //   name: "IDCC",
+    //   daoTagsProof: "",
+    //   projectTagsProof: "",
+    //   blockchainAddress: "ixo16xl3c8jqnk2ujk2zyafkrcm2ahkmvll6aduvej",
+    //   did: "did:ixo:entity:ff581af6e2e071758b1f94835933d038",
+    //   mnemonic: process.env.IDCC_DAO,
+    // },
+    // {
+    //   name: "BEHub",
+    //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
+    //   projectTagsProof: "bafkreibe3x5sbkgx7nn7lqjhq6ulic2ubfzubk5oynapipjfj4wvk54yfy",
+    //   blockchainAddress: "ixo1wgngzjv67wk9fr8lumdhllf84s79jm7uw75uen",
+    //   did: "did:ixo:entity:35f09ecb848032333e5b67b38b2e3d53",
+    //   mnemonic: process.env.IDCC_DAO_BEHUB,
+    // },
+    // {
+    //   name: "GoodSeed",
+    //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
+    //   projectTagsProof: "bafkreifflnjauouenjd4vymhekqjbtkzownzpwcn2c7euyzw6ajnt5z3ca",
+    //   blockchainAddress: "ixo1cehfv7xgwmf5ltvzxmkehe7ds7v9s04wsnh6af",
+    //   did: "did:ixo:entity:ffb6b788b6d6a2e7266d5a3eb7074816",
+    //   mnemonic: process.env.IDCC_DAO_GOOD_SEED,
+    // },
+    // {
+    //   name: "DreamImpact",
+    //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
+    //   projectTagsProof: "bafkreigjc3v64kgd3hx5kgejpz6on623bqptx2u752sumaywsvztigayta",
+    //   blockchainAddress: "ixo1jatf2ek6z4vzqwmtaz8jv4e9suaqmcdz6a9dcv",
+    //   did: "did:ixo:entity:7df8533fefe215c83e67107639e360b1",
+    //   mnemonic: process.env.IDCC_DAO_DREAM_IMPACT,
+    // },
+    // {
+    //   name: "CCSG",
+    //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
+    //   projectTagsProof: "bafkreigicuifavotu46uriwveb6po6e7djsmzhoabxalkyqkp6j4bhnjii",
+    //   blockchainAddress: "ixo1928ghdn5suwlv630ly92d7sfqw4e265cvqz6yz",
+    //   did: "did:ixo:entity:6578e65e6de53d873a4b8f7bd0186a9a",
+    //   mnemonic: process.env.IDCC_DAO_CCSG,
+    // },
+    // {
+    //   name: "GravityCapitalPartners",
+    //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
+    //   projectTagsProof: "bafkreicmiukizqf7lbjbfdptisvzysusipvonnzagb3kmxtik4z422lwwa",
+    //   blockchainAddress: "ixo1mf928zs6mstkjk6g0lwpm02nzukjha25d2ds40",
+    //   did: "did:ixo:entity:fa4c60f1648eaac69f0040cb064df648",
+    //   mnemonic: process.env.IDCC_DAO_GCP,
+    // },
+    // {
+    //   name: "CUHKAlumni",
+    //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
+    //   projectTagsProof: "bafkreih3cjysrafkmzgzljlkcdsr6ft5meei7jtybpspwqtobjp3jeea34",
+    //   blockchainAddress: "ixo1x2awez2fvw6cehg8xgk4a2xg8jc8jrw6cvgdx8",
+    //   did: "did:ixo:entity:c92166250fd76210662c71afbc3e4d48",
+    //   mnemonic: process.env.IDCC_DAO_CUHK,
+    // },
+    // {
+    //   name: "ICARE",
+    //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
+    //   projectTagsProof: "bafkreicsbydiasqsrwqe5h4xwraf72xyjl5pheseyxtomivvwptjxncofu",
+    //   blockchainAddress: "ixo1x029j64yjprthxy7jsye6we0sdf8ux5zzpcnr2",
+    //   did: "did:ixo:entity:512d36e9ca4b52760eca61e2dc44d4a8",
+    //   mnemonic: process.env.IDCC_DAO_ICARE,
+    // },
+    // {
+    //   name: "SEBC",
+    //   daoTagsProof: "bafkreifxervvezgvguy7nr6sdfkh4hxk7a4hjzjaliktu2jrmicipsowbm",
+    //   projectTagsProof: "bafkreibz5tr46g6qrfdabz4sbxqgubzhnsz3mz6wa7aldgjjnfz3mhhgwq",
+    //   blockchainAddress: "ixo12kl8felx4e5yae4utzs2z9rtfucktw0c9aes4h",
+    //   did: "did:ixo:entity:410704c1363e61574dfae8446c2e6b77",
+    //   mnemonic: process.env.IDCC_DAO_SEBC,
+    // },
+  ],
+};
 
 export const didArrays = {
   // IDCC Intermediaries and their Projects
@@ -197,7 +199,6 @@ export const didArrays = {
   //   ],
   // GravityCapitalPartners:
   //   [
-
   //   ],
   // CUHKAlumni:
   //   [
@@ -225,12 +226,13 @@ export const didArrays = {
   //     "did:ixo:entity:9b4168193e3d297759f77654e0630772",
   //     "did:ixo:entity:f8be78ce141be3e639057db86fbc3d71"
   //   ],
-}
+};
 
 export const adminEntityAccounts = {
   assetCollection: "ixo19e74tjy6gdwt0hjj6ph6xgtjhuulgqkzk8xaj4",
   legacyCollection: "ixo1kaluffrp0ncy3dlrerla3nd8v6zxwzmega3v7g",
   ai4gCollection: "",
+  fairClimateCollection: "",
 };
 
 // export const EcsCredentialsWorkerUrl = "http://localhost:3000/";
@@ -309,12 +311,14 @@ export const UmuziCredentialsWorkerUrl =
 //   ai4gCollection: "did:ixo:entity:3448d91ccb919450342958bb187f7eee",
 //   didOracle: "did:ixo:entity:a6e2f215dcfa4131dd299c958fdf1a03",
 //   aquaminerCollection: "",
+//   fairClimateCollection: "did:ixo:entity:9cb39e47f2ef26d3dd1c4e53c35e58a5",
 // };
 
 // export const adminEntityAccounts = {
 //   assetCollection: "ixo19e74tjy6gdwt0hjj6ph6xgtjhuulgqkzk8xaj4",
 //   legacyCollection: "ixo14x5r6stdxua49tc90jngj7k7xuwhgp9vlm5tc8",
 //   ai4gCollection: "ixo1atkdpd2cmh7tfehvsafpk6f6a0rq74ykekr4j9",
+//   fairClimateCollection: "ixo123zjnqt9cv6q8rm8lhl872l7qeuq4ugum4ykkz",
 // };
 
 // // export const EcsCredentialsWorkerUrl = "http://localhost:3006/";

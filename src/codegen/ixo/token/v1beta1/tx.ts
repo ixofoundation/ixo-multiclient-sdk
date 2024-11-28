@@ -127,6 +127,41 @@ export interface MsgRetireTokenSDKType {
 }
 export interface MsgRetireTokenResponse {}
 export interface MsgRetireTokenResponseSDKType {}
+export interface MsgTransferCredit {
+  /** address of owner */
+  owner: string;
+  /** tokens to retire, all tokens must be in same smart contract */
+  tokens: TokenBatch[];
+  /**
+   * jurisdiction is the jurisdiction of the token owner. A jurisdiction has
+   * the format: <country-code>[-<sub-national-code>[ <postal-code>]]
+   * The country-code must be 2 alphabetic characters, the sub-national-code
+   * can be 1-3 alphanumeric characters, and the postal-code can be up to 64
+   * alphanumeric characters. Only the country-code is required, while the
+   * sub-national-code and postal-code are optional and can be added for
+   * increased precision. See the valid format for this below.
+   */
+  jurisdiction: string;
+  /**
+   * reason is any arbitrary string that specifies the reason for retiring
+   * tokens.
+   */
+  reason: string;
+  /**
+   * authorization_id is the id of the authorization that was used for the
+   * credit transfer
+   */
+  authorizationId: string;
+}
+export interface MsgTransferCreditSDKType {
+  owner: string;
+  tokens: TokenBatchSDKType[];
+  jurisdiction: string;
+  reason: string;
+  authorization_id: string;
+}
+export interface MsgTransferCreditResponse {}
+export interface MsgTransferCreditResponseSDKType {}
 export interface MsgCancelToken {
   /** address of owner */
   owner: string;
@@ -775,6 +810,128 @@ export const MsgRetireTokenResponse = {
   },
   fromPartial(_: Partial<MsgRetireTokenResponse>): MsgRetireTokenResponse {
     const message = createBaseMsgRetireTokenResponse();
+    return message;
+  }
+};
+function createBaseMsgTransferCredit(): MsgTransferCredit {
+  return {
+    owner: "",
+    tokens: [],
+    jurisdiction: "",
+    reason: "",
+    authorizationId: ""
+  };
+}
+export const MsgTransferCredit = {
+  encode(message: MsgTransferCredit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.owner !== "") {
+      writer.uint32(10).string(message.owner);
+    }
+    for (const v of message.tokens) {
+      TokenBatch.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.jurisdiction !== "") {
+      writer.uint32(26).string(message.jurisdiction);
+    }
+    if (message.reason !== "") {
+      writer.uint32(34).string(message.reason);
+    }
+    if (message.authorizationId !== "") {
+      writer.uint32(42).string(message.authorizationId);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgTransferCredit {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgTransferCredit();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.owner = reader.string();
+          break;
+        case 2:
+          message.tokens.push(TokenBatch.decode(reader, reader.uint32()));
+          break;
+        case 3:
+          message.jurisdiction = reader.string();
+          break;
+        case 4:
+          message.reason = reader.string();
+          break;
+        case 5:
+          message.authorizationId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgTransferCredit {
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => TokenBatch.fromJSON(e)) : [],
+      jurisdiction: isSet(object.jurisdiction) ? String(object.jurisdiction) : "",
+      reason: isSet(object.reason) ? String(object.reason) : "",
+      authorizationId: isSet(object.authorizationId) ? String(object.authorizationId) : ""
+    };
+  },
+  toJSON(message: MsgTransferCredit): unknown {
+    const obj: any = {};
+    message.owner !== undefined && (obj.owner = message.owner);
+    if (message.tokens) {
+      obj.tokens = message.tokens.map(e => e ? TokenBatch.toJSON(e) : undefined);
+    } else {
+      obj.tokens = [];
+    }
+    message.jurisdiction !== undefined && (obj.jurisdiction = message.jurisdiction);
+    message.reason !== undefined && (obj.reason = message.reason);
+    message.authorizationId !== undefined && (obj.authorizationId = message.authorizationId);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgTransferCredit>): MsgTransferCredit {
+    const message = createBaseMsgTransferCredit();
+    message.owner = object.owner ?? "";
+    message.tokens = object.tokens?.map(e => TokenBatch.fromPartial(e)) || [];
+    message.jurisdiction = object.jurisdiction ?? "";
+    message.reason = object.reason ?? "";
+    message.authorizationId = object.authorizationId ?? "";
+    return message;
+  }
+};
+function createBaseMsgTransferCreditResponse(): MsgTransferCreditResponse {
+  return {};
+}
+export const MsgTransferCreditResponse = {
+  encode(_: MsgTransferCreditResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgTransferCreditResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgTransferCreditResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgTransferCreditResponse {
+    return {};
+  },
+  toJSON(_: MsgTransferCreditResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgTransferCreditResponse>): MsgTransferCreditResponse {
+    const message = createBaseMsgTransferCreditResponse();
     return message;
   }
 };

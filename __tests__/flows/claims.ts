@@ -80,6 +80,24 @@ export const claimsBasic = () =>
     //   ])
     // );
 
+    // Create relayer node entity first
+    let relayerNodeEntity = "";
+    testMsg("/ixo.entity.v1beta1.MsgCreateEntity protocol", async () => {
+      const res = await Entity.CreateEntity(
+        "dao",
+        undefined,
+        "",
+        WalletUsers.charlie
+      );
+      relayerNodeEntity = utils.common.getValueFromEvents(
+        res,
+        "wasm",
+        "token_id"
+      );
+      console.log({ relayerNodeEntity });
+      return res;
+    });
+
     // Create protocol
     let protocol = "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b";
     let adminAccount = "ixo14p4eh3hvunmlvegyysfp5lg8gf6cp6suxxx672";
@@ -88,7 +106,7 @@ export const claimsBasic = () =>
       const res = await Entity.CreateEntity(
         "protocol",
         undefined,
-        "",
+        relayerNodeEntity,
         WalletUsers.charlie
       );
       protocol = utils.common.getValueFromEvents(res, "wasm", "token_id");
@@ -1027,11 +1045,11 @@ export const supamotoClaims3 = () =>
     // });
 
     test("Generate Fuel Purchase claims and evaluate them", async () => {
-      type CollectionType = "Legacy" | "Genesis" | "ai4g";
+      type CollectionType = "Legacy" | "Genesis" | "ai4g" | "fairClimate";
       type NetworkType = "mainnet" | "testnet";
 
       let networkToUse: NetworkType = "mainnet";
-      let collectionToUse: CollectionType = "Legacy";
+      let collectionToUse: CollectionType = "fairClimate" as any;
 
       const collectionToNetworkMapping = {
         Genesis: {
@@ -1046,7 +1064,13 @@ export const supamotoClaims3 = () =>
           mainnet: "32",
           testnet: "42",
         },
+        fairClimate: {
+          mainnet: "46",
+          testnet: "",
+        },
       };
+      if (!collectionToNetworkMapping[collectionToUse][networkToUse])
+        throw new Error("no network mapping found");
       console.log(
         "collection to use: ",
         collectionToNetworkMapping[collectionToUse][networkToUse]
@@ -1122,6 +1146,7 @@ export const supamotoClaims3 = () =>
         return a;
       }, {});
 
+<<<<<<< HEAD
       const stovesCollection =
         // @ts-ignore
         collectionToUse === "Legacy"
@@ -1131,6 +1156,37 @@ export const supamotoClaims3 = () =>
           : require("../../assets/documents/emerging/stoves_genesis_collection.json").map(
             (s: any) => s.externalId
           );
+=======
+      let stovesCollection: string[];
+      switch (collectionToUse) {
+        case "Legacy":
+          stovesCollection =
+            require("../../assets/documents/emerging/stoves_legacy_collection.json").map(
+              (s: any) => s.externalId
+            );
+          break;
+        case "ai4g":
+          stovesCollection =
+            require("../../assets/documents/emerging/stoves_ai4g_collection.json").map(
+              (s: any) => s.externalId
+            );
+          break;
+        case "fairClimate":
+          stovesCollection =
+            require("../../assets/documents/emerging/stoves_fair_climate_collection.json").map(
+              (s: any) => s.externalId
+            );
+          break;
+        case "Genesis":
+          stovesCollection =
+            require("../../assets/documents/emerging/stoves_genesis_collection.json").map(
+              (s: any) => s.externalId
+            );
+          break;
+        default:
+          throw new Error("no collection found");
+      }
+>>>>>>> develop
 
       Object.keys(purchaseData).forEach((k) => {
         // purchaseData[k].sort((a, b) => a.time_paid - b.time_paid);
@@ -1198,7 +1254,7 @@ export const supamotoClaims3 = () =>
       console.time("claims");
       for (const stovePurchases of purchaseData) {
         index++;
-        // if (index < 108) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
+        // if (index < 36) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
 
         console.log(
           "starting batch " +
@@ -1569,8 +1625,8 @@ export const supamotoCreateCollection = () =>
       ])
     );
 
-    const collection = dids.assetCollection;
-    const collectionAdminAccount = adminEntityAccounts.assetCollection;
+    const collection = dids.fairClimateCollection;
+    const collectionAdminAccount = adminEntityAccounts.fairClimateCollection;
     const protocol = dids.cleanCookingProtocol;
 
     let collectionId = "1";
@@ -1584,9 +1640,8 @@ export const supamotoCreateCollection = () =>
         // mainnet using 990000 uusdc ibc (ibc/6BBE9BD4246F8E04948D5A4EEE7164B2630263B9EBB5E7DC5F0A46C62A2FF97B old) per evaluation
         // mainnet using 990000 uusdc ibc (ibc/2658C97FC74B74AB1898982081523C455561BBE3C705E47707021D47F3D94B38 new) per evaluation
         {
-          amount: "990000",
-          denom:
-            "ibc/2658C97FC74B74AB1898982081523C455561BBE3C705E47707021D47F3D94B38",
+          amount: "1000000",
+          denom: "uixo",
         }
       );
       collectionId = utils.common.getValueFromEvents(

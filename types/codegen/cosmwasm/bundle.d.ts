@@ -5,13 +5,13 @@ import * as _135 from "./wasm/v1/proposal_legacy";
 import * as _136 from "./wasm/v1/query";
 import * as _137 from "./wasm/v1/tx";
 import * as _138 from "./wasm/v1/types";
-import * as _287 from "./wasm/v1/query.rpc.Query";
-import * as _288 from "./wasm/v1/tx.rpc.msg";
+import * as _294 from "./wasm/v1/query.rpc.Query";
+import * as _295 from "./wasm/v1/tx.rpc.msg";
 export declare namespace cosmwasm {
     namespace wasm {
         const v1: {
-            MsgClientImpl: typeof _288.MsgClientImpl;
-            QueryClientImpl: typeof _287.QueryClientImpl;
+            MsgClientImpl: typeof _295.MsgClientImpl;
+            QueryClientImpl: typeof _294.QueryClientImpl;
             createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                 contractInfo(request: _136.QueryContractInfoRequest): Promise<_136.QueryContractInfoResponse>;
                 contractHistory(request: _136.QueryContractHistoryRequest): Promise<_136.QueryContractHistoryResponse>;
@@ -767,7 +767,7 @@ export declare namespace cosmwasm {
             };
             cosmwasm: {
                 wasm: {
-                    v1: _288.MsgClientImpl;
+                    v1: _295.MsgClientImpl;
                 };
             };
         }>;

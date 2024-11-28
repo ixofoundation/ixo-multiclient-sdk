@@ -5,7 +5,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "ixo/mint/v1beta1/mint.proto";
 
-option go_package = "github.com/ixofoundation/ixo-blockchain/v3/x/mint/types";
+option go_package = "github.com/ixofoundation/ixo-blockchain/v4/x/mint/types";
 
 // Query provides defines the gRPC querier service.
 service Query {
@@ -38,7 +38,7 @@ message QueryEpochProvisionsRequest {}
 // Query/EpochProvisions RPC method.
 message QueryEpochProvisionsResponse {
   // epoch_provisions is the current minting per epoch provisions value.
-  bytes epoch_provisions = 1 [
+  string epoch_provisions = 1 [
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
     (gogoproto.nullable) = false
   ];
