@@ -14,6 +14,7 @@ import * as Queries from "./flows/quickQueries";
 import * as Claims from "./flows/claims";
 import * as Authz from "./flows/authz";
 import * as Smartaccount from "./flows/smartaccount";
+import * as LiquidStake from "./flows/liquidStaking";
 import { dids } from "./setup/constants";
 import { idcc_constants } from "./setup/idcc/creds";
 import { web3Storage } from "./setup/web3";
@@ -36,6 +37,7 @@ IID.generateBlockchainTestUsers();
 // Claims.claimsBasic();
 // CosmWasm.daoCore();
 // Smartaccount.smartaccountBasic();
+// LiquidStake.prepareModuleWithProposals();
 // Cosmos.sendTokens();
 // IID.iidAddEdKeys();
 // Bonds.bondsSellsDisabled();
@@ -59,7 +61,6 @@ IID.generateBlockchainTestUsers();
 //   false
 // );
 // Entity.enititiesSetStatus();
-// Claims.supamotoClaims2();
 // Claims.claimsUpdateCollectionPayments();
 // CosmWasm.swapBasic();
 // CosmWasm.swapContract();
@@ -71,9 +72,11 @@ IID.generateBlockchainTestUsers();
 // Cosmos.authzBasic();
 // Cosmos.textProposalBasic();
 // Authz.authzBasic();
+// CosmWasm.daoCore2();
 // Claims.supamotoClaims3();
 // Queries.quickQueries();
 // web3Storage();
+// IID.addEdKeysToDid();
 
 // ------------------------------------------
 // Run the below after a devnet reset

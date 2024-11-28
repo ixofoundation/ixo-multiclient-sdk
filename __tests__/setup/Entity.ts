@@ -523,7 +523,8 @@ export const AddEdKeysVerification = async (entityId: string) => {
   const did = tester.did;
 
   // Add ed keys user to verification method for verification of credentials
-  const edPubKey = (await getUser(WalletUsers.alice).getAccounts())[0].pubkey;
+  const edPubKey = (await getUser(WalletUsers.alice, "ed").getAccounts())[0]
+    .pubkey;
   const pubkeyBase58 = base58.encode(edPubKey);
 
   const message = {

@@ -33,14 +33,14 @@ export interface QueryEpochProvisionsRequestSDKType {
  */
 export interface QueryEpochProvisionsResponse {
     /** epoch_provisions is the current minting per epoch provisions value. */
-    epochProvisions: Uint8Array;
+    epochProvisions: string;
 }
 /**
  * QueryEpochProvisionsResponse is the response type for the
  * Query/EpochProvisions RPC method.
  */
 export interface QueryEpochProvisionsResponseSDKType {
-    epoch_provisions: Uint8Array;
+    epoch_provisions: string;
 }
 export declare const QueryParamsRequest: {
     encode(_: QueryParamsRequest, writer?: _m0.Writer): _m0.Writer;

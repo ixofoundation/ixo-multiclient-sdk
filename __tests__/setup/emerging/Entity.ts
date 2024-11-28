@@ -187,7 +187,9 @@ export const CreateEntityAssetSupamotoInstance = async (
     index: number;
     deviceCreds: string;
   }[],
-  relayerDid?: string
+  relayerDid?: string,
+  tokenMetadataCID?: string,
+  profileMetadataCID?: string
 ) => {
   const client = await createClient();
 
@@ -206,7 +208,7 @@ export const CreateEntityAssetSupamotoInstance = async (
       controller: [did],
       service: [],
       startDate: utils.proto.toTimestamp(new Date()),
-      endDate: utils.proto.toTimestamp(new Date("2024-07-31T23:59:59Z")),
+      // endDate: utils.proto.toTimestamp(new Date("2024-07-31T23:59:59Z")),
       verification: createIidVerificationMethods({
         did,
         pubkey: myPubKey,
@@ -241,9 +243,12 @@ export const CreateEntityAssetSupamotoInstance = async (
           type: "TokenMetadata",
           description: "Impact Token",
           mediaType: "application/json",
-          serviceEndpoint:
-            "ipfs:bafkreigsemewlm4ihwnuxbbironfvex56o5k6ho5hdmcacvrtybpqlhxne",
-          proof: "bafkreigsemewlm4ihwnuxbbironfvex56o5k6ho5hdmcacvrtybpqlhxne",
+          serviceEndpoint: tokenMetadataCID
+            ? `ipfs:${tokenMetadataCID}`
+            : "ipfs:bafkreigsemewlm4ihwnuxbbironfvex56o5k6ho5hdmcacvrtybpqlhxne",
+          proof:
+            tokenMetadataCID ||
+            "bafkreigsemewlm4ihwnuxbbironfvex56o5k6ho5hdmcacvrtybpqlhxne",
           encrypted: "false",
           right: "",
         },
@@ -252,9 +257,12 @@ export const CreateEntityAssetSupamotoInstance = async (
           type: "Settings",
           description: "Profile",
           mediaType: "application/ld+json",
-          serviceEndpoint:
-            "ipfs:bafkreihavbzy2nugfl7qoxrmpcn7nwlmwrohoxocxzugvjxha575de5jde",
-          proof: "bafkreihavbzy2nugfl7qoxrmpcn7nwlmwrohoxocxzugvjxha575de5jde",
+          serviceEndpoint: profileMetadataCID
+            ? `ipfs:${profileMetadataCID}`
+            : "ipfs:bafkreihavbzy2nugfl7qoxrmpcn7nwlmwrohoxocxzugvjxha575de5jde",
+          proof:
+            profileMetadataCID ||
+            "bafkreihavbzy2nugfl7qoxrmpcn7nwlmwrohoxocxzugvjxha575de5jde",
           encrypted: "false",
           right: "",
         },

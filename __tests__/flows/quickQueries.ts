@@ -10,7 +10,7 @@ import gqlQuery, {
 import { RPC_URL, WalletUsers } from "../helpers/constants";
 import { AuthInfo, TxBody } from "../../src/codegen/cosmos/tx/v1beta1/tx";
 import { fromHex } from "@cosmjs/encoding";
-import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { connectComet, Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import {
   JsonToArray,
   Uint8ArrayToJS,
@@ -179,30 +179,48 @@ export const quickQueries = () =>
     // });
 
     // test("Query block results from Tendermint Clint", async () => {
-    //   const res = await (
-    //     await Tendermint34Client.connect(RPC_URL)
-    //   ).blockResults(2401);
+    //   const res = await (await connectComet(RPC_URL)).blockResults(498);
+    //   console.dir(res, { depth: null });
 
     //   const ignoreList = [
-    //     "coin_received",
+    //     // "coin_received",
     //     "rewards",
     //     "commission",
     //     // "transfer",
     //     // "coin_spent",
-    //     // "mint",
+    //     "mint",
     //   ];
     //   console.dir(
     //     {
     //       beginBlockEvents: res.beginBlockEvents.map((e) =>
     //         ignoreList.includes(e.type)
     //           ? null
-    //           : e.attributes.map((a) => ({
-    //               a: Uint8ArrayToJS(a.key),
-    //               b: Uint8ArrayToJS(a.value),
-    //             }))
+    //           : {
+    //               type: e.type,
+    //               attributes: e.attributes.map((a) => ({
+    //                 key:
+    //                   typeof a.key === "string" ? a.key : Uint8ArrayToJS(a.key),
+    //                 value:
+    //                   typeof a.value === "string"
+    //                     ? a.value
+    //                     : Uint8ArrayToJS(a.value),
+    //               })),
+    //             }
     //       ),
     //       endBlockEvents: res.endBlockEvents.map((e) =>
-    //         ignoreList.includes(e.type) ? null : e
+    //         ignoreList.includes(e.type)
+    //           ? null
+    //           : {
+    //               type: e.type,
+    //               attributes: e.attributes.map((a) => ({
+    //                 key:
+    //                   typeof a.key === "string" ? a.key : Uint8ArrayToJS(a.key),
+    //                 value:
+    //                   typeof a.value === "string"
+    //                     ? a.value
+    //                     : Uint8ArrayToJS(a.value),
+    //               })),
+    //             }
     //       ),
     //     },
     //     { depth: null }

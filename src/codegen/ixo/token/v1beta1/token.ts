@@ -43,6 +43,11 @@ export interface Token {
    * contract address
    */
   cancelled: TokensCancelled[];
+  /**
+   * credits that has been transferred for this Token with specific name and
+   * contract address
+   */
+  transferred: CreditsTransferred[];
 }
 export interface TokenSDKType {
   minter: string;
@@ -58,6 +63,7 @@ export interface TokenSDKType {
   stopped: boolean;
   retired: TokensRetiredSDKType[];
   cancelled: TokensCancelledSDKType[];
+  transferred: CreditsTransferredSDKType[];
 }
 export interface TokensRetired {
   id: string;
@@ -72,6 +78,22 @@ export interface TokensRetiredSDKType {
   jurisdiction: string;
   amount: string;
   owner: string;
+}
+export interface CreditsTransferred {
+  id: string;
+  reason: string;
+  jurisdiction: string;
+  amount: string;
+  owner: string;
+  authorizationId: string;
+}
+export interface CreditsTransferredSDKType {
+  id: string;
+  reason: string;
+  jurisdiction: string;
+  amount: string;
+  owner: string;
+  authorization_id: string;
 }
 export interface TokensCancelled {
   id: string;
@@ -181,7 +203,8 @@ function createBaseToken(): Token {
     paused: false,
     stopped: false,
     retired: [],
-    cancelled: []
+    cancelled: [],
+    transferred: []
   };
 }
 export const Token = {
@@ -224,6 +247,9 @@ export const Token = {
     }
     for (const v of message.cancelled) {
       TokensCancelled.encode(v!, writer.uint32(106).fork()).ldelim();
+    }
+    for (const v of message.transferred) {
+      CreditsTransferred.encode(v!, writer.uint32(114).fork()).ldelim();
     }
     return writer;
   },
@@ -273,6 +299,9 @@ export const Token = {
         case 13:
           message.cancelled.push(TokensCancelled.decode(reader, reader.uint32()));
           break;
+        case 14:
+          message.transferred.push(CreditsTransferred.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -294,7 +323,8 @@ export const Token = {
       paused: isSet(object.paused) ? Boolean(object.paused) : false,
       stopped: isSet(object.stopped) ? Boolean(object.stopped) : false,
       retired: Array.isArray(object?.retired) ? object.retired.map((e: any) => TokensRetired.fromJSON(e)) : [],
-      cancelled: Array.isArray(object?.cancelled) ? object.cancelled.map((e: any) => TokensCancelled.fromJSON(e)) : []
+      cancelled: Array.isArray(object?.cancelled) ? object.cancelled.map((e: any) => TokensCancelled.fromJSON(e)) : [],
+      transferred: Array.isArray(object?.transferred) ? object.transferred.map((e: any) => CreditsTransferred.fromJSON(e)) : []
     };
   },
   toJSON(message: Token): unknown {
@@ -320,6 +350,11 @@ export const Token = {
     } else {
       obj.cancelled = [];
     }
+    if (message.transferred) {
+      obj.transferred = message.transferred.map(e => e ? CreditsTransferred.toJSON(e) : undefined);
+    } else {
+      obj.transferred = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<Token>): Token {
@@ -337,6 +372,7 @@ export const Token = {
     message.stopped = object.stopped ?? false;
     message.retired = object.retired?.map(e => TokensRetired.fromPartial(e)) || [];
     message.cancelled = object.cancelled?.map(e => TokensCancelled.fromPartial(e)) || [];
+    message.transferred = object.transferred?.map(e => CreditsTransferred.fromPartial(e)) || [];
     return message;
   }
 };
@@ -422,6 +458,101 @@ export const TokensRetired = {
     message.jurisdiction = object.jurisdiction ?? "";
     message.amount = object.amount ?? "";
     message.owner = object.owner ?? "";
+    return message;
+  }
+};
+function createBaseCreditsTransferred(): CreditsTransferred {
+  return {
+    id: "",
+    reason: "",
+    jurisdiction: "",
+    amount: "",
+    owner: "",
+    authorizationId: ""
+  };
+}
+export const CreditsTransferred = {
+  encode(message: CreditsTransferred, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.reason !== "") {
+      writer.uint32(18).string(message.reason);
+    }
+    if (message.jurisdiction !== "") {
+      writer.uint32(26).string(message.jurisdiction);
+    }
+    if (message.amount !== "") {
+      writer.uint32(34).string(message.amount);
+    }
+    if (message.owner !== "") {
+      writer.uint32(42).string(message.owner);
+    }
+    if (message.authorizationId !== "") {
+      writer.uint32(50).string(message.authorizationId);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): CreditsTransferred {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCreditsTransferred();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+        case 2:
+          message.reason = reader.string();
+          break;
+        case 3:
+          message.jurisdiction = reader.string();
+          break;
+        case 4:
+          message.amount = reader.string();
+          break;
+        case 5:
+          message.owner = reader.string();
+          break;
+        case 6:
+          message.authorizationId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): CreditsTransferred {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      reason: isSet(object.reason) ? String(object.reason) : "",
+      jurisdiction: isSet(object.jurisdiction) ? String(object.jurisdiction) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "",
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      authorizationId: isSet(object.authorizationId) ? String(object.authorizationId) : ""
+    };
+  },
+  toJSON(message: CreditsTransferred): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.reason !== undefined && (obj.reason = message.reason);
+    message.jurisdiction !== undefined && (obj.jurisdiction = message.jurisdiction);
+    message.amount !== undefined && (obj.amount = message.amount);
+    message.owner !== undefined && (obj.owner = message.owner);
+    message.authorizationId !== undefined && (obj.authorizationId = message.authorizationId);
+    return obj;
+  },
+  fromPartial(object: Partial<CreditsTransferred>): CreditsTransferred {
+    const message = createBaseCreditsTransferred();
+    message.id = object.id ?? "";
+    message.reason = object.reason ?? "";
+    message.jurisdiction = object.jurisdiction ?? "";
+    message.amount = object.amount ?? "";
+    message.owner = object.owner ?? "";
+    message.authorizationId = object.authorizationId ?? "";
     return message;
   }
 };

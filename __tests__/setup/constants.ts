@@ -36,12 +36,14 @@ export const dids = {
   ai4gCollection: "",
   didOracle: "",
   aquaminerCollection: "did:ixo:entity:323dd1f9999c20142789010dae287a65",
+  fairClimateCollection: "",
 };
 
 export const adminEntityAccounts = {
   assetCollection: "ixo19e74tjy6gdwt0hjj6ph6xgtjhuulgqkzk8xaj4",
   legacyCollection: "ixo1kaluffrp0ncy3dlrerla3nd8v6zxwzmega3v7g",
   ai4gCollection: "",
+  fairClimateCollection: "",
 };
 
 // export const EcsCredentialsWorkerUrl = "http://localhost:3000/";
@@ -120,12 +122,14 @@ export const UmuziCredentialsWorkerUrl =
 //   ai4gCollection: "did:ixo:entity:3448d91ccb919450342958bb187f7eee",
 //   didOracle: "did:ixo:entity:a6e2f215dcfa4131dd299c958fdf1a03",
 //   aquaminerCollection: "",
+//   fairClimateCollection: "did:ixo:entity:9cb39e47f2ef26d3dd1c4e53c35e58a5",
 // };
 
 // export const adminEntityAccounts = {
 //   assetCollection: "ixo19e74tjy6gdwt0hjj6ph6xgtjhuulgqkzk8xaj4",
 //   legacyCollection: "ixo14x5r6stdxua49tc90jngj7k7xuwhgp9vlm5tc8",
 //   ai4gCollection: "ixo1atkdpd2cmh7tfehvsafpk6f6a0rq74ykekr4j9",
+//   fairClimateCollection: "ixo123zjnqt9cv6q8rm8lhl872l7qeuq4ugum4ykkz",
 // };
 
 // // export const EcsCredentialsWorkerUrl = "http://localhost:3006/";

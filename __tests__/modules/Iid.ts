@@ -148,6 +148,32 @@ export const DeleteIidContext = async (did?: string, key?: string) => {
   return response;
 };
 
+export const DeleteIidContexts = async (
+  data: { did: string; key: string }[]
+) => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const messages = data.map(({ did, key }) => ({
+    typeUrl: "/ixo.iid.v1beta1.MsgDeleteIidContext",
+    value: ixo.iid.v1beta1.MsgDeleteIidContext.fromPartial({
+      id: did,
+      contextKey: key,
+      signer: myAddress,
+    }),
+  }));
+
+  const response = await client.signAndBroadcast(
+    myAddress,
+    messages,
+    getFee(messages.length)
+  );
+  return response;
+};
+
 /**
  * @param relationships list with values: 'authentication' | 'assertionMethod' | 'keyAgreement' | 'capabilityInvocation' | 'capabilityDelegation'
  */

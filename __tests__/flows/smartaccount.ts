@@ -2,7 +2,7 @@ import { testMsg } from "../helpers/common";
 import * as Smartaccount from "../modules/Smartaccount";
 
 export const smartaccountBasic = () =>
-  describe("Testing the cosmos bank module", () => {
+  describe("Testing the ixo smartaccount module", () => {
     testMsg("/ixo.smartaccount.v1beta1.MsgAddAuthenticator", async () =>
       Smartaccount.MsgAddAuthenticator()
     );

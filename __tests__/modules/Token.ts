@@ -164,6 +164,36 @@ export const RetireToken = async (
   return response;
 };
 
+export const TransferCredit = async (
+  tokens: {
+    id: string;
+    amount: number;
+  }[]
+) => {
+  const client = await createClient();
+
+  const tester = (await getUser(WalletUsers.tester).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/ixo.token.v1beta1.MsgTransferCredit",
+    value: ixo.token.v1beta1.MsgTransferCredit.fromPartial({
+      owner: tester,
+      reason: "reason",
+      jurisdiction: "jurisdiction",
+      tokens: tokens.map((b) =>
+        ixo.token.v1beta1.TokenBatch.fromPartial({
+          id: b.id,
+          amount: b.amount.toString(),
+        })
+      ),
+      authorizationId: "authorizationId",
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
 export const PauseToken = async (contractAddress: string, paused: boolean) => {
   const client = await createClient();
 

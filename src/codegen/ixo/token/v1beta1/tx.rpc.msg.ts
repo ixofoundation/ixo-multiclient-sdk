@@ -1,13 +1,14 @@
 //@ts-nocheck
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { MsgCreateToken, MsgCreateTokenResponse, MsgMintToken, MsgMintTokenResponse, MsgTransferToken, MsgTransferTokenResponse, MsgRetireToken, MsgRetireTokenResponse, MsgCancelToken, MsgCancelTokenResponse, MsgPauseToken, MsgPauseTokenResponse, MsgStopToken, MsgStopTokenResponse } from "./tx";
+import { MsgCreateToken, MsgCreateTokenResponse, MsgMintToken, MsgMintTokenResponse, MsgTransferToken, MsgTransferTokenResponse, MsgRetireToken, MsgRetireTokenResponse, MsgTransferCredit, MsgTransferCreditResponse, MsgCancelToken, MsgCancelTokenResponse, MsgPauseToken, MsgPauseTokenResponse, MsgStopToken, MsgStopTokenResponse } from "./tx";
 /** Msg defines the project Msg service. */
 export interface Msg {
   createToken(request: MsgCreateToken): Promise<MsgCreateTokenResponse>;
   mintToken(request: MsgMintToken): Promise<MsgMintTokenResponse>;
   transferToken(request: MsgTransferToken): Promise<MsgTransferTokenResponse>;
   retireToken(request: MsgRetireToken): Promise<MsgRetireTokenResponse>;
+  transferCredit(request: MsgTransferCredit): Promise<MsgTransferCreditResponse>;
   cancelToken(request: MsgCancelToken): Promise<MsgCancelTokenResponse>;
   pauseToken(request: MsgPauseToken): Promise<MsgPauseTokenResponse>;
   stopToken(request: MsgStopToken): Promise<MsgStopTokenResponse>;
@@ -20,6 +21,7 @@ export class MsgClientImpl implements Msg {
     this.mintToken = this.mintToken.bind(this);
     this.transferToken = this.transferToken.bind(this);
     this.retireToken = this.retireToken.bind(this);
+    this.transferCredit = this.transferCredit.bind(this);
     this.cancelToken = this.cancelToken.bind(this);
     this.pauseToken = this.pauseToken.bind(this);
     this.stopToken = this.stopToken.bind(this);
@@ -43,6 +45,11 @@ export class MsgClientImpl implements Msg {
     const data = MsgRetireToken.encode(request).finish();
     const promise = this.rpc.request("ixo.token.v1beta1.Msg", "RetireToken", data);
     return promise.then(data => MsgRetireTokenResponse.decode(new _m0.Reader(data)));
+  }
+  transferCredit(request: MsgTransferCredit): Promise<MsgTransferCreditResponse> {
+    const data = MsgTransferCredit.encode(request).finish();
+    const promise = this.rpc.request("ixo.token.v1beta1.Msg", "TransferCredit", data);
+    return promise.then(data => MsgTransferCreditResponse.decode(new _m0.Reader(data)));
   }
   cancelToken(request: MsgCancelToken): Promise<MsgCancelTokenResponse> {
     const data = MsgCancelToken.encode(request).finish();

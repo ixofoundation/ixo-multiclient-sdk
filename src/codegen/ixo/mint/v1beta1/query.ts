@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Params, ParamsSDKType } from "./mint";
 import * as _m0 from "protobufjs/minimal";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { isSet } from "../../../helpers";
 /** QueryParamsRequest is the request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 /** QueryParamsRequest is the request type for the Query/Params RPC method. */
@@ -31,14 +31,14 @@ export interface QueryEpochProvisionsRequestSDKType {}
  */
 export interface QueryEpochProvisionsResponse {
   /** epoch_provisions is the current minting per epoch provisions value. */
-  epochProvisions: Uint8Array;
+  epochProvisions: string;
 }
 /**
  * QueryEpochProvisionsResponse is the response type for the
  * Query/EpochProvisions RPC method.
  */
 export interface QueryEpochProvisionsResponseSDKType {
-  epoch_provisions: Uint8Array;
+  epoch_provisions: string;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
@@ -153,13 +153,13 @@ export const QueryEpochProvisionsRequest = {
 };
 function createBaseQueryEpochProvisionsResponse(): QueryEpochProvisionsResponse {
   return {
-    epochProvisions: new Uint8Array()
+    epochProvisions: ""
   };
 }
 export const QueryEpochProvisionsResponse = {
   encode(message: QueryEpochProvisionsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.epochProvisions.length !== 0) {
-      writer.uint32(10).bytes(message.epochProvisions);
+    if (message.epochProvisions !== "") {
+      writer.uint32(10).string(message.epochProvisions);
     }
     return writer;
   },
@@ -171,7 +171,7 @@ export const QueryEpochProvisionsResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.epochProvisions = reader.bytes();
+          message.epochProvisions = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -182,17 +182,17 @@ export const QueryEpochProvisionsResponse = {
   },
   fromJSON(object: any): QueryEpochProvisionsResponse {
     return {
-      epochProvisions: isSet(object.epochProvisions) ? bytesFromBase64(object.epochProvisions) : new Uint8Array()
+      epochProvisions: isSet(object.epochProvisions) ? String(object.epochProvisions) : ""
     };
   },
   toJSON(message: QueryEpochProvisionsResponse): unknown {
     const obj: any = {};
-    message.epochProvisions !== undefined && (obj.epochProvisions = base64FromBytes(message.epochProvisions !== undefined ? message.epochProvisions : new Uint8Array()));
+    message.epochProvisions !== undefined && (obj.epochProvisions = message.epochProvisions);
     return obj;
   },
   fromPartial(object: Partial<QueryEpochProvisionsResponse>): QueryEpochProvisionsResponse {
     const message = createBaseQueryEpochProvisionsResponse();
-    message.epochProvisions = object.epochProvisions ?? new Uint8Array();
+    message.epochProvisions = object.epochProvisions ?? "";
     return message;
   }
 };

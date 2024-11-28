@@ -74,27 +74,29 @@ export const transferEntities = (mnemonic?: string) =>
       ])
     );
 
-    const recipient = "did:x:zQ3sheymdo5FLT64zGESnj6i7uhdXdgoELA5z3JW9ayVNcF6L";
-    const stovesCollection = require("../../assets/documents/emerging/stoves_genesis_collection.json");
+    const recipient = "did:x:zQ3shtUckPKEBN6fWWRTWViBFPpVtCce6DTWPrWHTSwczyLJN";
 
     // can provide static dids of entities to transfer
-    let entities = ["did:ixo:entity:fd353f85b5114b518235deda41bc8622"];
+    let entities = [
+      "did:ixo:entity:e0f8c06a5d2798e4c5f461e386de8396",
+      "did:ixo:entity:56d1ea4062745f04706e38f495e2482e",
+    ];
 
-    // or provide static ids of stoves to transfer, if this list is empty then will use the dids above
-    // the stoves here must be from the stovesCollection imported above
-    const stoveIds = ["310025325"];
+    // // or provide static ids of stoves to transfer, if this list is empty then will use the dids above
+    // // the stoves here must be from the stovesCollection imported above
+    // const stovesCollection = require("../../assets/documents/emerging/stoves_genesis_collection.json");
+    // const stoveIds = ["310025325"];
+    // if (stoveIds?.length) {
+    //   entities = stoveIds
+    //     .map((id) => stovesCollection.find((e) => e.externalId === id)?.id)
+    //     ?.filter((e) => !!e);
+    // }
 
-    if (stoveIds?.length) {
-      entities = stoveIds
-        .map((id) => stovesCollection.find((e) => e.externalId === id)?.id)
-        ?.filter((e) => !!e);
-    }
-
-    // paste all dids of entites belonging to user here, so can filter out entities not belonging to user
-    const entitiesBelongingToUser: string[] = [];
-    if (entitiesBelongingToUser?.length) {
-      entities = entities.filter((e) => entitiesBelongingToUser.includes(e));
-    }
+    // // paste all dids of entites belonging to user here, so can filter out entities not belonging to user
+    // const entitiesBelongingToUser: string[] = [];
+    // if (entitiesBelongingToUser?.length) {
+    //   entities = entities.filter((e) => entitiesBelongingToUser.includes(e));
+    // }
 
     // const entitiesToTransfer = usersEntities
     //   .map((e) => {

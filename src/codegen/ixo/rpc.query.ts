@@ -98,6 +98,9 @@ export const createRPCQueryClient = async ({
       iid: {
         v1beta1: (await import("./iid/v1beta1/query.rpc.Query")).createRpcQueryExtension(client)
       },
+      liquidstake: {
+        v1beta1: (await import("./liquidstake/v1beta1/query.rpc.Query")).createRpcQueryExtension(client)
+      },
       mint: {
         v1beta1: (await import("./mint/v1beta1/query.rpc.Query")).createRpcQueryExtension(client)
       },

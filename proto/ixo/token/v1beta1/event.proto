@@ -1,7 +1,7 @@
 syntax = "proto3";
 package ixo.token.v1beta1;
 
-option go_package = "github.com/ixofoundation/ixo-blockchain/v3/x/token/types";
+option go_package = "github.com/ixofoundation/ixo-blockchain/v4/x/token/types";
 
 import "ixo/token/v1beta1/token.proto";
 import "ixo/token/v1beta1/tx.proto";
@@ -48,6 +48,14 @@ message TokenCancelledEvent {
 
 // TokenRetiredEvent is an event triggered on a Token retire execution
 message TokenRetiredEvent {
+  // the token owner
+  string owner = 1;
+  repeated TokenBatch tokens = 2;
+}
+
+// CreditsTransferredEvent is an event triggered on a Credit transfer
+// execution
+message CreditsTransferredEvent {
   // the token owner
   string owner = 1;
   repeated TokenBatch tokens = 2;

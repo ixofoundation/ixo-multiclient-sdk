@@ -1,14 +1,14 @@
 {
   "kgsPellets": {
-    "average": 31.475409836065573,
-    "totalClaims": 61,
-    "totalKgPellets": 1920
+    "average": 32.72457985733285,
+    "totalClaims": 8271,
+    "totalKgPellets": 270665
   },
   "carbonCredits": {
-    "average": 344.3409836065577,
-    "totalClaims": 61,
-    "totalCarbonCredits": 21004.80000000002
+    "average": 298.1209225003055,
+    "totalClaims": 8271,
+    "totalCarbonCredits": 2465758.1500000264
   },
-  "amountOfStoves": 58,
-  "amountOfPurchases": 61
+  "amountOfStoves": 1186,
+  "amountOfPurchases": 8271
 }
