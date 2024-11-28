@@ -74,6 +74,23 @@ export interface TokenRetiredEventSDKType {
     owner: string;
     tokens: TokenBatchSDKType[];
 }
+/**
+ * CreditsTransferredEvent is an event triggered on a Credit transfer
+ * execution
+ */
+export interface CreditsTransferredEvent {
+    /** the token owner */
+    owner: string;
+    tokens: TokenBatch[];
+}
+/**
+ * CreditsTransferredEvent is an event triggered on a Credit transfer
+ * execution
+ */
+export interface CreditsTransferredEventSDKType {
+    owner: string;
+    tokens: TokenBatchSDKType[];
+}
 /** TokenPausedEvent is an event triggered on a Token pause/unpause execution */
 export interface TokenPausedEvent {
     /** the minter address */
@@ -141,6 +158,13 @@ export declare const TokenRetiredEvent: {
     fromJSON(object: any): TokenRetiredEvent;
     toJSON(message: TokenRetiredEvent): unknown;
     fromPartial(object: Partial<TokenRetiredEvent>): TokenRetiredEvent;
+};
+export declare const CreditsTransferredEvent: {
+    encode(message: CreditsTransferredEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): CreditsTransferredEvent;
+    fromJSON(object: any): CreditsTransferredEvent;
+    toJSON(message: CreditsTransferredEvent): unknown;
+    fromPartial(object: Partial<CreditsTransferredEvent>): CreditsTransferredEvent;
 };
 export declare const TokenPausedEvent: {
     encode(message: TokenPausedEvent, writer?: _m0.Writer): _m0.Writer;

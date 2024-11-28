@@ -284,6 +284,13 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
                 iidDocument(request: import("./iid/v1beta1/query").QueryIidDocumentRequest): Promise<import("./iid/v1beta1/query").QueryIidDocumentResponse>;
             };
         };
+        liquidstake: {
+            v1beta1: {
+                params(request?: import("./liquidstake/v1beta1/query").QueryParamsRequest): Promise<import("./liquidstake/v1beta1/query").QueryParamsResponse>;
+                liquidValidators(request?: import("./liquidstake/v1beta1/query").QueryLiquidValidatorsRequest): Promise<import("./liquidstake/v1beta1/query").QueryLiquidValidatorsResponse>;
+                states(request?: import("./liquidstake/v1beta1/query").QueryStatesRequest): Promise<import("./liquidstake/v1beta1/query").QueryStatesResponse>;
+            };
+        };
         mint: {
             v1beta1: {
                 params(request?: import("./mint/v1beta1/query").QueryParamsRequest): Promise<import("./mint/v1beta1/query").QueryParamsResponse>;
