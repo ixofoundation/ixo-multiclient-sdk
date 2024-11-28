@@ -22,25 +22,18 @@ export interface AuthnPubKey {
   coseAlgorithm: number;
   /** The public key bytes */
   key: Uint8Array;
-  /**
-   * The relaying party id is the id of the relaying party against which the
-   * authn key pair is registered. We store it as binary of sha256 hash.
-   */
-  relayingPartyId: Uint8Array;
 }
 /** PubKey defines an authn public key */
 export interface AuthnPubKeySDKType {
   key_id: string;
   cose_algorithm: number;
   key: Uint8Array;
-  relaying_party_id: Uint8Array;
 }
 function createBaseAuthnPubKey(): AuthnPubKey {
   return {
     keyId: "",
     coseAlgorithm: 0,
-    key: new Uint8Array(),
-    relayingPartyId: new Uint8Array()
+    key: new Uint8Array()
   };
 }
 export const AuthnPubKey = {
@@ -53,9 +46,6 @@ export const AuthnPubKey = {
     }
     if (message.key.length !== 0) {
       writer.uint32(26).bytes(message.key);
-    }
-    if (message.relayingPartyId.length !== 0) {
-      writer.uint32(34).bytes(message.relayingPartyId);
     }
     return writer;
   },
@@ -75,9 +65,6 @@ export const AuthnPubKey = {
         case 3:
           message.key = reader.bytes();
           break;
-        case 4:
-          message.relayingPartyId = reader.bytes();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -89,8 +76,7 @@ export const AuthnPubKey = {
     return {
       keyId: isSet(object.keyId) ? String(object.keyId) : "",
       coseAlgorithm: isSet(object.coseAlgorithm) ? Number(object.coseAlgorithm) : 0,
-      key: isSet(object.key) ? bytesFromBase64(object.key) : new Uint8Array(),
-      relayingPartyId: isSet(object.relayingPartyId) ? bytesFromBase64(object.relayingPartyId) : new Uint8Array()
+      key: isSet(object.key) ? bytesFromBase64(object.key) : new Uint8Array()
     };
   },
   toJSON(message: AuthnPubKey): unknown {
@@ -98,7 +84,6 @@ export const AuthnPubKey = {
     message.keyId !== undefined && (obj.keyId = message.keyId);
     message.coseAlgorithm !== undefined && (obj.coseAlgorithm = Math.round(message.coseAlgorithm));
     message.key !== undefined && (obj.key = base64FromBytes(message.key !== undefined ? message.key : new Uint8Array()));
-    message.relayingPartyId !== undefined && (obj.relayingPartyId = base64FromBytes(message.relayingPartyId !== undefined ? message.relayingPartyId : new Uint8Array()));
     return obj;
   },
   fromPartial(object: Partial<AuthnPubKey>): AuthnPubKey {
@@ -106,7 +91,6 @@ export const AuthnPubKey = {
     message.keyId = object.keyId ?? "";
     message.coseAlgorithm = object.coseAlgorithm ?? 0;
     message.key = object.key ?? new Uint8Array();
-    message.relayingPartyId = object.relayingPartyId ?? new Uint8Array();
     return message;
   }
 };

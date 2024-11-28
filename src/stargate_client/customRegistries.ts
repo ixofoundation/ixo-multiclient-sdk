@@ -490,6 +490,10 @@ export const createRegistry = (): Registry => {
     "/ixo.token.v1beta1.MsgStopToken",
     ixo.token.v1beta1.MsgStopToken
   );
+  myRegistry.register(
+    "/ixo.token.v1beta1.MsgTransferCredit",
+    ixo.token.v1beta1.MsgTransferCredit
+  );
 
   // Ixo Claims module
   // -----------------------------------------------------------------------------
@@ -584,8 +588,12 @@ export const createRegistry = (): Registry => {
     ixo.liquidstake.v1beta1.MsgUpdateWhitelistedValidators
   );
   myRegistry.register(
-    "/ixo.liquidstake.v1beta1.MsgLiquidStake",
-    ixo.liquidstake.v1beta1.MsgLiquidStake
+    "/ixo.liquidstake.v1beta1.MsgUpdateWeightedRewardsReceivers",
+    ixo.liquidstake.v1beta1.MsgUpdateWeightedRewardsReceivers
+  );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgSetModulePaused",
+    ixo.liquidstake.v1beta1.MsgSetModulePaused
   );
 
   return myRegistry;

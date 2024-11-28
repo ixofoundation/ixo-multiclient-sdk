@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { MsgLiquidStake, MsgLiquidStakeResponse, MsgLiquidUnstake, MsgLiquidUnstakeResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgUpdateWhitelistedValidators, MsgUpdateWhitelistedValidatorsResponse, MsgSetModulePaused, MsgSetModulePausedResponse } from "./tx";
+import { MsgLiquidStake, MsgLiquidStakeResponse, MsgLiquidUnstake, MsgLiquidUnstakeResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgUpdateWhitelistedValidators, MsgUpdateWhitelistedValidatorsResponse, MsgUpdateWeightedRewardsReceivers, MsgUpdateWeightedRewardsReceiversResponse, MsgSetModulePaused, MsgSetModulePausedResponse } from "./tx";
 /** Msg defines the liquid staking Msg service. */
 export interface Msg {
   /**
@@ -22,6 +22,11 @@ export interface Msg {
    */
   updateWhitelistedValidators(request: MsgUpdateWhitelistedValidators): Promise<MsgUpdateWhitelistedValidatorsResponse>;
   /**
+   * UpdateWhitelistedValidators defines a method to update the whitelisted
+   * validators list. Only the whitelist admin address can update this list.
+   */
+  updateWeightedRewardsReceivers(request: MsgUpdateWeightedRewardsReceivers): Promise<MsgUpdateWeightedRewardsReceiversResponse>;
+  /**
    * SetModulePaused  defines a method to update the module's pause status,
    * setting value of the safety flag in params.
    */
@@ -35,6 +40,7 @@ export class MsgClientImpl implements Msg {
     this.liquidUnstake = this.liquidUnstake.bind(this);
     this.updateParams = this.updateParams.bind(this);
     this.updateWhitelistedValidators = this.updateWhitelistedValidators.bind(this);
+    this.updateWeightedRewardsReceivers = this.updateWeightedRewardsReceivers.bind(this);
     this.setModulePaused = this.setModulePaused.bind(this);
   }
   liquidStake(request: MsgLiquidStake): Promise<MsgLiquidStakeResponse> {
@@ -56,6 +62,11 @@ export class MsgClientImpl implements Msg {
     const data = MsgUpdateWhitelistedValidators.encode(request).finish();
     const promise = this.rpc.request("ixo.liquidstake.v1beta1.Msg", "UpdateWhitelistedValidators", data);
     return promise.then(data => MsgUpdateWhitelistedValidatorsResponse.decode(new _m0.Reader(data)));
+  }
+  updateWeightedRewardsReceivers(request: MsgUpdateWeightedRewardsReceivers): Promise<MsgUpdateWeightedRewardsReceiversResponse> {
+    const data = MsgUpdateWeightedRewardsReceivers.encode(request).finish();
+    const promise = this.rpc.request("ixo.liquidstake.v1beta1.Msg", "UpdateWeightedRewardsReceivers", data);
+    return promise.then(data => MsgUpdateWeightedRewardsReceiversResponse.decode(new _m0.Reader(data)));
   }
   setModulePaused(request: MsgSetModulePaused): Promise<MsgSetModulePausedResponse> {
     const data = MsgSetModulePaused.encode(request).finish();

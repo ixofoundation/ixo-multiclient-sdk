@@ -79,9 +79,11 @@ export interface Params {
   /**
    * WhitelistAdminAddress the bech32-encoded address of an admin authority
    * that is allowed to update whitelisted validators or pause liquidstaking
-   * module entirely. The key is controlled by an offchain process that is
-   * selecting validators based on a criteria. Pausing of the module can be
-   * required during important migrations or failures.
+   * module entirely. It is also the only address that can update the
+   * weighted_rewards_receivers.
+   * The key is controlled by the ZERO dao.
+   * Pausing of the module can be required during important migrations or
+   * failures.
    */
   whitelistAdminAddress: string;
   /**
@@ -89,6 +91,16 @@ export interface Params {
    * such as stake/unstake/stake-to-lp and the BeginBlocker logic.
    */
   modulePaused: boolean;
+  /**
+   * weighted_rewards_receivers is the addresses to receive the staking
+   * rewards on autocompounding with weights assigned to each address.
+   * The total of weights in the list in not allowed to be greater than 1.
+   * 
+   * Eg. if the list has 1 address with weight 0.2, then on autocompounding
+   * the staking rewards will be split between 0.2 for the weighted receiver
+   * and 0.8 gets auto-compounded to the proxy account.
+   */
+  weightedRewardsReceivers: WeightedAddress[];
 }
 /** Params defines the set of params for the liquidstake module. */
 export interface ParamsSDKType {
@@ -100,6 +112,25 @@ export interface ParamsSDKType {
   autocompound_fee_rate: string;
   whitelist_admin_address: string;
   module_paused: boolean;
+  weighted_rewards_receivers: WeightedAddressSDKType[];
+}
+/**
+ * WeightedAddress represents an address with a weight assigned to it.
+ * The weight is used to determine the proportion of autocompounding
+ * rewards to be paid to the address.
+ */
+export interface WeightedAddress {
+  address: string;
+  weight: string;
+}
+/**
+ * WeightedAddress represents an address with a weight assigned to it.
+ * The weight is used to determine the proportion of autocompounding
+ * rewards to be paid to the address.
+ */
+export interface WeightedAddressSDKType {
+  address: string;
+  weight: string;
 }
 /**
  * WhitelistedValidator consists of the validator operator address and the
@@ -108,7 +139,7 @@ export interface ParamsSDKType {
  */
 export interface WhitelistedValidator {
   /**
-   * validator_address defines the bech32-encoded address that whitelisted
+   * validator_address defines the bech32-encoded address of the whitelisted
    * validator
    */
   validatorAddress: string;
@@ -187,18 +218,13 @@ export interface LiquidValidatorStateSDKType {
  * calculation and query and is not stored in kv.
  */
 export interface NetAmountState {
-  /**
-   * TODO: is this needed? It only for querying, not used anywhere else
-   * mint_rate is stkXPRTTotalSupply / NetAmount
-   */
-  mintRate: string;
-  /** btoken_total_supply returns the total supply of stk/uxprt (stkXPRT denom) */
-  stkxprtTotalSupply: string;
-  /**
-   * TODO: this description does not match how it is calculated?
-   * net_amount is proxy account's native token balance + total liquid tokens +
-   * total remaining rewards + total unbonding balance
-   */
+  /** stake_rate is the rate at which the liquid staking module mints stkIXO */
+  stakeRate: string;
+  /** unstake_rate is the rate at which the liquid staking module burns stkIXO */
+  unstakeRate: string;
+  /** btoken_total_supply returns the total supply of uzero (stkIXO denom) */
+  stkixoTotalSupply: string;
+  /** net_amount is proxy account's total liquid tokens + total unbonding balance */
   netAmount: string;
   /** total_del_shares define the delegation shares of all liquid validators */
   totalDelShares: string;
@@ -226,8 +252,9 @@ export interface NetAmountState {
  * calculation and query and is not stored in kv.
  */
 export interface NetAmountStateSDKType {
-  mint_rate: string;
-  stkxprt_total_supply: string;
+  stake_rate: string;
+  unstake_rate: string;
+  stkixo_total_supply: string;
   net_amount: string;
   total_del_shares: string;
   total_liquid_tokens: string;
@@ -244,7 +271,8 @@ function createBaseParams(): Params {
     feeAccountAddress: "",
     autocompoundFeeRate: "",
     whitelistAdminAddress: "",
-    modulePaused: false
+    modulePaused: false,
+    weightedRewardsReceivers: []
   };
 }
 export const Params = {
@@ -272,6 +300,9 @@ export const Params = {
     }
     if (message.modulePaused === true) {
       writer.uint32(64).bool(message.modulePaused);
+    }
+    for (const v of message.weightedRewardsReceivers) {
+      WeightedAddress.encode(v!, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -306,6 +337,9 @@ export const Params = {
         case 8:
           message.modulePaused = reader.bool();
           break;
+        case 9:
+          message.weightedRewardsReceivers.push(WeightedAddress.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -322,7 +356,8 @@ export const Params = {
       feeAccountAddress: isSet(object.feeAccountAddress) ? String(object.feeAccountAddress) : "",
       autocompoundFeeRate: isSet(object.autocompoundFeeRate) ? String(object.autocompoundFeeRate) : "",
       whitelistAdminAddress: isSet(object.whitelistAdminAddress) ? String(object.whitelistAdminAddress) : "",
-      modulePaused: isSet(object.modulePaused) ? Boolean(object.modulePaused) : false
+      modulePaused: isSet(object.modulePaused) ? Boolean(object.modulePaused) : false,
+      weightedRewardsReceivers: Array.isArray(object?.weightedRewardsReceivers) ? object.weightedRewardsReceivers.map((e: any) => WeightedAddress.fromJSON(e)) : []
     };
   },
   toJSON(message: Params): unknown {
@@ -339,6 +374,11 @@ export const Params = {
     message.autocompoundFeeRate !== undefined && (obj.autocompoundFeeRate = message.autocompoundFeeRate);
     message.whitelistAdminAddress !== undefined && (obj.whitelistAdminAddress = message.whitelistAdminAddress);
     message.modulePaused !== undefined && (obj.modulePaused = message.modulePaused);
+    if (message.weightedRewardsReceivers) {
+      obj.weightedRewardsReceivers = message.weightedRewardsReceivers.map(e => e ? WeightedAddress.toJSON(e) : undefined);
+    } else {
+      obj.weightedRewardsReceivers = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<Params>): Params {
@@ -351,6 +391,62 @@ export const Params = {
     message.autocompoundFeeRate = object.autocompoundFeeRate ?? "";
     message.whitelistAdminAddress = object.whitelistAdminAddress ?? "";
     message.modulePaused = object.modulePaused ?? false;
+    message.weightedRewardsReceivers = object.weightedRewardsReceivers?.map(e => WeightedAddress.fromPartial(e)) || [];
+    return message;
+  }
+};
+function createBaseWeightedAddress(): WeightedAddress {
+  return {
+    address: "",
+    weight: ""
+  };
+}
+export const WeightedAddress = {
+  encode(message: WeightedAddress, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    if (message.weight !== "") {
+      writer.uint32(18).string(message.weight);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): WeightedAddress {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseWeightedAddress();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        case 2:
+          message.weight = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): WeightedAddress {
+    return {
+      address: isSet(object.address) ? String(object.address) : "",
+      weight: isSet(object.weight) ? String(object.weight) : ""
+    };
+  },
+  toJSON(message: WeightedAddress): unknown {
+    const obj: any = {};
+    message.address !== undefined && (obj.address = message.address);
+    message.weight !== undefined && (obj.weight = message.weight);
+    return obj;
+  },
+  fromPartial(object: Partial<WeightedAddress>): WeightedAddress {
+    const message = createBaseWeightedAddress();
+    message.address = object.address ?? "";
+    message.weight = object.weight ?? "";
     return message;
   }
 };
@@ -541,8 +637,9 @@ export const LiquidValidatorState = {
 };
 function createBaseNetAmountState(): NetAmountState {
   return {
-    mintRate: "",
-    stkxprtTotalSupply: "",
+    stakeRate: "",
+    unstakeRate: "",
+    stkixoTotalSupply: "",
     netAmount: "",
     totalDelShares: "",
     totalLiquidTokens: "",
@@ -553,29 +650,32 @@ function createBaseNetAmountState(): NetAmountState {
 }
 export const NetAmountState = {
   encode(message: NetAmountState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.mintRate !== "") {
-      writer.uint32(10).string(message.mintRate);
+    if (message.stakeRate !== "") {
+      writer.uint32(10).string(message.stakeRate);
     }
-    if (message.stkxprtTotalSupply !== "") {
-      writer.uint32(18).string(message.stkxprtTotalSupply);
+    if (message.unstakeRate !== "") {
+      writer.uint32(18).string(message.unstakeRate);
+    }
+    if (message.stkixoTotalSupply !== "") {
+      writer.uint32(26).string(message.stkixoTotalSupply);
     }
     if (message.netAmount !== "") {
-      writer.uint32(26).string(message.netAmount);
+      writer.uint32(34).string(message.netAmount);
     }
     if (message.totalDelShares !== "") {
-      writer.uint32(34).string(message.totalDelShares);
+      writer.uint32(42).string(message.totalDelShares);
     }
     if (message.totalLiquidTokens !== "") {
-      writer.uint32(42).string(message.totalLiquidTokens);
+      writer.uint32(50).string(message.totalLiquidTokens);
     }
     if (message.totalRemainingRewards !== "") {
-      writer.uint32(50).string(message.totalRemainingRewards);
+      writer.uint32(58).string(message.totalRemainingRewards);
     }
     if (message.totalUnbondingBalance !== "") {
-      writer.uint32(58).string(message.totalUnbondingBalance);
+      writer.uint32(66).string(message.totalUnbondingBalance);
     }
     if (message.proxyAccBalance !== "") {
-      writer.uint32(66).string(message.proxyAccBalance);
+      writer.uint32(74).string(message.proxyAccBalance);
     }
     return writer;
   },
@@ -587,27 +687,30 @@ export const NetAmountState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.mintRate = reader.string();
+          message.stakeRate = reader.string();
           break;
         case 2:
-          message.stkxprtTotalSupply = reader.string();
+          message.unstakeRate = reader.string();
           break;
         case 3:
-          message.netAmount = reader.string();
+          message.stkixoTotalSupply = reader.string();
           break;
         case 4:
-          message.totalDelShares = reader.string();
+          message.netAmount = reader.string();
           break;
         case 5:
-          message.totalLiquidTokens = reader.string();
+          message.totalDelShares = reader.string();
           break;
         case 6:
-          message.totalRemainingRewards = reader.string();
+          message.totalLiquidTokens = reader.string();
           break;
         case 7:
-          message.totalUnbondingBalance = reader.string();
+          message.totalRemainingRewards = reader.string();
           break;
         case 8:
+          message.totalUnbondingBalance = reader.string();
+          break;
+        case 9:
           message.proxyAccBalance = reader.string();
           break;
         default:
@@ -619,8 +722,9 @@ export const NetAmountState = {
   },
   fromJSON(object: any): NetAmountState {
     return {
-      mintRate: isSet(object.mintRate) ? String(object.mintRate) : "",
-      stkxprtTotalSupply: isSet(object.stkxprtTotalSupply) ? String(object.stkxprtTotalSupply) : "",
+      stakeRate: isSet(object.stakeRate) ? String(object.stakeRate) : "",
+      unstakeRate: isSet(object.unstakeRate) ? String(object.unstakeRate) : "",
+      stkixoTotalSupply: isSet(object.stkixoTotalSupply) ? String(object.stkixoTotalSupply) : "",
       netAmount: isSet(object.netAmount) ? String(object.netAmount) : "",
       totalDelShares: isSet(object.totalDelShares) ? String(object.totalDelShares) : "",
       totalLiquidTokens: isSet(object.totalLiquidTokens) ? String(object.totalLiquidTokens) : "",
@@ -631,8 +735,9 @@ export const NetAmountState = {
   },
   toJSON(message: NetAmountState): unknown {
     const obj: any = {};
-    message.mintRate !== undefined && (obj.mintRate = message.mintRate);
-    message.stkxprtTotalSupply !== undefined && (obj.stkxprtTotalSupply = message.stkxprtTotalSupply);
+    message.stakeRate !== undefined && (obj.stakeRate = message.stakeRate);
+    message.unstakeRate !== undefined && (obj.unstakeRate = message.unstakeRate);
+    message.stkixoTotalSupply !== undefined && (obj.stkixoTotalSupply = message.stkixoTotalSupply);
     message.netAmount !== undefined && (obj.netAmount = message.netAmount);
     message.totalDelShares !== undefined && (obj.totalDelShares = message.totalDelShares);
     message.totalLiquidTokens !== undefined && (obj.totalLiquidTokens = message.totalLiquidTokens);
@@ -643,8 +748,9 @@ export const NetAmountState = {
   },
   fromPartial(object: Partial<NetAmountState>): NetAmountState {
     const message = createBaseNetAmountState();
-    message.mintRate = object.mintRate ?? "";
-    message.stkxprtTotalSupply = object.stkxprtTotalSupply ?? "";
+    message.stakeRate = object.stakeRate ?? "";
+    message.unstakeRate = object.unstakeRate ?? "";
+    message.stkixoTotalSupply = object.stkixoTotalSupply ?? "";
     message.netAmount = object.netAmount ?? "";
     message.totalDelShares = object.totalDelShares ?? "";
     message.totalLiquidTokens = object.totalLiquidTokens ?? "";

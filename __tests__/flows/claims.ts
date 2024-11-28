@@ -48,6 +48,24 @@ export const claimsBasic = () =>
     //   ])
     // );
 
+    // Create relayer node entity first
+    let relayerNodeEntity = "";
+    testMsg("/ixo.entity.v1beta1.MsgCreateEntity protocol", async () => {
+      const res = await Entity.CreateEntity(
+        "dao",
+        undefined,
+        "",
+        WalletUsers.charlie
+      );
+      relayerNodeEntity = utils.common.getValueFromEvents(
+        res,
+        "wasm",
+        "token_id"
+      );
+      console.log({ relayerNodeEntity });
+      return res;
+    });
+
     // Create protocol
     let protocol = "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b";
     let adminAccount = "ixo14p4eh3hvunmlvegyysfp5lg8gf6cp6suxxx672";
@@ -56,7 +74,7 @@ export const claimsBasic = () =>
       const res = await Entity.CreateEntity(
         "protocol",
         undefined,
-        "",
+        relayerNodeEntity,
         WalletUsers.charlie
       );
       protocol = utils.common.getValueFromEvents(res, "wasm", "token_id");

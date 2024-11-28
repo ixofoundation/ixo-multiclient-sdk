@@ -76,6 +76,23 @@ export interface TokenRetiredEventSDKType {
   owner: string;
   tokens: TokenBatchSDKType[];
 }
+/**
+ * CreditsTransferredEvent is an event triggered on a Credit transfer
+ * execution
+ */
+export interface CreditsTransferredEvent {
+  /** the token owner */
+  owner: string;
+  tokens: TokenBatch[];
+}
+/**
+ * CreditsTransferredEvent is an event triggered on a Credit transfer
+ * execution
+ */
+export interface CreditsTransferredEventSDKType {
+  owner: string;
+  tokens: TokenBatchSDKType[];
+}
 /** TokenPausedEvent is an event triggered on a Token pause/unpause execution */
 export interface TokenPausedEvent {
   /** the minter address */
@@ -459,6 +476,65 @@ export const TokenRetiredEvent = {
   },
   fromPartial(object: Partial<TokenRetiredEvent>): TokenRetiredEvent {
     const message = createBaseTokenRetiredEvent();
+    message.owner = object.owner ?? "";
+    message.tokens = object.tokens?.map(e => TokenBatch.fromPartial(e)) || [];
+    return message;
+  }
+};
+function createBaseCreditsTransferredEvent(): CreditsTransferredEvent {
+  return {
+    owner: "",
+    tokens: []
+  };
+}
+export const CreditsTransferredEvent = {
+  encode(message: CreditsTransferredEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.owner !== "") {
+      writer.uint32(10).string(message.owner);
+    }
+    for (const v of message.tokens) {
+      TokenBatch.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): CreditsTransferredEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCreditsTransferredEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.owner = reader.string();
+          break;
+        case 2:
+          message.tokens.push(TokenBatch.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): CreditsTransferredEvent {
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => TokenBatch.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: CreditsTransferredEvent): unknown {
+    const obj: any = {};
+    message.owner !== undefined && (obj.owner = message.owner);
+    if (message.tokens) {
+      obj.tokens = message.tokens.map(e => e ? TokenBatch.toJSON(e) : undefined);
+    } else {
+      obj.tokens = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<CreditsTransferredEvent>): CreditsTransferredEvent {
+    const message = createBaseCreditsTransferredEvent();
     message.owner = object.owner ?? "";
     message.tokens = object.tokens?.map(e => TokenBatch.fromPartial(e)) || [];
     return message;

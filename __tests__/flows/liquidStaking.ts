@@ -1,22 +1,7 @@
-import {
-  chunkArray,
-  generateNewWallet,
-  getFileFromPath,
-  getUser,
-  queryClient,
-  saveFileToPath,
-  sendFromFaucet,
-  testMsg,
-  timeout,
-} from "../helpers/common";
+import { testMsg, timeout } from "../helpers/common";
 import * as Cosmos from "../modules/Cosmos";
 import * as LiquidStake from "../modules/LiquidStake";
-import { WalletUsers } from "../helpers/constants";
-// @ts-ignore
-import Long from "long";
-import { Grant } from "../../src/codegen/cosmos/feegrant/v1beta1/feegrant";
-import { createRegistry, utils } from "../../src";
-import { fromTimestamp } from "../../src/codegen/helpers";
+import { utils } from "../../src";
 
 export const prepareModuleWithProposals = () =>
   describe("Preparing Liquid Stake Module with proposals", () => {
@@ -40,10 +25,14 @@ export const prepareModuleWithProposals = () =>
       async () => {
         // wait for proposal to pass
         await timeout(1000 * 100);
-        const res = await LiquidStake.MsgUpdateLiquidStakeWhitelist();
-        await timeout(1000 * 10);
+        const res = await LiquidStake.MsgUpdateWhitelistedValidators();
         return res;
       }
+    );
+
+    // Third update weighted rewards receivers
+    testMsg("/ixo.liquidstake.v1beta1.MsgUpdateWeightedRewardsReceivers", () =>
+      LiquidStake.MsgUpdateWeightedRewardsReceivers()
     );
 
     testMsg("/ixo.liquidstake.v1beta1.MsgLiquidStake", () =>
@@ -52,5 +41,9 @@ export const prepareModuleWithProposals = () =>
 
     testMsg("/ixo.liquidstake.v1beta1.MsgLiquidUnstake", () =>
       LiquidStake.MsgLiquidUnstake("1000000000")
+    );
+
+    testMsg("/cosmos.bank.v1beta1.MsgSend", () =>
+      LiquidStake.BankSendZeroTrx(1000000000)
     );
   });

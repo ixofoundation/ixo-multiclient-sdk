@@ -26,45 +26,47 @@ import * as _215 from "./iid/v1beta1/iid";
 import * as _216 from "./iid/v1beta1/query";
 import * as _217 from "./iid/v1beta1/tx";
 import * as _218 from "./iid/v1beta1/types";
-import * as _219 from "./liquidstake/v1beta1/genesis";
-import * as _220 from "./liquidstake/v1beta1/liquidstake";
-import * as _221 from "./liquidstake/v1beta1/query";
-import * as _222 from "./liquidstake/v1beta1/tx";
-import * as _223 from "./mint/v1beta1/genesis";
-import * as _224 from "./mint/v1beta1/mint";
-import * as _225 from "./mint/v1beta1/query";
-import * as _226 from "./smartaccount/crypto/crypto";
-import * as _227 from "./smartaccount/v1beta1/event";
-import * as _228 from "./smartaccount/v1beta1/genesis";
-import * as _229 from "./smartaccount/v1beta1/models";
-import * as _230 from "./smartaccount/v1beta1/params";
-import * as _231 from "./smartaccount/v1beta1/query";
-import * as _232 from "./smartaccount/v1beta1/tx";
-import * as _233 from "./token/v1beta1/authz";
-import * as _234 from "./token/v1beta1/event";
-import * as _235 from "./token/v1beta1/genesis";
-import * as _236 from "./token/v1beta1/proposal";
-import * as _237 from "./token/v1beta1/query";
-import * as _238 from "./token/v1beta1/token";
-import * as _239 from "./token/v1beta1/tx";
-import * as _310 from "./bonds/v1beta1/query.rpc.Query";
-import * as _311 from "./claims/v1beta1/query.rpc.Query";
-import * as _312 from "./entity/v1beta1/query.rpc.Query";
-import * as _313 from "./epochs/v1beta1/query.rpc.Query";
-import * as _314 from "./iid/v1beta1/query.rpc.Query";
-import * as _315 from "./liquidstake/v1beta1/query.rpc.Query";
-import * as _316 from "./mint/v1beta1/query.rpc.Query";
-import * as _317 from "./smartaccount/v1beta1/query.rpc.Query";
-import * as _318 from "./token/v1beta1/query.rpc.Query";
-import * as _319 from "./bonds/v1beta1/tx.rpc.msg";
-import * as _320 from "./claims/v1beta1/tx.rpc.msg";
-import * as _321 from "./entity/v1beta1/tx.rpc.msg";
-import * as _322 from "./iid/v1beta1/tx.rpc.msg";
-import * as _323 from "./liquidstake/v1beta1/tx.rpc.msg";
-import * as _324 from "./smartaccount/v1beta1/tx.rpc.msg";
-import * as _325 from "./token/v1beta1/tx.rpc.msg";
-import * as _332 from "./rpc.query";
-import * as _333 from "./rpc.tx";
+import * as _219 from "./liquidstake/v1beta1/event";
+import * as _220 from "./liquidstake/v1beta1/genesis";
+import * as _221 from "./liquidstake/v1beta1/liquidstake";
+import * as _222 from "./liquidstake/v1beta1/query";
+import * as _223 from "./liquidstake/v1beta1/tx";
+import * as _224 from "./mint/v1beta1/event";
+import * as _225 from "./mint/v1beta1/genesis";
+import * as _226 from "./mint/v1beta1/mint";
+import * as _227 from "./mint/v1beta1/query";
+import * as _228 from "./smartaccount/crypto/crypto";
+import * as _229 from "./smartaccount/v1beta1/event";
+import * as _230 from "./smartaccount/v1beta1/genesis";
+import * as _231 from "./smartaccount/v1beta1/models";
+import * as _232 from "./smartaccount/v1beta1/params";
+import * as _233 from "./smartaccount/v1beta1/query";
+import * as _234 from "./smartaccount/v1beta1/tx";
+import * as _235 from "./token/v1beta1/authz";
+import * as _236 from "./token/v1beta1/event";
+import * as _237 from "./token/v1beta1/genesis";
+import * as _238 from "./token/v1beta1/proposal";
+import * as _239 from "./token/v1beta1/query";
+import * as _240 from "./token/v1beta1/token";
+import * as _241 from "./token/v1beta1/tx";
+import * as _312 from "./bonds/v1beta1/query.rpc.Query";
+import * as _313 from "./claims/v1beta1/query.rpc.Query";
+import * as _314 from "./entity/v1beta1/query.rpc.Query";
+import * as _315 from "./epochs/v1beta1/query.rpc.Query";
+import * as _316 from "./iid/v1beta1/query.rpc.Query";
+import * as _317 from "./liquidstake/v1beta1/query.rpc.Query";
+import * as _318 from "./mint/v1beta1/query.rpc.Query";
+import * as _319 from "./smartaccount/v1beta1/query.rpc.Query";
+import * as _320 from "./token/v1beta1/query.rpc.Query";
+import * as _321 from "./bonds/v1beta1/tx.rpc.msg";
+import * as _322 from "./claims/v1beta1/tx.rpc.msg";
+import * as _323 from "./entity/v1beta1/tx.rpc.msg";
+import * as _324 from "./iid/v1beta1/tx.rpc.msg";
+import * as _325 from "./liquidstake/v1beta1/tx.rpc.msg";
+import * as _326 from "./smartaccount/v1beta1/tx.rpc.msg";
+import * as _327 from "./token/v1beta1/tx.rpc.msg";
+import * as _334 from "./rpc.query";
+import * as _335 from "./rpc.tx";
 export namespace ixo {
   export namespace bonds {
     export const v1beta1 = {
@@ -73,8 +75,8 @@ export namespace ixo {
       ..._194,
       ..._195,
       ..._196,
-      ..._310,
-      ..._319
+      ..._312,
+      ..._321
     };
   }
   export namespace claims {
@@ -85,8 +87,8 @@ export namespace ixo {
       ..._200,
       ..._201,
       ..._202,
-      ..._311,
-      ..._320
+      ..._313,
+      ..._322
     };
   }
   export namespace entity {
@@ -97,8 +99,8 @@ export namespace ixo {
       ..._206,
       ..._207,
       ..._208,
-      ..._312,
-      ..._321
+      ..._314,
+      ..._323
     };
   }
   export namespace epochs {
@@ -107,7 +109,7 @@ export namespace ixo {
       ..._210,
       ..._211,
       ..._212,
-      ..._313
+      ..._315
     };
   }
   export namespace iid {
@@ -118,8 +120,8 @@ export namespace ixo {
       ..._216,
       ..._217,
       ..._218,
-      ..._314,
-      ..._322
+      ..._316,
+      ..._324
     };
   }
   export namespace liquidstake {
@@ -128,48 +130,50 @@ export namespace ixo {
       ..._220,
       ..._221,
       ..._222,
-      ..._315,
-      ..._323
+      ..._223,
+      ..._317,
+      ..._325
     };
   }
   export namespace mint {
     export const v1beta1 = {
-      ..._223,
       ..._224,
       ..._225,
-      ..._316
+      ..._226,
+      ..._227,
+      ..._318
     };
   }
   export namespace smartaccount {
     export const crypto = {
-      ..._226
+      ..._228
     };
     export const v1beta1 = {
-      ..._227,
-      ..._228,
       ..._229,
       ..._230,
       ..._231,
       ..._232,
-      ..._317,
-      ..._324
+      ..._233,
+      ..._234,
+      ..._319,
+      ..._326
     };
   }
   export namespace token {
     export const v1beta1 = {
-      ..._233,
-      ..._234,
       ..._235,
       ..._236,
       ..._237,
       ..._238,
       ..._239,
-      ..._318,
-      ..._325
+      ..._240,
+      ..._241,
+      ..._320,
+      ..._327
     };
   }
   export const ClientFactory = {
-    ..._332,
-    ..._333
+    ..._334,
+    ..._335
   };
 }

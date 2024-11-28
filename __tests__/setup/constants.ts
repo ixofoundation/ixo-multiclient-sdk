@@ -36,12 +36,14 @@ export const dids = {
   ai4gCollection: "",
   didOracle: "",
   aquaminerCollection: "did:ixo:entity:323dd1f9999c20142789010dae287a65",
+  fairClimateCollection: "",
 };
 
 export const adminEntityAccounts = {
   assetCollection: "ixo19e74tjy6gdwt0hjj6ph6xgtjhuulgqkzk8xaj4",
   legacyCollection: "ixo1kaluffrp0ncy3dlrerla3nd8v6zxwzmega3v7g",
   ai4gCollection: "",
+  fairClimateCollection: "",
 };
 
 // export const EcsCredentialsWorkerUrl = "http://localhost:3000/";

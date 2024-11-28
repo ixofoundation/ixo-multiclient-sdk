@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { Params, ParamsSDKType, WhitelistedValidator, WhitelistedValidatorSDKType } from "./liquidstake";
+import { Params, ParamsSDKType, WhitelistedValidator, WhitelistedValidatorSDKType, WeightedAddress, WeightedAddressSDKType } from "./liquidstake";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import * as _m0 from "protobufjs/minimal";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
@@ -56,8 +56,8 @@ export interface MsgUpdateParams {
   authority: string;
   /**
    * params defines the parameters to update.
-   * 
-   * NOTE: denom and whitelisted validators are not updated.
+   * NOTE: denom and whitelisted_validators and weighted_rewards_receivers are
+   * not updated.
    */
   params?: Params;
 }
@@ -95,6 +95,32 @@ export interface MsgUpdateWhitelistedValidatorsResponse {}
  * executing a
  */
 export interface MsgUpdateWhitelistedValidatorsResponseSDKType {}
+export interface MsgUpdateWeightedRewardsReceivers {
+  /**
+   * Authority is the address that is allowed to update wieghted rewards
+   * receivers, defined as admin address in params (WhitelistAdminAddress).
+   */
+  authority: string;
+  /**
+   * WhitelistedValidators specifies the validators elected to become Active
+   * Liquid Validators.
+   */
+  weightedRewardsReceivers: WeightedAddress[];
+}
+export interface MsgUpdateWeightedRewardsReceiversSDKType {
+  authority: string;
+  weighted_rewards_receivers: WeightedAddressSDKType[];
+}
+/**
+ * MsgUpdateWeightedRewardsReceiversResponse defines the response structure for
+ * executing a
+ */
+export interface MsgUpdateWeightedRewardsReceiversResponse {}
+/**
+ * MsgUpdateWeightedRewardsReceiversResponse defines the response structure for
+ * executing a
+ */
+export interface MsgUpdateWeightedRewardsReceiversResponseSDKType {}
 export interface MsgSetModulePaused {
   /**
    * Authority is the address that is allowed to update module's paused state,
@@ -483,6 +509,98 @@ export const MsgUpdateWhitelistedValidatorsResponse = {
   },
   fromPartial(_: Partial<MsgUpdateWhitelistedValidatorsResponse>): MsgUpdateWhitelistedValidatorsResponse {
     const message = createBaseMsgUpdateWhitelistedValidatorsResponse();
+    return message;
+  }
+};
+function createBaseMsgUpdateWeightedRewardsReceivers(): MsgUpdateWeightedRewardsReceivers {
+  return {
+    authority: "",
+    weightedRewardsReceivers: []
+  };
+}
+export const MsgUpdateWeightedRewardsReceivers = {
+  encode(message: MsgUpdateWeightedRewardsReceivers, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    for (const v of message.weightedRewardsReceivers) {
+      WeightedAddress.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateWeightedRewardsReceivers {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateWeightedRewardsReceivers();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.weightedRewardsReceivers.push(WeightedAddress.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUpdateWeightedRewardsReceivers {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      weightedRewardsReceivers: Array.isArray(object?.weightedRewardsReceivers) ? object.weightedRewardsReceivers.map((e: any) => WeightedAddress.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: MsgUpdateWeightedRewardsReceivers): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    if (message.weightedRewardsReceivers) {
+      obj.weightedRewardsReceivers = message.weightedRewardsReceivers.map(e => e ? WeightedAddress.toJSON(e) : undefined);
+    } else {
+      obj.weightedRewardsReceivers = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<MsgUpdateWeightedRewardsReceivers>): MsgUpdateWeightedRewardsReceivers {
+    const message = createBaseMsgUpdateWeightedRewardsReceivers();
+    message.authority = object.authority ?? "";
+    message.weightedRewardsReceivers = object.weightedRewardsReceivers?.map(e => WeightedAddress.fromPartial(e)) || [];
+    return message;
+  }
+};
+function createBaseMsgUpdateWeightedRewardsReceiversResponse(): MsgUpdateWeightedRewardsReceiversResponse {
+  return {};
+}
+export const MsgUpdateWeightedRewardsReceiversResponse = {
+  encode(_: MsgUpdateWeightedRewardsReceiversResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateWeightedRewardsReceiversResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateWeightedRewardsReceiversResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgUpdateWeightedRewardsReceiversResponse {
+    return {};
+  },
+  toJSON(_: MsgUpdateWeightedRewardsReceiversResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgUpdateWeightedRewardsReceiversResponse>): MsgUpdateWeightedRewardsReceiversResponse {
+    const message = createBaseMsgUpdateWeightedRewardsReceiversResponse();
     return message;
   }
 };

@@ -4,7 +4,7 @@ package ixo.liquidstake.v1beta1;
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
 
-option go_package = "github.com/ixofoundation/ixo-blockchain/v3/x/liquidstake/types";
+option go_package = "github.com/ixofoundation/ixo-blockchain/v4/x/liquidstake/types";
 
 // Params defines the set of params for the liquidstake module.
 message Params {
@@ -53,15 +53,46 @@ message Params {
 
   // WhitelistAdminAddress the bech32-encoded address of an admin authority
   // that is allowed to update whitelisted validators or pause liquidstaking
-  // module entirely. The key is controlled by an offchain process that is
-  // selecting validators based on a criteria. Pausing of the module can be
-  // required during important migrations or failures.
+  // module entirely. It is also the only address that can update the
+  // weighted_rewards_receivers.
+  // The key is controlled by the ZERO dao.
+  // Pausing of the module can be required during important migrations or
+  // failures.
   string whitelist_admin_address = 7
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
   // ModulePaused is a safety toggle that allows to stop main module functions
   // such as stake/unstake/stake-to-lp and the BeginBlocker logic.
   bool module_paused = 8;
+
+  // weighted_rewards_receivers is the addresses to receive the staking
+  // rewards on autocompounding with weights assigned to each address.
+  // The total of weights in the list in not allowed to be greater than 1.
+  //
+  // Eg. if the list has 1 address with weight 0.2, then on autocompounding
+  // the staking rewards will be split between 0.2 for the weighted receiver
+  // and 0.8 gets auto-compounded to the proxy account.
+  repeated WeightedAddress weighted_rewards_receivers = 9 [
+    (gogoproto.moretags) = "yaml:\"impact_rewards_receiver\"",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// WeightedAddress represents an address with a weight assigned to it.
+// The weight is used to determine the proportion of autocompounding
+// rewards to be paid to the address.
+message WeightedAddress {
+  option (gogoproto.goproto_getters) = false;
+
+  string address = 1 [
+    (gogoproto.moretags) = "yaml:\"address\"",
+    (cosmos_proto.scalar) = "cosmos.AddressString"
+  ];
+  string weight = 2 [
+    (gogoproto.moretags) = "yaml:\"weight\"",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // ValidatorStatus enumerates the status of a liquid validator.
@@ -85,7 +116,7 @@ enum ValidatorStatus {
 message WhitelistedValidator {
   option (gogoproto.goproto_getters) = false;
 
-  // validator_address defines the bech32-encoded address that whitelisted
+  // validator_address defines the bech32-encoded address of the whitelisted
   // validator
   string validator_address = 1
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -157,32 +188,36 @@ message NetAmountState {
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = true;
 
-  // TODO: is this needed? It only for querying, not used anywhere else
-  // mint_rate is stkXPRTTotalSupply / NetAmount
-  string mint_rate = 1 [
+  // stake_rate is the rate at which the liquid staking module mints stkIXO
+  string stake_rate = 1 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
     (gogoproto.nullable) = false
   ];
 
-  // btoken_total_supply returns the total supply of stk/uxprt (stkXPRT denom)
-  string stkxprt_total_supply = 2 [
+  // unstake_rate is the rate at which the liquid staking module burns stkIXO
+  string unstake_rate = 2 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+
+  // btoken_total_supply returns the total supply of uzero (stkIXO denom)
+  string stkixo_total_supply = 3 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
 
-  // TODO: this description does not match how it is calculated?
-  // net_amount is proxy account's native token balance + total liquid tokens +
-  // total remaining rewards + total unbonding balance
-  string net_amount = 3 [
+  // net_amount is proxy account's total liquid tokens + total unbonding balance
+  string net_amount = 4 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
     (gogoproto.nullable) = false
   ];
 
   // total_del_shares define the delegation shares of all liquid validators
-  string total_del_shares = 4 [
+  string total_del_shares = 5 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
     (gogoproto.nullable) = false
@@ -190,7 +225,7 @@ message NetAmountState {
 
   // total_liquid_tokens define the token amount worth of delegation shares of
   // all liquid validator (slashing applied amount)
-  string total_liquid_tokens = 5 [
+  string total_liquid_tokens = 6 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
@@ -198,7 +233,7 @@ message NetAmountState {
 
   // total_remaining_rewards define the sum of remaining rewards of proxy
   // account by all liquid validators
-  string total_remaining_rewards = 6 [
+  string total_remaining_rewards = 7 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
     (gogoproto.nullable) = false
@@ -206,14 +241,14 @@ message NetAmountState {
 
   // total_unbonding_balance define the unbonding balance of proxy account by
   // all liquid validator (slashing applied amount)
-  string total_unbonding_balance = 7 [
+  string total_unbonding_balance = 8 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
 
   // proxy_acc_balance define the balance of proxy account for the native token
-  string proxy_acc_balance = 8 [
+  string proxy_acc_balance = 9 [
     (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
