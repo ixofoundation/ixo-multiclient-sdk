@@ -43,28 +43,28 @@ import * as _188 from "./lightclients/wasm/v1/genesis";
 import * as _189 from "./lightclients/wasm/v1/query";
 import * as _190 from "./lightclients/wasm/v1/tx";
 import * as _191 from "./lightclients/wasm/v1/wasm";
-import * as _290 from "./applications/fee/v1/query.rpc.Query";
-import * as _291 from "./applications/interchain_accounts/controller/v1/query.rpc.Query";
-import * as _292 from "./applications/interchain_accounts/host/v1/query.rpc.Query";
-import * as _293 from "./applications/transfer/v1/query.rpc.Query";
-import * as _294 from "./core/channel/v1/query.rpc.Query";
-import * as _295 from "./core/client/v1/query.rpc.Query";
-import * as _296 from "./core/connection/v1/query.rpc.Query";
-import * as _297 from "./lightclients/wasm/v1/query.rpc.Query";
-import * as _298 from "./applications/fee/v1/tx.rpc.msg";
-import * as _299 from "./applications/interchain_accounts/controller/v1/tx.rpc.msg";
-import * as _300 from "./applications/interchain_accounts/host/v1/tx.rpc.msg";
-import * as _301 from "./applications/transfer/v1/tx.rpc.msg";
-import * as _302 from "./core/channel/v1/tx.rpc.msg";
-import * as _303 from "./core/client/v1/tx.rpc.msg";
-import * as _304 from "./core/connection/v1/tx.rpc.msg";
-import * as _305 from "./lightclients/wasm/v1/tx.rpc.msg";
+import * as _296 from "./applications/fee/v1/query.rpc.Query";
+import * as _297 from "./applications/interchain_accounts/controller/v1/query.rpc.Query";
+import * as _298 from "./applications/interchain_accounts/host/v1/query.rpc.Query";
+import * as _299 from "./applications/transfer/v1/query.rpc.Query";
+import * as _300 from "./core/channel/v1/query.rpc.Query";
+import * as _301 from "./core/client/v1/query.rpc.Query";
+import * as _302 from "./core/connection/v1/query.rpc.Query";
+import * as _303 from "./lightclients/wasm/v1/query.rpc.Query";
+import * as _304 from "./applications/fee/v1/tx.rpc.msg";
+import * as _305 from "./applications/interchain_accounts/controller/v1/tx.rpc.msg";
+import * as _306 from "./applications/interchain_accounts/host/v1/tx.rpc.msg";
+import * as _307 from "./applications/transfer/v1/tx.rpc.msg";
+import * as _308 from "./core/channel/v1/tx.rpc.msg";
+import * as _309 from "./core/client/v1/tx.rpc.msg";
+import * as _310 from "./core/connection/v1/tx.rpc.msg";
+import * as _311 from "./lightclients/wasm/v1/tx.rpc.msg";
 export declare namespace ibc {
     namespace applications {
         namespace fee {
             const v1: {
-                MsgClientImpl: typeof _298.MsgClientImpl;
-                QueryClientImpl: typeof _290.QueryClientImpl;
+                MsgClientImpl: typeof _304.MsgClientImpl;
+                QueryClientImpl: typeof _296.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     incentivizedPackets(request: _151.QueryIncentivizedPacketsRequest): Promise<_151.QueryIncentivizedPacketsResponse>;
                     incentivizedPacket(request: _151.QueryIncentivizedPacketRequest): Promise<_151.QueryIncentivizedPacketResponse>;
@@ -355,8 +355,8 @@ export declare namespace ibc {
         namespace interchain_accounts {
             namespace controller {
                 const v1: {
-                    MsgClientImpl: typeof _299.MsgClientImpl;
-                    QueryClientImpl: typeof _291.QueryClientImpl;
+                    MsgClientImpl: typeof _305.MsgClientImpl;
+                    QueryClientImpl: typeof _297.QueryClientImpl;
                     createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                         interchainAccount(request: _154.QueryInterchainAccountRequest): Promise<_154.QueryInterchainAccountResponse>;
                         params(request?: _154.QueryParamsRequest): Promise<_154.QueryParamsResponse>;
@@ -481,8 +481,8 @@ export declare namespace ibc {
             }
             namespace host {
                 const v1: {
-                    MsgClientImpl: typeof _300.MsgClientImpl;
-                    QueryClientImpl: typeof _292.QueryClientImpl;
+                    MsgClientImpl: typeof _306.MsgClientImpl;
+                    QueryClientImpl: typeof _298.QueryClientImpl;
                     createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                         params(request?: _158.QueryParamsRequest): Promise<_158.QueryParamsResponse>;
                     };
@@ -581,8 +581,8 @@ export declare namespace ibc {
         }
         namespace transfer {
             const v1: {
-                MsgClientImpl: typeof _301.MsgClientImpl;
-                QueryClientImpl: typeof _293.QueryClientImpl;
+                MsgClientImpl: typeof _307.MsgClientImpl;
+                QueryClientImpl: typeof _299.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     denomTraces(request?: _165.QueryDenomTracesRequest): Promise<_165.QueryDenomTracesResponse>;
                     denomTrace(request: _165.QueryDenomTraceRequest): Promise<_165.QueryDenomTraceResponse>;
@@ -753,8 +753,8 @@ export declare namespace ibc {
     namespace core {
         namespace channel {
             const v1: {
-                MsgClientImpl: typeof _302.MsgClientImpl;
-                QueryClientImpl: typeof _294.QueryClientImpl;
+                MsgClientImpl: typeof _308.MsgClientImpl;
+                QueryClientImpl: typeof _300.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     channel(request: _171.QueryChannelRequest): Promise<_171.QueryChannelResponse>;
                     channels(request?: _171.QueryChannelsRequest): Promise<_171.QueryChannelsResponse>;
@@ -1392,8 +1392,8 @@ export declare namespace ibc {
         }
         namespace client {
             const v1: {
-                MsgClientImpl: typeof _303.MsgClientImpl;
-                QueryClientImpl: typeof _295.QueryClientImpl;
+                MsgClientImpl: typeof _309.MsgClientImpl;
+                QueryClientImpl: typeof _301.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     clientState(request: _176.QueryClientStateRequest): Promise<_176.QueryClientStateResponse>;
                     clientStates(request?: _176.QueryClientStatesRequest): Promise<_176.QueryClientStatesResponse>;
@@ -1750,8 +1750,8 @@ export declare namespace ibc {
         }
         namespace connection {
             const v1: {
-                MsgClientImpl: typeof _304.MsgClientImpl;
-                QueryClientImpl: typeof _296.QueryClientImpl;
+                MsgClientImpl: typeof _310.MsgClientImpl;
+                QueryClientImpl: typeof _302.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     connection(request: _181.QueryConnectionRequest): Promise<_181.QueryConnectionResponse>;
                     connections(request?: _181.QueryConnectionsRequest): Promise<_181.QueryConnectionsResponse>;
@@ -2219,8 +2219,8 @@ export declare namespace ibc {
         }
         namespace wasm {
             const v1: {
-                MsgClientImpl: typeof _305.MsgClientImpl;
-                QueryClientImpl: typeof _297.QueryClientImpl;
+                MsgClientImpl: typeof _311.MsgClientImpl;
+                QueryClientImpl: typeof _303.QueryClientImpl;
                 createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
                     checksums(request?: _189.QueryChecksumsRequest): Promise<_189.QueryChecksumsResponse>;
                     code(request: _189.QueryCodeRequest): Promise<_189.QueryCodeResponse>;
@@ -2401,34 +2401,34 @@ export declare namespace ibc {
             ibc: {
                 applications: {
                     fee: {
-                        v1: _298.MsgClientImpl;
+                        v1: _304.MsgClientImpl;
                     };
                     interchain_accounts: {
                         controller: {
-                            v1: _299.MsgClientImpl;
+                            v1: _305.MsgClientImpl;
                         };
                         host: {
-                            v1: _300.MsgClientImpl;
+                            v1: _306.MsgClientImpl;
                         };
                     };
                     transfer: {
-                        v1: _301.MsgClientImpl;
+                        v1: _307.MsgClientImpl;
                     };
                 };
                 core: {
                     channel: {
-                        v1: _302.MsgClientImpl;
+                        v1: _308.MsgClientImpl;
                     };
                     client: {
-                        v1: _303.MsgClientImpl;
+                        v1: _309.MsgClientImpl;
                     };
                     connection: {
-                        v1: _304.MsgClientImpl;
+                        v1: _310.MsgClientImpl;
                     };
                 };
                 lightclients: {
                     wasm: {
-                        v1: _305.MsgClientImpl;
+                        v1: _311.MsgClientImpl;
                     };
                 };
             };

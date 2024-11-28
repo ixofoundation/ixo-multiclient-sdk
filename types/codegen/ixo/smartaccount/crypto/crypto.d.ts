@@ -20,18 +20,12 @@ export interface AuthnPubKey {
     coseAlgorithm: number;
     /** The public key bytes */
     key: Uint8Array;
-    /**
-     * The relaying party id is the id of the relaying party against which the
-     * authn key pair is registered. We store it as binary of sha256 hash.
-     */
-    relayingPartyId: Uint8Array;
 }
 /** PubKey defines an authn public key */
 export interface AuthnPubKeySDKType {
     key_id: string;
     cose_algorithm: number;
     key: Uint8Array;
-    relaying_party_id: Uint8Array;
 }
 export declare const AuthnPubKey: {
     encode(message: AuthnPubKey, writer?: _m0.Writer): _m0.Writer;
