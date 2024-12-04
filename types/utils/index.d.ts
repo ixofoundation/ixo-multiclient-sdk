@@ -14,7 +14,7 @@ export declare namespace utils {
         decodeMbKey: (header: Uint8Array, mbKey: string) => Uint8Array;
     };
     const did: {
-        generateSecpDid(pubkey: string | Uint8Array, prefix?: string): string;
+        generateSecpDid(address: string): string;
         extractPubkeyFromDid(did: string): string;
         generateWasmDid(address: string): string;
     };
