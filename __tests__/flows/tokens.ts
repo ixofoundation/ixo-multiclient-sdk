@@ -320,11 +320,16 @@ export const supamotoTokensFarm = () =>
   describe("Testing the Supamoto Tokens flow", () => {
     // Set tester as root ecs user
     beforeAll(() =>
-      Promise.all([generateNewWallet(WalletUsers.tester, process.env.ROOT_ECS)])
+      Promise.all([
+        generateNewWallet(WalletUsers.tester, process.env.ECS_OPS_MNEMONIC),
+      ])
     );
 
+    const farm = false;
+    const topup = false;
+    const amountBalance = 0;
     const blocksyncUrlGraphql = "https://blocksync-graphql.ixo.earth";
-    const collectionToFarm = dids.ai4gCollection;
+    const collectionToFarm = dids.legacyCollection;
     const collTokensToUseForTopup = dids.legacyCollection;
 
     testMsg("Farm tokens", async () => {
@@ -359,9 +364,6 @@ export const supamotoTokensFarm = () =>
       // console.log(colEntities.map((e) => e.id).slice(70));
       // if (!!1) throw new Error("stop");
 
-      const farm = false;
-      const topup = false;
-      const amountBalance = 0;
       const chunkSize = 10;
       let totalAmounts: { did: string; amount: number }[] = [];
       let index = 0;

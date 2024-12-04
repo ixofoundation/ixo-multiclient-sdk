@@ -179,7 +179,7 @@ export const quickQueries = () =>
     // });
 
     // test("Query block results from Tendermint Clint", async () => {
-    //   const res = await (await connectComet(RPC_URL)).blockResults(498);
+    //   const res = await (await connectComet(RPC_URL)).blockResults(22);
     //   console.dir(res, { depth: null });
 
     //   const ignoreList = [
@@ -228,6 +228,30 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
+    // test("Query cosmos.tx.v1beta1.getTxsEvent", async () => {
+    //   const res = await queryClient.cosmos.tx.v1beta1.getTxsEvent({
+    //     events: [`tx.height=${22}`],
+    //     orderBy: cosmos.tx.v1beta1.OrderBy.ORDER_BY_ASC,
+    //     limit: Long.fromNumber(10000),
+    //     page: Long.fromNumber(1),
+    //     query: `tx.height=${22}`,
+    //   });
+    //   // console.log(res.txs[0]!.body!.messages[0]);
+    //   console.log(res);
+    //   // console.log(res.txResponses[0]);
+    //   // console.log(createRegistry().decode(res.txResponses[0].tx!));
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query cosmos.tx.v1beta1.getBlockByHeight", async () => {
+    //   const res =
+    //     await queryClient.cosmos.base.tendermint.v1beta1.getBlockByHeight({
+    //       height: Long.fromNumber(22),
+    //     });
+    //   console.log(res.block?.data);
+    //   expect(res).toBeTruthy();
+    // });
+
     // test("Decode txBodyBytes", async () => {
     //   const txBodyBytes = [
     //     10, 217, 1, 10, 46, 47, 105, 120, 111, 46, 101, 110, 116, 105, 116, 121,
@@ -254,26 +278,6 @@ export const quickQueries = () =>
     //   console.dir(msg, { depth: null });
 
     //   expect(true).toBeTruthy();
-    // });
-
-    // test("Query cosmos.tx.v1beta1.getTxsEvent", async () => {
-    //   const res = await queryClient.cosmos.tx.v1beta1.getTxsEvent({
-    //     events: [`tx.height=${15955}`],
-    //     orderBy: 1,
-    //   });
-    //   console.log(res.txs[0]!.body!.messages[0]);
-    //   console.log(res.txResponses[0]);
-    //   console.log(createRegistry().decode(res.txResponses[0].tx!));
-    //   expect(res).toBeTruthy();
-    // });
-
-    // test("Query cosmos.tx.v1beta1.getBlockByHeight", async () => {
-    //   const res =
-    //     await queryClient.cosmos.base.tendermint.v1beta1.getBlockByHeight({
-    //       height: Long.fromNumber(6525),
-    //     });
-    //   console.log(res.block?.data);
-    //   expect(res).toBeTruthy();
     // });
 
     // test("Query proposal by id", async () => {

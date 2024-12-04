@@ -3,13 +3,18 @@ import { decodeMbKey, encodeMbKey } from "./conversions";
 import { MULTICODEC_SECP256K1_PUB_HEADER } from "./constants";
 
 /**
- * @param pubkey Uint8Array or base58 encoded string
+ * @param address bech32 encoded address, eg: ixo1r3us73z564xxxcessqmc4h0dwh8j4z6sxn2730ag09mq87hlrkzqrg8clc
  */
-export function generateSecpDid(pubkey: string | Uint8Array, prefix?: string) {
-  const pubKeyBz = typeof pubkey === "string" ? base58.decode(pubkey) : pubkey;
-  const did = encodeMbKey(MULTICODEC_SECP256K1_PUB_HEADER, pubKeyBz);
-  return "did:" + (prefix || "x") + ":" + did;
+export function generateSecpDid(address: string) {
+  return "did:ixo:" + address;
 }
+
+// Leaving old code for reference
+// export function generateSecpDid(pubkey: string | Uint8Array, prefix?: string) {
+//   const pubKeyBz = typeof pubkey === "string" ? base58.decode(pubkey) : pubkey;
+//   const did = encodeMbKey(MULTICODEC_SECP256K1_PUB_HEADER, pubKeyBz);
+//   return "did:" + (prefix || "x") + ":" + did;
+// }
 
 /**
  * Extracts the public key from a DID.
