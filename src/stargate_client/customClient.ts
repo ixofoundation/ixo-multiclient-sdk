@@ -25,7 +25,7 @@ import {
   StargateClient,
   StargateClientOptions,
 } from "@cosmjs/stargate";
-import { CometClient, connectComet } from "@cosmjs/tendermint-rpc";
+import { CometClient, connectComet, HttpClient } from "@cosmjs/tendermint-rpc";
 import { assert, assertDefined } from "@cosmjs/utils";
 import { SignMode } from "cosmjs-types/cosmos/tx/signing/v1beta1/signing";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";

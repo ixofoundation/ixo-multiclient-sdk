@@ -127,9 +127,6 @@ export const createQueryClient = async (rpcEndpoint: string) => {
         v1: new cosmos.gov.v1.QueryClientImpl(rpc),
         v1beta1: new cosmos.gov.v1beta1.QueryClientImpl(rpc),
       },
-      mint: {
-        v1beta1: new cosmos.mint.v1beta1.QueryClientImpl(rpc),
-      },
       params: {
         v1beta1: new cosmos.params.v1beta1.QueryClientImpl(rpc),
       },
