@@ -1,6 +1,6 @@
 import csvtojsonV2 from "csvtojson/v2";
 import { AsyncParser } from "@json2csv/node";
-import { cosmos, createRegistry, utils } from "../../src";
+import { cosmos, createRegistry, customQueries, utils } from "../../src";
 import gqlQuery, {
   chunkArray,
   getUser,
@@ -179,52 +179,78 @@ export const quickQueries = () =>
     // });
 
     // test("Query block results from Tendermint Clint", async () => {
-    //   const res = await (await connectComet(RPC_URL)).blockResults(498);
-    //   console.dir(res, { depth: null });
+    //   const test = await customQueries.comet.blockResults(18, RPC_URL);
+    //   console.dir(test, { depth: null });
+    // const res = await (await connectComet(RPC_URL)).blockResults(22);
+    // console.dir(res, { depth: null });
 
-    //   const ignoreList = [
-    //     // "coin_received",
-    //     "rewards",
-    //     "commission",
-    //     // "transfer",
-    //     // "coin_spent",
-    //     "mint",
-    //   ];
-    //   console.dir(
-    //     {
-    //       beginBlockEvents: res.beginBlockEvents.map((e) =>
-    //         ignoreList.includes(e.type)
-    //           ? null
-    //           : {
-    //               type: e.type,
-    //               attributes: e.attributes.map((a) => ({
-    //                 key:
-    //                   typeof a.key === "string" ? a.key : Uint8ArrayToJS(a.key),
-    //                 value:
-    //                   typeof a.value === "string"
-    //                     ? a.value
-    //                     : Uint8ArrayToJS(a.value),
-    //               })),
-    //             }
-    //       ),
-    //       endBlockEvents: res.endBlockEvents.map((e) =>
-    //         ignoreList.includes(e.type)
-    //           ? null
-    //           : {
-    //               type: e.type,
-    //               attributes: e.attributes.map((a) => ({
-    //                 key:
-    //                   typeof a.key === "string" ? a.key : Uint8ArrayToJS(a.key),
-    //                 value:
-    //                   typeof a.value === "string"
-    //                     ? a.value
-    //                     : Uint8ArrayToJS(a.value),
-    //               })),
-    //             }
-    //       ),
-    //     },
-    //     { depth: null }
-    //   );
+    // const ignoreList = [
+    //   // "coin_received",
+    //   "rewards",
+    //   "commission",
+    //   // "transfer",
+    //   // "coin_spent",
+    //   "mint",
+    // ];
+    // console.dir(
+    //   {
+    //     beginBlockEvents: res.beginBlockEvents.map((e) =>
+    //       ignoreList.includes(e.type)
+    //         ? null
+    //         : {
+    //             type: e.type,
+    //             attributes: e.attributes.map((a) => ({
+    //               key:
+    //                 typeof a.key === "string" ? a.key : Uint8ArrayToJS(a.key),
+    //               value:
+    //                 typeof a.value === "string"
+    //                   ? a.value
+    //                   : Uint8ArrayToJS(a.value),
+    //             })),
+    //           }
+    //     ),
+    //     endBlockEvents: res.endBlockEvents.map((e) =>
+    //       ignoreList.includes(e.type)
+    //         ? null
+    //         : {
+    //             type: e.type,
+    //             attributes: e.attributes.map((a) => ({
+    //               key:
+    //                 typeof a.key === "string" ? a.key : Uint8ArrayToJS(a.key),
+    //               value:
+    //                 typeof a.value === "string"
+    //                   ? a.value
+    //                   : Uint8ArrayToJS(a.value),
+    //             })),
+    //           }
+    //     ),
+    //   },
+    //   { depth: null }
+    // );
+    //   expect(true).toBeTruthy();
+    // });
+
+    // test("Query cosmos.tx.v1beta1.getTxsEvent", async () => {
+    //   const res = await queryClient.cosmos.tx.v1beta1.getTxsEvent({
+    //     events: [`tx.height=${18}`],
+    //     orderBy: cosmos.tx.v1beta1.OrderBy.ORDER_BY_ASC,
+    //     limit: Long.fromNumber(10000),
+    //     page: Long.fromNumber(1),
+    //     query: `tx.height=${18}`,
+    //   });
+    //   // console.log(res.txs[0]!.body!.messages[0]);
+    //   console.dir(res, { depth: null });
+    //   // console.log(res.txResponses[0]);
+    //   // console.log(createRegistry().decode(res.txResponses[0].tx!));
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query cosmos.tx.v1beta1.getBlockByHeight", async () => {
+    //   const res =
+    //     await queryClient.cosmos.base.tendermint.v1beta1.getBlockByHeight({
+    //       height: Long.fromNumber(18),
+    //     });
+    //   console.dir(res, { depth: null });
     //   expect(res).toBeTruthy();
     // });
 
@@ -254,26 +280,6 @@ export const quickQueries = () =>
     //   console.dir(msg, { depth: null });
 
     //   expect(true).toBeTruthy();
-    // });
-
-    // test("Query cosmos.tx.v1beta1.getTxsEvent", async () => {
-    //   const res = await queryClient.cosmos.tx.v1beta1.getTxsEvent({
-    //     events: [`tx.height=${15955}`],
-    //     orderBy: 1,
-    //   });
-    //   console.log(res.txs[0]!.body!.messages[0]);
-    //   console.log(res.txResponses[0]);
-    //   console.log(createRegistry().decode(res.txResponses[0].tx!));
-    //   expect(res).toBeTruthy();
-    // });
-
-    // test("Query cosmos.tx.v1beta1.getBlockByHeight", async () => {
-    //   const res =
-    //     await queryClient.cosmos.base.tendermint.v1beta1.getBlockByHeight({
-    //       height: Long.fromNumber(6525),
-    //     });
-    //   console.log(res.block?.data);
-    //   expect(res).toBeTruthy();
     // });
 
     // test("Query proposal by id", async () => {

@@ -103,9 +103,6 @@ export declare namespace customQueries {
                     v1: import("../codegen/cosmos/gov/v1/query.rpc.Query").QueryClientImpl;
                     v1beta1: import("../codegen/cosmos/gov/v1beta1/query.rpc.Query").QueryClientImpl;
                 };
-                mint: {
-                    v1beta1: import("../codegen/cosmos/mint/v1beta1/query.rpc.Query").QueryClientImpl;
-                };
                 params: {
                     v1beta1: import("../codegen/cosmos/params/v1beta1/query.rpc.Query").QueryClientImpl;
                 };
@@ -224,9 +221,6 @@ export declare namespace customQueries {
                     v1: import("../codegen/cosmos/gov/v1/query.rpc.Query").QueryClientImpl;
                     v1beta1: import("../codegen/cosmos/gov/v1beta1/query.rpc.Query").QueryClientImpl;
                 };
-                mint: {
-                    v1beta1: import("../codegen/cosmos/mint/v1beta1/query.rpc.Query").QueryClientImpl;
-                };
                 params: {
                     v1beta1: import("../codegen/cosmos/params/v1beta1/query.rpc.Query").QueryClientImpl;
                 };
@@ -274,5 +268,8 @@ export declare namespace customQueries {
             path: string[];
             category: string;
         };
+    };
+    const comet: {
+        blockResults: (height: number, endpoint: string, includeResults?: boolean) => Promise<import("../utils/tendermintClientHelpers").BlockResultsResponse>;
     };
 }

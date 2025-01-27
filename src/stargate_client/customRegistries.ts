@@ -135,9 +135,6 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
   ["/cosmos.gov.v1.MsgExecLegacyContent", cosmos.gov.v1.MsgExecLegacyContent],
   ["/cosmos.gov.v1.MsgCancelProposal", cosmos.gov.v1.MsgCancelProposal],
 
-  // mint
-  ["/cosmos.mint.v1beta1.MsgUpdateParams", cosmos.mint.v1beta1.MsgUpdateParams],
-
   // slashing
   ["/cosmos.slashing.v1beta1.MsgUnjail", cosmos.slashing.v1beta1.MsgUnjail],
   [
