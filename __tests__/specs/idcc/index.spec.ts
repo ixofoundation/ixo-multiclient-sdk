@@ -31,9 +31,6 @@ relayerVerifyAllEntities(
   // "did:ixo:entity:72a27013b1d2f9c3561145e4a424778a", // mainnet emerging dao relayer
   // "did:ixo:entity:3d079ebc0b332aad3305bb4a51c72edb", // testnet relayer
   chainNetwork,
-  [
-    "did:ixo:entity:e38a5c4b4233e313e94ecc36d7619808",
-    "did:ixo:entity:37e444392f4e2335a1f144d5331bf9ca",
-  ],
+  ["did:ixo:entity:709bdcb7576486580a542d91e25a57d5"],
   true
 );
