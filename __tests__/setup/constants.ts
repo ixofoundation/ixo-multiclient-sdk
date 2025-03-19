@@ -81,12 +81,14 @@ export const UmuziCredentialsWorkerUrl =
 //   ai4gCollection: "did:ixo:entity:4ce80421effb121662866edf66d1cc21",
 //   didOracle: "did:ixo:entity:504a8255ca35e103bc8e3e78f62a5231",
 //   aquaminerCollection: "",
+//   fairClimateCollection: "",
 // };
 
 // export const adminEntityAccounts = {
 //   assetCollection: "ixo1rm68f38tv9dl2gne6599y3vz4hfa6f74tgcnha",
 //   legacyCollection: "ixo1xwc3mty6jyqrzfjpqsrhtpcfz57798phfg8y6s",
 //   ai4gCollection: "ixo1e466zhjtprtap545tj88uv8zjcc9768dfk97fl",
+//   fairClimateCollection: "",
 // };
 
 // export const EcsCredentialsWorkerUrl =

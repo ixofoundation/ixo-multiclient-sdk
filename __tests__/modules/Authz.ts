@@ -224,7 +224,7 @@ export const MsgGrantAllowanceFeegrant = async (
 ) => {
   const client = await createClient(getUser(granter));
 
-  const durationInDays = 32;
+  const durationInDays = 40; // keep 40 days for renew script, we renew every 30days so keep 40 so addresses will not expire
   let date = new Date();
   date = new Date(date.setDate(date.getDate() + durationInDays));
   const granterAddress = (await getUser(granter).getAccounts())[0].address;

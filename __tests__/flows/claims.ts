@@ -1017,7 +1017,7 @@ export const supamotoClaims3 = () =>
       type NetworkType = "mainnet" | "testnet";
 
       let networkToUse: NetworkType = "mainnet";
-      let collectionToUse: CollectionType = "fairClimate" as any;
+      let collectionToUse: CollectionType = "Legacy" as any;
 
       const collectionToNetworkMapping = {
         Genesis: {
@@ -1201,7 +1201,7 @@ export const supamotoClaims3 = () =>
       // helper to stop flow if just want the above data
       // if (!!1) throw new Error("stop");
 
-      // devide payments per device into 10 devices at a time
+      // divide payments per device into 10 devices at a time
       // ==============================================================
       purchaseData = chunkArray<any[]>(Object.values(purchaseData), 10);
       let stovePurchasesAll: any[] = [];
@@ -1210,7 +1210,7 @@ export const supamotoClaims3 = () =>
       console.time("claims");
       for (const stovePurchases of purchaseData) {
         index++;
-        // if (index < 36) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
+        // if (index < 1) continue; // if want to only mint a certain amount of batches add number here
 
         console.log(
           "starting batch " +

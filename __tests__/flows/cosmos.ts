@@ -25,22 +25,22 @@ export const bankBasic = () =>
         WalletUsers.tester,
         WalletUsers.alice,
         "secp",
-        "ed"
-        // "ixo1kaluffrp0ncy3dlrerla3nd8v6zxwzmega3v7g"
-      );
-      return res;
-    });
-    testMsg("/cosmos.bank.v1beta1.MsgSend", async () => {
-      const res = await Cosmos.BankSendTrx(
-        10000,
-        WalletUsers.alice,
-        WalletUsers.alice,
         "ed",
-        "secp"
-        // "ixo1kaluffrp0ncy3dlrerla3nd8v6zxwzmega3v7g"
+        "ixo1y6lumtueege99zacvjhzdw39kh8rtas27c0kxl"
       );
       return res;
     });
+    // testMsg("/cosmos.bank.v1beta1.MsgSend", async () => {
+    //   const res = await Cosmos.BankSendTrx(
+    //     10000,
+    //     WalletUsers.alice,
+    //     WalletUsers.alice,
+    //     "ed",
+    //     "secp"
+    //     // "ixo1kaluffrp0ncy3dlrerla3nd8v6zxwzmega3v7g"
+    //   );
+    //   return res;
+    // });
   });
 
 export const textProposalBasic = () =>
@@ -144,25 +144,28 @@ export const feegrantAllCurrentUsers = () =>
         key = res.pagination?.nextKey || undefined;
         if (!key?.length) break;
       }
-      console.log(allowances.length);
 
-      // devide grantees into chunks of 200
-      let granteesChunks = chunkArray<string>(
-        allowances.map((a) => a.grantee),
-        180
-      );
-
-      // optionally allow allowances to be fetched from saved file
+      // // optionally allow allowances to be fetched from saved file
+      // // then comment out save to file below if use this
       // allowances = JSON.parse(
       //   getFileFromPath(
       //     ["documents", "random", "mainnet_feegrant_addresses.json"],
       //     "ascii"
       //   )
       // );
-      // // @ts-ignore
-      // granteesChunks = chunkArray<string>(allowances, 180);
-      // console.log(allowances.length);
+      // // allowances fro file is string[], first turn into set to remove duplicates
+      // const allowancesSet = new Set(allowances);
+      // allowances = Array.from(allowancesSet).map((a) => ({
+      //   grantee: a,
+      // })) as any;
 
+      // divide grantees into chunks of 200
+      let granteesChunks = chunkArray<string>(
+        allowances.map((a) => a.grantee),
+        180
+      );
+
+      console.log(allowances.length);
       // to save current grantee addresses incase something goes wrong
       saveFileToPath(
         ["documents", "random", "mainnet_feegrant_addresses.json"],
@@ -197,6 +200,9 @@ export const feegrantAllCurrentUsers = () =>
 export const stakeBasic = () =>
   describe("Testing stake funds and rewards", () => {
     testMsg("/cosmos.staking.v1beta1.MsgDelegate", () => Cosmos.MsgStake());
+    // testMsg("/cosmos.staking.v1beta1.MsgCancelUnbondingDelegation", () =>
+    //   Cosmos.MsgCancelUnbondingDelegation()
+    // );
   });
 
 // ------------------------------------------------------------

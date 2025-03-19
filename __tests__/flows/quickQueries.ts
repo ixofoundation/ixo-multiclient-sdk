@@ -232,11 +232,11 @@ export const quickQueries = () =>
 
     // test("Query cosmos.tx.v1beta1.getTxsEvent", async () => {
     //   const res = await queryClient.cosmos.tx.v1beta1.getTxsEvent({
-    //     events: [`tx.height=${18}`],
+    //     events: [`tx.height=${34}`],
     //     orderBy: cosmos.tx.v1beta1.OrderBy.ORDER_BY_ASC,
     //     limit: Long.fromNumber(10000),
     //     page: Long.fromNumber(1),
-    //     query: `tx.height=${18}`,
+    //     query: `tx.height=${34}`,
     //   });
     //   // console.log(res.txs[0]!.body!.messages[0]);
     //   console.dir(res, { depth: null });
@@ -332,6 +332,34 @@ export const quickQueries = () =>
     //     utils.conversions.Uint8ArrayToJS(res.data)
     //   ).tokens;
     //   console.log({ tokens });
+
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("Query user tokens (entities)", async () => {
+    //   const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //     address:
+    //       // "ixo1fyvnk5zxh87n8f090wty327vl8y2eeadt0d60kmy3t486zzmzm6qp6284q", // isms
+    //       "ixo15jtd4yq97z54s9vw4mmz804fhugvdrn4d8v90zea6tpl8f2d88vqqr54hr", // validator announce
+    //     queryData: utils.conversions.JsonToArray(
+    //       JSON.stringify({
+    //         // multisig_ism: {
+    //         //   enrolled_validators: {
+    //         //     domain: 84532,
+    //         //   },
+    //         // },
+    //         get_announce_storage_locations: {
+    //           validators: ["662e102a234355c5054793cf5f5a1948c9b7193c"],
+    //         },
+    //         // get_announced_validators: {},
+    //         // router: {
+    //         //   list_routes: {},
+    //         // },
+    //       })
+    //     ),
+    //   });
+    //   const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+    //   console.dir(data, { depth: null });
 
     //   expect(res).toBeTruthy();
     // });

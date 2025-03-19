@@ -12,6 +12,7 @@ import {
   uploadAllToCellnodeWeb3Claims,
 } from "../helpers";
 import { WalletUsers } from "../../helpers/constants";
+import { dids } from "../constants";
 
 export const ecsDaoFlow = () =>
   describe("Flow for creating ECS entities (dao/protocol/oracle)", () => {
@@ -48,6 +49,11 @@ export const ecsDaoFlow = () =>
     testMsg("/ixo.iid.v1beta1.MsgAddVerification", () =>
       Entity.AddVerification(daoDid, "", WalletUsers.oracle)
     );
+
+    // // Add ED keys user to ECS for verification of credentials
+    // testMsg("/ixo.iid.v1beta1.MsgAddVerification", () =>
+    //   Entity.AddEdKeysVerification(daoDid, WalletUsers.alice)
+    // );
   });
 
 export const ecsFlow = () =>

@@ -22,7 +22,7 @@ export const getValueFromEvents = (
 ) => {
   try {
     let value: any;
-    // from cosmos-sdk v0.50 onwards, rawLog is not available, events is seperate
+    // from cosmos-sdk v0.50 onwards, rawLog is not available, events is separate
     if (res.events) {
       value = res.events
         .find((e: EventSDKType) => {
@@ -49,7 +49,7 @@ export const getValueFromEvents = (
         })
         ?.attributes?.find((a: EventAttribute) => a.key === attribute).value;
 
-      // if no value it could be for chain pre v0.50 where events doesnt include msgIndex
+      // if no value it could be for chain pre v0.50 where events doesn't include msgIndex
       if (!value) {
         value = res.events
           .find((e: EventSDKType) => {
@@ -85,7 +85,7 @@ export const getValueFromEvents = (
   }
 };
 
-// Iterator function to help run getValueFromEvents with mutliple messages
+// Iterator function to help run getValueFromEvents with multiple messages
 export const getValuesFromEvents = (
   res: DeliverTxResponse,
   event: string,
@@ -93,9 +93,9 @@ export const getValuesFromEvents = (
   filterFunc = (s: any): any => s,
   logError?: boolean,
   throwError?: boolean
-) => {
+): any[] => {
   try {
-    return JSON.parse(res.rawLog!).map((log, i) =>
+    return res.msgResponses.map((_, i) =>
       getValueFromEvents(
         res,
         event,

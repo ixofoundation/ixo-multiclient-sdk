@@ -10,11 +10,14 @@ export function generateSecpDid(address: string) {
 }
 
 // Leaving old code for reference
-// export function generateSecpDid(pubkey: string | Uint8Array, prefix?: string) {
-//   const pubKeyBz = typeof pubkey === "string" ? base58.decode(pubkey) : pubkey;
-//   const did = encodeMbKey(MULTICODEC_SECP256K1_PUB_HEADER, pubKeyBz);
-//   return "did:" + (prefix || "x") + ":" + did;
-// }
+export function generateSecpDidLegacy(
+  pubkey: string | Uint8Array,
+  prefix?: string
+) {
+  const pubKeyBz = typeof pubkey === "string" ? base58.decode(pubkey) : pubkey;
+  const did = encodeMbKey(MULTICODEC_SECP256K1_PUB_HEADER, pubKeyBz);
+  return "did:" + (prefix || "x") + ":" + did;
+}
 
 /**
  * Extracts the public key from a DID.
