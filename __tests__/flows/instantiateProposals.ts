@@ -8,12 +8,13 @@ export const instantiateModulesProposals = () =>
   describe("Testing the gov module", () => {
     let proposalId: number;
 
+    const daodaocontracts = contracts.slice(0, 29);
     // to run all contracts proposals synchronously
-    contracts.map((c, i) => [
+    daodaocontracts.map((c, i) => [
       testMsg(
         `/cosmos.gov.v1beta1.MsgSubmitProposal store wasm contract ${
           i + 1
-        } of ${contracts.length}`,
+        } of ${daodaocontracts.length}`,
         async () => {
           // const res = await Cosmos.MsgSubmitProposalStoreCWOld(c.name, c.path);
           const res = await Cosmos.MsgSubmitProposalStoreCW(c.name, c.path);

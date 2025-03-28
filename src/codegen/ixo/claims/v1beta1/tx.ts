@@ -3,6 +3,8 @@ import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp"
 import { CollectionState, Payments, PaymentsSDKType, CollectionIntentOptions, CW20Payment, CW20PaymentSDKType, EvaluationStatus, DisputeData, DisputeDataSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType, collectionStateFromJSON, collectionIntentOptionsFromJSON, collectionStateToJSON, collectionIntentOptionsToJSON, evaluationStatusFromJSON, evaluationStatusToJSON, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
+import { CreateClaimAuthorizationType, createClaimAuthorizationTypeFromJSON, createClaimAuthorizationTypeToJSON } from "./authz";
+import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
 import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface MsgCreateCollection {
@@ -60,19 +62,20 @@ export interface MsgSubmitClaim {
   /**
    * use_intent is the option for using intent for this claim if it exists and
    * is active. NOTE: if use_intent is true then amount and cw20 amount are
-   * ignored and overriden with intent amounts. NOTE: if use_intent is true and
+   * ignored and overridden with intent amounts. NOTE: if use_intent is true and
    * there is no active intent then will error
    */
   useIntent: boolean;
   /**
-   * NOTE: if both amount and cw20_payment are empty then use default by
-   * Collection custom amount specified by service agent for claim approval
+   * custom amount specified by service agent for claim approval
+   * NOTE: if both amount and cw20_payment are empty then collection default is
+   * used
    */
   amount: Coin[];
   /**
-   * NOTE: if both amount and cw20 amount are empty then use default by
-   * Collection custom cw20 payments specified by service agent for claim
-   * approval
+   * custom cw20 payments specified by service agent for claim approval
+   * NOTE: if both amount and cw20 amount are empty then collection default is
+   * used
    */
   cw20Payment: CW20Payment[];
 }
@@ -110,20 +113,20 @@ export interface MsgEvaluateClaim {
    * was given (codes defined by evaluator)
    */
   reason: number;
-  /** verificationProof is the cid of the evaluation Verfiable Credential */
+  /** verificationProof is the cid of the evaluation Verifiable Credential */
   verificationProof: string;
   /**
+   * custom amount specified by evaluator for claim approval
    * NOTE: if claim is using intent, then amount and cw20 amount are ignored and
-   * overriden with intent amounts NOTE: if both amount and cw20 amount are
-   * empty then use collection default custom amount specified by evaluator for
-   * claim approval
+   * overridden with intent amounts NOTE: if both amount and cw20 amount are
+   * empty then collection default is used
    */
   amount: Coin[];
   /**
+   * custom cw20 payments specified by evaluator for claim approval
    * NOTE: if claim is using intent, then amount and cw20 amount are ignored and
-   * overriden with intent amounts NOTE: if both amount and cw20 amount are
-   * empty then use collection default custom cw20 payments specified by
-   * evaluator for claim approval
+   * overridden with intent amounts NOTE: if both amount and cw20 amount are
+   * empty then collection default is used
    */
   cw20Payment: CW20Payment[];
 }
@@ -178,9 +181,9 @@ export interface MsgDisputeClaimResponseSDKType {}
 export interface MsgWithdrawPayment {
   /** claim_id the withdrawal is for */
   claimId: string;
-  /** Inputs to the multisend tx to run to withdraw payment */
+  /** Inputs to the multi send tx to run to withdraw payment */
   inputs: Input[];
-  /** Outputs for the multisend tx to run to withdraw payment */
+  /** Outputs for the multi send tx to run to withdraw payment */
   outputs: Output[];
   /**
    * payment type to keep track what payment is for and mark claim payment
@@ -300,13 +303,15 @@ export interface MsgClaimIntent {
   /** The id of the collection this intent is linked to. */
   collectionId: string;
   /**
+   * The desired claim amount, if any.
    * NOTE: if both amount and cw20 amount are empty then default by Collection
-   * is used (APPROVAL payment). The desired claim amount, if any.
+   * is used (APPROVAL payment).
    */
   amount: Coin[];
   /**
+   * The custom CW20 payment, if any.
    * NOTE: if both amount and cw20 amount are empty then default by Collection
-   * is used (APPROVAL payment). The custom CW20 payment, if any.
+   * is used (APPROVAL payment).
    */
   cw20Payment: CW20Payment[];
 }
@@ -332,6 +337,80 @@ export interface MsgClaimIntentResponseSDKType {
   intent_id: string;
   expire_at?: TimestampSDKType;
 }
+/**
+ * MsgCreateClaimAuthorization defines a message for creating a claim
+ * authorization on behalf of an entity admin account (SubmitClaimAuthorization
+ * or EvaluateClaimAuthorization)
+ */
+export interface MsgCreateClaimAuthorization {
+  /** Address of the creator (user with meta-authorization) */
+  creatorAddress: string;
+  /** agent is the DID of the agent submitting the claim */
+  creatorDid: string;
+  /** Address of the grantee (who will receive the authorization) */
+  granteeAddress: string;
+  /** admin address used to sign this message, validated against Collection Admin */
+  adminAddress: string;
+  /** Collection ID the authorization applies to (for both submit and evaluate) */
+  collectionId: string;
+  /**
+   * Type of authorization to create (submit or evaluate, can't create both in a
+   * single request)
+   */
+  authType: CreateClaimAuthorizationType;
+  /** Quota for the created authorization (for both submit and evaluate) */
+  agentQuota: Long;
+  /**
+   * Maximum amount that can be specified in the authorization (for both submit
+   * and evaluate)
+   */
+  maxAmount: Coin[];
+  /**
+   * Maximum CW20 payment that can be specified in the authorization (for both
+   * submit and evaluate)
+   */
+  maxCw20Payment: CW20Payment[];
+  /**
+   * Expiration time for the authorization, be careful with this as it is the
+   * expiration of the authorization itself, not the constraints, meaning if the
+   * authorization expires all constraints will be removed with the
+   * authorization (standard authz behavior)
+   */
+  expiration?: Timestamp;
+  /** Maximum intent duration for the authorization allowed (for submit) */
+  intentDurationNs?: Duration;
+  /** if null then no before_date validation done (for evaluate) */
+  beforeDate?: Timestamp;
+}
+/**
+ * MsgCreateClaimAuthorization defines a message for creating a claim
+ * authorization on behalf of an entity admin account (SubmitClaimAuthorization
+ * or EvaluateClaimAuthorization)
+ */
+export interface MsgCreateClaimAuthorizationSDKType {
+  creator_address: string;
+  creator_did: string;
+  grantee_address: string;
+  admin_address: string;
+  collection_id: string;
+  auth_type: CreateClaimAuthorizationType;
+  agent_quota: Long;
+  max_amount: CoinSDKType[];
+  max_cw20_payment: CW20PaymentSDKType[];
+  expiration?: TimestampSDKType;
+  intent_duration_ns?: DurationSDKType;
+  before_date?: TimestampSDKType;
+}
+/**
+ * MsgCreateClaimAuthorizationResponse defines the response for creating a claim
+ * authorization
+ */
+export interface MsgCreateClaimAuthorizationResponse {}
+/**
+ * MsgCreateClaimAuthorizationResponse defines the response for creating a claim
+ * authorization
+ */
+export interface MsgCreateClaimAuthorizationResponseSDKType {}
 function createBaseMsgCreateCollection(): MsgCreateCollection {
   return {
     entity: "",
@@ -1677,6 +1756,202 @@ export const MsgClaimIntentResponse = {
     const message = createBaseMsgClaimIntentResponse();
     message.intentId = object.intentId ?? "";
     message.expireAt = object.expireAt !== undefined && object.expireAt !== null ? Timestamp.fromPartial(object.expireAt) : undefined;
+    return message;
+  }
+};
+function createBaseMsgCreateClaimAuthorization(): MsgCreateClaimAuthorization {
+  return {
+    creatorAddress: "",
+    creatorDid: "",
+    granteeAddress: "",
+    adminAddress: "",
+    collectionId: "",
+    authType: 0,
+    agentQuota: Long.UZERO,
+    maxAmount: [],
+    maxCw20Payment: [],
+    expiration: undefined,
+    intentDurationNs: undefined,
+    beforeDate: undefined
+  };
+}
+export const MsgCreateClaimAuthorization = {
+  encode(message: MsgCreateClaimAuthorization, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creatorAddress !== "") {
+      writer.uint32(10).string(message.creatorAddress);
+    }
+    if (message.creatorDid !== "") {
+      writer.uint32(18).string(message.creatorDid);
+    }
+    if (message.granteeAddress !== "") {
+      writer.uint32(26).string(message.granteeAddress);
+    }
+    if (message.adminAddress !== "") {
+      writer.uint32(34).string(message.adminAddress);
+    }
+    if (message.collectionId !== "") {
+      writer.uint32(42).string(message.collectionId);
+    }
+    if (message.authType !== 0) {
+      writer.uint32(48).int32(message.authType);
+    }
+    if (!message.agentQuota.isZero()) {
+      writer.uint32(56).uint64(message.agentQuota);
+    }
+    for (const v of message.maxAmount) {
+      Coin.encode(v!, writer.uint32(66).fork()).ldelim();
+    }
+    for (const v of message.maxCw20Payment) {
+      CW20Payment.encode(v!, writer.uint32(74).fork()).ldelim();
+    }
+    if (message.expiration !== undefined) {
+      Timestamp.encode(message.expiration, writer.uint32(82).fork()).ldelim();
+    }
+    if (message.intentDurationNs !== undefined) {
+      Duration.encode(message.intentDurationNs, writer.uint32(90).fork()).ldelim();
+    }
+    if (message.beforeDate !== undefined) {
+      Timestamp.encode(message.beforeDate, writer.uint32(98).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateClaimAuthorization {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgCreateClaimAuthorization();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creatorAddress = reader.string();
+          break;
+        case 2:
+          message.creatorDid = reader.string();
+          break;
+        case 3:
+          message.granteeAddress = reader.string();
+          break;
+        case 4:
+          message.adminAddress = reader.string();
+          break;
+        case 5:
+          message.collectionId = reader.string();
+          break;
+        case 6:
+          message.authType = (reader.int32() as any);
+          break;
+        case 7:
+          message.agentQuota = (reader.uint64() as Long);
+          break;
+        case 8:
+          message.maxAmount.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 9:
+          message.maxCw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
+        case 10:
+          message.expiration = Timestamp.decode(reader, reader.uint32());
+          break;
+        case 11:
+          message.intentDurationNs = Duration.decode(reader, reader.uint32());
+          break;
+        case 12:
+          message.beforeDate = Timestamp.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgCreateClaimAuthorization {
+    return {
+      creatorAddress: isSet(object.creatorAddress) ? String(object.creatorAddress) : "",
+      creatorDid: isSet(object.creatorDid) ? String(object.creatorDid) : "",
+      granteeAddress: isSet(object.granteeAddress) ? String(object.granteeAddress) : "",
+      adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : "",
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      authType: isSet(object.authType) ? createClaimAuthorizationTypeFromJSON(object.authType) : 0,
+      agentQuota: isSet(object.agentQuota) ? Long.fromValue(object.agentQuota) : Long.UZERO,
+      maxAmount: Array.isArray(object?.maxAmount) ? object.maxAmount.map((e: any) => Coin.fromJSON(e)) : [],
+      maxCw20Payment: Array.isArray(object?.maxCw20Payment) ? object.maxCw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      expiration: isSet(object.expiration) ? fromJsonTimestamp(object.expiration) : undefined,
+      intentDurationNs: isSet(object.intentDurationNs) ? Duration.fromJSON(object.intentDurationNs) : undefined,
+      beforeDate: isSet(object.beforeDate) ? fromJsonTimestamp(object.beforeDate) : undefined
+    };
+  },
+  toJSON(message: MsgCreateClaimAuthorization): unknown {
+    const obj: any = {};
+    message.creatorAddress !== undefined && (obj.creatorAddress = message.creatorAddress);
+    message.creatorDid !== undefined && (obj.creatorDid = message.creatorDid);
+    message.granteeAddress !== undefined && (obj.granteeAddress = message.granteeAddress);
+    message.adminAddress !== undefined && (obj.adminAddress = message.adminAddress);
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.authType !== undefined && (obj.authType = createClaimAuthorizationTypeToJSON(message.authType));
+    message.agentQuota !== undefined && (obj.agentQuota = (message.agentQuota || Long.UZERO).toString());
+    if (message.maxAmount) {
+      obj.maxAmount = message.maxAmount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.maxAmount = [];
+    }
+    if (message.maxCw20Payment) {
+      obj.maxCw20Payment = message.maxCw20Payment.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.maxCw20Payment = [];
+    }
+    message.expiration !== undefined && (obj.expiration = fromTimestamp(message.expiration).toISOString());
+    message.intentDurationNs !== undefined && (obj.intentDurationNs = message.intentDurationNs ? Duration.toJSON(message.intentDurationNs) : undefined);
+    message.beforeDate !== undefined && (obj.beforeDate = fromTimestamp(message.beforeDate).toISOString());
+    return obj;
+  },
+  fromPartial(object: Partial<MsgCreateClaimAuthorization>): MsgCreateClaimAuthorization {
+    const message = createBaseMsgCreateClaimAuthorization();
+    message.creatorAddress = object.creatorAddress ?? "";
+    message.creatorDid = object.creatorDid ?? "";
+    message.granteeAddress = object.granteeAddress ?? "";
+    message.adminAddress = object.adminAddress ?? "";
+    message.collectionId = object.collectionId ?? "";
+    message.authType = object.authType ?? 0;
+    message.agentQuota = object.agentQuota !== undefined && object.agentQuota !== null ? Long.fromValue(object.agentQuota) : Long.UZERO;
+    message.maxAmount = object.maxAmount?.map(e => Coin.fromPartial(e)) || [];
+    message.maxCw20Payment = object.maxCw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.expiration = object.expiration !== undefined && object.expiration !== null ? Timestamp.fromPartial(object.expiration) : undefined;
+    message.intentDurationNs = object.intentDurationNs !== undefined && object.intentDurationNs !== null ? Duration.fromPartial(object.intentDurationNs) : undefined;
+    message.beforeDate = object.beforeDate !== undefined && object.beforeDate !== null ? Timestamp.fromPartial(object.beforeDate) : undefined;
+    return message;
+  }
+};
+function createBaseMsgCreateClaimAuthorizationResponse(): MsgCreateClaimAuthorizationResponse {
+  return {};
+}
+export const MsgCreateClaimAuthorizationResponse = {
+  encode(_: MsgCreateClaimAuthorizationResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateClaimAuthorizationResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgCreateClaimAuthorizationResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgCreateClaimAuthorizationResponse {
+    return {};
+  },
+  toJSON(_: MsgCreateClaimAuthorizationResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgCreateClaimAuthorizationResponse>): MsgCreateClaimAuthorizationResponse {
+    const message = createBaseMsgCreateClaimAuthorizationResponse();
     return message;
   }
 };

@@ -11,8 +11,9 @@ export const getSecpClient = async (mnemonic: string) => {
   const secpClient = {
     mnemonic,
     didDoc: "",
-    didPrefix: "did:x:",
-    did: utils.did.generateSecpDid(base58.encode(account.pubkey)),
+    didPrefix: "did:ixo:",
+    // did: utils.did.generateSecpDidLegacy(base58.encode(account.pubkey)), // legacy
+    did: utils.did.generateSecpDid(account.address),
 
     async getAccounts() {
       return (await wallet.getAccounts()) as AccountData[];

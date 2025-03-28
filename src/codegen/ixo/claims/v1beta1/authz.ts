@@ -6,8 +6,52 @@ import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp"
 import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
 import { Long, isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
+/**
+ * AuthorizationType defines the types of claim authorizations that can be
+ * created
+ */
+export enum CreateClaimAuthorizationType {
+  /** ALL - both submit and evaluate */
+  ALL = 0,
+  /** SUBMIT - submit only */
+  SUBMIT = 1,
+  /** EVALUATE - evaluate only */
+  EVALUATE = 2,
+  UNRECOGNIZED = -1,
+}
+export const CreateClaimAuthorizationTypeSDKType = CreateClaimAuthorizationType;
+export function createClaimAuthorizationTypeFromJSON(object: any): CreateClaimAuthorizationType {
+  switch (object) {
+    case 0:
+    case "ALL":
+      return CreateClaimAuthorizationType.ALL;
+    case 1:
+    case "SUBMIT":
+      return CreateClaimAuthorizationType.SUBMIT;
+    case 2:
+    case "EVALUATE":
+      return CreateClaimAuthorizationType.EVALUATE;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return CreateClaimAuthorizationType.UNRECOGNIZED;
+  }
+}
+export function createClaimAuthorizationTypeToJSON(object: CreateClaimAuthorizationType): string {
+  switch (object) {
+    case CreateClaimAuthorizationType.ALL:
+      return "ALL";
+    case CreateClaimAuthorizationType.SUBMIT:
+      return "SUBMIT";
+    case CreateClaimAuthorizationType.EVALUATE:
+      return "EVALUATE";
+    case CreateClaimAuthorizationType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
 export interface SubmitClaimAuthorization {
-  /** address of admin */
+  /** address of admin (entity admin module account) */
   admin: string;
   constraints: SubmitClaimConstraints[];
 }
@@ -21,12 +65,14 @@ export interface SubmitClaimConstraints {
   agentQuota: Long;
   /**
    * custom max_amount allowed to be specified by service agent for claim
-   * approval, if empty then no custom amount is allowed
+   * approval, if empty then no custom amount is allowed, and default payments
+   * from Collection payments are used
    */
   maxAmount: Coin[];
   /**
    * custom max_cw20_payment allowed to be specified by service agent for claim
-   * approval, if empty then no custom amount is allowed
+   * approval, if empty then no custom amount is allowed, and default payments
+   * from Collection payments are used
    */
   maxCw20Payment: CW20Payment[];
   /**
@@ -43,7 +89,7 @@ export interface SubmitClaimConstraintsSDKType {
   intent_duration_ns?: DurationSDKType;
 }
 export interface EvaluateClaimAuthorization {
-  /** address of admin */
+  /** address of admin (entity admin module account) */
   admin: string;
   constraints: EvaluateClaimConstraints[];
 }
@@ -60,13 +106,13 @@ export interface EvaluateClaimConstraints {
   /** if null then no before_date validation done */
   beforeDate?: Timestamp;
   /**
-   * max custom amount evaluator can change, if empty list must use amount
-   * defined in Token payments
+   * max custom amount evaluator can change, if empty then no custom amount is
+   * allowed, and default payments from Collection payments are used
    */
   maxCustomAmount: Coin[];
   /**
-   * max custom cw20 payment evaluator can change, if empty list must use amount
-   * defined in Token payments
+   * max custom cw20 payment evaluator can change, if empty then no custom
+   * amount is allowed, and default payments from Collection payments are used
    */
   maxCustomCw20Payment: CW20Payment[];
 }
@@ -123,6 +169,87 @@ export interface WithdrawPaymentConstraintsSDKType {
   fromAddress: string;
   release_date?: TimestampSDKType;
   cw20_payment: CW20PaymentSDKType[];
+}
+/**
+ * CreateClaimAuthorizationAuthorization allows a grantee to create
+ * SubmitClaimAuthorization and EvaluateClaimAuthorization for specific
+ * collections(constraints)
+ */
+export interface CreateClaimAuthorizationAuthorization {
+  /** address of admin (entity admin module account) */
+  admin: string;
+  /** Constraints on the authorizations that can be created */
+  constraints: CreateClaimAuthorizationConstraints[];
+}
+/**
+ * CreateClaimAuthorizationAuthorization allows a grantee to create
+ * SubmitClaimAuthorization and EvaluateClaimAuthorization for specific
+ * collections(constraints)
+ */
+export interface CreateClaimAuthorizationAuthorizationSDKType {
+  admin: string;
+  constraints: CreateClaimAuthorizationConstraintsSDKType[];
+}
+/**
+ * CreateClaimAuthorizationConstraints defines the constraints for creating
+ * claim authorizations
+ */
+export interface CreateClaimAuthorizationConstraints {
+  /**
+   * Maximum number of authorizations that can be created through this
+   * meta-authorization, 0 means no quota
+   */
+  maxAuthorizations: Long;
+  /**
+   * Maximum quota that can be set in created authorizations
+   * 0 means no quota maximum quota per authorization
+   */
+  maxAgentQuota: Long;
+  /**
+   * Maximum amount that can be set in created authorizations,
+   * if empty then any custom amount is allowed in the created authorizations
+   * explicitly set to 0 to disallow any custom amount in the created
+   * authorizations
+   */
+  maxAmount: Coin[];
+  /**
+   * Maximum cw20 payment that can be set in created authorizations,
+   * if empty then any cw20 payment is allowed in the created authorizations
+   * explicitly set to 0 to disallow any cw20 payment in the created
+   * authorizations
+   */
+  maxCw20Payment: CW20Payment[];
+  /**
+   * Expiration of this meta-authorization(specific constraint), if not set then
+   * no expiration
+   */
+  expiration?: Timestamp;
+  /**
+   * Collection IDs the grantee can create authorizations for, if empty then all
+   * collections for the admin are allowed
+   */
+  collectionIds: string[];
+  /**
+   * Types of authorizations the grantee can create (submit, evaluate, or
+   * all(both))
+   */
+  allowedAuthTypes: CreateClaimAuthorizationType;
+  /** Maximum intent duration for the authorization allowed (for submit) */
+  maxIntentDurationNs?: Duration;
+}
+/**
+ * CreateClaimAuthorizationConstraints defines the constraints for creating
+ * claim authorizations
+ */
+export interface CreateClaimAuthorizationConstraintsSDKType {
+  max_authorizations: Long;
+  max_agent_quota: Long;
+  max_amount: CoinSDKType[];
+  max_cw20_payment: CW20PaymentSDKType[];
+  expiration?: TimestampSDKType;
+  collection_ids: string[];
+  allowed_auth_types: CreateClaimAuthorizationType;
+  max_intent_duration_ns?: DurationSDKType;
 }
 function createBaseSubmitClaimAuthorization(): SubmitClaimAuthorization {
   return {
@@ -635,6 +762,192 @@ export const WithdrawPaymentConstraints = {
     message.fromAddress = object.fromAddress ?? "";
     message.releaseDate = object.releaseDate !== undefined && object.releaseDate !== null ? Timestamp.fromPartial(object.releaseDate) : undefined;
     message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
+    return message;
+  }
+};
+function createBaseCreateClaimAuthorizationAuthorization(): CreateClaimAuthorizationAuthorization {
+  return {
+    admin: "",
+    constraints: []
+  };
+}
+export const CreateClaimAuthorizationAuthorization = {
+  encode(message: CreateClaimAuthorizationAuthorization, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.admin !== "") {
+      writer.uint32(10).string(message.admin);
+    }
+    for (const v of message.constraints) {
+      CreateClaimAuthorizationConstraints.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): CreateClaimAuthorizationAuthorization {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCreateClaimAuthorizationAuthorization();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.admin = reader.string();
+          break;
+        case 2:
+          message.constraints.push(CreateClaimAuthorizationConstraints.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): CreateClaimAuthorizationAuthorization {
+    return {
+      admin: isSet(object.admin) ? String(object.admin) : "",
+      constraints: Array.isArray(object?.constraints) ? object.constraints.map((e: any) => CreateClaimAuthorizationConstraints.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: CreateClaimAuthorizationAuthorization): unknown {
+    const obj: any = {};
+    message.admin !== undefined && (obj.admin = message.admin);
+    if (message.constraints) {
+      obj.constraints = message.constraints.map(e => e ? CreateClaimAuthorizationConstraints.toJSON(e) : undefined);
+    } else {
+      obj.constraints = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<CreateClaimAuthorizationAuthorization>): CreateClaimAuthorizationAuthorization {
+    const message = createBaseCreateClaimAuthorizationAuthorization();
+    message.admin = object.admin ?? "";
+    message.constraints = object.constraints?.map(e => CreateClaimAuthorizationConstraints.fromPartial(e)) || [];
+    return message;
+  }
+};
+function createBaseCreateClaimAuthorizationConstraints(): CreateClaimAuthorizationConstraints {
+  return {
+    maxAuthorizations: Long.UZERO,
+    maxAgentQuota: Long.UZERO,
+    maxAmount: [],
+    maxCw20Payment: [],
+    expiration: undefined,
+    collectionIds: [],
+    allowedAuthTypes: 0,
+    maxIntentDurationNs: undefined
+  };
+}
+export const CreateClaimAuthorizationConstraints = {
+  encode(message: CreateClaimAuthorizationConstraints, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (!message.maxAuthorizations.isZero()) {
+      writer.uint32(8).uint64(message.maxAuthorizations);
+    }
+    if (!message.maxAgentQuota.isZero()) {
+      writer.uint32(16).uint64(message.maxAgentQuota);
+    }
+    for (const v of message.maxAmount) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.maxCw20Payment) {
+      CW20Payment.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.expiration !== undefined) {
+      Timestamp.encode(message.expiration, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.collectionIds) {
+      writer.uint32(50).string(v!);
+    }
+    if (message.allowedAuthTypes !== 0) {
+      writer.uint32(56).int32(message.allowedAuthTypes);
+    }
+    if (message.maxIntentDurationNs !== undefined) {
+      Duration.encode(message.maxIntentDurationNs, writer.uint32(66).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): CreateClaimAuthorizationConstraints {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCreateClaimAuthorizationConstraints();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.maxAuthorizations = (reader.uint64() as Long);
+          break;
+        case 2:
+          message.maxAgentQuota = (reader.uint64() as Long);
+          break;
+        case 3:
+          message.maxAmount.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 4:
+          message.maxCw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
+        case 5:
+          message.expiration = Timestamp.decode(reader, reader.uint32());
+          break;
+        case 6:
+          message.collectionIds.push(reader.string());
+          break;
+        case 7:
+          message.allowedAuthTypes = (reader.int32() as any);
+          break;
+        case 8:
+          message.maxIntentDurationNs = Duration.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): CreateClaimAuthorizationConstraints {
+    return {
+      maxAuthorizations: isSet(object.maxAuthorizations) ? Long.fromValue(object.maxAuthorizations) : Long.UZERO,
+      maxAgentQuota: isSet(object.maxAgentQuota) ? Long.fromValue(object.maxAgentQuota) : Long.UZERO,
+      maxAmount: Array.isArray(object?.maxAmount) ? object.maxAmount.map((e: any) => Coin.fromJSON(e)) : [],
+      maxCw20Payment: Array.isArray(object?.maxCw20Payment) ? object.maxCw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      expiration: isSet(object.expiration) ? fromJsonTimestamp(object.expiration) : undefined,
+      collectionIds: Array.isArray(object?.collectionIds) ? object.collectionIds.map((e: any) => String(e)) : [],
+      allowedAuthTypes: isSet(object.allowedAuthTypes) ? createClaimAuthorizationTypeFromJSON(object.allowedAuthTypes) : 0,
+      maxIntentDurationNs: isSet(object.maxIntentDurationNs) ? Duration.fromJSON(object.maxIntentDurationNs) : undefined
+    };
+  },
+  toJSON(message: CreateClaimAuthorizationConstraints): unknown {
+    const obj: any = {};
+    message.maxAuthorizations !== undefined && (obj.maxAuthorizations = (message.maxAuthorizations || Long.UZERO).toString());
+    message.maxAgentQuota !== undefined && (obj.maxAgentQuota = (message.maxAgentQuota || Long.UZERO).toString());
+    if (message.maxAmount) {
+      obj.maxAmount = message.maxAmount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.maxAmount = [];
+    }
+    if (message.maxCw20Payment) {
+      obj.maxCw20Payment = message.maxCw20Payment.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.maxCw20Payment = [];
+    }
+    message.expiration !== undefined && (obj.expiration = fromTimestamp(message.expiration).toISOString());
+    if (message.collectionIds) {
+      obj.collectionIds = message.collectionIds.map(e => e);
+    } else {
+      obj.collectionIds = [];
+    }
+    message.allowedAuthTypes !== undefined && (obj.allowedAuthTypes = createClaimAuthorizationTypeToJSON(message.allowedAuthTypes));
+    message.maxIntentDurationNs !== undefined && (obj.maxIntentDurationNs = message.maxIntentDurationNs ? Duration.toJSON(message.maxIntentDurationNs) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<CreateClaimAuthorizationConstraints>): CreateClaimAuthorizationConstraints {
+    const message = createBaseCreateClaimAuthorizationConstraints();
+    message.maxAuthorizations = object.maxAuthorizations !== undefined && object.maxAuthorizations !== null ? Long.fromValue(object.maxAuthorizations) : Long.UZERO;
+    message.maxAgentQuota = object.maxAgentQuota !== undefined && object.maxAgentQuota !== null ? Long.fromValue(object.maxAgentQuota) : Long.UZERO;
+    message.maxAmount = object.maxAmount?.map(e => Coin.fromPartial(e)) || [];
+    message.maxCw20Payment = object.maxCw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.expiration = object.expiration !== undefined && object.expiration !== null ? Timestamp.fromPartial(object.expiration) : undefined;
+    message.collectionIds = object.collectionIds?.map(e => e) || [];
+    message.allowedAuthTypes = object.allowedAuthTypes ?? 0;
+    message.maxIntentDurationNs = object.maxIntentDurationNs !== undefined && object.maxIntentDurationNs !== null ? Duration.fromPartial(object.maxIntentDurationNs) : undefined;
     return message;
   }
 };

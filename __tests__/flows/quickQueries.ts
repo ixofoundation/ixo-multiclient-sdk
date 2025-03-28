@@ -312,6 +312,83 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
+    // test("Query cw20 token balancea", async () => {
+    //   const cw20Address =
+    //     "ixo1747e2jlnmk6lzqe2pcpq4x0fxys4e7puadx7np78s9ygqed24cxshj2xuc";
+
+    //   const ixo = await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //     address: cw20Address,
+    //     queryData: utils.conversions.JsonToArray(
+    //       JSON.stringify({
+    //         balance: {
+    //           address: "ixo1kqmtxkggcqa9u34lnr6shy0euvclgatw4f9zz5",
+    //         },
+    //       })
+    //     ),
+    //   });
+    //   const ixoData = JSON.parse(utils.conversions.Uint8ArrayToJS(ixo.data));
+
+    //   const relayer = await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //     address: cw20Address,
+    //     queryData: utils.conversions.JsonToArray(
+    //       JSON.stringify({
+    //         balance: {
+    //           address: "ixo1drv3l0hut8rexrnm9vf3pfmtw053ms63lgx36u",
+    //         },
+    //       })
+    //     ),
+    //   });
+    //   const relayerData = JSON.parse(
+    //     utils.conversions.Uint8ArrayToJS(relayer.data)
+    //   );
+
+    //   const alice = await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //     address: cw20Address,
+    //     queryData: utils.conversions.JsonToArray(
+    //       JSON.stringify({
+    //         balance: {
+    //           address: "ixo12am7v5xgjh72c7xujreyvtncqwue3w0v6ud3r4",
+    //         },
+    //       })
+    //     ),
+    //   });
+    //   const aliceData = JSON.parse(
+    //     utils.conversions.Uint8ArrayToJS(alice.data)
+    //   );
+
+    //   const escrow = await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //     address: cw20Address,
+    //     queryData: utils.conversions.JsonToArray(
+    //       JSON.stringify({
+    //         balance: {
+    //           address: "ixo1h8ysw25vwez33hh9yx03kea935achlvrqve956",
+    //         },
+    //       })
+    //     ),
+    //   });
+    //   const escrowData = JSON.parse(
+    //     utils.conversions.Uint8ArrayToJS(escrow.data)
+    //   );
+
+    //   const admin = await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //     address: cw20Address,
+    //     queryData: utils.conversions.JsonToArray(
+    //       JSON.stringify({
+    //         balance: {
+    //           address: "ixo1wc43xczdzlc623e9ssxkndpqnvgk2vq4hheyq2",
+    //         },
+    //       })
+    //     ),
+    //   });
+    //   const adminData = JSON.parse(
+    //     utils.conversions.Uint8ArrayToJS(admin.data)
+    //   );
+
+    //   console.log({ ixoData, relayerData, aliceData, escrowData, adminData });
+
+    //   expect(ixo).toBeTruthy();
+    // });
+
     // test("Query user tokens (entities)", async () => {
     //   const address = (await getUser(WalletUsers.tester).getAccounts())[0]
     //     .address;
