@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType } from "./claims";
+import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, Intent, IntentSDKType } from "./claims";
 import { WithdrawPaymentConstraints, WithdrawPaymentConstraintsSDKType } from "./authz";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
@@ -59,12 +59,13 @@ export interface ClaimDisputedEventSDKType {
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface PaymentWithdrawnEvent {
-  /** ClaimDisputedEvent is an event triggered on a Claim dispute */
   withdraw?: WithdrawPaymentConstraints;
+  cw20Outputs: CW20Output[];
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface PaymentWithdrawnEventSDKType {
   withdraw?: WithdrawPaymentConstraintsSDKType;
+  cw20_outputs: CW20OutputSDKType[];
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface PaymentWithdrawCreatedEvent {
@@ -92,6 +93,30 @@ export interface IntentUpdatedEvent {
 /** IntentUpdatedEvent is an event triggered on an Intent update */
 export interface IntentUpdatedEventSDKType {
   intent?: IntentSDKType;
+}
+/**
+ * ClaimAuthorizationCreatedEvent is an event triggered on a Claim authorization
+ * creation
+ */
+export interface ClaimAuthorizationCreatedEvent {
+  creator: string;
+  creatorDid: string;
+  grantee: string;
+  admin: string;
+  collectionId: string;
+  authType: string;
+}
+/**
+ * ClaimAuthorizationCreatedEvent is an event triggered on a Claim authorization
+ * creation
+ */
+export interface ClaimAuthorizationCreatedEventSDKType {
+  creator: string;
+  creator_did: string;
+  grantee: string;
+  admin: string;
+  collection_id: string;
+  auth_type: string;
 }
 function createBaseCollectionCreatedEvent(): CollectionCreatedEvent {
   return {
@@ -365,13 +390,17 @@ export const ClaimDisputedEvent = {
 };
 function createBasePaymentWithdrawnEvent(): PaymentWithdrawnEvent {
   return {
-    withdraw: undefined
+    withdraw: undefined,
+    cw20Outputs: []
   };
 }
 export const PaymentWithdrawnEvent = {
   encode(message: PaymentWithdrawnEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.withdraw !== undefined) {
       WithdrawPaymentConstraints.encode(message.withdraw, writer.uint32(10).fork()).ldelim();
+    }
+    for (const v of message.cw20Outputs) {
+      CW20Output.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -385,6 +414,9 @@ export const PaymentWithdrawnEvent = {
         case 1:
           message.withdraw = WithdrawPaymentConstraints.decode(reader, reader.uint32());
           break;
+        case 2:
+          message.cw20Outputs.push(CW20Output.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -394,17 +426,24 @@ export const PaymentWithdrawnEvent = {
   },
   fromJSON(object: any): PaymentWithdrawnEvent {
     return {
-      withdraw: isSet(object.withdraw) ? WithdrawPaymentConstraints.fromJSON(object.withdraw) : undefined
+      withdraw: isSet(object.withdraw) ? WithdrawPaymentConstraints.fromJSON(object.withdraw) : undefined,
+      cw20Outputs: Array.isArray(object?.cw20Outputs) ? object.cw20Outputs.map((e: any) => CW20Output.fromJSON(e)) : []
     };
   },
   toJSON(message: PaymentWithdrawnEvent): unknown {
     const obj: any = {};
     message.withdraw !== undefined && (obj.withdraw = message.withdraw ? WithdrawPaymentConstraints.toJSON(message.withdraw) : undefined);
+    if (message.cw20Outputs) {
+      obj.cw20Outputs = message.cw20Outputs.map(e => e ? CW20Output.toJSON(e) : undefined);
+    } else {
+      obj.cw20Outputs = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<PaymentWithdrawnEvent>): PaymentWithdrawnEvent {
     const message = createBasePaymentWithdrawnEvent();
     message.withdraw = object.withdraw !== undefined && object.withdraw !== null ? WithdrawPaymentConstraints.fromPartial(object.withdraw) : undefined;
+    message.cw20Outputs = object.cw20Outputs?.map(e => CW20Output.fromPartial(e)) || [];
     return message;
   }
 };
@@ -540,6 +579,101 @@ export const IntentUpdatedEvent = {
   fromPartial(object: Partial<IntentUpdatedEvent>): IntentUpdatedEvent {
     const message = createBaseIntentUpdatedEvent();
     message.intent = object.intent !== undefined && object.intent !== null ? Intent.fromPartial(object.intent) : undefined;
+    return message;
+  }
+};
+function createBaseClaimAuthorizationCreatedEvent(): ClaimAuthorizationCreatedEvent {
+  return {
+    creator: "",
+    creatorDid: "",
+    grantee: "",
+    admin: "",
+    collectionId: "",
+    authType: ""
+  };
+}
+export const ClaimAuthorizationCreatedEvent = {
+  encode(message: ClaimAuthorizationCreatedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.creatorDid !== "") {
+      writer.uint32(18).string(message.creatorDid);
+    }
+    if (message.grantee !== "") {
+      writer.uint32(26).string(message.grantee);
+    }
+    if (message.admin !== "") {
+      writer.uint32(34).string(message.admin);
+    }
+    if (message.collectionId !== "") {
+      writer.uint32(42).string(message.collectionId);
+    }
+    if (message.authType !== "") {
+      writer.uint32(50).string(message.authType);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): ClaimAuthorizationCreatedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseClaimAuthorizationCreatedEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.creatorDid = reader.string();
+          break;
+        case 3:
+          message.grantee = reader.string();
+          break;
+        case 4:
+          message.admin = reader.string();
+          break;
+        case 5:
+          message.collectionId = reader.string();
+          break;
+        case 6:
+          message.authType = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): ClaimAuthorizationCreatedEvent {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      creatorDid: isSet(object.creatorDid) ? String(object.creatorDid) : "",
+      grantee: isSet(object.grantee) ? String(object.grantee) : "",
+      admin: isSet(object.admin) ? String(object.admin) : "",
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      authType: isSet(object.authType) ? String(object.authType) : ""
+    };
+  },
+  toJSON(message: ClaimAuthorizationCreatedEvent): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.creatorDid !== undefined && (obj.creatorDid = message.creatorDid);
+    message.grantee !== undefined && (obj.grantee = message.grantee);
+    message.admin !== undefined && (obj.admin = message.admin);
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.authType !== undefined && (obj.authType = message.authType);
+    return obj;
+  },
+  fromPartial(object: Partial<ClaimAuthorizationCreatedEvent>): ClaimAuthorizationCreatedEvent {
+    const message = createBaseClaimAuthorizationCreatedEvent();
+    message.creator = object.creator ?? "";
+    message.creatorDid = object.creatorDid ?? "";
+    message.grantee = object.grantee ?? "";
+    message.admin = object.admin ?? "";
+    message.collectionId = object.collectionId ?? "";
+    message.authType = object.authType ?? "";
     return message;
   }
 };

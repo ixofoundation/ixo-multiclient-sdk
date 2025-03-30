@@ -190,6 +190,49 @@ export const UpdateCollectionDates = async (
   return response;
 };
 
+export const DirectCreateClaimAuthorization = async (
+  collectionId: string,
+  adminAddress: string,
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = (await getUser(signer).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+      grantee: tester,
+      msgs: [
+        {
+          typeUrl: "/ixo.claims.v1beta1.MsgCreateClaimAuthorization",
+          value: ixo.claims.v1beta1.MsgCreateClaimAuthorization.encode(
+            ixo.claims.v1beta1.MsgCreateClaimAuthorization.fromPartial({
+              adminAddress: adminAddress,
+              collectionId,
+              creatorAddress: tester,
+              creatorDid: getUser(signer).did,
+              expiration: utils.proto.toTimestamp(addDays(new Date(), 400)),
+              granteeAddress: tester,
+              authType: ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT,
+              agentQuota: Long.fromNumber(100),
+              maxAmount: [],
+              maxCw20Payment: [],
+              intentDurationNs: utils.proto.toDuration(
+                (1000000000 * 60 * 60 * 24 * 30).toString()
+              ),
+            })
+          ).finish(),
+        },
+      ],
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  console.dir(response, { depth: null });
+  return response;
+};
+
 export const UpdateCollectionPayments = async (
   collectionId: string,
   paymentsAccount: string,
@@ -226,6 +269,12 @@ export const UpdateCollectionPayments = async (
                     (1000000000 * 60 * 0).toString()
                   ), // ns * seconds * minutes
                   isOraclePayment,
+                  // cw20Payment: [
+                  //   ixo.claims.v1beta1.CW20Payment.fromPartial({
+                  //     address: cw20Address,
+                  //     amount: Long.fromNumber(10),
+                  //   }),
+                  // ],
                 }),
                 submission: ixo.claims.v1beta1.Payment.fromPartial({
                   account: paymentsAccount,
@@ -254,7 +303,7 @@ export const UpdateCollectionPayments = async (
                     }),
                   ],
                   timeoutNs: utils.proto.toDuration(
-                    (1000000000 * 60 * 5).toString()
+                    (1000000000 * 60 * 0).toString()
                   ), // ns * seconds * minutes
                 }),
                 rejection: ixo.claims.v1beta1.Payment.fromPartial({
@@ -368,6 +417,136 @@ export const GrantEntityAccountClaimsSubmitAuthz = async (
         },
         expiration: utils.proto.toTimestamp(addDays(new Date(), 365 * 3)),
       }),
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
+export const GrantEntityAccountCreateClaimAuthz = async (
+  entityDid: string,
+  name: string,
+  adminAddress: string,
+  collectionId: string,
+  agentQuota = 100,
+  overrideCurrentGrants = false,
+  grantee: WalletUsers = WalletUsers.alice,
+  signer: WalletUsers = WalletUsers.tester,
+  maxAmount: Coin[] = [],
+  maxCw20Payment: CW20Payment[] = [],
+  intentDurationSeconds = 0,
+  allowedAuthTypes = ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT,
+  maxAuthorizations = 2
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = (await getUser(signer).getAccounts())[0].address;
+  const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
+
+  const granteeGrants = await queryClient.cosmos.authz.v1beta1.granteeGrants({
+    grantee: granteeAddress,
+  });
+  const createAuth = granteeGrants.grants.find(
+    (g) =>
+      g.authorization?.typeUrl ==
+        "/ixo.claims.v1beta1.CreateClaimAuthorizationAuthorization" &&
+      g.granter == adminAddress
+  );
+  const granteeCurrentAuthConstraints =
+    overrideCurrentGrants || createAuth == undefined
+      ? []
+      : client.registry.decode(createAuth!.authorization!).constraints;
+
+  const message = {
+    typeUrl: "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz",
+    value: ixo.entity.v1beta1.MsgGrantEntityAccountAuthz.fromPartial({
+      id: entityDid,
+      ownerAddress: tester,
+      name,
+      granteeAddress,
+      grant: cosmos.authz.v1beta1.Grant.fromPartial({
+        authorization: {
+          typeUrl: "/ixo.claims.v1beta1.CreateClaimAuthorizationAuthorization",
+          value:
+            ixo.claims.v1beta1.CreateClaimAuthorizationAuthorization.encode(
+              ixo.claims.v1beta1.CreateClaimAuthorizationAuthorization.fromPartial(
+                {
+                  admin: adminAddress,
+                  constraints: [
+                    ixo.claims.v1beta1.CreateClaimAuthorizationConstraints.fromPartial(
+                      {
+                        collectionIds: [collectionId],
+                        maxAgentQuota: Long.fromNumber(agentQuota),
+                        maxIntentDurationNs: utils.proto.toDuration(
+                          (1000000000 * intentDurationSeconds).toString()
+                        ),
+                        maxAmount,
+                        maxCw20Payment,
+                        expiration: utils.proto.toTimestamp(
+                          addDays(new Date(), 365 * 3)
+                        ),
+                        maxAuthorizations: Long.fromNumber(maxAuthorizations),
+                        allowedAuthTypes,
+                      }
+                    ),
+                    ...granteeCurrentAuthConstraints,
+                  ],
+                }
+              )
+            ).finish(),
+        },
+        expiration: utils.proto.toTimestamp(addDays(new Date(), 365 * 3)),
+      }),
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
+export const CreateClaimAuthorization = async (
+  adminAddress: string,
+  collectionId: string,
+  agentQuota = 100,
+  grantee: WalletUsers = WalletUsers.alice,
+  signer: WalletUsers = WalletUsers.tester,
+  maxAmount: Coin[] = [],
+  maxCw20Payment: CW20Payment[] = [],
+  intentDurationSeconds = 0,
+  authType = ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = (await getUser(signer).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+      grantee: tester,
+      msgs: [
+        {
+          typeUrl: "/ixo.claims.v1beta1.MsgCreateClaimAuthorization",
+          value: ixo.claims.v1beta1.MsgCreateClaimAuthorization.encode(
+            ixo.claims.v1beta1.MsgCreateClaimAuthorization.fromPartial({
+              creatorAddress: tester,
+              creatorDid: getUser(signer).did,
+              adminAddress,
+              granteeAddress: (await getUser(grantee).getAccounts())[0].address,
+              collectionId,
+              agentQuota: Long.fromNumber(agentQuota),
+              maxAmount,
+              maxCw20Payment,
+              intentDurationNs: utils.proto.toDuration(
+                (1000000000 * intentDurationSeconds).toString()
+              ),
+              expiration: utils.proto.toTimestamp(addDays(new Date(), 365 * 3)),
+              authType,
+              beforeDate: utils.proto.toTimestamp(addDays(new Date(), 365)),
+            })
+          ).finish(),
+        },
+      ],
     }),
   };
 

@@ -472,7 +472,8 @@ export const AddVerification = async (
   entityId: string,
   address: string,
   accountUser?: WalletUsers,
-  relationships: string[] = ["assertionMethod"]
+  relationships: string[] = ["assertionMethod"],
+  legacyDidController = false
 ) => {
   const client = await createClient();
 
@@ -490,6 +491,14 @@ export const AddVerification = async (
     accountUserAddress = accountUserAccount.address;
     accountUserDid = accountUserUser.did;
   }
+  let methodId = accountUserAddress
+    ? `${entityId}#${accountUserAddress}`
+    : entityId;
+
+  // override accountUserDid with old did structure
+  if (legacyDidController) {
+    accountUserDid = utils.did.generateSecpDidLegacy(accountUserAccount.pubkey);
+  }
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgAddVerification",
@@ -498,9 +507,7 @@ export const AddVerification = async (
       verification: ixo.iid.v1beta1.Verification.fromPartial({
         relationships: relationships,
         method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
-          id: accountUserAddress
-            ? `${entityId}#${accountUserAddress}`
-            : entityId,
+          id: methodId,
           type: "CosmosAccountAddress",
           blockchainAccountID: accountUserAddress || address,
           controller: accountUserDid || entityId,
@@ -514,25 +521,28 @@ export const AddVerification = async (
   return response;
 };
 
-export const AddEdKeysVerification = async (entityId: string) => {
+export const AddEdKeysVerification = async (
+  entityId: string,
+  accountUser = WalletUsers.alice
+) => {
   const client = await createClient();
 
   const tester = getUser();
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
-  const did = tester.did;
 
   // Add ed keys user to verification method for verification of credentials
-  const edPubKey = (await getUser(WalletUsers.alice, "ed").getAccounts())[0]
-    .pubkey;
-  const pubkeyBase58 = base58.encode(edPubKey);
+  const edUser = getUser(accountUser || undefined, "ed");
+  const edAccount = (await edUser.getAccounts())[0];
+  const pubkeyBase58 = base58.encode(edAccount.pubkey);
+  const did = edUser.did;
 
   const message = {
     typeUrl: "/ixo.iid.v1beta1.MsgAddVerification",
     value: ixo.iid.v1beta1.MsgAddVerification.fromPartial({
       id: entityId,
       verification: ixo.iid.v1beta1.Verification.fromPartial({
-        relationships: ["authentication"],
+        relationships: ["authentication", "assertionMethod"],
         method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
           id: did + "#" + pubkeyBase58,
           type: "Ed25519VerificationKey2018",

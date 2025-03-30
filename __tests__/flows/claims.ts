@@ -49,7 +49,7 @@ export const claimsBasic = () =>
     // );
 
     // Create relayer node entity first
-    let relayerNodeEntity = "";
+    let relayerNodeEntity = "did:ixo:entity:72a27013b1d2f9c3561145e4a424778a";
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity protocol", async () => {
       const res = await Entity.CreateEntity(
         "dao",
@@ -67,8 +67,8 @@ export const claimsBasic = () =>
     });
 
     // Create protocol
-    let protocol = "did:ixo:entity:065ba0b99948e2e8ff3228836dee423b";
-    let adminAccount = "ixo14p4eh3hvunmlvegyysfp5lg8gf6cp6suxxx672";
+    let protocol = "did:ixo:entity:7889238a0a6a68554f65f5c7da96f13b";
+    let adminAccount = "ixo1w43mq3zn0kdeqz7jgwgyj9gxlu6nal7nnhpe8t";
 
     testMsg("/ixo.entity.v1beta1.MsgCreateEntity protocol", async () => {
       const res = await Entity.CreateEntity(
@@ -101,7 +101,7 @@ export const claimsBasic = () =>
     );
 
     let cw20ContractAddress: string =
-      "ixo1svqw226fkt7pkaq2mwx6958pykdp009tvtjft9n9q6un7efnfueqqtwjdm";
+      "ixo1r4azksxfmfn3wx6tlazcu5acreymnvyacnu3q33532zdt6ypwmxqnystvl";
     testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
       const tester = (await getUser(WalletUsers.tester).getAccounts())[0]
         .address;
@@ -221,6 +221,87 @@ export const claimsBasic = () =>
       Claims.UpdateCollectionIntents(collectionId, adminAccount)
     );
 
+    // Test CreateClaimAuthorization and granting Submit and Evaluate authz through authz as delegate
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz GrantEntityAccountCreateClaimAuthz",
+      () =>
+        Claims.GrantEntityAccountCreateClaimAuthz(
+          protocol,
+          "admin",
+          adminAccount,
+          collectionId,
+          100,
+          false,
+          WalletUsers.alice,
+          WalletUsers.tester,
+          [
+            {
+              amount: "1000000",
+              denom: "uixo",
+            },
+          ],
+          [
+            {
+              address: cw20ContractAddress,
+              amount: Long.fromNumber(10),
+            },
+          ],
+          60,
+          ixo.claims.v1beta1.CreateClaimAuthorizationType.ALL,
+          0
+        )
+    );
+    testMsg(
+      "/ixo.claims.v1beta1.MsgCreateClaimAuthorization CreateClaimAuthorization",
+      () =>
+        Claims.CreateClaimAuthorization(
+          adminAccount,
+          collectionId,
+          100,
+          WalletUsers.bob,
+          WalletUsers.alice,
+          [
+            {
+              amount: "1000000",
+              denom: "uixo",
+            },
+          ],
+          [
+            {
+              address: cw20ContractAddress,
+              amount: Long.fromNumber(10),
+            },
+          ],
+          60,
+          ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT
+        )
+    );
+    testMsg(
+      "/ixo.claims.v1beta1.MsgCreateClaimAuthorization CreateClaimAuthorization",
+      () =>
+        Claims.CreateClaimAuthorization(
+          adminAccount,
+          collectionId,
+          100,
+          WalletUsers.bob,
+          WalletUsers.alice,
+          [
+            {
+              amount: "1000000",
+              denom: "uixo",
+            },
+          ],
+          [
+            {
+              address: cw20ContractAddress,
+              amount: Long.fromNumber(10),
+            },
+          ],
+          60,
+          ixo.claims.v1beta1.CreateClaimAuthorizationType.EVALUATE
+        )
+    );
+
     testMsg("/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz agent submit", () =>
       Claims.GrantEntityAccountClaimsSubmitAuthz(
         protocol,
@@ -283,7 +364,7 @@ export const claimsBasic = () =>
     // );
 
     // test claim and eval with custom amount and cw20 payment
-    let claimId = "100001";
+    let claimId = "110001";
     testMsg("/ixo.claims.v1beta1.MsgClaimIntent agent submit intent", () =>
       Claims.MsgClaimIntent(
         collectionId,
@@ -361,7 +442,7 @@ export const claimsBasic = () =>
 
     // test claim and eval with no custom amount and cw20 payment
     testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", async () => {
-      claimId = "100002";
+      claimId = "110002";
       return Claims.MsgExecAgentSubmit(
         claimId,
         collectionId,
@@ -381,7 +462,7 @@ export const claimsBasic = () =>
 
     // test claim and eval reject
     testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", async () => {
-      claimId = "100003";
+      claimId = "110003";
       return Claims.MsgExecAgentSubmit(
         claimId,
         collectionId,
@@ -401,7 +482,7 @@ export const claimsBasic = () =>
 
     // test claim and eval dispute
     testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", async () => {
-      claimId = "100004";
+      claimId = "110004";
       return Claims.MsgExecAgentSubmit(
         claimId,
         collectionId,
@@ -416,6 +497,100 @@ export const claimsBasic = () =>
         adminAccount,
         ixo.claims.v1beta1.EvaluationStatus.DISPUTED,
         WalletUsers.tester
+      )
+    );
+
+    // Test Oracle payments split for APPROVAL payment
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz MsgUpdateCollectionPayments",
+      () =>
+        Entity.GrantEntityAccountAuthz(
+          protocol,
+          "admin",
+          WalletUsers.tester,
+          undefined,
+          "/ixo.claims.v1beta1.MsgUpdateCollectionPayments"
+        )
+    );
+    testMsg("/ixo.claims.v1beta1.MsgUpdateCollectionState", () =>
+      Claims.UpdateCollectionPayments(
+        collectionId,
+        adminAccount,
+        adminAccount,
+        undefined,
+        cw20ContractAddress,
+        // Set isOraclePayment to true to use oracle payments
+        true
+      )
+    );
+
+    testMsg(
+      "/ixo.claims.v1beta1.MsgClaimIntent agent submit intent",
+      async () => {
+        claimId = "110012";
+        return Claims.MsgClaimIntent(
+          collectionId,
+          [
+            {
+              amount: "1000000",
+              denom: "uixo",
+            },
+          ],
+          [
+            {
+              address: cw20ContractAddress,
+              amount: Long.fromNumber(10),
+            },
+          ],
+          WalletUsers.alice
+        );
+      }
+    );
+    testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", () =>
+      Claims.MsgExecAgentSubmit(
+        claimId,
+        collectionId,
+        adminAccount,
+        WalletUsers.alice,
+        true,
+        // With intent being used this won't be used at all and ignored
+        [
+          {
+            amount: "800000",
+            denom: "uixo",
+          },
+        ],
+        // Tested if tried using cw20 payment for oracle payment without first creating intent,
+        // it fails as expected, as need intent to use cw20 payment for oracle payment
+        [
+          {
+            address: cw20ContractAddress,
+            amount: Long.fromNumber(8),
+          },
+        ]
+      )
+    );
+    testMsg("/cosmos.authz.v1beta1.MsgExec agent evaluate", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimId,
+        collectionId,
+        adminAccount,
+        // Tested REJECTED also then intent funds get returned to admin out of escrow
+        ixo.claims.v1beta1.EvaluationStatus.APPROVED,
+        WalletUsers.tester,
+        // With intent being used this won't be used at all and ignored
+        [
+          {
+            amount: "800000",
+            denom: "uixo",
+          },
+        ],
+        [
+          ixo.claims.v1beta1.CW20Payment.fromPartial({
+            address: cw20ContractAddress,
+            amount: Long.fromNumber(8),
+          }),
+        ]
       )
     );
   });
@@ -1017,7 +1192,7 @@ export const supamotoClaims3 = () =>
       type NetworkType = "mainnet" | "testnet";
 
       let networkToUse: NetworkType = "mainnet";
-      let collectionToUse: CollectionType = "fairClimate" as any;
+      let collectionToUse: CollectionType = "Legacy" as any;
 
       const collectionToNetworkMapping = {
         Genesis: {
@@ -1201,7 +1376,7 @@ export const supamotoClaims3 = () =>
       // helper to stop flow if just want the above data
       // if (!!1) throw new Error("stop");
 
-      // devide payments per device into 10 devices at a time
+      // divide payments per device into 10 devices at a time
       // ==============================================================
       purchaseData = chunkArray<any[]>(Object.values(purchaseData), 10);
       let stovePurchasesAll: any[] = [];
@@ -1210,7 +1385,7 @@ export const supamotoClaims3 = () =>
       console.time("claims");
       for (const stovePurchases of purchaseData) {
         index++;
-        // if (index < 36) continue; // if want to only mint a certain amount of batches add number here (devnet restart)
+        // if (index < 1) continue; // if want to only mint a certain amount of batches add number here
 
         console.log(
           "starting batch " +

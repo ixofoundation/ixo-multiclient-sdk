@@ -119,6 +119,7 @@ export const MsgSubmitProposalStoreCWOld = async (
   });
   return response;
 };
+
 export const MsgSubmitProposalStoreCW = async (
   contract: string = "cw721",
   pathList?: string[],
@@ -385,6 +386,34 @@ export const MsgDeposit = async (
   return response;
 };
 
+export const MsgCancelUnbondingDelegation = async () => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const message = {
+    typeUrl: "/cosmos.staking.v1beta1.MsgCancelUnbondingDelegation",
+    value: cosmos.staking.v1beta1.MsgCancelUnbondingDelegation.fromPartial({
+      delegatorAddress: myAddress,
+      validatorAddress: "ixovaloper1wd02ktcvpananlvd9u6jm3x3ap3vmw59wh7me3",
+      amount: cosmos.base.v1beta1.Coin.fromPartial({
+        amount: "18885358417",
+        denom: "uixo",
+      }),
+      creationHeight: Long.fromNumber(9311978),
+    }),
+  };
+
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
+  return response;
+};
+
 export const MsgProposalText = async () => {
   const client = await createClient();
 
@@ -531,6 +560,167 @@ export const MsgSubmitProposalUpdateParams = async () => {
     }),
   };
 
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
+  return response;
+};
+
+export const MsgSubmitHyperlaneProposalStoreCW = async (
+  proposal: {
+    title: string;
+    summary: string;
+    contract: string;
+  },
+  signer = WalletUsers.tester,
+  timeoutSeconds = 1,
+  instantiateAccessType = cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_EVERYBODY
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = getUser(signer);
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const govModAccRes =
+    await queryClient.cosmos.auth.v1beta1.moduleAccountByName({
+      name: "gov",
+    });
+  if (!govModAccRes?.account?.value)
+    throw new Error("gov module account not found");
+  const govModAcc = client.registry.decode(govModAccRes.account)?.baseAccount
+    ?.address;
+
+  const message = {
+    typeUrl: "/cosmos.gov.v1.MsgSubmitProposal",
+    value: cosmos.gov.v1.MsgSubmitProposal.fromPartial({
+      initialDeposit: [
+        cosmos.base.v1beta1.Coin.fromPartial({
+          amount: "30000000", // match normal or expedited amount needed
+          denom: "uixo",
+        }),
+      ],
+      proposer: myAddress,
+      title: proposal.title,
+      summary: proposal.summary,
+      expedited: true,
+      messages: [
+        {
+          typeUrl: "/cosmwasm.wasm.v1.MsgStoreCode",
+          value: cosmwasm.wasm.v1.MsgStoreCode.encode(
+            cosmwasm.wasm.v1.MsgStoreCode.fromPartial({
+              sender: govModAcc,
+              wasmByteCode: new Uint8Array(
+                getFileFromPath(
+                  ["contracts", "hyperlane", `${proposal.contract}.wasm`],
+                  ""
+                )
+              ),
+              instantiatePermission: cosmwasm.wasm.v1.AccessConfig.fromPartial({
+                permission: instantiateAccessType,
+                addresses:
+                  instantiateAccessType ==
+                  cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_ANY_OF_ADDRESSES
+                    ? [myAddress]
+                    : undefined,
+              }),
+            })
+          ).finish(),
+        },
+      ],
+    }),
+  };
+  console.dir(message, { depth: null });
+
+  await timeout(timeoutSeconds * 1000);
+
+  console.log("signing and broadcasting hyperlane wasm contract proposal");
+  const response = await client.signAndBroadcast(myAddress, [message], {
+    amount: [
+      {
+        denom: "uixo",
+        amount: "5000000",
+      },
+    ],
+    gas: "100000000",
+  });
+  return response;
+};
+
+export const MsgSubmitProposalUpdateGovParams = async () => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const govModAccRes =
+    await queryClient.cosmos.auth.v1beta1.moduleAccountByName({
+      name: "gov",
+    });
+  if (!govModAccRes?.account?.value)
+    throw new Error("gov module account not found");
+  const govModAcc = client.registry.decode(govModAccRes.account)?.baseAccount
+    ?.address;
+  // console.log({ govModAcc });
+
+  const message = {
+    typeUrl: "/cosmos.gov.v1.MsgSubmitProposal",
+    value: cosmos.gov.v1.MsgSubmitProposal.fromPartial({
+      initialDeposit: [
+        cosmos.base.v1beta1.Coin.fromPartial({
+          amount: "10000000",
+          denom: "uixo",
+        }),
+      ],
+      proposer: myAddress,
+      title: `Update Gov Params`,
+      summary: "Update Gov Params",
+      expedited: false,
+      messages: [
+        {
+          typeUrl: "/cosmos.gov.v1.MsgUpdateParams",
+          value: cosmos.gov.v1.MsgUpdateParams.encode(
+            cosmos.gov.v1.MsgUpdateParams.fromPartial({
+              authority: govModAcc,
+              params: cosmos.gov.v1.Params.fromPartial({
+                votingPeriod: utils.proto.toDuration("1800000000000s"),
+                minDeposit: [
+                  cosmos.base.v1beta1.Coin.fromPartial({
+                    amount: "10000000",
+                    denom: "uixo",
+                  }),
+                ],
+                maxDepositPeriod: utils.proto.toDuration("1800000000000s"),
+                quorum: "0.334000000000000000",
+                threshold: "0.400000000000000000",
+                vetoThreshold: "0.334000000000000000",
+                minInitialDepositRatio: "0.100000000000000000",
+                proposalCancelRatio: "0.500000000000000000",
+                proposalCancelDest: "",
+                expeditedThreshold: "0.410000000000000000",
+                expeditedMinDeposit: [
+                  cosmos.base.v1beta1.Coin.fromPartial({
+                    amount: "30000000",
+                    denom: "uixo",
+                  }),
+                ],
+                burnVoteQuorum: false,
+                burnProposalDepositPrevote: false,
+                burnVoteVeto: true,
+                minDepositRatio: "0.010000000000000000",
+                expeditedVotingPeriod: utils.proto.toDuration("300000000000s"),
+              }),
+            })
+          ).finish(),
+        },
+      ],
+    }),
+  };
+
+  console.log("signing and broadcasting gov params update proposal");
   const response = await client.signAndBroadcast(
     myAddress,
     [message],

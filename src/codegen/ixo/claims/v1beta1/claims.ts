@@ -426,8 +426,11 @@ export interface Payment {
   cw20Payment: CW20Payment[];
   /**
    * boolean to indicate if the payment is for oracle payments, aka it will go
-   * through network fees split NOTE: if true the payment can only have amount
-   * values(Native coins), no cw20 payments allowed then
+   * through network fees split, only allowed for APPROVED payment types. NOTE:
+   * if true and the payment contains cw20 payments, the claim will only be
+   * successfully if an intent exists to ensure immediate cw20 payment split,
+   * since there is no WithdrawalAuthorization to manage the cw20 payment split
+   * for delayed payments
    */
   isOraclePayment: boolean;
 }
@@ -461,6 +464,25 @@ export interface CW20PaymentSDKType {
   address: string;
   amount: Long;
 }
+/** CW20Output represents a CW20 token output for split payments */
+export interface CW20Output {
+  /** address is the address of the recipient */
+  address: string;
+  /** contract_address is the address of the contract */
+  contractAddress: string;
+  /**
+   * amount is the amount of the token to transfer
+   * chose uint64 for now as amounts should be small enough to fit in a
+   * uint64(max 18446744073709551615)
+   */
+  amount: Long;
+}
+/** CW20Output represents a CW20 token output for split payments */
+export interface CW20OutputSDKType {
+  address: string;
+  contract_address: string;
+  amount: Long;
+}
 export interface Claim {
   /** collection_id indicates to which Collection this claim belongs */
   collectionId: string;
@@ -478,14 +500,16 @@ export interface Claim {
   /** intent_id is the id of the intent for this claim, if any */
   useIntent: boolean;
   /**
-   * NOTE: if both amount and cw20 amount are empty then use default by
-   * Collection custom amount specified by service agent for claim approval
+   * custom amount specified by service agent for claim approval
+   * NOTE: if both amount and cw20 amount are empty then collection default is
+   * used
    */
   amount: Coin[];
   /**
-   * NOTE: if both amount and cw20 amount are empty then use default by
-   * Collection custom cw20 payments specified by service agent for claim
+   * custom cw20 payments specified by service agent for claim
    * approval
+   * NOTE: if both amount and cw20 amount are empty then collection default is
+   * used
    */
   cw20Payment: CW20Payment[];
 }
@@ -544,11 +568,16 @@ export interface Evaluation {
    */
   evaluationDate?: Timestamp;
   /**
-   * if both amount and cw20 amount are empty then use default by Collection
    * custom amount specified by evaluator for claim approval
+   * NOTE: if both amount and cw20 amount are empty then collection default is
+   * used
    */
   amount: Coin[];
-  /** custom cw20 payments specified by evaluator for claim approval */
+  /**
+   * custom cw20 payments specified by evaluator for claim approval
+   * NOTE: if both amount and cw20 amount are empty then collection default is
+   * used
+   */
   cw20Payment: CW20Payment[];
 }
 export interface EvaluationSDKType {
@@ -1227,6 +1256,71 @@ export const CW20Payment = {
   fromPartial(object: Partial<CW20Payment>): CW20Payment {
     const message = createBaseCW20Payment();
     message.address = object.address ?? "";
+    message.amount = object.amount !== undefined && object.amount !== null ? Long.fromValue(object.amount) : Long.UZERO;
+    return message;
+  }
+};
+function createBaseCW20Output(): CW20Output {
+  return {
+    address: "",
+    contractAddress: "",
+    amount: Long.UZERO
+  };
+}
+export const CW20Output = {
+  encode(message: CW20Output, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    if (message.contractAddress !== "") {
+      writer.uint32(18).string(message.contractAddress);
+    }
+    if (!message.amount.isZero()) {
+      writer.uint32(24).uint64(message.amount);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): CW20Output {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCW20Output();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        case 2:
+          message.contractAddress = reader.string();
+          break;
+        case 3:
+          message.amount = (reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): CW20Output {
+    return {
+      address: isSet(object.address) ? String(object.address) : "",
+      contractAddress: isSet(object.contractAddress) ? String(object.contractAddress) : "",
+      amount: isSet(object.amount) ? Long.fromValue(object.amount) : Long.UZERO
+    };
+  },
+  toJSON(message: CW20Output): unknown {
+    const obj: any = {};
+    message.address !== undefined && (obj.address = message.address);
+    message.contractAddress !== undefined && (obj.contractAddress = message.contractAddress);
+    message.amount !== undefined && (obj.amount = (message.amount || Long.UZERO).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<CW20Output>): CW20Output {
+    const message = createBaseCW20Output();
+    message.address = object.address ?? "";
+    message.contractAddress = object.contractAddress ?? "";
     message.amount = object.amount !== undefined && object.amount !== null ? Long.fromValue(object.amount) : Long.UZERO;
     return message;
   }

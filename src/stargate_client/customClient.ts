@@ -146,9 +146,10 @@ export class SigningStargateClient extends StargateClient {
     memo: string | undefined,
     txBodyBytes?: Uint8Array
   ): Promise<number> {
-    const txBody = txBodyBytes ? this.registry.decodeTxBody(txBodyBytes) : null;
-    const anyMsgs =
-      txBody?.messages || messages.map((m) => this.registry.encodeAsAny(m));
+    // const txBody = txBodyBytes ? this.registry.decodeTxBody(txBodyBytes) : null;
+    // console.log("txBody", txBody);
+
+    const anyMsgs = messages.map((m) => this.registry.encodeAsAny(m));
 
     const accountFromSigner = (await this.signer.getAccounts()).find(
       (account) => account.address === signerAddress
@@ -170,7 +171,7 @@ export class SigningStargateClient extends StargateClient {
 
     const { gasInfo } = await this.forceGetQueryClient().tx.simulate(
       anyMsgs,
-      txBody?.memo || memo,
+      memo,
       pubkey,
       sequence
     );
