@@ -15,6 +15,7 @@ export declare namespace utils {
     };
     const did: {
         generateSecpDid(address: string): string;
+        generateSecpDidLegacy(pubkey: string | Uint8Array, prefix?: string): string;
         extractPubkeyFromDid(did: string): string;
         generateWasmDid(address: string): string;
     };
@@ -31,7 +32,7 @@ export declare namespace utils {
     const common: {
         generateId: (length?: number) => string;
         getValueFromEvents: (res: import("@cosmjs/stargate").DeliverTxResponse, event: string, attribute: string, filterFunc?: (s: any) => any, logError?: boolean, throwError?: boolean, messageIndex?: number) => any;
-        getValuesFromEvents: (res: import("@cosmjs/stargate").DeliverTxResponse, event: string, attribute: string, filterFunc?: (s: any) => any, logError?: boolean, throwError?: boolean) => any;
+        getValuesFromEvents: (res: import("@cosmjs/stargate").DeliverTxResponse, event: string, attribute: string, filterFunc?: (s: any) => any, logError?: boolean, throwError?: boolean) => any[];
     };
     const proto: {
         toDuration(duration: string): _6.Duration;
