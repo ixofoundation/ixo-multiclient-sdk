@@ -753,6 +753,20 @@ export declare namespace ixo {
                 toJSON(message: _202.MsgClaimIntentResponse): unknown;
                 fromPartial(object: Partial<_202.MsgClaimIntentResponse>): _202.MsgClaimIntentResponse;
             };
+            MsgCreateClaimAuthorization: {
+                encode(message: _202.MsgCreateClaimAuthorization, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _202.MsgCreateClaimAuthorization;
+                fromJSON(object: any): _202.MsgCreateClaimAuthorization;
+                toJSON(message: _202.MsgCreateClaimAuthorization): unknown;
+                fromPartial(object: Partial<_202.MsgCreateClaimAuthorization>): _202.MsgCreateClaimAuthorization;
+            };
+            MsgCreateClaimAuthorizationResponse: {
+                encode(_: _202.MsgCreateClaimAuthorizationResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _202.MsgCreateClaimAuthorizationResponse;
+                fromJSON(_: any): _202.MsgCreateClaimAuthorizationResponse;
+                toJSON(_: _202.MsgCreateClaimAuthorizationResponse): unknown;
+                fromPartial(_: Partial<_202.MsgCreateClaimAuthorizationResponse>): _202.MsgCreateClaimAuthorizationResponse;
+            };
             QueryParamsRequest: {
                 encode(_: _201.QueryParamsRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _201.QueryParamsRequest;
@@ -956,6 +970,13 @@ export declare namespace ixo {
                 toJSON(message: _199.IntentUpdatedEvent): unknown;
                 fromPartial(object: Partial<_199.IntentUpdatedEvent>): _199.IntentUpdatedEvent;
             };
+            ClaimAuthorizationCreatedEvent: {
+                encode(message: _199.ClaimAuthorizationCreatedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _199.ClaimAuthorizationCreatedEvent;
+                fromJSON(object: any): _199.ClaimAuthorizationCreatedEvent;
+                toJSON(message: _199.ClaimAuthorizationCreatedEvent): unknown;
+                fromPartial(object: Partial<_199.ClaimAuthorizationCreatedEvent>): _199.ClaimAuthorizationCreatedEvent;
+            };
             collectionStateFromJSON(object: any): _198.CollectionState;
             collectionStateToJSON(object: _198.CollectionState): string;
             collectionIntentOptionsFromJSON(object: any): _198.CollectionIntentOptions;
@@ -1022,6 +1043,13 @@ export declare namespace ixo {
                 toJSON(message: _198.CW20Payment): unknown;
                 fromPartial(object: Partial<_198.CW20Payment>): _198.CW20Payment;
             };
+            CW20Output: {
+                encode(message: _198.CW20Output, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _198.CW20Output;
+                fromJSON(object: any): _198.CW20Output;
+                toJSON(message: _198.CW20Output): unknown;
+                fromPartial(object: Partial<_198.CW20Output>): _198.CW20Output;
+            };
             Claim: {
                 encode(message: _198.Claim, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _198.Claim;
@@ -1064,6 +1092,10 @@ export declare namespace ixo {
                 toJSON(message: _198.Intent): unknown;
                 fromPartial(object: Partial<_198.Intent>): _198.Intent;
             };
+            createClaimAuthorizationTypeFromJSON(object: any): _197.CreateClaimAuthorizationType;
+            createClaimAuthorizationTypeToJSON(object: _197.CreateClaimAuthorizationType): string;
+            CreateClaimAuthorizationType: typeof _197.CreateClaimAuthorizationType;
+            CreateClaimAuthorizationTypeSDKType: typeof _197.CreateClaimAuthorizationType;
             SubmitClaimAuthorization: {
                 encode(message: _197.SubmitClaimAuthorization, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _197.SubmitClaimAuthorization;
@@ -1105,6 +1137,20 @@ export declare namespace ixo {
                 fromJSON(object: any): _197.WithdrawPaymentConstraints;
                 toJSON(message: _197.WithdrawPaymentConstraints): unknown;
                 fromPartial(object: Partial<_197.WithdrawPaymentConstraints>): _197.WithdrawPaymentConstraints;
+            };
+            CreateClaimAuthorizationAuthorization: {
+                encode(message: _197.CreateClaimAuthorizationAuthorization, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _197.CreateClaimAuthorizationAuthorization;
+                fromJSON(object: any): _197.CreateClaimAuthorizationAuthorization;
+                toJSON(message: _197.CreateClaimAuthorizationAuthorization): unknown;
+                fromPartial(object: Partial<_197.CreateClaimAuthorizationAuthorization>): _197.CreateClaimAuthorizationAuthorization;
+            };
+            CreateClaimAuthorizationConstraints: {
+                encode(message: _197.CreateClaimAuthorizationConstraints, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _197.CreateClaimAuthorizationConstraints;
+                fromJSON(object: any): _197.CreateClaimAuthorizationConstraints;
+                toJSON(message: _197.CreateClaimAuthorizationConstraints): unknown;
+                fromPartial(object: Partial<_197.CreateClaimAuthorizationConstraints>): _197.CreateClaimAuthorizationConstraints;
             };
         };
     }

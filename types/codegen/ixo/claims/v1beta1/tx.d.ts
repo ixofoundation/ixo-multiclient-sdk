@@ -2,6 +2,8 @@ import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp"
 import { CollectionState, Payments, PaymentsSDKType, CollectionIntentOptions, CW20Payment, CW20PaymentSDKType, EvaluationStatus, DisputeData, DisputeDataSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType } from "./claims";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
+import { CreateClaimAuthorizationType } from "./authz";
+import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
 import { Long } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface MsgCreateCollection {
@@ -61,19 +63,20 @@ export interface MsgSubmitClaim {
     /**
      * use_intent is the option for using intent for this claim if it exists and
      * is active. NOTE: if use_intent is true then amount and cw20 amount are
-     * ignored and overriden with intent amounts. NOTE: if use_intent is true and
+     * ignored and overridden with intent amounts. NOTE: if use_intent is true and
      * there is no active intent then will error
      */
     useIntent: boolean;
     /**
-     * NOTE: if both amount and cw20_payment are empty then use default by
-     * Collection custom amount specified by service agent for claim approval
+     * custom amount specified by service agent for claim approval
+     * NOTE: if both amount and cw20_payment are empty then collection default is
+     * used
      */
     amount: Coin[];
     /**
-     * NOTE: if both amount and cw20 amount are empty then use default by
-     * Collection custom cw20 payments specified by service agent for claim
-     * approval
+     * custom cw20 payments specified by service agent for claim approval
+     * NOTE: if both amount and cw20 amount are empty then collection default is
+     * used
      */
     cw20Payment: CW20Payment[];
 }
@@ -113,20 +116,20 @@ export interface MsgEvaluateClaim {
      * was given (codes defined by evaluator)
      */
     reason: number;
-    /** verificationProof is the cid of the evaluation Verfiable Credential */
+    /** verificationProof is the cid of the evaluation Verifiable Credential */
     verificationProof: string;
     /**
+     * custom amount specified by evaluator for claim approval
      * NOTE: if claim is using intent, then amount and cw20 amount are ignored and
-     * overriden with intent amounts NOTE: if both amount and cw20 amount are
-     * empty then use collection default custom amount specified by evaluator for
-     * claim approval
+     * overridden with intent amounts NOTE: if both amount and cw20 amount are
+     * empty then collection default is used
      */
     amount: Coin[];
     /**
+     * custom cw20 payments specified by evaluator for claim approval
      * NOTE: if claim is using intent, then amount and cw20 amount are ignored and
-     * overriden with intent amounts NOTE: if both amount and cw20 amount are
-     * empty then use collection default custom cw20 payments specified by
-     * evaluator for claim approval
+     * overridden with intent amounts NOTE: if both amount and cw20 amount are
+     * empty then collection default is used
      */
     cw20Payment: CW20Payment[];
 }
@@ -185,9 +188,9 @@ export interface MsgDisputeClaimResponseSDKType {
 export interface MsgWithdrawPayment {
     /** claim_id the withdrawal is for */
     claimId: string;
-    /** Inputs to the multisend tx to run to withdraw payment */
+    /** Inputs to the multi send tx to run to withdraw payment */
     inputs: Input[];
-    /** Outputs for the multisend tx to run to withdraw payment */
+    /** Outputs for the multi send tx to run to withdraw payment */
     outputs: Output[];
     /**
      * payment type to keep track what payment is for and mark claim payment
@@ -317,13 +320,15 @@ export interface MsgClaimIntent {
     /** The id of the collection this intent is linked to. */
     collectionId: string;
     /**
+     * The desired claim amount, if any.
      * NOTE: if both amount and cw20 amount are empty then default by Collection
-     * is used (APPROVAL payment). The desired claim amount, if any.
+     * is used (APPROVAL payment).
      */
     amount: Coin[];
     /**
+     * The custom CW20 payment, if any.
      * NOTE: if both amount and cw20 amount are empty then default by Collection
-     * is used (APPROVAL payment). The custom CW20 payment, if any.
+     * is used (APPROVAL payment).
      */
     cw20Payment: CW20Payment[];
 }
@@ -348,6 +353,82 @@ export interface MsgClaimIntentResponse {
 export interface MsgClaimIntentResponseSDKType {
     intent_id: string;
     expire_at?: TimestampSDKType;
+}
+/**
+ * MsgCreateClaimAuthorization defines a message for creating a claim
+ * authorization on behalf of an entity admin account (SubmitClaimAuthorization
+ * or EvaluateClaimAuthorization)
+ */
+export interface MsgCreateClaimAuthorization {
+    /** Address of the creator (user with meta-authorization) */
+    creatorAddress: string;
+    /** agent is the DID of the agent submitting the claim */
+    creatorDid: string;
+    /** Address of the grantee (who will receive the authorization) */
+    granteeAddress: string;
+    /** admin address used to sign this message, validated against Collection Admin */
+    adminAddress: string;
+    /** Collection ID the authorization applies to (for both submit and evaluate) */
+    collectionId: string;
+    /**
+     * Type of authorization to create (submit or evaluate, can't create both in a
+     * single request)
+     */
+    authType: CreateClaimAuthorizationType;
+    /** Quota for the created authorization (for both submit and evaluate) */
+    agentQuota: Long;
+    /**
+     * Maximum amount that can be specified in the authorization (for both submit
+     * and evaluate)
+     */
+    maxAmount: Coin[];
+    /**
+     * Maximum CW20 payment that can be specified in the authorization (for both
+     * submit and evaluate)
+     */
+    maxCw20Payment: CW20Payment[];
+    /**
+     * Expiration time for the authorization, be careful with this as it is the
+     * expiration of the authorization itself, not the constraints, meaning if the
+     * authorization expires all constraints will be removed with the
+     * authorization (standard authz behavior)
+     */
+    expiration?: Timestamp;
+    /** Maximum intent duration for the authorization allowed (for submit) */
+    intentDurationNs?: Duration;
+    /** if null then no before_date validation done (for evaluate) */
+    beforeDate?: Timestamp;
+}
+/**
+ * MsgCreateClaimAuthorization defines a message for creating a claim
+ * authorization on behalf of an entity admin account (SubmitClaimAuthorization
+ * or EvaluateClaimAuthorization)
+ */
+export interface MsgCreateClaimAuthorizationSDKType {
+    creator_address: string;
+    creator_did: string;
+    grantee_address: string;
+    admin_address: string;
+    collection_id: string;
+    auth_type: CreateClaimAuthorizationType;
+    agent_quota: Long;
+    max_amount: CoinSDKType[];
+    max_cw20_payment: CW20PaymentSDKType[];
+    expiration?: TimestampSDKType;
+    intent_duration_ns?: DurationSDKType;
+    before_date?: TimestampSDKType;
+}
+/**
+ * MsgCreateClaimAuthorizationResponse defines the response for creating a claim
+ * authorization
+ */
+export interface MsgCreateClaimAuthorizationResponse {
+}
+/**
+ * MsgCreateClaimAuthorizationResponse defines the response for creating a claim
+ * authorization
+ */
+export interface MsgCreateClaimAuthorizationResponseSDKType {
 }
 export declare const MsgCreateCollection: {
     encode(message: MsgCreateCollection, writer?: _m0.Writer): _m0.Writer;
@@ -488,4 +569,18 @@ export declare const MsgClaimIntentResponse: {
     fromJSON(object: any): MsgClaimIntentResponse;
     toJSON(message: MsgClaimIntentResponse): unknown;
     fromPartial(object: Partial<MsgClaimIntentResponse>): MsgClaimIntentResponse;
+};
+export declare const MsgCreateClaimAuthorization: {
+    encode(message: MsgCreateClaimAuthorization, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateClaimAuthorization;
+    fromJSON(object: any): MsgCreateClaimAuthorization;
+    toJSON(message: MsgCreateClaimAuthorization): unknown;
+    fromPartial(object: Partial<MsgCreateClaimAuthorization>): MsgCreateClaimAuthorization;
+};
+export declare const MsgCreateClaimAuthorizationResponse: {
+    encode(_: MsgCreateClaimAuthorizationResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateClaimAuthorizationResponse;
+    fromJSON(_: any): MsgCreateClaimAuthorizationResponse;
+    toJSON(_: MsgCreateClaimAuthorizationResponse): unknown;
+    fromPartial(_: Partial<MsgCreateClaimAuthorizationResponse>): MsgCreateClaimAuthorizationResponse;
 };

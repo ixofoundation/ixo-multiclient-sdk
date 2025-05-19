@@ -1,4 +1,4 @@
-import * as bip39 from "bip39";
+import * as bip39 from "bip39-light";
 import { fromHex, toHex } from "@cosmjs/encoding";
 import { Random } from "@cosmjs/crypto";
 
@@ -43,8 +43,6 @@ export class Bip39 {
 }
 
 export class EnglishMnemonic {
-  public static readonly wordlist: readonly string[] = bip39.wordlists.english;
-
   // list of space separated lower case words (1 or more)
   private static readonly mnemonicMatcher = /^[a-z]+( [a-z]+)*$/;
 
@@ -63,10 +61,8 @@ export class EnglishMnemonic {
       );
     }
 
-    for (const word of words) {
-      if (EnglishMnemonic.wordlist.indexOf(word) === -1) {
-        throw new Error("Mnemonic contains invalid word");
-      }
+    if (!bip39.validateMnemonic(mnemonic)) {
+      throw new Error("Mnemonic is invalid.");
     }
 
     // Throws with informative error message if mnemonic is not valid
