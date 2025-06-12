@@ -1,4 +1,4 @@
-import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType } from "./claims";
+import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, Intent, IntentSDKType } from "./claims";
 import { WithdrawPaymentConstraints, WithdrawPaymentConstraintsSDKType } from "./authz";
 import * as _m0 from "protobufjs/minimal";
 /** CollectionCreatedEvent is an event triggered on a Collection creation */
@@ -57,12 +57,13 @@ export interface ClaimDisputedEventSDKType {
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface PaymentWithdrawnEvent {
-    /** ClaimDisputedEvent is an event triggered on a Claim dispute */
     withdraw?: WithdrawPaymentConstraints;
+    cw20Outputs: CW20Output[];
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface PaymentWithdrawnEventSDKType {
     withdraw?: WithdrawPaymentConstraintsSDKType;
+    cw20_outputs: CW20OutputSDKType[];
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface PaymentWithdrawCreatedEvent {
@@ -90,6 +91,30 @@ export interface IntentUpdatedEvent {
 /** IntentUpdatedEvent is an event triggered on an Intent update */
 export interface IntentUpdatedEventSDKType {
     intent?: IntentSDKType;
+}
+/**
+ * ClaimAuthorizationCreatedEvent is an event triggered on a Claim authorization
+ * creation
+ */
+export interface ClaimAuthorizationCreatedEvent {
+    creator: string;
+    creatorDid: string;
+    grantee: string;
+    admin: string;
+    collectionId: string;
+    authType: string;
+}
+/**
+ * ClaimAuthorizationCreatedEvent is an event triggered on a Claim authorization
+ * creation
+ */
+export interface ClaimAuthorizationCreatedEventSDKType {
+    creator: string;
+    creator_did: string;
+    grantee: string;
+    admin: string;
+    collection_id: string;
+    auth_type: string;
 }
 export declare const CollectionCreatedEvent: {
     encode(message: CollectionCreatedEvent, writer?: _m0.Writer): _m0.Writer;
@@ -160,4 +185,11 @@ export declare const IntentUpdatedEvent: {
     fromJSON(object: any): IntentUpdatedEvent;
     toJSON(message: IntentUpdatedEvent): unknown;
     fromPartial(object: Partial<IntentUpdatedEvent>): IntentUpdatedEvent;
+};
+export declare const ClaimAuthorizationCreatedEvent: {
+    encode(message: ClaimAuthorizationCreatedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): ClaimAuthorizationCreatedEvent;
+    fromJSON(object: any): ClaimAuthorizationCreatedEvent;
+    toJSON(message: ClaimAuthorizationCreatedEvent): unknown;
+    fromPartial(object: Partial<ClaimAuthorizationCreatedEvent>): ClaimAuthorizationCreatedEvent;
 };
