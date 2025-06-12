@@ -29,7 +29,7 @@ export const pubKeyToAddress = (
 export const didToAddress = (did: string, prefix = "ixo") => {
   // if did is did:x:zQ3.. and the total count for : is only 3 we can safely assume it is the old did format from secp pubkey
   // can get the pubkey to get the address to get the ideal new address based did we are working towards
-  if (did.includes("did:x:zQ3")) {
+  if (!did.includes("did:x:zQ3")) {
     throw new Error("Invalid DID format, only support did:x:zQ3...");
   }
   const pubkey = extractPubkeyFromDid(did);
