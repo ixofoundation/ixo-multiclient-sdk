@@ -176,16 +176,25 @@ export const feegrantAllCurrentUsers = () =>
         )
       );
 
+      let revokeCount = 0;
       // first revoke all current feegrants
       for (const grantees of granteesChunks) {
+        revokeCount++;
+        console.log(
+          `revoking batch ${revokeCount} of ${granteesChunks.length}`
+        );
         const ress = await Authz.MsgRevokeAllowance(
           WalletUsers.tester,
           grantees
         );
         if (ress.code != 0) throw new Error(ress.rawLog);
       }
+
+      let grantCount = 0;
       // then grant all current users new feegrants
       for (const grantees of granteesChunks) {
+        grantCount++;
+        console.log(`granting batch ${grantCount} of ${granteesChunks.length}`);
         const ress = await Authz.MsgGrantAllowanceFeegrant(
           WalletUsers.tester,
           grantees

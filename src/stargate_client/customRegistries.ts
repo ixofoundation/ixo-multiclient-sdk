@@ -223,6 +223,11 @@ export const defaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
     "/ibc.applications.transfer.v1.MsgUpdateParams",
     ibc.applications.transfer.v1.MsgUpdateParams,
   ],
+  ["/ibc.core.channel.v1.MsgRecvPacket", ibc.core.channel.v1.MsgRecvPacket],
+  [
+    "/ibc.core.channel.v1.MsgAcknowledgement",
+    ibc.core.channel.v1.MsgAcknowledgement,
+  ],
   ["/ibc.core.client.v1.MsgCreateClient", ibc.core.client.v1.MsgCreateClient],
   [
     "/ibc.core.client.v1.MsgSubmitMisbehaviour",

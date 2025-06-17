@@ -329,18 +329,28 @@ export const daoCore = () =>
           }),
         },
       };
-      const res = await Wasm.WasmInstantiateTrx(
-        daoCoreContractCode!,
-        JSON.stringify(msg)
-      );
+      const res = await Promise.all([
+        Wasm.WasmInstantiateTrx(
+          daoCoreContractCode!,
+          JSON.stringify(msg),
+          1,
+          WalletUsers.tester
+        ),
+        // Wasm.WasmInstantiateTrx(
+        //   daoCoreContractCode!,
+        //   JSON.stringify(msg),
+        //   1,
+        //   WalletUsers.alice
+        // ),
+      ]);
       console.log("initialize::", res);
       contractAddress = utils.common.getValueFromEvents(
-        res,
+        res[0],
         "instantiate",
         "_contract_address"
       );
       console.log({ contractAddress });
-      return res;
+      return res[0];
     });
 
     test("query dao core contract: dump_state", async () => {

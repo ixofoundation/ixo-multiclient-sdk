@@ -222,8 +222,11 @@ export interface Payment {
     cw20Payment: CW20Payment[];
     /**
      * boolean to indicate if the payment is for oracle payments, aka it will go
-     * through network fees split NOTE: if true the payment can only have amount
-     * values(Native coins), no cw20 payments allowed then
+     * through network fees split, only allowed for APPROVED payment types. NOTE:
+     * if true and the payment contains cw20 payments, the claim will only be
+     * successfully if an intent exists to ensure immediate cw20 payment split,
+     * since there is no WithdrawalAuthorization to manage the cw20 payment split
+     * for delayed payments
      */
     isOraclePayment: boolean;
 }
@@ -257,6 +260,25 @@ export interface CW20PaymentSDKType {
     address: string;
     amount: Long;
 }
+/** CW20Output represents a CW20 token output for split payments */
+export interface CW20Output {
+    /** address is the address of the recipient */
+    address: string;
+    /** contract_address is the address of the contract */
+    contractAddress: string;
+    /**
+     * amount is the amount of the token to transfer
+     * chose uint64 for now as amounts should be small enough to fit in a
+     * uint64(max 18446744073709551615)
+     */
+    amount: Long;
+}
+/** CW20Output represents a CW20 token output for split payments */
+export interface CW20OutputSDKType {
+    address: string;
+    contract_address: string;
+    amount: Long;
+}
 export interface Claim {
     /** collection_id indicates to which Collection this claim belongs */
     collectionId: string;
@@ -274,14 +296,16 @@ export interface Claim {
     /** intent_id is the id of the intent for this claim, if any */
     useIntent: boolean;
     /**
-     * NOTE: if both amount and cw20 amount are empty then use default by
-     * Collection custom amount specified by service agent for claim approval
+     * custom amount specified by service agent for claim approval
+     * NOTE: if both amount and cw20 amount are empty then collection default is
+     * used
      */
     amount: Coin[];
     /**
-     * NOTE: if both amount and cw20 amount are empty then use default by
-     * Collection custom cw20 payments specified by service agent for claim
+     * custom cw20 payments specified by service agent for claim
      * approval
+     * NOTE: if both amount and cw20 amount are empty then collection default is
+     * used
      */
     cw20Payment: CW20Payment[];
 }
@@ -340,11 +364,16 @@ export interface Evaluation {
      */
     evaluationDate?: Timestamp;
     /**
-     * if both amount and cw20 amount are empty then use default by Collection
      * custom amount specified by evaluator for claim approval
+     * NOTE: if both amount and cw20 amount are empty then collection default is
+     * used
      */
     amount: Coin[];
-    /** custom cw20 payments specified by evaluator for claim approval */
+    /**
+     * custom cw20 payments specified by evaluator for claim approval
+     * NOTE: if both amount and cw20 amount are empty then collection default is
+     * used
+     */
     cw20Payment: CW20Payment[];
 }
 export interface EvaluationSDKType {
@@ -470,6 +499,13 @@ export declare const CW20Payment: {
     fromJSON(object: any): CW20Payment;
     toJSON(message: CW20Payment): unknown;
     fromPartial(object: Partial<CW20Payment>): CW20Payment;
+};
+export declare const CW20Output: {
+    encode(message: CW20Output, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): CW20Output;
+    fromJSON(object: any): CW20Output;
+    toJSON(message: CW20Output): unknown;
+    fromPartial(object: Partial<CW20Output>): CW20Output;
 };
 export declare const Claim: {
     encode(message: Claim, writer?: _m0.Writer): _m0.Writer;

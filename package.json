@@ -1,6 +1,6 @@
 {
   "name": "@ixo/impactxclient-sdk",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them",
   "author": "Ixo <ixo>",
   "homepage": "https://github.com/ixofoundation/ixo-MultiClient-SDK#readme",
@@ -104,7 +104,7 @@
     "@cosmjs/stargate": "0.32.4",
     "@cosmjs/tendermint-rpc": "0.32.4",
     "axios": "1.2.5",
-    "bip39": "3.0.4",
+    "bip39-light": "1.0.7",
     "bs58": "5.0.0",
     "dotenv": "16.0.3",
     "protobufjs": "6.11.2"

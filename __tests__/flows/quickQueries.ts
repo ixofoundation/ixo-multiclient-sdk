@@ -232,11 +232,11 @@ export const quickQueries = () =>
 
     // test("Query cosmos.tx.v1beta1.getTxsEvent", async () => {
     //   const res = await queryClient.cosmos.tx.v1beta1.getTxsEvent({
-    //     events: [`tx.height=${34}`],
+    //     events: [`tx.height=${711}`],
     //     orderBy: cosmos.tx.v1beta1.OrderBy.ORDER_BY_ASC,
     //     limit: Long.fromNumber(10000),
     //     page: Long.fromNumber(1),
-    //     query: `tx.height=${34}`,
+    //     query: `tx.height=${711}`,
     //   });
     //   // console.log(res.txs[0]!.body!.messages[0]);
     //   console.dir(res, { depth: null });
@@ -255,7 +255,7 @@ export const quickQueries = () =>
     // });
 
     // test("Decode txBodyBytes", async () => {
-    //   const txBodyBytes = [
+    //   let txBodyBytes: any = [
     //     10, 217, 1, 10, 46, 47, 105, 120, 111, 46, 101, 110, 116, 105, 116, 121,
     //     46, 118, 49, 98, 101, 116, 97, 49, 46, 77, 115, 103, 71, 114, 97, 110,
     //     116, 69, 110, 116, 105, 116, 121, 65, 99, 99, 111, 117, 110, 116, 65,
@@ -272,12 +272,29 @@ export const quickQueries = () =>
     //     118, 121, 114, 110, 109, 109, 113, 106, 51, 102, 100, 52, 115, 118, 97,
     //     55, 116,
     //   ];
+    //   const txBodyHex =
+    //     "0a8d040a1d2f636f736d6f732e617574687a2e763162657461312e4d73674578656312eb030a2a69786f313832757138716b796b6565787173363871357637756e786b7a6870326b6a6a35766c616b303012bc030a242f69786f2e636c61696d732e763162657461312e4d73674576616c75617465436c61696d1293030a3b6261667962656965643378656b7077676f7068633568706d797a7762326f376d6d6e7132673234706836786f3376667834767a7072366968336b71120233361a326469643a69786f3a69786f313832757138716b796b6565787173363871357637756e786b7a6870326b6a6a35766c616b303022326469643a69786f3a69786f313832757138716b796b6565787173363871357637756e786b7a6870326b6a6a35766c616b30302a2a69786f313832757138716b796b6565787173363871357637756e786b7a6870326b6a6a35766c616b3030322a69786f316c366b72667764756475677666306e797a7a677079337a7036736a6b61726b78353036616b65380140014a3b6261667962656965643378656b7077676f7068633568706d797a7762326f376d6d6e7132673234706836786f3376667834767a7072366968336b71524f0a446962632f36424245394244343234364638453034393438443541344545453731363442323633303236334239454242354537444335463041343643363241324646393742120731303030303030";
+
+    //   // if txBodyHex then convert hex to base64 and then to txBodyBytes
+    //   if (txBodyHex) {
+    //     txBodyBytes = utils.conversions.b64toUint8Array(
+    //       Buffer.from(txBodyHex, "hex").toString("base64")
+    //     );
+    //   }
 
     //   const txBody = TxBody.decode(txBodyBytes as any);
     //   console.dir(txBody.messages[0], { depth: null });
 
     //   const msg = createRegistry().decode(txBody.messages[0]);
     //   console.dir(msg, { depth: null });
+
+    //   const innerAuthMsg = createRegistry().decode(msg.msgs[0]);
+    //   console.dir(innerAuthMsg, { depth: null });
+
+    //   // const innerInnerAuthMsg = createRegistry().decode(
+    //   //   innerAuthMsg.grant.authorization
+    //   // );
+    //   // console.dir(innerInnerAuthMsg, { depth: null });
 
     //   expect(true).toBeTruthy();
     // });
@@ -534,6 +551,44 @@ export const quickQueries = () =>
     // test("query wasm store codes", async () => {
     //   const res = await queryClient.cosmwasm.wasm.v1.codes();
     //   console.log(res.codeInfos);
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("query address in daodao", async () => {
+    //   const daodaoAddress =
+    //     "ixo1engh7fuly026cnh558m7j96jm37z4vrqpx5dr57gua4pxw5myqvs7n8ewr";
+    //   // const userAddress = (await getUser(WalletUsers.tester).getAccounts())[0].address
+    //   const userAddress = "ixo17e23sdgfsukxnu639xe2fjfe4cme0zz532325q";
+
+    //   const msg = {
+    //     voting_power_at_height: {
+    //       address: userAddress,
+    //     },
+    //   };
+    //   const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //     address: daodaoAddress,
+    //     queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+    //   });
+    //   const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+    //   console.dir(data, { depth: null });
+    //   expect(res).toBeTruthy();
+    // });
+
+    // test("query add daodao members", async () => {
+    //   const daodaoAddress =
+    //     "ixo1engh7fuly026cnh558m7j96jm37z4vrqpx5dr57gua4pxw5myqvs7n8ewr";
+
+    //   const msg = {
+    //     voting_power_at_height: {
+    //       address: userAddress,
+    //     },
+    //   };
+    //   const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //     address: daodaoAddress,
+    //     queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+    //   });
+    //   const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+    //   console.dir(data, { depth: null });
     //   expect(res).toBeTruthy();
     // });
 
