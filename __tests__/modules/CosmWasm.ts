@@ -49,11 +49,12 @@ export const WasmStoreTrx = async (
 export const WasmInstantiateTrx = async (
   codeId: number,
   msg: string,
-  funds = 1
+  funds = 1,
+  signer: WalletUsers = WalletUsers.tester
 ) => {
-  const client = await createClient();
+  const client = await createClient(getUser(signer));
 
-  const tester = getUser();
+  const tester = getUser(signer);
   const account = (await tester.getAccounts())[0];
   const myAddress = account.address;
 

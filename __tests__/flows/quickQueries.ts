@@ -232,11 +232,11 @@ export const quickQueries = () =>
 
     // test("Query cosmos.tx.v1beta1.getTxsEvent", async () => {
     //   const res = await queryClient.cosmos.tx.v1beta1.getTxsEvent({
-    //     events: [`tx.height=${34}`],
+    //     events: [`tx.height=${711}`],
     //     orderBy: cosmos.tx.v1beta1.OrderBy.ORDER_BY_ASC,
     //     limit: Long.fromNumber(10000),
     //     page: Long.fromNumber(1),
-    //     query: `tx.height=${34}`,
+    //     query: `tx.height=${711}`,
     //   });
     //   // console.log(res.txs[0]!.body!.messages[0]);
     //   console.dir(res, { depth: null });
