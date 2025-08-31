@@ -28,14 +28,14 @@ beforeAll(() => {
 IID.generateBlockchainTestUsers();
 
 // IID.registerIids();
-// Proposals.instantiateModulesProposals();
+// Proposals.instantiateModulesProposals(false);
 // Cosmos.bankBasic();
 // IID.iidsBasic();
 // Bonds.bondsBasic();
 // Entity.enititiesBasic();
 // Token.tokenBasic();
 // Claims.claimsBasic();
-// CosmWasm.daoCore();
+// CosmWasm.daoCoreCw4();
 // Smartaccount.smartaccountBasic();
 // LiquidStake.prepareModuleWithProposals();
 // CosmWasm.wasmBasic();
@@ -74,7 +74,9 @@ IID.generateBlockchainTestUsers();
 // Entity.transferEntities();
 // CosmWasm.daodaoAuthzExecute();
 // Cosmos.textProposalBasic();
-// CosmWasm.daoCore2();
+// CosmWasm.daoCoreCw721();
+// CosmWasm.daoCoreCw20();
+// CosmWasm.daoCoreNative();
 // Claims.supamotoClaims3();
 // Proposals.uploadHyperlaneProposals();
 // Queries.quickQueries();
