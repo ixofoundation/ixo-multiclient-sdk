@@ -4,7 +4,7 @@ import { cosmwasm, testMsg, timeout, utils } from "../helpers/common";
 import { WalletUsers } from "../helpers/constants";
 import * as Cosmos from "../modules/Cosmos";
 
-export const instantiateModulesProposals = () =>
+export const instantiateModulesProposals = (onlyContractUploads = false) =>
   describe("Testing the gov module", () => {
     let proposalId: number;
 
@@ -66,49 +66,51 @@ export const instantiateModulesProposals = () =>
     // );
     // testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(proposalId));
 
-    test("timeout", async () => {
-      console.log(
-        "Waiting 90 second for previous proposal to pass (local chain)"
+    if (!onlyContractUploads) {
+      test("timeout", async () => {
+        console.log(
+          "Waiting 90 second for previous proposal to pass (local chain)"
+        );
+        await timeout(90 * 1000);
+        expect(true).toBeTruthy();
+      });
+
+      let proposalIdUpdateEntityParams: number;
+      testMsg(
+        "/cosmos.gov.v1beta1.MsgSubmitProposal update entity params",
+        async () => {
+          const res = await Cosmos.MsgSubmitProposalUpdateEntityParams(1);
+          proposalIdUpdateEntityParams = utils.common.getValueFromEvents(
+            res,
+            "submit_proposal",
+            "proposal_id"
+          );
+          console.log({ proposalIdUpdateEntityParams });
+          return res;
+        }
       );
-      await timeout(90 * 1000);
-      expect(true).toBeTruthy();
-    });
+      testMsg("/cosmos.gov.v1beta1.MsgVote", () =>
+        Cosmos.MsgVote(proposalIdUpdateEntityParams)
+      );
 
-    let proposalIdUpdateEntityParams: number;
-    testMsg(
-      "/cosmos.gov.v1beta1.MsgSubmitProposal update entity params",
-      async () => {
-        const res = await Cosmos.MsgSubmitProposalUpdateEntityParams(1);
-        proposalIdUpdateEntityParams = utils.common.getValueFromEvents(
-          res,
-          "submit_proposal",
-          "proposal_id"
-        );
-        console.log({ proposalIdUpdateEntityParams });
-        return res;
-      }
-    );
-    testMsg("/cosmos.gov.v1beta1.MsgVote", () =>
-      Cosmos.MsgVote(proposalIdUpdateEntityParams)
-    );
-
-    let proposalIdUpdateTokenParams: number;
-    testMsg(
-      "/cosmos.gov.v1beta1.MsgSubmitProposal update token params",
-      async () => {
-        const res = await Cosmos.MsgSubmitProposalUpdateTokenParams(2);
-        proposalIdUpdateTokenParams = utils.common.getValueFromEvents(
-          res,
-          "submit_proposal",
-          "proposal_id"
-        );
-        console.log({ proposalIdUpdateTokenParams });
-        return res;
-      }
-    );
-    testMsg("/cosmos.gov.v1beta1.MsgVote", () =>
-      Cosmos.MsgVote(proposalIdUpdateTokenParams)
-    );
+      let proposalIdUpdateTokenParams: number;
+      testMsg(
+        "/cosmos.gov.v1beta1.MsgSubmitProposal update token params",
+        async () => {
+          const res = await Cosmos.MsgSubmitProposalUpdateTokenParams(2);
+          proposalIdUpdateTokenParams = utils.common.getValueFromEvents(
+            res,
+            "submit_proposal",
+            "proposal_id"
+          );
+          console.log({ proposalIdUpdateTokenParams });
+          return res;
+        }
+      );
+      testMsg("/cosmos.gov.v1beta1.MsgVote", () =>
+        Cosmos.MsgVote(proposalIdUpdateTokenParams)
+      );
+    }
 
     test("timeout", async () => {
       console.log(

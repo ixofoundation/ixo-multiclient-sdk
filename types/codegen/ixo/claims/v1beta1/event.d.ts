@@ -1,4 +1,4 @@
-import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, Intent, IntentSDKType } from "./claims";
+import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, CW1155IntentPayment, CW1155IntentPaymentSDKType, Intent, IntentSDKType } from "./claims";
 import { WithdrawPaymentConstraints, WithdrawPaymentConstraintsSDKType } from "./authz";
 import * as _m0 from "protobufjs/minimal";
 /** CollectionCreatedEvent is an event triggered on a Collection creation */
@@ -58,12 +58,20 @@ export interface ClaimDisputedEventSDKType {
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface PaymentWithdrawnEvent {
     withdraw?: WithdrawPaymentConstraints;
+    /** the cw20 with the split amounts if any */
     cw20Outputs: CW20Output[];
+    /**
+     * the cw1155 with the transferred token ids and amounts
+     * since in the msg you can define an amount but we don't necessarily know the
+     * token ids
+     */
+    cw1155Payments: CW1155IntentPayment[];
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface PaymentWithdrawnEventSDKType {
     withdraw?: WithdrawPaymentConstraintsSDKType;
     cw20_outputs: CW20OutputSDKType[];
+    cw1155_payments: CW1155IntentPaymentSDKType[];
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface PaymentWithdrawCreatedEvent {

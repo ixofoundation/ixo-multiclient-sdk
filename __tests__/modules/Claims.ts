@@ -1,6 +1,9 @@
 import { Coin } from "@cosmjs/amino";
 import { WithdrawPaymentConstraints } from "../../src/codegen/ixo/claims/v1beta1/authz";
-import { CW20Payment } from "../../src/codegen/ixo/claims/v1beta1/claims";
+import {
+  CW1155Payment,
+  CW20Payment,
+} from "../../src/codegen/ixo/claims/v1beta1/claims";
 import {
   addDays,
   createClient,
@@ -10,7 +13,7 @@ import {
   cosmos,
   queryClient,
 } from "../helpers/common";
-import { fee, WalletUsers } from "../helpers/constants";
+import { fee, getFee, WalletUsers } from "../helpers/constants";
 // @ts-ignore
 import Long from "long";
 
@@ -239,7 +242,8 @@ export const UpdateCollectionPayments = async (
   adminAddress: string,
   signer: WalletUsers = WalletUsers.tester,
   cw20Address: string = "ixo1747e2jlnmk6lzqe2pcpq4x0fxys4e7puadx7np78s9ygqed24cxshj2xuc",
-  isOraclePayment = false
+  isOraclePayment = false,
+  cw1155Address?: string
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -275,6 +279,15 @@ export const UpdateCollectionPayments = async (
                   //     amount: Long.fromNumber(10),
                   //   }),
                   // ],
+                  cw1155Payment: cw1155Address
+                    ? [
+                        ixo.claims.v1beta1.CW1155Payment.fromPartial({
+                          address: cw1155Address,
+                          tokenId: [],
+                          amount: Long.fromNumber(5),
+                        }),
+                      ]
+                    : undefined,
                 }),
                 submission: ixo.claims.v1beta1.Payment.fromPartial({
                   account: paymentsAccount,
@@ -366,7 +379,8 @@ export const GrantEntityAccountClaimsSubmitAuthz = async (
   signer: WalletUsers = WalletUsers.tester,
   maxAmount: Coin[] = [],
   maxCw20Payment: CW20Payment[] = [],
-  intentDurationSeconds = 0
+  intentDurationSeconds = 0,
+  maxCw1155Payment: CW1155Payment[] = []
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -406,6 +420,7 @@ export const GrantEntityAccountClaimsSubmitAuthz = async (
                   agentQuota: Long.fromNumber(agentQuota),
                   maxAmount,
                   maxCw20Payment,
+                  maxCw1155Payment,
                   intentDurationNs: utils.proto.toDuration(
                     (1000000000 * intentDurationSeconds).toString()
                   ),
@@ -437,7 +452,8 @@ export const GrantEntityAccountCreateClaimAuthz = async (
   maxCw20Payment: CW20Payment[] = [],
   intentDurationSeconds = 0,
   allowedAuthTypes = ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT,
-  maxAuthorizations = 2
+  maxAuthorizations = 2,
+  maxCw1155Payment: CW1155Payment[] = []
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -486,6 +502,7 @@ export const GrantEntityAccountCreateClaimAuthz = async (
                         expiration: utils.proto.toTimestamp(
                           addDays(new Date(), 365 * 3)
                         ),
+                        maxCw1155Payment,
                         maxAuthorizations: Long.fromNumber(maxAuthorizations),
                         allowedAuthTypes,
                       }
@@ -514,7 +531,8 @@ export const CreateClaimAuthorization = async (
   maxAmount: Coin[] = [],
   maxCw20Payment: CW20Payment[] = [],
   intentDurationSeconds = 0,
-  authType = ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT
+  authType = ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT,
+  maxCw1155Payment: CW1155Payment[] = []
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -537,6 +555,7 @@ export const CreateClaimAuthorization = async (
               agentQuota: Long.fromNumber(agentQuota),
               maxAmount,
               maxCw20Payment,
+              maxCw1155Payment,
               intentDurationNs: utils.proto.toDuration(
                 (1000000000 * intentDurationSeconds).toString()
               ),
@@ -558,7 +577,8 @@ export const MsgClaimIntent = async (
   collectionId: string,
   amount: Coin[] = [],
   cw20Payment: CW20Payment[] = [],
-  signer = WalletUsers.alice
+  signer = WalletUsers.alice,
+  cw1155Payment: CW1155Payment[] = []
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -573,13 +593,14 @@ export const MsgClaimIntent = async (
       collectionId,
       amount,
       cw20Payment,
+      cw1155Payment,
     }),
   };
 
   const response = await client.signAndBroadcast(
     granteeAddress,
     [message],
-    fee
+    getFee(1, await client.simulate(granteeAddress, [message], undefined))
   );
   return response;
 };
@@ -591,7 +612,8 @@ export const MsgExecAgentSubmit = async (
   grantee = WalletUsers.alice,
   useIntent = false,
   amount: Coin[] = [],
-  cw20Payment: CW20Payment[] = []
+  cw20Payment: CW20Payment[] = [],
+  cw1155Payment: CW1155Payment[] = []
 ) => {
   const client = await createClient(getUser(grantee));
 
@@ -615,6 +637,7 @@ export const MsgExecAgentSubmit = async (
               useIntent,
               amount,
               cw20Payment,
+              cw1155Payment,
             })
           ).finish(),
         },
@@ -640,7 +663,8 @@ export const GrantEntityAccountClaimsEvaluateAuthz = async (
   overrideCurretGrants = false,
   grantee: WalletUsers = WalletUsers.alice,
   signer: WalletUsers = WalletUsers.tester,
-  cw20Address: string = "ixo1747e2jlnmk6lzqe2pcpq4x0fxys4e7puadx7np78s9ygqed24cxshj2xuc"
+  cw20Address: string = "ixo1747e2jlnmk6lzqe2pcpq4x0fxys4e7puadx7np78s9ygqed24cxshj2xuc",
+  maxCw1155Payment: CW1155Payment[] = []
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -693,6 +717,7 @@ export const GrantEntityAccountClaimsEvaluateAuthz = async (
                       amount: Long.fromNumber(30),
                     }),
                   ],
+                  maxCustomCw1155Payment: maxCw1155Payment,
                 }),
                 ...granteeCurrentAuthConstraints,
               ],
@@ -799,7 +824,8 @@ export const MsgExecAgentEvaluate = async (
   status = ixo.claims.v1beta1.EvaluationStatus.APPROVED,
   grantee = WalletUsers.alice,
   customAmount?: Coin[],
-  customCW20Payment?: CW20Payment[]
+  customCW20Payment?: CW20Payment[],
+  customCW1155Payment?: CW1155Payment[]
 ) => {
   const client = await createClient(getUser(grantee));
 
@@ -827,6 +853,7 @@ export const MsgExecAgentEvaluate = async (
               // if want to do custom amount, must be within allowed authz if through authz
               amount: customAmount,
               cw20Payment: customCW20Payment,
+              cw1155Payment: customCW1155Payment,
             })
           ).finish(),
         },
@@ -892,6 +919,7 @@ export const MsgExecWithdrawal = async (
               paymentType,
               contract_1155Payment: withdrawContraints.contract_1155Payment,
               cw20Payment: withdrawContraints.cw20Payment,
+              cw1155Payment: withdrawContraints.cw1155Payment,
             })
           ).finish(),
         },
@@ -902,7 +930,7 @@ export const MsgExecWithdrawal = async (
   const response = await client.signAndBroadcast(
     granteeAddress,
     [message],
-    fee
+    getFee(1, await client.simulate(granteeAddress, [message], undefined))
   );
   return response;
 };

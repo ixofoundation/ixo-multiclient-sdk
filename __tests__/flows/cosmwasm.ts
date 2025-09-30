@@ -171,7 +171,40 @@ export const daoDaoContracts = () =>
     }
   });
 
-export const daoCore = () =>
+export const quickTest = () =>
+  describe("Testing the quick queries", () => {
+    const item = {
+      key: "whoIsAwesome",
+      value: "Petrus",
+    };
+
+    let denom: string;
+    let proposalId: number;
+    const contractAddress =
+      "ixo15z90j6vl69u0x37veexxav9dsptnldgt08x9gz5vfqmha8zq9g4sq4msjm";
+    const votingContractAddress =
+      "ixo107rr2axw6afww63pjjfr7pzsalllss76xacu6kep695dyfcx6j7s3jmfn3";
+    const preProposalContractAddress =
+      "ixo12ywawfvmrelz9qsql4xrvqm977hk05cl75qqacxw4k72rv6de4qqv7ha5e";
+    const proposalContractAddress =
+      "ixo15w57v5kgpntxaggg30zhclxe7jhp9uf58jz0aylhpsjctcrck36qhxgygu";
+
+    test("query dao core contract: get nft contract", async () => {
+      const msg = {
+        get_config: {},
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: votingContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+      denom = data.denom;
+      console.dir({ denom });
+      expect(res).toBeTruthy();
+    });
+  });
+
+export const daoCoreCw4 = () =>
   /**
    * This series of tests for a DAODAO DAO (Decentralized Autonomous Organization) smart contract
    * begin by defining a few variables for different smart contract codes that will be used later
@@ -246,6 +279,7 @@ export const daoCore = () =>
     let preProposalContractAddress: string;
     let votingContractAddress: string;
     let proposalId: number;
+    let groupContractAddress: string;
 
     testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract dao core", async () => {
       const tester = (await getUser().getAccounts())[0].address;
@@ -323,7 +357,7 @@ export const daoCore = () =>
             initial_members: [
               {
                 addr: tester,
-                weight: 1,
+                weight: 2,
               },
             ],
           }),
@@ -343,7 +377,7 @@ export const daoCore = () =>
         //   WalletUsers.alice
         // ),
       ]);
-      console.log("initialize::", res);
+      // console.log("initialize::", res);
       contractAddress = utils.common.getValueFromEvents(
         res[0],
         "instantiate",
@@ -384,31 +418,53 @@ export const daoCore = () =>
       expect(res).toBeTruthy();
     });
 
+    test("query dao core contract: get group contract", async () => {
+      const msg = {
+        group_contract: {},
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: votingContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+      groupContractAddress = data;
+      console.dir({ groupContractAddress });
+      expect(res).toBeTruthy();
+    });
+
     testMsg(
-      "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal propose",
+      "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal add member",
       async () => {
-        console.log("Waiting 10 seconds");
-        await timeout(10 * 1000);
+        const tester = getUser(WalletUsers.alice);
+        const account = (await tester.getAccounts())[0].address;
 
         const msg = {
           propose: {
             msg: {
               propose: {
-                description: "Testing: set item whoIsAwesome",
+                description: "Testing: add member",
                 msgs: [
                   {
                     wasm: {
                       execute: {
-                        contract_addr: contractAddress,
+                        contract_addr: groupContractAddress,
                         funds: [],
                         msg: utils.conversions.jsonToBase64({
-                          set_item: item,
+                          update_members: {
+                            add: [
+                              {
+                                addr: account,
+                                weight: 1,
+                              },
+                            ],
+                            remove: [],
+                          },
                         }),
                       },
                     },
                   },
                 ],
-                title: "Testing",
+                title: "Testing: add member",
               },
             },
           },
@@ -420,7 +476,7 @@ export const daoCore = () =>
           WalletUsers.tester,
           { amount: "1000000", denom: "uixo" }
         );
-        console.log("proposal", res);
+        // console.log("proposal", res);
         return res;
       }
     );
@@ -459,6 +515,114 @@ export const daoCore = () =>
       }
     );
 
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal execute",
+      async () => {
+        const msg = {
+          execute: {
+            proposal_id: proposalId,
+          },
+        };
+        const res = await Wasm.WasmExecuteTrx(
+          proposalContractAddress,
+          JSON.stringify(msg)
+        );
+        // console.log("execute", res);
+        return res;
+      }
+    );
+
+    test("query dao core contract: get group members", async () => {
+      const msg = {
+        list_members: {
+          start_after: null,
+          limit: 10,
+        },
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: groupContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+      console.dir({ data }, { depth: null });
+      expect(res).toBeTruthy();
+    });
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal propose",
+      async () => {
+        console.log("Waiting 10 seconds");
+        await timeout(10 * 1000);
+
+        const msg = {
+          propose: {
+            msg: {
+              propose: {
+                description: "Testing: set item whoIsAwesome",
+                msgs: [
+                  {
+                    wasm: {
+                      execute: {
+                        contract_addr: contractAddress,
+                        funds: [],
+                        msg: utils.conversions.jsonToBase64({
+                          set_item: item,
+                        }),
+                      },
+                    },
+                  },
+                ],
+                title: "Testing",
+              },
+            },
+          },
+        };
+
+        const res = await Wasm.WasmExecuteTrx(
+          preProposalContractAddress,
+          JSON.stringify(msg),
+          WalletUsers.tester,
+          { amount: "1000000", denom: "uixo" }
+        );
+        // console.log("proposal", res);
+        return res;
+      }
+    );
+
+    test("query dao proposal contract: reverse_proposals", async () => {
+      const msg = {
+        reverse_proposals: {},
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: proposalContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const reverseProposals = JSON.parse(
+        utils.conversions.Uint8ArrayToJS(res.data)
+      );
+      proposalId = reverseProposals.proposals[0].id;
+      console.log({ proposalId });
+      expect(res).toBeTruthy();
+    });
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal vote",
+      async () => {
+        const msg = {
+          vote: {
+            proposal_id: proposalId,
+            vote: "yes",
+          },
+        };
+        const res = await Wasm.WasmExecuteTrx(
+          proposalContractAddress,
+          JSON.stringify(msg)
+        );
+        // console.log("vote", res);
+        return res;
+      }
+    );
+
     test("query dao proposal contract: get_vote", async () => {
       const tester = (await getUser().getAccounts())[0].address;
       const msg = {
@@ -488,7 +652,7 @@ export const daoCore = () =>
           proposalContractAddress,
           JSON.stringify(msg)
         );
-        console.log("execute", res);
+        // console.log("execute", res);
         return res;
       }
     );
@@ -504,14 +668,13 @@ export const daoCore = () =>
         queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
       });
       const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
-      console.log({ [item.key]: data.item });
+      console.log({ data });
       expect(res).toBeTruthy();
     });
   });
 
-// To get cw721 voting working
-export const daoCore2 = () =>
-  describe("Testing the Dao Core", () => {
+export const daoCoreCw721 = () =>
+  describe("Testing the Dao Core with cw721 voting", () => {
     // Set the object below and run tests to see it added to dao via proposal and voting
     const item = {
       key: "whoIsAwesome",
@@ -541,7 +704,7 @@ export const daoCore2 = () =>
     );
 
     let cw721ContractAddress: string;
-    const membershipTokenId = "Awesomeness Memberships #2";
+    const membershipTokenId = "Awesomeness Memberships";
     let contractAddress: string;
     let proposalContractAddress: string;
     let preProposalContractAddress: string;
@@ -560,7 +723,7 @@ export const daoCore2 = () =>
         cw721BaseContractCode!,
         JSON.stringify(msg)
       );
-      console.log("initialize::", res);
+      // console.log("initialize::", res);
       cw721ContractAddress = utils.common.getValueFromEvents(
         res,
         "instantiate",
@@ -576,7 +739,24 @@ export const daoCore2 = () =>
       const msg = {
         mint: {
           owner: tester,
-          token_id: membershipTokenId,
+          token_id: membershipTokenId + " tester",
+          token_uri: null,
+        },
+      };
+      const res = await Wasm.WasmExecuteTrx(
+        cw721ContractAddress,
+        JSON.stringify(msg)
+      );
+      return res;
+    });
+
+    testMsg("execute mint cw721_base", async () => {
+      const alice = (await getUser(WalletUsers.alice).getAccounts())[0].address;
+
+      const msg = {
+        mint: {
+          owner: alice,
+          token_id: membershipTokenId + " alice",
           token_uri: null,
         },
       };
@@ -671,7 +851,7 @@ export const daoCore2 = () =>
         daoCoreContractCode!,
         JSON.stringify(msg)
       );
-      console.log("initialize::", res);
+      // console.log("initialize::", res);
       contractAddress = utils.common.getValueFromEvents(
         res,
         "instantiate",
@@ -712,13 +892,26 @@ export const daoCore2 = () =>
       expect(res).toBeTruthy();
     });
 
+    test("query dao core contract: get nft contract", async () => {
+      const msg = {
+        config: {},
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: votingContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+      cw721ContractAddress = data.nft_address;
+      console.dir({ cw721ContractAddress });
+      expect(res).toBeTruthy();
+    });
+
     testMsg("execute send cw721 nft to voting contract", async () => {
-      const tester = (await getUser().getAccounts())[0].address;
       const msg = {
         send_nft: {
           msg: "",
           contract: votingContractAddress,
-          token_id: membershipTokenId,
+          token_id: membershipTokenId + " tester",
         },
       };
       const res = await Wasm.WasmExecuteTrx(
@@ -728,13 +921,29 @@ export const daoCore2 = () =>
       return res;
     });
 
-    test("query dao proposal contract: proposal_creation_policy", async () => {
+    testMsg("execute send cw721 nft to voting contract", async () => {
+      const msg = {
+        send_nft: {
+          msg: "",
+          contract: votingContractAddress,
+          token_id: membershipTokenId + " alice",
+        },
+      };
+      const res = await Wasm.WasmExecuteTrx(
+        cw721ContractAddress,
+        JSON.stringify(msg),
+        WalletUsers.alice
+      );
+      return res;
+    });
+
+    test("query dao proposal contract: get_voting_power", async () => {
       const tester = (await getUser().getAccounts())[0].address;
       const msg = {
-        // total_power_at_height: {},
-        voting_power_at_height: {
-          address: tester,
-        },
+        total_power_at_height: {},
+        // voting_power_at_height: {
+        //   address: tester,
+        // },
         // staked_nfts: {
         //   address: tester,
         // },
@@ -751,9 +960,6 @@ export const daoCore2 = () =>
     testMsg(
       "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal propose",
       async () => {
-        console.log("Waiting 10 seconds");
-        await timeout(10 * 1000);
-
         const msg = {
           propose: {
             msg: {
@@ -784,7 +990,7 @@ export const daoCore2 = () =>
           WalletUsers.tester,
           { amount: "1000000", denom: "uixo" }
         );
-        console.log("proposal", res);
+        // console.log("proposal", res);
         return res;
       }
     );
@@ -818,7 +1024,28 @@ export const daoCore2 = () =>
           proposalContractAddress,
           JSON.stringify(msg)
         );
-        console.log("vote", res);
+        // console.log("vote", res);
+        return res;
+      }
+    );
+
+    // need to vote with alice also as there only 2 members so 1 vote is 50%, not
+    // majority and thus proposal wont pass immediately with only 1 vote
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal vote",
+      async () => {
+        const msg = {
+          vote: {
+            proposal_id: proposalId,
+            vote: "yes",
+          },
+        };
+        const res = await Wasm.WasmExecuteTrx(
+          proposalContractAddress,
+          JSON.stringify(msg),
+          WalletUsers.alice
+        );
+        // console.log("vote", res);
         return res;
       }
     );
@@ -855,7 +1082,7 @@ export const daoCore2 = () =>
           proposalContractAddress,
           JSON.stringify(msg)
         );
-        console.log("execute", res);
+        // console.log("execute", res);
         return res;
       }
     );
@@ -871,7 +1098,782 @@ export const daoCore2 = () =>
         queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
       });
       const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
-      console.log({ [item.key]: data.item });
+      console.log({ data });
+      expect(res).toBeTruthy();
+    });
+  });
+
+export const daoCoreCw20 = () =>
+  describe("Testing the Dao Core with cw20 voting", () => {
+    // Set the object below and run tests to see it added to dao via proposal and voting
+    const item = {
+      key: "whoIsAwesome",
+      value: "Petrus",
+    };
+
+    const daoCoreContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "dao_core"
+    );
+    const daoProposalContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "dao_proposal_single"
+    );
+    const daoPreProposalContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "dao_pre_propose_single"
+    );
+    const daoVotingCw20ContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "dao_voting_cw20_staked"
+    );
+    const cw20BaseContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "cw20_base"
+    );
+    const cw20StakeContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "cw20_stake"
+    );
+
+    let contractAddress: string;
+    let proposalContractAddress: string;
+    let preProposalContractAddress: string;
+    let votingContractAddress: string;
+    let proposalId: number;
+    let cw20StakingContractAddress: string;
+    let cw20TokenAddress: string;
+
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract dao core", async () => {
+      const tester = (await getUser().getAccounts())[0].address;
+      const alice = (await getUser(WalletUsers.alice).getAccounts())[0].address;
+
+      const msg = {
+        admin: null,
+        automatically_add_cw20s: true,
+        automatically_add_cw721s: true,
+        description: "This is a test dao with cw20 voting",
+        image_url:
+          "https://sienaconstruction.com/wp-content/uploads/2017/05/test-image.jpg",
+        name: "Test Dao Cw20",
+        proposal_modules_instantiate_info: [
+          {
+            admin: {
+              core_module: {},
+            },
+            code_id: daoProposalContractCode,
+            label: "DAO_Test Dao_DaoProposalSingle",
+            msg: utils.conversions.jsonToBase64({
+              allow_revoting: false,
+              close_proposal_on_execution_failure: true,
+              max_voting_period: {
+                time: 604800,
+              },
+              min_voting_period: null,
+              only_members_execute: true,
+              pre_propose_info: {
+                module_may_propose: {
+                  info: {
+                    admin: {
+                      core_module: {},
+                    },
+                    code_id: daoPreProposalContractCode,
+                    label: "DAO_Test Dao_pre-propose-DaoProposalSingle",
+                    msg: utils.conversions.jsonToBase64({
+                      deposit_info: {
+                        amount: "1000000",
+                        denom: {
+                          token: {
+                            denom: {
+                              native: "uixo",
+                            },
+                          },
+                        },
+                        refund_policy: "only_passed",
+                      },
+                      extension: {},
+                      open_proposal_submission: false,
+                    }),
+                  },
+                },
+              },
+              threshold: {
+                threshold_quorum: {
+                  quorum: {
+                    percent: "0.20",
+                  },
+                  threshold: {
+                    majority: {},
+                  },
+                },
+              },
+            }),
+          },
+        ],
+        voting_module_instantiate_info: {
+          admin: {
+            core_module: {},
+          },
+          code_id: daoVotingCw20ContractCode,
+          label: "DAO_Test Dao_DaoVotingCw20",
+          msg: utils.conversions.jsonToBase64({
+            token_info: {
+              new: {
+                code_id: cw20BaseContractCode,
+                decimals: 6,
+                // pub struct InstantiateMarketingInfo {
+                //     pub project: Option<String>,
+                //     pub description: Option<String>,
+                //     pub marketing: Option<String>,
+                //     pub logo: Option<Logo>,
+                // }
+                marketing: null,
+                label: "Test Dao Cw20",
+                name: "Test Dao Cw20",
+                staking_code_id: cw20StakeContractCode,
+                symbol: "TEST",
+                initial_balances: [
+                  {
+                    address: tester,
+                    amount: "10000000000000",
+                  },
+                  {
+                    address: alice,
+                    amount: "10000000000000",
+                  },
+                ],
+                initial_dao_balance: "10000000000000",
+                unstaking_duration: {
+                  time: 240, // seconds = 4 minutes
+                },
+              },
+            },
+          }),
+        },
+      };
+      const res = await Promise.all([
+        Wasm.WasmInstantiateTrx(
+          daoCoreContractCode!,
+          JSON.stringify(msg),
+          1,
+          WalletUsers.tester
+        ),
+      ]);
+      // console.log("initialize::", res);
+      contractAddress = utils.common.getValueFromEvents(
+        res[0],
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ contractAddress });
+      return res[0];
+    });
+
+    test("query dao core contract: dump_state", async () => {
+      const msg = {
+        dump_state: {},
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: contractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const dumpState = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+      proposalContractAddress = dumpState.proposal_modules[0].address;
+      votingContractAddress = dumpState.voting_module;
+      console.log({ proposalContractAddress, votingContractAddress });
+      expect(res).toBeTruthy();
+    });
+
+    test("query dao proposal contract: proposal_creation_policy", async () => {
+      const msg = {
+        proposal_creation_policy: {},
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: proposalContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const proposalCreationPolicy = JSON.parse(
+        utils.conversions.Uint8ArrayToJS(res.data)
+      );
+      preProposalContractAddress = proposalCreationPolicy.module.addr;
+      console.log({ preProposalContractAddress });
+      expect(res).toBeTruthy();
+    });
+
+    test("query dao core contract: get staking contract", async () => {
+      const msg = {
+        staking_contract: {},
+        // active_threshold: {},
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: votingContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+      cw20StakingContractAddress = data;
+      console.dir({ cw20StakingContractAddress });
+      expect(res).toBeTruthy();
+    });
+
+    test("query dao core contract: get cw20 token address", async () => {
+      const msg = {
+        get_config: {},
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: cw20StakingContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const config = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+      cw20TokenAddress = config.token_address;
+      console.log({ cw20TokenAddress });
+      expect(res).toBeTruthy();
+    });
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract send cw20 to staking contract",
+      async () => {
+        const msg = {
+          send: {
+            amount: "10",
+            msg: utils.conversions.jsonToBase64({
+              stake: {},
+            }),
+            contract: cw20StakingContractAddress,
+          },
+        };
+
+        const res = await Wasm.WasmExecuteTrx(
+          cw20TokenAddress,
+          JSON.stringify(msg),
+          WalletUsers.tester,
+          null
+        );
+        // console.log("proposal", res);
+        return res;
+      }
+    );
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract send cw20 to staking contract",
+      async () => {
+        const msg = {
+          send: {
+            amount: "5",
+            msg: utils.conversions.jsonToBase64({
+              stake: {},
+            }),
+            contract: cw20StakingContractAddress,
+          },
+        };
+
+        const res = await Wasm.WasmExecuteTrx(
+          cw20TokenAddress,
+          JSON.stringify(msg),
+          WalletUsers.alice,
+          null
+        );
+        // console.log("proposal", res);
+        return res;
+      }
+    );
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract unstake cw20 from staking contract",
+      async () => {
+        const msg = {
+          unstake: {
+            amount: "3",
+          },
+        };
+
+        const res = await Wasm.WasmExecuteTrx(
+          cw20StakingContractAddress,
+          JSON.stringify(msg),
+          WalletUsers.alice,
+          null
+        );
+        // console.log("proposal", res);
+        return res;
+      }
+    );
+
+    test("query dao core contract: get cw20_staking powers total_value", async () => {
+      const msg = {
+        total_value: {},
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: cw20StakingContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+      console.dir({ data });
+      expect(res).toBeTruthy();
+    });
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal set item",
+      async () => {
+        const msg = {
+          propose: {
+            msg: {
+              propose: {
+                description: "Testing: set item whoIsAwesome",
+                msgs: [
+                  {
+                    wasm: {
+                      execute: {
+                        contract_addr: contractAddress,
+                        funds: [],
+                        msg: utils.conversions.jsonToBase64({
+                          set_item: item,
+                        }),
+                      },
+                    },
+                  },
+                ],
+                title: "Testing",
+              },
+            },
+          },
+        };
+
+        const res = await Wasm.WasmExecuteTrx(
+          preProposalContractAddress,
+          JSON.stringify(msg),
+          WalletUsers.tester,
+          { amount: "1000000", denom: "uixo" }
+        );
+        // console.log("proposal", res);
+        return res;
+      }
+    );
+
+    test("query dao proposal contract: reverse_proposals", async () => {
+      const msg = {
+        reverse_proposals: {},
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: proposalContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const reverseProposals = JSON.parse(
+        utils.conversions.Uint8ArrayToJS(res.data)
+      );
+      proposalId = reverseProposals.proposals[0].id;
+      console.log({ proposalId });
+      expect(res).toBeTruthy();
+    });
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal vote",
+      async () => {
+        const msg = {
+          vote: {
+            proposal_id: proposalId,
+            vote: "yes",
+          },
+        };
+        const res = await Wasm.WasmExecuteTrx(
+          proposalContractAddress,
+          JSON.stringify(msg)
+        );
+        // console.log("vote", res);
+        return res;
+      }
+    );
+
+    test("query dao proposal contract: get_vote", async () => {
+      const tester = (await getUser().getAccounts())[0].address;
+      const msg = {
+        // get_vote: {
+        //   proposal_id: proposalId,
+        //   voter: tester,
+        // },
+        proposal: {
+          proposal_id: proposalId,
+        },
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: proposalContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+      console.dir({ data }, { depth: null });
+      expect(res).toBeTruthy();
+    });
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal execute",
+      async () => {
+        const msg = {
+          execute: {
+            proposal_id: proposalId,
+          },
+        };
+        const res = await Wasm.WasmExecuteTrx(
+          proposalContractAddress,
+          JSON.stringify(msg)
+        );
+        // console.log("execute", res);
+        return res;
+      }
+    );
+
+    test("query dao core contract: get_item", async () => {
+      const msg = {
+        get_item: {
+          key: item.key,
+        },
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: contractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+      console.log({ data });
+      expect(res).toBeTruthy();
+    });
+  });
+
+export const daoCoreNative = () =>
+  describe("Testing the Dao Core with native voting", () => {
+    // Set the object below and run tests to see it added to dao via proposal and voting
+    const item = {
+      key: "whoIsAwesome",
+      value: "Petrus",
+    };
+
+    const daoCoreContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "dao_core"
+    );
+    const daoProposalContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "dao_proposal_single"
+    );
+    const daoPreProposalContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "dao_pre_propose_single"
+    );
+    const daoVotingNativeContractCode = customQueries.contract.getContractCode(
+      "devnet",
+      "dao_voting_native_staked"
+    );
+
+    let contractAddress: string;
+    let proposalContractAddress: string;
+    let preProposalContractAddress: string;
+    let votingContractAddress: string;
+    let proposalId: number;
+    let denom: string;
+
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract dao core", async () => {
+      const tester = (await getUser().getAccounts())[0].address;
+      const alice = (await getUser(WalletUsers.alice).getAccounts())[0].address;
+
+      const msg = {
+        admin: null,
+        automatically_add_cw20s: true,
+        automatically_add_cw721s: true,
+        description: "This is a test dao with native voting",
+        image_url:
+          "https://sienaconstruction.com/wp-content/uploads/2017/05/test-image.jpg",
+        name: "Test Dao Native",
+        proposal_modules_instantiate_info: [
+          {
+            admin: {
+              core_module: {},
+            },
+            code_id: daoProposalContractCode,
+            label: "DAO_Test Dao_DaoProposalSingle",
+            msg: utils.conversions.jsonToBase64({
+              allow_revoting: false,
+              close_proposal_on_execution_failure: true,
+              max_voting_period: {
+                time: 604800,
+              },
+              min_voting_period: null,
+              only_members_execute: true,
+              pre_propose_info: {
+                module_may_propose: {
+                  info: {
+                    admin: {
+                      core_module: {},
+                    },
+                    code_id: daoPreProposalContractCode,
+                    label: "DAO_Test Dao_pre-propose-DaoProposalSingle",
+                    msg: utils.conversions.jsonToBase64({
+                      deposit_info: {
+                        amount: "1000000",
+                        denom: {
+                          token: {
+                            denom: {
+                              native: "uixo",
+                            },
+                          },
+                        },
+                        refund_policy: "only_passed",
+                      },
+                      extension: {},
+                      open_proposal_submission: false,
+                    }),
+                  },
+                },
+              },
+              threshold: {
+                threshold_quorum: {
+                  quorum: {
+                    percent: "0.20",
+                  },
+                  threshold: {
+                    majority: {},
+                  },
+                },
+              },
+            }),
+          },
+        ],
+        voting_module_instantiate_info: {
+          admin: {
+            core_module: {},
+          },
+          code_id: daoVotingNativeContractCode,
+          label: "DAO_Test Dao_DaoVotingNative",
+          msg: utils.conversions.jsonToBase64({
+            denom: "uixo",
+          }),
+        },
+      };
+      const res = await Promise.all([
+        Wasm.WasmInstantiateTrx(
+          daoCoreContractCode!,
+          JSON.stringify(msg),
+          1,
+          WalletUsers.tester
+        ),
+      ]);
+      // console.log("initialize::", res);
+      contractAddress = utils.common.getValueFromEvents(
+        res[0],
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ contractAddress });
+      return res[0];
+    });
+
+    test("query dao core contract: dump_state", async () => {
+      const msg = {
+        dump_state: {},
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: contractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const dumpState = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+      proposalContractAddress = dumpState.proposal_modules[0].address;
+      votingContractAddress = dumpState.voting_module;
+      console.log({ proposalContractAddress, votingContractAddress });
+      expect(res).toBeTruthy();
+    });
+
+    test("query dao proposal contract: proposal_creation_policy", async () => {
+      const msg = {
+        proposal_creation_policy: {},
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: proposalContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const proposalCreationPolicy = JSON.parse(
+        utils.conversions.Uint8ArrayToJS(res.data)
+      );
+      preProposalContractAddress = proposalCreationPolicy.module.addr;
+      console.log({ preProposalContractAddress });
+      expect(res).toBeTruthy();
+    });
+
+    test("query dao core contract: get denom", async () => {
+      const msg = {
+        get_config: {},
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: votingContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const config = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+      denom = config.denom;
+      console.log({ denom });
+      expect(res).toBeTruthy();
+    });
+
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract stake native", async () => {
+      const msg = {
+        stake: {},
+      };
+
+      const res = await Wasm.WasmExecuteTrx(
+        votingContractAddress,
+        JSON.stringify(msg),
+        WalletUsers.tester,
+        { amount: "2000000", denom: "uixo" }
+      );
+      // console.log("proposal", res);
+      return res;
+    });
+
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract stake native", async () => {
+      const msg = {
+        stake: {},
+      };
+
+      const res = await Wasm.WasmExecuteTrx(
+        votingContractAddress,
+        JSON.stringify(msg),
+        WalletUsers.alice,
+        { amount: "1000000", denom: "uixo" }
+      );
+      // console.log("proposal", res);
+      return res;
+    });
+
+    test("query dao core contract: get native_staking powers total_value", async () => {
+      const msg = {
+        list_stakers: {
+          start_after: null,
+          limit: 10,
+        },
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: votingContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+      console.dir({ data }, { depth: null });
+      expect(res).toBeTruthy();
+    });
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal set item",
+      async () => {
+        const msg = {
+          propose: {
+            msg: {
+              propose: {
+                description: "Testing: set item whoIsAwesome",
+                msgs: [
+                  {
+                    wasm: {
+                      execute: {
+                        contract_addr: contractAddress,
+                        funds: [],
+                        msg: utils.conversions.jsonToBase64({
+                          set_item: item,
+                        }),
+                      },
+                    },
+                  },
+                ],
+                title: "Testing",
+              },
+            },
+          },
+        };
+
+        const res = await Wasm.WasmExecuteTrx(
+          preProposalContractAddress,
+          JSON.stringify(msg),
+          WalletUsers.tester,
+          { amount: "1000000", denom: "uixo" }
+        );
+        // console.log("proposal", res);
+        return res;
+      }
+    );
+
+    test("query dao proposal contract: reverse_proposals", async () => {
+      const msg = {
+        reverse_proposals: {},
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: proposalContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const reverseProposals = JSON.parse(
+        utils.conversions.Uint8ArrayToJS(res.data)
+      );
+      proposalId = reverseProposals.proposals[0].id;
+      console.log({ proposalId });
+      expect(res).toBeTruthy();
+    });
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal vote",
+      async () => {
+        const msg = {
+          vote: {
+            proposal_id: proposalId,
+            vote: "yes",
+          },
+        };
+        const res = await Wasm.WasmExecuteTrx(
+          proposalContractAddress,
+          JSON.stringify(msg)
+        );
+        // console.log("vote", res);
+        return res;
+      }
+    );
+
+    test("query dao proposal contract: get_vote", async () => {
+      const tester = (await getUser().getAccounts())[0].address;
+      const msg = {
+        // get_vote: {
+        //   proposal_id: proposalId,
+        //   voter: tester,
+        // },
+        proposal: {
+          proposal_id: proposalId,
+        },
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: proposalContractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+      console.dir({ data }, { depth: null });
+      expect(res).toBeTruthy();
+    });
+
+    testMsg(
+      "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal execute",
+      async () => {
+        const msg = {
+          execute: {
+            proposal_id: proposalId,
+          },
+        };
+        const res = await Wasm.WasmExecuteTrx(
+          proposalContractAddress,
+          JSON.stringify(msg)
+        );
+        // console.log("execute", res);
+        return res;
+      }
+    );
+
+    test("query dao core contract: get_item", async () => {
+      const msg = {
+        get_item: {
+          key: item.key,
+        },
+      };
+      const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
+        address: contractAddress,
+        queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+      });
+      const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
+      console.log({ data });
       expect(res).toBeTruthy();
     });
   });

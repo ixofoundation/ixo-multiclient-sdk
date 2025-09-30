@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, Intent, IntentSDKType } from "./claims";
+import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, CW1155IntentPayment, CW1155IntentPaymentSDKType, Intent, IntentSDKType } from "./claims";
 import { WithdrawPaymentConstraints, WithdrawPaymentConstraintsSDKType } from "./authz";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
@@ -60,12 +60,20 @@ export interface ClaimDisputedEventSDKType {
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface PaymentWithdrawnEvent {
   withdraw?: WithdrawPaymentConstraints;
+  /** the cw20 with the split amounts if any */
   cw20Outputs: CW20Output[];
+  /**
+   * the cw1155 with the transferred token ids and amounts
+   * since in the msg you can define an amount but we don't necessarily know the
+   * token ids
+   */
+  cw1155Payments: CW1155IntentPayment[];
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface PaymentWithdrawnEventSDKType {
   withdraw?: WithdrawPaymentConstraintsSDKType;
   cw20_outputs: CW20OutputSDKType[];
+  cw1155_payments: CW1155IntentPaymentSDKType[];
 }
 /** ClaimDisputedEvent is an event triggered on a Claim dispute */
 export interface PaymentWithdrawCreatedEvent {
@@ -391,7 +399,8 @@ export const ClaimDisputedEvent = {
 function createBasePaymentWithdrawnEvent(): PaymentWithdrawnEvent {
   return {
     withdraw: undefined,
-    cw20Outputs: []
+    cw20Outputs: [],
+    cw1155Payments: []
   };
 }
 export const PaymentWithdrawnEvent = {
@@ -401,6 +410,9 @@ export const PaymentWithdrawnEvent = {
     }
     for (const v of message.cw20Outputs) {
       CW20Output.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.cw1155Payments) {
+      CW1155IntentPayment.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -417,6 +429,9 @@ export const PaymentWithdrawnEvent = {
         case 2:
           message.cw20Outputs.push(CW20Output.decode(reader, reader.uint32()));
           break;
+        case 3:
+          message.cw1155Payments.push(CW1155IntentPayment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -427,7 +442,8 @@ export const PaymentWithdrawnEvent = {
   fromJSON(object: any): PaymentWithdrawnEvent {
     return {
       withdraw: isSet(object.withdraw) ? WithdrawPaymentConstraints.fromJSON(object.withdraw) : undefined,
-      cw20Outputs: Array.isArray(object?.cw20Outputs) ? object.cw20Outputs.map((e: any) => CW20Output.fromJSON(e)) : []
+      cw20Outputs: Array.isArray(object?.cw20Outputs) ? object.cw20Outputs.map((e: any) => CW20Output.fromJSON(e)) : [],
+      cw1155Payments: Array.isArray(object?.cw1155Payments) ? object.cw1155Payments.map((e: any) => CW1155IntentPayment.fromJSON(e)) : []
     };
   },
   toJSON(message: PaymentWithdrawnEvent): unknown {
@@ -438,12 +454,18 @@ export const PaymentWithdrawnEvent = {
     } else {
       obj.cw20Outputs = [];
     }
+    if (message.cw1155Payments) {
+      obj.cw1155Payments = message.cw1155Payments.map(e => e ? CW1155IntentPayment.toJSON(e) : undefined);
+    } else {
+      obj.cw1155Payments = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<PaymentWithdrawnEvent>): PaymentWithdrawnEvent {
     const message = createBasePaymentWithdrawnEvent();
     message.withdraw = object.withdraw !== undefined && object.withdraw !== null ? WithdrawPaymentConstraints.fromPartial(object.withdraw) : undefined;
     message.cw20Outputs = object.cw20Outputs?.map(e => CW20Output.fromPartial(e)) || [];
+    message.cw1155Payments = object.cw1155Payments?.map(e => CW1155IntentPayment.fromPartial(e)) || [];
     return message;
   }
 };

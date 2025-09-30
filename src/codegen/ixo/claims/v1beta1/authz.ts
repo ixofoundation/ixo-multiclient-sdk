@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { CW20Payment, CW20PaymentSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
+import { CW20Payment, CW20PaymentSDKType, CW1155Payment, CW1155PaymentSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
 import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
@@ -80,6 +80,12 @@ export interface SubmitClaimConstraints {
    * which it will expire (in nanoseconds)
    */
   intentDurationNs?: Duration;
+  /**
+   * custom max_cw1155_payment allowed to be specified by service agent for
+   * claim approval, if empty then no custom amount is allowed, and default
+   * payments from Collection payments are used
+   */
+  maxCw1155Payment: CW1155Payment[];
 }
 export interface SubmitClaimConstraintsSDKType {
   collection_id: string;
@@ -87,6 +93,7 @@ export interface SubmitClaimConstraintsSDKType {
   max_amount: CoinSDKType[];
   max_cw20_payment: CW20PaymentSDKType[];
   intent_duration_ns?: DurationSDKType;
+  max_cw1155_payment: CW1155PaymentSDKType[];
 }
 export interface EvaluateClaimAuthorization {
   /** address of admin (entity admin module account) */
@@ -115,6 +122,11 @@ export interface EvaluateClaimConstraints {
    * amount is allowed, and default payments from Collection payments are used
    */
   maxCustomCw20Payment: CW20Payment[];
+  /**
+   * custom max_cw1155_payment evaluator can change, if empty then no custom
+   * amount is allowed, and default payments from Collection payments are used
+   */
+  maxCustomCw1155Payment: CW1155Payment[];
 }
 export interface EvaluateClaimConstraintsSDKType {
   collection_id: string;
@@ -123,6 +135,7 @@ export interface EvaluateClaimConstraintsSDKType {
   before_date?: TimestampSDKType;
   max_custom_amount: CoinSDKType[];
   max_custom_cw20_payment: CW20PaymentSDKType[];
+  max_custom_cw1155_payment: CW1155PaymentSDKType[];
 }
 export interface WithdrawPaymentAuthorization {
   /** address of admin */
@@ -146,6 +159,7 @@ export interface WithdrawPaymentConstraints {
    */
   paymentType: PaymentType;
   /** if empty(nil) then no contract payment */
+  /** @deprecated */
   contract_1155Payment?: Contract1155Payment;
   /** for contract payment */
   toAddress: string;
@@ -158,17 +172,21 @@ export interface WithdrawPaymentConstraints {
   releaseDate?: Timestamp;
   /** cw20 payments, can be empty or multiple */
   cw20Payment: CW20Payment[];
+  /** custom cw1155 payments, can be empty or multiple */
+  cw1155Payment: CW1155Payment[];
 }
 export interface WithdrawPaymentConstraintsSDKType {
   claim_id: string;
   inputs: InputSDKType[];
   outputs: OutputSDKType[];
   payment_type: PaymentType;
+  /** @deprecated */
   contract_1155_payment?: Contract1155PaymentSDKType;
   toAddress: string;
   fromAddress: string;
   release_date?: TimestampSDKType;
   cw20_payment: CW20PaymentSDKType[];
+  cw1155_payment: CW1155PaymentSDKType[];
 }
 /**
  * CreateClaimAuthorizationAuthorization allows a grantee to create
@@ -236,6 +254,13 @@ export interface CreateClaimAuthorizationConstraints {
   allowedAuthTypes: CreateClaimAuthorizationType;
   /** Maximum intent duration for the authorization allowed (for submit) */
   maxIntentDurationNs?: Duration;
+  /**
+   * Maximum cw1155 payment that can be set in created authorizations,
+   * if empty then any cw1155 payment is allowed in the created authorizations
+   * explicitly set to amount to 0 to disallow any cw1155 payment in the created
+   * authorizations
+   */
+  maxCw1155Payment: CW1155Payment[];
 }
 /**
  * CreateClaimAuthorizationConstraints defines the constraints for creating
@@ -250,6 +275,7 @@ export interface CreateClaimAuthorizationConstraintsSDKType {
   collection_ids: string[];
   allowed_auth_types: CreateClaimAuthorizationType;
   max_intent_duration_ns?: DurationSDKType;
+  max_cw1155_payment: CW1155PaymentSDKType[];
 }
 function createBaseSubmitClaimAuthorization(): SubmitClaimAuthorization {
   return {
@@ -316,7 +342,8 @@ function createBaseSubmitClaimConstraints(): SubmitClaimConstraints {
     agentQuota: Long.UZERO,
     maxAmount: [],
     maxCw20Payment: [],
-    intentDurationNs: undefined
+    intentDurationNs: undefined,
+    maxCw1155Payment: []
   };
 }
 export const SubmitClaimConstraints = {
@@ -335,6 +362,9 @@ export const SubmitClaimConstraints = {
     }
     if (message.intentDurationNs !== undefined) {
       Duration.encode(message.intentDurationNs, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.maxCw1155Payment) {
+      CW1155Payment.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -360,6 +390,9 @@ export const SubmitClaimConstraints = {
         case 5:
           message.intentDurationNs = Duration.decode(reader, reader.uint32());
           break;
+        case 6:
+          message.maxCw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -373,7 +406,8 @@ export const SubmitClaimConstraints = {
       agentQuota: isSet(object.agentQuota) ? Long.fromValue(object.agentQuota) : Long.UZERO,
       maxAmount: Array.isArray(object?.maxAmount) ? object.maxAmount.map((e: any) => Coin.fromJSON(e)) : [],
       maxCw20Payment: Array.isArray(object?.maxCw20Payment) ? object.maxCw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
-      intentDurationNs: isSet(object.intentDurationNs) ? Duration.fromJSON(object.intentDurationNs) : undefined
+      intentDurationNs: isSet(object.intentDurationNs) ? Duration.fromJSON(object.intentDurationNs) : undefined,
+      maxCw1155Payment: Array.isArray(object?.maxCw1155Payment) ? object.maxCw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: SubmitClaimConstraints): unknown {
@@ -391,6 +425,11 @@ export const SubmitClaimConstraints = {
       obj.maxCw20Payment = [];
     }
     message.intentDurationNs !== undefined && (obj.intentDurationNs = message.intentDurationNs ? Duration.toJSON(message.intentDurationNs) : undefined);
+    if (message.maxCw1155Payment) {
+      obj.maxCw1155Payment = message.maxCw1155Payment.map(e => e ? CW1155Payment.toJSON(e) : undefined);
+    } else {
+      obj.maxCw1155Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<SubmitClaimConstraints>): SubmitClaimConstraints {
@@ -400,6 +439,7 @@ export const SubmitClaimConstraints = {
     message.maxAmount = object.maxAmount?.map(e => Coin.fromPartial(e)) || [];
     message.maxCw20Payment = object.maxCw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     message.intentDurationNs = object.intentDurationNs !== undefined && object.intentDurationNs !== null ? Duration.fromPartial(object.intentDurationNs) : undefined;
+    message.maxCw1155Payment = object.maxCw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -469,7 +509,8 @@ function createBaseEvaluateClaimConstraints(): EvaluateClaimConstraints {
     agentQuota: Long.UZERO,
     beforeDate: undefined,
     maxCustomAmount: [],
-    maxCustomCw20Payment: []
+    maxCustomCw20Payment: [],
+    maxCustomCw1155Payment: []
   };
 }
 export const EvaluateClaimConstraints = {
@@ -491,6 +532,9 @@ export const EvaluateClaimConstraints = {
     }
     for (const v of message.maxCustomCw20Payment) {
       CW20Payment.encode(v!, writer.uint32(90).fork()).ldelim();
+    }
+    for (const v of message.maxCustomCw1155Payment) {
+      CW1155Payment.encode(v!, writer.uint32(98).fork()).ldelim();
     }
     return writer;
   },
@@ -519,6 +563,9 @@ export const EvaluateClaimConstraints = {
         case 11:
           message.maxCustomCw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
           break;
+        case 12:
+          message.maxCustomCw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -533,7 +580,8 @@ export const EvaluateClaimConstraints = {
       agentQuota: isSet(object.agentQuota) ? Long.fromValue(object.agentQuota) : Long.UZERO,
       beforeDate: isSet(object.beforeDate) ? fromJsonTimestamp(object.beforeDate) : undefined,
       maxCustomAmount: Array.isArray(object?.maxCustomAmount) ? object.maxCustomAmount.map((e: any) => Coin.fromJSON(e)) : [],
-      maxCustomCw20Payment: Array.isArray(object?.maxCustomCw20Payment) ? object.maxCustomCw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
+      maxCustomCw20Payment: Array.isArray(object?.maxCustomCw20Payment) ? object.maxCustomCw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      maxCustomCw1155Payment: Array.isArray(object?.maxCustomCw1155Payment) ? object.maxCustomCw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: EvaluateClaimConstraints): unknown {
@@ -556,6 +604,11 @@ export const EvaluateClaimConstraints = {
     } else {
       obj.maxCustomCw20Payment = [];
     }
+    if (message.maxCustomCw1155Payment) {
+      obj.maxCustomCw1155Payment = message.maxCustomCw1155Payment.map(e => e ? CW1155Payment.toJSON(e) : undefined);
+    } else {
+      obj.maxCustomCw1155Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<EvaluateClaimConstraints>): EvaluateClaimConstraints {
@@ -566,6 +619,7 @@ export const EvaluateClaimConstraints = {
     message.beforeDate = object.beforeDate !== undefined && object.beforeDate !== null ? Timestamp.fromPartial(object.beforeDate) : undefined;
     message.maxCustomAmount = object.maxCustomAmount?.map(e => Coin.fromPartial(e)) || [];
     message.maxCustomCw20Payment = object.maxCustomCw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.maxCustomCw1155Payment = object.maxCustomCw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -638,7 +692,8 @@ function createBaseWithdrawPaymentConstraints(): WithdrawPaymentConstraints {
     toAddress: "",
     fromAddress: "",
     releaseDate: undefined,
-    cw20Payment: []
+    cw20Payment: [],
+    cw1155Payment: []
   };
 }
 export const WithdrawPaymentConstraints = {
@@ -669,6 +724,9 @@ export const WithdrawPaymentConstraints = {
     }
     for (const v of message.cw20Payment) {
       CW20Payment.encode(v!, writer.uint32(74).fork()).ldelim();
+    }
+    for (const v of message.cw1155Payment) {
+      CW1155Payment.encode(v!, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -706,6 +764,9 @@ export const WithdrawPaymentConstraints = {
         case 9:
           message.cw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
           break;
+        case 10:
+          message.cw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -723,7 +784,8 @@ export const WithdrawPaymentConstraints = {
       toAddress: isSet(object.toAddress) ? String(object.toAddress) : "",
       fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
       releaseDate: isSet(object.releaseDate) ? fromJsonTimestamp(object.releaseDate) : undefined,
-      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
+      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: WithdrawPaymentConstraints): unknown {
@@ -749,6 +811,11 @@ export const WithdrawPaymentConstraints = {
     } else {
       obj.cw20Payment = [];
     }
+    if (message.cw1155Payment) {
+      obj.cw1155Payment = message.cw1155Payment.map(e => e ? CW1155Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw1155Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<WithdrawPaymentConstraints>): WithdrawPaymentConstraints {
@@ -762,6 +829,7 @@ export const WithdrawPaymentConstraints = {
     message.fromAddress = object.fromAddress ?? "";
     message.releaseDate = object.releaseDate !== undefined && object.releaseDate !== null ? Timestamp.fromPartial(object.releaseDate) : undefined;
     message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -833,7 +901,8 @@ function createBaseCreateClaimAuthorizationConstraints(): CreateClaimAuthorizati
     expiration: undefined,
     collectionIds: [],
     allowedAuthTypes: 0,
-    maxIntentDurationNs: undefined
+    maxIntentDurationNs: undefined,
+    maxCw1155Payment: []
   };
 }
 export const CreateClaimAuthorizationConstraints = {
@@ -861,6 +930,9 @@ export const CreateClaimAuthorizationConstraints = {
     }
     if (message.maxIntentDurationNs !== undefined) {
       Duration.encode(message.maxIntentDurationNs, writer.uint32(66).fork()).ldelim();
+    }
+    for (const v of message.maxCw1155Payment) {
+      CW1155Payment.encode(v!, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -895,6 +967,9 @@ export const CreateClaimAuthorizationConstraints = {
         case 8:
           message.maxIntentDurationNs = Duration.decode(reader, reader.uint32());
           break;
+        case 9:
+          message.maxCw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -911,7 +986,8 @@ export const CreateClaimAuthorizationConstraints = {
       expiration: isSet(object.expiration) ? fromJsonTimestamp(object.expiration) : undefined,
       collectionIds: Array.isArray(object?.collectionIds) ? object.collectionIds.map((e: any) => String(e)) : [],
       allowedAuthTypes: isSet(object.allowedAuthTypes) ? createClaimAuthorizationTypeFromJSON(object.allowedAuthTypes) : 0,
-      maxIntentDurationNs: isSet(object.maxIntentDurationNs) ? Duration.fromJSON(object.maxIntentDurationNs) : undefined
+      maxIntentDurationNs: isSet(object.maxIntentDurationNs) ? Duration.fromJSON(object.maxIntentDurationNs) : undefined,
+      maxCw1155Payment: Array.isArray(object?.maxCw1155Payment) ? object.maxCw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: CreateClaimAuthorizationConstraints): unknown {
@@ -936,6 +1012,11 @@ export const CreateClaimAuthorizationConstraints = {
     }
     message.allowedAuthTypes !== undefined && (obj.allowedAuthTypes = createClaimAuthorizationTypeToJSON(message.allowedAuthTypes));
     message.maxIntentDurationNs !== undefined && (obj.maxIntentDurationNs = message.maxIntentDurationNs ? Duration.toJSON(message.maxIntentDurationNs) : undefined);
+    if (message.maxCw1155Payment) {
+      obj.maxCw1155Payment = message.maxCw1155Payment.map(e => e ? CW1155Payment.toJSON(e) : undefined);
+    } else {
+      obj.maxCw1155Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<CreateClaimAuthorizationConstraints>): CreateClaimAuthorizationConstraints {
@@ -948,6 +1029,7 @@ export const CreateClaimAuthorizationConstraints = {
     message.collectionIds = object.collectionIds?.map(e => e) || [];
     message.allowedAuthTypes = object.allowedAuthTypes ?? 0;
     message.maxIntentDurationNs = object.maxIntentDurationNs !== undefined && object.maxIntentDurationNs !== null ? Duration.fromPartial(object.maxIntentDurationNs) : undefined;
+    message.maxCw1155Payment = object.maxCw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
     return message;
   }
 };

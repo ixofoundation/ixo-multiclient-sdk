@@ -134,8 +134,42 @@ export const claimsBasic = () =>
       return res;
     });
 
-    let collectionId = "1";
+    let cw1155ContractAddress: string =
+      "ixo1aakfpghcanxtc45gpqlx8j3rq0zcpyf49qmhm9mdjrfx036h4z5skn3d4n";
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract", async () => {
+      const tester = (await getUser(WalletUsers.tester).getAccounts())[0]
+        .address;
+      const msg = {
+        minter: tester,
+      };
 
+      const res = await Wasm.WasmInstantiateTrx(2, JSON.stringify(msg));
+      cw1155ContractAddress = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ cw1155ContractAddress });
+      return res;
+    });
+    testMsg("/cosmwasm.wasm.v1.MsgExecuteContract Mint tokens", async () => {
+      const msg = {
+        mint: {
+          to: adminAccount,
+          token_id: "5",
+          value: "30000000000",
+          uri: "uri",
+        },
+      };
+
+      const res = await Wasm.WasmExecuteTrx(
+        cw1155ContractAddress,
+        JSON.stringify(msg)
+      );
+      return res;
+    });
+
+    let collectionId = "1";
     testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
       const res = await Claims.CreateCollection(
         protocol,
@@ -202,7 +236,8 @@ export const claimsBasic = () =>
         adminAccount,
         undefined,
         cw20ContractAddress,
-        false
+        false,
+        cw1155ContractAddress
       )
     );
 
@@ -248,7 +283,14 @@ export const claimsBasic = () =>
           ],
           60,
           ixo.claims.v1beta1.CreateClaimAuthorizationType.ALL,
-          0
+          0,
+          [
+            {
+              address: cw1155ContractAddress,
+              tokenId: [],
+              amount: Long.fromNumber(5),
+            },
+          ]
         )
     );
     testMsg(
@@ -273,7 +315,14 @@ export const claimsBasic = () =>
             },
           ],
           60,
-          ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT
+          ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT,
+          [
+            {
+              address: cw1155ContractAddress,
+              tokenId: ["5"],
+              amount: Long.fromNumber(3),
+            },
+          ]
         )
     );
     testMsg(
@@ -298,7 +347,14 @@ export const claimsBasic = () =>
             },
           ],
           60,
-          ixo.claims.v1beta1.CreateClaimAuthorizationType.EVALUATE
+          ixo.claims.v1beta1.CreateClaimAuthorizationType.EVALUATE,
+          [
+            {
+              address: cw1155ContractAddress,
+              tokenId: [],
+              amount: Long.fromNumber(5),
+            },
+          ]
         )
     );
 
@@ -324,7 +380,14 @@ export const claimsBasic = () =>
             amount: Long.fromNumber(10),
           },
         ],
-        60
+        60,
+        [
+          {
+            address: cw1155ContractAddress,
+            tokenId: [],
+            amount: Long.fromNumber(10),
+          },
+        ]
       )
     );
 
@@ -341,7 +404,14 @@ export const claimsBasic = () =>
           false,
           WalletUsers.tester,
           undefined,
-          cw20ContractAddress
+          cw20ContractAddress,
+          [
+            {
+              address: cw1155ContractAddress,
+              tokenId: [],
+              amount: Long.fromNumber(10),
+            },
+          ]
         )
     );
 
@@ -380,7 +450,14 @@ export const claimsBasic = () =>
             amount: Long.fromNumber(10),
           },
         ],
-        WalletUsers.alice
+        WalletUsers.alice,
+        [
+          {
+            address: cw1155ContractAddress,
+            tokenId: [],
+            amount: Long.fromNumber(1),
+          },
+        ]
       )
     );
     testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", () =>
@@ -400,6 +477,13 @@ export const claimsBasic = () =>
           {
             address: cw20ContractAddress,
             amount: Long.fromNumber(5),
+          },
+        ],
+        [
+          {
+            address: cw1155ContractAddress,
+            tokenId: ["5"],
+            amount: Long.fromNumber(3),
           },
         ]
       )
@@ -421,6 +505,13 @@ export const claimsBasic = () =>
           ixo.claims.v1beta1.CW20Payment.fromPartial({
             address: cw20ContractAddress,
             amount: Long.fromNumber(15),
+          }),
+        ],
+        [
+          ixo.claims.v1beta1.CW1155Payment.fromPartial({
+            address: cw1155ContractAddress,
+            tokenId: [],
+            amount: Long.fromNumber(4),
           }),
         ]
       )
@@ -521,6 +612,7 @@ export const claimsBasic = () =>
         cw20ContractAddress,
         // Set isOraclePayment to true to use oracle payments
         true
+        // Tested with cw1155 payment it fails as cant have cw1155 and oracle payment
       )
     );
 

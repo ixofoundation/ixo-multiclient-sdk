@@ -144,6 +144,28 @@ export interface MsgSetModulePausedResponse {}
  * executing a
  */
 export interface MsgSetModulePausedResponseSDKType {}
+/**
+ * MsgBurn defines a SDK message for performing a burn of coins.
+ * NOTE: only ixo native token can be burned
+ */
+export interface MsgBurn {
+  burner: string;
+  /**
+   * amount is the amount of coins to burn
+   * NOTE: only ixo native token can be burned
+   */
+  amount?: Coin;
+}
+/**
+ * MsgBurn defines a SDK message for performing a burn of coins.
+ * NOTE: only ixo native token can be burned
+ */
+export interface MsgBurnSDKType {
+  burner: string;
+  amount?: CoinSDKType;
+}
+export interface MsgBurnResponse {}
+export interface MsgBurnResponseSDKType {}
 function createBaseMsgLiquidStake(): MsgLiquidStake {
   return {
     delegatorAddress: "",
@@ -689,6 +711,94 @@ export const MsgSetModulePausedResponse = {
   },
   fromPartial(_: Partial<MsgSetModulePausedResponse>): MsgSetModulePausedResponse {
     const message = createBaseMsgSetModulePausedResponse();
+    return message;
+  }
+};
+function createBaseMsgBurn(): MsgBurn {
+  return {
+    burner: "",
+    amount: undefined
+  };
+}
+export const MsgBurn = {
+  encode(message: MsgBurn, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.burner !== "") {
+      writer.uint32(10).string(message.burner);
+    }
+    if (message.amount !== undefined) {
+      Coin.encode(message.amount, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgBurn {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgBurn();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.burner = reader.string();
+          break;
+        case 2:
+          message.amount = Coin.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgBurn {
+    return {
+      burner: isSet(object.burner) ? String(object.burner) : "",
+      amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined
+    };
+  },
+  toJSON(message: MsgBurn): unknown {
+    const obj: any = {};
+    message.burner !== undefined && (obj.burner = message.burner);
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgBurn>): MsgBurn {
+    const message = createBaseMsgBurn();
+    message.burner = object.burner ?? "";
+    message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
+    return message;
+  }
+};
+function createBaseMsgBurnResponse(): MsgBurnResponse {
+  return {};
+}
+export const MsgBurnResponse = {
+  encode(_: MsgBurnResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgBurnResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgBurnResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgBurnResponse {
+    return {};
+  },
+  toJSON(_: MsgBurnResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgBurnResponse>): MsgBurnResponse {
+    const message = createBaseMsgBurnResponse();
     return message;
   }
 };

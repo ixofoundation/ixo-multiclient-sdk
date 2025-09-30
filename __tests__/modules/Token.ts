@@ -304,7 +304,8 @@ export const MsgExecContract = async (
     tokenData?: TokenData[];
   }[],
   granter = WalletUsers.tester,
-  grantee = WalletUsers.alice
+  grantee = WalletUsers.alice,
+  owner?: string
 ) => {
   const client = await createClient(getUser(grantee));
 
@@ -322,7 +323,7 @@ export const MsgExecContract = async (
             ixo.token.v1beta1.MsgMintToken.fromPartial({
               minter: granterAddress,
               contractAddress,
-              owner: granteeAddress,
+              owner: owner || granteeAddress,
               mintBatch: batches.map((b) =>
                 ixo.token.v1beta1.MintBatch.fromPartial({
                   name: b.name,

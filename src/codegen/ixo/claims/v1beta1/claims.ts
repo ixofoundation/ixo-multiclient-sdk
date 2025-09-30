@@ -415,7 +415,8 @@ export interface Payment {
   /** account is the entity account address from which the payment will be made */
   account: string;
   amount: Coin[];
-  /** if empty(nil) then no contract payment, not allowed for Evaluation Payment */
+  /** Deprecated: Use cw1155_payment instead */
+  /** @deprecated */
   contract_1155Payment?: Contract1155Payment;
   /**
    * timeout after claim/evaluation to create authZ for payment, if 0 then
@@ -433,14 +434,18 @@ export interface Payment {
    * for delayed payments
    */
   isOraclePayment: boolean;
+  /** cw1155 payments, can be empty or multiple */
+  cw1155Payment: CW1155Payment[];
 }
 export interface PaymentSDKType {
   account: string;
   amount: CoinSDKType[];
+  /** @deprecated */
   contract_1155_payment?: Contract1155PaymentSDKType;
   timeout_ns?: DurationSDKType;
   cw20_payment: CW20PaymentSDKType[];
   is_oracle_payment: boolean;
+  cw1155_payment: CW1155PaymentSDKType[];
 }
 export interface Contract1155Payment {
   address: string;
@@ -451,6 +456,32 @@ export interface Contract1155PaymentSDKType {
   address: string;
   token_id: string;
   amount: number;
+}
+export interface CW1155Payment {
+  address: string;
+  tokenId: string[];
+  amount: Long;
+}
+export interface CW1155PaymentSDKType {
+  address: string;
+  token_id: string[];
+  amount: Long;
+}
+export interface CW1155IntentPayment {
+  address: string;
+  tokens: CW1155IntentPaymentToken[];
+}
+export interface CW1155IntentPaymentSDKType {
+  address: string;
+  tokens: CW1155IntentPaymentTokenSDKType[];
+}
+export interface CW1155IntentPaymentToken {
+  tokenId: string;
+  amount: Long;
+}
+export interface CW1155IntentPaymentTokenSDKType {
+  token_id: string;
+  amount: Long;
 }
 export interface CW20Payment {
   address: string;
@@ -493,7 +524,7 @@ export interface Claim {
   submissionDate?: Timestamp;
   /** claimID is the unique identifier of the claim in the cid hash format */
   claimId: string;
-  /** evaluation is the result of one or more claim evaluations */
+  /** evaluation is the result of the claim evaluation */
   evaluation?: Evaluation;
   /** payments_status is the status of the payments for the claim */
   paymentsStatus?: ClaimPayments;
@@ -501,17 +532,24 @@ export interface Claim {
   useIntent: boolean;
   /**
    * custom amount specified by service agent for claim approval
-   * NOTE: if both amount and cw20 amount are empty then collection default is
-   * used
+   * NOTE: if all amounts are empty then collection default is used
    */
   amount: Coin[];
   /**
-   * custom cw20 payments specified by service agent for claim
-   * approval
-   * NOTE: if both amount and cw20 amount are empty then collection default is
-   * used
+   * custom cw20 payments specified by service agent for claim approval
+   * NOTE: if all amounts are empty then collection default is used
    */
   cw20Payment: CW20Payment[];
+  /**
+   * custom cw1155 payments specified by service agent for claim approval
+   * NOTE: if all amounts are empty then collection default is used
+   */
+  cw1155Payment: CW1155Payment[];
+  /**
+   * If intent was used, this is the cw20_payment equivalent but with amounts
+   * per token_id to transfer the same tokens to and from the escrow account
+   */
+  cw1155IntentPayment: CW1155IntentPayment[];
 }
 export interface ClaimSDKType {
   collection_id: string;
@@ -524,6 +562,8 @@ export interface ClaimSDKType {
   use_intent: boolean;
   amount: CoinSDKType[];
   cw20_payment: CW20PaymentSDKType[];
+  cw1155_payment: CW1155PaymentSDKType[];
+  cw1155_intent_payment: CW1155IntentPaymentSDKType[];
 }
 export interface ClaimPayments {
   submission: PaymentStatus;
@@ -560,7 +600,7 @@ export interface Evaluation {
    * was given (codes defined by evaluator)
    */
   reason: number;
-  /** verificationProof is the cid of the evaluation Verfiable Credential */
+  /** verificationProof is the cid of the evaluation Verifiable Credential */
   verificationProof: string;
   /**
    * evaluationDate is the date and time that the claim evaluation was submitted
@@ -569,16 +609,30 @@ export interface Evaluation {
   evaluationDate?: Timestamp;
   /**
    * custom amount specified by evaluator for claim approval
-   * NOTE: if both amount and cw20 amount are empty then collection default is
-   * used
+   * NOTE: if all amounts are empty then collection default is used
+   * NOTE: if claim has intent, then custom amounts are ignored and intent
+   * amounts are used
    */
   amount: Coin[];
   /**
    * custom cw20 payments specified by evaluator for claim approval
-   * NOTE: if both amount and cw20 amount are empty then collection default is
-   * used
+   * NOTE: if all amounts are empty then collection default is used
+   * NOTE: if claim has intent, then custom amounts are ignored and intent
+   * amounts are used
    */
   cw20Payment: CW20Payment[];
+  /**
+   * custom cw1155 payments specified by evaluator for claim approval
+   * NOTE: if all amounts are empty then collection default is used
+   * NOTE: if claim has intent, then custom amounts are ignored and intent
+   * amounts are used
+   */
+  cw1155Payment: CW1155Payment[];
+  /**
+   * If intent was used, this is the cw20_payment equivalent but with amounts
+   * per token_id to transfer the same tokens to and from the escrow account
+   */
+  cw1155IntentPayment: CW1155IntentPayment[];
 }
 export interface EvaluationSDKType {
   claim_id: string;
@@ -592,6 +646,8 @@ export interface EvaluationSDKType {
   evaluation_date?: TimestampSDKType;
   amount: CoinSDKType[];
   cw20_payment: CW20PaymentSDKType[];
+  cw1155_payment: CW1155PaymentSDKType[];
+  cw1155_intent_payment: CW1155IntentPaymentSDKType[];
 }
 export interface Dispute {
   subjectId: string;
@@ -646,6 +702,13 @@ export interface Intent {
   fromAddress: string;
   /** the escrow account address */
   escrowAddress: string;
+  /** The custom cw1155 payments the agent intends to claim, if any. */
+  cw1155Payment: CW1155Payment[];
+  /**
+   * Same as cw1155_payment but with amounts per token_id to transfer
+   * the same tokens to and from the escrow account
+   */
+  cw1155IntentPayment: CW1155IntentPayment[];
 }
 /** Intent defines the structure for a service agent's claim intent. */
 export interface IntentSDKType {
@@ -661,6 +724,8 @@ export interface IntentSDKType {
   cw20_payment: CW20PaymentSDKType[];
   from_address: string;
   escrow_address: string;
+  cw1155_payment: CW1155PaymentSDKType[];
+  cw1155_intent_payment: CW1155IntentPaymentSDKType[];
 }
 function createBaseParams(): Params {
   return {
@@ -1044,7 +1109,8 @@ function createBasePayment(): Payment {
     contract_1155Payment: undefined,
     timeoutNs: undefined,
     cw20Payment: [],
-    isOraclePayment: false
+    isOraclePayment: false,
+    cw1155Payment: []
   };
 }
 export const Payment = {
@@ -1066,6 +1132,9 @@ export const Payment = {
     }
     if (message.isOraclePayment === true) {
       writer.uint32(48).bool(message.isOraclePayment);
+    }
+    for (const v of message.cw1155Payment) {
+      CW1155Payment.encode(v!, writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
@@ -1094,6 +1163,9 @@ export const Payment = {
         case 6:
           message.isOraclePayment = reader.bool();
           break;
+        case 7:
+          message.cw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1108,7 +1180,8 @@ export const Payment = {
       contract_1155Payment: isSet(object.contract_1155Payment) ? Contract1155Payment.fromJSON(object.contract_1155Payment) : undefined,
       timeoutNs: isSet(object.timeoutNs) ? Duration.fromJSON(object.timeoutNs) : undefined,
       cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
-      isOraclePayment: isSet(object.isOraclePayment) ? Boolean(object.isOraclePayment) : false
+      isOraclePayment: isSet(object.isOraclePayment) ? Boolean(object.isOraclePayment) : false,
+      cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: Payment): unknown {
@@ -1127,6 +1200,11 @@ export const Payment = {
       obj.cw20Payment = [];
     }
     message.isOraclePayment !== undefined && (obj.isOraclePayment = message.isOraclePayment);
+    if (message.cw1155Payment) {
+      obj.cw1155Payment = message.cw1155Payment.map(e => e ? CW1155Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw1155Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<Payment>): Payment {
@@ -1137,6 +1215,7 @@ export const Payment = {
     message.timeoutNs = object.timeoutNs !== undefined && object.timeoutNs !== null ? Duration.fromPartial(object.timeoutNs) : undefined;
     message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     message.isOraclePayment = object.isOraclePayment ?? false;
+    message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -1202,6 +1281,189 @@ export const Contract1155Payment = {
     message.address = object.address ?? "";
     message.tokenId = object.tokenId ?? "";
     message.amount = object.amount ?? 0;
+    return message;
+  }
+};
+function createBaseCW1155Payment(): CW1155Payment {
+  return {
+    address: "",
+    tokenId: [],
+    amount: Long.UZERO
+  };
+}
+export const CW1155Payment = {
+  encode(message: CW1155Payment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    for (const v of message.tokenId) {
+      writer.uint32(18).string(v!);
+    }
+    if (!message.amount.isZero()) {
+      writer.uint32(24).uint64(message.amount);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): CW1155Payment {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCW1155Payment();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        case 2:
+          message.tokenId.push(reader.string());
+          break;
+        case 3:
+          message.amount = (reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): CW1155Payment {
+    return {
+      address: isSet(object.address) ? String(object.address) : "",
+      tokenId: Array.isArray(object?.tokenId) ? object.tokenId.map((e: any) => String(e)) : [],
+      amount: isSet(object.amount) ? Long.fromValue(object.amount) : Long.UZERO
+    };
+  },
+  toJSON(message: CW1155Payment): unknown {
+    const obj: any = {};
+    message.address !== undefined && (obj.address = message.address);
+    if (message.tokenId) {
+      obj.tokenId = message.tokenId.map(e => e);
+    } else {
+      obj.tokenId = [];
+    }
+    message.amount !== undefined && (obj.amount = (message.amount || Long.UZERO).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<CW1155Payment>): CW1155Payment {
+    const message = createBaseCW1155Payment();
+    message.address = object.address ?? "";
+    message.tokenId = object.tokenId?.map(e => e) || [];
+    message.amount = object.amount !== undefined && object.amount !== null ? Long.fromValue(object.amount) : Long.UZERO;
+    return message;
+  }
+};
+function createBaseCW1155IntentPayment(): CW1155IntentPayment {
+  return {
+    address: "",
+    tokens: []
+  };
+}
+export const CW1155IntentPayment = {
+  encode(message: CW1155IntentPayment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    for (const v of message.tokens) {
+      CW1155IntentPaymentToken.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): CW1155IntentPayment {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCW1155IntentPayment();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        case 2:
+          message.tokens.push(CW1155IntentPaymentToken.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): CW1155IntentPayment {
+    return {
+      address: isSet(object.address) ? String(object.address) : "",
+      tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => CW1155IntentPaymentToken.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: CW1155IntentPayment): unknown {
+    const obj: any = {};
+    message.address !== undefined && (obj.address = message.address);
+    if (message.tokens) {
+      obj.tokens = message.tokens.map(e => e ? CW1155IntentPaymentToken.toJSON(e) : undefined);
+    } else {
+      obj.tokens = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<CW1155IntentPayment>): CW1155IntentPayment {
+    const message = createBaseCW1155IntentPayment();
+    message.address = object.address ?? "";
+    message.tokens = object.tokens?.map(e => CW1155IntentPaymentToken.fromPartial(e)) || [];
+    return message;
+  }
+};
+function createBaseCW1155IntentPaymentToken(): CW1155IntentPaymentToken {
+  return {
+    tokenId: "",
+    amount: Long.UZERO
+  };
+}
+export const CW1155IntentPaymentToken = {
+  encode(message: CW1155IntentPaymentToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.tokenId !== "") {
+      writer.uint32(10).string(message.tokenId);
+    }
+    if (!message.amount.isZero()) {
+      writer.uint32(16).uint64(message.amount);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): CW1155IntentPaymentToken {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCW1155IntentPaymentToken();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.tokenId = reader.string();
+          break;
+        case 2:
+          message.amount = (reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): CW1155IntentPaymentToken {
+    return {
+      tokenId: isSet(object.tokenId) ? String(object.tokenId) : "",
+      amount: isSet(object.amount) ? Long.fromValue(object.amount) : Long.UZERO
+    };
+  },
+  toJSON(message: CW1155IntentPaymentToken): unknown {
+    const obj: any = {};
+    message.tokenId !== undefined && (obj.tokenId = message.tokenId);
+    message.amount !== undefined && (obj.amount = (message.amount || Long.UZERO).toString());
+    return obj;
+  },
+  fromPartial(object: Partial<CW1155IntentPaymentToken>): CW1155IntentPaymentToken {
+    const message = createBaseCW1155IntentPaymentToken();
+    message.tokenId = object.tokenId ?? "";
+    message.amount = object.amount !== undefined && object.amount !== null ? Long.fromValue(object.amount) : Long.UZERO;
     return message;
   }
 };
@@ -1336,7 +1598,9 @@ function createBaseClaim(): Claim {
     paymentsStatus: undefined,
     useIntent: false,
     amount: [],
-    cw20Payment: []
+    cw20Payment: [],
+    cw1155Payment: [],
+    cw1155IntentPayment: []
   };
 }
 export const Claim = {
@@ -1370,6 +1634,12 @@ export const Claim = {
     }
     for (const v of message.cw20Payment) {
       CW20Payment.encode(v!, writer.uint32(82).fork()).ldelim();
+    }
+    for (const v of message.cw1155Payment) {
+      CW1155Payment.encode(v!, writer.uint32(90).fork()).ldelim();
+    }
+    for (const v of message.cw1155IntentPayment) {
+      CW1155IntentPayment.encode(v!, writer.uint32(98).fork()).ldelim();
     }
     return writer;
   },
@@ -1410,6 +1680,12 @@ export const Claim = {
         case 10:
           message.cw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
           break;
+        case 11:
+          message.cw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
+          break;
+        case 12:
+          message.cw1155IntentPayment.push(CW1155IntentPayment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1428,7 +1704,9 @@ export const Claim = {
       paymentsStatus: isSet(object.paymentsStatus) ? ClaimPayments.fromJSON(object.paymentsStatus) : undefined,
       useIntent: isSet(object.useIntent) ? Boolean(object.useIntent) : false,
       amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
-      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
+      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : [],
+      cw1155IntentPayment: Array.isArray(object?.cw1155IntentPayment) ? object.cw1155IntentPayment.map((e: any) => CW1155IntentPayment.fromJSON(e)) : []
     };
   },
   toJSON(message: Claim): unknown {
@@ -1451,6 +1729,16 @@ export const Claim = {
     } else {
       obj.cw20Payment = [];
     }
+    if (message.cw1155Payment) {
+      obj.cw1155Payment = message.cw1155Payment.map(e => e ? CW1155Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw1155Payment = [];
+    }
+    if (message.cw1155IntentPayment) {
+      obj.cw1155IntentPayment = message.cw1155IntentPayment.map(e => e ? CW1155IntentPayment.toJSON(e) : undefined);
+    } else {
+      obj.cw1155IntentPayment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<Claim>): Claim {
@@ -1465,6 +1753,8 @@ export const Claim = {
     message.useIntent = object.useIntent ?? false;
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
+    message.cw1155IntentPayment = object.cw1155IntentPayment?.map(e => CW1155IntentPayment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -1555,7 +1845,9 @@ function createBaseEvaluation(): Evaluation {
     verificationProof: "",
     evaluationDate: undefined,
     amount: [],
-    cw20Payment: []
+    cw20Payment: [],
+    cw1155Payment: [],
+    cw1155IntentPayment: []
   };
 }
 export const Evaluation = {
@@ -1592,6 +1884,12 @@ export const Evaluation = {
     }
     for (const v of message.cw20Payment) {
       CW20Payment.encode(v!, writer.uint32(90).fork()).ldelim();
+    }
+    for (const v of message.cw1155Payment) {
+      CW1155Payment.encode(v!, writer.uint32(98).fork()).ldelim();
+    }
+    for (const v of message.cw1155IntentPayment) {
+      CW1155IntentPayment.encode(v!, writer.uint32(106).fork()).ldelim();
     }
     return writer;
   },
@@ -1635,6 +1933,12 @@ export const Evaluation = {
         case 11:
           message.cw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
           break;
+        case 12:
+          message.cw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
+          break;
+        case 13:
+          message.cw1155IntentPayment.push(CW1155IntentPayment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1654,7 +1958,9 @@ export const Evaluation = {
       verificationProof: isSet(object.verificationProof) ? String(object.verificationProof) : "",
       evaluationDate: isSet(object.evaluationDate) ? fromJsonTimestamp(object.evaluationDate) : undefined,
       amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
-      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
+      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : [],
+      cw1155IntentPayment: Array.isArray(object?.cw1155IntentPayment) ? object.cw1155IntentPayment.map((e: any) => CW1155IntentPayment.fromJSON(e)) : []
     };
   },
   toJSON(message: Evaluation): unknown {
@@ -1678,6 +1984,16 @@ export const Evaluation = {
     } else {
       obj.cw20Payment = [];
     }
+    if (message.cw1155Payment) {
+      obj.cw1155Payment = message.cw1155Payment.map(e => e ? CW1155Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw1155Payment = [];
+    }
+    if (message.cw1155IntentPayment) {
+      obj.cw1155IntentPayment = message.cw1155IntentPayment.map(e => e ? CW1155IntentPayment.toJSON(e) : undefined);
+    } else {
+      obj.cw1155IntentPayment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<Evaluation>): Evaluation {
@@ -1693,6 +2009,8 @@ export const Evaluation = {
     message.evaluationDate = object.evaluationDate !== undefined && object.evaluationDate !== null ? Timestamp.fromPartial(object.evaluationDate) : undefined;
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
+    message.cw1155IntentPayment = object.cw1155IntentPayment?.map(e => CW1155IntentPayment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -1849,7 +2167,9 @@ function createBaseIntent(): Intent {
     amount: [],
     cw20Payment: [],
     fromAddress: "",
-    escrowAddress: ""
+    escrowAddress: "",
+    cw1155Payment: [],
+    cw1155IntentPayment: []
   };
 }
 export const Intent = {
@@ -1889,6 +2209,12 @@ export const Intent = {
     }
     if (message.escrowAddress !== "") {
       writer.uint32(98).string(message.escrowAddress);
+    }
+    for (const v of message.cw1155Payment) {
+      CW1155Payment.encode(v!, writer.uint32(106).fork()).ldelim();
+    }
+    for (const v of message.cw1155IntentPayment) {
+      CW1155IntentPayment.encode(v!, writer.uint32(114).fork()).ldelim();
     }
     return writer;
   },
@@ -1935,6 +2261,12 @@ export const Intent = {
         case 12:
           message.escrowAddress = reader.string();
           break;
+        case 13:
+          message.cw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
+          break;
+        case 14:
+          message.cw1155IntentPayment.push(CW1155IntentPayment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1955,7 +2287,9 @@ export const Intent = {
       amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
       cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
       fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
-      escrowAddress: isSet(object.escrowAddress) ? String(object.escrowAddress) : ""
+      escrowAddress: isSet(object.escrowAddress) ? String(object.escrowAddress) : "",
+      cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : [],
+      cw1155IntentPayment: Array.isArray(object?.cw1155IntentPayment) ? object.cw1155IntentPayment.map((e: any) => CW1155IntentPayment.fromJSON(e)) : []
     };
   },
   toJSON(message: Intent): unknown {
@@ -1980,6 +2314,16 @@ export const Intent = {
     }
     message.fromAddress !== undefined && (obj.fromAddress = message.fromAddress);
     message.escrowAddress !== undefined && (obj.escrowAddress = message.escrowAddress);
+    if (message.cw1155Payment) {
+      obj.cw1155Payment = message.cw1155Payment.map(e => e ? CW1155Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw1155Payment = [];
+    }
+    if (message.cw1155IntentPayment) {
+      obj.cw1155IntentPayment = message.cw1155IntentPayment.map(e => e ? CW1155IntentPayment.toJSON(e) : undefined);
+    } else {
+      obj.cw1155IntentPayment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<Intent>): Intent {
@@ -1996,6 +2340,8 @@ export const Intent = {
     message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     message.fromAddress = object.fromAddress ?? "";
     message.escrowAddress = object.escrowAddress ?? "";
+    message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
+    message.cw1155IntentPayment = object.cw1155IntentPayment?.map(e => CW1155IntentPayment.fromPartial(e)) || [];
     return message;
   }
 };

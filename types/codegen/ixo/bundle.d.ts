@@ -1036,6 +1036,27 @@ export declare namespace ixo {
                 toJSON(message: _198.Contract1155Payment): unknown;
                 fromPartial(object: Partial<_198.Contract1155Payment>): _198.Contract1155Payment;
             };
+            CW1155Payment: {
+                encode(message: _198.CW1155Payment, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _198.CW1155Payment;
+                fromJSON(object: any): _198.CW1155Payment;
+                toJSON(message: _198.CW1155Payment): unknown;
+                fromPartial(object: Partial<_198.CW1155Payment>): _198.CW1155Payment;
+            };
+            CW1155IntentPayment: {
+                encode(message: _198.CW1155IntentPayment, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _198.CW1155IntentPayment;
+                fromJSON(object: any): _198.CW1155IntentPayment;
+                toJSON(message: _198.CW1155IntentPayment): unknown;
+                fromPartial(object: Partial<_198.CW1155IntentPayment>): _198.CW1155IntentPayment;
+            };
+            CW1155IntentPaymentToken: {
+                encode(message: _198.CW1155IntentPaymentToken, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _198.CW1155IntentPaymentToken;
+                fromJSON(object: any): _198.CW1155IntentPaymentToken;
+                toJSON(message: _198.CW1155IntentPaymentToken): unknown;
+                fromPartial(object: Partial<_198.CW1155IntentPaymentToken>): _198.CW1155IntentPaymentToken;
+            };
             CW20Payment: {
                 encode(message: _198.CW20Payment, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _198.CW20Payment;
@@ -2007,6 +2028,20 @@ export declare namespace ixo {
                 fromJSON(_: any): _223.MsgSetModulePausedResponse;
                 toJSON(_: _223.MsgSetModulePausedResponse): unknown;
                 fromPartial(_: Partial<_223.MsgSetModulePausedResponse>): _223.MsgSetModulePausedResponse;
+            };
+            MsgBurn: {
+                encode(message: _223.MsgBurn, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _223.MsgBurn;
+                fromJSON(object: any): _223.MsgBurn;
+                toJSON(message: _223.MsgBurn): unknown;
+                fromPartial(object: Partial<_223.MsgBurn>): _223.MsgBurn;
+            };
+            MsgBurnResponse: {
+                encode(_: _223.MsgBurnResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _223.MsgBurnResponse;
+                fromJSON(_: any): _223.MsgBurnResponse;
+                toJSON(_: _223.MsgBurnResponse): unknown;
+                fromPartial(_: Partial<_223.MsgBurnResponse>): _223.MsgBurnResponse;
             };
             QueryParamsRequest: {
                 encode(_: _222.QueryParamsRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;

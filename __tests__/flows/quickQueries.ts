@@ -493,10 +493,11 @@ export const quickQueries = () =>
     // });
 
     // test("query wasm contract 1155 state", async () => {
-    //   // const user = (await getUser(WalletUsers.tester).getAccounts())[0].address;
-    //   const user = "ixo1xwn45d6xhe3egcz3nqlfc2elpc3h6usy6yw3uk";
+    //   // const user = (await getUser(WalletUsers.alice).getAccounts())[0].address;
+    //   const user = "ixo14p4eh3hvunmlvegyysfp5lg8gf6cp6suxxx672"; // admin account
+    //   // const user = "ixo1h8ysw25vwez33hh9yx03kea935achlvrqve956"; // escrow account
     //   const contractAddress =
-    //     "ixo15jzyzklz8rq9gy38p4kcall0nqr8exglqg5870gglaq4c976vlxs92x0ga";
+    //     "ixo1aakfpghcanxtc45gpqlx8j3rq0zcpyf49qmhm9mdjrfx036h4z5skn3d4n";
 
     //   const tokens: string[] = [];
     //   const ownerTokensQuery = {
@@ -558,7 +559,7 @@ export const quickQueries = () =>
     //   const daodaoAddress =
     //     "ixo1engh7fuly026cnh558m7j96jm37z4vrqpx5dr57gua4pxw5myqvs7n8ewr";
     //   // const userAddress = (await getUser(WalletUsers.tester).getAccounts())[0].address
-    //   const userAddress = "ixo17e23sdgfsukxnu639xe2fjfe4cme0zz532325q";
+    //   const userAddress = "ixo182uq8qkykeexqs68q5v7unxkzhp2kjj5vlak00";
 
     //   const msg = {
     //     voting_power_at_height: {
@@ -574,21 +575,46 @@ export const quickQueries = () =>
     //   expect(res).toBeTruthy();
     // });
 
-    // test("query add daodao members", async () => {
+    // test("query add daodao members for cw4 group", async () => {
     //   const daodaoAddress =
     //     "ixo1engh7fuly026cnh558m7j96jm37z4vrqpx5dr57gua4pxw5myqvs7n8ewr";
 
-    //   const msg = {
-    //     voting_power_at_height: {
-    //       address: userAddress,
-    //     },
-    //   };
     //   const res = await queryClient.cosmwasm.wasm.v1.smartContractState({
     //     address: daodaoAddress,
-    //     queryData: utils.conversions.JsonToArray(JSON.stringify(msg)),
+    //     queryData: utils.conversions.JsonToArray(
+    //       JSON.stringify({
+    //         dump_state: {},
+    //       })
+    //     ),
     //   });
     //   const data = JSON.parse(utils.conversions.Uint8ArrayToJS(res.data));
     //   console.dir(data, { depth: null });
+
+    //   const votingModule = data.voting_module;
+    //   const res1 = await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //     address: votingModule,
+    //     queryData: utils.conversions.JsonToArray(
+    //       JSON.stringify({ group_contract: {} })
+    //     ),
+    //   });
+    //   const data1 = JSON.parse(utils.conversions.Uint8ArrayToJS(res1.data));
+    //   console.dir(data1, { depth: null });
+
+    //   const groupContract = data1;
+    //   const res2 = await queryClient.cosmwasm.wasm.v1.smartContractState({
+    //     address: groupContract,
+    //     queryData: utils.conversions.JsonToArray(
+    //       JSON.stringify({
+    //         list_members: {
+    //           limit: 10,
+    //           start_after: null,
+    //         },
+    //       })
+    //     ),
+    //   });
+    //   const data2 = JSON.parse(utils.conversions.Uint8ArrayToJS(res2.data));
+    //   console.dir(data2, { depth: null });
+
     //   expect(res).toBeTruthy();
     // });
 

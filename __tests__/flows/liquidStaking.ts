@@ -46,4 +46,15 @@ export const prepareModuleWithProposals = () =>
     testMsg("/cosmos.bank.v1beta1.MsgSend", () =>
       LiquidStake.BankSendZeroTrx(1000000000)
     );
+
+    testMsg("/ixo.liquidstake.v1beta1.MsgBurn", () =>
+      LiquidStake.MsgBurn("10000000")
+    );
+  });
+
+export const burnIxo = () =>
+  describe("Burning ixo", () => {
+    testMsg("/ixo.liquidstake.v1beta1.MsgBurn", () =>
+      LiquidStake.MsgBurn("10000000")
+    );
   });

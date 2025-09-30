@@ -211,7 +211,8 @@ export interface Payment {
     /** account is the entity account address from which the payment will be made */
     account: string;
     amount: Coin[];
-    /** if empty(nil) then no contract payment, not allowed for Evaluation Payment */
+    /** Deprecated: Use cw1155_payment instead */
+    /** @deprecated */
     contract_1155Payment?: Contract1155Payment;
     /**
      * timeout after claim/evaluation to create authZ for payment, if 0 then
@@ -229,14 +230,18 @@ export interface Payment {
      * for delayed payments
      */
     isOraclePayment: boolean;
+    /** cw1155 payments, can be empty or multiple */
+    cw1155Payment: CW1155Payment[];
 }
 export interface PaymentSDKType {
     account: string;
     amount: CoinSDKType[];
+    /** @deprecated */
     contract_1155_payment?: Contract1155PaymentSDKType;
     timeout_ns?: DurationSDKType;
     cw20_payment: CW20PaymentSDKType[];
     is_oracle_payment: boolean;
+    cw1155_payment: CW1155PaymentSDKType[];
 }
 export interface Contract1155Payment {
     address: string;
@@ -247,6 +252,32 @@ export interface Contract1155PaymentSDKType {
     address: string;
     token_id: string;
     amount: number;
+}
+export interface CW1155Payment {
+    address: string;
+    tokenId: string[];
+    amount: Long;
+}
+export interface CW1155PaymentSDKType {
+    address: string;
+    token_id: string[];
+    amount: Long;
+}
+export interface CW1155IntentPayment {
+    address: string;
+    tokens: CW1155IntentPaymentToken[];
+}
+export interface CW1155IntentPaymentSDKType {
+    address: string;
+    tokens: CW1155IntentPaymentTokenSDKType[];
+}
+export interface CW1155IntentPaymentToken {
+    tokenId: string;
+    amount: Long;
+}
+export interface CW1155IntentPaymentTokenSDKType {
+    token_id: string;
+    amount: Long;
 }
 export interface CW20Payment {
     address: string;
@@ -289,7 +320,7 @@ export interface Claim {
     submissionDate?: Timestamp;
     /** claimID is the unique identifier of the claim in the cid hash format */
     claimId: string;
-    /** evaluation is the result of one or more claim evaluations */
+    /** evaluation is the result of the claim evaluation */
     evaluation?: Evaluation;
     /** payments_status is the status of the payments for the claim */
     paymentsStatus?: ClaimPayments;
@@ -297,17 +328,24 @@ export interface Claim {
     useIntent: boolean;
     /**
      * custom amount specified by service agent for claim approval
-     * NOTE: if both amount and cw20 amount are empty then collection default is
-     * used
+     * NOTE: if all amounts are empty then collection default is used
      */
     amount: Coin[];
     /**
-     * custom cw20 payments specified by service agent for claim
-     * approval
-     * NOTE: if both amount and cw20 amount are empty then collection default is
-     * used
+     * custom cw20 payments specified by service agent for claim approval
+     * NOTE: if all amounts are empty then collection default is used
      */
     cw20Payment: CW20Payment[];
+    /**
+     * custom cw1155 payments specified by service agent for claim approval
+     * NOTE: if all amounts are empty then collection default is used
+     */
+    cw1155Payment: CW1155Payment[];
+    /**
+     * If intent was used, this is the cw20_payment equivalent but with amounts
+     * per token_id to transfer the same tokens to and from the escrow account
+     */
+    cw1155IntentPayment: CW1155IntentPayment[];
 }
 export interface ClaimSDKType {
     collection_id: string;
@@ -320,6 +358,8 @@ export interface ClaimSDKType {
     use_intent: boolean;
     amount: CoinSDKType[];
     cw20_payment: CW20PaymentSDKType[];
+    cw1155_payment: CW1155PaymentSDKType[];
+    cw1155_intent_payment: CW1155IntentPaymentSDKType[];
 }
 export interface ClaimPayments {
     submission: PaymentStatus;
@@ -356,7 +396,7 @@ export interface Evaluation {
      * was given (codes defined by evaluator)
      */
     reason: number;
-    /** verificationProof is the cid of the evaluation Verfiable Credential */
+    /** verificationProof is the cid of the evaluation Verifiable Credential */
     verificationProof: string;
     /**
      * evaluationDate is the date and time that the claim evaluation was submitted
@@ -365,16 +405,30 @@ export interface Evaluation {
     evaluationDate?: Timestamp;
     /**
      * custom amount specified by evaluator for claim approval
-     * NOTE: if both amount and cw20 amount are empty then collection default is
-     * used
+     * NOTE: if all amounts are empty then collection default is used
+     * NOTE: if claim has intent, then custom amounts are ignored and intent
+     * amounts are used
      */
     amount: Coin[];
     /**
      * custom cw20 payments specified by evaluator for claim approval
-     * NOTE: if both amount and cw20 amount are empty then collection default is
-     * used
+     * NOTE: if all amounts are empty then collection default is used
+     * NOTE: if claim has intent, then custom amounts are ignored and intent
+     * amounts are used
      */
     cw20Payment: CW20Payment[];
+    /**
+     * custom cw1155 payments specified by evaluator for claim approval
+     * NOTE: if all amounts are empty then collection default is used
+     * NOTE: if claim has intent, then custom amounts are ignored and intent
+     * amounts are used
+     */
+    cw1155Payment: CW1155Payment[];
+    /**
+     * If intent was used, this is the cw20_payment equivalent but with amounts
+     * per token_id to transfer the same tokens to and from the escrow account
+     */
+    cw1155IntentPayment: CW1155IntentPayment[];
 }
 export interface EvaluationSDKType {
     claim_id: string;
@@ -388,6 +442,8 @@ export interface EvaluationSDKType {
     evaluation_date?: TimestampSDKType;
     amount: CoinSDKType[];
     cw20_payment: CW20PaymentSDKType[];
+    cw1155_payment: CW1155PaymentSDKType[];
+    cw1155_intent_payment: CW1155IntentPaymentSDKType[];
 }
 export interface Dispute {
     subjectId: string;
@@ -442,6 +498,13 @@ export interface Intent {
     fromAddress: string;
     /** the escrow account address */
     escrowAddress: string;
+    /** The custom cw1155 payments the agent intends to claim, if any. */
+    cw1155Payment: CW1155Payment[];
+    /**
+     * Same as cw1155_payment but with amounts per token_id to transfer
+     * the same tokens to and from the escrow account
+     */
+    cw1155IntentPayment: CW1155IntentPayment[];
 }
 /** Intent defines the structure for a service agent's claim intent. */
 export interface IntentSDKType {
@@ -457,6 +520,8 @@ export interface IntentSDKType {
     cw20_payment: CW20PaymentSDKType[];
     from_address: string;
     escrow_address: string;
+    cw1155_payment: CW1155PaymentSDKType[];
+    cw1155_intent_payment: CW1155IntentPaymentSDKType[];
 }
 export declare const Params: {
     encode(message: Params, writer?: _m0.Writer): _m0.Writer;
@@ -492,6 +557,27 @@ export declare const Contract1155Payment: {
     fromJSON(object: any): Contract1155Payment;
     toJSON(message: Contract1155Payment): unknown;
     fromPartial(object: Partial<Contract1155Payment>): Contract1155Payment;
+};
+export declare const CW1155Payment: {
+    encode(message: CW1155Payment, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): CW1155Payment;
+    fromJSON(object: any): CW1155Payment;
+    toJSON(message: CW1155Payment): unknown;
+    fromPartial(object: Partial<CW1155Payment>): CW1155Payment;
+};
+export declare const CW1155IntentPayment: {
+    encode(message: CW1155IntentPayment, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): CW1155IntentPayment;
+    fromJSON(object: any): CW1155IntentPayment;
+    toJSON(message: CW1155IntentPayment): unknown;
+    fromPartial(object: Partial<CW1155IntentPayment>): CW1155IntentPayment;
+};
+export declare const CW1155IntentPaymentToken: {
+    encode(message: CW1155IntentPaymentToken, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): CW1155IntentPaymentToken;
+    fromJSON(object: any): CW1155IntentPaymentToken;
+    toJSON(message: CW1155IntentPaymentToken): unknown;
+    fromPartial(object: Partial<CW1155IntentPaymentToken>): CW1155IntentPaymentToken;
 };
 export declare const CW20Payment: {
     encode(message: CW20Payment, writer?: _m0.Writer): _m0.Writer;

@@ -605,6 +605,10 @@ export const createRegistry = (): Registry => {
     "/ixo.liquidstake.v1beta1.MsgSetModulePaused",
     ixo.liquidstake.v1beta1.MsgSetModulePaused
   );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgBurn",
+    ixo.liquidstake.v1beta1.MsgBurn
+  );
 
   return myRegistry;
 };
