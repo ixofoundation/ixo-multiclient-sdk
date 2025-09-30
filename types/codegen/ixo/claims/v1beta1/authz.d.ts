@@ -1,5 +1,5 @@
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { CW20Payment, CW20PaymentSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType } from "./claims";
+import { CW20Payment, CW20PaymentSDKType, CW1155Payment, CW1155PaymentSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType } from "./claims";
 import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
@@ -51,6 +51,12 @@ export interface SubmitClaimConstraints {
      * which it will expire (in nanoseconds)
      */
     intentDurationNs?: Duration;
+    /**
+     * custom max_cw1155_payment allowed to be specified by service agent for
+     * claim approval, if empty then no custom amount is allowed, and default
+     * payments from Collection payments are used
+     */
+    maxCw1155Payment: CW1155Payment[];
 }
 export interface SubmitClaimConstraintsSDKType {
     collection_id: string;
@@ -58,6 +64,7 @@ export interface SubmitClaimConstraintsSDKType {
     max_amount: CoinSDKType[];
     max_cw20_payment: CW20PaymentSDKType[];
     intent_duration_ns?: DurationSDKType;
+    max_cw1155_payment: CW1155PaymentSDKType[];
 }
 export interface EvaluateClaimAuthorization {
     /** address of admin (entity admin module account) */
@@ -86,6 +93,11 @@ export interface EvaluateClaimConstraints {
      * amount is allowed, and default payments from Collection payments are used
      */
     maxCustomCw20Payment: CW20Payment[];
+    /**
+     * custom max_cw1155_payment evaluator can change, if empty then no custom
+     * amount is allowed, and default payments from Collection payments are used
+     */
+    maxCustomCw1155Payment: CW1155Payment[];
 }
 export interface EvaluateClaimConstraintsSDKType {
     collection_id: string;
@@ -94,6 +106,7 @@ export interface EvaluateClaimConstraintsSDKType {
     before_date?: TimestampSDKType;
     max_custom_amount: CoinSDKType[];
     max_custom_cw20_payment: CW20PaymentSDKType[];
+    max_custom_cw1155_payment: CW1155PaymentSDKType[];
 }
 export interface WithdrawPaymentAuthorization {
     /** address of admin */
@@ -117,6 +130,7 @@ export interface WithdrawPaymentConstraints {
      */
     paymentType: PaymentType;
     /** if empty(nil) then no contract payment */
+    /** @deprecated */
     contract_1155Payment?: Contract1155Payment;
     /** for contract payment */
     toAddress: string;
@@ -129,17 +143,21 @@ export interface WithdrawPaymentConstraints {
     releaseDate?: Timestamp;
     /** cw20 payments, can be empty or multiple */
     cw20Payment: CW20Payment[];
+    /** custom cw1155 payments, can be empty or multiple */
+    cw1155Payment: CW1155Payment[];
 }
 export interface WithdrawPaymentConstraintsSDKType {
     claim_id: string;
     inputs: InputSDKType[];
     outputs: OutputSDKType[];
     payment_type: PaymentType;
+    /** @deprecated */
     contract_1155_payment?: Contract1155PaymentSDKType;
     toAddress: string;
     fromAddress: string;
     release_date?: TimestampSDKType;
     cw20_payment: CW20PaymentSDKType[];
+    cw1155_payment: CW1155PaymentSDKType[];
 }
 /**
  * CreateClaimAuthorizationAuthorization allows a grantee to create
@@ -207,6 +225,13 @@ export interface CreateClaimAuthorizationConstraints {
     allowedAuthTypes: CreateClaimAuthorizationType;
     /** Maximum intent duration for the authorization allowed (for submit) */
     maxIntentDurationNs?: Duration;
+    /**
+     * Maximum cw1155 payment that can be set in created authorizations,
+     * if empty then any cw1155 payment is allowed in the created authorizations
+     * explicitly set to amount to 0 to disallow any cw1155 payment in the created
+     * authorizations
+     */
+    maxCw1155Payment: CW1155Payment[];
 }
 /**
  * CreateClaimAuthorizationConstraints defines the constraints for creating
@@ -221,6 +246,7 @@ export interface CreateClaimAuthorizationConstraintsSDKType {
     collection_ids: string[];
     allowed_auth_types: CreateClaimAuthorizationType;
     max_intent_duration_ns?: DurationSDKType;
+    max_cw1155_payment: CW1155PaymentSDKType[];
 }
 export declare const SubmitClaimAuthorization: {
     encode(message: SubmitClaimAuthorization, writer?: _m0.Writer): _m0.Writer;

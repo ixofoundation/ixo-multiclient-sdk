@@ -209,3 +209,29 @@ export const BankSendZeroTrx = async (
   );
   return response as any;
 };
+
+export const MsgBurn = async (amount = "1000000") => {
+  const client = await createClient();
+
+  const tester = getUser();
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const message = {
+    typeUrl: "/ixo.liquidstake.v1beta1.MsgBurn",
+    value: ixo.liquidstake.v1beta1.MsgBurn.fromPartial({
+      burner: myAddress,
+      amount: cosmos.base.v1beta1.Coin.fromPartial({
+        amount,
+        denom: "uixo",
+      }),
+    }),
+  };
+
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
+  return response;
+};

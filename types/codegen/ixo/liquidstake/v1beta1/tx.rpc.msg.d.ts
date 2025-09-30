@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import { MsgLiquidStake, MsgLiquidStakeResponse, MsgLiquidUnstake, MsgLiquidUnstakeResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgUpdateWhitelistedValidators, MsgUpdateWhitelistedValidatorsResponse, MsgUpdateWeightedRewardsReceivers, MsgUpdateWeightedRewardsReceiversResponse, MsgSetModulePaused, MsgSetModulePausedResponse } from "./tx";
+import { MsgLiquidStake, MsgLiquidStakeResponse, MsgLiquidUnstake, MsgLiquidUnstakeResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgUpdateWhitelistedValidators, MsgUpdateWhitelistedValidatorsResponse, MsgUpdateWeightedRewardsReceivers, MsgUpdateWeightedRewardsReceiversResponse, MsgSetModulePaused, MsgSetModulePausedResponse, MsgBurn, MsgBurnResponse } from "./tx";
 /** Msg defines the liquid staking Msg service. */
 export interface Msg {
     /**
@@ -29,6 +29,8 @@ export interface Msg {
      * setting value of the safety flag in params.
      */
     setModulePaused(request: MsgSetModulePaused): Promise<MsgSetModulePausedResponse>;
+    /** Burn defines a method for burning coins. */
+    burn(request: MsgBurn): Promise<MsgBurnResponse>;
 }
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
@@ -39,4 +41,5 @@ export declare class MsgClientImpl implements Msg {
     updateWhitelistedValidators(request: MsgUpdateWhitelistedValidators): Promise<MsgUpdateWhitelistedValidatorsResponse>;
     updateWeightedRewardsReceivers(request: MsgUpdateWeightedRewardsReceivers): Promise<MsgUpdateWeightedRewardsReceiversResponse>;
     setModulePaused(request: MsgSetModulePaused): Promise<MsgSetModulePausedResponse>;
+    burn(request: MsgBurn): Promise<MsgBurnResponse>;
 }

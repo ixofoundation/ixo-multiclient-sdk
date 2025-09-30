@@ -79,6 +79,8 @@ IID.generateBlockchainTestUsers();
 // CosmWasm.daoCoreNative();
 // Claims.supamotoClaims3();
 // Proposals.uploadHyperlaneProposals();
+// Cosmos.voteProposal();
+// LiquidStake.burnIxo();
 // Queries.quickQueries();
 // web3Storage();
 // IID.addEdKeysToDid();

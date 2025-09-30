@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
-import { CollectionState, Payments, PaymentsSDKType, CollectionIntentOptions, CW20Payment, CW20PaymentSDKType, EvaluationStatus, DisputeData, DisputeDataSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType, collectionStateFromJSON, collectionIntentOptionsFromJSON, collectionStateToJSON, collectionIntentOptionsToJSON, evaluationStatusFromJSON, evaluationStatusToJSON, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
+import { CollectionState, Payments, PaymentsSDKType, CollectionIntentOptions, CW20Payment, CW20PaymentSDKType, CW1155Payment, CW1155PaymentSDKType, EvaluationStatus, DisputeData, DisputeDataSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType, collectionStateFromJSON, collectionIntentOptionsFromJSON, collectionStateToJSON, collectionIntentOptionsToJSON, evaluationStatusFromJSON, evaluationStatusToJSON, paymentTypeFromJSON, paymentTypeToJSON } from "./claims";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
 import { CreateClaimAuthorizationType, createClaimAuthorizationTypeFromJSON, createClaimAuthorizationTypeToJSON } from "./authz";
@@ -61,23 +61,26 @@ export interface MsgSubmitClaim {
   adminAddress: string;
   /**
    * use_intent is the option for using intent for this claim if it exists and
-   * is active. NOTE: if use_intent is true then amount and cw20 amount are
+   * is active. NOTE: if use_intent is true then custom amounts in the msg are
    * ignored and overridden with intent amounts. NOTE: if use_intent is true and
    * there is no active intent then will error
    */
   useIntent: boolean;
   /**
    * custom amount specified by service agent for claim approval
-   * NOTE: if both amount and cw20_payment are empty then collection default is
-   * used
+   * NOTE: if all amounts are empty then collection default is used
    */
   amount: Coin[];
   /**
    * custom cw20 payments specified by service agent for claim approval
-   * NOTE: if both amount and cw20 amount are empty then collection default is
-   * used
+   * NOTE: if all amounts are empty then collection default is used
    */
   cw20Payment: CW20Payment[];
+  /**
+   * custom cw1155 payments specified by service agent for claim approval
+   * NOTE: if all amounts are empty then collection default is used
+   */
+  cw1155Payment: CW1155Payment[];
 }
 export interface MsgSubmitClaimSDKType {
   collection_id: string;
@@ -88,6 +91,7 @@ export interface MsgSubmitClaimSDKType {
   use_intent: boolean;
   amount: CoinSDKType[];
   cw20_payment: CW20PaymentSDKType[];
+  cw1155_payment: CW1155PaymentSDKType[];
 }
 export interface MsgSubmitClaimResponse {}
 export interface MsgSubmitClaimResponseSDKType {}
@@ -117,18 +121,25 @@ export interface MsgEvaluateClaim {
   verificationProof: string;
   /**
    * custom amount specified by evaluator for claim approval
-   * NOTE: if claim is using intent, then amount and cw20 amount are ignored and
-   * overridden with intent amounts NOTE: if both amount and cw20 amount are
-   * empty then collection default is used
+   * NOTE: if claim is using intent, then custom amounts are ignored and
+   * overridden with intent amounts NOTE: if all amounts are empty then
+   * collection default is used
    */
   amount: Coin[];
   /**
    * custom cw20 payments specified by evaluator for claim approval
-   * NOTE: if claim is using intent, then amount and cw20 amount are ignored and
-   * overridden with intent amounts NOTE: if both amount and cw20 amount are
-   * empty then collection default is used
+   * NOTE: if claim is using intent, then custom amounts are ignored and
+   * overridden with intent amounts NOTE: if all amounts are empty then
+   * collection default is used
    */
   cw20Payment: CW20Payment[];
+  /**
+   * custom cw1155 payments specified by evaluator for claim approval
+   * NOTE: if claim is using intent, then custom amounts are ignored and
+   * overridden with intent amounts NOTE: if all amounts are empty then
+   * collection default is used
+   */
+  cw1155Payment: CW1155Payment[];
 }
 export interface MsgEvaluateClaimSDKType {
   claim_id: string;
@@ -142,6 +153,7 @@ export interface MsgEvaluateClaimSDKType {
   verification_proof: string;
   amount: CoinSDKType[];
   cw20_payment: CW20PaymentSDKType[];
+  cw1155_payment: CW1155PaymentSDKType[];
 }
 export interface MsgEvaluateClaimResponse {}
 export interface MsgEvaluateClaimResponseSDKType {}
@@ -190,7 +202,8 @@ export interface MsgWithdrawPayment {
    * accordingly
    */
   paymentType: PaymentType;
-  /** if empty(nil) then no contract payment */
+  /** Deprecated: Use cw1155_payment instead */
+  /** @deprecated */
   contract_1155Payment?: Contract1155Payment;
   /** for contract payment */
   toAddress: string;
@@ -205,18 +218,22 @@ export interface MsgWithdrawPayment {
   adminAddress: string;
   /** cw20 payments, can be empty or multiple */
   cw20Payment: CW20Payment[];
+  /** custom cw1155, can be empty or multiple */
+  cw1155Payment: CW1155Payment[];
 }
 export interface MsgWithdrawPaymentSDKType {
   claim_id: string;
   inputs: InputSDKType[];
   outputs: OutputSDKType[];
   payment_type: PaymentType;
+  /** @deprecated */
   contract_1155_payment?: Contract1155PaymentSDKType;
   toAddress: string;
   fromAddress: string;
   release_date?: TimestampSDKType;
   admin_address: string;
   cw20_payment: CW20PaymentSDKType[];
+  cw1155_payment: CW1155PaymentSDKType[];
 }
 export interface MsgWithdrawPaymentResponse {}
 export interface MsgWithdrawPaymentResponseSDKType {}
@@ -304,16 +321,22 @@ export interface MsgClaimIntent {
   collectionId: string;
   /**
    * The desired claim amount, if any.
-   * NOTE: if both amount and cw20 amount are empty then default by Collection
-   * is used (APPROVAL payment).
+   * NOTE: if all amounts are empty then collection default is used (APPROVAL
+   * payment)
    */
   amount: Coin[];
   /**
    * The custom CW20 payment, if any.
-   * NOTE: if both amount and cw20 amount are empty then default by Collection
-   * is used (APPROVAL payment).
+   * NOTE: if all amounts are empty then collection default is used (APPROVAL
+   * payment)
    */
   cw20Payment: CW20Payment[];
+  /**
+   * The custom CW1155 payment, if any.
+   * NOTE: if all amounts are empty then collection default is used (APPROVAL
+   * payment)
+   */
+  cw1155Payment: CW1155Payment[];
 }
 export interface MsgClaimIntentSDKType {
   agent_did: string;
@@ -321,6 +344,7 @@ export interface MsgClaimIntentSDKType {
   collection_id: string;
   amount: CoinSDKType[];
   cw20_payment: CW20PaymentSDKType[];
+  cw1155_payment: CW1155PaymentSDKType[];
 }
 /** MsgClaimIntentResponse defines the response after submitting an intent. */
 export interface MsgClaimIntentResponse {
@@ -381,6 +405,11 @@ export interface MsgCreateClaimAuthorization {
   intentDurationNs?: Duration;
   /** if null then no before_date validation done (for evaluate) */
   beforeDate?: Timestamp;
+  /**
+   * Maximum cw1155 payment that can be specified in the authorization (for both
+   * submit and evaluate)
+   */
+  maxCw1155Payment: CW1155Payment[];
 }
 /**
  * MsgCreateClaimAuthorization defines a message for creating a claim
@@ -400,6 +429,7 @@ export interface MsgCreateClaimAuthorizationSDKType {
   expiration?: TimestampSDKType;
   intent_duration_ns?: DurationSDKType;
   before_date?: TimestampSDKType;
+  max_cw1155_payment: CW1155PaymentSDKType[];
 }
 /**
  * MsgCreateClaimAuthorizationResponse defines the response for creating a claim
@@ -578,7 +608,8 @@ function createBaseMsgSubmitClaim(): MsgSubmitClaim {
     adminAddress: "",
     useIntent: false,
     amount: [],
-    cw20Payment: []
+    cw20Payment: [],
+    cw1155Payment: []
   };
 }
 export const MsgSubmitClaim = {
@@ -606,6 +637,9 @@ export const MsgSubmitClaim = {
     }
     for (const v of message.cw20Payment) {
       CW20Payment.encode(v!, writer.uint32(66).fork()).ldelim();
+    }
+    for (const v of message.cw1155Payment) {
+      CW1155Payment.encode(v!, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -640,6 +674,9 @@ export const MsgSubmitClaim = {
         case 8:
           message.cw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
           break;
+        case 9:
+          message.cw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -656,7 +693,8 @@ export const MsgSubmitClaim = {
       adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : "",
       useIntent: isSet(object.useIntent) ? Boolean(object.useIntent) : false,
       amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
-      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
+      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgSubmitClaim): unknown {
@@ -677,6 +715,11 @@ export const MsgSubmitClaim = {
     } else {
       obj.cw20Payment = [];
     }
+    if (message.cw1155Payment) {
+      obj.cw1155Payment = message.cw1155Payment.map(e => e ? CW1155Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw1155Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgSubmitClaim>): MsgSubmitClaim {
@@ -689,6 +732,7 @@ export const MsgSubmitClaim = {
     message.useIntent = object.useIntent ?? false;
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -737,7 +781,8 @@ function createBaseMsgEvaluateClaim(): MsgEvaluateClaim {
     reason: 0,
     verificationProof: "",
     amount: [],
-    cw20Payment: []
+    cw20Payment: [],
+    cw1155Payment: []
   };
 }
 export const MsgEvaluateClaim = {
@@ -774,6 +819,9 @@ export const MsgEvaluateClaim = {
     }
     for (const v of message.cw20Payment) {
       CW20Payment.encode(v!, writer.uint32(90).fork()).ldelim();
+    }
+    for (const v of message.cw1155Payment) {
+      CW1155Payment.encode(v!, writer.uint32(98).fork()).ldelim();
     }
     return writer;
   },
@@ -817,6 +865,9 @@ export const MsgEvaluateClaim = {
         case 11:
           message.cw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
           break;
+        case 12:
+          message.cw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -836,7 +887,8 @@ export const MsgEvaluateClaim = {
       reason: isSet(object.reason) ? Number(object.reason) : 0,
       verificationProof: isSet(object.verificationProof) ? String(object.verificationProof) : "",
       amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
-      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
+      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgEvaluateClaim): unknown {
@@ -860,6 +912,11 @@ export const MsgEvaluateClaim = {
     } else {
       obj.cw20Payment = [];
     }
+    if (message.cw1155Payment) {
+      obj.cw1155Payment = message.cw1155Payment.map(e => e ? CW1155Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw1155Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgEvaluateClaim>): MsgEvaluateClaim {
@@ -875,6 +932,7 @@ export const MsgEvaluateClaim = {
     message.verificationProof = object.verificationProof ?? "";
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -1040,7 +1098,8 @@ function createBaseMsgWithdrawPayment(): MsgWithdrawPayment {
     fromAddress: "",
     releaseDate: undefined,
     adminAddress: "",
-    cw20Payment: []
+    cw20Payment: [],
+    cw1155Payment: []
   };
 }
 export const MsgWithdrawPayment = {
@@ -1074,6 +1133,9 @@ export const MsgWithdrawPayment = {
     }
     for (const v of message.cw20Payment) {
       CW20Payment.encode(v!, writer.uint32(82).fork()).ldelim();
+    }
+    for (const v of message.cw1155Payment) {
+      CW1155Payment.encode(v!, writer.uint32(90).fork()).ldelim();
     }
     return writer;
   },
@@ -1114,6 +1176,9 @@ export const MsgWithdrawPayment = {
         case 10:
           message.cw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
           break;
+        case 11:
+          message.cw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1132,7 +1197,8 @@ export const MsgWithdrawPayment = {
       fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
       releaseDate: isSet(object.releaseDate) ? fromJsonTimestamp(object.releaseDate) : undefined,
       adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : "",
-      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
+      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgWithdrawPayment): unknown {
@@ -1159,6 +1225,11 @@ export const MsgWithdrawPayment = {
     } else {
       obj.cw20Payment = [];
     }
+    if (message.cw1155Payment) {
+      obj.cw1155Payment = message.cw1155Payment.map(e => e ? CW1155Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw1155Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgWithdrawPayment>): MsgWithdrawPayment {
@@ -1173,6 +1244,7 @@ export const MsgWithdrawPayment = {
     message.releaseDate = object.releaseDate !== undefined && object.releaseDate !== null ? Timestamp.fromPartial(object.releaseDate) : undefined;
     message.adminAddress = object.adminAddress ?? "";
     message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -1617,7 +1689,8 @@ function createBaseMsgClaimIntent(): MsgClaimIntent {
     agentAddress: "",
     collectionId: "",
     amount: [],
-    cw20Payment: []
+    cw20Payment: [],
+    cw1155Payment: []
   };
 }
 export const MsgClaimIntent = {
@@ -1636,6 +1709,9 @@ export const MsgClaimIntent = {
     }
     for (const v of message.cw20Payment) {
       CW20Payment.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.cw1155Payment) {
+      CW1155Payment.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -1661,6 +1737,9 @@ export const MsgClaimIntent = {
         case 5:
           message.cw20Payment.push(CW20Payment.decode(reader, reader.uint32()));
           break;
+        case 6:
+          message.cw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1674,7 +1753,8 @@ export const MsgClaimIntent = {
       agentAddress: isSet(object.agentAddress) ? String(object.agentAddress) : "",
       collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
       amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
-      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : []
+      cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgClaimIntent): unknown {
@@ -1692,6 +1772,11 @@ export const MsgClaimIntent = {
     } else {
       obj.cw20Payment = [];
     }
+    if (message.cw1155Payment) {
+      obj.cw1155Payment = message.cw1155Payment.map(e => e ? CW1155Payment.toJSON(e) : undefined);
+    } else {
+      obj.cw1155Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgClaimIntent>): MsgClaimIntent {
@@ -1701,6 +1786,7 @@ export const MsgClaimIntent = {
     message.collectionId = object.collectionId ?? "";
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
     return message;
   }
 };
@@ -1772,7 +1858,8 @@ function createBaseMsgCreateClaimAuthorization(): MsgCreateClaimAuthorization {
     maxCw20Payment: [],
     expiration: undefined,
     intentDurationNs: undefined,
-    beforeDate: undefined
+    beforeDate: undefined,
+    maxCw1155Payment: []
   };
 }
 export const MsgCreateClaimAuthorization = {
@@ -1812,6 +1899,9 @@ export const MsgCreateClaimAuthorization = {
     }
     if (message.beforeDate !== undefined) {
       Timestamp.encode(message.beforeDate, writer.uint32(98).fork()).ldelim();
+    }
+    for (const v of message.maxCw1155Payment) {
+      CW1155Payment.encode(v!, writer.uint32(106).fork()).ldelim();
     }
     return writer;
   },
@@ -1858,6 +1948,9 @@ export const MsgCreateClaimAuthorization = {
         case 12:
           message.beforeDate = Timestamp.decode(reader, reader.uint32());
           break;
+        case 13:
+          message.maxCw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1878,7 +1971,8 @@ export const MsgCreateClaimAuthorization = {
       maxCw20Payment: Array.isArray(object?.maxCw20Payment) ? object.maxCw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
       expiration: isSet(object.expiration) ? fromJsonTimestamp(object.expiration) : undefined,
       intentDurationNs: isSet(object.intentDurationNs) ? Duration.fromJSON(object.intentDurationNs) : undefined,
-      beforeDate: isSet(object.beforeDate) ? fromJsonTimestamp(object.beforeDate) : undefined
+      beforeDate: isSet(object.beforeDate) ? fromJsonTimestamp(object.beforeDate) : undefined,
+      maxCw1155Payment: Array.isArray(object?.maxCw1155Payment) ? object.maxCw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgCreateClaimAuthorization): unknown {
@@ -1903,6 +1997,11 @@ export const MsgCreateClaimAuthorization = {
     message.expiration !== undefined && (obj.expiration = fromTimestamp(message.expiration).toISOString());
     message.intentDurationNs !== undefined && (obj.intentDurationNs = message.intentDurationNs ? Duration.toJSON(message.intentDurationNs) : undefined);
     message.beforeDate !== undefined && (obj.beforeDate = fromTimestamp(message.beforeDate).toISOString());
+    if (message.maxCw1155Payment) {
+      obj.maxCw1155Payment = message.maxCw1155Payment.map(e => e ? CW1155Payment.toJSON(e) : undefined);
+    } else {
+      obj.maxCw1155Payment = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<MsgCreateClaimAuthorization>): MsgCreateClaimAuthorization {
@@ -1919,6 +2018,7 @@ export const MsgCreateClaimAuthorization = {
     message.expiration = object.expiration !== undefined && object.expiration !== null ? Timestamp.fromPartial(object.expiration) : undefined;
     message.intentDurationNs = object.intentDurationNs !== undefined && object.intentDurationNs !== null ? Duration.fromPartial(object.intentDurationNs) : undefined;
     message.beforeDate = object.beforeDate !== undefined && object.beforeDate !== null ? Timestamp.fromPartial(object.beforeDate) : undefined;
+    message.maxCw1155Payment = object.maxCw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
     return message;
   }
 };

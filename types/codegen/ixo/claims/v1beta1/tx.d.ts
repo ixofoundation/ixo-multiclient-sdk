@@ -1,5 +1,5 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
-import { CollectionState, Payments, PaymentsSDKType, CollectionIntentOptions, CW20Payment, CW20PaymentSDKType, EvaluationStatus, DisputeData, DisputeDataSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType } from "./claims";
+import { CollectionState, Payments, PaymentsSDKType, CollectionIntentOptions, CW20Payment, CW20PaymentSDKType, CW1155Payment, CW1155PaymentSDKType, EvaluationStatus, DisputeData, DisputeDataSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType } from "./claims";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
 import { CreateClaimAuthorizationType } from "./authz";
@@ -62,23 +62,26 @@ export interface MsgSubmitClaim {
     adminAddress: string;
     /**
      * use_intent is the option for using intent for this claim if it exists and
-     * is active. NOTE: if use_intent is true then amount and cw20 amount are
+     * is active. NOTE: if use_intent is true then custom amounts in the msg are
      * ignored and overridden with intent amounts. NOTE: if use_intent is true and
      * there is no active intent then will error
      */
     useIntent: boolean;
     /**
      * custom amount specified by service agent for claim approval
-     * NOTE: if both amount and cw20_payment are empty then collection default is
-     * used
+     * NOTE: if all amounts are empty then collection default is used
      */
     amount: Coin[];
     /**
      * custom cw20 payments specified by service agent for claim approval
-     * NOTE: if both amount and cw20 amount are empty then collection default is
-     * used
+     * NOTE: if all amounts are empty then collection default is used
      */
     cw20Payment: CW20Payment[];
+    /**
+     * custom cw1155 payments specified by service agent for claim approval
+     * NOTE: if all amounts are empty then collection default is used
+     */
+    cw1155Payment: CW1155Payment[];
 }
 export interface MsgSubmitClaimSDKType {
     collection_id: string;
@@ -89,6 +92,7 @@ export interface MsgSubmitClaimSDKType {
     use_intent: boolean;
     amount: CoinSDKType[];
     cw20_payment: CW20PaymentSDKType[];
+    cw1155_payment: CW1155PaymentSDKType[];
 }
 export interface MsgSubmitClaimResponse {
 }
@@ -120,18 +124,25 @@ export interface MsgEvaluateClaim {
     verificationProof: string;
     /**
      * custom amount specified by evaluator for claim approval
-     * NOTE: if claim is using intent, then amount and cw20 amount are ignored and
-     * overridden with intent amounts NOTE: if both amount and cw20 amount are
-     * empty then collection default is used
+     * NOTE: if claim is using intent, then custom amounts are ignored and
+     * overridden with intent amounts NOTE: if all amounts are empty then
+     * collection default is used
      */
     amount: Coin[];
     /**
      * custom cw20 payments specified by evaluator for claim approval
-     * NOTE: if claim is using intent, then amount and cw20 amount are ignored and
-     * overridden with intent amounts NOTE: if both amount and cw20 amount are
-     * empty then collection default is used
+     * NOTE: if claim is using intent, then custom amounts are ignored and
+     * overridden with intent amounts NOTE: if all amounts are empty then
+     * collection default is used
      */
     cw20Payment: CW20Payment[];
+    /**
+     * custom cw1155 payments specified by evaluator for claim approval
+     * NOTE: if claim is using intent, then custom amounts are ignored and
+     * overridden with intent amounts NOTE: if all amounts are empty then
+     * collection default is used
+     */
+    cw1155Payment: CW1155Payment[];
 }
 export interface MsgEvaluateClaimSDKType {
     claim_id: string;
@@ -145,6 +156,7 @@ export interface MsgEvaluateClaimSDKType {
     verification_proof: string;
     amount: CoinSDKType[];
     cw20_payment: CW20PaymentSDKType[];
+    cw1155_payment: CW1155PaymentSDKType[];
 }
 export interface MsgEvaluateClaimResponse {
 }
@@ -197,7 +209,8 @@ export interface MsgWithdrawPayment {
      * accordingly
      */
     paymentType: PaymentType;
-    /** if empty(nil) then no contract payment */
+    /** Deprecated: Use cw1155_payment instead */
+    /** @deprecated */
     contract_1155Payment?: Contract1155Payment;
     /** for contract payment */
     toAddress: string;
@@ -212,18 +225,22 @@ export interface MsgWithdrawPayment {
     adminAddress: string;
     /** cw20 payments, can be empty or multiple */
     cw20Payment: CW20Payment[];
+    /** custom cw1155, can be empty or multiple */
+    cw1155Payment: CW1155Payment[];
 }
 export interface MsgWithdrawPaymentSDKType {
     claim_id: string;
     inputs: InputSDKType[];
     outputs: OutputSDKType[];
     payment_type: PaymentType;
+    /** @deprecated */
     contract_1155_payment?: Contract1155PaymentSDKType;
     toAddress: string;
     fromAddress: string;
     release_date?: TimestampSDKType;
     admin_address: string;
     cw20_payment: CW20PaymentSDKType[];
+    cw1155_payment: CW1155PaymentSDKType[];
 }
 export interface MsgWithdrawPaymentResponse {
 }
@@ -321,16 +338,22 @@ export interface MsgClaimIntent {
     collectionId: string;
     /**
      * The desired claim amount, if any.
-     * NOTE: if both amount and cw20 amount are empty then default by Collection
-     * is used (APPROVAL payment).
+     * NOTE: if all amounts are empty then collection default is used (APPROVAL
+     * payment)
      */
     amount: Coin[];
     /**
      * The custom CW20 payment, if any.
-     * NOTE: if both amount and cw20 amount are empty then default by Collection
-     * is used (APPROVAL payment).
+     * NOTE: if all amounts are empty then collection default is used (APPROVAL
+     * payment)
      */
     cw20Payment: CW20Payment[];
+    /**
+     * The custom CW1155 payment, if any.
+     * NOTE: if all amounts are empty then collection default is used (APPROVAL
+     * payment)
+     */
+    cw1155Payment: CW1155Payment[];
 }
 export interface MsgClaimIntentSDKType {
     agent_did: string;
@@ -338,6 +361,7 @@ export interface MsgClaimIntentSDKType {
     collection_id: string;
     amount: CoinSDKType[];
     cw20_payment: CW20PaymentSDKType[];
+    cw1155_payment: CW1155PaymentSDKType[];
 }
 /** MsgClaimIntentResponse defines the response after submitting an intent. */
 export interface MsgClaimIntentResponse {
@@ -398,6 +422,11 @@ export interface MsgCreateClaimAuthorization {
     intentDurationNs?: Duration;
     /** if null then no before_date validation done (for evaluate) */
     beforeDate?: Timestamp;
+    /**
+     * Maximum cw1155 payment that can be specified in the authorization (for both
+     * submit and evaluate)
+     */
+    maxCw1155Payment: CW1155Payment[];
 }
 /**
  * MsgCreateClaimAuthorization defines a message for creating a claim
@@ -417,6 +446,7 @@ export interface MsgCreateClaimAuthorizationSDKType {
     expiration?: TimestampSDKType;
     intent_duration_ns?: DurationSDKType;
     before_date?: TimestampSDKType;
+    max_cw1155_payment: CW1155PaymentSDKType[];
 }
 /**
  * MsgCreateClaimAuthorizationResponse defines the response for creating a claim

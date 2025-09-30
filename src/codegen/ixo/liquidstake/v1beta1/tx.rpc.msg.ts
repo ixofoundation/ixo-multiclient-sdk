@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { MsgLiquidStake, MsgLiquidStakeResponse, MsgLiquidUnstake, MsgLiquidUnstakeResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgUpdateWhitelistedValidators, MsgUpdateWhitelistedValidatorsResponse, MsgUpdateWeightedRewardsReceivers, MsgUpdateWeightedRewardsReceiversResponse, MsgSetModulePaused, MsgSetModulePausedResponse } from "./tx";
+import { MsgLiquidStake, MsgLiquidStakeResponse, MsgLiquidUnstake, MsgLiquidUnstakeResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgUpdateWhitelistedValidators, MsgUpdateWhitelistedValidatorsResponse, MsgUpdateWeightedRewardsReceivers, MsgUpdateWeightedRewardsReceiversResponse, MsgSetModulePaused, MsgSetModulePausedResponse, MsgBurn, MsgBurnResponse } from "./tx";
 /** Msg defines the liquid staking Msg service. */
 export interface Msg {
   /**
@@ -31,6 +31,8 @@ export interface Msg {
    * setting value of the safety flag in params.
    */
   setModulePaused(request: MsgSetModulePaused): Promise<MsgSetModulePausedResponse>;
+  /** Burn defines a method for burning coins. */
+  burn(request: MsgBurn): Promise<MsgBurnResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -42,6 +44,7 @@ export class MsgClientImpl implements Msg {
     this.updateWhitelistedValidators = this.updateWhitelistedValidators.bind(this);
     this.updateWeightedRewardsReceivers = this.updateWeightedRewardsReceivers.bind(this);
     this.setModulePaused = this.setModulePaused.bind(this);
+    this.burn = this.burn.bind(this);
   }
   liquidStake(request: MsgLiquidStake): Promise<MsgLiquidStakeResponse> {
     const data = MsgLiquidStake.encode(request).finish();
@@ -72,5 +75,10 @@ export class MsgClientImpl implements Msg {
     const data = MsgSetModulePaused.encode(request).finish();
     const promise = this.rpc.request("ixo.liquidstake.v1beta1.Msg", "SetModulePaused", data);
     return promise.then(data => MsgSetModulePausedResponse.decode(new _m0.Reader(data)));
+  }
+  burn(request: MsgBurn): Promise<MsgBurnResponse> {
+    const data = MsgBurn.encode(request).finish();
+    const promise = this.rpc.request("ixo.liquidstake.v1beta1.Msg", "Burn", data);
+    return promise.then(data => MsgBurnResponse.decode(new _m0.Reader(data)));
   }
 }

@@ -152,6 +152,30 @@ export interface MsgSetModulePausedResponse {
  */
 export interface MsgSetModulePausedResponseSDKType {
 }
+/**
+ * MsgBurn defines a SDK message for performing a burn of coins.
+ * NOTE: only ixo native token can be burned
+ */
+export interface MsgBurn {
+    burner: string;
+    /**
+     * amount is the amount of coins to burn
+     * NOTE: only ixo native token can be burned
+     */
+    amount?: Coin;
+}
+/**
+ * MsgBurn defines a SDK message for performing a burn of coins.
+ * NOTE: only ixo native token can be burned
+ */
+export interface MsgBurnSDKType {
+    burner: string;
+    amount?: CoinSDKType;
+}
+export interface MsgBurnResponse {
+}
+export interface MsgBurnResponseSDKType {
+}
 export declare const MsgLiquidStake: {
     encode(message: MsgLiquidStake, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): MsgLiquidStake;
@@ -235,4 +259,18 @@ export declare const MsgSetModulePausedResponse: {
     fromJSON(_: any): MsgSetModulePausedResponse;
     toJSON(_: MsgSetModulePausedResponse): unknown;
     fromPartial(_: Partial<MsgSetModulePausedResponse>): MsgSetModulePausedResponse;
+};
+export declare const MsgBurn: {
+    encode(message: MsgBurn, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgBurn;
+    fromJSON(object: any): MsgBurn;
+    toJSON(message: MsgBurn): unknown;
+    fromPartial(object: Partial<MsgBurn>): MsgBurn;
+};
+export declare const MsgBurnResponse: {
+    encode(_: MsgBurnResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgBurnResponse;
+    fromJSON(_: any): MsgBurnResponse;
+    toJSON(_: MsgBurnResponse): unknown;
+    fromPartial(_: Partial<MsgBurnResponse>): MsgBurnResponse;
 };

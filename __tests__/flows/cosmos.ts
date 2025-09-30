@@ -233,3 +233,8 @@ export const updateParamsProposal = () =>
     });
     testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(proposalId));
   });
+
+export const voteProposal = () =>
+  describe("Testing the gov module", () => {
+    testMsg("/cosmos.gov.v1beta1.MsgVote", () => Cosmos.MsgVote(33));
+  });
