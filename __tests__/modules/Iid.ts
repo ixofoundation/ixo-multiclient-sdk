@@ -72,6 +72,7 @@ export const CreateIidDoc = async (
     }),
   };
 
+  console.log(`Crearing IID doc for: ${signer}(${account.address})`);
   const response = await client.signAndBroadcast(myAddress, [message], fee);
   return response;
 };

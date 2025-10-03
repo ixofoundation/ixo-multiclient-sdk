@@ -23,6 +23,7 @@ import {
   customQueries,
 } from "../../src";
 import { IObjectKeys } from "./types";
+import { CreateIidDoc } from "../modules/Iid"
 
 const fs = require("fs");
 const path = require("path");
@@ -52,6 +53,7 @@ export type Wallet = {
 
 export let wallets: { [key in WalletUsers]: Wallet };
 
+
 export const generateWallets = async (log = true) => {
   let generatedWallets = {};
   for (const user of Object.values(WalletUsers)) {
@@ -61,6 +63,7 @@ export const generateWallets = async (log = true) => {
       secp: await getSecpClient(mnemonics),
     };
   }
+
   wallets = generatedWallets as any;
 
   if (log) {
@@ -217,18 +220,18 @@ export const runQry = (message: string, query: () => Promise<any>) => {
     if (message.indexOf("ProjectDoc") !== -1) {
       console.log(
         '[\n {\n "projectDoc": {\n "txHash":"' +
-          res.projectDoc.txHash +
-          '",\n "projectDid":"' +
-          res.projectDoc.projectDid +
-          '",\n "senderDid":"' +
-          res.projectDoc.senderDid +
-          '",\n "pubKey":"' +
-          res.projectDoc.pubKey +
-          '",\n "status":"' +
-          res.projectDoc.status +
-          '",\n "data": [\n ' +
-          utils.conversions.Uint8ArrayToJS(res.projectDoc.data) +
-          "\n}\n]"
+        res.projectDoc.txHash +
+        '",\n "projectDid":"' +
+        res.projectDoc.projectDid +
+        '",\n "senderDid":"' +
+        res.projectDoc.senderDid +
+        '",\n "pubKey":"' +
+        res.projectDoc.pubKey +
+        '",\n "status":"' +
+        res.projectDoc.status +
+        '",\n "data": [\n ' +
+        utils.conversions.Uint8ArrayToJS(res.projectDoc.data) +
+        "\n}\n]"
       );
     } else if (message.indexOf("AllAccounts") !== -1) {
       console.log(utils.conversions.Uint8ArrayToJS(res.accounts.value));

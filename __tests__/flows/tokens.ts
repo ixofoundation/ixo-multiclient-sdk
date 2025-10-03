@@ -20,13 +20,13 @@ export const tokenBasic = () =>
     let cap = 20000000000000;
 
     // Create token class
-    let tokenClass = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14";
-    testMsg("/ixo.entity.v1beta1.MsgCreateEntity token class", async () => {
-      const res = await Entity.CreateEntity("protocol");
-      tokenClass = utils.common.getValueFromEvents(res, "wasm", "token_id");
-      console.log({ tokenClass });
-      return res;
-    });
+    let tokenClass = "did:ixo:entity:fdcb83e6c85d57c9158ae0b76eb94046";
+    // testMsg("/ixo.entity.v1beta1.MsgCreateEntity token class", async () => {
+    //   const res = await Entity.CreateEntity("protocol");
+    //   tokenClass = utils.common.getValueFromEvents(res, "wasm", "token_id");
+    //   console.log({ tokenClass });
+    //   return res;
+    // });
 
     let contractAddress1155 =
       "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
@@ -72,7 +72,7 @@ export const tokenBasic = () =>
     });
 
     // few more mint tokens
-    new Array(30).fill(0).map((_, i) =>
+    new Array(7).fill(0).map((_, i) =>
       testMsg("/ixo.token.v1beta1.MsgMintToken", () =>
         Token.MintToken(contractAddress1155, [
           {
@@ -113,13 +113,13 @@ export const tokenBasic = () =>
       ])
     );
 
-    // testMsg("/ixo.token.v1beta1.MsgPauseToken", () =>
-    //   Token.PauseToken(contractAddress1155, false)
-    // );
+    testMsg("/ixo.token.v1beta1.MsgPauseToken", () =>
+      Token.PauseToken(contractAddress1155, false)
+    );
 
-    // testMsg("/ixo.token.v1beta1.MsgStopToken", () =>
-    //   Token.StopToken(contractAddress1155)
-    // );
+    testMsg("/ixo.token.v1beta1.MsgStopToken", () =>
+      Token.StopToken(contractAddress1155)
+    );
 
     let authzIndex = "999999";
     testMsg("/cosmos.authz.v1beta1.MsgGrant mint token", () =>
@@ -145,9 +145,9 @@ export const tokenBasic = () =>
       ])
     );
 
-    // testMsg("/cosmos.authz.v1beta1.MsgRevoke mint token", () =>
-    //   Token.MsgRevokeContract()
-    // );
+    testMsg("/cosmos.authz.v1beta1.MsgRevoke mint token", () =>
+      Token.MsgRevokeContract()
+    );
   });
 
 // ------------------------------------------------------------

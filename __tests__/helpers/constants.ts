@@ -13,9 +13,9 @@ export enum WalletUsers {
   tester = "tester",
   alice = "alice",
   bob = "bob",
-  charlie = "charlie",
-  bond = "bond",
-  oracle = "oracle",
+  // charlie = "charlie",
+  // bond = "bond",
+  // oracle = "oracle",
   random = "random",
 }
 

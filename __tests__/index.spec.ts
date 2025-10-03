@@ -1,9 +1,12 @@
 require("dotenv").config();
+import { beforeAll } from '@jest/globals';
 
-import { createQueryClient, generateWallets } from "./helpers/common";
-import { generateConstants } from "./helpers/constants";
+
+import { createQueryClient, generateWallets, getUser, sendFaucet } from "./helpers/common";
+import { generateConstants, WalletUsers } from "./helpers/constants";
 import * as Bonds from "./flows/bonds";
 import * as IID from "./flows/iids";
+import { CreateIidDoc } from "./modules/Iid"
 import * as Entity from "./flows/entities";
 import * as IBC from "./flows/ibc";
 import * as Cosmos from "./flows/cosmos";
@@ -18,22 +21,31 @@ import * as LiquidStake from "./flows/liquidStaking";
 import { dids } from "./setup/constants";
 import { idcc_constants } from "./setup/idcc/creds";
 import { web3Storage } from "./setup/web3";
+import { setAndLedgerUser } from './setup/helpers';
 
-beforeAll(() => {
+beforeAll(async () => {
   generateConstants();
-  return Promise.all([createQueryClient(), generateWallets()]);
+  await Promise.all([createQueryClient(), generateWallets()]);
+  //Don't know where account tester, alice, etc. are normally funded from faucet, so doing it here
+  //They also need to be ledgered with an IID doc
+  const users = Object.values(WalletUsers);
+  for (const user of users) {
+    console.log(`Setting up user: ${user}`);
+    const wallet = getUser(user);
+    const account = (await wallet.getAccounts())[0];
+    await sendFaucet(account.address);
+    console.log(`After sendFaucet: ${account.address}`);
+    await CreateIidDoc(user);
+    console.log(`After CreateIidDoc: ${user}`);
+  }
 });
 
-// To generate mapping of blockchain test users to sdk test users with set mnemonics
-IID.generateBlockchainTestUsers();
-
-// IID.registerIids();
 // Proposals.instantiateModulesProposals(false);
 // Cosmos.bankBasic();
 // IID.iidsBasic();
 // Bonds.bondsBasic();
 // Entity.enititiesBasic();
-// Token.tokenBasic();
+Token.tokenBasic();
 // Claims.claimsBasic();
 // CosmWasm.daoCoreCw4();
 // Smartaccount.smartaccountBasic();

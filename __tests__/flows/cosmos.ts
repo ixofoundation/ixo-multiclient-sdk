@@ -20,8 +20,9 @@ import { fromTimestamp } from "../../src/codegen/helpers";
 export const bankBasic = () =>
   describe("Testing the cosmos bank module", () => {
     testMsg("/cosmos.bank.v1beta1.MsgSend", async () => {
+
       const res = await Cosmos.BankSendTrx(
-        undefined,
+        1000000,
         WalletUsers.tester,
         WalletUsers.alice,
         "secp",
