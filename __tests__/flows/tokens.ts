@@ -5,18 +5,115 @@ import gqlQuery, {
   saveFileToPath,
   testMsg,
   utils,
+  customQueries,
 } from "../helpers/common";
 import * as Token from "../modules/Token";
 import * as Entity from "../modules/Entity";
 import { WalletUsers } from "../helpers/constants";
 import { TokenData } from "../../src/codegen/ixo/token/v1beta1/token";
-import { dids } from "../setup/constants";
+import { dids, chainNetwork } from "../setup/constants";
 import axios from "axios";
 
+// Helper function to create bean token metadata from CSV attributes
+const createBeanTokenMetadata = (batchInfo?: {
+  lotBatchId?: string;
+  packingDate?: string;
+  netWeight?: string;
+  province?: string;
+}) => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+
+    // Product identity
+    productName: "Dry beans",
+    intendedUse: "Cooking (not seed)",
+
+    // Quality & grading
+    grade: "Food grade",
+    moisture: "Not known",
+    foreignMatter: "Cleaned",
+    odorCheck: "Normal",
+
+    // Food safety & compliance
+    processingFacility: "Not known",
+    bestBeforeDate: "Not known",
+    storageInstructions: "Cool, dry, off floor",
+
+    // Origin & traceability
+    country: "Zambia",
+    province: batchInfo?.province || "Not known",
+    lotBatchId: batchInfo?.lotBatchId || "Id of wholesaler",
+    productionDate: "Not known",
+    packingDate:
+      batchInfo?.packingDate || new Date().toISOString().split("T")[0],
+
+    // Packaging & presentation
+    netWeight: batchInfo?.netWeight || "1 kg",
+    bagMaterial: "PE-plastic",
+
+    // Nutrition facts (per 100g)
+    nutritionFacts: {
+      per100g: {
+        energy: "Not known",
+        protein: "Not known",
+        carbohydrate: "Not known",
+        fat: "Not known",
+        dietaryFiber: "Not known",
+        sodium: "Not known",
+      },
+      perServing: {
+        servingSize: "Not known",
+        energy: "Not known",
+        protein: "Not known",
+        carbohydrate: "Not known",
+        fat: "Not known",
+        dietaryFiber: "Not known",
+        sodium: "Not known",
+      },
+    },
+
+    // Handling & storage
+    shelfLife: "12 months",
+
+    // Additional metadata
+    schemaVersion: "1.0",
+    timestamp: new Date().toISOString(),
+  };
+};
+
+// Helper function to upload metadata and create tokenData
+const createTokenDataWithMetadata = async (
+  metadata: any,
+  nftDid: string
+): Promise<TokenData[]> => {
+  // Upload metadata to IPFS via Web3 Storage (using chainNetwork from constants)
+  const uploaded = await customQueries.cellnode.uploadWeb3Doc(
+    utils.common.generateId(12),
+    "application/json",
+    Buffer.from(JSON.stringify(metadata)).toString("base64"),
+    undefined,
+    chainNetwork
+  );
+
+  console.log("Metadata uploaded to IPFS:", uploaded.url);
+  console.log("IPFS CID:", uploaded.cid);
+
+  return [
+    {
+      uri: uploaded.url,
+      encrypted: false,
+      proof: uploaded.cid,
+      type: "application/json",
+      id: nftDid,
+    },
+  ];
+};
+
 export const tokenBasic = () =>
-  describe("Testing the Token module", () => {
-    let name = "TEST";
-    let description = "Test credits";
+  describe("Testing the Token module with bean attributes", () => {
+    let name = "DRY BEANS";
+    let description = "Zambian dry beans for cooking";
     let cap = 20000000000000;
 
     // Create token class
@@ -42,48 +139,72 @@ export const tokenBasic = () =>
     });
 
     let index = "1";
-    let amount = 20000000000;
+    let amount = 5;
     let collectionDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14"; // Did of collection
     let nftDid = "did:ixo:entity:eaff254f2fc62aefca0d831bc7361c14"; // Did of entity to map token to
-    let tokenData = [
-      {
-        uri: "https://media.makeameme.org/created/haha-you-were-a3866a4349.jpg",
-        encrypted: false,
-        proof: "proof",
-        type: "application/json", //media type value should always be "application/json"
-        id: nftDid,
-      },
-    ];
 
     let tokenId = "db03fa33c1e2ca35794adbb14aebb153";
-    testMsg("/ixo.token.v1beta1.MsgMintToken", async () => {
-      const res = await Token.MintToken(contractAddress1155, [
-        {
-          name,
-          index,
-          amount,
-          collection: collectionDid,
-          tokenData,
-        },
-      ]);
-      tokenId = utils.common.getValueFromEvents(res, "wasm", "token_id");
-      console.log({ tokenId });
-      return res;
-    });
+    testMsg(
+      "/ixo.token.v1beta1.MsgMintToken with bean attributes",
+      async () => {
+        // Create metadata from CSV attributes
+        const beanMetadata = createBeanTokenMetadata({
+          lotBatchId: "BATCH001",
+          packingDate: "2025-01-15",
+          netWeight: "1 kg",
+          province: "Lusaka",
+        });
 
-    // few more mint tokens
+        // Upload metadata and create tokenData
+        const tokenData = await createTokenDataWithMetadata(
+          beanMetadata,
+          nftDid
+        );
+
+        const res = await Token.MintToken(contractAddress1155, [
+          {
+            name,
+            index,
+            amount,
+            collection: collectionDid,
+            tokenData,
+          },
+        ]);
+        tokenId = utils.common.getValueFromEvents(res, "wasm", "token_id");
+        console.log({ tokenId });
+        return res;
+      }
+    );
+
+    // Mint additional tokens with different batch attributes
     new Array(7).fill(0).map((_, i) =>
-      testMsg("/ixo.token.v1beta1.MsgMintToken", () =>
-        Token.MintToken(contractAddress1155, [
+      testMsg(`/ixo.token.v1beta1.MsgMintToken batch ${i + 3}`, async () => {
+        // Create unique metadata for each batch
+        const batchMetadata = createBeanTokenMetadata({
+          lotBatchId: `BATCH00${i + 2}`,
+          packingDate: new Date(Date.now() + i * 86400000)
+            .toISOString()
+            .split("T")[0],
+          netWeight: i % 2 === 0 ? "1 kg" : "2.5 kg",
+          province: ["Lusaka", "Copperbelt", "Southern"][i % 3],
+        });
+
+        // Upload metadata and create tokenData for this batch
+        const batchTokenData = await createTokenDataWithMetadata(
+          batchMetadata,
+          nftDid
+        );
+
+        return Token.MintToken(contractAddress1155, [
           {
             name,
             index: (i + 3).toString(),
             amount,
             collection: collectionDid,
-            tokenData,
+            tokenData: batchTokenData,
           },
-        ])
-      )
+        ]);
+      })
     );
 
     testMsg("/ixo.token.v1beta1.MsgCancelToken", () =>
@@ -122,27 +243,49 @@ export const tokenBasic = () =>
     );
 
     let authzIndex = "999999";
-    testMsg("/cosmos.authz.v1beta1.MsgGrant mint token", () =>
-      Token.MsgGrantContract(
-        contractAddress1155,
-        name,
-        authzIndex,
-        collectionDid,
-        amount,
-        tokenData
-      )
+    let authzTokenData: TokenData[] = [];
+
+    testMsg(
+      "/cosmos.authz.v1beta1.MsgGrant mint token with attributes",
+      async () => {
+        // Create metadata for authz grant
+        const authzMetadata = createBeanTokenMetadata({
+          lotBatchId: "AUTHZ_BATCH",
+          packingDate: new Date().toISOString().split("T")[0],
+          netWeight: "5 kg",
+          province: "Central",
+        });
+
+        authzTokenData = await createTokenDataWithMetadata(
+          authzMetadata,
+          nftDid
+        );
+
+        return Token.MsgGrantContract(
+          contractAddress1155,
+          name,
+          authzIndex,
+          collectionDid,
+          amount,
+          authzTokenData
+        );
+      }
     );
 
-    testMsg("/cosmos.authz.v1beta1.MsgExec mint token", () =>
-      Token.MsgExecContract(contractAddress1155, [
-        {
-          name,
-          index: authzIndex,
-          amount,
-          collection: collectionDid,
-          tokenData,
-        },
-      ])
+    testMsg(
+      "/cosmos.authz.v1beta1.MsgExec mint token with attributes",
+      async () => {
+        // Use the SAME metadata that was granted (authz constraints must match)
+        return Token.MsgExecContract(contractAddress1155, [
+          {
+            name,
+            index: authzIndex,
+            amount,
+            collection: collectionDid,
+            tokenData: authzTokenData, // Must match the granted constraints
+          },
+        ]);
+      }
     );
 
     testMsg("/cosmos.authz.v1beta1.MsgRevoke mint token", () =>

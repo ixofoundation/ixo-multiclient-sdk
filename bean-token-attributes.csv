@@ -1,0 +1,35 @@
+Section,Field Name,Example/Allowed Values,Data Type,Notes,Value
+Product identity,Product name,Mbereshi dry beans,Text,Core identifier,Dry beans
+Product identity,Intended use,Cooking (not seed),Text,Explicitly not for planting,Cooking (not seed)
+Quality & grading,Grade,Grade A/B/C per spec,Text,Conform to national/COMESA/EAS,Food grade
+Quality & grading,Moisture (%),Percent moisture content,Number,Typical target 10–13%,Not known
+Quality & grading,Foreign matter (%),"Stones, husks, etc.",Number,Keep minimal,Cleaned
+Quality & grading,Odor check,Normal / musty / rancid,Text,Must be normal to pass,Normal
+Food safety & compliance,Processing facility name,Registered facility handling packing,Text,Name only; no PII of people,Not known
+Food safety & compliance,Best-before date,YYYY-MM-DD,Date,Derived from pack date + shelf life,Not known
+Food safety & compliance,Storage instructions,"Cool, dry, off floor",Text,Household-friendly phrasing,"Cool, dry, off floor"
+Origin & traceability,Country,Zambia,Text,Origin country,Zambia
+Origin & traceability,Province,Province name,Text,Administrative region,Not known
+Origin & traceability,Lot/Batch ID,Production run identifier,Text,Core traceability field,Id of wholesaler
+Origin & traceability,Production date,YYYY-MM-DD,Date,Date of processing,Not known
+Origin & traceability,Packing date,YYYY-MM-DD,Date,Date bags were packed,YYYY-MM-DD
+Packaging & presentation,Net weight,"e.g., 1 kg / 2.5 kg / 5 kg",Text,Match bag size,1 kg
+Packaging & presentation,Bag material,PP woven / laminated / paper,Text,Primary packaging,PE-plastic
+Nutrition facts,Energy per 100 g,kJ/kcal,Number,Per 100 g standard,Not known
+Nutrition facts,Protein per 100 g,g,Number,,Not known
+Nutrition facts,Carbohydrate per 100 g,g,Number,,Not known
+Nutrition facts,Fat per 100 g,g,Number,,Not known
+Nutrition facts,Dietary fiber per 100 g,g,Number,,Not known
+Nutrition facts,Sodium per 100 g,mg,Number,,Not known
+Nutrition facts,Serving size,g,Number,"e.g., 50 g",Not known
+Nutrition facts,Energy per serving,kJ/kcal,Number,,Not known
+Nutrition facts,Protein per serving,g,Number,,Not known
+Nutrition facts,Carbohydrate per serving,g,Number,,Not known
+Nutrition facts,Fat per serving,g,Number,,Not known
+Nutrition facts,Dietary fiber per serving,g,Number,,Not known
+Nutrition facts,Sodium per serving,mg,Number,,Not known
+Handling & storage,Shelf life,Months from pack date,Text,"e.g., 12 months",12 months
+Data & schema,Schema version,Your proprietary schema version,Text,Maintains compatibility,
+Data & schema,Required/optional flags,Per deployment context,Text,Define in your system,
+Data & schema,Units standardization,SI units applied,Text,Consistency across fields,
+Data & schema,Access permissions,Roles allowed to edit/view,Text,Security control,
