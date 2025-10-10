@@ -112,7 +112,7 @@ const createTokenDataWithMetadata = async (
 
 export const tokenBasic = () =>
   describe("Testing the Token module with bean attributes", () => {
-    let name = "DRY BEANS";
+    let name = `DRY_BEANS_${Math.floor(Date.now() / 1000)}`;
     let description = "Zambian dry beans for cooking";
     let cap = 20000000000000;
 
@@ -308,7 +308,7 @@ export const supamotoTokens = () =>
       ])
     );
 
-    let name = "CARBON";
+    let name = `CARBON_${Math.floor(Date.now() / 1000)}`;
     let description = "Carbon Credit";
     let cap = 0; // no cap
 
