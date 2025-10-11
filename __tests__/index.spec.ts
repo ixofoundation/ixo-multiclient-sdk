@@ -2,7 +2,7 @@ require("dotenv").config();
 import { beforeAll } from '@jest/globals';
 
 
-import { createQueryClient, generateWallets, getUser, sendFaucet } from "./helpers/common";
+import { createQueryClient, generateWallets, generateNewWallet, getUser, sendFaucet } from "./helpers/common";
 import { generateConstants, WalletUsers } from "./helpers/constants";
 import * as Bonds from "./flows/bonds";
 import * as IID from "./flows/iids";
@@ -25,7 +25,24 @@ import { setAndLedgerUser } from './setup/helpers';
 
 beforeAll(async () => {
   generateConstants();
-  await Promise.all([createQueryClient(), generateWallets()]);
+  await createQueryClient();
+
+  // Check if custom mnemonic is provided for bean token minter
+  const customMnemonic = process.env.BEAN_TOKEN_MINTER_SUBSCRIPTION_OWNER;
+
+  if (customMnemonic) {
+    console.log("🔑 Using custom mnemonic from BEAN_TOKEN_MINTER_SUBSCRIPTION_OWNER");
+
+    // First, generate all wallets normally to initialize the wallets object
+    await generateWallets(false); // false = don't log yet
+
+    // Then override the tester wallet with custom mnemonic
+    await generateNewWallet(WalletUsers.tester, customMnemonic);
+  } else {
+    console.log("⚠️  No BEAN_TOKEN_MINTER_SUBSCRIPTION_OWNER found in .env, generating random wallets");
+    await generateWallets();
+  }
+
   //Don't know where account tester, alice, etc. are normally funded from faucet, so doing it here
   //They also need to be ledgered with an IID doc
   const users = Object.values(WalletUsers);
@@ -33,11 +50,18 @@ beforeAll(async () => {
     console.log(`Setting up user: ${user}`);
     const wallet = getUser(user);
     const account = (await wallet.getAccounts())[0];
+    console.log(`  Address: ${account.address}`);
     await sendFaucet(account.address);
-    console.log(`After sendFaucet: ${account.address}`);
+    console.log(`  ✅ Funded from faucet`);
     await CreateIidDoc(user);
-    console.log(`After CreateIidDoc: ${user}`);
+    console.log(`  ✅ IID Doc created`);
   }
+
+  // Log the minter address that will be used for token operations
+  const testerWallet = getUser(WalletUsers.tester);
+  const testerAccount = (await testerWallet.getAccounts())[0];
+  console.log("\n🎯 Token Minter Address:", testerAccount.address);
+  console.log("   This address will be used as minter and owner for all token operations\n");
 });
 
 // Proposals.instantiateModulesProposals(false);

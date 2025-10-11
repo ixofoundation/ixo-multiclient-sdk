@@ -16,6 +16,7 @@ export const CreateToken = async (
   description: string,
   cap: number,
   tokenClass: string,
+  imageUrl?: string,
   signer: WalletUsers = WalletUsers.tester
 ) => {
   const client = await createClient(getUser(signer));
@@ -28,8 +29,7 @@ export const CreateToken = async (
       minter: tester, // carbon oracle
       name,
       description,
-      image:
-        "https://ipfs.io/ipfs/bafkreidw5lg6mn2q33vj6gokazbl6yepsh3s32xf5z3evqu43s2ccqg3xy",
+      image: imageUrl || "https://ipfs.io/ipfs/bafkreiabsolyyp6zli654hiwptgoj6slesgyjqvtdnnvwacpd3vxwscr2e",
       tokenType: "ixo1155",
       cap: cap.toString(),
       class: tokenClass,

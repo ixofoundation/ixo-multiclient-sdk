@@ -6,12 +6,14 @@ import gqlQuery, {
   testMsg,
   utils,
   customQueries,
+  getFileFromPath,
 } from "../helpers/common";
 import * as Token from "../modules/Token";
 import * as Entity from "../modules/Entity";
 import { WalletUsers } from "../helpers/constants";
 import { TokenData } from "../../src/codegen/ixo/token/v1beta1/token";
 import { dids, chainNetwork } from "../setup/constants";
+import { storeWeb3 } from "../helpers/web3";
 import axios from "axios";
 
 // Helper function to create bean token metadata from CSV attributes
@@ -112,7 +114,7 @@ const createTokenDataWithMetadata = async (
 
 export const tokenBasic = () =>
   describe("Testing the Token module with bean attributes", () => {
-    let name = `DRY_BEANS_${Math.floor(Date.now() / 1000)}`;
+    let name = `BEAN_${Math.floor(Date.now() / 1000)}`;
     let description = "Zambian dry beans for cooking";
     let cap = 20000000000000;
 
@@ -127,8 +129,41 @@ export const tokenBasic = () =>
 
     let contractAddress1155 =
       "ixo1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqvg5w3c";
+    let beanImageUrl: string;
+
+    // Upload bean image to IPFS first
+    test("Upload mbereshi-beans.jpg to IPFS", async () => {
+      console.log("📸 Reading bean image from assets/images/mbereshi-beans.jpg");
+      const imageFile = getFileFromPath(
+        ["images", "mbereshi-beans.jpg"],
+        "base64"
+      );
+
+      console.log("☁️  Uploading to IPFS via Web3 Storage...");
+      const result = await storeWeb3(
+        "Mbereshi Beans Token Image",
+        "image/jpeg",
+        imageFile
+      );
+
+      beanImageUrl = result.url;
+      console.log("✅ Bean image uploaded to IPFS!");
+      console.log("   IPFS CID:", result.cid);
+      console.log("   IPFS URL:", result.url);
+
+      expect(result.cid).toBeTruthy();
+      expect(result.url).toBeTruthy();
+    });
+
     testMsg("/ixo.token.v1beta1.MsgCreateToken", async () => {
-      const res = await Token.CreateToken(name, description, cap, tokenClass);
+      console.log("🪙 Creating token with bean image:", beanImageUrl);
+      const res = await Token.CreateToken(
+        name,
+        description,
+        cap,
+        tokenClass,
+        beanImageUrl  // Pass the uploaded IPFS URL
+      );
       contractAddress1155 = utils.common.getValueFromEvents(
         res,
         "instantiate",
