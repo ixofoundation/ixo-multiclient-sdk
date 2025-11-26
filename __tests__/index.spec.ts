@@ -1,12 +1,17 @@
 require("dotenv").config();
-import { beforeAll } from '@jest/globals';
+import { beforeAll } from "@jest/globals";
 
-
-import { createQueryClient, generateWallets, generateNewWallet, getUser, sendFaucet } from "./helpers/common";
+import {
+  createQueryClient,
+  generateWallets,
+  generateNewWallet,
+  getUser,
+  sendFaucet,
+} from "./helpers/common";
 import { generateConstants, WalletUsers } from "./helpers/constants";
 import * as Bonds from "./flows/bonds";
 import * as IID from "./flows/iids";
-import { CreateIidDoc } from "./modules/Iid"
+import { CreateIidDoc } from "./modules/Iid";
 import * as Entity from "./flows/entities";
 import * as IBC from "./flows/ibc";
 import * as Cosmos from "./flows/cosmos";
@@ -21,7 +26,7 @@ import * as LiquidStake from "./flows/liquidStaking";
 import { dids } from "./setup/constants";
 import { idcc_constants } from "./setup/idcc/creds";
 import { web3Storage } from "./setup/web3";
-import { setAndLedgerUser } from './setup/helpers';
+import { setAndLedgerUser } from "./setup/helpers";
 
 beforeAll(async () => {
   generateConstants();
@@ -31,7 +36,9 @@ beforeAll(async () => {
   const customMnemonic = process.env.BEAN_TOKEN_MINTER_SUBSCRIPTION_OWNER;
 
   if (customMnemonic) {
-    console.log("🔑 Using custom mnemonic from BEAN_TOKEN_MINTER_SUBSCRIPTION_OWNER");
+    console.log(
+      "🔑 Using custom mnemonic from BEAN_TOKEN_MINTER_SUBSCRIPTION_OWNER"
+    );
 
     // First, generate all wallets normally to initialize the wallets object
     await generateWallets(false); // false = don't log yet
@@ -39,7 +46,9 @@ beforeAll(async () => {
     // Then override the tester wallet with custom mnemonic
     await generateNewWallet(WalletUsers.tester, customMnemonic);
   } else {
-    console.log("⚠️  No BEAN_TOKEN_MINTER_SUBSCRIPTION_OWNER found in .env, generating random wallets");
+    console.log(
+      "⚠️  No BEAN_TOKEN_MINTER_SUBSCRIPTION_OWNER found in .env, generating random wallets"
+    );
     await generateWallets();
   }
 
@@ -61,7 +70,9 @@ beforeAll(async () => {
   const testerWallet = getUser(WalletUsers.tester);
   const testerAccount = (await testerWallet.getAccounts())[0];
   console.log("\n🎯 Token Minter Address:", testerAccount.address);
-  console.log("   This address will be used as minter and owner for all token operations\n");
+  console.log(
+    "   This address will be used as minter and owner for all token operations\n"
+  );
 });
 
 // Proposals.instantiateModulesProposals(false);
@@ -69,7 +80,8 @@ beforeAll(async () => {
 // IID.iidsBasic();
 // Bonds.bondsBasic();
 // Entity.enititiesBasic();
-Token.tokenBasic();
+// Token.tokenBasic();
+Token.transferBeanTokens("ixo1gncytttq9htr9f2xyff6dnx447h4wmvr5gdce8", 39); // devnet SupaMoto account as set up in subscriptions repo
 // Claims.claimsBasic();
 // CosmWasm.daoCoreCw4();
 // Smartaccount.smartaccountBasic();

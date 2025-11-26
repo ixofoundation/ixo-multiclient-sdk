@@ -7,6 +7,7 @@ import gqlQuery, {
   utils,
   customQueries,
   getFileFromPath,
+  queryClient,
 } from "../helpers/common";
 import * as Token from "../modules/Token";
 import * as Entity from "../modules/Entity";
@@ -15,6 +16,12 @@ import { TokenData } from "../../src/codegen/ixo/token/v1beta1/token";
 import { dids, chainNetwork } from "../setup/constants";
 import { storeWeb3 } from "../helpers/web3";
 import axios from "axios";
+
+// ============================================================
+// Shared state for cross-flow communication
+// ============================================================
+let sharedBeanTokenId: string = "";
+let sharedBeanContractAddress: string = "";
 
 // Helper function to create bean token metadata from CSV attributes
 const createBeanTokenMetadata = (batchInfo?: {
@@ -206,7 +213,13 @@ export const tokenBasic = () =>
           },
         ]);
         tokenId = utils.common.getValueFromEvents(res, "wasm", "token_id");
+
+        // Share with other flows
+        sharedBeanTokenId = tokenId;
+        sharedBeanContractAddress = contractAddress1155;
+
         console.log({ tokenId });
+        console.log("✅ Token data saved for transfer flow");
         return res;
       }
     );
@@ -726,4 +739,136 @@ export const supamotoTokensFarm = () =>
 
       return true as any;
     });
+  });
+
+// ============================================================
+// Transfer bean tokens to a custom address
+// ============================================================
+export const transferBeanTokens = (
+  recipientAddress: string,
+  tokenAmount: number
+) =>
+  describe(`Transfer ${tokenAmount} bean tokens to ${recipientAddress}`, () => {
+    testMsg(
+      "/ixo.token.v1beta1.MsgTransferToken custom transfer",
+      async () => {
+        console.log("\n🔄 Starting bean token transfer...");
+        console.log(`   Recipient: ${recipientAddress}`);
+        console.log(`   Amount to transfer: ${tokenAmount}`);
+
+        // Validation
+        if (!recipientAddress.startsWith("ixo1")) {
+          throw new Error(
+            `❌ Invalid recipient address: ${recipientAddress}. Must start with 'ixo1'`
+          );
+        }
+
+        // Get the owner address (tester wallet)
+        const ownerWallet = getUser(WalletUsers.tester);
+        const ownerAddress = (await ownerWallet.getAccounts())[0].address;
+
+        // Contract address for the bean tokens
+        const contractAddress = "ixo14a9sjwps70xmsa5h5u5d372kxz40aae3e7rhfj55hd2jnqqcx0yqqa4zhw";
+
+        console.log(`   Owner: ${ownerAddress}`);
+        console.log(`   Contract: ${contractAddress}`);
+
+        // Step 1: Query all token IDs owned by the owner
+        console.log("\n📋 Querying token IDs from blockchain...");
+        const queryMsg = {
+          tokens: {
+            owner: ownerAddress,
+            limit: 100,
+          },
+        };
+
+        const tokenIdsResult = await queryClient.cosmwasm.wasm.v1.smartContractState({
+          address: contractAddress,
+          queryData: utils.conversions.JsonToArray(JSON.stringify(queryMsg)),
+        });
+
+        const tokenIdsData = JSON.parse(
+          utils.conversions.Uint8ArrayToJS(tokenIdsResult.data)
+        );
+        const tokenIds: string[] = tokenIdsData.tokens || [];
+
+        if (tokenIds.length === 0) {
+          throw new Error(
+            `❌ No tokens found for owner ${ownerAddress} in contract ${contractAddress}`
+          );
+        }
+
+        console.log(`   Found ${tokenIds.length} token ID(s)`);
+
+        // Step 2: Query balance for each token ID to determine available amounts
+        console.log("\n💰 Querying token balances...");
+        const tokenBalances: { id: string; balance: number }[] = [];
+
+        for (const tokenId of tokenIds) {
+          const balanceQueryMsg = {
+            balance_of: {
+              owner: ownerAddress,
+              token_id: tokenId,
+            },
+          };
+
+          const balanceResult = await queryClient.cosmwasm.wasm.v1.smartContractState({
+            address: contractAddress,
+            queryData: utils.conversions.JsonToArray(JSON.stringify(balanceQueryMsg)),
+          });
+
+          const balanceData = JSON.parse(
+            utils.conversions.Uint8ArrayToJS(balanceResult.data)
+          );
+          const balance = parseInt(balanceData.balance || "0");
+
+          if (balance > 0) {
+            tokenBalances.push({ id: tokenId, balance });
+            console.log(`   Token ${tokenId}: ${balance} available`);
+          }
+        }
+
+        if (tokenBalances.length === 0) {
+          throw new Error(
+            `❌ No tokens with positive balance found for owner ${ownerAddress}`
+          );
+        }
+
+        // Step 3: Determine which tokens to transfer
+        console.log(`\n🎯 Preparing to transfer ${tokenAmount} tokens...`);
+
+        const tokensToTransfer: { id: string; amount: number }[] = [];
+        let remainingAmount = tokenAmount;
+
+        for (const { id, balance } of tokenBalances) {
+          if (remainingAmount <= 0) break;
+
+          const amountToTransfer = Math.min(balance, remainingAmount);
+          tokensToTransfer.push({ id, amount: amountToTransfer });
+          remainingAmount -= amountToTransfer;
+
+          console.log(`   Will transfer ${amountToTransfer} of token ${id}`);
+        }
+
+        // Check if we have enough tokens
+        const totalAvailable = tokenBalances.reduce((sum, t) => sum + t.balance, 0);
+        if (remainingAmount > 0) {
+          throw new Error(
+            `❌ Insufficient tokens! Requested: ${tokenAmount}, Available: ${totalAvailable}`
+          );
+        }
+
+        // Step 4: Execute transfer
+        console.log("\n🚀 Executing transfer...");
+        const result = await Token.TransferToken(
+          tokensToTransfer,
+          recipientAddress
+        );
+
+        console.log("✅ Transfer successful!");
+        console.log(`   Transferred ${tokenAmount} tokens across ${tokensToTransfer.length} token ID(s)`);
+
+        return result;
+      }
+    );
   });
