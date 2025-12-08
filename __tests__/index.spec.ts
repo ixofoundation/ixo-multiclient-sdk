@@ -80,8 +80,8 @@ beforeAll(async () => {
 // IID.iidsBasic();
 // Bonds.bondsBasic();
 // Entity.enititiesBasic();
-// Token.tokenBasic();
-Token.transferBeanTokens("ixo1gncytttq9htr9f2xyff6dnx447h4wmvr5gdce8", 39); // devnet SupaMoto account as set up in subscriptions repo
+Token.tokenBasic();
+// Token.transferBeanTokens("ixo14cxerx5f7klswv6h3sf563gs8mchq0dr7uvck0", 1); // devnet SupaMoto account as set up in subscriptions repo
 // Claims.claimsBasic();
 // CosmWasm.daoCoreCw4();
 // Smartaccount.smartaccountBasic();
