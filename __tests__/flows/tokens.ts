@@ -121,9 +121,9 @@ const createTokenDataWithMetadata = async (
 
 export const tokenBasic = () =>
   describe("Testing the Token module with bean attributes", () => {
-    let name = `BEAN-ZM-0001`;
+    let name = `BEAN-ZM-0000`;
     let description = "Zambian dry beans for cooking";
-    let cap = 20000000000000;
+    let cap = 0;
 
     // Create token class
     // BEAN tokens require the canonical protocol shown in the "ECS Protocols" spreadsheet created by Graeme

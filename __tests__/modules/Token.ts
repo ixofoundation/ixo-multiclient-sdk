@@ -26,10 +26,12 @@ export const CreateToken = async (
   const message = {
     typeUrl: "/ixo.token.v1beta1.MsgCreateToken",
     value: ixo.token.v1beta1.MsgCreateToken.fromPartial({
-      minter: tester, // carbon oracle
+      minter: tester,
       name,
       description,
-      image: imageUrl || "https://ipfs.io/ipfs/bafkreiabsolyyp6zli654hiwptgoj6slesgyjqvtdnnvwacpd3vxwscr2e",
+      image:
+        imageUrl ||
+        "https://ipfs.io/ipfs/bafkreiabsolyyp6zli654hiwptgoj6slesgyjqvtdnnvwacpd3vxwscr2e",
       tokenType: "ixo1155",
       cap: cap.toString(),
       class: tokenClass,

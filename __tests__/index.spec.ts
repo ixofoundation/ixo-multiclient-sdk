@@ -60,8 +60,8 @@ beforeAll(async () => {
     const wallet = getUser(user);
     const account = (await wallet.getAccounts())[0];
     console.log(`  Address: ${account.address}`);
-    await sendFaucet(account.address);
-    console.log(`  ✅ Funded from faucet`);
+    // await sendFaucet(account.address);
+    // console.log(`  ✅ Funded from faucet`);
     await CreateIidDoc(user);
     console.log(`  ✅ IID Doc created`);
   }

@@ -11,8 +11,8 @@ export const keyType: KeyTypes = "secp";
 // You can add more users here and wallets will be generated for it and usable from getUser(WalletUsers.user)
 export enum WalletUsers {
   tester = "tester",
-  alice = "alice",
-  bob = "bob",
+  // alice = "alice",
+  // bob = "bob",
   // charlie = "charlie",
   // bond = "bond",
   // oracle = "oracle",
