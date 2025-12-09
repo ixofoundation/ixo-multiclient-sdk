@@ -129,8 +129,8 @@ export const tokenBasic = () =>
     // BEAN tokens require the canonical protocol shown in the "ECS Protocols" spreadsheet created by Graeme
     // let tokenClass = "did:ixo:entity:0b31e0115c4e64c00c41b10cfe62aa0c"; // devnet
     // let tokenClass = "did:ixo:entity:69d9ae9f85181e54ef038818afb71079"; // testnet
-    // let tokenClass = "did:ixo:entity:"; // mainnet
-    let tokenClass = "";
+    let tokenClass = "did:ixo:entity:f5bca1fa471f77ec323d1b3fe928bd64"; // mainnet
+    // let tokenClass = "";
     // ### Note: Token class can also be generated here to use a generic protocol as class by un-commenting "testMsg("/ixo.entity.v1beta1.MsgCreateEntity token class", async () => {"
     // testMsg("/ixo.entity.v1beta1.MsgCreateEntity token class", async () => {
     //   const res = await Entity.CreateEntity("protocol");
