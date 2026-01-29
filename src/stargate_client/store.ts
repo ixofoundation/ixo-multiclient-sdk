@@ -11,7 +11,7 @@ export type SignerData = {
 
 export type LocalStoreFunctions = {
   getLocalData: (key: string) => Promise<any>;
-  setLocalData: (key: string, data: any) => void;
+  setLocalData: (key: string, data: any) => void | Promise<void>;
 };
 
 /**
@@ -39,8 +39,8 @@ export const getSignerData = async (
   const address = accounts[0].address;
   const { accountNumber, sequence } = await signingClient.getSequence(address);
 
-  let data = storageFunctions.getLocalData(SignerStoreKey) || {};
-  let now = new Date();
+  let data = (await storageFunctions.getLocalData(SignerStoreKey)) || {};
+  const now = new Date();
 
   if (!data[chainId]) data[chainId] = {};
   if (!data[chainId][accountNumber]) {
@@ -71,7 +71,10 @@ export const getSignerData = async (
   // set the updated time to now
   data[chainId][accountNumber].updated = now.toISOString();
 
-  storageFunctions.setLocalData(SignerStoreKey, data);
+  // Await setLocalData to ensure data is persisted before returning
+  // This prevents race conditions where concurrent calls read stale sequence data
+  await storageFunctions.setLocalData(SignerStoreKey, data);
+
   return {
     accountNumber,
     sequence: data[chainId][accountNumber].sequence,
