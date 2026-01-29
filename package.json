@@ -1,6 +1,6 @@
 {
   "name": "@ixo/impactxclient-sdk",
-  "version": "2.4.5",
+  "version": "2.4.6",
   "description": "One ixo client to rule them all, One ixo client to find, One ixo client to bring them all, and in impact bind them",
   "author": "Ixo <ixo>",
   "homepage": "https://github.com/ixofoundation/ixo-MultiClient-SDK#readme",
@@ -8,6 +8,18 @@
   "main": "main/index.js",
   "module": "module/index.js",
   "typings": "types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./module/index.js",
+      "require": "./main/index.js"
+    },
+    "./cloudflare": {
+      "types": "./types/stargate_client/storeCloudflare.d.ts",
+      "import": "./module/stargate_client/storeCloudflare.js",
+      "require": "./main/stargate_client/storeCloudflare.js"
+    }
+  },
   "directories": {
     "lib": "src",
     "test": "__tests__"
