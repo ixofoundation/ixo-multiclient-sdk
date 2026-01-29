@@ -12,7 +12,18 @@ export type SignerData = {
 export type LocalStoreFunctions = {
   getLocalData: (key: string) => Promise<any>;
   setLocalData: (key: string, data: any) => void | Promise<void>;
+  /**
+   * Optional atomic get-and-increment for distributed sequence coordination.
+   * If provided, this method is used instead of the local storage logic,
+   * enabling coordination across multiple workers/processes (e.g., via Durable Objects).
+   */
+  getAndIncrementSequence?: (params: {
+    chainId: string;
+    accountNumber: number;
+    chainSequence: number;
+  }) => Promise<SignerData>;
 };
+
 
 /**
  * Helper function to get the signer sequence from chain, and if it is same
@@ -26,11 +37,7 @@ export const getSignerData = async (
   wallet: OfflineSigner,
   storageFunctions: LocalStoreFunctions
 ): Promise<SignerData> => {
-  if (
-    !storageFunctions ||
-    !storageFunctions.getLocalData ||
-    !storageFunctions.setLocalData
-  ) {
+  if (!storageFunctions) {
     throw new Error("Storage functions not provided");
   }
 
@@ -38,6 +45,23 @@ export const getSignerData = async (
   const accounts = await wallet.getAccounts();
   const address = accounts[0].address;
   const { accountNumber, sequence } = await signingClient.getSequence(address);
+
+  // If atomic getAndIncrementSequence is provided, use it for distributed coordination
+  // This enables safe concurrent access across multiple workers/processes
+  if (storageFunctions.getAndIncrementSequence) {
+    return storageFunctions.getAndIncrementSequence({
+      chainId,
+      accountNumber,
+      chainSequence: sequence,
+    });
+  }
+
+  // Fall back to local storage logic for single-process scenarios
+  if (!storageFunctions.getLocalData || !storageFunctions.setLocalData) {
+    throw new Error(
+      "Storage functions must provide either getAndIncrementSequence or both getLocalData and setLocalData"
+    );
+  }
 
   let data = (await storageFunctions.getLocalData(SignerStoreKey)) || {};
   const now = new Date();

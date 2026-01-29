@@ -40,7 +40,7 @@ export declare class SigningStargateClient extends StargateClient {
      */
     static offline(signer: OfflineSigner, options?: SigningStargateClientOptions, ignoreGetSequence?: boolean, localStoreFunctions?: LocalStoreFunctions): Promise<SigningStargateClient>;
     protected constructor(cometClient: CometClient | undefined, signer: OfflineSigner, options: SigningStargateClientOptions, ignoreGetSequence?: boolean, localStoreFunctions?: LocalStoreFunctions);
-    simulate(signerAddress: string, messages: readonly EncodeObject[], memo: string | undefined, txBodyBytes?: Uint8Array): Promise<number>;
+    simulate(signerAddress: string, messages: readonly EncodeObject[], memo: string | undefined, txBodyBytes?: Uint8Array, explicitSignerData?: SignerData): Promise<number>;
     signAndBroadcast(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee | "auto" | number, memo?: string, explicitSignerData?: SignerData, txBodyBytes?: Uint8Array, timeoutHeight?: bigint): Promise<DeliverTxResponse>;
     /**
      * This method is useful if you want to send a transaction in broadcast,
@@ -60,7 +60,7 @@ export declare class SigningStargateClient extends StargateClient {
      * (See the SigningStargateClient.offline constructor).
      */
     sign(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee, memo: string, explicitSignerData?: SignerData, txBodyBytes?: Uint8Array, timeoutHeight?: bigint): Promise<TxRaw>;
-    getUsedFee(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee | "auto" | number, memo?: string, txBodyBytes?: Uint8Array): Promise<StdFee>;
+    getUsedFee(signerAddress: string, messages: readonly EncodeObject[], fee: StdFee | "auto" | number, memo?: string, txBodyBytes?: Uint8Array, explicitSignerData?: SignerData): Promise<StdFee>;
     private signAmino;
     private signDirect;
 }

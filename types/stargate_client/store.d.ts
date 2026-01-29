@@ -7,7 +7,17 @@ export declare type SignerData = {
 };
 export declare type LocalStoreFunctions = {
     getLocalData: (key: string) => Promise<any>;
-    setLocalData: (key: string, data: any) => void;
+    setLocalData: (key: string, data: any) => void | Promise<void>;
+    /**
+     * Optional atomic get-and-increment for distributed sequence coordination.
+     * If provided, this method is used instead of the local storage logic,
+     * enabling coordination across multiple workers/processes (e.g., via Durable Objects).
+     */
+    getAndIncrementSequence?: (params: {
+        chainId: string;
+        accountNumber: number;
+        chainSequence: number;
+    }) => Promise<SignerData>;
 };
 /**
  * Helper function to get the signer sequence from chain, and if it is same

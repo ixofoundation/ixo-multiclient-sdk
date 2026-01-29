@@ -144,7 +144,8 @@ export class SigningStargateClient extends StargateClient {
     signerAddress: string,
     messages: readonly EncodeObject[],
     memo: string | undefined,
-    txBodyBytes?: Uint8Array
+    txBodyBytes?: Uint8Array,
+    explicitSignerData?: SignerData
   ): Promise<number> {
     // const txBody = txBodyBytes ? this.registry.decodeTxBody(txBodyBytes) : null;
     // console.log("txBody", txBody);
@@ -165,9 +166,16 @@ export class SigningStargateClient extends StargateClient {
       value: toBase64(accountFromSigner.pubkey),
     };
 
-    const { sequence } = this.ignoreGetSequence
-      ? { sequence: 0 }
-      : await this.getSequence(signerAddress);
+    // Use explicit sequence if provided, otherwise fetch from chain
+    let sequence: number;
+    if (explicitSignerData?.sequence !== undefined) {
+      sequence = explicitSignerData.sequence;
+    } else if (this.ignoreGetSequence) {
+      sequence = 0;
+    } else {
+      const seqResult = await this.getSequence(signerAddress);
+      sequence = seqResult.sequence;
+    }
 
     const { gasInfo } = await this.forceGetQueryClient().tx.simulate(
       anyMsgs,
@@ -188,19 +196,30 @@ export class SigningStargateClient extends StargateClient {
     txBodyBytes?: Uint8Array,
     timeoutHeight?: bigint
   ): Promise<DeliverTxResponse> {
+    // Get signer data FIRST before getUsedFee, so simulate uses correct sequence
+    let signerData: SignerData | undefined = explicitSignerData;
+    if (!signerData && !this.ignoreGetSequence && this.localStoreFunctions) {
+      signerData = await getSignerData(
+        this,
+        this.signer,
+        this.localStoreFunctions
+      );
+    }
+
     const usedFee = await this.getUsedFee(
       signerAddress,
       messages,
       fee,
       memo,
-      txBodyBytes
+      txBodyBytes,
+      signerData
     );
     const txRaw = await this.sign(
       signerAddress,
       messages,
       usedFee,
       memo,
-      explicitSignerData,
+      signerData,
       txBodyBytes,
       timeoutHeight
     );
@@ -227,19 +246,30 @@ export class SigningStargateClient extends StargateClient {
     txBodyBytes?: Uint8Array,
     timeoutHeight?: bigint
   ): Promise<string> {
+    // Get signer data FIRST before getUsedFee, so simulate uses correct sequence
+    let signerData: SignerData | undefined = explicitSignerData;
+    if (!signerData && !this.ignoreGetSequence && this.localStoreFunctions) {
+      signerData = await getSignerData(
+        this,
+        this.signer,
+        this.localStoreFunctions
+      );
+    }
+
     const usedFee = await this.getUsedFee(
       signerAddress,
       messages,
       fee,
       memo,
-      txBodyBytes
+      txBodyBytes,
+      signerData
     );
     const txRaw = await this.sign(
       signerAddress,
       messages,
       usedFee,
       memo,
-      explicitSignerData,
+      signerData,
       txBodyBytes,
       timeoutHeight
     );
@@ -313,7 +343,8 @@ export class SigningStargateClient extends StargateClient {
     messages: readonly EncodeObject[],
     fee: StdFee | "auto" | number,
     memo = "",
-    txBodyBytes?: Uint8Array
+    txBodyBytes?: Uint8Array,
+    explicitSignerData?: SignerData
   ): Promise<StdFee> {
     if (fee == "auto" || typeof fee === "number") {
       assertDefined(
@@ -324,7 +355,8 @@ export class SigningStargateClient extends StargateClient {
         signerAddress,
         messages,
         memo,
-        txBodyBytes
+        txBodyBytes,
+        explicitSignerData
       );
       const multiplier =
         typeof fee === "number" ? fee : this.defaultGasMultiplier;
