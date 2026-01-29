@@ -28,7 +28,8 @@
  * 1. Re-export the class from your worker (required by Cloudflare):
  *
  * ```typescript
- * export { SequenceManagerDO } from '@ixo/impactxclient-sdk';
+ * // Use the /cloudflare subpath to avoid loading crypto at module load time
+ * export { SequenceManagerDO } from '@ixo/impactxclient-sdk/cloudflare';
  * ```
  *
  * 2. Configure wrangler.jsonc:
