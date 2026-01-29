@@ -74,7 +74,7 @@
  * }
  * ```
  */
-import { LocalStoreFunctions } from "./store";
+import type { LocalStoreFunctions } from "./storeTypes";
 interface DurableObjectState {
     storage: DurableObjectStorage;
     blockConcurrencyWhile<T>(callback: () => Promise<T>): void;

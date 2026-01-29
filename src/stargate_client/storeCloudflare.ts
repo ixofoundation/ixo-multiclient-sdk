@@ -75,7 +75,7 @@
  * ```
  */
 
-import { LocalStoreFunctions } from "./store";
+import type { LocalStoreFunctions } from "./storeTypes";
 
 // ============================================================================
 // Internal type definitions
