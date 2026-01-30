@@ -20,7 +20,7 @@
  *
  * 1. All workers request their sequence from a single DO instance
  * 2. DO serializes requests and allocates consecutive sequences
- * 3. DO adds a stagger delay (300ms default) so chain can process transactions in order
+ * 3. DO adds a stagger delay (400ms default) so chain can process transactions in order
  * 4. Workers broadcast with their allocated sequence
  *
  * ## Usage
@@ -65,7 +65,7 @@
  * ## Configuration
  *
  * Set `IXO_CLIENT_SEQUENCE_MIN_DELAY_MS` in your wrangler.jsonc vars to configure
- * the stagger delay (default: 300ms):
+ * the stagger delay (default: 400ms):
  *
  * ```jsonc
  * {
@@ -148,7 +148,7 @@ type GetSignerDataParams = {
  *
  * ## Configuration
  *
- * Set `IXO_CLIENT_SEQUENCE_MIN_DELAY_MS` env var to configure stagger delay (default: 300ms).
+ * Set `IXO_CLIENT_SEQUENCE_MIN_DELAY_MS` env var to configure stagger delay (default: 400ms).
  *
  * @example
  * ```typescript
@@ -169,7 +169,7 @@ export class SequenceManagerDO {
 
   /**
    * Minimum delay between sequence allocations in milliseconds.
-   * Configurable via IXO_CLIENT_SEQUENCE_MIN_DELAY_MS env var (default: 300ms).
+   * Configurable via IXO_CLIENT_SEQUENCE_MIN_DELAY_MS env var (default: 400ms).
    *
    * Why is this needed?
    * When Worker A gets sequence N and broadcasts, the chain needs time to
@@ -179,7 +179,7 @@ export class SequenceManagerDO {
   private minAllocationDelayMs: number;
 
   /** Default stagger delay if not configured via env */
-  private static readonly DEFAULT_MIN_DELAY_MS = 300;
+  private static readonly DEFAULT_MIN_DELAY_MS = 400;
 
   constructor(state: DurableObjectState, env: Record<string, unknown>) {
     this.state = state;

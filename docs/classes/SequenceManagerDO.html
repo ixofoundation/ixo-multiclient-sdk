@@ -50,7 +50,7 @@ sequence numbers for blockchain transactions. It implements:</p>
 <a href="#configuration" id="configuration" style="color: inherit; text-decoration: none;">
   <h2>Configuration</h2>
 </a>
-<p>Set <code>IXO_CLIENT_SEQUENCE_MIN_DELAY_MS</code> env var to configure stagger delay (default: 300ms).</p>
+<p>Set <code>IXO_CLIENT_SEQUENCE_MIN_DELAY_MS</code> env var to configure stagger delay (default: 400ms).</p>
 
 <h3>Example</h3><pre><code class="language-typescript"><span class="hl-7">// In your worker, re-export the class:</span><br/><span class="hl-1">export</span><span class="hl-0"> { </span><span class="hl-2">SequenceManagerDO</span><span class="hl-0"> } </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@ixo/impactxclient-sdk&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-7">// Then use it via createDOStoreFunctions:</span><br/><span class="hl-4">const</span><span class="hl-0"> </span><span class="hl-5">doStub</span><span class="hl-0"> = </span><span class="hl-2">env</span><span class="hl-0">.</span><span class="hl-5">SEQUENCE_MANAGER</span><span class="hl-0">.</span><span class="hl-6">get</span><span class="hl-0">(</span><span class="hl-2">env</span><span class="hl-0">.</span><span class="hl-5">SEQUENCE_MANAGER</span><span class="hl-0">.</span><span class="hl-6">idFromName</span><span class="hl-0">(</span><span class="hl-3">&#39;global&#39;</span><span class="hl-0">));</span><br/><span class="hl-4">const</span><span class="hl-0"> </span><span class="hl-5">storageFunctions</span><span class="hl-0"> = </span><span class="hl-6">createDOStoreFunctions</span><span class="hl-0">(</span><span class="hl-2">doStub</span><span class="hl-0">);</span><br/><span class="hl-4">const</span><span class="hl-0"> </span><span class="hl-5">client</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-6">createSigningClient</span><span class="hl-0">(</span><span class="hl-2">rpc</span><span class="hl-0">, </span><span class="hl-2">wallet</span><span class="hl-0">, </span><span class="hl-4">false</span><span class="hl-0">, </span><span class="hl-2">opts</span><span class="hl-0">, </span><span class="hl-2">storageFunctions</span><span class="hl-0">);</span>
 </code></pre>
@@ -119,7 +119,7 @@ sequence numbers for blockchain transactions. It implements:</p>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>min<wbr/>Allocation<wbr/>Delay<wbr/>Ms</span><a href="#minAllocationDelayMs" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">min<wbr/>Allocation<wbr/>Delay<wbr/>Ms<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 <div class="tsd-comment tsd-typography"><p>Minimum delay between sequence allocations in milliseconds.
-Configurable via IXO_CLIENT_SEQUENCE_MIN_DELAY_MS env var (default: 300ms).</p>
+Configurable via IXO_CLIENT_SEQUENCE_MIN_DELAY_MS env var (default: 400ms).</p>
 <p>Why is this needed?
 When Worker A gets sequence N and broadcasts, the chain needs time to
 add it to the mempool before Worker B tries to simulate with sequence N+1.
@@ -139,7 +139,7 @@ If Worker B&#39;s simulation happens too soon, the chain rejects it.</p>
 <li>Defined in src/stargate_client/storeCloudflare.ts:165</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private"><a id="DEFAULT_MIN_DELAY_MS" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagStatic">Static</code> <code class="tsd-tag ts-flagPrivate">Private</code> <code class="tsd-tag ts-flagReadonly">Readonly</code> <span>DEFAULT_<wbr/>MIN_<wbr/>DELAY_<wbr/>MS</span><a href="#DEFAULT_MIN_DELAY_MS" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
-<div class="tsd-signature">DEFAULT_<wbr/>MIN_<wbr/>DELAY_<wbr/>MS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">300</span><span class="tsd-signature-symbol"> = 300</span></div>
+<div class="tsd-signature">DEFAULT_<wbr/>MIN_<wbr/>DELAY_<wbr/>MS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">400</span><span class="tsd-signature-symbol"> = 400</span></div>
 <div class="tsd-comment tsd-typography"><p>Default stagger delay if not configured via env</p>
 </div><aside class="tsd-sources">
 <ul>
