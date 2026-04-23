@@ -1047,7 +1047,7 @@ export const supamotoClaims2 = () =>
               // Custom date transformation to match json schema format
               time_paid: new Date(
                 item.Transaction_date.replaceAll("/", "-").replace(" ", "T") +
-                  "Z"
+                "Z"
               ),
             };
           return aggObj;
@@ -1284,7 +1284,7 @@ export const supamotoClaims3 = () =>
       type NetworkType = "mainnet" | "testnet";
 
       let networkToUse: NetworkType = "mainnet";
-      let collectionToUse: CollectionType = "Legacy" as any;
+      let collectionToUse: CollectionType = "fairClimate" as any;
 
       const collectionToNetworkMapping = {
         Genesis: {
@@ -1325,11 +1325,18 @@ export const supamotoClaims3 = () =>
 
       let purchaseData: any[] = [];
       let duplicatesData: any[] = [];
+      const afterDate = new Date("2025-01-01T00:00:00Z")
       // loop over paths and add all transaction ids to previous purchases list
       for (let path of paths) {
         let data = await csvtojsonV2().fromFile(path);
         console.log({ path, purchaseData: data.length });
         data = data.reduce((aggObj, item) => {
+          const timePaid = new Date(
+            item["Creation date"].replaceAll("/", "-").replace(" ", "T") +
+            "Z"
+          )
+          // only handle payments with timePaid after 2024-06 (skip June 2024 and earlier)
+          if (timePaid < afterDate) return aggObj;
           if (
             !aggObj[item["Transaction ID"]] &&
             !previousPurchases.includes(item["Transaction ID"])
@@ -1344,15 +1351,12 @@ export const supamotoClaims3 = () =>
               amount: item["Amount"],
               currency: item["Currency"],
               // Custom date transformation to match json schema format
-              time_paid: new Date(
-                item["Creation date"].replaceAll("/", "-").replace(" ", "T") +
-                  "Z"
-              ),
+              time_paid: timePaid,
             };
           } else {
             previousPurchases.push(item["Transaction ID"]);
             duplicatesData.push({
-              Device_ID: item["Device ID"],
+              Device_ID: item["Device ID Revised"],
               Transaction_ID: item["Transaction ID"],
             });
           }
@@ -1470,26 +1474,26 @@ export const supamotoClaims3 = () =>
 
       // divide payments per device into 10 devices at a time
       // ==============================================================
-      purchaseData = chunkArray<any[]>(Object.values(purchaseData), 10);
+      purchaseData = chunkArray<any[]>(Object.values(purchaseData), 3);
       let stovePurchasesAll: any[] = [];
       let index = -1;
 
       console.time("claims");
       for (const stovePurchases of purchaseData) {
         index++;
-        // if (index < 1) continue; // if want to only mint a certain amount of batches add number here
+        // if (index < 3) continue; // if want to only mint a certain amount of batches add number here
 
         console.log(
           "starting batch " +
-            (index + 1) +
-            " of " +
-            purchaseData.length +
-            " with " +
-            stovePurchases.flat(1).length +
-            " purchases"
+          (index + 1) +
+          " of " +
+          purchaseData.length +
+          " with " +
+          stovePurchases.flat(1).length +
+          " purchases"
         );
         // add wait for ipfs rate limit
-        if (index) await timeout(1000 * 60);
+        if (index) await timeout(1000 * 5);
 
         // create fuelPurchase claims for each purchase
         const fpClaims = await axios.post(
@@ -1685,9 +1689,9 @@ export const supamotoClaimsRedoRejected = () =>
           let endDate =
             period > 30
               ? addDays(
-                  new Date(claimData.credentialSubject.claim.period.startDate),
-                  30
-                ).toISOString()
+                new Date(claimData.credentialSubject.claim.period.startDate),
+                30
+              ).toISOString()
               : claimData.credentialSubject.claim.period.endDate;
 
           // fetch cooking sessions for the period of CER

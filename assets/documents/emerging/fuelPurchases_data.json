@@ -1,14 +1,60 @@
+// Legacy
 {
   "kgsPellets": {
-    "average": 32.72457985733285,
-    "totalClaims": 8271,
-    "totalKgPellets": 270665
+    "average": 34.95371335020092,
+    "totalClaims": 6719,
+    "totalKgPellets": 234854
   },
   "carbonCredits": {
-    "average": 298.1209225003055,
-    "totalClaims": 8271,
-    "totalCarbonCredits": 2465758.1500000264
+    "average": 318.4283286203549,
+    "totalClaims": 6719,
+    "totalCarbonCredits": 2139519.9400001643
   },
-  "amountOfStoves": 1186,
-  "amountOfPurchases": 8271
+  "amountOfStoves": 1114,
+  "amountOfPurchases": 6719
+}
+// Genesis
+{
+  "kgsPellets": {
+    "average": 33.945185891325075,
+    "totalClaims": 2098,
+    "totalKgPellets": 71217
+  },
+  "carbonCredits": {
+    "average": 309.24064346997056,
+    "totalClaims": 2098,
+    "totalCarbonCredits": 648786.8699999982
+  },
+  "amountOfStoves": 311,
+  "amountOfPurchases": 2098
+}
+// ai4g
+{
+  "kgsPellets": {
+    "average": 35.000736377025035,
+    "totalClaims": 1358,
+    "totalKgPellets": 47531
+  },
+  "carbonCredits": {
+    "average": 318.85670839469105,
+    "totalClaims": 1358,
+    "totalCarbonCredits": 433007.4099999904
+  },
+  "amountOfStoves": 183,
+  "amountOfPurchases": 1358
+}
+// fairClimate
+{
+  "kgsPellets": {
+    "average": 35.47371675943104,
+    "totalClaims": 1617,
+    "totalKgPellets": 57361
+  },
+  "carbonCredits": {
+    "average": 323.16555967841003,
+    "totalClaims": 1617,
+    "totalCarbonCredits": 522558.709999989
+  },
+  "amountOfStoves": 308,
+  "amountOfPurchases": 1617
 }
