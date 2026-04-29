@@ -550,6 +550,12 @@ export interface Claim {
    * per token_id to transfer the same tokens to and from the escrow account
    */
   cw1155IntentPayment: CW1155IntentPayment[];
+  /**
+   * member_address is the team member this claim is on behalf of, if any.
+   * Copied from intent when use_intent is true. Used for budget restoration
+   * on claim rejection/dispute/invalidation.
+   */
+  memberAddress: string;
 }
 export interface ClaimSDKType {
   collection_id: string;
@@ -564,6 +570,7 @@ export interface ClaimSDKType {
   cw20_payment: CW20PaymentSDKType[];
   cw1155_payment: CW1155PaymentSDKType[];
   cw1155_intent_payment: CW1155IntentPaymentSDKType[];
+  member_address: string;
 }
 export interface ClaimPayments {
   submission: PaymentStatus;
@@ -709,6 +716,12 @@ export interface Intent {
    * the same tokens to and from the escrow account
    */
   cw1155IntentPayment: CW1155IntentPayment[];
+  /**
+   * member_address is the team member this intent is on behalf of, if any.
+   * Required if the collection has member budgets. Validated against the
+   * oracle's SubmitClaimConstraints.member_address.
+   */
+  memberAddress: string;
 }
 /** Intent defines the structure for a service agent's claim intent. */
 export interface IntentSDKType {
@@ -726,6 +739,52 @@ export interface IntentSDKType {
   escrow_address: string;
   cw1155_payment: CW1155PaymentSDKType[];
   cw1155_intent_payment: CW1155IntentPaymentSDKType[];
+  member_address: string;
+}
+/**
+ * MemberBudget defines a team member's periodic spending budget for a
+ * collection. Stored as separate state keyed by collectionId/memberAddress
+ * for gas-efficient O(1) reads and writes independent of team size.
+ */
+export interface MemberBudget {
+  /** collection_id this budget belongs to */
+  collectionId: string;
+  /** member's blockchain address */
+  memberAddress: string;
+  /**
+   * period duration for budget reset (e.g., 30 days). Must be at least 24 hours
+   * (MinMemberBudgetPeriod). Periods shorter than 24 hours are rejected to
+   * prevent griefing via the lazy-reset loop in the intent handler.
+   */
+  period?: Duration;
+  /** maximum native coin spend allowed per period */
+  periodSpendLimit: Coin[];
+  /** native coins already spent (intented) in the current period */
+  periodSpent: Coin[];
+  /** maximum CW20 spend allowed per period */
+  periodCw20SpendLimit: CW20Payment[];
+  /** CW20 amount already spent in the current period */
+  periodCw20Spent: CW20Payment[];
+  /**
+   * timestamp when current period resets (lazy reset in intent handler,
+   * following the feegrant PeriodicAllowance pattern)
+   */
+  periodResetAt?: Timestamp;
+}
+/**
+ * MemberBudget defines a team member's periodic spending budget for a
+ * collection. Stored as separate state keyed by collectionId/memberAddress
+ * for gas-efficient O(1) reads and writes independent of team size.
+ */
+export interface MemberBudgetSDKType {
+  collection_id: string;
+  member_address: string;
+  period?: DurationSDKType;
+  period_spend_limit: CoinSDKType[];
+  period_spent: CoinSDKType[];
+  period_cw20_spend_limit: CW20PaymentSDKType[];
+  period_cw20_spent: CW20PaymentSDKType[];
+  period_reset_at?: TimestampSDKType;
 }
 function createBaseParams(): Params {
   return {
@@ -1600,7 +1659,8 @@ function createBaseClaim(): Claim {
     amount: [],
     cw20Payment: [],
     cw1155Payment: [],
-    cw1155IntentPayment: []
+    cw1155IntentPayment: [],
+    memberAddress: ""
   };
 }
 export const Claim = {
@@ -1640,6 +1700,9 @@ export const Claim = {
     }
     for (const v of message.cw1155IntentPayment) {
       CW1155IntentPayment.encode(v!, writer.uint32(98).fork()).ldelim();
+    }
+    if (message.memberAddress !== "") {
+      writer.uint32(106).string(message.memberAddress);
     }
     return writer;
   },
@@ -1686,6 +1749,9 @@ export const Claim = {
         case 12:
           message.cw1155IntentPayment.push(CW1155IntentPayment.decode(reader, reader.uint32()));
           break;
+        case 13:
+          message.memberAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1706,7 +1772,8 @@ export const Claim = {
       amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
       cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
       cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : [],
-      cw1155IntentPayment: Array.isArray(object?.cw1155IntentPayment) ? object.cw1155IntentPayment.map((e: any) => CW1155IntentPayment.fromJSON(e)) : []
+      cw1155IntentPayment: Array.isArray(object?.cw1155IntentPayment) ? object.cw1155IntentPayment.map((e: any) => CW1155IntentPayment.fromJSON(e)) : [],
+      memberAddress: isSet(object.memberAddress) ? String(object.memberAddress) : ""
     };
   },
   toJSON(message: Claim): unknown {
@@ -1739,6 +1806,7 @@ export const Claim = {
     } else {
       obj.cw1155IntentPayment = [];
     }
+    message.memberAddress !== undefined && (obj.memberAddress = message.memberAddress);
     return obj;
   },
   fromPartial(object: Partial<Claim>): Claim {
@@ -1755,6 +1823,7 @@ export const Claim = {
     message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
     message.cw1155IntentPayment = object.cw1155IntentPayment?.map(e => CW1155IntentPayment.fromPartial(e)) || [];
+    message.memberAddress = object.memberAddress ?? "";
     return message;
   }
 };
@@ -2169,7 +2238,8 @@ function createBaseIntent(): Intent {
     fromAddress: "",
     escrowAddress: "",
     cw1155Payment: [],
-    cw1155IntentPayment: []
+    cw1155IntentPayment: [],
+    memberAddress: ""
   };
 }
 export const Intent = {
@@ -2215,6 +2285,9 @@ export const Intent = {
     }
     for (const v of message.cw1155IntentPayment) {
       CW1155IntentPayment.encode(v!, writer.uint32(114).fork()).ldelim();
+    }
+    if (message.memberAddress !== "") {
+      writer.uint32(122).string(message.memberAddress);
     }
     return writer;
   },
@@ -2267,6 +2340,9 @@ export const Intent = {
         case 14:
           message.cw1155IntentPayment.push(CW1155IntentPayment.decode(reader, reader.uint32()));
           break;
+        case 15:
+          message.memberAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2289,7 +2365,8 @@ export const Intent = {
       fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
       escrowAddress: isSet(object.escrowAddress) ? String(object.escrowAddress) : "",
       cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : [],
-      cw1155IntentPayment: Array.isArray(object?.cw1155IntentPayment) ? object.cw1155IntentPayment.map((e: any) => CW1155IntentPayment.fromJSON(e)) : []
+      cw1155IntentPayment: Array.isArray(object?.cw1155IntentPayment) ? object.cw1155IntentPayment.map((e: any) => CW1155IntentPayment.fromJSON(e)) : [],
+      memberAddress: isSet(object.memberAddress) ? String(object.memberAddress) : ""
     };
   },
   toJSON(message: Intent): unknown {
@@ -2324,6 +2401,7 @@ export const Intent = {
     } else {
       obj.cw1155IntentPayment = [];
     }
+    message.memberAddress !== undefined && (obj.memberAddress = message.memberAddress);
     return obj;
   },
   fromPartial(object: Partial<Intent>): Intent {
@@ -2342,6 +2420,138 @@ export const Intent = {
     message.escrowAddress = object.escrowAddress ?? "";
     message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
     message.cw1155IntentPayment = object.cw1155IntentPayment?.map(e => CW1155IntentPayment.fromPartial(e)) || [];
+    message.memberAddress = object.memberAddress ?? "";
+    return message;
+  }
+};
+function createBaseMemberBudget(): MemberBudget {
+  return {
+    collectionId: "",
+    memberAddress: "",
+    period: undefined,
+    periodSpendLimit: [],
+    periodSpent: [],
+    periodCw20SpendLimit: [],
+    periodCw20Spent: [],
+    periodResetAt: undefined
+  };
+}
+export const MemberBudget = {
+  encode(message: MemberBudget, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.collectionId !== "") {
+      writer.uint32(10).string(message.collectionId);
+    }
+    if (message.memberAddress !== "") {
+      writer.uint32(18).string(message.memberAddress);
+    }
+    if (message.period !== undefined) {
+      Duration.encode(message.period, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.periodSpendLimit) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    for (const v of message.periodSpent) {
+      Coin.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.periodCw20SpendLimit) {
+      CW20Payment.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    for (const v of message.periodCw20Spent) {
+      CW20Payment.encode(v!, writer.uint32(58).fork()).ldelim();
+    }
+    if (message.periodResetAt !== undefined) {
+      Timestamp.encode(message.periodResetAt, writer.uint32(66).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MemberBudget {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMemberBudget();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.collectionId = reader.string();
+          break;
+        case 2:
+          message.memberAddress = reader.string();
+          break;
+        case 3:
+          message.period = Duration.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.periodSpendLimit.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 5:
+          message.periodSpent.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 6:
+          message.periodCw20SpendLimit.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
+        case 7:
+          message.periodCw20Spent.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
+        case 8:
+          message.periodResetAt = Timestamp.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MemberBudget {
+    return {
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      memberAddress: isSet(object.memberAddress) ? String(object.memberAddress) : "",
+      period: isSet(object.period) ? Duration.fromJSON(object.period) : undefined,
+      periodSpendLimit: Array.isArray(object?.periodSpendLimit) ? object.periodSpendLimit.map((e: any) => Coin.fromJSON(e)) : [],
+      periodSpent: Array.isArray(object?.periodSpent) ? object.periodSpent.map((e: any) => Coin.fromJSON(e)) : [],
+      periodCw20SpendLimit: Array.isArray(object?.periodCw20SpendLimit) ? object.periodCw20SpendLimit.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      periodCw20Spent: Array.isArray(object?.periodCw20Spent) ? object.periodCw20Spent.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      periodResetAt: isSet(object.periodResetAt) ? fromJsonTimestamp(object.periodResetAt) : undefined
+    };
+  },
+  toJSON(message: MemberBudget): unknown {
+    const obj: any = {};
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.memberAddress !== undefined && (obj.memberAddress = message.memberAddress);
+    message.period !== undefined && (obj.period = message.period ? Duration.toJSON(message.period) : undefined);
+    if (message.periodSpendLimit) {
+      obj.periodSpendLimit = message.periodSpendLimit.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.periodSpendLimit = [];
+    }
+    if (message.periodSpent) {
+      obj.periodSpent = message.periodSpent.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.periodSpent = [];
+    }
+    if (message.periodCw20SpendLimit) {
+      obj.periodCw20SpendLimit = message.periodCw20SpendLimit.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.periodCw20SpendLimit = [];
+    }
+    if (message.periodCw20Spent) {
+      obj.periodCw20Spent = message.periodCw20Spent.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.periodCw20Spent = [];
+    }
+    message.periodResetAt !== undefined && (obj.periodResetAt = fromTimestamp(message.periodResetAt).toISOString());
+    return obj;
+  },
+  fromPartial(object: Partial<MemberBudget>): MemberBudget {
+    const message = createBaseMemberBudget();
+    message.collectionId = object.collectionId ?? "";
+    message.memberAddress = object.memberAddress ?? "";
+    message.period = object.period !== undefined && object.period !== null ? Duration.fromPartial(object.period) : undefined;
+    message.periodSpendLimit = object.periodSpendLimit?.map(e => Coin.fromPartial(e)) || [];
+    message.periodSpent = object.periodSpent?.map(e => Coin.fromPartial(e)) || [];
+    message.periodCw20SpendLimit = object.periodCw20SpendLimit?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.periodCw20Spent = object.periodCw20Spent?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.periodResetAt = object.periodResetAt !== undefined && object.periodResetAt !== null ? Timestamp.fromPartial(object.periodResetAt) : undefined;
     return message;
   }
 };

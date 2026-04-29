@@ -2,7 +2,7 @@
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { QueryParamsRequest, QueryParamsResponse, QueryCollectionRequest, QueryCollectionResponse, QueryCollectionListRequest, QueryCollectionListResponse, QueryClaimRequest, QueryClaimResponse, QueryClaimListRequest, QueryClaimListResponse, QueryDisputeRequest, QueryDisputeResponse, QueryDisputeListRequest, QueryDisputeListResponse, QueryIntentRequest, QueryIntentResponse, QueryIntentListRequest, QueryIntentListResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryCollectionRequest, QueryCollectionResponse, QueryCollectionListRequest, QueryCollectionListResponse, QueryClaimRequest, QueryClaimResponse, QueryClaimListRequest, QueryClaimListResponse, QueryDisputeRequest, QueryDisputeResponse, QueryDisputeListRequest, QueryDisputeListResponse, QueryIntentRequest, QueryIntentResponse, QueryIntentListRequest, QueryIntentListResponse, QueryCollectionMemberRequest, QueryCollectionMemberResponse, QueryCollectionMemberListRequest, QueryCollectionMemberListResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -15,6 +15,8 @@ export interface Query {
   disputeList(request?: QueryDisputeListRequest): Promise<QueryDisputeListResponse>;
   intent(request: QueryIntentRequest): Promise<QueryIntentResponse>;
   intentList(request?: QueryIntentListRequest): Promise<QueryIntentListResponse>;
+  collectionMember(request: QueryCollectionMemberRequest): Promise<QueryCollectionMemberResponse>;
+  collectionMemberList(request: QueryCollectionMemberListRequest): Promise<QueryCollectionMemberListResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -29,6 +31,8 @@ export class QueryClientImpl implements Query {
     this.disputeList = this.disputeList.bind(this);
     this.intent = this.intent.bind(this);
     this.intentList = this.intentList.bind(this);
+    this.collectionMember = this.collectionMember.bind(this);
+    this.collectionMemberList = this.collectionMemberList.bind(this);
   }
   params(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -83,6 +87,16 @@ export class QueryClientImpl implements Query {
     const promise = this.rpc.request("ixo.claims.v1beta1.Query", "IntentList", data);
     return promise.then(data => QueryIntentListResponse.decode(new _m0.Reader(data)));
   }
+  collectionMember(request: QueryCollectionMemberRequest): Promise<QueryCollectionMemberResponse> {
+    const data = QueryCollectionMemberRequest.encode(request).finish();
+    const promise = this.rpc.request("ixo.claims.v1beta1.Query", "CollectionMember", data);
+    return promise.then(data => QueryCollectionMemberResponse.decode(new _m0.Reader(data)));
+  }
+  collectionMemberList(request: QueryCollectionMemberListRequest): Promise<QueryCollectionMemberListResponse> {
+    const data = QueryCollectionMemberListRequest.encode(request).finish();
+    const promise = this.rpc.request("ixo.claims.v1beta1.Query", "CollectionMemberList", data);
+    return promise.then(data => QueryCollectionMemberListResponse.decode(new _m0.Reader(data)));
+  }
 }
 export const createRpcQueryExtension = (base: QueryClient) => {
   const rpc = createProtobufRpcClient(base);
@@ -114,6 +128,12 @@ export const createRpcQueryExtension = (base: QueryClient) => {
     },
     intentList(request?: QueryIntentListRequest): Promise<QueryIntentListResponse> {
       return queryService.intentList(request);
+    },
+    collectionMember(request: QueryCollectionMemberRequest): Promise<QueryCollectionMemberResponse> {
+      return queryService.collectionMember(request);
+    },
+    collectionMemberList(request: QueryCollectionMemberListRequest): Promise<QueryCollectionMemberListResponse> {
+      return queryService.collectionMemberList(request);
     }
   };
 };

@@ -131,7 +131,8 @@ export const UpdateCollectionState = async (
 export const UpdateCollectionIntents = async (
   collectionId: string,
   adminAddress: string,
-  signer: WalletUsers = WalletUsers.tester
+  signer: WalletUsers = WalletUsers.tester,
+  intents = ixo.claims.v1beta1.CollectionIntentOptions.ALLOW
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -148,7 +149,7 @@ export const UpdateCollectionIntents = async (
             ixo.claims.v1beta1.MsgUpdateCollectionIntents.fromPartial({
               collectionId,
               adminAddress: adminAddress,
-              intents: ixo.claims.v1beta1.CollectionIntentOptions.ALLOW,
+              intents,
             })
           ).finish(),
         },
@@ -380,7 +381,9 @@ export const GrantEntityAccountClaimsSubmitAuthz = async (
   maxAmount: Coin[] = [],
   maxCw20Payment: CW20Payment[] = [],
   intentDurationSeconds = 0,
-  maxCw1155Payment: CW1155Payment[] = []
+  maxCw1155Payment: CW1155Payment[] = [],
+  // For team subscriptions: the member this constraint applies to.
+  memberAddress: string = ""
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -424,6 +427,7 @@ export const GrantEntityAccountClaimsSubmitAuthz = async (
                   intentDurationNs: utils.proto.toDuration(
                     (1000000000 * intentDurationSeconds).toString()
                   ),
+                  memberAddress,
                 }),
                 ...granteeCurrentAuthConstraints,
               ],
@@ -453,7 +457,11 @@ export const GrantEntityAccountCreateClaimAuthz = async (
   intentDurationSeconds = 0,
   allowedAuthTypes = ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT,
   maxAuthorizations = 2,
-  maxCw1155Payment: CW1155Payment[] = []
+  maxCw1155Payment: CW1155Payment[] = [],
+  // For team subscriptions: the member this CCAA constraint authorizes the
+  // grantee to create downstream authorizations for. Anti-spoofing — strict
+  // equality enforced in Accept().
+  memberAddress: string = ""
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -505,6 +513,7 @@ export const GrantEntityAccountCreateClaimAuthz = async (
                         maxCw1155Payment,
                         maxAuthorizations: Long.fromNumber(maxAuthorizations),
                         allowedAuthTypes,
+                        memberAddress,
                       }
                     ),
                     ...granteeCurrentAuthConstraints,
@@ -532,7 +541,11 @@ export const CreateClaimAuthorization = async (
   maxCw20Payment: CW20Payment[] = [],
   intentDurationSeconds = 0,
   authType = ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT,
-  maxCw1155Payment: CW1155Payment[] = []
+  maxCw1155Payment: CW1155Payment[] = [],
+  // For team subscriptions: the member this authorization is being created
+  // for. Must match the signer's CreateClaimAuthorizationConstraints
+  // memberAddress (strict equality — anti-spoofing).
+  memberAddress: string = ""
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -562,6 +575,7 @@ export const CreateClaimAuthorization = async (
               expiration: utils.proto.toTimestamp(addDays(new Date(), 365 * 3)),
               authType,
               beforeDate: utils.proto.toTimestamp(addDays(new Date(), 365)),
+              memberAddress,
             })
           ).finish(),
         },
@@ -578,7 +592,10 @@ export const MsgClaimIntent = async (
   amount: Coin[] = [],
   cw20Payment: CW20Payment[] = [],
   signer = WalletUsers.alice,
-  cw1155Payment: CW1155Payment[] = []
+  cw1155Payment: CW1155Payment[] = [],
+  // For team subscriptions: the member this intent is on behalf of. Required
+  // when the collection has member budgets, must be empty otherwise.
+  memberAddress: string = ""
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -594,13 +611,29 @@ export const MsgClaimIntent = async (
       amount,
       cw20Payment,
       cw1155Payment,
+      memberAddress,
     }),
   };
 
+  // Try to simulate for accurate gas; if simulation throws (e.g. chain
+  // rejects the tx for a validation reason like missing member_address),
+  // fall back to a fixed fee so the actual broadcast still happens and
+  // returns a DeliverTxResponse with the error. Tests using
+  // `testMsg(..., succeed: false)` rely on the failure being surfaced as
+  // a response rather than a thrown exception.
+  let txFee;
+  try {
+    txFee = getFee(
+      1,
+      await client.simulate(granteeAddress, [message], undefined)
+    );
+  } catch {
+    txFee = fee;
+  }
   const response = await client.signAndBroadcast(
     granteeAddress,
     [message],
-    getFee(1, await client.simulate(granteeAddress, [message], undefined))
+    txFee
   );
   return response;
 };
@@ -613,7 +646,12 @@ export const MsgExecAgentSubmit = async (
   useIntent = false,
   amount: Coin[] = [],
   cw20Payment: CW20Payment[] = [],
-  cw1155Payment: CW1155Payment[] = []
+  cw1155Payment: CW1155Payment[] = [],
+  // For team subscriptions: the member this claim is on behalf of. Must equal
+  // the originating intent's member_address (strict equality — both empty for
+  // individual subscriptions, or both equal for team). Must be empty when
+  // useIntent is false.
+  memberAddress: string = ""
 ) => {
   const client = await createClient(getUser(grantee));
 
@@ -638,6 +676,7 @@ export const MsgExecAgentSubmit = async (
               amount,
               cw20Payment,
               cw1155Payment,
+              memberAddress,
             })
           ).finish(),
         },
@@ -985,6 +1024,111 @@ export const CreateCollectionSupamotoGenesis = async (
           timeoutNs: utils.proto.toDuration((0).toString()),
         }),
       }),
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
+// -------------------------------------------
+// Team Member Budgets
+// -------------------------------------------
+
+export type CollectionMemberInputArgs = {
+  memberAddress: string;
+  // Period in seconds for budget reset (e.g., 240 = 4 min — chain minimum
+  // when set for testing; 30 days = 30 * 24 * 60 * 60).
+  periodSeconds: number;
+  periodSpendLimit?: Coin[];
+  periodCw20SpendLimit?: CW20Payment[];
+  resetPeriodSpent?: boolean;
+};
+
+/**
+ * SetCollectionMembers adds or updates one or more team member budgets on a
+ * collection. Each member entry needs at least one non-zero spend limit
+ * (native or CW20) — otherwise the chain rejects with ErrMemberBudgetZero.
+ * Periods shorter than MinMemberBudgetPeriod (24h in production, 4 min while
+ * testing) are rejected. Duplicate member addresses within a single message
+ * are rejected by ValidateBasic.
+ */
+export const SetCollectionMembers = async (
+  collectionId: string,
+  adminAddress: string,
+  members: CollectionMemberInputArgs[],
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
+  const tester = (await getUser(signer).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+      grantee: tester,
+      msgs: [
+        {
+          typeUrl: "/ixo.claims.v1beta1.MsgSetCollectionMembers",
+          value: ixo.claims.v1beta1.MsgSetCollectionMembers.encode(
+            ixo.claims.v1beta1.MsgSetCollectionMembers.fromPartial({
+              collectionId,
+              adminAddress,
+              members: members.map((m) =>
+                ixo.claims.v1beta1.CollectionMemberInput.fromPartial({
+                  memberAddress: m.memberAddress,
+                  period: utils.proto.toDuration(
+                    (1000000000 * m.periodSeconds).toString()
+                  ),
+                  periodSpendLimit: m.periodSpendLimit ?? [],
+                  periodCw20SpendLimit: m.periodCw20SpendLimit ?? [],
+                  resetPeriodSpent: m.resetPeriodSpent ?? false,
+                })
+              ),
+            })
+          ).finish(),
+        },
+      ],
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
+/**
+ * RemoveCollectionMembers removes one or more team member budgets from a
+ * collection in a single transaction. Fails atomically if any of the member
+ * addresses do not currently exist as members on the collection. Existing
+ * authorizations the removed members granted to oracles are NOT revoked —
+ * the admin must do that separately if needed. Pending intents from removed
+ * members continue to expire and refund escrow normally; budget restoration
+ * is silently skipped (member budget no longer exists).
+ */
+export const RemoveCollectionMembers = async (
+  collectionId: string,
+  adminAddress: string,
+  memberAddresses: string[],
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
+  const tester = (await getUser(signer).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+      grantee: tester,
+      msgs: [
+        {
+          typeUrl: "/ixo.claims.v1beta1.MsgRemoveCollectionMembers",
+          value: ixo.claims.v1beta1.MsgRemoveCollectionMembers.encode(
+            ixo.claims.v1beta1.MsgRemoveCollectionMembers.fromPartial({
+              collectionId,
+              adminAddress,
+              memberAddresses,
+            })
+          ).finish(),
+        },
+      ],
     }),
   };
 

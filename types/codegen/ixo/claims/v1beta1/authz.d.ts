@@ -57,6 +57,14 @@ export interface SubmitClaimConstraints {
      * payments from Collection payments are used
      */
     maxCw1155Payment: CW1155Payment[];
+    /**
+     * member_address is the team member who created this constraint via
+     * MsgCreateClaimAuthorization. Empty for individual (non-team) subscriptions.
+     * Used by Accept() to match the correct member's constraint when multiple
+     * team members authorize the same oracle, and by the intent handler to
+     * validate the oracle was authorized by the claimed member.
+     */
+    memberAddress: string;
 }
 export interface SubmitClaimConstraintsSDKType {
     collection_id: string;
@@ -65,6 +73,7 @@ export interface SubmitClaimConstraintsSDKType {
     max_cw20_payment: CW20PaymentSDKType[];
     intent_duration_ns?: DurationSDKType;
     max_cw1155_payment: CW1155PaymentSDKType[];
+    member_address: string;
 }
 export interface EvaluateClaimAuthorization {
     /** address of admin (entity admin module account) */
@@ -232,6 +241,14 @@ export interface CreateClaimAuthorizationConstraints {
      * authorizations
      */
     maxCw1155Payment: CW1155Payment[];
+    /**
+     * member_address is the team member this constraint is for. Set by the team
+     * admin when granting CreateClaimAuthorizationAuthorization to a member.
+     * Enforced in Accept() to prevent a member from spoofing another member's
+     * address when creating oracle authorizations. Empty for individual
+     * (non-team) subscriptions.
+     */
+    memberAddress: string;
 }
 /**
  * CreateClaimAuthorizationConstraints defines the constraints for creating
@@ -247,6 +264,7 @@ export interface CreateClaimAuthorizationConstraintsSDKType {
     allowed_auth_types: CreateClaimAuthorizationType;
     max_intent_duration_ns?: DurationSDKType;
     max_cw1155_payment: CW1155PaymentSDKType[];
+    member_address: string;
 }
 export declare const SubmitClaimAuthorization: {
     encode(message: SubmitClaimAuthorization, writer?: _m0.Writer): _m0.Writer;

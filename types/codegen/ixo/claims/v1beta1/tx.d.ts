@@ -82,6 +82,12 @@ export interface MsgSubmitClaim {
      * NOTE: if all amounts are empty then collection default is used
      */
     cw1155Payment: CW1155Payment[];
+    /**
+     * member_address is the team member this claim is on behalf of. Required if
+     * the collection has member budgets. Must match intent's member_address when
+     * use_intent is true.
+     */
+    memberAddress: string;
 }
 export interface MsgSubmitClaimSDKType {
     collection_id: string;
@@ -93,6 +99,7 @@ export interface MsgSubmitClaimSDKType {
     amount: CoinSDKType[];
     cw20_payment: CW20PaymentSDKType[];
     cw1155_payment: CW1155PaymentSDKType[];
+    member_address: string;
 }
 export interface MsgSubmitClaimResponse {
 }
@@ -354,6 +361,13 @@ export interface MsgClaimIntent {
      * payment)
      */
     cw1155Payment: CW1155Payment[];
+    /**
+     * member_address is the team member this intent is on behalf of. Required if
+     * the collection has member budgets. Validated against the oracle's
+     * SubmitClaimConstraints.member_address to prove the member authorized this
+     * oracle. Used to check and deduct from the member's periodic budget.
+     */
+    memberAddress: string;
 }
 export interface MsgClaimIntentSDKType {
     agent_did: string;
@@ -362,6 +376,7 @@ export interface MsgClaimIntentSDKType {
     amount: CoinSDKType[];
     cw20_payment: CW20PaymentSDKType[];
     cw1155_payment: CW1155PaymentSDKType[];
+    member_address: string;
 }
 /** MsgClaimIntentResponse defines the response after submitting an intent. */
 export interface MsgClaimIntentResponse {
@@ -427,6 +442,12 @@ export interface MsgCreateClaimAuthorization {
      * submit and evaluate)
      */
     maxCw1155Payment: CW1155Payment[];
+    /**
+     * member_address to set on the created SubmitClaimConstraint. Must match
+     * the member_address in the creator's CreateClaimAuthorizationConstraints
+     * to prevent spoofing (enforced in Accept()).
+     */
+    memberAddress: string;
 }
 /**
  * MsgCreateClaimAuthorization defines a message for creating a claim
@@ -447,6 +468,7 @@ export interface MsgCreateClaimAuthorizationSDKType {
     intent_duration_ns?: DurationSDKType;
     before_date?: TimestampSDKType;
     max_cw1155_payment: CW1155PaymentSDKType[];
+    member_address: string;
 }
 /**
  * MsgCreateClaimAuthorizationResponse defines the response for creating a claim
@@ -459,6 +481,115 @@ export interface MsgCreateClaimAuthorizationResponse {
  * authorization
  */
 export interface MsgCreateClaimAuthorizationResponseSDKType {
+}
+/**
+ * MsgSetCollectionMembers adds or updates one or more member budgets on a
+ * collection in a single transaction. For each member entry:
+ *   - If the member already exists and reset_period_spent is false: budget
+ *     limits (period, spend_limit, cw20_spend_limit) are updated, but
+ *     period_spent and period_reset_at are preserved. The current period
+ *     continues with the new limits applied immediately.
+ *   - If the member already exists and reset_period_spent is true:
+ *     period_spent is cleared and period_reset_at is set to now + period.
+ *     This starts a fresh cycle from the current block time.
+ *   - If the member is new: created with period_spent = zero and
+ *     period_reset_at = now + period.
+ *
+ * Handler will reject any member entry where all spend limits are zero —
+ * use MsgRemoveCollectionMembers instead. Duplicate member addresses within
+ * a single message are rejected.
+ */
+export interface MsgSetCollectionMembers {
+    /** collection_id to add/update members on */
+    collectionId: string;
+    /** admin address, validated against Collection Admin */
+    adminAddress: string;
+    /** list of member budgets to set */
+    members: CollectionMemberInput[];
+}
+/**
+ * MsgSetCollectionMembers adds or updates one or more member budgets on a
+ * collection in a single transaction. For each member entry:
+ *   - If the member already exists and reset_period_spent is false: budget
+ *     limits (period, spend_limit, cw20_spend_limit) are updated, but
+ *     period_spent and period_reset_at are preserved. The current period
+ *     continues with the new limits applied immediately.
+ *   - If the member already exists and reset_period_spent is true:
+ *     period_spent is cleared and period_reset_at is set to now + period.
+ *     This starts a fresh cycle from the current block time.
+ *   - If the member is new: created with period_spent = zero and
+ *     period_reset_at = now + period.
+ *
+ * Handler will reject any member entry where all spend limits are zero —
+ * use MsgRemoveCollectionMembers instead. Duplicate member addresses within
+ * a single message are rejected.
+ */
+export interface MsgSetCollectionMembersSDKType {
+    collection_id: string;
+    admin_address: string;
+    members: CollectionMemberInputSDKType[];
+}
+export interface MsgSetCollectionMembersResponse {
+}
+export interface MsgSetCollectionMembersResponseSDKType {
+}
+/**
+ * CollectionMemberInput defines the input for a single member budget within
+ * MsgSetCollectionMembers
+ */
+export interface CollectionMemberInput {
+    /** member's blockchain address */
+    memberAddress: string;
+    /**
+     * period duration for budget reset (e.g., 30 days). Must be at least 24 hours
+     * (MinMemberBudgetPeriod). Periods shorter than 24 hours are rejected to
+     * prevent griefing via the lazy-reset loop in the intent handler.
+     */
+    period?: Duration;
+    /** maximum native coin spend allowed per period */
+    periodSpendLimit: Coin[];
+    /** maximum CW20 spend allowed per period */
+    periodCw20SpendLimit: CW20Payment[];
+    /** if true, resets period_spent to zero (useful for manual admin reset) */
+    resetPeriodSpent: boolean;
+}
+/**
+ * CollectionMemberInput defines the input for a single member budget within
+ * MsgSetCollectionMembers
+ */
+export interface CollectionMemberInputSDKType {
+    member_address: string;
+    period?: DurationSDKType;
+    period_spend_limit: CoinSDKType[];
+    period_cw20_spend_limit: CW20PaymentSDKType[];
+    reset_period_spent: boolean;
+}
+/**
+ * MsgRemoveCollectionMembers removes one or more member budgets from a
+ * collection in a single transaction. Does not revoke the members' existing
+ * authorization grants — admin should do that separately if needed.
+ */
+export interface MsgRemoveCollectionMembers {
+    /** collection_id to remove members from */
+    collectionId: string;
+    /** admin address, validated against Collection Admin */
+    adminAddress: string;
+    /** list of member addresses to remove */
+    memberAddresses: string[];
+}
+/**
+ * MsgRemoveCollectionMembers removes one or more member budgets from a
+ * collection in a single transaction. Does not revoke the members' existing
+ * authorization grants — admin should do that separately if needed.
+ */
+export interface MsgRemoveCollectionMembersSDKType {
+    collection_id: string;
+    admin_address: string;
+    member_addresses: string[];
+}
+export interface MsgRemoveCollectionMembersResponse {
+}
+export interface MsgRemoveCollectionMembersResponseSDKType {
 }
 export declare const MsgCreateCollection: {
     encode(message: MsgCreateCollection, writer?: _m0.Writer): _m0.Writer;
@@ -613,4 +744,39 @@ export declare const MsgCreateClaimAuthorizationResponse: {
     fromJSON(_: any): MsgCreateClaimAuthorizationResponse;
     toJSON(_: MsgCreateClaimAuthorizationResponse): unknown;
     fromPartial(_: Partial<MsgCreateClaimAuthorizationResponse>): MsgCreateClaimAuthorizationResponse;
+};
+export declare const MsgSetCollectionMembers: {
+    encode(message: MsgSetCollectionMembers, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetCollectionMembers;
+    fromJSON(object: any): MsgSetCollectionMembers;
+    toJSON(message: MsgSetCollectionMembers): unknown;
+    fromPartial(object: Partial<MsgSetCollectionMembers>): MsgSetCollectionMembers;
+};
+export declare const MsgSetCollectionMembersResponse: {
+    encode(_: MsgSetCollectionMembersResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetCollectionMembersResponse;
+    fromJSON(_: any): MsgSetCollectionMembersResponse;
+    toJSON(_: MsgSetCollectionMembersResponse): unknown;
+    fromPartial(_: Partial<MsgSetCollectionMembersResponse>): MsgSetCollectionMembersResponse;
+};
+export declare const CollectionMemberInput: {
+    encode(message: CollectionMemberInput, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): CollectionMemberInput;
+    fromJSON(object: any): CollectionMemberInput;
+    toJSON(message: CollectionMemberInput): unknown;
+    fromPartial(object: Partial<CollectionMemberInput>): CollectionMemberInput;
+};
+export declare const MsgRemoveCollectionMembers: {
+    encode(message: MsgRemoveCollectionMembers, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgRemoveCollectionMembers;
+    fromJSON(object: any): MsgRemoveCollectionMembers;
+    toJSON(message: MsgRemoveCollectionMembers): unknown;
+    fromPartial(object: Partial<MsgRemoveCollectionMembers>): MsgRemoveCollectionMembers;
+};
+export declare const MsgRemoveCollectionMembersResponse: {
+    encode(_: MsgRemoveCollectionMembersResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgRemoveCollectionMembersResponse;
+    fromJSON(_: any): MsgRemoveCollectionMembersResponse;
+    toJSON(_: MsgRemoveCollectionMembersResponse): unknown;
+    fromPartial(_: Partial<MsgRemoveCollectionMembersResponse>): MsgRemoveCollectionMembersResponse;
 };

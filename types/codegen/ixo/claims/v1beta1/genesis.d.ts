@@ -1,4 +1,4 @@
-import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType } from "./claims";
+import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType, MemberBudget, MemberBudgetSDKType } from "./claims";
 import * as _m0 from "protobufjs/minimal";
 /** GenesisState defines the claims module's genesis state. */
 export interface GenesisState {
@@ -7,6 +7,7 @@ export interface GenesisState {
     claims: Claim[];
     disputes: Dispute[];
     intents: Intent[];
+    memberBudgets: MemberBudget[];
 }
 /** GenesisState defines the claims module's genesis state. */
 export interface GenesisStateSDKType {
@@ -15,6 +16,7 @@ export interface GenesisStateSDKType {
     claims: ClaimSDKType[];
     disputes: DisputeSDKType[];
     intents: IntentSDKType[];
+    member_budgets: MemberBudgetSDKType[];
 }
 export declare const GenesisState: {
     encode(message: GenesisState, writer?: _m0.Writer): _m0.Writer;

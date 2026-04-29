@@ -21,3 +21,21 @@ export const IidDocument = async (did: string) => {
 export const AllAccounts = async () => {
   return await queryClient.cosmos.auth.v1beta1.accounts({});
 };
+
+// Claims module — team member budgets
+
+export const CollectionMember = async (
+  collectionId: string,
+  memberAddress: string
+) => {
+  return await queryClient.ixo.claims.v1beta1.collectionMember({
+    collectionId,
+    memberAddress,
+  });
+};
+
+export const CollectionMemberList = async (collectionId: string) => {
+  return await queryClient.ixo.claims.v1beta1.collectionMemberList({
+    collectionId,
+  });
+};

@@ -81,6 +81,12 @@ export interface MsgSubmitClaim {
    * NOTE: if all amounts are empty then collection default is used
    */
   cw1155Payment: CW1155Payment[];
+  /**
+   * member_address is the team member this claim is on behalf of. Required if
+   * the collection has member budgets. Must match intent's member_address when
+   * use_intent is true.
+   */
+  memberAddress: string;
 }
 export interface MsgSubmitClaimSDKType {
   collection_id: string;
@@ -92,6 +98,7 @@ export interface MsgSubmitClaimSDKType {
   amount: CoinSDKType[];
   cw20_payment: CW20PaymentSDKType[];
   cw1155_payment: CW1155PaymentSDKType[];
+  member_address: string;
 }
 export interface MsgSubmitClaimResponse {}
 export interface MsgSubmitClaimResponseSDKType {}
@@ -337,6 +344,13 @@ export interface MsgClaimIntent {
    * payment)
    */
   cw1155Payment: CW1155Payment[];
+  /**
+   * member_address is the team member this intent is on behalf of. Required if
+   * the collection has member budgets. Validated against the oracle's
+   * SubmitClaimConstraints.member_address to prove the member authorized this
+   * oracle. Used to check and deduct from the member's periodic budget.
+   */
+  memberAddress: string;
 }
 export interface MsgClaimIntentSDKType {
   agent_did: string;
@@ -345,6 +359,7 @@ export interface MsgClaimIntentSDKType {
   amount: CoinSDKType[];
   cw20_payment: CW20PaymentSDKType[];
   cw1155_payment: CW1155PaymentSDKType[];
+  member_address: string;
 }
 /** MsgClaimIntentResponse defines the response after submitting an intent. */
 export interface MsgClaimIntentResponse {
@@ -410,6 +425,12 @@ export interface MsgCreateClaimAuthorization {
    * submit and evaluate)
    */
   maxCw1155Payment: CW1155Payment[];
+  /**
+   * member_address to set on the created SubmitClaimConstraint. Must match
+   * the member_address in the creator's CreateClaimAuthorizationConstraints
+   * to prevent spoofing (enforced in Accept()).
+   */
+  memberAddress: string;
 }
 /**
  * MsgCreateClaimAuthorization defines a message for creating a claim
@@ -430,6 +451,7 @@ export interface MsgCreateClaimAuthorizationSDKType {
   intent_duration_ns?: DurationSDKType;
   before_date?: TimestampSDKType;
   max_cw1155_payment: CW1155PaymentSDKType[];
+  member_address: string;
 }
 /**
  * MsgCreateClaimAuthorizationResponse defines the response for creating a claim
@@ -441,6 +463,111 @@ export interface MsgCreateClaimAuthorizationResponse {}
  * authorization
  */
 export interface MsgCreateClaimAuthorizationResponseSDKType {}
+/**
+ * MsgSetCollectionMembers adds or updates one or more member budgets on a
+ * collection in a single transaction. For each member entry:
+ *   - If the member already exists and reset_period_spent is false: budget
+ *     limits (period, spend_limit, cw20_spend_limit) are updated, but
+ *     period_spent and period_reset_at are preserved. The current period
+ *     continues with the new limits applied immediately.
+ *   - If the member already exists and reset_period_spent is true:
+ *     period_spent is cleared and period_reset_at is set to now + period.
+ *     This starts a fresh cycle from the current block time.
+ *   - If the member is new: created with period_spent = zero and
+ *     period_reset_at = now + period.
+ * 
+ * Handler will reject any member entry where all spend limits are zero —
+ * use MsgRemoveCollectionMembers instead. Duplicate member addresses within
+ * a single message are rejected.
+ */
+export interface MsgSetCollectionMembers {
+  /** collection_id to add/update members on */
+  collectionId: string;
+  /** admin address, validated against Collection Admin */
+  adminAddress: string;
+  /** list of member budgets to set */
+  members: CollectionMemberInput[];
+}
+/**
+ * MsgSetCollectionMembers adds or updates one or more member budgets on a
+ * collection in a single transaction. For each member entry:
+ *   - If the member already exists and reset_period_spent is false: budget
+ *     limits (period, spend_limit, cw20_spend_limit) are updated, but
+ *     period_spent and period_reset_at are preserved. The current period
+ *     continues with the new limits applied immediately.
+ *   - If the member already exists and reset_period_spent is true:
+ *     period_spent is cleared and period_reset_at is set to now + period.
+ *     This starts a fresh cycle from the current block time.
+ *   - If the member is new: created with period_spent = zero and
+ *     period_reset_at = now + period.
+ * 
+ * Handler will reject any member entry where all spend limits are zero —
+ * use MsgRemoveCollectionMembers instead. Duplicate member addresses within
+ * a single message are rejected.
+ */
+export interface MsgSetCollectionMembersSDKType {
+  collection_id: string;
+  admin_address: string;
+  members: CollectionMemberInputSDKType[];
+}
+export interface MsgSetCollectionMembersResponse {}
+export interface MsgSetCollectionMembersResponseSDKType {}
+/**
+ * CollectionMemberInput defines the input for a single member budget within
+ * MsgSetCollectionMembers
+ */
+export interface CollectionMemberInput {
+  /** member's blockchain address */
+  memberAddress: string;
+  /**
+   * period duration for budget reset (e.g., 30 days). Must be at least 24 hours
+   * (MinMemberBudgetPeriod). Periods shorter than 24 hours are rejected to
+   * prevent griefing via the lazy-reset loop in the intent handler.
+   */
+  period?: Duration;
+  /** maximum native coin spend allowed per period */
+  periodSpendLimit: Coin[];
+  /** maximum CW20 spend allowed per period */
+  periodCw20SpendLimit: CW20Payment[];
+  /** if true, resets period_spent to zero (useful for manual admin reset) */
+  resetPeriodSpent: boolean;
+}
+/**
+ * CollectionMemberInput defines the input for a single member budget within
+ * MsgSetCollectionMembers
+ */
+export interface CollectionMemberInputSDKType {
+  member_address: string;
+  period?: DurationSDKType;
+  period_spend_limit: CoinSDKType[];
+  period_cw20_spend_limit: CW20PaymentSDKType[];
+  reset_period_spent: boolean;
+}
+/**
+ * MsgRemoveCollectionMembers removes one or more member budgets from a
+ * collection in a single transaction. Does not revoke the members' existing
+ * authorization grants — admin should do that separately if needed.
+ */
+export interface MsgRemoveCollectionMembers {
+  /** collection_id to remove members from */
+  collectionId: string;
+  /** admin address, validated against Collection Admin */
+  adminAddress: string;
+  /** list of member addresses to remove */
+  memberAddresses: string[];
+}
+/**
+ * MsgRemoveCollectionMembers removes one or more member budgets from a
+ * collection in a single transaction. Does not revoke the members' existing
+ * authorization grants — admin should do that separately if needed.
+ */
+export interface MsgRemoveCollectionMembersSDKType {
+  collection_id: string;
+  admin_address: string;
+  member_addresses: string[];
+}
+export interface MsgRemoveCollectionMembersResponse {}
+export interface MsgRemoveCollectionMembersResponseSDKType {}
 function createBaseMsgCreateCollection(): MsgCreateCollection {
   return {
     entity: "",
@@ -609,7 +736,8 @@ function createBaseMsgSubmitClaim(): MsgSubmitClaim {
     useIntent: false,
     amount: [],
     cw20Payment: [],
-    cw1155Payment: []
+    cw1155Payment: [],
+    memberAddress: ""
   };
 }
 export const MsgSubmitClaim = {
@@ -640,6 +768,9 @@ export const MsgSubmitClaim = {
     }
     for (const v of message.cw1155Payment) {
       CW1155Payment.encode(v!, writer.uint32(74).fork()).ldelim();
+    }
+    if (message.memberAddress !== "") {
+      writer.uint32(82).string(message.memberAddress);
     }
     return writer;
   },
@@ -677,6 +808,9 @@ export const MsgSubmitClaim = {
         case 9:
           message.cw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
           break;
+        case 10:
+          message.memberAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -694,7 +828,8 @@ export const MsgSubmitClaim = {
       useIntent: isSet(object.useIntent) ? Boolean(object.useIntent) : false,
       amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
       cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
-      cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : []
+      cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : [],
+      memberAddress: isSet(object.memberAddress) ? String(object.memberAddress) : ""
     };
   },
   toJSON(message: MsgSubmitClaim): unknown {
@@ -720,6 +855,7 @@ export const MsgSubmitClaim = {
     } else {
       obj.cw1155Payment = [];
     }
+    message.memberAddress !== undefined && (obj.memberAddress = message.memberAddress);
     return obj;
   },
   fromPartial(object: Partial<MsgSubmitClaim>): MsgSubmitClaim {
@@ -733,6 +869,7 @@ export const MsgSubmitClaim = {
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
+    message.memberAddress = object.memberAddress ?? "";
     return message;
   }
 };
@@ -1690,7 +1827,8 @@ function createBaseMsgClaimIntent(): MsgClaimIntent {
     collectionId: "",
     amount: [],
     cw20Payment: [],
-    cw1155Payment: []
+    cw1155Payment: [],
+    memberAddress: ""
   };
 }
 export const MsgClaimIntent = {
@@ -1712,6 +1850,9 @@ export const MsgClaimIntent = {
     }
     for (const v of message.cw1155Payment) {
       CW1155Payment.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.memberAddress !== "") {
+      writer.uint32(58).string(message.memberAddress);
     }
     return writer;
   },
@@ -1740,6 +1881,9 @@ export const MsgClaimIntent = {
         case 6:
           message.cw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
           break;
+        case 7:
+          message.memberAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1754,7 +1898,8 @@ export const MsgClaimIntent = {
       collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
       amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
       cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
-      cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : []
+      cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : [],
+      memberAddress: isSet(object.memberAddress) ? String(object.memberAddress) : ""
     };
   },
   toJSON(message: MsgClaimIntent): unknown {
@@ -1777,6 +1922,7 @@ export const MsgClaimIntent = {
     } else {
       obj.cw1155Payment = [];
     }
+    message.memberAddress !== undefined && (obj.memberAddress = message.memberAddress);
     return obj;
   },
   fromPartial(object: Partial<MsgClaimIntent>): MsgClaimIntent {
@@ -1787,6 +1933,7 @@ export const MsgClaimIntent = {
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
+    message.memberAddress = object.memberAddress ?? "";
     return message;
   }
 };
@@ -1859,7 +2006,8 @@ function createBaseMsgCreateClaimAuthorization(): MsgCreateClaimAuthorization {
     expiration: undefined,
     intentDurationNs: undefined,
     beforeDate: undefined,
-    maxCw1155Payment: []
+    maxCw1155Payment: [],
+    memberAddress: ""
   };
 }
 export const MsgCreateClaimAuthorization = {
@@ -1902,6 +2050,9 @@ export const MsgCreateClaimAuthorization = {
     }
     for (const v of message.maxCw1155Payment) {
       CW1155Payment.encode(v!, writer.uint32(106).fork()).ldelim();
+    }
+    if (message.memberAddress !== "") {
+      writer.uint32(114).string(message.memberAddress);
     }
     return writer;
   },
@@ -1951,6 +2102,9 @@ export const MsgCreateClaimAuthorization = {
         case 13:
           message.maxCw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
           break;
+        case 14:
+          message.memberAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1972,7 +2126,8 @@ export const MsgCreateClaimAuthorization = {
       expiration: isSet(object.expiration) ? fromJsonTimestamp(object.expiration) : undefined,
       intentDurationNs: isSet(object.intentDurationNs) ? Duration.fromJSON(object.intentDurationNs) : undefined,
       beforeDate: isSet(object.beforeDate) ? fromJsonTimestamp(object.beforeDate) : undefined,
-      maxCw1155Payment: Array.isArray(object?.maxCw1155Payment) ? object.maxCw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : []
+      maxCw1155Payment: Array.isArray(object?.maxCw1155Payment) ? object.maxCw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : [],
+      memberAddress: isSet(object.memberAddress) ? String(object.memberAddress) : ""
     };
   },
   toJSON(message: MsgCreateClaimAuthorization): unknown {
@@ -2002,6 +2157,7 @@ export const MsgCreateClaimAuthorization = {
     } else {
       obj.maxCw1155Payment = [];
     }
+    message.memberAddress !== undefined && (obj.memberAddress = message.memberAddress);
     return obj;
   },
   fromPartial(object: Partial<MsgCreateClaimAuthorization>): MsgCreateClaimAuthorization {
@@ -2019,6 +2175,7 @@ export const MsgCreateClaimAuthorization = {
     message.intentDurationNs = object.intentDurationNs !== undefined && object.intentDurationNs !== null ? Duration.fromPartial(object.intentDurationNs) : undefined;
     message.beforeDate = object.beforeDate !== undefined && object.beforeDate !== null ? Timestamp.fromPartial(object.beforeDate) : undefined;
     message.maxCw1155Payment = object.maxCw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
+    message.memberAddress = object.memberAddress ?? "";
     return message;
   }
 };
@@ -2052,6 +2209,303 @@ export const MsgCreateClaimAuthorizationResponse = {
   },
   fromPartial(_: Partial<MsgCreateClaimAuthorizationResponse>): MsgCreateClaimAuthorizationResponse {
     const message = createBaseMsgCreateClaimAuthorizationResponse();
+    return message;
+  }
+};
+function createBaseMsgSetCollectionMembers(): MsgSetCollectionMembers {
+  return {
+    collectionId: "",
+    adminAddress: "",
+    members: []
+  };
+}
+export const MsgSetCollectionMembers = {
+  encode(message: MsgSetCollectionMembers, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.collectionId !== "") {
+      writer.uint32(10).string(message.collectionId);
+    }
+    if (message.adminAddress !== "") {
+      writer.uint32(18).string(message.adminAddress);
+    }
+    for (const v of message.members) {
+      CollectionMemberInput.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetCollectionMembers {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetCollectionMembers();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.collectionId = reader.string();
+          break;
+        case 2:
+          message.adminAddress = reader.string();
+          break;
+        case 3:
+          message.members.push(CollectionMemberInput.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgSetCollectionMembers {
+    return {
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : "",
+      members: Array.isArray(object?.members) ? object.members.map((e: any) => CollectionMemberInput.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: MsgSetCollectionMembers): unknown {
+    const obj: any = {};
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.adminAddress !== undefined && (obj.adminAddress = message.adminAddress);
+    if (message.members) {
+      obj.members = message.members.map(e => e ? CollectionMemberInput.toJSON(e) : undefined);
+    } else {
+      obj.members = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<MsgSetCollectionMembers>): MsgSetCollectionMembers {
+    const message = createBaseMsgSetCollectionMembers();
+    message.collectionId = object.collectionId ?? "";
+    message.adminAddress = object.adminAddress ?? "";
+    message.members = object.members?.map(e => CollectionMemberInput.fromPartial(e)) || [];
+    return message;
+  }
+};
+function createBaseMsgSetCollectionMembersResponse(): MsgSetCollectionMembersResponse {
+  return {};
+}
+export const MsgSetCollectionMembersResponse = {
+  encode(_: MsgSetCollectionMembersResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetCollectionMembersResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetCollectionMembersResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgSetCollectionMembersResponse {
+    return {};
+  },
+  toJSON(_: MsgSetCollectionMembersResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgSetCollectionMembersResponse>): MsgSetCollectionMembersResponse {
+    const message = createBaseMsgSetCollectionMembersResponse();
+    return message;
+  }
+};
+function createBaseCollectionMemberInput(): CollectionMemberInput {
+  return {
+    memberAddress: "",
+    period: undefined,
+    periodSpendLimit: [],
+    periodCw20SpendLimit: [],
+    resetPeriodSpent: false
+  };
+}
+export const CollectionMemberInput = {
+  encode(message: CollectionMemberInput, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.memberAddress !== "") {
+      writer.uint32(10).string(message.memberAddress);
+    }
+    if (message.period !== undefined) {
+      Duration.encode(message.period, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.periodSpendLimit) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.periodCw20SpendLimit) {
+      CW20Payment.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.resetPeriodSpent === true) {
+      writer.uint32(40).bool(message.resetPeriodSpent);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): CollectionMemberInput {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCollectionMemberInput();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.memberAddress = reader.string();
+          break;
+        case 2:
+          message.period = Duration.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.periodSpendLimit.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 4:
+          message.periodCw20SpendLimit.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
+        case 5:
+          message.resetPeriodSpent = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): CollectionMemberInput {
+    return {
+      memberAddress: isSet(object.memberAddress) ? String(object.memberAddress) : "",
+      period: isSet(object.period) ? Duration.fromJSON(object.period) : undefined,
+      periodSpendLimit: Array.isArray(object?.periodSpendLimit) ? object.periodSpendLimit.map((e: any) => Coin.fromJSON(e)) : [],
+      periodCw20SpendLimit: Array.isArray(object?.periodCw20SpendLimit) ? object.periodCw20SpendLimit.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      resetPeriodSpent: isSet(object.resetPeriodSpent) ? Boolean(object.resetPeriodSpent) : false
+    };
+  },
+  toJSON(message: CollectionMemberInput): unknown {
+    const obj: any = {};
+    message.memberAddress !== undefined && (obj.memberAddress = message.memberAddress);
+    message.period !== undefined && (obj.period = message.period ? Duration.toJSON(message.period) : undefined);
+    if (message.periodSpendLimit) {
+      obj.periodSpendLimit = message.periodSpendLimit.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.periodSpendLimit = [];
+    }
+    if (message.periodCw20SpendLimit) {
+      obj.periodCw20SpendLimit = message.periodCw20SpendLimit.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.periodCw20SpendLimit = [];
+    }
+    message.resetPeriodSpent !== undefined && (obj.resetPeriodSpent = message.resetPeriodSpent);
+    return obj;
+  },
+  fromPartial(object: Partial<CollectionMemberInput>): CollectionMemberInput {
+    const message = createBaseCollectionMemberInput();
+    message.memberAddress = object.memberAddress ?? "";
+    message.period = object.period !== undefined && object.period !== null ? Duration.fromPartial(object.period) : undefined;
+    message.periodSpendLimit = object.periodSpendLimit?.map(e => Coin.fromPartial(e)) || [];
+    message.periodCw20SpendLimit = object.periodCw20SpendLimit?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.resetPeriodSpent = object.resetPeriodSpent ?? false;
+    return message;
+  }
+};
+function createBaseMsgRemoveCollectionMembers(): MsgRemoveCollectionMembers {
+  return {
+    collectionId: "",
+    adminAddress: "",
+    memberAddresses: []
+  };
+}
+export const MsgRemoveCollectionMembers = {
+  encode(message: MsgRemoveCollectionMembers, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.collectionId !== "") {
+      writer.uint32(10).string(message.collectionId);
+    }
+    if (message.adminAddress !== "") {
+      writer.uint32(18).string(message.adminAddress);
+    }
+    for (const v of message.memberAddresses) {
+      writer.uint32(26).string(v!);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRemoveCollectionMembers {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRemoveCollectionMembers();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.collectionId = reader.string();
+          break;
+        case 2:
+          message.adminAddress = reader.string();
+          break;
+        case 3:
+          message.memberAddresses.push(reader.string());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgRemoveCollectionMembers {
+    return {
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : "",
+      memberAddresses: Array.isArray(object?.memberAddresses) ? object.memberAddresses.map((e: any) => String(e)) : []
+    };
+  },
+  toJSON(message: MsgRemoveCollectionMembers): unknown {
+    const obj: any = {};
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.adminAddress !== undefined && (obj.adminAddress = message.adminAddress);
+    if (message.memberAddresses) {
+      obj.memberAddresses = message.memberAddresses.map(e => e);
+    } else {
+      obj.memberAddresses = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<MsgRemoveCollectionMembers>): MsgRemoveCollectionMembers {
+    const message = createBaseMsgRemoveCollectionMembers();
+    message.collectionId = object.collectionId ?? "";
+    message.adminAddress = object.adminAddress ?? "";
+    message.memberAddresses = object.memberAddresses?.map(e => e) || [];
+    return message;
+  }
+};
+function createBaseMsgRemoveCollectionMembersResponse(): MsgRemoveCollectionMembersResponse {
+  return {};
+}
+export const MsgRemoveCollectionMembersResponse = {
+  encode(_: MsgRemoveCollectionMembersResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRemoveCollectionMembersResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRemoveCollectionMembersResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgRemoveCollectionMembersResponse {
+    return {};
+  },
+  toJSON(_: MsgRemoveCollectionMembersResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgRemoveCollectionMembersResponse>): MsgRemoveCollectionMembersResponse {
+    const message = createBaseMsgRemoveCollectionMembersResponse();
     return message;
   }
 };

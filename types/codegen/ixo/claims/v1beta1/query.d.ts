@@ -1,5 +1,5 @@
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType } from "./claims";
+import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType, MemberBudget, MemberBudgetSDKType } from "./claims";
 import * as _m0 from "protobufjs/minimal";
 export interface QueryParamsRequest {
 }
@@ -118,6 +118,36 @@ export interface QueryIntentListResponse {
 }
 export interface QueryIntentListResponseSDKType {
     intents: IntentSDKType[];
+    pagination?: PageResponseSDKType;
+}
+export interface QueryCollectionMemberRequest {
+    collectionId: string;
+    memberAddress: string;
+}
+export interface QueryCollectionMemberRequestSDKType {
+    collectionId: string;
+    memberAddress: string;
+}
+export interface QueryCollectionMemberResponse {
+    memberBudget?: MemberBudget;
+}
+export interface QueryCollectionMemberResponseSDKType {
+    member_budget?: MemberBudgetSDKType;
+}
+export interface QueryCollectionMemberListRequest {
+    collectionId: string;
+    pagination?: PageRequest;
+}
+export interface QueryCollectionMemberListRequestSDKType {
+    collectionId: string;
+    pagination?: PageRequestSDKType;
+}
+export interface QueryCollectionMemberListResponse {
+    memberBudgets: MemberBudget[];
+    pagination?: PageResponse;
+}
+export interface QueryCollectionMemberListResponseSDKType {
+    member_budgets: MemberBudgetSDKType[];
     pagination?: PageResponseSDKType;
 }
 export declare const QueryParamsRequest: {
@@ -245,4 +275,32 @@ export declare const QueryIntentListResponse: {
     fromJSON(object: any): QueryIntentListResponse;
     toJSON(message: QueryIntentListResponse): unknown;
     fromPartial(object: Partial<QueryIntentListResponse>): QueryIntentListResponse;
+};
+export declare const QueryCollectionMemberRequest: {
+    encode(message: QueryCollectionMemberRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryCollectionMemberRequest;
+    fromJSON(object: any): QueryCollectionMemberRequest;
+    toJSON(message: QueryCollectionMemberRequest): unknown;
+    fromPartial(object: Partial<QueryCollectionMemberRequest>): QueryCollectionMemberRequest;
+};
+export declare const QueryCollectionMemberResponse: {
+    encode(message: QueryCollectionMemberResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryCollectionMemberResponse;
+    fromJSON(object: any): QueryCollectionMemberResponse;
+    toJSON(message: QueryCollectionMemberResponse): unknown;
+    fromPartial(object: Partial<QueryCollectionMemberResponse>): QueryCollectionMemberResponse;
+};
+export declare const QueryCollectionMemberListRequest: {
+    encode(message: QueryCollectionMemberListRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryCollectionMemberListRequest;
+    fromJSON(object: any): QueryCollectionMemberListRequest;
+    toJSON(message: QueryCollectionMemberListRequest): unknown;
+    fromPartial(object: Partial<QueryCollectionMemberListRequest>): QueryCollectionMemberListRequest;
+};
+export declare const QueryCollectionMemberListResponse: {
+    encode(message: QueryCollectionMemberListResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryCollectionMemberListResponse;
+    fromJSON(object: any): QueryCollectionMemberListResponse;
+    toJSON(message: QueryCollectionMemberListResponse): unknown;
+    fromPartial(object: Partial<QueryCollectionMemberListResponse>): QueryCollectionMemberListResponse;
 };

@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, CW1155IntentPayment, CW1155IntentPaymentSDKType, Intent, IntentSDKType } from "./claims";
+import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, CW1155IntentPayment, CW1155IntentPaymentSDKType, Intent, IntentSDKType, MemberBudget, MemberBudgetSDKType } from "./claims";
 import { WithdrawPaymentConstraints, WithdrawPaymentConstraintsSDKType } from "./authz";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
@@ -125,6 +125,72 @@ export interface ClaimAuthorizationCreatedEventSDKType {
   admin: string;
   collection_id: string;
   auth_type: string;
+}
+/**
+ * MemberBudgetCreatedEvent is an event triggered when a team member budget is
+ * added to a collection for the first time.
+ */
+export interface MemberBudgetCreatedEvent {
+  /**
+   * MemberBudgetCreatedEvent is an event triggered when a team member budget is
+   * added to a collection for the first time.
+   */
+  budget?: MemberBudget;
+}
+/**
+ * MemberBudgetCreatedEvent is an event triggered when a team member budget is
+ * added to a collection for the first time.
+ */
+export interface MemberBudgetCreatedEventSDKType {
+  budget?: MemberBudgetSDKType;
+}
+/**
+ * MemberBudgetUpdatedEvent is an event triggered on any state change to an
+ * existing member budget — admin-driven update via MsgSetCollectionMembers,
+ * period_spent deduction during MsgClaimIntent, period_spent restoration on
+ * claim rejection / dispute / invalidation / intent expiration, or lazy period
+ * reset.
+ */
+export interface MemberBudgetUpdatedEvent {
+  /**
+   * MemberBudgetUpdatedEvent is an event triggered on any state change to an
+   * existing member budget — admin-driven update via MsgSetCollectionMembers,
+   * period_spent deduction during MsgClaimIntent, period_spent restoration on
+   * claim rejection / dispute / invalidation / intent expiration, or lazy period
+   * reset.
+   */
+  budget?: MemberBudget;
+}
+/**
+ * MemberBudgetUpdatedEvent is an event triggered on any state change to an
+ * existing member budget — admin-driven update via MsgSetCollectionMembers,
+ * period_spent deduction during MsgClaimIntent, period_spent restoration on
+ * claim rejection / dispute / invalidation / intent expiration, or lazy period
+ * reset.
+ */
+export interface MemberBudgetUpdatedEventSDKType {
+  budget?: MemberBudgetSDKType;
+}
+/**
+ * MemberBudgetRemovedEvent is an event triggered when a team member budget is
+ * removed from a collection. Includes the final budget state at the time of
+ * removal for indexer audit.
+ */
+export interface MemberBudgetRemovedEvent {
+  /**
+   * MemberBudgetRemovedEvent is an event triggered when a team member budget is
+   * removed from a collection. Includes the final budget state at the time of
+   * removal for indexer audit.
+   */
+  budget?: MemberBudget;
+}
+/**
+ * MemberBudgetRemovedEvent is an event triggered when a team member budget is
+ * removed from a collection. Includes the final budget state at the time of
+ * removal for indexer audit.
+ */
+export interface MemberBudgetRemovedEventSDKType {
+  budget?: MemberBudgetSDKType;
 }
 function createBaseCollectionCreatedEvent(): CollectionCreatedEvent {
   return {
@@ -696,6 +762,141 @@ export const ClaimAuthorizationCreatedEvent = {
     message.admin = object.admin ?? "";
     message.collectionId = object.collectionId ?? "";
     message.authType = object.authType ?? "";
+    return message;
+  }
+};
+function createBaseMemberBudgetCreatedEvent(): MemberBudgetCreatedEvent {
+  return {
+    budget: undefined
+  };
+}
+export const MemberBudgetCreatedEvent = {
+  encode(message: MemberBudgetCreatedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.budget !== undefined) {
+      MemberBudget.encode(message.budget, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MemberBudgetCreatedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMemberBudgetCreatedEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.budget = MemberBudget.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MemberBudgetCreatedEvent {
+    return {
+      budget: isSet(object.budget) ? MemberBudget.fromJSON(object.budget) : undefined
+    };
+  },
+  toJSON(message: MemberBudgetCreatedEvent): unknown {
+    const obj: any = {};
+    message.budget !== undefined && (obj.budget = message.budget ? MemberBudget.toJSON(message.budget) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<MemberBudgetCreatedEvent>): MemberBudgetCreatedEvent {
+    const message = createBaseMemberBudgetCreatedEvent();
+    message.budget = object.budget !== undefined && object.budget !== null ? MemberBudget.fromPartial(object.budget) : undefined;
+    return message;
+  }
+};
+function createBaseMemberBudgetUpdatedEvent(): MemberBudgetUpdatedEvent {
+  return {
+    budget: undefined
+  };
+}
+export const MemberBudgetUpdatedEvent = {
+  encode(message: MemberBudgetUpdatedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.budget !== undefined) {
+      MemberBudget.encode(message.budget, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MemberBudgetUpdatedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMemberBudgetUpdatedEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.budget = MemberBudget.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MemberBudgetUpdatedEvent {
+    return {
+      budget: isSet(object.budget) ? MemberBudget.fromJSON(object.budget) : undefined
+    };
+  },
+  toJSON(message: MemberBudgetUpdatedEvent): unknown {
+    const obj: any = {};
+    message.budget !== undefined && (obj.budget = message.budget ? MemberBudget.toJSON(message.budget) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<MemberBudgetUpdatedEvent>): MemberBudgetUpdatedEvent {
+    const message = createBaseMemberBudgetUpdatedEvent();
+    message.budget = object.budget !== undefined && object.budget !== null ? MemberBudget.fromPartial(object.budget) : undefined;
+    return message;
+  }
+};
+function createBaseMemberBudgetRemovedEvent(): MemberBudgetRemovedEvent {
+  return {
+    budget: undefined
+  };
+}
+export const MemberBudgetRemovedEvent = {
+  encode(message: MemberBudgetRemovedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.budget !== undefined) {
+      MemberBudget.encode(message.budget, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MemberBudgetRemovedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMemberBudgetRemovedEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.budget = MemberBudget.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MemberBudgetRemovedEvent {
+    return {
+      budget: isSet(object.budget) ? MemberBudget.fromJSON(object.budget) : undefined
+    };
+  },
+  toJSON(message: MemberBudgetRemovedEvent): unknown {
+    const obj: any = {};
+    message.budget !== undefined && (obj.budget = message.budget ? MemberBudget.toJSON(message.budget) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<MemberBudgetRemovedEvent>): MemberBudgetRemovedEvent {
+    const message = createBaseMemberBudgetRemovedEvent();
+    message.budget = object.budget !== undefined && object.budget !== null ? MemberBudget.fromPartial(object.budget) : undefined;
     return message;
   }
 };

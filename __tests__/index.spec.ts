@@ -35,6 +35,8 @@ IID.generateBlockchainTestUsers();
 // Entity.enititiesBasic();
 // Token.tokenBasic();
 // Claims.claimsBasic();
+// Claims.claimsTeamMembers();
+// Claims.claimsTeamMembersPeriodReset();
 // CosmWasm.daoCoreCw4();
 // Smartaccount.smartaccountBasic();
 // LiquidStake.prepareModuleWithProposals();

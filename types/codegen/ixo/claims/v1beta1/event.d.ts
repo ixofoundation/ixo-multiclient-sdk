@@ -1,4 +1,4 @@
-import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, CW1155IntentPayment, CW1155IntentPaymentSDKType, Intent, IntentSDKType } from "./claims";
+import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, CW1155IntentPayment, CW1155IntentPaymentSDKType, Intent, IntentSDKType, MemberBudget, MemberBudgetSDKType } from "./claims";
 import { WithdrawPaymentConstraints, WithdrawPaymentConstraintsSDKType } from "./authz";
 import * as _m0 from "protobufjs/minimal";
 /** CollectionCreatedEvent is an event triggered on a Collection creation */
@@ -124,6 +124,72 @@ export interface ClaimAuthorizationCreatedEventSDKType {
     collection_id: string;
     auth_type: string;
 }
+/**
+ * MemberBudgetCreatedEvent is an event triggered when a team member budget is
+ * added to a collection for the first time.
+ */
+export interface MemberBudgetCreatedEvent {
+    /**
+     * MemberBudgetCreatedEvent is an event triggered when a team member budget is
+     * added to a collection for the first time.
+     */
+    budget?: MemberBudget;
+}
+/**
+ * MemberBudgetCreatedEvent is an event triggered when a team member budget is
+ * added to a collection for the first time.
+ */
+export interface MemberBudgetCreatedEventSDKType {
+    budget?: MemberBudgetSDKType;
+}
+/**
+ * MemberBudgetUpdatedEvent is an event triggered on any state change to an
+ * existing member budget — admin-driven update via MsgSetCollectionMembers,
+ * period_spent deduction during MsgClaimIntent, period_spent restoration on
+ * claim rejection / dispute / invalidation / intent expiration, or lazy period
+ * reset.
+ */
+export interface MemberBudgetUpdatedEvent {
+    /**
+     * MemberBudgetUpdatedEvent is an event triggered on any state change to an
+     * existing member budget — admin-driven update via MsgSetCollectionMembers,
+     * period_spent deduction during MsgClaimIntent, period_spent restoration on
+     * claim rejection / dispute / invalidation / intent expiration, or lazy period
+     * reset.
+     */
+    budget?: MemberBudget;
+}
+/**
+ * MemberBudgetUpdatedEvent is an event triggered on any state change to an
+ * existing member budget — admin-driven update via MsgSetCollectionMembers,
+ * period_spent deduction during MsgClaimIntent, period_spent restoration on
+ * claim rejection / dispute / invalidation / intent expiration, or lazy period
+ * reset.
+ */
+export interface MemberBudgetUpdatedEventSDKType {
+    budget?: MemberBudgetSDKType;
+}
+/**
+ * MemberBudgetRemovedEvent is an event triggered when a team member budget is
+ * removed from a collection. Includes the final budget state at the time of
+ * removal for indexer audit.
+ */
+export interface MemberBudgetRemovedEvent {
+    /**
+     * MemberBudgetRemovedEvent is an event triggered when a team member budget is
+     * removed from a collection. Includes the final budget state at the time of
+     * removal for indexer audit.
+     */
+    budget?: MemberBudget;
+}
+/**
+ * MemberBudgetRemovedEvent is an event triggered when a team member budget is
+ * removed from a collection. Includes the final budget state at the time of
+ * removal for indexer audit.
+ */
+export interface MemberBudgetRemovedEventSDKType {
+    budget?: MemberBudgetSDKType;
+}
 export declare const CollectionCreatedEvent: {
     encode(message: CollectionCreatedEvent, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): CollectionCreatedEvent;
@@ -200,4 +266,25 @@ export declare const ClaimAuthorizationCreatedEvent: {
     fromJSON(object: any): ClaimAuthorizationCreatedEvent;
     toJSON(message: ClaimAuthorizationCreatedEvent): unknown;
     fromPartial(object: Partial<ClaimAuthorizationCreatedEvent>): ClaimAuthorizationCreatedEvent;
+};
+export declare const MemberBudgetCreatedEvent: {
+    encode(message: MemberBudgetCreatedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MemberBudgetCreatedEvent;
+    fromJSON(object: any): MemberBudgetCreatedEvent;
+    toJSON(message: MemberBudgetCreatedEvent): unknown;
+    fromPartial(object: Partial<MemberBudgetCreatedEvent>): MemberBudgetCreatedEvent;
+};
+export declare const MemberBudgetUpdatedEvent: {
+    encode(message: MemberBudgetUpdatedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MemberBudgetUpdatedEvent;
+    fromJSON(object: any): MemberBudgetUpdatedEvent;
+    toJSON(message: MemberBudgetUpdatedEvent): unknown;
+    fromPartial(object: Partial<MemberBudgetUpdatedEvent>): MemberBudgetUpdatedEvent;
+};
+export declare const MemberBudgetRemovedEvent: {
+    encode(message: MemberBudgetRemovedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MemberBudgetRemovedEvent;
+    fromJSON(object: any): MemberBudgetRemovedEvent;
+    toJSON(message: MemberBudgetRemovedEvent): unknown;
+    fromPartial(object: Partial<MemberBudgetRemovedEvent>): MemberBudgetRemovedEvent;
 };

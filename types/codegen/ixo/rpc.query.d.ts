@@ -260,6 +260,8 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
                 disputeList(request?: import("./claims/v1beta1/query").QueryDisputeListRequest): Promise<import("./claims/v1beta1/query").QueryDisputeListResponse>;
                 intent(request: import("./claims/v1beta1/query").QueryIntentRequest): Promise<import("./claims/v1beta1/query").QueryIntentResponse>;
                 intentList(request?: import("./claims/v1beta1/query").QueryIntentListRequest): Promise<import("./claims/v1beta1/query").QueryIntentListResponse>;
+                collectionMember(request: import("./claims/v1beta1/query").QueryCollectionMemberRequest): Promise<import("./claims/v1beta1/query").QueryCollectionMemberResponse>;
+                collectionMemberList(request: import("./claims/v1beta1/query").QueryCollectionMemberListRequest): Promise<import("./claims/v1beta1/query").QueryCollectionMemberListResponse>;
             };
         };
         entity: {

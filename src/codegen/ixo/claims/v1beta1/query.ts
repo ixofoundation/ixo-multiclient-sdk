@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType } from "./claims";
+import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType, MemberBudget, MemberBudgetSDKType } from "./claims";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 export interface QueryParamsRequest {}
@@ -118,6 +118,36 @@ export interface QueryIntentListResponse {
 }
 export interface QueryIntentListResponseSDKType {
   intents: IntentSDKType[];
+  pagination?: PageResponseSDKType;
+}
+export interface QueryCollectionMemberRequest {
+  collectionId: string;
+  memberAddress: string;
+}
+export interface QueryCollectionMemberRequestSDKType {
+  collectionId: string;
+  memberAddress: string;
+}
+export interface QueryCollectionMemberResponse {
+  memberBudget?: MemberBudget;
+}
+export interface QueryCollectionMemberResponseSDKType {
+  member_budget?: MemberBudgetSDKType;
+}
+export interface QueryCollectionMemberListRequest {
+  collectionId: string;
+  pagination?: PageRequest;
+}
+export interface QueryCollectionMemberListRequestSDKType {
+  collectionId: string;
+  pagination?: PageRequestSDKType;
+}
+export interface QueryCollectionMemberListResponse {
+  memberBudgets: MemberBudget[];
+  pagination?: PageResponse;
+}
+export interface QueryCollectionMemberListResponseSDKType {
+  member_budgets: MemberBudgetSDKType[];
   pagination?: PageResponseSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -990,6 +1020,220 @@ export const QueryIntentListResponse = {
   fromPartial(object: Partial<QueryIntentListResponse>): QueryIntentListResponse {
     const message = createBaseQueryIntentListResponse();
     message.intents = object.intents?.map(e => Intent.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};
+function createBaseQueryCollectionMemberRequest(): QueryCollectionMemberRequest {
+  return {
+    collectionId: "",
+    memberAddress: ""
+  };
+}
+export const QueryCollectionMemberRequest = {
+  encode(message: QueryCollectionMemberRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.collectionId !== "") {
+      writer.uint32(10).string(message.collectionId);
+    }
+    if (message.memberAddress !== "") {
+      writer.uint32(18).string(message.memberAddress);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCollectionMemberRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryCollectionMemberRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.collectionId = reader.string();
+          break;
+        case 2:
+          message.memberAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryCollectionMemberRequest {
+    return {
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      memberAddress: isSet(object.memberAddress) ? String(object.memberAddress) : ""
+    };
+  },
+  toJSON(message: QueryCollectionMemberRequest): unknown {
+    const obj: any = {};
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.memberAddress !== undefined && (obj.memberAddress = message.memberAddress);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryCollectionMemberRequest>): QueryCollectionMemberRequest {
+    const message = createBaseQueryCollectionMemberRequest();
+    message.collectionId = object.collectionId ?? "";
+    message.memberAddress = object.memberAddress ?? "";
+    return message;
+  }
+};
+function createBaseQueryCollectionMemberResponse(): QueryCollectionMemberResponse {
+  return {
+    memberBudget: undefined
+  };
+}
+export const QueryCollectionMemberResponse = {
+  encode(message: QueryCollectionMemberResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.memberBudget !== undefined) {
+      MemberBudget.encode(message.memberBudget, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCollectionMemberResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryCollectionMemberResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.memberBudget = MemberBudget.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryCollectionMemberResponse {
+    return {
+      memberBudget: isSet(object.memberBudget) ? MemberBudget.fromJSON(object.memberBudget) : undefined
+    };
+  },
+  toJSON(message: QueryCollectionMemberResponse): unknown {
+    const obj: any = {};
+    message.memberBudget !== undefined && (obj.memberBudget = message.memberBudget ? MemberBudget.toJSON(message.memberBudget) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryCollectionMemberResponse>): QueryCollectionMemberResponse {
+    const message = createBaseQueryCollectionMemberResponse();
+    message.memberBudget = object.memberBudget !== undefined && object.memberBudget !== null ? MemberBudget.fromPartial(object.memberBudget) : undefined;
+    return message;
+  }
+};
+function createBaseQueryCollectionMemberListRequest(): QueryCollectionMemberListRequest {
+  return {
+    collectionId: "",
+    pagination: undefined
+  };
+}
+export const QueryCollectionMemberListRequest = {
+  encode(message: QueryCollectionMemberListRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.collectionId !== "") {
+      writer.uint32(10).string(message.collectionId);
+    }
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCollectionMemberListRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryCollectionMemberListRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.collectionId = reader.string();
+          break;
+        case 2:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryCollectionMemberListRequest {
+    return {
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryCollectionMemberListRequest): unknown {
+    const obj: any = {};
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryCollectionMemberListRequest>): QueryCollectionMemberListRequest {
+    const message = createBaseQueryCollectionMemberListRequest();
+    message.collectionId = object.collectionId ?? "";
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};
+function createBaseQueryCollectionMemberListResponse(): QueryCollectionMemberListResponse {
+  return {
+    memberBudgets: [],
+    pagination: undefined
+  };
+}
+export const QueryCollectionMemberListResponse = {
+  encode(message: QueryCollectionMemberListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.memberBudgets) {
+      MemberBudget.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryCollectionMemberListResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryCollectionMemberListResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.memberBudgets.push(MemberBudget.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryCollectionMemberListResponse {
+    return {
+      memberBudgets: Array.isArray(object?.memberBudgets) ? object.memberBudgets.map((e: any) => MemberBudget.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryCollectionMemberListResponse): unknown {
+    const obj: any = {};
+    if (message.memberBudgets) {
+      obj.memberBudgets = message.memberBudgets.map(e => e ? MemberBudget.toJSON(e) : undefined);
+    } else {
+      obj.memberBudgets = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryCollectionMemberListResponse>): QueryCollectionMemberListResponse {
+    const message = createBaseQueryCollectionMemberListResponse();
+    message.memberBudgets = object.memberBudgets?.map(e => MemberBudget.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   }

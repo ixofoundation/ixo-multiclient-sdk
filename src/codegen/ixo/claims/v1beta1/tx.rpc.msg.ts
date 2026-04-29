@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { MsgCreateCollection, MsgCreateCollectionResponse, MsgSubmitClaim, MsgSubmitClaimResponse, MsgEvaluateClaim, MsgEvaluateClaimResponse, MsgDisputeClaim, MsgDisputeClaimResponse, MsgWithdrawPayment, MsgWithdrawPaymentResponse, MsgUpdateCollectionState, MsgUpdateCollectionStateResponse, MsgUpdateCollectionDates, MsgUpdateCollectionDatesResponse, MsgUpdateCollectionPayments, MsgUpdateCollectionPaymentsResponse, MsgUpdateCollectionIntents, MsgUpdateCollectionIntentsResponse, MsgClaimIntent, MsgClaimIntentResponse, MsgCreateClaimAuthorization, MsgCreateClaimAuthorizationResponse } from "./tx";
+import { MsgCreateCollection, MsgCreateCollectionResponse, MsgSubmitClaim, MsgSubmitClaimResponse, MsgEvaluateClaim, MsgEvaluateClaimResponse, MsgDisputeClaim, MsgDisputeClaimResponse, MsgWithdrawPayment, MsgWithdrawPaymentResponse, MsgUpdateCollectionState, MsgUpdateCollectionStateResponse, MsgUpdateCollectionDates, MsgUpdateCollectionDatesResponse, MsgUpdateCollectionPayments, MsgUpdateCollectionPaymentsResponse, MsgUpdateCollectionIntents, MsgUpdateCollectionIntentsResponse, MsgClaimIntent, MsgClaimIntentResponse, MsgCreateClaimAuthorization, MsgCreateClaimAuthorizationResponse, MsgSetCollectionMembers, MsgSetCollectionMembersResponse, MsgRemoveCollectionMembers, MsgRemoveCollectionMembersResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
   createCollection(request: MsgCreateCollection): Promise<MsgCreateCollectionResponse>;
@@ -15,6 +15,8 @@ export interface Msg {
   updateCollectionIntents(request: MsgUpdateCollectionIntents): Promise<MsgUpdateCollectionIntentsResponse>;
   claimIntent(request: MsgClaimIntent): Promise<MsgClaimIntentResponse>;
   createClaimAuthorization(request: MsgCreateClaimAuthorization): Promise<MsgCreateClaimAuthorizationResponse>;
+  setCollectionMembers(request: MsgSetCollectionMembers): Promise<MsgSetCollectionMembersResponse>;
+  removeCollectionMembers(request: MsgRemoveCollectionMembers): Promise<MsgRemoveCollectionMembersResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -31,6 +33,8 @@ export class MsgClientImpl implements Msg {
     this.updateCollectionIntents = this.updateCollectionIntents.bind(this);
     this.claimIntent = this.claimIntent.bind(this);
     this.createClaimAuthorization = this.createClaimAuthorization.bind(this);
+    this.setCollectionMembers = this.setCollectionMembers.bind(this);
+    this.removeCollectionMembers = this.removeCollectionMembers.bind(this);
   }
   createCollection(request: MsgCreateCollection): Promise<MsgCreateCollectionResponse> {
     const data = MsgCreateCollection.encode(request).finish();
@@ -86,5 +90,15 @@ export class MsgClientImpl implements Msg {
     const data = MsgCreateClaimAuthorization.encode(request).finish();
     const promise = this.rpc.request("ixo.claims.v1beta1.Msg", "CreateClaimAuthorization", data);
     return promise.then(data => MsgCreateClaimAuthorizationResponse.decode(new _m0.Reader(data)));
+  }
+  setCollectionMembers(request: MsgSetCollectionMembers): Promise<MsgSetCollectionMembersResponse> {
+    const data = MsgSetCollectionMembers.encode(request).finish();
+    const promise = this.rpc.request("ixo.claims.v1beta1.Msg", "SetCollectionMembers", data);
+    return promise.then(data => MsgSetCollectionMembersResponse.decode(new _m0.Reader(data)));
+  }
+  removeCollectionMembers(request: MsgRemoveCollectionMembers): Promise<MsgRemoveCollectionMembersResponse> {
+    const data = MsgRemoveCollectionMembers.encode(request).finish();
+    const promise = this.rpc.request("ixo.claims.v1beta1.Msg", "RemoveCollectionMembers", data);
+    return promise.then(data => MsgRemoveCollectionMembersResponse.decode(new _m0.Reader(data)));
   }
 }

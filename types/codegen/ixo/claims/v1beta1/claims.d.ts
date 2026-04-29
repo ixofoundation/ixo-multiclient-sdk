@@ -346,6 +346,12 @@ export interface Claim {
      * per token_id to transfer the same tokens to and from the escrow account
      */
     cw1155IntentPayment: CW1155IntentPayment[];
+    /**
+     * member_address is the team member this claim is on behalf of, if any.
+     * Copied from intent when use_intent is true. Used for budget restoration
+     * on claim rejection/dispute/invalidation.
+     */
+    memberAddress: string;
 }
 export interface ClaimSDKType {
     collection_id: string;
@@ -360,6 +366,7 @@ export interface ClaimSDKType {
     cw20_payment: CW20PaymentSDKType[];
     cw1155_payment: CW1155PaymentSDKType[];
     cw1155_intent_payment: CW1155IntentPaymentSDKType[];
+    member_address: string;
 }
 export interface ClaimPayments {
     submission: PaymentStatus;
@@ -505,6 +512,12 @@ export interface Intent {
      * the same tokens to and from the escrow account
      */
     cw1155IntentPayment: CW1155IntentPayment[];
+    /**
+     * member_address is the team member this intent is on behalf of, if any.
+     * Required if the collection has member budgets. Validated against the
+     * oracle's SubmitClaimConstraints.member_address.
+     */
+    memberAddress: string;
 }
 /** Intent defines the structure for a service agent's claim intent. */
 export interface IntentSDKType {
@@ -522,6 +535,52 @@ export interface IntentSDKType {
     escrow_address: string;
     cw1155_payment: CW1155PaymentSDKType[];
     cw1155_intent_payment: CW1155IntentPaymentSDKType[];
+    member_address: string;
+}
+/**
+ * MemberBudget defines a team member's periodic spending budget for a
+ * collection. Stored as separate state keyed by collectionId/memberAddress
+ * for gas-efficient O(1) reads and writes independent of team size.
+ */
+export interface MemberBudget {
+    /** collection_id this budget belongs to */
+    collectionId: string;
+    /** member's blockchain address */
+    memberAddress: string;
+    /**
+     * period duration for budget reset (e.g., 30 days). Must be at least 24 hours
+     * (MinMemberBudgetPeriod). Periods shorter than 24 hours are rejected to
+     * prevent griefing via the lazy-reset loop in the intent handler.
+     */
+    period?: Duration;
+    /** maximum native coin spend allowed per period */
+    periodSpendLimit: Coin[];
+    /** native coins already spent (intented) in the current period */
+    periodSpent: Coin[];
+    /** maximum CW20 spend allowed per period */
+    periodCw20SpendLimit: CW20Payment[];
+    /** CW20 amount already spent in the current period */
+    periodCw20Spent: CW20Payment[];
+    /**
+     * timestamp when current period resets (lazy reset in intent handler,
+     * following the feegrant PeriodicAllowance pattern)
+     */
+    periodResetAt?: Timestamp;
+}
+/**
+ * MemberBudget defines a team member's periodic spending budget for a
+ * collection. Stored as separate state keyed by collectionId/memberAddress
+ * for gas-efficient O(1) reads and writes independent of team size.
+ */
+export interface MemberBudgetSDKType {
+    collection_id: string;
+    member_address: string;
+    period?: DurationSDKType;
+    period_spend_limit: CoinSDKType[];
+    period_spent: CoinSDKType[];
+    period_cw20_spend_limit: CW20PaymentSDKType[];
+    period_cw20_spent: CW20PaymentSDKType[];
+    period_reset_at?: TimestampSDKType;
 }
 export declare const Params: {
     encode(message: Params, writer?: _m0.Writer): _m0.Writer;
@@ -634,4 +693,11 @@ export declare const Intent: {
     fromJSON(object: any): Intent;
     toJSON(message: Intent): unknown;
     fromPartial(object: Partial<Intent>): Intent;
+};
+export declare const MemberBudget: {
+    encode(message: MemberBudget, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MemberBudget;
+    fromJSON(object: any): MemberBudget;
+    toJSON(message: MemberBudget): unknown;
+    fromPartial(object: Partial<MemberBudget>): MemberBudget;
 };
