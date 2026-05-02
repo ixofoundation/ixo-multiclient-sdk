@@ -2034,9 +2034,11 @@ export declare namespace ixo {
             MsgClientImpl: typeof _325.MsgClientImpl;
             QueryClientImpl: typeof _317.QueryClientImpl;
             createRpcQueryExtension: (base: import("@cosmjs/stargate").QueryClient) => {
-                params(request?: _222.QueryParamsRequest): Promise<_222.QueryParamsResponse>;
-                liquidValidators(request?: _222.QueryLiquidValidatorsRequest): Promise<_222.QueryLiquidValidatorsResponse>;
-                states(request?: _222.QueryStatesRequest): Promise<_222.QueryStatesResponse>;
+                moduleParams(request?: _222.QueryModuleParamsRequest): Promise<_222.QueryModuleParamsResponse>;
+                pool(request: _222.QueryPoolRequest): Promise<_222.QueryPoolResponse>;
+                pools(request?: _222.QueryPoolsRequest): Promise<_222.QueryPoolsResponse>;
+                liquidValidators(request: _222.QueryLiquidValidatorsRequest): Promise<_222.QueryLiquidValidatorsResponse>;
+                states(request: _222.QueryStatesRequest): Promise<_222.QueryStatesResponse>;
             };
             MsgLiquidStake: {
                 encode(message: _223.MsgLiquidStake, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
@@ -2066,19 +2068,47 @@ export declare namespace ixo {
                 toJSON(message: _223.MsgLiquidUnstakeResponse): unknown;
                 fromPartial(object: Partial<_223.MsgLiquidUnstakeResponse>): _223.MsgLiquidUnstakeResponse;
             };
-            MsgUpdateParams: {
-                encode(message: _223.MsgUpdateParams, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _223.MsgUpdateParams;
-                fromJSON(object: any): _223.MsgUpdateParams;
-                toJSON(message: _223.MsgUpdateParams): unknown;
-                fromPartial(object: Partial<_223.MsgUpdateParams>): _223.MsgUpdateParams;
+            MsgCreatePool: {
+                encode(message: _223.MsgCreatePool, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _223.MsgCreatePool;
+                fromJSON(object: any): _223.MsgCreatePool;
+                toJSON(message: _223.MsgCreatePool): unknown;
+                fromPartial(object: Partial<_223.MsgCreatePool>): _223.MsgCreatePool;
             };
-            MsgUpdateParamsResponse: {
-                encode(_: _223.MsgUpdateParamsResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _223.MsgUpdateParamsResponse;
-                fromJSON(_: any): _223.MsgUpdateParamsResponse;
-                toJSON(_: _223.MsgUpdateParamsResponse): unknown;
-                fromPartial(_: Partial<_223.MsgUpdateParamsResponse>): _223.MsgUpdateParamsResponse;
+            MsgCreatePoolResponse: {
+                encode(message: _223.MsgCreatePoolResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _223.MsgCreatePoolResponse;
+                fromJSON(object: any): _223.MsgCreatePoolResponse;
+                toJSON(message: _223.MsgCreatePoolResponse): unknown;
+                fromPartial(object: Partial<_223.MsgCreatePoolResponse>): _223.MsgCreatePoolResponse;
+            };
+            MsgUpdateModuleParams: {
+                encode(message: _223.MsgUpdateModuleParams, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _223.MsgUpdateModuleParams;
+                fromJSON(object: any): _223.MsgUpdateModuleParams;
+                toJSON(message: _223.MsgUpdateModuleParams): unknown;
+                fromPartial(object: Partial<_223.MsgUpdateModuleParams>): _223.MsgUpdateModuleParams;
+            };
+            MsgUpdateModuleParamsResponse: {
+                encode(_: _223.MsgUpdateModuleParamsResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _223.MsgUpdateModuleParamsResponse;
+                fromJSON(_: any): _223.MsgUpdateModuleParamsResponse;
+                toJSON(_: _223.MsgUpdateModuleParamsResponse): unknown;
+                fromPartial(_: Partial<_223.MsgUpdateModuleParamsResponse>): _223.MsgUpdateModuleParamsResponse;
+            };
+            MsgUpdatePool: {
+                encode(message: _223.MsgUpdatePool, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _223.MsgUpdatePool;
+                fromJSON(object: any): _223.MsgUpdatePool;
+                toJSON(message: _223.MsgUpdatePool): unknown;
+                fromPartial(object: Partial<_223.MsgUpdatePool>): _223.MsgUpdatePool;
+            };
+            MsgUpdatePoolResponse: {
+                encode(_: _223.MsgUpdatePoolResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _223.MsgUpdatePoolResponse;
+                fromJSON(_: any): _223.MsgUpdatePoolResponse;
+                toJSON(_: _223.MsgUpdatePoolResponse): unknown;
+                fromPartial(_: Partial<_223.MsgUpdatePoolResponse>): _223.MsgUpdatePoolResponse;
             };
             MsgUpdateWhitelistedValidators: {
                 encode(message: _223.MsgUpdateWhitelistedValidators, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
@@ -2108,6 +2138,20 @@ export declare namespace ixo {
                 toJSON(_: _223.MsgUpdateWeightedRewardsReceiversResponse): unknown;
                 fromPartial(_: Partial<_223.MsgUpdateWeightedRewardsReceiversResponse>): _223.MsgUpdateWeightedRewardsReceiversResponse;
             };
+            MsgSetPoolPaused: {
+                encode(message: _223.MsgSetPoolPaused, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _223.MsgSetPoolPaused;
+                fromJSON(object: any): _223.MsgSetPoolPaused;
+                toJSON(message: _223.MsgSetPoolPaused): unknown;
+                fromPartial(object: Partial<_223.MsgSetPoolPaused>): _223.MsgSetPoolPaused;
+            };
+            MsgSetPoolPausedResponse: {
+                encode(_: _223.MsgSetPoolPausedResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _223.MsgSetPoolPausedResponse;
+                fromJSON(_: any): _223.MsgSetPoolPausedResponse;
+                toJSON(_: _223.MsgSetPoolPausedResponse): unknown;
+                fromPartial(_: Partial<_223.MsgSetPoolPausedResponse>): _223.MsgSetPoolPausedResponse;
+            };
             MsgSetModulePaused: {
                 encode(message: _223.MsgSetModulePaused, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _223.MsgSetModulePaused;
@@ -2136,26 +2180,54 @@ export declare namespace ixo {
                 toJSON(_: _223.MsgBurnResponse): unknown;
                 fromPartial(_: Partial<_223.MsgBurnResponse>): _223.MsgBurnResponse;
             };
-            QueryParamsRequest: {
-                encode(_: _222.QueryParamsRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _222.QueryParamsRequest;
-                fromJSON(_: any): _222.QueryParamsRequest;
-                toJSON(_: _222.QueryParamsRequest): unknown;
-                fromPartial(_: Partial<_222.QueryParamsRequest>): _222.QueryParamsRequest;
+            QueryModuleParamsRequest: {
+                encode(_: _222.QueryModuleParamsRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _222.QueryModuleParamsRequest;
+                fromJSON(_: any): _222.QueryModuleParamsRequest;
+                toJSON(_: _222.QueryModuleParamsRequest): unknown;
+                fromPartial(_: Partial<_222.QueryModuleParamsRequest>): _222.QueryModuleParamsRequest;
             };
-            QueryParamsResponse: {
-                encode(message: _222.QueryParamsResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _222.QueryParamsResponse;
-                fromJSON(object: any): _222.QueryParamsResponse;
-                toJSON(message: _222.QueryParamsResponse): unknown;
-                fromPartial(object: Partial<_222.QueryParamsResponse>): _222.QueryParamsResponse;
+            QueryModuleParamsResponse: {
+                encode(message: _222.QueryModuleParamsResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _222.QueryModuleParamsResponse;
+                fromJSON(object: any): _222.QueryModuleParamsResponse;
+                toJSON(message: _222.QueryModuleParamsResponse): unknown;
+                fromPartial(object: Partial<_222.QueryModuleParamsResponse>): _222.QueryModuleParamsResponse;
+            };
+            QueryPoolRequest: {
+                encode(message: _222.QueryPoolRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _222.QueryPoolRequest;
+                fromJSON(object: any): _222.QueryPoolRequest;
+                toJSON(message: _222.QueryPoolRequest): unknown;
+                fromPartial(object: Partial<_222.QueryPoolRequest>): _222.QueryPoolRequest;
+            };
+            QueryPoolResponse: {
+                encode(message: _222.QueryPoolResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _222.QueryPoolResponse;
+                fromJSON(object: any): _222.QueryPoolResponse;
+                toJSON(message: _222.QueryPoolResponse): unknown;
+                fromPartial(object: Partial<_222.QueryPoolResponse>): _222.QueryPoolResponse;
+            };
+            QueryPoolsRequest: {
+                encode(message: _222.QueryPoolsRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _222.QueryPoolsRequest;
+                fromJSON(object: any): _222.QueryPoolsRequest;
+                toJSON(message: _222.QueryPoolsRequest): unknown;
+                fromPartial(object: Partial<_222.QueryPoolsRequest>): _222.QueryPoolsRequest;
+            };
+            QueryPoolsResponse: {
+                encode(message: _222.QueryPoolsResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _222.QueryPoolsResponse;
+                fromJSON(object: any): _222.QueryPoolsResponse;
+                toJSON(message: _222.QueryPoolsResponse): unknown;
+                fromPartial(object: Partial<_222.QueryPoolsResponse>): _222.QueryPoolsResponse;
             };
             QueryLiquidValidatorsRequest: {
-                encode(_: _222.QueryLiquidValidatorsRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                encode(message: _222.QueryLiquidValidatorsRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _222.QueryLiquidValidatorsRequest;
-                fromJSON(_: any): _222.QueryLiquidValidatorsRequest;
-                toJSON(_: _222.QueryLiquidValidatorsRequest): unknown;
-                fromPartial(_: Partial<_222.QueryLiquidValidatorsRequest>): _222.QueryLiquidValidatorsRequest;
+                fromJSON(object: any): _222.QueryLiquidValidatorsRequest;
+                toJSON(message: _222.QueryLiquidValidatorsRequest): unknown;
+                fromPartial(object: Partial<_222.QueryLiquidValidatorsRequest>): _222.QueryLiquidValidatorsRequest;
             };
             QueryLiquidValidatorsResponse: {
                 encode(message: _222.QueryLiquidValidatorsResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
@@ -2165,11 +2237,11 @@ export declare namespace ixo {
                 fromPartial(object: Partial<_222.QueryLiquidValidatorsResponse>): _222.QueryLiquidValidatorsResponse;
             };
             QueryStatesRequest: {
-                encode(_: _222.QueryStatesRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                encode(message: _222.QueryStatesRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _222.QueryStatesRequest;
-                fromJSON(_: any): _222.QueryStatesRequest;
-                toJSON(_: _222.QueryStatesRequest): unknown;
-                fromPartial(_: Partial<_222.QueryStatesRequest>): _222.QueryStatesRequest;
+                fromJSON(object: any): _222.QueryStatesRequest;
+                toJSON(message: _222.QueryStatesRequest): unknown;
+                fromPartial(object: Partial<_222.QueryStatesRequest>): _222.QueryStatesRequest;
             };
             QueryStatesResponse: {
                 encode(message: _222.QueryStatesResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
@@ -2188,6 +2260,20 @@ export declare namespace ixo {
                 fromJSON(object: any): _221.Params;
                 toJSON(message: _221.Params): unknown;
                 fromPartial(object: Partial<_221.Params>): _221.Params;
+            };
+            ModuleParams: {
+                encode(message: _221.ModuleParams, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _221.ModuleParams;
+                fromJSON(object: any): _221.ModuleParams;
+                toJSON(message: _221.ModuleParams): unknown;
+                fromPartial(object: Partial<_221.ModuleParams>): _221.ModuleParams;
+            };
+            Pool: {
+                encode(message: _221.Pool, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _221.Pool;
+                fromJSON(object: any): _221.Pool;
+                toJSON(message: _221.Pool): unknown;
+                fromPartial(object: Partial<_221.Pool>): _221.Pool;
             };
             WeightedAddress: {
                 encode(message: _221.WeightedAddress, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
@@ -2231,12 +2317,33 @@ export declare namespace ixo {
                 toJSON(message: _220.GenesisState): unknown;
                 fromPartial(object: Partial<_220.GenesisState>): _220.GenesisState;
             };
-            LiquidStakeParamsUpdatedEvent: {
-                encode(message: _219.LiquidStakeParamsUpdatedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _219.LiquidStakeParamsUpdatedEvent;
-                fromJSON(object: any): _219.LiquidStakeParamsUpdatedEvent;
-                toJSON(message: _219.LiquidStakeParamsUpdatedEvent): unknown;
-                fromPartial(object: Partial<_219.LiquidStakeParamsUpdatedEvent>): _219.LiquidStakeParamsUpdatedEvent;
+            PoolLiquidValidators: {
+                encode(message: _220.PoolLiquidValidators, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _220.PoolLiquidValidators;
+                fromJSON(object: any): _220.PoolLiquidValidators;
+                toJSON(message: _220.PoolLiquidValidators): unknown;
+                fromPartial(object: Partial<_220.PoolLiquidValidators>): _220.PoolLiquidValidators;
+            };
+            ModuleParamsUpdatedEvent: {
+                encode(message: _219.ModuleParamsUpdatedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _219.ModuleParamsUpdatedEvent;
+                fromJSON(object: any): _219.ModuleParamsUpdatedEvent;
+                toJSON(message: _219.ModuleParamsUpdatedEvent): unknown;
+                fromPartial(object: Partial<_219.ModuleParamsUpdatedEvent>): _219.ModuleParamsUpdatedEvent;
+            };
+            PoolCreatedEvent: {
+                encode(message: _219.PoolCreatedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _219.PoolCreatedEvent;
+                fromJSON(object: any): _219.PoolCreatedEvent;
+                toJSON(message: _219.PoolCreatedEvent): unknown;
+                fromPartial(object: Partial<_219.PoolCreatedEvent>): _219.PoolCreatedEvent;
+            };
+            PoolUpdatedEvent: {
+                encode(message: _219.PoolUpdatedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _219.PoolUpdatedEvent;
+                fromJSON(object: any): _219.PoolUpdatedEvent;
+                toJSON(message: _219.PoolUpdatedEvent): unknown;
+                fromPartial(object: Partial<_219.PoolUpdatedEvent>): _219.PoolUpdatedEvent;
             };
             LiquidStakeEvent: {
                 encode(message: _219.LiquidStakeEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
@@ -3226,9 +3333,11 @@ export declare namespace ixo {
                 };
                 liquidstake: {
                     v1beta1: {
-                        params(request?: _222.QueryParamsRequest): Promise<_222.QueryParamsResponse>;
-                        liquidValidators(request?: _222.QueryLiquidValidatorsRequest): Promise<_222.QueryLiquidValidatorsResponse>;
-                        states(request?: _222.QueryStatesRequest): Promise<_222.QueryStatesResponse>;
+                        moduleParams(request?: _222.QueryModuleParamsRequest): Promise<_222.QueryModuleParamsResponse>;
+                        pool(request: _222.QueryPoolRequest): Promise<_222.QueryPoolResponse>;
+                        pools(request?: _222.QueryPoolsRequest): Promise<_222.QueryPoolsResponse>;
+                        liquidValidators(request: _222.QueryLiquidValidatorsRequest): Promise<_222.QueryLiquidValidatorsResponse>;
+                        states(request: _222.QueryStatesRequest): Promise<_222.QueryStatesResponse>;
                     };
                 };
                 mint: {

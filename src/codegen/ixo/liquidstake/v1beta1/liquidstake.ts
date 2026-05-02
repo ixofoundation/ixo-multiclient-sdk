@@ -42,67 +42,33 @@ export function validatorStatusToJSON(object: ValidatorStatus): string {
       return "UNRECOGNIZED";
   }
 }
-/** Params defines the set of params for the liquidstake module. */
+/**
+ * Params defines the legacy single-pool params layout.
+ * 
+ * DEPRECATED: kept only so the v7 upgrade migration can unmarshal pre-upgrade
+ * state from the KV store. New code must use ModuleParams (global) and Pool
+ * (per-pool). Do not reference this from new application logic.
+ */
+/** @deprecated */
 export interface Params {
-  /**
-   * LiquidBondDenom specifies the denomination of the token receiving after
-   * liquid stake, The value is calculated through NetAmount.
-   */
   liquidBondDenom: string;
-  /**
-   * WhitelistedValidators specifies the validators elected to become Active
-   * Liquid Validators.
-   */
   whitelistedValidators: WhitelistedValidator[];
-  /**
-   * UnstakeFeeRate specifies the fee rate when liquid unstake is requested,
-   * unbonded by subtracting it from unbondingAmount
-   */
   unstakeFeeRate: string;
-  /**
-   * MinLiquidStakingAmount specifies the minimum number of coins to be staked
-   * to the active liquid validators on liquid staking to minimize decimal loss
-   * and consider gas efficiency.
-   */
   minLiquidStakeAmount: string;
-  /**
-   * FeeAccountAddress defines the bech32-encoded address of
-   * an account responsible for accumulating protocol fees.
-   */
   feeAccountAddress: string;
-  /**
-   * AutocompoundFeeRate specifies the fee rate for auto redelegating the stake
-   * rewards. The fee is taken in favour of the fee account (see
-   * FeeAccountAddress).
-   */
   autocompoundFeeRate: string;
-  /**
-   * WhitelistAdminAddress the bech32-encoded address of an admin authority
-   * that is allowed to update whitelisted validators or pause liquidstaking
-   * module entirely. It is also the only address that can update the
-   * weighted_rewards_receivers.
-   * The key is controlled by the ZERO dao.
-   * Pausing of the module can be required during important migrations or
-   * failures.
-   */
   whitelistAdminAddress: string;
-  /**
-   * ModulePaused is a safety toggle that allows to stop main module functions
-   * such as stake/unstake/stake-to-lp and the BeginBlocker logic.
-   */
   modulePaused: boolean;
-  /**
-   * weighted_rewards_receivers is the addresses to receive the staking
-   * rewards on autocompounding with weights assigned to each address.
-   * The total of weights in the list in not allowed to be greater than 1.
-   * 
-   * Eg. if the list has 1 address with weight 0.2, then on autocompounding
-   * the staking rewards will be split between 0.2 for the weighted receiver
-   * and 0.8 gets auto-compounded to the proxy account.
-   */
   weightedRewardsReceivers: WeightedAddress[];
 }
-/** Params defines the set of params for the liquidstake module. */
+/**
+ * Params defines the legacy single-pool params layout.
+ * 
+ * DEPRECATED: kept only so the v7 upgrade migration can unmarshal pre-upgrade
+ * state from the KV store. New code must use ModuleParams (global) and Pool
+ * (per-pool). Do not reference this from new application logic.
+ */
+/** @deprecated */
 export interface ParamsSDKType {
   liquid_bond_denom: string;
   whitelisted_validators: WhitelistedValidatorSDKType[];
@@ -112,6 +78,122 @@ export interface ParamsSDKType {
   autocompound_fee_rate: string;
   whitelist_admin_address: string;
   module_paused: boolean;
+  weighted_rewards_receivers: WeightedAddressSDKType[];
+}
+/**
+ * ModuleParams defines global, module-wide parameters that apply across every
+ * liquid staking pool.
+ */
+export interface ModuleParams {
+  /**
+   * min_liquid_stake_amount is the minimum amount of native tokens that can
+   * be liquid-staked into any pool, applied across the entire module to
+   * minimise decimal loss and gas waste from dust amounts.
+   */
+  minLiquidStakeAmount: string;
+  /**
+   * module_paused is a global emergency kill switch. When true, ALL pools
+   * are paused regardless of their per-pool paused flag: liquid_stake,
+   * liquid_unstake, autocompounding, rebalancing, and BeginBlocker logic
+   * are halted module-wide. Used for migrations or critical incidents.
+   */
+  modulePaused: boolean;
+}
+/**
+ * ModuleParams defines global, module-wide parameters that apply across every
+ * liquid staking pool.
+ */
+export interface ModuleParamsSDKType {
+  min_liquid_stake_amount: string;
+  module_paused: boolean;
+}
+/**
+ * Pool defines a single liquid staking instance with its own LST denom,
+ * validator whitelist, admin, and fee configuration. Each pool maintains an
+ * independent NetAmount/Supply ratio, so two pools' LST tokens are NOT
+ * fungible with each other and may diverge in IXO value over time.
+ */
+export interface Pool {
+  /**
+   * pool_id is the unique, immutable identifier for this pool (e.g. "zero",
+   * "qi"). Used in storage keys, message routing, and proxy account
+   * derivation. Set at pool creation; cannot be changed.
+   */
+  poolId: string;
+  /**
+   * liquid_bond_denom is the denomination of the LST minted by this pool
+   * (e.g. "uzero"). Must be globally unique across all pools. Immutable.
+   */
+  liquidBondDenom: string;
+  /**
+   * proxy_account_address is the bech32-encoded address of the per-pool
+   * delegation proxy account. All delegations, redelegations, unbondings,
+   * and reward withdrawals for this pool flow through this account.
+   * Derived deterministically from pool_id at creation; immutable.
+   * For the legacy "zero" pool migrated from pre-v7 state, this field
+   * holds the original LiquidStakeProxyAcc address so existing
+   * delegations are preserved without state migration.
+   */
+  proxyAccountAddress: string;
+  /**
+   * whitelisted_validators are the validators eligible for delegation from
+   * this pool's proxy account. Target weights must sum to 10000.
+   */
+  whitelistedValidators: WhitelistedValidator[];
+  /**
+   * unstake_fee_rate is deducted from the unbonding amount when an unstake
+   * is requested against this pool.
+   */
+  unstakeFeeRate: string;
+  /**
+   * fee_account_address is the bech32-encoded address that accumulates the
+   * autocompound fee for this pool.
+   */
+  feeAccountAddress: string;
+  /**
+   * autocompound_fee_rate is the fraction of accrued staking rewards taken
+   * by this pool as a protocol fee on each autocompound epoch and sent to
+   * fee_account_address.
+   */
+  autocompoundFeeRate: string;
+  /**
+   * whitelist_admin_address is the bech32-encoded address authorised to
+   * update this pool's whitelisted_validators, weighted_rewards_receivers,
+   * paused flag, and other mutable pool fields. Governance can also update
+   * these fields. The admin is also the only address allowed to call
+   * LiquidStake against this pool.
+   */
+  whitelistAdminAddress: string;
+  /**
+   * paused is a per-pool safety toggle. When true, this specific pool's
+   * stake/unstake, autocompounding, and rebalancing are halted; other
+   * pools are unaffected. The global ModuleParams.module_paused flag
+   * overrides this and pauses every pool regardless of its per-pool value.
+   */
+  paused: boolean;
+  /**
+   * weighted_rewards_receivers are the addresses that receive a weighted
+   * share of this pool's autocompound rewards. The sum of weights must
+   * not exceed 1; the remainder is restaked to validators.
+   */
+  weightedRewardsReceivers: WeightedAddress[];
+}
+/**
+ * Pool defines a single liquid staking instance with its own LST denom,
+ * validator whitelist, admin, and fee configuration. Each pool maintains an
+ * independent NetAmount/Supply ratio, so two pools' LST tokens are NOT
+ * fungible with each other and may diverge in IXO value over time.
+ */
+export interface PoolSDKType {
+  pool_id: string;
+  liquid_bond_denom: string;
+  proxy_account_address: string;
+  whitelisted_validators: WhitelistedValidatorSDKType[];
+  unstake_fee_rate: string;
+  fee_account_address: string;
+  autocompound_fee_rate: string;
+  whitelist_admin_address: string;
+  paused: boolean;
   weighted_rewards_receivers: WeightedAddressSDKType[];
 }
 /**
@@ -213,43 +295,61 @@ export interface LiquidValidatorStateSDKType {
   liquid_tokens: string;
 }
 /**
- * NetAmountState is type for net amount raw data and mint rate, This is a value
- * that depends on the several module state every time, so it is used only for
- * calculation and query and is not stored in kv.
+ * NetAmountState holds the raw amounts and exchange rates for a single pool.
+ * Computed on the fly from pool state every time (never persisted), and used
+ * for unstake-rate calculation and queries. Each pool has its own independent
+ * NetAmountState.
  */
 export interface NetAmountState {
-  /** stake_rate is the rate at which the liquid staking module mints stkIXO */
+  /**
+   * stake_rate is the mint rate when staking into this pool.
+   * Always 1.0: 1 native token mints 1 LST regardless of accrued rewards.
+   */
   stakeRate: string;
-  /** unstake_rate is the rate at which the liquid staking module burns stkIXO */
+  /**
+   * unstake_rate is the burn rate when unstaking from this pool, equal to
+   * net_amount / stkixo_total_supply. Diverges from 1.0 as rewards accrue
+   * or slashing occurs.
+   */
   unstakeRate: string;
-  /** btoken_total_supply returns the total supply of uzero (stkIXO denom) */
+  /** stkixo_total_supply is the total supply of this pool's LST denom. */
   stkixoTotalSupply: string;
-  /** net_amount is proxy account's total liquid tokens + total unbonding balance */
+  /**
+   * net_amount is this pool's total liquid tokens + total unbonding balance,
+   * measured at its own proxy account.
+   */
   netAmount: string;
-  /** total_del_shares define the delegation shares of all liquid validators */
+  /**
+   * total_del_shares is the sum of delegation shares held by this pool's
+   * proxy account across all of its liquid validators.
+   */
   totalDelShares: string;
   /**
-   * total_liquid_tokens define the token amount worth of delegation shares of
-   * all liquid validator (slashing applied amount)
+   * total_liquid_tokens is the token-equivalent of total_del_shares with
+   * slashing applied, summed across this pool's liquid validators.
    */
   totalLiquidTokens: string;
   /**
-   * total_remaining_rewards define the sum of remaining rewards of proxy
-   * account by all liquid validators
+   * total_remaining_rewards is the sum of unwithdrawn staking rewards owed
+   * to this pool's proxy account from all its liquid validators.
    */
   totalRemainingRewards: string;
   /**
-   * total_unbonding_balance define the unbonding balance of proxy account by
-   * all liquid validator (slashing applied amount)
+   * total_unbonding_balance is the sum of unbonding amounts (slashing
+   * applied) for this pool's proxy account.
    */
   totalUnbondingBalance: string;
-  /** proxy_acc_balance define the balance of proxy account for the native token */
+  /**
+   * proxy_acc_balance is the spendable native-token balance currently sitting
+   * in this pool's proxy account (rewards withdrawn but not yet redelegated).
+   */
   proxyAccBalance: string;
 }
 /**
- * NetAmountState is type for net amount raw data and mint rate, This is a value
- * that depends on the several module state every time, so it is used only for
- * calculation and query and is not stored in kv.
+ * NetAmountState holds the raw amounts and exchange rates for a single pool.
+ * Computed on the fly from pool state every time (never persisted), and used
+ * for unstake-rate calculation and queries. Each pool has its own independent
+ * NetAmountState.
  */
 export interface NetAmountStateSDKType {
   stake_rate: string;
@@ -391,6 +491,204 @@ export const Params = {
     message.autocompoundFeeRate = object.autocompoundFeeRate ?? "";
     message.whitelistAdminAddress = object.whitelistAdminAddress ?? "";
     message.modulePaused = object.modulePaused ?? false;
+    message.weightedRewardsReceivers = object.weightedRewardsReceivers?.map(e => WeightedAddress.fromPartial(e)) || [];
+    return message;
+  }
+};
+function createBaseModuleParams(): ModuleParams {
+  return {
+    minLiquidStakeAmount: "",
+    modulePaused: false
+  };
+}
+export const ModuleParams = {
+  encode(message: ModuleParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.minLiquidStakeAmount !== "") {
+      writer.uint32(10).string(message.minLiquidStakeAmount);
+    }
+    if (message.modulePaused === true) {
+      writer.uint32(16).bool(message.modulePaused);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): ModuleParams {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseModuleParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.minLiquidStakeAmount = reader.string();
+          break;
+        case 2:
+          message.modulePaused = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): ModuleParams {
+    return {
+      minLiquidStakeAmount: isSet(object.minLiquidStakeAmount) ? String(object.minLiquidStakeAmount) : "",
+      modulePaused: isSet(object.modulePaused) ? Boolean(object.modulePaused) : false
+    };
+  },
+  toJSON(message: ModuleParams): unknown {
+    const obj: any = {};
+    message.minLiquidStakeAmount !== undefined && (obj.minLiquidStakeAmount = message.minLiquidStakeAmount);
+    message.modulePaused !== undefined && (obj.modulePaused = message.modulePaused);
+    return obj;
+  },
+  fromPartial(object: Partial<ModuleParams>): ModuleParams {
+    const message = createBaseModuleParams();
+    message.minLiquidStakeAmount = object.minLiquidStakeAmount ?? "";
+    message.modulePaused = object.modulePaused ?? false;
+    return message;
+  }
+};
+function createBasePool(): Pool {
+  return {
+    poolId: "",
+    liquidBondDenom: "",
+    proxyAccountAddress: "",
+    whitelistedValidators: [],
+    unstakeFeeRate: "",
+    feeAccountAddress: "",
+    autocompoundFeeRate: "",
+    whitelistAdminAddress: "",
+    paused: false,
+    weightedRewardsReceivers: []
+  };
+}
+export const Pool = {
+  encode(message: Pool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.poolId !== "") {
+      writer.uint32(10).string(message.poolId);
+    }
+    if (message.liquidBondDenom !== "") {
+      writer.uint32(18).string(message.liquidBondDenom);
+    }
+    if (message.proxyAccountAddress !== "") {
+      writer.uint32(26).string(message.proxyAccountAddress);
+    }
+    for (const v of message.whitelistedValidators) {
+      WhitelistedValidator.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.unstakeFeeRate !== "") {
+      writer.uint32(42).string(message.unstakeFeeRate);
+    }
+    if (message.feeAccountAddress !== "") {
+      writer.uint32(50).string(message.feeAccountAddress);
+    }
+    if (message.autocompoundFeeRate !== "") {
+      writer.uint32(58).string(message.autocompoundFeeRate);
+    }
+    if (message.whitelistAdminAddress !== "") {
+      writer.uint32(66).string(message.whitelistAdminAddress);
+    }
+    if (message.paused === true) {
+      writer.uint32(72).bool(message.paused);
+    }
+    for (const v of message.weightedRewardsReceivers) {
+      WeightedAddress.encode(v!, writer.uint32(82).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): Pool {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePool();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.poolId = reader.string();
+          break;
+        case 2:
+          message.liquidBondDenom = reader.string();
+          break;
+        case 3:
+          message.proxyAccountAddress = reader.string();
+          break;
+        case 4:
+          message.whitelistedValidators.push(WhitelistedValidator.decode(reader, reader.uint32()));
+          break;
+        case 5:
+          message.unstakeFeeRate = reader.string();
+          break;
+        case 6:
+          message.feeAccountAddress = reader.string();
+          break;
+        case 7:
+          message.autocompoundFeeRate = reader.string();
+          break;
+        case 8:
+          message.whitelistAdminAddress = reader.string();
+          break;
+        case 9:
+          message.paused = reader.bool();
+          break;
+        case 10:
+          message.weightedRewardsReceivers.push(WeightedAddress.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): Pool {
+    return {
+      poolId: isSet(object.poolId) ? String(object.poolId) : "",
+      liquidBondDenom: isSet(object.liquidBondDenom) ? String(object.liquidBondDenom) : "",
+      proxyAccountAddress: isSet(object.proxyAccountAddress) ? String(object.proxyAccountAddress) : "",
+      whitelistedValidators: Array.isArray(object?.whitelistedValidators) ? object.whitelistedValidators.map((e: any) => WhitelistedValidator.fromJSON(e)) : [],
+      unstakeFeeRate: isSet(object.unstakeFeeRate) ? String(object.unstakeFeeRate) : "",
+      feeAccountAddress: isSet(object.feeAccountAddress) ? String(object.feeAccountAddress) : "",
+      autocompoundFeeRate: isSet(object.autocompoundFeeRate) ? String(object.autocompoundFeeRate) : "",
+      whitelistAdminAddress: isSet(object.whitelistAdminAddress) ? String(object.whitelistAdminAddress) : "",
+      paused: isSet(object.paused) ? Boolean(object.paused) : false,
+      weightedRewardsReceivers: Array.isArray(object?.weightedRewardsReceivers) ? object.weightedRewardsReceivers.map((e: any) => WeightedAddress.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: Pool): unknown {
+    const obj: any = {};
+    message.poolId !== undefined && (obj.poolId = message.poolId);
+    message.liquidBondDenom !== undefined && (obj.liquidBondDenom = message.liquidBondDenom);
+    message.proxyAccountAddress !== undefined && (obj.proxyAccountAddress = message.proxyAccountAddress);
+    if (message.whitelistedValidators) {
+      obj.whitelistedValidators = message.whitelistedValidators.map(e => e ? WhitelistedValidator.toJSON(e) : undefined);
+    } else {
+      obj.whitelistedValidators = [];
+    }
+    message.unstakeFeeRate !== undefined && (obj.unstakeFeeRate = message.unstakeFeeRate);
+    message.feeAccountAddress !== undefined && (obj.feeAccountAddress = message.feeAccountAddress);
+    message.autocompoundFeeRate !== undefined && (obj.autocompoundFeeRate = message.autocompoundFeeRate);
+    message.whitelistAdminAddress !== undefined && (obj.whitelistAdminAddress = message.whitelistAdminAddress);
+    message.paused !== undefined && (obj.paused = message.paused);
+    if (message.weightedRewardsReceivers) {
+      obj.weightedRewardsReceivers = message.weightedRewardsReceivers.map(e => e ? WeightedAddress.toJSON(e) : undefined);
+    } else {
+      obj.weightedRewardsReceivers = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<Pool>): Pool {
+    const message = createBasePool();
+    message.poolId = object.poolId ?? "";
+    message.liquidBondDenom = object.liquidBondDenom ?? "";
+    message.proxyAccountAddress = object.proxyAccountAddress ?? "";
+    message.whitelistedValidators = object.whitelistedValidators?.map(e => WhitelistedValidator.fromPartial(e)) || [];
+    message.unstakeFeeRate = object.unstakeFeeRate ?? "";
+    message.feeAccountAddress = object.feeAccountAddress ?? "";
+    message.autocompoundFeeRate = object.autocompoundFeeRate ?? "";
+    message.whitelistAdminAddress = object.whitelistAdminAddress ?? "";
+    message.paused = object.paused ?? false;
     message.weightedRewardsReceivers = object.weightedRewardsReceivers?.map(e => WeightedAddress.fromPartial(e)) || [];
     return message;
   }

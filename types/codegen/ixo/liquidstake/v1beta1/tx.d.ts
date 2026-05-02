@@ -1,173 +1,284 @@
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { Params, ParamsSDKType, WhitelistedValidator, WhitelistedValidatorSDKType, WeightedAddress, WeightedAddressSDKType } from "./liquidstake";
+import { ModuleParams, ModuleParamsSDKType, WhitelistedValidator, WhitelistedValidatorSDKType, WeightedAddress, WeightedAddressSDKType } from "./liquidstake";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import * as _m0 from "protobufjs/minimal";
-/**
- * MsgLiquidStake defines a SDK message for performing a liquid stake of coins
- * from a delegator to whitelisted validators.
- */
+/** MsgLiquidStake liquid-stakes native tokens into a specific pool. */
 export interface MsgLiquidStake {
+    /** delegator_address must equal the pool's whitelist_admin_address. */
     delegatorAddress: string;
+    /**
+     * pool_id selects which pool to stake into and therefore which LST denom
+     * is minted in return.
+     */
+    poolId: string;
+    /**
+     * amount is the native staking-token coin to liquid-stake. Its denom must
+     * match the chain's bond denom.
+     */
     amount?: Coin;
 }
-/**
- * MsgLiquidStake defines a SDK message for performing a liquid stake of coins
- * from a delegator to whitelisted validators.
- */
+/** MsgLiquidStake liquid-stakes native tokens into a specific pool. */
 export interface MsgLiquidStakeSDKType {
     delegator_address: string;
+    pool_id: string;
     amount?: CoinSDKType;
 }
-/** MsgLiquidStakeResponse defines the MsgLiquidStake response type. */
 export interface MsgLiquidStakeResponse {
 }
-/** MsgLiquidStakeResponse defines the MsgLiquidStake response type. */
 export interface MsgLiquidStakeResponseSDKType {
 }
-/**
- * MsgLiquidUnstake defines a SDK message for performing an undelegation of
- * liquid staking from a delegate.
- */
+/** MsgLiquidUnstake burns LST of a specific pool and initiates unbonding. */
 export interface MsgLiquidUnstake {
     delegatorAddress: string;
+    /**
+     * pool_id must correspond to amount.denom (the pool's liquid_bond_denom);
+     * both are required for explicitness and validated to match.
+     */
+    poolId: string;
+    /**
+     * amount is the LST coin to burn. Its denom must equal
+     * Pool(pool_id).liquid_bond_denom.
+     */
     amount?: Coin;
 }
-/**
- * MsgLiquidUnstake defines a SDK message for performing an undelegation of
- * liquid staking from a delegate.
- */
+/** MsgLiquidUnstake burns LST of a specific pool and initiates unbonding. */
 export interface MsgLiquidUnstakeSDKType {
     delegator_address: string;
+    pool_id: string;
     amount?: CoinSDKType;
 }
-/** MsgLiquidUnstakeResponse defines the MsgLiquidUnstake response type. */
 export interface MsgLiquidUnstakeResponse {
     completionTime?: Timestamp;
 }
-/** MsgLiquidUnstakeResponse defines the MsgLiquidUnstake response type. */
 export interface MsgLiquidUnstakeResponseSDKType {
     completion_time?: TimestampSDKType;
 }
-export interface MsgUpdateParams {
-    /**
-     * authority is the address that controls the module (defaults to x/gov unless
-     * overwritten).
-     */
+/**
+ * MsgCreatePool registers a new liquid staking pool. Governance only.
+ *
+ * The proxy account is derived deterministically from pool_id; pool_id and
+ * liquid_bond_denom must both be globally unique. The newly created pool
+ * starts with an empty whitelisted_validators list, empty
+ * weighted_rewards_receivers, zero fee rates, and paused=false. Validators
+ * must be added with MsgUpdateWhitelistedValidators before staking is
+ * possible (the active-weight-quorum check requires sum >= 33.33%).
+ */
+export interface MsgCreatePool {
+    /** authority must be the governance module address. */
     authority: string;
     /**
-     * params defines the parameters to update.
-     * NOTE: denom and whitelisted_validators and weighted_rewards_receivers are
-     * not updated.
+     * pool_id is the immutable identifier for the new pool. Validated as
+     * lowercase alphanumeric plus '-', length 2..16, globally unique.
      */
-    params?: Params;
+    poolId: string;
+    /**
+     * liquid_bond_denom is the LST denom for the new pool. Must pass
+     * sdk.ValidateDenom and be globally unique across pools.
+     */
+    liquidBondDenom: string;
+    /** initial_admin_address becomes the pool's whitelist_admin_address. */
+    initialAdminAddress: string;
+    /** initial_fee_account_address becomes the pool's fee_account_address. */
+    initialFeeAccountAddress: string;
 }
-export interface MsgUpdateParamsSDKType {
+/**
+ * MsgCreatePool registers a new liquid staking pool. Governance only.
+ *
+ * The proxy account is derived deterministically from pool_id; pool_id and
+ * liquid_bond_denom must both be globally unique. The newly created pool
+ * starts with an empty whitelisted_validators list, empty
+ * weighted_rewards_receivers, zero fee rates, and paused=false. Validators
+ * must be added with MsgUpdateWhitelistedValidators before staking is
+ * possible (the active-weight-quorum check requires sum >= 33.33%).
+ */
+export interface MsgCreatePoolSDKType {
     authority: string;
-    params?: ParamsSDKType;
+    pool_id: string;
+    liquid_bond_denom: string;
+    initial_admin_address: string;
+    initial_fee_account_address: string;
 }
-/** MsgUpdateParamsResponse defines the response structure for executing a */
-export interface MsgUpdateParamsResponse {
+export interface MsgCreatePoolResponse {
+    /**
+     * proxy_account_address is the derived bech32 address that will hold this
+     * pool's delegations. Returned for client convenience.
+     */
+    proxyAccountAddress: string;
 }
-/** MsgUpdateParamsResponse defines the response structure for executing a */
-export interface MsgUpdateParamsResponseSDKType {
+export interface MsgCreatePoolResponseSDKType {
+    proxy_account_address: string;
 }
+/** MsgUpdateModuleParams updates the global ModuleParams. Governance only. */
+export interface MsgUpdateModuleParams {
+    /** authority must be the governance module address. */
+    authority: string;
+    /** module_params replaces the current ModuleParams in full. */
+    moduleParams?: ModuleParams;
+}
+/** MsgUpdateModuleParams updates the global ModuleParams. Governance only. */
+export interface MsgUpdateModuleParamsSDKType {
+    authority: string;
+    module_params?: ModuleParamsSDKType;
+}
+export interface MsgUpdateModuleParamsResponse {
+}
+export interface MsgUpdateModuleParamsResponseSDKType {
+}
+/**
+ * MsgUpdatePool updates a pool's mutable scalar/address fields. Governance
+ * or the pool's current whitelist_admin_address may call this.
+ *
+ * Whitelisted validators, weighted rewards receivers, and the paused flag
+ * each have their own dedicated update message and are NOT touched here.
+ * The pool_id, liquid_bond_denom, and proxy_account_address are immutable
+ * after creation and cannot be changed via this message.
+ */
+export interface MsgUpdatePool {
+    /** authority must be either governance or the pool's current admin. */
+    authority: string;
+    /** pool_id selects the pool to update. */
+    poolId: string;
+    /** unstake_fee_rate replaces the pool's current unstake fee rate. */
+    unstakeFeeRate: string;
+    /** fee_account_address replaces the pool's current fee account. */
+    feeAccountAddress: string;
+    /** autocompound_fee_rate replaces the pool's current autocompound fee rate. */
+    autocompoundFeeRate: string;
+    /** whitelist_admin_address replaces the pool's current admin address. */
+    whitelistAdminAddress: string;
+}
+/**
+ * MsgUpdatePool updates a pool's mutable scalar/address fields. Governance
+ * or the pool's current whitelist_admin_address may call this.
+ *
+ * Whitelisted validators, weighted rewards receivers, and the paused flag
+ * each have their own dedicated update message and are NOT touched here.
+ * The pool_id, liquid_bond_denom, and proxy_account_address are immutable
+ * after creation and cannot be changed via this message.
+ */
+export interface MsgUpdatePoolSDKType {
+    authority: string;
+    pool_id: string;
+    unstake_fee_rate: string;
+    fee_account_address: string;
+    autocompound_fee_rate: string;
+    whitelist_admin_address: string;
+}
+export interface MsgUpdatePoolResponse {
+}
+export interface MsgUpdatePoolResponseSDKType {
+}
+/**
+ * MsgUpdateWhitelistedValidators replaces a pool's validator whitelist.
+ * Governance or the pool's current admin may call this. Target weights must
+ * sum to 10000.
+ */
 export interface MsgUpdateWhitelistedValidators {
-    /**
-     * Authority is the address that is allowed to update whitelisted validators,
-     * defined as admin address in params (WhitelistAdminAddress).
-     */
+    /** authority must be either governance or the pool's current admin. */
     authority: string;
-    /**
-     * WhitelistedValidators specifies the validators elected to become Active
-     * Liquid Validators.
-     */
+    /** pool_id selects the pool whose whitelist is being replaced. */
+    poolId: string;
+    /** whitelisted_validators replaces the pool's validator set. */
     whitelistedValidators: WhitelistedValidator[];
 }
+/**
+ * MsgUpdateWhitelistedValidators replaces a pool's validator whitelist.
+ * Governance or the pool's current admin may call this. Target weights must
+ * sum to 10000.
+ */
 export interface MsgUpdateWhitelistedValidatorsSDKType {
     authority: string;
+    pool_id: string;
     whitelisted_validators: WhitelistedValidatorSDKType[];
 }
-/**
- * MsgUpdateWhitelistedValidatorsResponse defines the response structure for
- * executing a
- */
 export interface MsgUpdateWhitelistedValidatorsResponse {
 }
-/**
- * MsgUpdateWhitelistedValidatorsResponse defines the response structure for
- * executing a
- */
 export interface MsgUpdateWhitelistedValidatorsResponseSDKType {
 }
+/**
+ * MsgUpdateWeightedRewardsReceivers replaces a pool's weighted rewards
+ * receivers list. Pool admin only (matches pre-v7 admin-only constraint).
+ */
 export interface MsgUpdateWeightedRewardsReceivers {
-    /**
-     * Authority is the address that is allowed to update wieghted rewards
-     * receivers, defined as admin address in params (WhitelistAdminAddress).
-     */
+    /** authority must equal the pool's whitelist_admin_address. */
     authority: string;
+    /** pool_id selects the pool whose receivers are being replaced. */
+    poolId: string;
     /**
-     * WhitelistedValidators specifies the validators elected to become Active
-     * Liquid Validators.
+     * weighted_rewards_receivers replaces the pool's receivers list. Sum of
+     * weights must not exceed 1.
      */
     weightedRewardsReceivers: WeightedAddress[];
 }
+/**
+ * MsgUpdateWeightedRewardsReceivers replaces a pool's weighted rewards
+ * receivers list. Pool admin only (matches pre-v7 admin-only constraint).
+ */
 export interface MsgUpdateWeightedRewardsReceiversSDKType {
     authority: string;
+    pool_id: string;
     weighted_rewards_receivers: WeightedAddressSDKType[];
 }
-/**
- * MsgUpdateWeightedRewardsReceiversResponse defines the response structure for
- * executing a
- */
 export interface MsgUpdateWeightedRewardsReceiversResponse {
 }
-/**
- * MsgUpdateWeightedRewardsReceiversResponse defines the response structure for
- * executing a
- */
 export interface MsgUpdateWeightedRewardsReceiversResponseSDKType {
 }
-export interface MsgSetModulePaused {
-    /**
-     * Authority is the address that is allowed to update module's paused state,
-     * defined as admin address in params (WhitelistAdminAddress).
-     */
+/**
+ * MsgSetPoolPaused toggles a single pool's per-pool paused flag.
+ * Governance or the pool's current admin may call this.
+ */
+export interface MsgSetPoolPaused {
+    /** authority must be either governance or the pool's current admin. */
     authority: string;
-    /** IsPaused represents the target state of the paused flag. */
+    /** pool_id selects the pool whose paused flag is being set. */
+    poolId: string;
+    /** is_paused is the target value of Pool.paused. */
     isPaused: boolean;
 }
+/**
+ * MsgSetPoolPaused toggles a single pool's per-pool paused flag.
+ * Governance or the pool's current admin may call this.
+ */
+export interface MsgSetPoolPausedSDKType {
+    authority: string;
+    pool_id: string;
+    is_paused: boolean;
+}
+export interface MsgSetPoolPausedResponse {
+}
+export interface MsgSetPoolPausedResponseSDKType {
+}
+/**
+ * MsgSetModulePaused toggles the global ModuleParams.module_paused kill
+ * switch. When true, every pool is halted regardless of its per-pool flag.
+ * Governance authority only.
+ */
+export interface MsgSetModulePaused {
+    /** authority must be the governance module address. */
+    authority: string;
+    /** is_paused is the target value of ModuleParams.module_paused. */
+    isPaused: boolean;
+}
+/**
+ * MsgSetModulePaused toggles the global ModuleParams.module_paused kill
+ * switch. When true, every pool is halted regardless of its per-pool flag.
+ * Governance authority only.
+ */
 export interface MsgSetModulePausedSDKType {
     authority: string;
     is_paused: boolean;
 }
-/**
- * MsgSetModulePausedResponse defines the response structure for
- * executing a
- */
 export interface MsgSetModulePausedResponse {
 }
-/**
- * MsgSetModulePausedResponse defines the response structure for
- * executing a
- */
 export interface MsgSetModulePausedResponseSDKType {
 }
-/**
- * MsgBurn defines a SDK message for performing a burn of coins.
- * NOTE: only ixo native token can be burned
- */
+/** MsgBurn burns the signer's native uixo tokens. Module-level operation. */
 export interface MsgBurn {
     burner: string;
-    /**
-     * amount is the amount of coins to burn
-     * NOTE: only ixo native token can be burned
-     */
+    /** amount must be denominated in uixo. */
     amount?: Coin;
 }
-/**
- * MsgBurn defines a SDK message for performing a burn of coins.
- * NOTE: only ixo native token can be burned
- */
+/** MsgBurn burns the signer's native uixo tokens. Module-level operation. */
 export interface MsgBurnSDKType {
     burner: string;
     amount?: CoinSDKType;
@@ -204,19 +315,47 @@ export declare const MsgLiquidUnstakeResponse: {
     toJSON(message: MsgLiquidUnstakeResponse): unknown;
     fromPartial(object: Partial<MsgLiquidUnstakeResponse>): MsgLiquidUnstakeResponse;
 };
-export declare const MsgUpdateParams: {
-    encode(message: MsgUpdateParams, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams;
-    fromJSON(object: any): MsgUpdateParams;
-    toJSON(message: MsgUpdateParams): unknown;
-    fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams;
+export declare const MsgCreatePool: {
+    encode(message: MsgCreatePool, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreatePool;
+    fromJSON(object: any): MsgCreatePool;
+    toJSON(message: MsgCreatePool): unknown;
+    fromPartial(object: Partial<MsgCreatePool>): MsgCreatePool;
 };
-export declare const MsgUpdateParamsResponse: {
-    encode(_: MsgUpdateParamsResponse, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse;
-    fromJSON(_: any): MsgUpdateParamsResponse;
-    toJSON(_: MsgUpdateParamsResponse): unknown;
-    fromPartial(_: Partial<MsgUpdateParamsResponse>): MsgUpdateParamsResponse;
+export declare const MsgCreatePoolResponse: {
+    encode(message: MsgCreatePoolResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreatePoolResponse;
+    fromJSON(object: any): MsgCreatePoolResponse;
+    toJSON(message: MsgCreatePoolResponse): unknown;
+    fromPartial(object: Partial<MsgCreatePoolResponse>): MsgCreatePoolResponse;
+};
+export declare const MsgUpdateModuleParams: {
+    encode(message: MsgUpdateModuleParams, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateModuleParams;
+    fromJSON(object: any): MsgUpdateModuleParams;
+    toJSON(message: MsgUpdateModuleParams): unknown;
+    fromPartial(object: Partial<MsgUpdateModuleParams>): MsgUpdateModuleParams;
+};
+export declare const MsgUpdateModuleParamsResponse: {
+    encode(_: MsgUpdateModuleParamsResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateModuleParamsResponse;
+    fromJSON(_: any): MsgUpdateModuleParamsResponse;
+    toJSON(_: MsgUpdateModuleParamsResponse): unknown;
+    fromPartial(_: Partial<MsgUpdateModuleParamsResponse>): MsgUpdateModuleParamsResponse;
+};
+export declare const MsgUpdatePool: {
+    encode(message: MsgUpdatePool, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdatePool;
+    fromJSON(object: any): MsgUpdatePool;
+    toJSON(message: MsgUpdatePool): unknown;
+    fromPartial(object: Partial<MsgUpdatePool>): MsgUpdatePool;
+};
+export declare const MsgUpdatePoolResponse: {
+    encode(_: MsgUpdatePoolResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdatePoolResponse;
+    fromJSON(_: any): MsgUpdatePoolResponse;
+    toJSON(_: MsgUpdatePoolResponse): unknown;
+    fromPartial(_: Partial<MsgUpdatePoolResponse>): MsgUpdatePoolResponse;
 };
 export declare const MsgUpdateWhitelistedValidators: {
     encode(message: MsgUpdateWhitelistedValidators, writer?: _m0.Writer): _m0.Writer;
@@ -245,6 +384,20 @@ export declare const MsgUpdateWeightedRewardsReceiversResponse: {
     fromJSON(_: any): MsgUpdateWeightedRewardsReceiversResponse;
     toJSON(_: MsgUpdateWeightedRewardsReceiversResponse): unknown;
     fromPartial(_: Partial<MsgUpdateWeightedRewardsReceiversResponse>): MsgUpdateWeightedRewardsReceiversResponse;
+};
+export declare const MsgSetPoolPaused: {
+    encode(message: MsgSetPoolPaused, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetPoolPaused;
+    fromJSON(object: any): MsgSetPoolPaused;
+    toJSON(message: MsgSetPoolPaused): unknown;
+    fromPartial(object: Partial<MsgSetPoolPaused>): MsgSetPoolPaused;
+};
+export declare const MsgSetPoolPausedResponse: {
+    encode(_: MsgSetPoolPausedResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetPoolPausedResponse;
+    fromJSON(_: any): MsgSetPoolPausedResponse;
+    toJSON(_: MsgSetPoolPausedResponse): unknown;
+    fromPartial(_: Partial<MsgSetPoolPausedResponse>): MsgSetPoolPausedResponse;
 };
 export declare const MsgSetModulePaused: {
     encode(message: MsgSetModulePaused, writer?: _m0.Writer): _m0.Writer;

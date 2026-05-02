@@ -288,9 +288,11 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
         };
         liquidstake: {
             v1beta1: {
-                params(request?: import("./liquidstake/v1beta1/query").QueryParamsRequest): Promise<import("./liquidstake/v1beta1/query").QueryParamsResponse>;
-                liquidValidators(request?: import("./liquidstake/v1beta1/query").QueryLiquidValidatorsRequest): Promise<import("./liquidstake/v1beta1/query").QueryLiquidValidatorsResponse>;
-                states(request?: import("./liquidstake/v1beta1/query").QueryStatesRequest): Promise<import("./liquidstake/v1beta1/query").QueryStatesResponse>;
+                moduleParams(request?: import("./liquidstake/v1beta1/query").QueryModuleParamsRequest): Promise<import("./liquidstake/v1beta1/query").QueryModuleParamsResponse>;
+                pool(request: import("./liquidstake/v1beta1/query").QueryPoolRequest): Promise<import("./liquidstake/v1beta1/query").QueryPoolResponse>;
+                pools(request?: import("./liquidstake/v1beta1/query").QueryPoolsRequest): Promise<import("./liquidstake/v1beta1/query").QueryPoolsResponse>;
+                liquidValidators(request: import("./liquidstake/v1beta1/query").QueryLiquidValidatorsRequest): Promise<import("./liquidstake/v1beta1/query").QueryLiquidValidatorsResponse>;
+                states(request: import("./liquidstake/v1beta1/query").QueryStatesRequest): Promise<import("./liquidstake/v1beta1/query").QueryStatesResponse>;
             };
         };
         mint: {

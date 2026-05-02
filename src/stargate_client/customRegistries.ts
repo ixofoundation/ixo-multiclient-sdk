@@ -579,7 +579,7 @@ export const createRegistry = (): Registry => {
     ixo.smartaccount.crypto.AuthnPubKey
   );
 
-  // Ixo Liquid Stake module
+  // Ixo Liquid Stake module (v7 multi-pool surface)
   // -----------------------------------------------------------------------------
   myRegistry.register(
     "/ixo.liquidstake.v1beta1.MsgLiquidStake",
@@ -590,8 +590,16 @@ export const createRegistry = (): Registry => {
     ixo.liquidstake.v1beta1.MsgLiquidUnstake
   );
   myRegistry.register(
-    "/ixo.liquidstake.v1beta1.MsgUpdateParams",
-    ixo.liquidstake.v1beta1.MsgUpdateParams
+    "/ixo.liquidstake.v1beta1.MsgCreatePool",
+    ixo.liquidstake.v1beta1.MsgCreatePool
+  );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgUpdateModuleParams",
+    ixo.liquidstake.v1beta1.MsgUpdateModuleParams
+  );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgUpdatePool",
+    ixo.liquidstake.v1beta1.MsgUpdatePool
   );
   myRegistry.register(
     "/ixo.liquidstake.v1beta1.MsgUpdateWhitelistedValidators",
@@ -600,6 +608,10 @@ export const createRegistry = (): Registry => {
   myRegistry.register(
     "/ixo.liquidstake.v1beta1.MsgUpdateWeightedRewardsReceivers",
     ixo.liquidstake.v1beta1.MsgUpdateWeightedRewardsReceivers
+  );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgSetPoolPaused",
+    ixo.liquidstake.v1beta1.MsgSetPoolPaused
   );
   myRegistry.register(
     "/ixo.liquidstake.v1beta1.MsgSetModulePaused",

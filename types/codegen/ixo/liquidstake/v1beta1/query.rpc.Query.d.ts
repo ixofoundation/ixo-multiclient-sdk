@@ -1,27 +1,41 @@
 import { Rpc } from "../../../helpers";
 import { QueryClient } from "@cosmjs/stargate";
-import { QueryParamsRequest, QueryParamsResponse, QueryLiquidValidatorsRequest, QueryLiquidValidatorsResponse, QueryStatesRequest, QueryStatesResponse } from "./query";
+import { QueryModuleParamsRequest, QueryModuleParamsResponse, QueryPoolRequest, QueryPoolResponse, QueryPoolsRequest, QueryPoolsResponse, QueryLiquidValidatorsRequest, QueryLiquidValidatorsResponse, QueryStatesRequest, QueryStatesResponse } from "./query";
 /** Query defines the gRPC query service for the liquidstake module. */
 export interface Query {
-    /** Params returns parameters of the liquidstake module. */
-    params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
     /**
-     * LiquidValidators returns liquid validators with states of the liquidstake
-     * module.
+     * ModuleParams returns the global, module-wide parameters (minimum stake
+     * amount and global pause flag).
      */
-    liquidValidators(request?: QueryLiquidValidatorsRequest): Promise<QueryLiquidValidatorsResponse>;
-    /** States returns states of the liquidstake module. */
-    states(request?: QueryStatesRequest): Promise<QueryStatesResponse>;
+    moduleParams(request?: QueryModuleParamsRequest): Promise<QueryModuleParamsResponse>;
+    /** Pool returns the configuration of a single pool by pool_id. */
+    pool(request: QueryPoolRequest): Promise<QueryPoolResponse>;
+    /** Pools returns every registered pool's configuration, paginated. */
+    pools(request?: QueryPoolsRequest): Promise<QueryPoolsResponse>;
+    /**
+     * LiquidValidators returns liquid validators (with state) for a single
+     * pool.
+     */
+    liquidValidators(request: QueryLiquidValidatorsRequest): Promise<QueryLiquidValidatorsResponse>;
+    /**
+     * States returns the NetAmountState (rates, supplies, balances) for a
+     * single pool.
+     */
+    states(request: QueryStatesRequest): Promise<QueryStatesResponse>;
 }
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
-    params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
-    liquidValidators(request?: QueryLiquidValidatorsRequest): Promise<QueryLiquidValidatorsResponse>;
-    states(request?: QueryStatesRequest): Promise<QueryStatesResponse>;
+    moduleParams(request?: QueryModuleParamsRequest): Promise<QueryModuleParamsResponse>;
+    pool(request: QueryPoolRequest): Promise<QueryPoolResponse>;
+    pools(request?: QueryPoolsRequest): Promise<QueryPoolsResponse>;
+    liquidValidators(request: QueryLiquidValidatorsRequest): Promise<QueryLiquidValidatorsResponse>;
+    states(request: QueryStatesRequest): Promise<QueryStatesResponse>;
 }
 export declare const createRpcQueryExtension: (base: QueryClient) => {
-    params(request?: QueryParamsRequest): Promise<QueryParamsResponse>;
-    liquidValidators(request?: QueryLiquidValidatorsRequest): Promise<QueryLiquidValidatorsResponse>;
-    states(request?: QueryStatesRequest): Promise<QueryStatesResponse>;
+    moduleParams(request?: QueryModuleParamsRequest): Promise<QueryModuleParamsResponse>;
+    pool(request: QueryPoolRequest): Promise<QueryPoolResponse>;
+    pools(request?: QueryPoolsRequest): Promise<QueryPoolsResponse>;
+    liquidValidators(request: QueryLiquidValidatorsRequest): Promise<QueryLiquidValidatorsResponse>;
+    states(request: QueryStatesRequest): Promise<QueryStatesResponse>;
 };

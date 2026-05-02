@@ -1,85 +1,177 @@
-import { Params, ParamsSDKType } from "./liquidstake";
+import { ModuleParams, ModuleParamsSDKType, Pool, PoolSDKType } from "./liquidstake";
 import * as _m0 from "protobufjs/minimal";
-/** LiquidStakeParamsUpdatedEvent is triggered when a the Params is updated. */
-export interface LiquidStakeParamsUpdatedEvent {
-    params?: Params;
+/**
+ * ModuleParamsUpdatedEvent is emitted when the global ModuleParams change
+ * (either via MsgUpdateModuleParams or MsgSetModulePaused).
+ */
+export interface ModuleParamsUpdatedEvent {
+    moduleParams?: ModuleParams;
     authority: string;
 }
-/** LiquidStakeParamsUpdatedEvent is triggered when a the Params is updated. */
-export interface LiquidStakeParamsUpdatedEventSDKType {
-    params?: ParamsSDKType;
+/**
+ * ModuleParamsUpdatedEvent is emitted when the global ModuleParams change
+ * (either via MsgUpdateModuleParams or MsgSetModulePaused).
+ */
+export interface ModuleParamsUpdatedEventSDKType {
+    module_params?: ModuleParamsSDKType;
     authority: string;
 }
-/** LiquidStakeEvent is triggered when a liquid stake is performed. */
+/**
+ * PoolCreatedEvent is emitted when a new pool is registered via
+ * MsgCreatePool.
+ */
+export interface PoolCreatedEvent {
+    poolId: string;
+    pool?: Pool;
+    authority: string;
+}
+/**
+ * PoolCreatedEvent is emitted when a new pool is registered via
+ * MsgCreatePool.
+ */
+export interface PoolCreatedEventSDKType {
+    pool_id: string;
+    pool?: PoolSDKType;
+    authority: string;
+}
+/**
+ * PoolUpdatedEvent is emitted when a pool's configuration changes via any
+ * of: MsgUpdatePool, MsgUpdateWhitelistedValidators,
+ * MsgUpdateWeightedRewardsReceivers, MsgSetPoolPaused.
+ */
+export interface PoolUpdatedEvent {
+    poolId: string;
+    pool?: Pool;
+    authority: string;
+}
+/**
+ * PoolUpdatedEvent is emitted when a pool's configuration changes via any
+ * of: MsgUpdatePool, MsgUpdateWhitelistedValidators,
+ * MsgUpdateWeightedRewardsReceivers, MsgSetPoolPaused.
+ */
+export interface PoolUpdatedEventSDKType {
+    pool_id: string;
+    pool?: PoolSDKType;
+    authority: string;
+}
+/**
+ * LiquidStakeEvent is emitted when a liquid stake is performed against a
+ * specific pool.
+ */
 export interface LiquidStakeEvent {
+    poolId: string;
     delegator: string;
     liquidAmount: string;
     stkIxoMintedAmount: string;
 }
-/** LiquidStakeEvent is triggered when a liquid stake is performed. */
+/**
+ * LiquidStakeEvent is emitted when a liquid stake is performed against a
+ * specific pool.
+ */
 export interface LiquidStakeEventSDKType {
+    pool_id: string;
     delegator: string;
     liquid_amount: string;
     stk_ixo_minted_amount: string;
 }
-/** LiquidUnstakeEvent is triggered when a liquid unstake is performed. */
+/**
+ * LiquidUnstakeEvent is emitted when a liquid unstake is performed against
+ * a specific pool.
+ */
 export interface LiquidUnstakeEvent {
+    poolId: string;
     delegator: string;
     unstakeAmount: string;
     unbondingAmount: string;
     unbondedAmount: string;
     completionTime: string;
 }
-/** LiquidUnstakeEvent is triggered when a liquid unstake is performed. */
+/**
+ * LiquidUnstakeEvent is emitted when a liquid unstake is performed against
+ * a specific pool.
+ */
 export interface LiquidUnstakeEventSDKType {
+    pool_id: string;
     delegator: string;
     unstake_amount: string;
     unbonding_amount: string;
     unbonded_amount: string;
     completion_time: string;
 }
-/** LiquidRedelegateEvent is triggered when a liquid validator is added. */
+/**
+ * AddLiquidValidatorEvent is emitted when a newly whitelisted validator is
+ * activated for a pool.
+ */
 export interface AddLiquidValidatorEvent {
+    poolId: string;
     validator: string;
 }
-/** LiquidRedelegateEvent is triggered when a liquid validator is added. */
+/**
+ * AddLiquidValidatorEvent is emitted when a newly whitelisted validator is
+ * activated for a pool.
+ */
 export interface AddLiquidValidatorEventSDKType {
+    pool_id: string;
     validator: string;
 }
-/** RebalancedEvent is triggered after a rebalance is performed. */
+/** RebalancedLiquidStakeEvent is emitted after a pool's rebalancing pass. */
 export interface RebalancedLiquidStakeEvent {
+    poolId: string;
     delegator: string;
     redelegationCount: string;
     redelegationFailCount: string;
 }
-/** RebalancedEvent is triggered after a rebalance is performed. */
+/** RebalancedLiquidStakeEvent is emitted after a pool's rebalancing pass. */
 export interface RebalancedLiquidStakeEventSDKType {
+    pool_id: string;
     delegator: string;
     redelegation_count: string;
     redelegation_fail_count: string;
 }
-/** AutocompoundEvent is triggered after a epoch is triggered for autocompound. */
+/**
+ * AutocompoundStakingRewardsEvent is emitted when a pool's autocompound
+ * epoch hook runs successfully.
+ */
 export interface AutocompoundStakingRewardsEvent {
+    poolId: string;
     delegator: string;
     totalAmount: string;
     feeAmount: string;
     redelegateAmount: string;
     weightedRewardsAmount: string;
 }
-/** AutocompoundEvent is triggered after a epoch is triggered for autocompound. */
+/**
+ * AutocompoundStakingRewardsEvent is emitted when a pool's autocompound
+ * epoch hook runs successfully.
+ */
 export interface AutocompoundStakingRewardsEventSDKType {
+    pool_id: string;
     delegator: string;
     total_amount: string;
     fee_amount: string;
     redelegate_amount: string;
     weighted_rewards_amount: string;
 }
-export declare const LiquidStakeParamsUpdatedEvent: {
-    encode(message: LiquidStakeParamsUpdatedEvent, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): LiquidStakeParamsUpdatedEvent;
-    fromJSON(object: any): LiquidStakeParamsUpdatedEvent;
-    toJSON(message: LiquidStakeParamsUpdatedEvent): unknown;
-    fromPartial(object: Partial<LiquidStakeParamsUpdatedEvent>): LiquidStakeParamsUpdatedEvent;
+export declare const ModuleParamsUpdatedEvent: {
+    encode(message: ModuleParamsUpdatedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): ModuleParamsUpdatedEvent;
+    fromJSON(object: any): ModuleParamsUpdatedEvent;
+    toJSON(message: ModuleParamsUpdatedEvent): unknown;
+    fromPartial(object: Partial<ModuleParamsUpdatedEvent>): ModuleParamsUpdatedEvent;
+};
+export declare const PoolCreatedEvent: {
+    encode(message: PoolCreatedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): PoolCreatedEvent;
+    fromJSON(object: any): PoolCreatedEvent;
+    toJSON(message: PoolCreatedEvent): unknown;
+    fromPartial(object: Partial<PoolCreatedEvent>): PoolCreatedEvent;
+};
+export declare const PoolUpdatedEvent: {
+    encode(message: PoolUpdatedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): PoolUpdatedEvent;
+    fromJSON(object: any): PoolUpdatedEvent;
+    toJSON(message: PoolUpdatedEvent): unknown;
+    fromPartial(object: Partial<PoolUpdatedEvent>): PoolUpdatedEvent;
 };
 export declare const LiquidStakeEvent: {
     encode(message: LiquidStakeEvent, writer?: _m0.Writer): _m0.Writer;

@@ -18,6 +18,9 @@ export declare const createQueryClient: (rpcEndpoint: string) => Promise<{
         iid: {
             v1beta1: import("../codegen/ixo/iid/v1beta1/query.rpc.Query").QueryClientImpl;
         };
+        liquidstake: {
+            v1beta1: import("../codegen/ixo/liquidstake/v1beta1/query.rpc.Query").QueryClientImpl;
+        };
         mint: {
             v1beta1: import("../codegen/ixo/mint/v1beta1/query.rpc.Query").QueryClientImpl;
         };
