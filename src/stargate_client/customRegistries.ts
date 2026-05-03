@@ -622,5 +622,36 @@ export const createRegistry = (): Registry => {
     ixo.liquidstake.v1beta1.MsgBurn
   );
 
+  // Ixo Names module (chain-level name service, IXO-1123)
+  // -----------------------------------------------------------------------------
+  myRegistry.register(
+    "/ixo.names.v1beta1.MsgCreateNamespace",
+    ixo.names.v1beta1.MsgCreateNamespace
+  );
+  myRegistry.register(
+    "/ixo.names.v1beta1.MsgUpdateNamespace",
+    ixo.names.v1beta1.MsgUpdateNamespace
+  );
+  myRegistry.register(
+    "/ixo.names.v1beta1.MsgRegisterName",
+    ixo.names.v1beta1.MsgRegisterName
+  );
+  myRegistry.register(
+    "/ixo.names.v1beta1.MsgRegisterNameByRegistrar",
+    ixo.names.v1beta1.MsgRegisterNameByRegistrar
+  );
+  myRegistry.register(
+    "/ixo.names.v1beta1.MsgUpdateNameByRegistrar",
+    ixo.names.v1beta1.MsgUpdateNameByRegistrar
+  );
+  myRegistry.register(
+    "/ixo.names.v1beta1.MsgTransferName",
+    ixo.names.v1beta1.MsgTransferName
+  );
+  myRegistry.register(
+    "/ixo.names.v1beta1.MsgSetNameStatus",
+    ixo.names.v1beta1.MsgSetNameStatus
+  );
+
   return myRegistry;
 };

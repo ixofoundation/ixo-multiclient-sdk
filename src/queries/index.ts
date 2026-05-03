@@ -39,6 +39,9 @@ export const createQueryClient = async (rpcEndpoint: string) => {
       mint: {
         v1beta1: new ixo.mint.v1beta1.QueryClientImpl(rpc),
       },
+      names: {
+        v1beta1: new ixo.names.v1beta1.QueryClientImpl(rpc),
+      },
       smartaccount: {
         v1beta1: new ixo.smartaccount.v1beta1.QueryClientImpl(rpc),
       },
