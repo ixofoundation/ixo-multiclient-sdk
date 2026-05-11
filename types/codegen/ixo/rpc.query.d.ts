@@ -301,6 +301,16 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
                 epochProvisions(request?: import("./mint/v1beta1/query").QueryEpochProvisionsRequest): Promise<import("./mint/v1beta1/query").QueryEpochProvisionsResponse>;
             };
         };
+        names: {
+            v1beta1: {
+                namespace(request: import("./names/v1beta1/query").QueryNamespaceRequest): Promise<import("./names/v1beta1/query").QueryNamespaceResponse>;
+                namespaces(request?: import("./names/v1beta1/query").QueryNamespacesRequest): Promise<import("./names/v1beta1/query").QueryNamespacesResponse>;
+                resolveName(request: import("./names/v1beta1/query").QueryResolveNameRequest): Promise<import("./names/v1beta1/query").QueryResolveNameResponse>;
+                getName(request: import("./names/v1beta1/query").QueryGetNameRequest): Promise<import("./names/v1beta1/query").QueryGetNameResponse>;
+                namesByNamespace(request: import("./names/v1beta1/query").QueryNamesByNamespaceRequest): Promise<import("./names/v1beta1/query").QueryNamesByNamespaceResponse>;
+                namesByOwner(request: import("./names/v1beta1/query").QueryNamesByOwnerRequest): Promise<import("./names/v1beta1/query").QueryNamesByOwnerResponse>;
+            };
+        };
         smartaccount: {
             v1beta1: {
                 params(request?: import("./smartaccount/v1beta1/query").QueryParamsRequest): Promise<import("./smartaccount/v1beta1/query").QueryParamsResponse>;

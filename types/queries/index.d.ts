@@ -24,6 +24,9 @@ export declare const createQueryClient: (rpcEndpoint: string) => Promise<{
         mint: {
             v1beta1: import("../codegen/ixo/mint/v1beta1/query.rpc.Query").QueryClientImpl;
         };
+        names: {
+            v1beta1: import("../codegen/ixo/names/v1beta1/query.rpc.Query").QueryClientImpl;
+        };
         smartaccount: {
             v1beta1: import("../codegen/ixo/smartaccount/v1beta1/query.rpc.Query").QueryClientImpl;
         };

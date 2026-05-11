@@ -22,6 +22,22 @@ export const AllAccounts = async () => {
   return await queryClient.cosmos.auth.v1beta1.accounts({});
 };
 
+// Claims module
+
+/** Single claim by id (CID hash). Returns the claim including its current
+ * Evaluation and EvaluationHistory (the latter populated only when a claim has
+ * been re-evaluated, e.g. flagged then finalised). */
+export const Claim = async (id: string) => {
+  return await queryClient.ixo.claims.v1beta1.claim({ id });
+};
+
+/** Single collection by id. Used to assert counter state — `flagged` is a
+ * cumulative event counter (every flag, including re-flags), `flaggedActive`
+ * is the number of claims currently sitting in FLAGGED state. */
+export const Collection = async (id: string) => {
+  return await queryClient.ixo.claims.v1beta1.collection({ id });
+};
+
 // Claims module — team member budgets
 
 export const CollectionMember = async (

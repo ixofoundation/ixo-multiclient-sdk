@@ -1820,6 +1820,547 @@ export const claimsTeamMembersPeriodReset = () =>
     });
   });
 
+// =====================================================================
+// Flagged evaluations — covers the FLAGGED escape-hatch status:
+//
+//   1. Happy path: alice submits claim → tester FLAGS → bob (different
+//      agent) APPROVES. Verifies flagged_active increments on flag and
+//      decrements on finalise; flagged counter is cumulative; the flag
+//      moves into evaluation_history.
+//   2. Self-finalise of own flag: same agent that flagged can later
+//      terminate their own flag (e.g. they got more info). FLAGGED still
+//      consumes AgentQuota the same as a terminal evaluation.
+//   3. Self-reflag blocked (ErrSelfReFlag) — same agent cannot flag a
+//      claim they already flagged (no new state to record). The check
+//      covers both the current evaluation and every prior entry in
+//      evaluation_history, so an agent cannot flag-bomb across an
+//      intervening flag from another evaluator.
+//   4. Re-flag chain (tester flags → bob also flags → tester finalises):
+//      flagged_active stays at 1, flagged counter increments per event,
+//      the finalising re-evaluation moves both prior flags into history
+//      in chronological order.
+//   5. Terminal-locked: a re-evaluation against an already-terminal
+//      claim is rejected (ErrClaimDuplicateEvaluation).
+//   6. Flag → REJECT path: verifies flagged_active decrements on
+//      non-approved finalisation and Rejected counter increments.
+//   7. First-time terminal eval (no prior flag) still works and leaves
+//      evaluation_history empty.
+// =====================================================================
+export const claimsFlagged = () =>
+  describe("Testing the Claims module — flagged evaluations", () => {
+    // -----------------------------------------------------------------
+    // Setup: relayer node entity, protocol entity, fund admin, cw20
+    // (the default Claims.CreateCollection wires a cw20 approval payment
+    // so we instantiate one to keep the approval payouts working), then
+    // a collection in OPEN state.
+    // -----------------------------------------------------------------
+    let relayerNodeEntity = "";
+    testMsg("/ixo.entity.v1beta1.MsgCreateEntity dao", async () => {
+      const res = await Entity.CreateEntity(
+        "dao",
+        undefined,
+        "",
+        WalletUsers.charlie
+      );
+      relayerNodeEntity = utils.common.getValueFromEvents(
+        res,
+        "wasm",
+        "token_id"
+      );
+      console.log({ relayerNodeEntity });
+      return res;
+    });
+
+    let protocol = "";
+    let adminAccount = "";
+    testMsg("/ixo.entity.v1beta1.MsgCreateEntity protocol", async () => {
+      const res = await Entity.CreateEntity(
+        "protocol",
+        undefined,
+        relayerNodeEntity,
+        WalletUsers.charlie
+      );
+      protocol = utils.common.getValueFromEvents(res, "wasm", "token_id");
+      adminAccount = utils.common.getValueFromEvents(
+        res,
+        "ixo.entity.v1beta1.EntityCreatedEvent",
+        "entity",
+        (s) => s.accounts.find((a) => a.name === "admin").address
+      );
+      console.log({ protocol, adminAccount });
+      return res;
+    });
+
+    testMsg("Bank Send to admin account", () =>
+      Cosmos.BankSendTrx(
+        100000000,
+        WalletUsers.tester,
+        undefined,
+        undefined,
+        undefined,
+        adminAccount
+      )
+    );
+
+    let cw20ContractAddress = "";
+    testMsg("/cosmwasm.wasm.v1.MsgInstantiateContract cw20", async () => {
+      const tester = (await getUser(WalletUsers.tester).getAccounts())[0]
+        .address;
+      const msg = {
+        decimals: 6,
+        initial_balances: [
+          { address: tester, amount: "3000000000000" },
+          { address: adminAccount, amount: "3000000000000" },
+        ],
+        mint: { minter: tester },
+        name: "CW20",
+        symbol: "FLAG",
+      };
+      const res = await Wasm.WasmInstantiateTrx(25, JSON.stringify(msg));
+      cw20ContractAddress = utils.common.getValueFromEvents(
+        res,
+        "instantiate",
+        "_contract_address"
+      );
+      console.log({ cw20ContractAddress });
+      return res;
+    });
+
+    let collectionId = "";
+    testMsg("/ixo.claims.v1beta1.MsgCreateCollection", async () => {
+      const res = await Claims.CreateCollection(
+        protocol,
+        protocol,
+        adminAccount,
+        undefined,
+        cw20ContractAddress
+      );
+      collectionId = utils.common.getValueFromEvents(
+        res,
+        "ixo.claims.v1beta1.CollectionCreatedEvent",
+        "collection",
+        (c) => c.id
+      );
+      console.log({ collectionId });
+      return res;
+    });
+
+    testMsg("Grant entity authz: MsgUpdateCollectionState", () =>
+      Entity.GrantEntityAccountAuthz(
+        protocol,
+        "admin",
+        WalletUsers.tester,
+        undefined,
+        "/ixo.claims.v1beta1.MsgUpdateCollectionState"
+      )
+    );
+    testMsg("Open collection", () =>
+      Claims.UpdateCollectionState(collectionId, adminAccount)
+    );
+
+    // -----------------------------------------------------------------
+    // Authorizations:
+    //   - alice: submitter
+    //   - tester: first evaluator (flagger across the test cases)
+    //   - bob: second evaluator (finaliser / second flagger in the chain)
+    // -----------------------------------------------------------------
+    testMsg("Grant alice submit authz", () =>
+      Claims.GrantEntityAccountClaimsSubmitAuthz(
+        protocol,
+        "admin",
+        adminAccount,
+        collectionId,
+        100,
+        false,
+        WalletUsers.alice,
+        WalletUsers.tester,
+        [{ amount: "1000000", denom: "uixo" }]
+      )
+    );
+
+    testMsg("Grant tester evaluate authz", () =>
+      Claims.GrantEntityAccountClaimsEvaluateAuthz(
+        protocol,
+        "admin",
+        adminAccount,
+        collectionId,
+        [],
+        100,
+        false,
+        WalletUsers.tester,
+        undefined,
+        cw20ContractAddress
+      )
+    );
+
+    testMsg("Grant bob evaluate authz", () =>
+      Claims.GrantEntityAccountClaimsEvaluateAuthz(
+        protocol,
+        "admin",
+        adminAccount,
+        collectionId,
+        [],
+        100,
+        false,
+        WalletUsers.bob,
+        undefined,
+        cw20ContractAddress
+      )
+    );
+
+    // -----------------------------------------------------------------
+    // Case 1: happy path — flag, then finalise APPROVED by a different
+    // agent. After flag: flagged_active=1, flagged=1, evaluation.status
+    // FLAGGED, history empty. After approve: flagged_active=0,
+    // approved=1, evaluated=1, evaluation.status APPROVED, history has
+    // exactly 1 entry (tester's flag).
+    // -----------------------------------------------------------------
+    const claimFlaggedThenApproved = "FLAG-1";
+    testMsg("submit claim 1 (will be flagged then approved)", () =>
+      Claims.MsgExecAgentSubmit(
+        claimFlaggedThenApproved,
+        collectionId,
+        adminAccount,
+        WalletUsers.alice
+      )
+    );
+
+    testMsg("tester FLAGS claim 1", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimFlaggedThenApproved,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.FLAGGED,
+        WalletUsers.tester
+      )
+    );
+
+    test("after flag: collection counters and claim state", async () => {
+      const c = await Queries.Collection(collectionId);
+      expect(c.collection!.flagged.toString()).toBe("1");
+      expect(c.collection!.flaggedActive.toString()).toBe("1");
+      expect(c.collection!.evaluated.toString()).toBe("0");
+
+      const claim = await Queries.Claim(claimFlaggedThenApproved);
+      expect(claim.claim!.evaluation?.status).toBe(
+        ixo.claims.v1beta1.EvaluationStatus.FLAGGED
+      );
+      expect(claim.claim!.evaluationHistory.length).toBe(0);
+    });
+
+    testMsg("bob APPROVES claim 1 (different agent finalises)", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimFlaggedThenApproved,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.APPROVED,
+        WalletUsers.bob
+      )
+    );
+
+    test("after finalise: counters move and history captures the flag", async () => {
+      const c = await Queries.Collection(collectionId);
+      expect(c.collection!.flaggedActive.toString()).toBe("0");
+      expect(c.collection!.flagged.toString()).toBe("1");
+      expect(c.collection!.approved.toString()).toBe("1");
+      expect(c.collection!.evaluated.toString()).toBe("1");
+
+      const claim = await Queries.Claim(claimFlaggedThenApproved);
+      expect(claim.claim!.evaluation?.status).toBe(
+        ixo.claims.v1beta1.EvaluationStatus.APPROVED
+      );
+      // Prior flag moved into history; latest is the APPROVED.
+      expect(claim.claim!.evaluationHistory.length).toBe(1);
+      expect(claim.claim!.evaluationHistory[0].status).toBe(
+        ixo.claims.v1beta1.EvaluationStatus.FLAGGED
+      );
+    });
+
+    // -----------------------------------------------------------------
+    // Case 2: self-finalise of own flag. The agent that flagged can
+    // later terminate their own flag without escalation — useful when
+    // an oracle flags due to insufficient data and the data arrives
+    // shortly after. FLAGGED still consumes AgentQuota.
+    // -----------------------------------------------------------------
+    const claimSelfFinalise = "FLAG-1B";
+    testMsg("submit claim 1B (will be self-finalised)", () =>
+      Claims.MsgExecAgentSubmit(
+        claimSelfFinalise,
+        collectionId,
+        adminAccount,
+        WalletUsers.alice
+      )
+    );
+
+    testMsg("tester FLAGS claim 1B", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimSelfFinalise,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.FLAGGED,
+        WalletUsers.tester
+      )
+    );
+
+    testMsg("tester APPROVES own flagged claim 1B (self-finalise)", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimSelfFinalise,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.APPROVED,
+        WalletUsers.tester
+      )
+    );
+
+    test("after self-finalise: counters and history reflect the chain", async () => {
+      const c = await Queries.Collection(collectionId);
+      // Two claims fully processed; flag counter cumulative across both.
+      expect(c.collection!.flaggedActive.toString()).toBe("0");
+      expect(c.collection!.flagged.toString()).toBe("2");
+      expect(c.collection!.approved.toString()).toBe("2");
+      expect(c.collection!.evaluated.toString()).toBe("2");
+
+      const claim = await Queries.Claim(claimSelfFinalise);
+      expect(claim.claim!.evaluation?.status).toBe(
+        ixo.claims.v1beta1.EvaluationStatus.APPROVED
+      );
+      // The flag-then-self-finalise produces one history entry — the
+      // prior flag — even though both events came from the same agent.
+      expect(claim.claim!.evaluationHistory.length).toBe(1);
+      expect(claim.claim!.evaluationHistory[0].status).toBe(
+        ixo.claims.v1beta1.EvaluationStatus.FLAGGED
+      );
+    });
+
+    // -----------------------------------------------------------------
+    // Case 3: re-flag chain across two different flaggers + self-reflag
+    // is still blocked.
+    //   tester FLAG → tester FLAG (self-reflag, must fail)
+    //               → bob FLAG (re-flag by different agent, succeeds)
+    //               → tester APPROVE (different from bob, finalise)
+    // -----------------------------------------------------------------
+    const claimReflagged = "FLAG-2";
+    testMsg("submit claim 2 (will be re-flagged)", () =>
+      Claims.MsgExecAgentSubmit(
+        claimReflagged,
+        collectionId,
+        adminAccount,
+        WalletUsers.alice
+      )
+    );
+
+    testMsg("tester FLAGS claim 2", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimReflagged,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.FLAGGED,
+        WalletUsers.tester
+      )
+    );
+
+    testMsg(
+      "tester FLAG again on claim 2 must fail (ErrSelfReFlag)",
+      () =>
+        Claims.MsgExecAgentEvaluate(
+          claimReflagged,
+          collectionId,
+          adminAccount,
+          ixo.claims.v1beta1.EvaluationStatus.FLAGGED,
+          WalletUsers.tester
+        ),
+      false,
+      false
+    );
+
+    testMsg("bob FLAGS claim 2 (re-flag by different agent)", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimReflagged,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.FLAGGED,
+        WalletUsers.bob
+      )
+    );
+
+    // Self-reflag is also blocked when the agent's prior flag is in
+    // evaluation_history (rather than the current evaluation). Tester
+    // flagged earlier; bob's flag is now current; tester flagging again
+    // must still be rejected (ErrSelfReFlag).
+    testMsg(
+      "tester FLAG claim 2 again (history-only prior) must fail (ErrSelfReFlag)",
+      () =>
+        Claims.MsgExecAgentEvaluate(
+          claimReflagged,
+          collectionId,
+          adminAccount,
+          ixo.claims.v1beta1.EvaluationStatus.FLAGGED,
+          WalletUsers.tester
+        ),
+      false,
+      false
+    );
+
+    test("re-flag chain: counters and history mid-chain", async () => {
+      const c = await Queries.Collection(collectionId);
+      // 4 flag events total: claim1 flag, claim1B flag, claim2 flag tester,
+      // claim2 flag bob
+      expect(c.collection!.flagged.toString()).toBe("4");
+      // Only claim 2 is currently flagged
+      expect(c.collection!.flaggedActive.toString()).toBe("1");
+
+      const claim = await Queries.Claim(claimReflagged);
+      // Latest evaluation is bob's flag
+      expect(claim.claim!.evaluation?.status).toBe(
+        ixo.claims.v1beta1.EvaluationStatus.FLAGGED
+      );
+      // Tester's prior flag is now in history
+      expect(claim.claim!.evaluationHistory.length).toBe(1);
+      expect(claim.claim!.evaluationHistory[0].status).toBe(
+        ixo.claims.v1beta1.EvaluationStatus.FLAGGED
+      );
+    });
+
+    testMsg("tester APPROVES claim 2 (finalise the chain)", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimReflagged,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.APPROVED,
+        WalletUsers.tester
+      )
+    );
+
+    test("after chain finalise: history holds both prior flags", async () => {
+      const c = await Queries.Collection(collectionId);
+      expect(c.collection!.flaggedActive.toString()).toBe("0");
+      expect(c.collection!.approved.toString()).toBe("3");
+      expect(c.collection!.evaluated.toString()).toBe("3");
+
+      const claim = await Queries.Claim(claimReflagged);
+      expect(claim.claim!.evaluation?.status).toBe(
+        ixo.claims.v1beta1.EvaluationStatus.APPROVED
+      );
+      // Two flags now in history, in chronological order (oldest first).
+      expect(claim.claim!.evaluationHistory.length).toBe(2);
+      expect(claim.claim!.evaluationHistory[0].status).toBe(
+        ixo.claims.v1beta1.EvaluationStatus.FLAGGED
+      );
+      expect(claim.claim!.evaluationHistory[1].status).toBe(
+        ixo.claims.v1beta1.EvaluationStatus.FLAGGED
+      );
+    });
+
+    // -----------------------------------------------------------------
+    // Case 3: terminal-locked. A claim that's already APPROVED cannot
+    // be re-evaluated (the FLAGGED-only relaxation does not apply).
+    // -----------------------------------------------------------------
+    testMsg(
+      "re-evaluating already-APPROVED claim 1 must fail (terminal lock)",
+      () =>
+        Claims.MsgExecAgentEvaluate(
+          claimFlaggedThenApproved,
+          collectionId,
+          adminAccount,
+          ixo.claims.v1beta1.EvaluationStatus.REJECTED,
+          WalletUsers.bob
+        ),
+      false,
+      false
+    );
+
+    // -----------------------------------------------------------------
+    // Case 4: flag → REJECT. Confirms the active-flag decrement also
+    // fires on non-approved terminal transitions and that the rejected
+    // counter increments correctly.
+    // -----------------------------------------------------------------
+    const claimFlaggedThenRejected = "FLAG-3";
+    testMsg("submit claim 3 (will be flagged then rejected)", () =>
+      Claims.MsgExecAgentSubmit(
+        claimFlaggedThenRejected,
+        collectionId,
+        adminAccount,
+        WalletUsers.alice
+      )
+    );
+
+    testMsg("tester FLAGS claim 3", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimFlaggedThenRejected,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.FLAGGED,
+        WalletUsers.tester
+      )
+    );
+
+    testMsg("bob REJECTS claim 3", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimFlaggedThenRejected,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.REJECTED,
+        WalletUsers.bob
+      )
+    );
+
+    test("after flag → reject: rejected counter and active decrement", async () => {
+      const c = await Queries.Collection(collectionId);
+      expect(c.collection!.flaggedActive.toString()).toBe("0");
+      expect(c.collection!.rejected.toString()).toBe("1");
+      expect(c.collection!.evaluated.toString()).toBe("4");
+      // flagged total is now 5 (claim1 +1, claim1B +1, claim2 +2, claim3 +1)
+      expect(c.collection!.flagged.toString()).toBe("5");
+
+      const claim = await Queries.Claim(claimFlaggedThenRejected);
+      expect(claim.claim!.evaluation?.status).toBe(
+        ixo.claims.v1beta1.EvaluationStatus.REJECTED
+      );
+      expect(claim.claim!.evaluationHistory.length).toBe(1);
+    });
+
+    // -----------------------------------------------------------------
+    // Case 5: a first-time terminal evaluation (no prior flag) still
+    // works exactly as before — empty evaluation_history confirms the
+    // history-append path only fires for re-evaluations.
+    // -----------------------------------------------------------------
+    const claimDirectApprove = "FLAG-4";
+    testMsg("submit claim 4 (direct approve, no flag)", () =>
+      Claims.MsgExecAgentSubmit(
+        claimDirectApprove,
+        collectionId,
+        adminAccount,
+        WalletUsers.alice
+      )
+    );
+
+    testMsg("bob APPROVES claim 4 directly", () =>
+      Claims.MsgExecAgentEvaluate(
+        claimDirectApprove,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.APPROVED,
+        WalletUsers.bob
+      )
+    );
+
+    test("direct terminal eval leaves history empty", async () => {
+      const claim = await Queries.Claim(claimDirectApprove);
+      expect(claim.claim!.evaluation?.status).toBe(
+        ixo.claims.v1beta1.EvaluationStatus.APPROVED
+      );
+      expect(claim.claim!.evaluationHistory.length).toBe(0);
+
+      const c = await Queries.Collection(collectionId);
+      // No new flag events, flagged stays at 5
+      expect(c.collection!.flagged.toString()).toBe("5");
+      // approved bumped to 4 (claim1, claim1B, claim2, claim4)
+      expect(c.collection!.approved.toString()).toBe("4");
+      // evaluated bumped to 5 (claim1, claim1B, claim2 approved; claim3 rejected; claim4 approved)
+      expect(c.collection!.evaluated.toString()).toBe("5");
+    });
+  });
+
 export const claimsUpdateCollectionPayments = () =>
   describe("Testing the Claims module", () => {
     beforeAll(() =>
@@ -2413,11 +2954,16 @@ export const supamotoClaims3 = () =>
     // });
 
     test("Generate Fuel Purchase claims and evaluate them", async () => {
-      type CollectionType = "Legacy" | "Genesis" | "ai4g" | "fairClimate";
+      type CollectionType =
+        | "Legacy"
+        | "Genesis"
+        | "ai4g"
+        | "fairClimate"
+        | "uncollected";
       type NetworkType = "mainnet" | "testnet";
 
       let networkToUse: NetworkType = "mainnet";
-      let collectionToUse: CollectionType = "fairClimate" as any;
+      let collectionToUse: CollectionType = "uncollected" as any;
 
       const collectionToNetworkMapping = {
         Genesis: {
@@ -2435,6 +2981,14 @@ export const supamotoClaims3 = () =>
         fairClimate: {
           mainnet: "46",
           testnet: "",
+        },
+        // Reuses Legacy's collection ids since uncollected stoves are the
+        // ones we plan to mint into the Legacy collection. Safe for
+        // stats-only runs (uncomment the throw on line ~3082 to stop
+        // before any on-chain create call).
+        uncollected: {
+          mainnet: "5",
+          testnet: "8",
         },
       };
       if (!collectionToNetworkMapping[collectionToUse][networkToUse])
@@ -2458,7 +3012,7 @@ export const supamotoClaims3 = () =>
 
       let purchaseData: any[] = [];
       let duplicatesData: any[] = [];
-      const afterDate = new Date("2025-01-01T00:00:00Z")
+      const afterDate = new Date("2020-01-01T00:00:00Z")
       // loop over paths and add all transaction ids to previous purchases list
       for (let path of paths) {
         let data = await csvtojsonV2().fromFile(path);
@@ -2544,6 +3098,11 @@ export const supamotoClaims3 = () =>
               (s: any) => s.externalId
             );
           break;
+        case "uncollected":
+          // stoves_uncollected.json is a flat string[] of device ids,
+          // produced by supamotoFindUncollectedStoves — no .externalId map
+          stovesCollection = require("../../assets/documents/emerging/stoves_uncollected.json");
+          break;
         default:
           throw new Error("no collection found");
       }
@@ -2603,7 +3162,7 @@ export const supamotoClaims3 = () =>
       );
 
       // helper to stop flow if just want the above data
-      // if (!!1) throw new Error("stop");
+      if (!!1) throw new Error("stop");
 
       // divide payments per device into 10 devices at a time
       // ==============================================================
@@ -2713,6 +3272,78 @@ export const supamotoClaims3 = () =>
       saveFileToPath(
         ["documents", "emerging", "fuelPurchases_made.json"],
         JSON.stringify(stovePurchasesAll, null, 2)
+      );
+
+      expect(true).toBeTruthy();
+    });
+  });
+
+// ------------------------------------------------------------
+// flow to find stove ids in payments_new.csv that are not in any of the
+// 4 existing collections (Legacy, Genesis, ai4g, fairClimate). Output
+// is written to assets/documents/emerging/stoves_uncollected.json
+// ------------------------------------------------------------
+export const supamotoFindUncollectedStoves = () =>
+  describe("Find uncollected stove ids", () => {
+    test("Get stove ids from payments_new.csv not in any collection", async () => {
+      // Load stove ids already in each of the 4 collections
+      const legacyStoves: string[] =
+        require("../../assets/documents/emerging/stoves_legacy_collection.json").map(
+          (s: any) => s.externalId
+        );
+      const genesisStoves: string[] =
+        require("../../assets/documents/emerging/stoves_genesis_collection.json").map(
+          (s: any) => s.externalId
+        );
+      const ai4gStoves: string[] =
+        require("../../assets/documents/emerging/stoves_ai4g_collection.json").map(
+          (s: any) => s.externalId
+        );
+      const fairClimateStoves: string[] =
+        require("../../assets/documents/emerging/stoves_fair_climate_collection.json").map(
+          (s: any) => s.externalId
+        );
+
+      const collectedStoveIds = new Set<string>([
+        ...legacyStoves,
+        ...genesisStoves,
+        ...ai4gStoves,
+        ...fairClimateStoves,
+      ]);
+
+      console.log({
+        legacy: legacyStoves.length,
+        genesis: genesisStoves.length,
+        ai4g: ai4gStoves.length,
+        fairClimate: fairClimateStoves.length,
+        totalCollectedUnique: collectedStoveIds.size,
+      });
+
+      // Read payments csv and extract unique device ids
+      const csvPath = "./assets/documents/emerging/payments_new.csv";
+      const rows = await csvtojsonV2().fromFile(csvPath);
+      console.log({ csvRows: rows.length });
+
+      const csvStoveIds = new Set<string>();
+      for (const row of rows) {
+        // Use "Device ID Revised" to match supamotoClaims3
+        const deviceId = row["Device ID Revised"];
+        if (deviceId) csvStoveIds.add(String(deviceId).trim());
+      }
+      console.log({ uniqueCsvStoves: csvStoveIds.size });
+
+      // Stoves in CSV but not in any collection
+      const uncollected: string[] = [];
+      for (const id of csvStoveIds) {
+        if (!collectedStoveIds.has(id)) uncollected.push(id);
+      }
+      uncollected.sort();
+
+      console.log({ uncollectedStoves: uncollected.length });
+
+      saveFileToPath(
+        ["documents", "emerging", "stoves_uncollected.json"],
+        JSON.stringify(uncollected, null, 2)
       );
 
       expect(true).toBeTruthy();

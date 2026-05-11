@@ -36,6 +36,14 @@ export declare enum EvaluationStatus {
     REJECTED = 2,
     DISPUTED = 3,
     INVALIDATED = 4,
+    /**
+     * FLAGGED - Flagged: non-terminal "I am declining to make a final call" outcome.
+     * Payment does not fire. The flagger or any other authorized evaluator
+     * can subsequently re-evaluate the claim to a terminal status (APPROVED
+     * / REJECTED / INVALIDATED) when more information is available. FLAGGED
+     * counts against AgentQuota the same as a terminal evaluation.
+     */
+    FLAGGED = 5,
     UNRECOGNIZED = -1
 }
 export declare const EvaluationStatusSDKType: typeof EvaluationStatus;
@@ -174,6 +182,18 @@ export interface Collection {
      * required)
      */
     intents: CollectionIntentOptions;
+    /**
+     * flagged is the cumulative number of times any claim in this collection
+     * has been flagged by an evaluator. Never decremented — it is an
+     * event-count metric, not a current-state count.
+     */
+    flagged: Long;
+    /**
+     * flagged_active is the number of claims currently in FLAGGED state
+     * (incremented when a claim becomes FLAGGED, decremented when it
+     * transitions to a terminal evaluation status).
+     */
+    flaggedActive: Long;
 }
 export interface CollectionSDKType {
     id: string;
@@ -194,6 +214,8 @@ export interface CollectionSDKType {
     invalidated: Long;
     escrow_account: string;
     intents: CollectionIntentOptions;
+    flagged: Long;
+    flagged_active: Long;
 }
 export interface Payments {
     submission?: Payment;
@@ -352,6 +374,15 @@ export interface Claim {
      * on claim rejection/dispute/invalidation.
      */
     memberAddress: string;
+    /**
+     * evaluation_history holds prior evaluations for this claim in chronological
+     * order. The most recent evaluation always lives in `evaluation`; only
+     * superseded entries are appended here. Empty for claims that have been
+     * evaluated at most once. Populated when an evaluator FLAGS a claim and a
+     * subsequent evaluation (flag-then-flag chain or terminal finalisation)
+     * moves the prior evaluation into history.
+     */
+    evaluationHistory: Evaluation[];
 }
 export interface ClaimSDKType {
     collection_id: string;
@@ -367,6 +398,7 @@ export interface ClaimSDKType {
     cw1155_payment: CW1155PaymentSDKType[];
     cw1155_intent_payment: CW1155IntentPaymentSDKType[];
     member_address: string;
+    evaluation_history: EvaluationSDKType[];
 }
 export interface ClaimPayments {
     submission: PaymentStatus;

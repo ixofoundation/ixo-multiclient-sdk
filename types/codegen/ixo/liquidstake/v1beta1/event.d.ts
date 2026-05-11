@@ -1,4 +1,6 @@
 import { ModuleParams, ModuleParamsSDKType, Pool, PoolSDKType } from "./liquidstake";
+import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import * as _m0 from "protobufjs/minimal";
 /**
  * ModuleParamsUpdatedEvent is emitted when the global ModuleParams change
@@ -57,100 +59,148 @@ export interface PoolUpdatedEventSDKType {
 /**
  * LiquidStakeEvent is emitted when a liquid stake is performed against a
  * specific pool.
+ *
+ * Field tag numbers preserved from the pre-v7 single-pool layout
+ * (delegator=1, liquid_amount=2, stk_ixo_minted_amount=3) so wire-level
+ * proto compatibility is preserved for any consumer decoding historical
+ * v6 events with v7 codegen — pool_id simply shows as empty for those.
+ * The liquid_amount and stk_ixo_minted_amount fields were upgraded from
+ * the v6 string format ("100000000uixo") to typed Coin in v7 to remove
+ * regex parsing on the indexer side; the tag is unchanged but the wire
+ * encoding for that tag is now a length-delimited Coin sub-message.
  */
 export interface LiquidStakeEvent {
-    poolId: string;
     delegator: string;
-    liquidAmount: string;
-    stkIxoMintedAmount: string;
+    liquidAmount?: Coin;
+    stkIxoMintedAmount?: Coin;
+    poolId: string;
 }
 /**
  * LiquidStakeEvent is emitted when a liquid stake is performed against a
  * specific pool.
+ *
+ * Field tag numbers preserved from the pre-v7 single-pool layout
+ * (delegator=1, liquid_amount=2, stk_ixo_minted_amount=3) so wire-level
+ * proto compatibility is preserved for any consumer decoding historical
+ * v6 events with v7 codegen — pool_id simply shows as empty for those.
+ * The liquid_amount and stk_ixo_minted_amount fields were upgraded from
+ * the v6 string format ("100000000uixo") to typed Coin in v7 to remove
+ * regex parsing on the indexer side; the tag is unchanged but the wire
+ * encoding for that tag is now a length-delimited Coin sub-message.
  */
 export interface LiquidStakeEventSDKType {
-    pool_id: string;
     delegator: string;
-    liquid_amount: string;
-    stk_ixo_minted_amount: string;
+    liquid_amount?: CoinSDKType;
+    stk_ixo_minted_amount?: CoinSDKType;
+    pool_id: string;
 }
 /**
  * LiquidUnstakeEvent is emitted when a liquid unstake is performed against
  * a specific pool.
+ *
+ * Field tag numbers preserved from v6. completion_time upgraded from RFC3339
+ * string to google.protobuf.Timestamp to match
+ * MsgLiquidUnstakeResponse.completion_time. Amount fields upgraded from
+ * "<amount><denom>" strings to typed Coin.
  */
 export interface LiquidUnstakeEvent {
-    poolId: string;
     delegator: string;
-    unstakeAmount: string;
-    unbondingAmount: string;
-    unbondedAmount: string;
-    completionTime: string;
+    unstakeAmount?: Coin;
+    unbondingAmount?: Coin;
+    unbondedAmount?: Coin;
+    completionTime?: Timestamp;
+    poolId: string;
 }
 /**
  * LiquidUnstakeEvent is emitted when a liquid unstake is performed against
  * a specific pool.
+ *
+ * Field tag numbers preserved from v6. completion_time upgraded from RFC3339
+ * string to google.protobuf.Timestamp to match
+ * MsgLiquidUnstakeResponse.completion_time. Amount fields upgraded from
+ * "<amount><denom>" strings to typed Coin.
  */
 export interface LiquidUnstakeEventSDKType {
-    pool_id: string;
     delegator: string;
-    unstake_amount: string;
-    unbonding_amount: string;
-    unbonded_amount: string;
-    completion_time: string;
+    unstake_amount?: CoinSDKType;
+    unbonding_amount?: CoinSDKType;
+    unbonded_amount?: CoinSDKType;
+    completion_time?: TimestampSDKType;
+    pool_id: string;
 }
 /**
  * AddLiquidValidatorEvent is emitted when a newly whitelisted validator is
  * activated for a pool.
+ *
+ * Field tag preserved from v6 (validator=1); pool_id added at the end.
  */
 export interface AddLiquidValidatorEvent {
-    poolId: string;
     validator: string;
+    poolId: string;
 }
 /**
  * AddLiquidValidatorEvent is emitted when a newly whitelisted validator is
  * activated for a pool.
+ *
+ * Field tag preserved from v6 (validator=1); pool_id added at the end.
  */
 export interface AddLiquidValidatorEventSDKType {
-    pool_id: string;
     validator: string;
-}
-/** RebalancedLiquidStakeEvent is emitted after a pool's rebalancing pass. */
-export interface RebalancedLiquidStakeEvent {
-    poolId: string;
-    delegator: string;
-    redelegationCount: string;
-    redelegationFailCount: string;
-}
-/** RebalancedLiquidStakeEvent is emitted after a pool's rebalancing pass. */
-export interface RebalancedLiquidStakeEventSDKType {
     pool_id: string;
+}
+/**
+ * RebalancedLiquidStakeEvent is emitted after a pool's rebalancing pass.
+ *
+ * Field tag numbers preserved from v6. Count fields upgraded from
+ * strconv-formatted strings to typed uint32.
+ */
+export interface RebalancedLiquidStakeEvent {
     delegator: string;
-    redelegation_count: string;
-    redelegation_fail_count: string;
+    redelegationCount: number;
+    redelegationFailCount: number;
+    poolId: string;
+}
+/**
+ * RebalancedLiquidStakeEvent is emitted after a pool's rebalancing pass.
+ *
+ * Field tag numbers preserved from v6. Count fields upgraded from
+ * strconv-formatted strings to typed uint32.
+ */
+export interface RebalancedLiquidStakeEventSDKType {
+    delegator: string;
+    redelegation_count: number;
+    redelegation_fail_count: number;
+    pool_id: string;
 }
 /**
  * AutocompoundStakingRewardsEvent is emitted when a pool's autocompound
  * epoch hook runs successfully.
+ *
+ * Field tag numbers preserved from v6. Amount fields upgraded from
+ * "<amount><denom>" strings to typed Coin.
  */
 export interface AutocompoundStakingRewardsEvent {
-    poolId: string;
     delegator: string;
-    totalAmount: string;
-    feeAmount: string;
-    redelegateAmount: string;
-    weightedRewardsAmount: string;
+    totalAmount?: Coin;
+    feeAmount?: Coin;
+    redelegateAmount?: Coin;
+    weightedRewardsAmount?: Coin;
+    poolId: string;
 }
 /**
  * AutocompoundStakingRewardsEvent is emitted when a pool's autocompound
  * epoch hook runs successfully.
+ *
+ * Field tag numbers preserved from v6. Amount fields upgraded from
+ * "<amount><denom>" strings to typed Coin.
  */
 export interface AutocompoundStakingRewardsEventSDKType {
-    pool_id: string;
     delegator: string;
-    total_amount: string;
-    fee_amount: string;
-    redelegate_amount: string;
-    weighted_rewards_amount: string;
+    total_amount?: CoinSDKType;
+    fee_amount?: CoinSDKType;
+    redelegate_amount?: CoinSDKType;
+    weighted_rewards_amount?: CoinSDKType;
+    pool_id: string;
 }
 export declare const ModuleParamsUpdatedEvent: {
     encode(message: ModuleParamsUpdatedEvent, writer?: _m0.Writer): _m0.Writer;

@@ -93,6 +93,14 @@ export enum EvaluationStatus {
   REJECTED = 2,
   DISPUTED = 3,
   INVALIDATED = 4,
+  /**
+   * FLAGGED - Flagged: non-terminal "I am declining to make a final call" outcome.
+   * Payment does not fire. The flagger or any other authorized evaluator
+   * can subsequently re-evaluate the claim to a terminal status (APPROVED
+   * / REJECTED / INVALIDATED) when more information is available. FLAGGED
+   * counts against AgentQuota the same as a terminal evaluation.
+   */
+  FLAGGED = 5,
   UNRECOGNIZED = -1,
 }
 export const EvaluationStatusSDKType = EvaluationStatus;
@@ -113,6 +121,9 @@ export function evaluationStatusFromJSON(object: any): EvaluationStatus {
     case 4:
     case "INVALIDATED":
       return EvaluationStatus.INVALIDATED;
+    case 5:
+    case "FLAGGED":
+      return EvaluationStatus.FLAGGED;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -131,6 +142,8 @@ export function evaluationStatusToJSON(object: EvaluationStatus): string {
       return "DISPUTED";
     case EvaluationStatus.INVALIDATED:
       return "INVALIDATED";
+    case EvaluationStatus.FLAGGED:
+      return "FLAGGED";
     case EvaluationStatus.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -378,6 +391,18 @@ export interface Collection {
    * required)
    */
   intents: CollectionIntentOptions;
+  /**
+   * flagged is the cumulative number of times any claim in this collection
+   * has been flagged by an evaluator. Never decremented — it is an
+   * event-count metric, not a current-state count.
+   */
+  flagged: Long;
+  /**
+   * flagged_active is the number of claims currently in FLAGGED state
+   * (incremented when a claim becomes FLAGGED, decremented when it
+   * transitions to a terminal evaluation status).
+   */
+  flaggedActive: Long;
 }
 export interface CollectionSDKType {
   id: string;
@@ -398,6 +423,8 @@ export interface CollectionSDKType {
   invalidated: Long;
   escrow_account: string;
   intents: CollectionIntentOptions;
+  flagged: Long;
+  flagged_active: Long;
 }
 export interface Payments {
   submission?: Payment;
@@ -556,6 +583,15 @@ export interface Claim {
    * on claim rejection/dispute/invalidation.
    */
   memberAddress: string;
+  /**
+   * evaluation_history holds prior evaluations for this claim in chronological
+   * order. The most recent evaluation always lives in `evaluation`; only
+   * superseded entries are appended here. Empty for claims that have been
+   * evaluated at most once. Populated when an evaluator FLAGS a claim and a
+   * subsequent evaluation (flag-then-flag chain or terminal finalisation)
+   * moves the prior evaluation into history.
+   */
+  evaluationHistory: Evaluation[];
 }
 export interface ClaimSDKType {
   collection_id: string;
@@ -571,6 +607,7 @@ export interface ClaimSDKType {
   cw1155_payment: CW1155PaymentSDKType[];
   cw1155_intent_payment: CW1155IntentPaymentSDKType[];
   member_address: string;
+  evaluation_history: EvaluationSDKType[];
 }
 export interface ClaimPayments {
   submission: PaymentStatus;
@@ -890,7 +927,9 @@ function createBaseCollection(): Collection {
     signer: "",
     invalidated: Long.UZERO,
     escrowAccount: "",
-    intents: 0
+    intents: 0,
+    flagged: Long.UZERO,
+    flaggedActive: Long.UZERO
   };
 }
 export const Collection = {
@@ -948,6 +987,12 @@ export const Collection = {
     }
     if (message.intents !== 0) {
       writer.uint32(144).int32(message.intents);
+    }
+    if (!message.flagged.isZero()) {
+      writer.uint32(152).uint64(message.flagged);
+    }
+    if (!message.flaggedActive.isZero()) {
+      writer.uint32(160).uint64(message.flaggedActive);
     }
     return writer;
   },
@@ -1012,6 +1057,12 @@ export const Collection = {
         case 18:
           message.intents = (reader.int32() as any);
           break;
+        case 19:
+          message.flagged = (reader.uint64() as Long);
+          break;
+        case 20:
+          message.flaggedActive = (reader.uint64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1038,7 +1089,9 @@ export const Collection = {
       signer: isSet(object.signer) ? String(object.signer) : "",
       invalidated: isSet(object.invalidated) ? Long.fromValue(object.invalidated) : Long.UZERO,
       escrowAccount: isSet(object.escrowAccount) ? String(object.escrowAccount) : "",
-      intents: isSet(object.intents) ? collectionIntentOptionsFromJSON(object.intents) : 0
+      intents: isSet(object.intents) ? collectionIntentOptionsFromJSON(object.intents) : 0,
+      flagged: isSet(object.flagged) ? Long.fromValue(object.flagged) : Long.UZERO,
+      flaggedActive: isSet(object.flaggedActive) ? Long.fromValue(object.flaggedActive) : Long.UZERO
     };
   },
   toJSON(message: Collection): unknown {
@@ -1061,6 +1114,8 @@ export const Collection = {
     message.invalidated !== undefined && (obj.invalidated = (message.invalidated || Long.UZERO).toString());
     message.escrowAccount !== undefined && (obj.escrowAccount = message.escrowAccount);
     message.intents !== undefined && (obj.intents = collectionIntentOptionsToJSON(message.intents));
+    message.flagged !== undefined && (obj.flagged = (message.flagged || Long.UZERO).toString());
+    message.flaggedActive !== undefined && (obj.flaggedActive = (message.flaggedActive || Long.UZERO).toString());
     return obj;
   },
   fromPartial(object: Partial<Collection>): Collection {
@@ -1083,6 +1138,8 @@ export const Collection = {
     message.invalidated = object.invalidated !== undefined && object.invalidated !== null ? Long.fromValue(object.invalidated) : Long.UZERO;
     message.escrowAccount = object.escrowAccount ?? "";
     message.intents = object.intents ?? 0;
+    message.flagged = object.flagged !== undefined && object.flagged !== null ? Long.fromValue(object.flagged) : Long.UZERO;
+    message.flaggedActive = object.flaggedActive !== undefined && object.flaggedActive !== null ? Long.fromValue(object.flaggedActive) : Long.UZERO;
     return message;
   }
 };
@@ -1660,7 +1717,8 @@ function createBaseClaim(): Claim {
     cw20Payment: [],
     cw1155Payment: [],
     cw1155IntentPayment: [],
-    memberAddress: ""
+    memberAddress: "",
+    evaluationHistory: []
   };
 }
 export const Claim = {
@@ -1703,6 +1761,9 @@ export const Claim = {
     }
     if (message.memberAddress !== "") {
       writer.uint32(106).string(message.memberAddress);
+    }
+    for (const v of message.evaluationHistory) {
+      Evaluation.encode(v!, writer.uint32(114).fork()).ldelim();
     }
     return writer;
   },
@@ -1752,6 +1813,9 @@ export const Claim = {
         case 13:
           message.memberAddress = reader.string();
           break;
+        case 14:
+          message.evaluationHistory.push(Evaluation.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1773,7 +1837,8 @@ export const Claim = {
       cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
       cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : [],
       cw1155IntentPayment: Array.isArray(object?.cw1155IntentPayment) ? object.cw1155IntentPayment.map((e: any) => CW1155IntentPayment.fromJSON(e)) : [],
-      memberAddress: isSet(object.memberAddress) ? String(object.memberAddress) : ""
+      memberAddress: isSet(object.memberAddress) ? String(object.memberAddress) : "",
+      evaluationHistory: Array.isArray(object?.evaluationHistory) ? object.evaluationHistory.map((e: any) => Evaluation.fromJSON(e)) : []
     };
   },
   toJSON(message: Claim): unknown {
@@ -1807,6 +1872,11 @@ export const Claim = {
       obj.cw1155IntentPayment = [];
     }
     message.memberAddress !== undefined && (obj.memberAddress = message.memberAddress);
+    if (message.evaluationHistory) {
+      obj.evaluationHistory = message.evaluationHistory.map(e => e ? Evaluation.toJSON(e) : undefined);
+    } else {
+      obj.evaluationHistory = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<Claim>): Claim {
@@ -1824,6 +1894,7 @@ export const Claim = {
     message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
     message.cw1155IntentPayment = object.cw1155IntentPayment?.map(e => CW1155IntentPayment.fromPartial(e)) || [];
     message.memberAddress = object.memberAddress ?? "";
+    message.evaluationHistory = object.evaluationHistory?.map(e => Evaluation.fromPartial(e)) || [];
     return message;
   }
 };
