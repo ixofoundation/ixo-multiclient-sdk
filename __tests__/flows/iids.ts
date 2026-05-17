@@ -344,6 +344,51 @@ export const iidsBasic = () =>
     );
     testMsg("/ixo.iid.v1beta1.MsgAddService", () => Iid.AddService());
     testMsg("/ixo.iid.v1beta1.MsgDeleteService", () => Iid.DeleteService());
+
+    // -----------------------------------------------------------------------
+    // Reserved-namespace guard: MsgCreateIidDocument must reject any DID
+    // under did:ixo:entity:..., because that prefix is minted deterministically
+    // by the entity module via IidKeeper.SetDidDocument. Without the guard a
+    // malicious user could squat a DID that the entity module's CreateSequence
+    // will later try to mint, deadlocking the module.
+    // -----------------------------------------------------------------------
+    testMsg(
+      "/ixo.iid.v1beta1.MsgCreateIidDocument rejected for did:ixo:entity: prefix",
+      async () => {
+        const signer = WalletUsers.tester;
+        const client = await createClient(getUser(signer));
+        const account = (await getUser(signer).getAccounts())[0];
+        const message = {
+          typeUrl: "/ixo.iid.v1beta1.MsgCreateIidDocument",
+          value: ixo.iid.v1beta1.MsgCreateIidDocument.fromPartial({
+            // A well-formed entity-prefixed DID. The chain must reject it
+            // before any other validation runs — ErrReservedDidNamespace.
+            id: "did:ixo:entity:deadbeefcafebabe00000000abcdef01",
+            verifications: [
+              ixo.iid.v1beta1.Verification.fromPartial({
+                relationships: ["authentication"],
+                method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
+                  id: "did:ixo:entity:deadbeefcafebabe00000000abcdef01#key-1",
+                  type: "EcdsaSecp256k1VerificationKey2019",
+                  controller: "did:ixo:entity:deadbeefcafebabe00000000abcdef01",
+                  blockchainAccountID: "cosmos:ixo-1:" + account.address,
+                }),
+              }),
+            ],
+            signer: account.address,
+          }),
+        };
+        // signAndBroadcast throws on non-zero code; catch and synthesise a
+        // failure response so testMsg(false) handles it as expected-failure.
+        try {
+          return await client.signAndBroadcast(account.address, [message], fee);
+        } catch (e: any) {
+          return { code: 1, rawLog: String(e?.message ?? e) } as any;
+        }
+      },
+      false,
+      false
+    );
   });
 
 export const iidAddEdKeys = () =>
