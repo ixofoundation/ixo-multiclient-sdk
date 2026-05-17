@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { MsgCreateCollection, MsgCreateCollectionResponse, MsgSubmitClaim, MsgSubmitClaimResponse, MsgEvaluateClaim, MsgEvaluateClaimResponse, MsgDisputeClaim, MsgDisputeClaimResponse, MsgWithdrawPayment, MsgWithdrawPaymentResponse, MsgUpdateCollectionState, MsgUpdateCollectionStateResponse, MsgUpdateCollectionDates, MsgUpdateCollectionDatesResponse, MsgUpdateCollectionPayments, MsgUpdateCollectionPaymentsResponse, MsgUpdateCollectionIntents, MsgUpdateCollectionIntentsResponse, MsgClaimIntent, MsgClaimIntentResponse, MsgCreateClaimAuthorization, MsgCreateClaimAuthorizationResponse, MsgSetCollectionMembers, MsgSetCollectionMembersResponse, MsgRemoveCollectionMembers, MsgRemoveCollectionMembersResponse } from "./tx";
+import { MsgCreateCollection, MsgCreateCollectionResponse, MsgSubmitClaim, MsgSubmitClaimResponse, MsgEvaluateClaim, MsgEvaluateClaimResponse, MsgDisputeClaim, MsgDisputeClaimResponse, MsgWithdrawPayment, MsgWithdrawPaymentResponse, MsgUpdateCollectionState, MsgUpdateCollectionStateResponse, MsgUpdateCollectionDates, MsgUpdateCollectionDatesResponse, MsgUpdateCollectionPayments, MsgUpdateCollectionPaymentsResponse, MsgUpdateCollectionIntents, MsgUpdateCollectionIntentsResponse, MsgClaimIntent, MsgClaimIntentResponse, MsgCreateClaimAuthorization, MsgCreateClaimAuthorizationResponse, MsgSetCollectionMembers, MsgSetCollectionMembersResponse, MsgRemoveCollectionMembers, MsgRemoveCollectionMembersResponse, MsgUpdateCollectionDisputeConfig, MsgUpdateCollectionDisputeConfigResponse, MsgAddPerformanceDeposit, MsgAddPerformanceDepositResponse, MsgWithdrawPerformanceDeposit, MsgWithdrawPerformanceDepositResponse, MsgAdjudicateDispute, MsgAdjudicateDisputeResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
   createCollection(request: MsgCreateCollection): Promise<MsgCreateCollectionResponse>;
@@ -17,6 +17,10 @@ export interface Msg {
   createClaimAuthorization(request: MsgCreateClaimAuthorization): Promise<MsgCreateClaimAuthorizationResponse>;
   setCollectionMembers(request: MsgSetCollectionMembers): Promise<MsgSetCollectionMembersResponse>;
   removeCollectionMembers(request: MsgRemoveCollectionMembers): Promise<MsgRemoveCollectionMembersResponse>;
+  updateCollectionDisputeConfig(request: MsgUpdateCollectionDisputeConfig): Promise<MsgUpdateCollectionDisputeConfigResponse>;
+  addPerformanceDeposit(request: MsgAddPerformanceDeposit): Promise<MsgAddPerformanceDepositResponse>;
+  withdrawPerformanceDeposit(request: MsgWithdrawPerformanceDeposit): Promise<MsgWithdrawPerformanceDepositResponse>;
+  adjudicateDispute(request: MsgAdjudicateDispute): Promise<MsgAdjudicateDisputeResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
@@ -35,6 +39,10 @@ export class MsgClientImpl implements Msg {
     this.createClaimAuthorization = this.createClaimAuthorization.bind(this);
     this.setCollectionMembers = this.setCollectionMembers.bind(this);
     this.removeCollectionMembers = this.removeCollectionMembers.bind(this);
+    this.updateCollectionDisputeConfig = this.updateCollectionDisputeConfig.bind(this);
+    this.addPerformanceDeposit = this.addPerformanceDeposit.bind(this);
+    this.withdrawPerformanceDeposit = this.withdrawPerformanceDeposit.bind(this);
+    this.adjudicateDispute = this.adjudicateDispute.bind(this);
   }
   createCollection(request: MsgCreateCollection): Promise<MsgCreateCollectionResponse> {
     const data = MsgCreateCollection.encode(request).finish();
@@ -100,5 +108,25 @@ export class MsgClientImpl implements Msg {
     const data = MsgRemoveCollectionMembers.encode(request).finish();
     const promise = this.rpc.request("ixo.claims.v1beta1.Msg", "RemoveCollectionMembers", data);
     return promise.then(data => MsgRemoveCollectionMembersResponse.decode(new _m0.Reader(data)));
+  }
+  updateCollectionDisputeConfig(request: MsgUpdateCollectionDisputeConfig): Promise<MsgUpdateCollectionDisputeConfigResponse> {
+    const data = MsgUpdateCollectionDisputeConfig.encode(request).finish();
+    const promise = this.rpc.request("ixo.claims.v1beta1.Msg", "UpdateCollectionDisputeConfig", data);
+    return promise.then(data => MsgUpdateCollectionDisputeConfigResponse.decode(new _m0.Reader(data)));
+  }
+  addPerformanceDeposit(request: MsgAddPerformanceDeposit): Promise<MsgAddPerformanceDepositResponse> {
+    const data = MsgAddPerformanceDeposit.encode(request).finish();
+    const promise = this.rpc.request("ixo.claims.v1beta1.Msg", "AddPerformanceDeposit", data);
+    return promise.then(data => MsgAddPerformanceDepositResponse.decode(new _m0.Reader(data)));
+  }
+  withdrawPerformanceDeposit(request: MsgWithdrawPerformanceDeposit): Promise<MsgWithdrawPerformanceDepositResponse> {
+    const data = MsgWithdrawPerformanceDeposit.encode(request).finish();
+    const promise = this.rpc.request("ixo.claims.v1beta1.Msg", "WithdrawPerformanceDeposit", data);
+    return promise.then(data => MsgWithdrawPerformanceDepositResponse.decode(new _m0.Reader(data)));
+  }
+  adjudicateDispute(request: MsgAdjudicateDispute): Promise<MsgAdjudicateDisputeResponse> {
+    const data = MsgAdjudicateDispute.encode(request).finish();
+    const promise = this.rpc.request("ixo.claims.v1beta1.Msg", "AdjudicateDispute", data);
+    return promise.then(data => MsgAdjudicateDisputeResponse.decode(new _m0.Reader(data)));
   }
 }

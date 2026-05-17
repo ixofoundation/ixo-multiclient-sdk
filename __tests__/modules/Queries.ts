@@ -56,6 +56,44 @@ export const CollectionMemberList = async (collectionId: string) => {
   });
 };
 
+// Claims module — v7 disputes & performance deposits
+
+/** Latest dispute for (subject_id, target_role). Throws NotFound if none. */
+export const DisputeBySubject = async (
+  subjectId: string,
+  targetRole: number
+) => {
+  return await queryClient.ixo.claims.v1beta1.disputeBySubject({
+    subjectId,
+    targetRole,
+  });
+};
+
+/** All disputes (any role, any status) for a single claim. */
+export const DisputeListForSubject = async (subjectId: string) => {
+  return await queryClient.ixo.claims.v1beta1.disputeListForSubject({
+    subjectId,
+  });
+};
+
+/** An agent's rolling performance-deposit balance on a collection. */
+export const AgentDepositBalance = async (
+  collectionId: string,
+  agentAddress: string
+) => {
+  return await queryClient.ixo.claims.v1beta1.agentDepositBalance({
+    collectionId,
+    agentAddress,
+  });
+};
+
+/** All performance-deposit balances on a collection. */
+export const AgentDepositBalanceList = async (collectionId: string) => {
+  return await queryClient.ixo.claims.v1beta1.agentDepositBalanceList({
+    collectionId,
+  });
+};
+
 // ---------------------------------------------------------------------------
 // Liquidstake module (v7 multi-pool)
 // ---------------------------------------------------------------------------

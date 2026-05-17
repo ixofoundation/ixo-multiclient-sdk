@@ -559,6 +559,31 @@ export const createRegistry = (): Registry => {
     "/ixo.claims.v1beta1.CreateClaimAuthorizationAuthorization",
     ixo.claims.v1beta1.CreateClaimAuthorizationAuthorization
   );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgSetCollectionMembers",
+    ixo.claims.v1beta1.MsgSetCollectionMembers
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgRemoveCollectionMembers",
+    ixo.claims.v1beta1.MsgRemoveCollectionMembers
+  );
+  // v7 dispute / performance-deposit messages
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgUpdateCollectionDisputeConfig",
+    ixo.claims.v1beta1.MsgUpdateCollectionDisputeConfig
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgAddPerformanceDeposit",
+    ixo.claims.v1beta1.MsgAddPerformanceDeposit
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgWithdrawPerformanceDeposit",
+    ixo.claims.v1beta1.MsgWithdrawPerformanceDeposit
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgAdjudicateDispute",
+    ixo.claims.v1beta1.MsgAdjudicateDispute
+  );
 
   // Ixo Smart Account module
   // -----------------------------------------------------------------------------

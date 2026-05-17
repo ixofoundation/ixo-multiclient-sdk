@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType, MemberBudget, MemberBudgetSDKType } from "./claims";
+import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType, MemberBudget, MemberBudgetSDKType, AgentDepositBalance, AgentDepositBalanceSDKType } from "./claims";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 /** GenesisState defines the claims module's genesis state. */
@@ -10,6 +10,13 @@ export interface GenesisState {
   disputes: Dispute[];
   intents: Intent[];
   memberBudgets: MemberBudget[];
+  /**
+   * agent_deposit_balances are the rolling performance-deposit balances per
+   * (collection, agent). On InitGenesis, the active-dispute index and the
+   * dispute subject index are rebuilt from the disputes slice rather than
+   * exported separately.
+   */
+  agentDepositBalances: AgentDepositBalance[];
 }
 /** GenesisState defines the claims module's genesis state. */
 export interface GenesisStateSDKType {
@@ -19,6 +26,7 @@ export interface GenesisStateSDKType {
   disputes: DisputeSDKType[];
   intents: IntentSDKType[];
   member_budgets: MemberBudgetSDKType[];
+  agent_deposit_balances: AgentDepositBalanceSDKType[];
 }
 function createBaseGenesisState(): GenesisState {
   return {
@@ -27,7 +35,8 @@ function createBaseGenesisState(): GenesisState {
     claims: [],
     disputes: [],
     intents: [],
-    memberBudgets: []
+    memberBudgets: [],
+    agentDepositBalances: []
   };
 }
 export const GenesisState = {
@@ -49,6 +58,9 @@ export const GenesisState = {
     }
     for (const v of message.memberBudgets) {
       MemberBudget.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    for (const v of message.agentDepositBalances) {
+      AgentDepositBalance.encode(v!, writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
@@ -77,6 +89,9 @@ export const GenesisState = {
         case 6:
           message.memberBudgets.push(MemberBudget.decode(reader, reader.uint32()));
           break;
+        case 7:
+          message.agentDepositBalances.push(AgentDepositBalance.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -91,7 +106,8 @@ export const GenesisState = {
       claims: Array.isArray(object?.claims) ? object.claims.map((e: any) => Claim.fromJSON(e)) : [],
       disputes: Array.isArray(object?.disputes) ? object.disputes.map((e: any) => Dispute.fromJSON(e)) : [],
       intents: Array.isArray(object?.intents) ? object.intents.map((e: any) => Intent.fromJSON(e)) : [],
-      memberBudgets: Array.isArray(object?.memberBudgets) ? object.memberBudgets.map((e: any) => MemberBudget.fromJSON(e)) : []
+      memberBudgets: Array.isArray(object?.memberBudgets) ? object.memberBudgets.map((e: any) => MemberBudget.fromJSON(e)) : [],
+      agentDepositBalances: Array.isArray(object?.agentDepositBalances) ? object.agentDepositBalances.map((e: any) => AgentDepositBalance.fromJSON(e)) : []
     };
   },
   toJSON(message: GenesisState): unknown {
@@ -122,6 +138,11 @@ export const GenesisState = {
     } else {
       obj.memberBudgets = [];
     }
+    if (message.agentDepositBalances) {
+      obj.agentDepositBalances = message.agentDepositBalances.map(e => e ? AgentDepositBalance.toJSON(e) : undefined);
+    } else {
+      obj.agentDepositBalances = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<GenesisState>): GenesisState {
@@ -132,6 +153,7 @@ export const GenesisState = {
     message.disputes = object.disputes?.map(e => Dispute.fromPartial(e)) || [];
     message.intents = object.intents?.map(e => Intent.fromPartial(e)) || [];
     message.memberBudgets = object.memberBudgets?.map(e => MemberBudget.fromPartial(e)) || [];
+    message.agentDepositBalances = object.agentDepositBalances?.map(e => AgentDepositBalance.fromPartial(e)) || [];
     return message;
   }
 };

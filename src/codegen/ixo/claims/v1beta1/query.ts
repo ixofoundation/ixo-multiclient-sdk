@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType, MemberBudget, MemberBudgetSDKType } from "./claims";
+import { DisputeTargetRole, Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType, MemberBudget, MemberBudgetSDKType, AgentDepositBalance, AgentDepositBalanceSDKType, disputeTargetRoleFromJSON, disputeTargetRoleToJSON } from "./claims";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
 export interface QueryParamsRequest {}
@@ -148,6 +148,62 @@ export interface QueryCollectionMemberListResponse {
 }
 export interface QueryCollectionMemberListResponseSDKType {
   member_budgets: MemberBudgetSDKType[];
+  pagination?: PageResponseSDKType;
+}
+export interface QueryDisputeBySubjectRequest {
+  subjectId: string;
+  targetRole: DisputeTargetRole;
+}
+export interface QueryDisputeBySubjectRequestSDKType {
+  subjectId: string;
+  targetRole: DisputeTargetRole;
+}
+export interface QueryDisputeBySubjectResponse {
+  dispute?: Dispute;
+}
+export interface QueryDisputeBySubjectResponseSDKType {
+  dispute?: DisputeSDKType;
+}
+export interface QueryDisputeListForSubjectRequest {
+  subjectId: string;
+}
+export interface QueryDisputeListForSubjectRequestSDKType {
+  subjectId: string;
+}
+export interface QueryDisputeListForSubjectResponse {
+  disputes: Dispute[];
+}
+export interface QueryDisputeListForSubjectResponseSDKType {
+  disputes: DisputeSDKType[];
+}
+export interface QueryAgentDepositBalanceRequest {
+  collectionId: string;
+  agentAddress: string;
+}
+export interface QueryAgentDepositBalanceRequestSDKType {
+  collectionId: string;
+  agentAddress: string;
+}
+export interface QueryAgentDepositBalanceResponse {
+  balance?: AgentDepositBalance;
+}
+export interface QueryAgentDepositBalanceResponseSDKType {
+  balance?: AgentDepositBalanceSDKType;
+}
+export interface QueryAgentDepositBalanceListRequest {
+  collectionId: string;
+  pagination?: PageRequest;
+}
+export interface QueryAgentDepositBalanceListRequestSDKType {
+  collectionId: string;
+  pagination?: PageRequestSDKType;
+}
+export interface QueryAgentDepositBalanceListResponse {
+  balances: AgentDepositBalance[];
+  pagination?: PageResponse;
+}
+export interface QueryAgentDepositBalanceListResponseSDKType {
+  balances: AgentDepositBalanceSDKType[];
   pagination?: PageResponseSDKType;
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -1234,6 +1290,414 @@ export const QueryCollectionMemberListResponse = {
   fromPartial(object: Partial<QueryCollectionMemberListResponse>): QueryCollectionMemberListResponse {
     const message = createBaseQueryCollectionMemberListResponse();
     message.memberBudgets = object.memberBudgets?.map(e => MemberBudget.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};
+function createBaseQueryDisputeBySubjectRequest(): QueryDisputeBySubjectRequest {
+  return {
+    subjectId: "",
+    targetRole: 0
+  };
+}
+export const QueryDisputeBySubjectRequest = {
+  encode(message: QueryDisputeBySubjectRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.subjectId !== "") {
+      writer.uint32(10).string(message.subjectId);
+    }
+    if (message.targetRole !== 0) {
+      writer.uint32(16).int32(message.targetRole);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDisputeBySubjectRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryDisputeBySubjectRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.subjectId = reader.string();
+          break;
+        case 2:
+          message.targetRole = (reader.int32() as any);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryDisputeBySubjectRequest {
+    return {
+      subjectId: isSet(object.subjectId) ? String(object.subjectId) : "",
+      targetRole: isSet(object.targetRole) ? disputeTargetRoleFromJSON(object.targetRole) : 0
+    };
+  },
+  toJSON(message: QueryDisputeBySubjectRequest): unknown {
+    const obj: any = {};
+    message.subjectId !== undefined && (obj.subjectId = message.subjectId);
+    message.targetRole !== undefined && (obj.targetRole = disputeTargetRoleToJSON(message.targetRole));
+    return obj;
+  },
+  fromPartial(object: Partial<QueryDisputeBySubjectRequest>): QueryDisputeBySubjectRequest {
+    const message = createBaseQueryDisputeBySubjectRequest();
+    message.subjectId = object.subjectId ?? "";
+    message.targetRole = object.targetRole ?? 0;
+    return message;
+  }
+};
+function createBaseQueryDisputeBySubjectResponse(): QueryDisputeBySubjectResponse {
+  return {
+    dispute: undefined
+  };
+}
+export const QueryDisputeBySubjectResponse = {
+  encode(message: QueryDisputeBySubjectResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.dispute !== undefined) {
+      Dispute.encode(message.dispute, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDisputeBySubjectResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryDisputeBySubjectResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.dispute = Dispute.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryDisputeBySubjectResponse {
+    return {
+      dispute: isSet(object.dispute) ? Dispute.fromJSON(object.dispute) : undefined
+    };
+  },
+  toJSON(message: QueryDisputeBySubjectResponse): unknown {
+    const obj: any = {};
+    message.dispute !== undefined && (obj.dispute = message.dispute ? Dispute.toJSON(message.dispute) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryDisputeBySubjectResponse>): QueryDisputeBySubjectResponse {
+    const message = createBaseQueryDisputeBySubjectResponse();
+    message.dispute = object.dispute !== undefined && object.dispute !== null ? Dispute.fromPartial(object.dispute) : undefined;
+    return message;
+  }
+};
+function createBaseQueryDisputeListForSubjectRequest(): QueryDisputeListForSubjectRequest {
+  return {
+    subjectId: ""
+  };
+}
+export const QueryDisputeListForSubjectRequest = {
+  encode(message: QueryDisputeListForSubjectRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.subjectId !== "") {
+      writer.uint32(10).string(message.subjectId);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDisputeListForSubjectRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryDisputeListForSubjectRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.subjectId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryDisputeListForSubjectRequest {
+    return {
+      subjectId: isSet(object.subjectId) ? String(object.subjectId) : ""
+    };
+  },
+  toJSON(message: QueryDisputeListForSubjectRequest): unknown {
+    const obj: any = {};
+    message.subjectId !== undefined && (obj.subjectId = message.subjectId);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryDisputeListForSubjectRequest>): QueryDisputeListForSubjectRequest {
+    const message = createBaseQueryDisputeListForSubjectRequest();
+    message.subjectId = object.subjectId ?? "";
+    return message;
+  }
+};
+function createBaseQueryDisputeListForSubjectResponse(): QueryDisputeListForSubjectResponse {
+  return {
+    disputes: []
+  };
+}
+export const QueryDisputeListForSubjectResponse = {
+  encode(message: QueryDisputeListForSubjectResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.disputes) {
+      Dispute.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDisputeListForSubjectResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryDisputeListForSubjectResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.disputes.push(Dispute.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryDisputeListForSubjectResponse {
+    return {
+      disputes: Array.isArray(object?.disputes) ? object.disputes.map((e: any) => Dispute.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: QueryDisputeListForSubjectResponse): unknown {
+    const obj: any = {};
+    if (message.disputes) {
+      obj.disputes = message.disputes.map(e => e ? Dispute.toJSON(e) : undefined);
+    } else {
+      obj.disputes = [];
+    }
+    return obj;
+  },
+  fromPartial(object: Partial<QueryDisputeListForSubjectResponse>): QueryDisputeListForSubjectResponse {
+    const message = createBaseQueryDisputeListForSubjectResponse();
+    message.disputes = object.disputes?.map(e => Dispute.fromPartial(e)) || [];
+    return message;
+  }
+};
+function createBaseQueryAgentDepositBalanceRequest(): QueryAgentDepositBalanceRequest {
+  return {
+    collectionId: "",
+    agentAddress: ""
+  };
+}
+export const QueryAgentDepositBalanceRequest = {
+  encode(message: QueryAgentDepositBalanceRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.collectionId !== "") {
+      writer.uint32(10).string(message.collectionId);
+    }
+    if (message.agentAddress !== "") {
+      writer.uint32(18).string(message.agentAddress);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAgentDepositBalanceRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAgentDepositBalanceRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.collectionId = reader.string();
+          break;
+        case 2:
+          message.agentAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAgentDepositBalanceRequest {
+    return {
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      agentAddress: isSet(object.agentAddress) ? String(object.agentAddress) : ""
+    };
+  },
+  toJSON(message: QueryAgentDepositBalanceRequest): unknown {
+    const obj: any = {};
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.agentAddress !== undefined && (obj.agentAddress = message.agentAddress);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAgentDepositBalanceRequest>): QueryAgentDepositBalanceRequest {
+    const message = createBaseQueryAgentDepositBalanceRequest();
+    message.collectionId = object.collectionId ?? "";
+    message.agentAddress = object.agentAddress ?? "";
+    return message;
+  }
+};
+function createBaseQueryAgentDepositBalanceResponse(): QueryAgentDepositBalanceResponse {
+  return {
+    balance: undefined
+  };
+}
+export const QueryAgentDepositBalanceResponse = {
+  encode(message: QueryAgentDepositBalanceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.balance !== undefined) {
+      AgentDepositBalance.encode(message.balance, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAgentDepositBalanceResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAgentDepositBalanceResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.balance = AgentDepositBalance.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAgentDepositBalanceResponse {
+    return {
+      balance: isSet(object.balance) ? AgentDepositBalance.fromJSON(object.balance) : undefined
+    };
+  },
+  toJSON(message: QueryAgentDepositBalanceResponse): unknown {
+    const obj: any = {};
+    message.balance !== undefined && (obj.balance = message.balance ? AgentDepositBalance.toJSON(message.balance) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAgentDepositBalanceResponse>): QueryAgentDepositBalanceResponse {
+    const message = createBaseQueryAgentDepositBalanceResponse();
+    message.balance = object.balance !== undefined && object.balance !== null ? AgentDepositBalance.fromPartial(object.balance) : undefined;
+    return message;
+  }
+};
+function createBaseQueryAgentDepositBalanceListRequest(): QueryAgentDepositBalanceListRequest {
+  return {
+    collectionId: "",
+    pagination: undefined
+  };
+}
+export const QueryAgentDepositBalanceListRequest = {
+  encode(message: QueryAgentDepositBalanceListRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.collectionId !== "") {
+      writer.uint32(10).string(message.collectionId);
+    }
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAgentDepositBalanceListRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAgentDepositBalanceListRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.collectionId = reader.string();
+          break;
+        case 2:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAgentDepositBalanceListRequest {
+    return {
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAgentDepositBalanceListRequest): unknown {
+    const obj: any = {};
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAgentDepositBalanceListRequest>): QueryAgentDepositBalanceListRequest {
+    const message = createBaseQueryAgentDepositBalanceListRequest();
+    message.collectionId = object.collectionId ?? "";
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  }
+};
+function createBaseQueryAgentDepositBalanceListResponse(): QueryAgentDepositBalanceListResponse {
+  return {
+    balances: [],
+    pagination: undefined
+  };
+}
+export const QueryAgentDepositBalanceListResponse = {
+  encode(message: QueryAgentDepositBalanceListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.balances) {
+      AgentDepositBalance.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAgentDepositBalanceListResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAgentDepositBalanceListResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.balances.push(AgentDepositBalance.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): QueryAgentDepositBalanceListResponse {
+    return {
+      balances: Array.isArray(object?.balances) ? object.balances.map((e: any) => AgentDepositBalance.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+    };
+  },
+  toJSON(message: QueryAgentDepositBalanceListResponse): unknown {
+    const obj: any = {};
+    if (message.balances) {
+      obj.balances = message.balances.map(e => e ? AgentDepositBalance.toJSON(e) : undefined);
+    } else {
+      obj.balances = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<QueryAgentDepositBalanceListResponse>): QueryAgentDepositBalanceListResponse {
+    const message = createBaseQueryAgentDepositBalanceListResponse();
+    message.balances = object.balances?.map(e => AgentDepositBalance.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   }
