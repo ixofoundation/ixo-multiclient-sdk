@@ -161,6 +161,42 @@ export const UpdateCollectionIntents = async (
   return response;
 };
 
+/**
+ * Update a collection's quota (max-claim cap). Uses authz exec so the tester
+ * wallet can call it on behalf of the entity admin. Uses
+ * broadcastOrSynthesiseFailure so the helper can serve both positive and
+ * negative tests (the keeper rejects new_quota < current_count with
+ * ErrCollectionQuotaBelowCount).
+ */
+export const UpdateCollectionQuota = async (
+  collectionId: string,
+  adminAddress: string,
+  quota: number,
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createUncachedClient(getUser(signer));
+  const grantee = (await getUser(signer).getAccounts())[0].address;
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+      grantee,
+      msgs: [
+        {
+          typeUrl: "/ixo.claims.v1beta1.MsgUpdateCollectionQuota",
+          value: ixo.claims.v1beta1.MsgUpdateCollectionQuota.encode(
+            ixo.claims.v1beta1.MsgUpdateCollectionQuota.fromPartial({
+              collectionId,
+              adminAddress,
+              quota: Long.fromNumber(quota),
+            })
+          ).finish(),
+        },
+      ],
+    }),
+  };
+  return await broadcastOrSynthesiseFailure(client, grantee, [message], fee);
+};
+
 export const UpdateCollectionDates = async (
   collectionId: string,
   adminAddress: string,

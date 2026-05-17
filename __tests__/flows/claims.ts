@@ -3903,6 +3903,15 @@ export const claimsDisputesBasic = () =>
         "/ixo.claims.v1beta1.MsgUpdateCollectionDisputeConfig"
       )
     );
+    testMsg("Grant authz: MsgUpdateCollectionQuota (for later)", () =>
+      Entity.GrantEntityAccountAuthz(
+        protocol,
+        "admin",
+        WalletUsers.tester,
+        undefined,
+        "/ixo.claims.v1beta1.MsgUpdateCollectionQuota"
+      )
+    );
 
     testMsg("Open collection", () =>
       Claims.UpdateCollectionState(collectionId, adminAccount)
@@ -4346,6 +4355,35 @@ export const claimsDisputesBasic = () =>
         gone = true;
       }
       expect(gone).toBe(true);
+    });
+
+    // -----------------------------------------------------------------------
+    // MsgUpdateCollectionQuota: the only collection field that didn't have an
+    // admin-mutation message before. By this point the collection has had
+    // claim1 + claim2 submitted (count = 2). The new quota must be either 0
+    // (unlimited) or ≥ 2 — anything below current count is rejected with
+    // ErrCollectionQuotaBelowCount so already-accepted claims aren't
+    // retroactively invalidated.
+    // -----------------------------------------------------------------------
+    testMsg("admin updates quota 10000 → 50 (above current count)", () =>
+      Claims.UpdateCollectionQuota(collectionId, adminAccount, 50)
+    );
+    test("collection.quota reflects the update", async () => {
+      const c = await Queries.Collection(collectionId);
+      expect(c.collection!.quota.toString()).toBe("50");
+    });
+    testMsg(
+      "quota below current count rejected (ErrCollectionQuotaBelowCount)",
+      () => Claims.UpdateCollectionQuota(collectionId, adminAccount, 1),
+      false,
+      false
+    );
+    testMsg("admin sets quota to 0 (unlimited)", () =>
+      Claims.UpdateCollectionQuota(collectionId, adminAccount, 0)
+    );
+    test("collection.quota is 0 (unlimited)", async () => {
+      const c = await Queries.Collection(collectionId);
+      expect(c.collection!.quota.toString()).toBe("0");
     });
   });
 

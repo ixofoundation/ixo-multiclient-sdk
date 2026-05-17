@@ -353,6 +353,35 @@ export interface MsgUpdateCollectionIntentsSDKType {
 }
 export interface MsgUpdateCollectionIntentsResponse {}
 export interface MsgUpdateCollectionIntentsResponseSDKType {}
+/**
+ * MsgUpdateCollectionQuota updates the maximum claim count for a collection.
+ * The new quota must be either zero (unlimited) or ≥ the collection's current
+ * `count` so already-submitted claims are not retroactively invalidated.
+ */
+export interface MsgUpdateCollectionQuota {
+  /** collection_id indicates which Collection to update */
+  collectionId: string;
+  /**
+   * quota is the new maximum number of claims that may be submitted. 0 means
+   * unlimited. Must be 0 or ≥ collection.count (cannot retroactively cap
+   * below already-submitted claims).
+   */
+  quota: Long;
+  /** admin address used to sign this message, validated against Collection Admin */
+  adminAddress: string;
+}
+/**
+ * MsgUpdateCollectionQuota updates the maximum claim count for a collection.
+ * The new quota must be either zero (unlimited) or ≥ the collection's current
+ * `count` so already-submitted claims are not retroactively invalidated.
+ */
+export interface MsgUpdateCollectionQuotaSDKType {
+  collection_id: string;
+  quota: Long;
+  admin_address: string;
+}
+export interface MsgUpdateCollectionQuotaResponse {}
+export interface MsgUpdateCollectionQuotaResponseSDKType {}
 export interface MsgClaimIntent {
   /** The service agent's DID (Decentralized Identifier). */
   agentDid: string;
@@ -764,8 +793,8 @@ export interface MsgAdjudicateDispute {
    * data is the structured payload the adjudicator wants recorded on the
    * resolution — symmetric with MsgDisputeClaim.data. The keeper stores
    * this verbatim on DisputeResolution.data, so adjudicators can pin a
-   * signed opinion doc (IPFS uri + proof/cid), declare its MIME type, and
-   * flag encryption. Replaces the previous free-form `string reason`.
+   * signed opinion doc (IPFS/matrix uri + proof/cid), declare its MIME type,
+   * and flag encryption.
    */
   data?: DisputeData;
   /**
@@ -2154,6 +2183,104 @@ export const MsgUpdateCollectionIntentsResponse = {
   },
   fromPartial(_: Partial<MsgUpdateCollectionIntentsResponse>): MsgUpdateCollectionIntentsResponse {
     const message = createBaseMsgUpdateCollectionIntentsResponse();
+    return message;
+  }
+};
+function createBaseMsgUpdateCollectionQuota(): MsgUpdateCollectionQuota {
+  return {
+    collectionId: "",
+    quota: Long.UZERO,
+    adminAddress: ""
+  };
+}
+export const MsgUpdateCollectionQuota = {
+  encode(message: MsgUpdateCollectionQuota, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.collectionId !== "") {
+      writer.uint32(10).string(message.collectionId);
+    }
+    if (!message.quota.isZero()) {
+      writer.uint32(16).uint64(message.quota);
+    }
+    if (message.adminAddress !== "") {
+      writer.uint32(26).string(message.adminAddress);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionQuota {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateCollectionQuota();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.collectionId = reader.string();
+          break;
+        case 2:
+          message.quota = (reader.uint64() as Long);
+          break;
+        case 3:
+          message.adminAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUpdateCollectionQuota {
+    return {
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      quota: isSet(object.quota) ? Long.fromValue(object.quota) : Long.UZERO,
+      adminAddress: isSet(object.adminAddress) ? String(object.adminAddress) : ""
+    };
+  },
+  toJSON(message: MsgUpdateCollectionQuota): unknown {
+    const obj: any = {};
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.quota !== undefined && (obj.quota = (message.quota || Long.UZERO).toString());
+    message.adminAddress !== undefined && (obj.adminAddress = message.adminAddress);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgUpdateCollectionQuota>): MsgUpdateCollectionQuota {
+    const message = createBaseMsgUpdateCollectionQuota();
+    message.collectionId = object.collectionId ?? "";
+    message.quota = object.quota !== undefined && object.quota !== null ? Long.fromValue(object.quota) : Long.UZERO;
+    message.adminAddress = object.adminAddress ?? "";
+    return message;
+  }
+};
+function createBaseMsgUpdateCollectionQuotaResponse(): MsgUpdateCollectionQuotaResponse {
+  return {};
+}
+export const MsgUpdateCollectionQuotaResponse = {
+  encode(_: MsgUpdateCollectionQuotaResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionQuotaResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateCollectionQuotaResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgUpdateCollectionQuotaResponse {
+    return {};
+  },
+  toJSON(_: MsgUpdateCollectionQuotaResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgUpdateCollectionQuotaResponse>): MsgUpdateCollectionQuotaResponse {
+    const message = createBaseMsgUpdateCollectionQuotaResponse();
     return message;
   }
 };

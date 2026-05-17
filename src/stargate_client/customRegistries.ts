@@ -548,6 +548,10 @@ export const createRegistry = (): Registry => {
     ixo.claims.v1beta1.MsgUpdateCollectionIntents
   );
   myRegistry.register(
+    "/ixo.claims.v1beta1.MsgUpdateCollectionQuota",
+    ixo.claims.v1beta1.MsgUpdateCollectionQuota
+  );
+  myRegistry.register(
     "/ixo.claims.v1beta1.MsgClaimIntent",
     ixo.claims.v1beta1.MsgClaimIntent
   );

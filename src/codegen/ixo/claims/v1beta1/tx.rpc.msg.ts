@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { MsgCreateCollection, MsgCreateCollectionResponse, MsgSubmitClaim, MsgSubmitClaimResponse, MsgEvaluateClaim, MsgEvaluateClaimResponse, MsgDisputeClaim, MsgDisputeClaimResponse, MsgWithdrawPayment, MsgWithdrawPaymentResponse, MsgUpdateCollectionState, MsgUpdateCollectionStateResponse, MsgUpdateCollectionDates, MsgUpdateCollectionDatesResponse, MsgUpdateCollectionPayments, MsgUpdateCollectionPaymentsResponse, MsgUpdateCollectionIntents, MsgUpdateCollectionIntentsResponse, MsgClaimIntent, MsgClaimIntentResponse, MsgCreateClaimAuthorization, MsgCreateClaimAuthorizationResponse, MsgSetCollectionMembers, MsgSetCollectionMembersResponse, MsgRemoveCollectionMembers, MsgRemoveCollectionMembersResponse, MsgUpdateCollectionDisputeConfig, MsgUpdateCollectionDisputeConfigResponse, MsgAddPerformanceDeposit, MsgAddPerformanceDepositResponse, MsgWithdrawPerformanceDeposit, MsgWithdrawPerformanceDepositResponse, MsgAdjudicateDispute, MsgAdjudicateDisputeResponse } from "./tx";
+import { MsgCreateCollection, MsgCreateCollectionResponse, MsgSubmitClaim, MsgSubmitClaimResponse, MsgEvaluateClaim, MsgEvaluateClaimResponse, MsgDisputeClaim, MsgDisputeClaimResponse, MsgWithdrawPayment, MsgWithdrawPaymentResponse, MsgUpdateCollectionState, MsgUpdateCollectionStateResponse, MsgUpdateCollectionDates, MsgUpdateCollectionDatesResponse, MsgUpdateCollectionPayments, MsgUpdateCollectionPaymentsResponse, MsgUpdateCollectionIntents, MsgUpdateCollectionIntentsResponse, MsgUpdateCollectionQuota, MsgUpdateCollectionQuotaResponse, MsgClaimIntent, MsgClaimIntentResponse, MsgCreateClaimAuthorization, MsgCreateClaimAuthorizationResponse, MsgSetCollectionMembers, MsgSetCollectionMembersResponse, MsgRemoveCollectionMembers, MsgRemoveCollectionMembersResponse, MsgUpdateCollectionDisputeConfig, MsgUpdateCollectionDisputeConfigResponse, MsgAddPerformanceDeposit, MsgAddPerformanceDepositResponse, MsgWithdrawPerformanceDeposit, MsgWithdrawPerformanceDepositResponse, MsgAdjudicateDispute, MsgAdjudicateDisputeResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
   createCollection(request: MsgCreateCollection): Promise<MsgCreateCollectionResponse>;
@@ -13,6 +13,7 @@ export interface Msg {
   updateCollectionDates(request: MsgUpdateCollectionDates): Promise<MsgUpdateCollectionDatesResponse>;
   updateCollectionPayments(request: MsgUpdateCollectionPayments): Promise<MsgUpdateCollectionPaymentsResponse>;
   updateCollectionIntents(request: MsgUpdateCollectionIntents): Promise<MsgUpdateCollectionIntentsResponse>;
+  updateCollectionQuota(request: MsgUpdateCollectionQuota): Promise<MsgUpdateCollectionQuotaResponse>;
   claimIntent(request: MsgClaimIntent): Promise<MsgClaimIntentResponse>;
   createClaimAuthorization(request: MsgCreateClaimAuthorization): Promise<MsgCreateClaimAuthorizationResponse>;
   setCollectionMembers(request: MsgSetCollectionMembers): Promise<MsgSetCollectionMembersResponse>;
@@ -35,6 +36,7 @@ export class MsgClientImpl implements Msg {
     this.updateCollectionDates = this.updateCollectionDates.bind(this);
     this.updateCollectionPayments = this.updateCollectionPayments.bind(this);
     this.updateCollectionIntents = this.updateCollectionIntents.bind(this);
+    this.updateCollectionQuota = this.updateCollectionQuota.bind(this);
     this.claimIntent = this.claimIntent.bind(this);
     this.createClaimAuthorization = this.createClaimAuthorization.bind(this);
     this.setCollectionMembers = this.setCollectionMembers.bind(this);
@@ -88,6 +90,11 @@ export class MsgClientImpl implements Msg {
     const data = MsgUpdateCollectionIntents.encode(request).finish();
     const promise = this.rpc.request("ixo.claims.v1beta1.Msg", "UpdateCollectionIntents", data);
     return promise.then(data => MsgUpdateCollectionIntentsResponse.decode(new _m0.Reader(data)));
+  }
+  updateCollectionQuota(request: MsgUpdateCollectionQuota): Promise<MsgUpdateCollectionQuotaResponse> {
+    const data = MsgUpdateCollectionQuota.encode(request).finish();
+    const promise = this.rpc.request("ixo.claims.v1beta1.Msg", "UpdateCollectionQuota", data);
+    return promise.then(data => MsgUpdateCollectionQuotaResponse.decode(new _m0.Reader(data)));
   }
   claimIntent(request: MsgClaimIntent): Promise<MsgClaimIntentResponse> {
     const data = MsgClaimIntent.encode(request).finish();
