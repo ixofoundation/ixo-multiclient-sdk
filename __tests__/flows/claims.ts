@@ -771,9 +771,8 @@ export const claimsTeamMembers = () =>
     // randomly and has no balance, so every oracle-signed tx (intent / submit)
     // would fail with "Account does not exist on chain" without this.
     testMsg("Bank Send to oracle account", async () => {
-      const oracleAddress = (
-        await getUser(WalletUsers.oracle).getAccounts()
-      )[0].address;
+      const oracleAddress = (await getUser(WalletUsers.oracle).getAccounts())[0]
+        .address;
       return Cosmos.BankSendTrx(
         50000000,
         WalletUsers.tester,
@@ -1047,53 +1046,49 @@ export const claimsTeamMembers = () =>
     // -------------------------------------------------
     // Anti-spoofing: alice's CCAA tied to alice. bob's CCAA tied to bob.
     // -------------------------------------------------
-    testMsg(
-      "Grant CCAA to alice with memberAddress=alice",
-      () =>
-        Claims.GrantEntityAccountCreateClaimAuthz(
-          protocol,
-          "admin",
-          adminAccount,
-          collectionId,
-          1000,
-          false,
-          WalletUsers.alice,
-          WalletUsers.tester,
-          [{ amount: "10000000", denom: "uixo" }],
-          [
-            {
-              address: cw20ContractAddress,
-              amount: Long.fromNumber(100),
-            },
-          ],
-          60 * 60 * 24, // 1d intent duration
-          ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT,
-          5,
-          [],
-          aliceAddress // member_address locked into the CCAA constraint
-        )
+    testMsg("Grant CCAA to alice with memberAddress=alice", () =>
+      Claims.GrantEntityAccountCreateClaimAuthz(
+        protocol,
+        "admin",
+        adminAccount,
+        collectionId,
+        1000,
+        false,
+        WalletUsers.alice,
+        WalletUsers.tester,
+        [{ amount: "10000000", denom: "uixo" }],
+        [
+          {
+            address: cw20ContractAddress,
+            amount: Long.fromNumber(100),
+          },
+        ],
+        60 * 60 * 24, // 1d intent duration
+        ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT,
+        5,
+        [],
+        aliceAddress // member_address locked into the CCAA constraint
+      )
     );
 
-    testMsg(
-      "Grant CCAA to bob with memberAddress=bob",
-      () =>
-        Claims.GrantEntityAccountCreateClaimAuthz(
-          protocol,
-          "admin",
-          adminAccount,
-          collectionId,
-          1000,
-          false,
-          WalletUsers.bob,
-          WalletUsers.tester,
-          [{ amount: "10000000", denom: "uixo" }],
-          [],
-          60 * 60 * 24,
-          ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT,
-          5,
-          [],
-          bobAddress
-        )
+    testMsg("Grant CCAA to bob with memberAddress=bob", () =>
+      Claims.GrantEntityAccountCreateClaimAuthz(
+        protocol,
+        "admin",
+        adminAccount,
+        collectionId,
+        1000,
+        false,
+        WalletUsers.bob,
+        WalletUsers.tester,
+        [{ amount: "10000000", denom: "uixo" }],
+        [],
+        60 * 60 * 24,
+        ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT,
+        5,
+        [],
+        bobAddress
+      )
     );
 
     // Anti-spoofing: alice tries to mint an oracle authz for bob → fail
@@ -1217,22 +1212,20 @@ export const claimsTeamMembers = () =>
     // ACTIVE and breaks the rest of the flow ("agent already has an active
     // intent for collection").
     let aliceClaimId = "team_alice_" + utils.common.generateId(8);
-    testMsg(
-      "alice intent (1.5M uixo + 10 cw20)",
-      () =>
-        Claims.MsgClaimIntent(
-          collectionId,
-          [{ amount: "1500000", denom: "uixo" }],
-          [
-            {
-              address: cw20ContractAddress,
-              amount: Long.fromNumber(10),
-            },
-          ],
-          WalletUsers.oracle,
-          [],
-          aliceAddress
-        )
+    testMsg("alice intent (1.5M uixo + 10 cw20)", () =>
+      Claims.MsgClaimIntent(
+        collectionId,
+        [{ amount: "1500000", denom: "uixo" }],
+        [
+          {
+            address: cw20ContractAddress,
+            amount: Long.fromNumber(10),
+          },
+        ],
+        WalletUsers.oracle,
+        [],
+        aliceAddress
+      )
     );
 
     test("alice budget shows 1.5M uixo + 10 cw20 spent", async () => {
@@ -1247,51 +1240,45 @@ export const claimsTeamMembers = () =>
       expect(spentCw20?.amount?.toString()).toBe("10");
     });
 
-    testMsg(
-      "alice oracle submits claim referencing intent",
-      () =>
-        Claims.MsgExecAgentSubmit(
-          aliceClaimId,
-          collectionId,
-          adminAccount,
-          WalletUsers.oracle,
-          true,
-          [],
-          [],
-          [],
-          aliceAddress
-        )
+    testMsg("alice oracle submits claim referencing intent", () =>
+      Claims.MsgExecAgentSubmit(
+        aliceClaimId,
+        collectionId,
+        adminAccount,
+        WalletUsers.oracle,
+        true,
+        [],
+        [],
+        [],
+        aliceAddress
+      )
     );
 
     // Need eval authz for tester too. Since we already have authz infra,
     // grant it.
-    testMsg(
-      "Grant eval authz to tester",
-      () =>
-        Claims.GrantEntityAccountClaimsEvaluateAuthz(
-          protocol,
-          "admin",
-          adminAccount,
-          collectionId,
-          [],
-          1000,
-          false,
-          WalletUsers.tester,
-          WalletUsers.tester,
-          cw20ContractAddress
-        )
+    testMsg("Grant eval authz to tester", () =>
+      Claims.GrantEntityAccountClaimsEvaluateAuthz(
+        protocol,
+        "admin",
+        adminAccount,
+        collectionId,
+        [],
+        1000,
+        false,
+        WalletUsers.tester,
+        WalletUsers.tester,
+        cw20ContractAddress
+      )
     );
 
-    testMsg(
-      "evaluate alice's claim APPROVED",
-      () =>
-        Claims.MsgExecAgentEvaluate(
-          aliceClaimId,
-          collectionId,
-          adminAccount,
-          ixo.claims.v1beta1.EvaluationStatus.APPROVED,
-          WalletUsers.tester
-        )
+    testMsg("evaluate alice's claim APPROVED", () =>
+      Claims.MsgExecAgentEvaluate(
+        aliceClaimId,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.APPROVED,
+        WalletUsers.tester
+      )
     );
 
     test("alice budget stays spent after APPROVED (real spend)", async () => {
@@ -1325,17 +1312,15 @@ export const claimsTeamMembers = () =>
     // Budget restore: bob intent → claim → REJECTED. Bob's budget restored.
     // -------------------------------------------------
     let bobClaimId = "team_bob_" + utils.common.generateId(8);
-    testMsg(
-      "bob intent (1M uixo)",
-      () =>
-        Claims.MsgClaimIntent(
-          collectionId,
-          [{ amount: "1000000", denom: "uixo" }],
-          [],
-          WalletUsers.oracle,
-          [],
-          bobAddress
-        )
+    testMsg("bob intent (1M uixo)", () =>
+      Claims.MsgClaimIntent(
+        collectionId,
+        [{ amount: "1000000", denom: "uixo" }],
+        [],
+        WalletUsers.oracle,
+        [],
+        bobAddress
+      )
     );
 
     test("bob budget shows 1M uixo spent", async () => {
@@ -1346,32 +1331,28 @@ export const claimsTeamMembers = () =>
       expect(spentUixo?.amount).toBe("1000000");
     });
 
-    testMsg(
-      "bob oracle submits claim",
-      () =>
-        Claims.MsgExecAgentSubmit(
-          bobClaimId,
-          collectionId,
-          adminAccount,
-          WalletUsers.oracle,
-          true,
-          [],
-          [],
-          [],
-          bobAddress
-        )
+    testMsg("bob oracle submits claim", () =>
+      Claims.MsgExecAgentSubmit(
+        bobClaimId,
+        collectionId,
+        adminAccount,
+        WalletUsers.oracle,
+        true,
+        [],
+        [],
+        [],
+        bobAddress
+      )
     );
 
-    testMsg(
-      "evaluate bob's claim REJECTED",
-      () =>
-        Claims.MsgExecAgentEvaluate(
-          bobClaimId,
-          collectionId,
-          adminAccount,
-          ixo.claims.v1beta1.EvaluationStatus.REJECTED,
-          WalletUsers.tester
-        )
+    testMsg("evaluate bob's claim REJECTED", () =>
+      Claims.MsgExecAgentEvaluate(
+        bobClaimId,
+        collectionId,
+        adminAccount,
+        ixo.claims.v1beta1.EvaluationStatus.REJECTED,
+        WalletUsers.tester
+      )
     );
 
     test("bob budget restored after REJECTED (period_spent back to 0)", async () => {
@@ -1446,17 +1427,15 @@ export const claimsTeamMembers = () =>
         )
     );
 
-    testMsg(
-      "oracle2 creates intent for bob (will be allowed to expire)",
-      () =>
-        Claims.MsgClaimIntent(
-          collectionId,
-          [{ amount: "500000", denom: "uixo" }],
-          [],
-          WalletUsers.random,
-          [],
-          bobAddress
-        )
+    testMsg("oracle2 creates intent for bob (will be allowed to expire)", () =>
+      Claims.MsgClaimIntent(
+        collectionId,
+        [{ amount: "500000", denom: "uixo" }],
+        [],
+        WalletUsers.random,
+        [],
+        bobAddress
+      )
     );
 
     test("bob budget shows 500k spent right after intent", async () => {
@@ -1515,17 +1494,15 @@ export const claimsTeamMembers = () =>
     );
 
     // alice still works — proves removal is targeted
-    testMsg(
-      "alice can still create intents after bob removed",
-      () =>
-        Claims.MsgClaimIntent(
-          collectionId,
-          [{ amount: "500000", denom: "uixo" }],
-          [],
-          WalletUsers.oracle,
-          [],
-          aliceAddress
-        )
+    testMsg("alice can still create intents after bob removed", () =>
+      Claims.MsgClaimIntent(
+        collectionId,
+        [{ amount: "500000", denom: "uixo" }],
+        [],
+        WalletUsers.oracle,
+        [],
+        aliceAddress
+      )
     );
   });
 
@@ -1588,9 +1565,8 @@ export const claimsTeamMembersPeriodReset = () =>
 
     // Fund the oracle wallet (see comment in claimsTeamMembers above)
     testMsg("fund oracle", async () => {
-      const oracleAddress = (
-        await getUser(WalletUsers.oracle).getAccounts()
-      )[0].address;
+      const oracleAddress = (await getUser(WalletUsers.oracle).getAccounts())[0]
+        .address;
       return Cosmos.BankSendTrx(
         20000000,
         WalletUsers.tester,
@@ -1677,16 +1653,14 @@ export const claimsTeamMembersPeriodReset = () =>
 
     // Set alice with chain minimum period (4 min in test mode)
     const RESET_PERIOD_SECONDS = 4 * 60;
-    testMsg(
-      "Add alice with 4-minute period",
-      () =>
-        Claims.SetCollectionMembers(collectionId, adminAccount, [
-          {
-            memberAddress: aliceAddress,
-            periodSeconds: RESET_PERIOD_SECONDS,
-            periodSpendLimit: [{ amount: "5000000", denom: "uixo" }],
-          },
-        ])
+    testMsg("Add alice with 4-minute period", () =>
+      Claims.SetCollectionMembers(collectionId, adminAccount, [
+        {
+          memberAddress: aliceAddress,
+          periodSeconds: RESET_PERIOD_SECONDS,
+          periodSpendLimit: [{ amount: "5000000", denom: "uixo" }],
+        },
+      ])
     );
 
     // Grant alice the meta-authorization (CCAA) so she can mint downstream
@@ -1712,35 +1686,31 @@ export const claimsTeamMembersPeriodReset = () =>
       )
     );
 
-    testMsg(
-      "alice grants oracle authz",
-      () =>
-        Claims.CreateClaimAuthorization(
-          adminAccount,
-          collectionId,
-          100,
-          WalletUsers.oracle,
-          WalletUsers.alice,
-          [{ amount: "5000000", denom: "uixo" }],
-          [],
-          60 * 60,
-          ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT,
-          [],
-          aliceAddress
-        )
+    testMsg("alice grants oracle authz", () =>
+      Claims.CreateClaimAuthorization(
+        adminAccount,
+        collectionId,
+        100,
+        WalletUsers.oracle,
+        WalletUsers.alice,
+        [{ amount: "5000000", denom: "uixo" }],
+        [],
+        60 * 60,
+        ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT,
+        [],
+        aliceAddress
+      )
     );
 
-    testMsg(
-      "first intent (1M uixo) — period_spent goes to 1M",
-      () =>
-        Claims.MsgClaimIntent(
-          collectionId,
-          [{ amount: "1000000", denom: "uixo" }],
-          [],
-          WalletUsers.oracle,
-          [],
-          aliceAddress
-        )
+    testMsg("first intent (1M uixo) — period_spent goes to 1M", () =>
+      Claims.MsgClaimIntent(
+        collectionId,
+        [{ amount: "1000000", denom: "uixo" }],
+        [],
+        WalletUsers.oracle,
+        [],
+        aliceAddress
+      )
     );
 
     test("verify period_spent = 1M", async () => {
@@ -1796,22 +1766,24 @@ export const claimsTeamMembersPeriodReset = () =>
       )
     );
 
-    test("wait ~5 minutes for period boundary", async () => {
-      console.log("waiting 5 min for period reset...");
-      await timeout((RESET_PERIOD_SECONDS + 60) * 1000);
-    }, 6 * 60 * 1000); // 6 min jest timeout
+    test(
+      "wait ~5 minutes for period boundary",
+      async () => {
+        console.log("waiting 5 min for period reset...");
+        await timeout((RESET_PERIOD_SECONDS + 60) * 1000);
+      },
+      6 * 60 * 1000
+    ); // 6 min jest timeout
 
-    testMsg(
-      "second intent (after period elapsed) — triggers lazy reset",
-      () =>
-        Claims.MsgClaimIntent(
-          collectionId,
-          [{ amount: "2000000", denom: "uixo" }],
-          [],
-          WalletUsers.oracle,
-          [],
-          aliceAddress
-        )
+    testMsg("second intent (after period elapsed) — triggers lazy reset", () =>
+      Claims.MsgClaimIntent(
+        collectionId,
+        [{ amount: "2000000", denom: "uixo" }],
+        [],
+        WalletUsers.oracle,
+        [],
+        aliceAddress
+      )
     );
 
     test("after lazy reset, period_spent = 2M (not 3M — old period was wiped)", async () => {
@@ -2724,7 +2696,7 @@ export const supamotoClaims2 = () =>
               // Custom date transformation to match json schema format
               time_paid: new Date(
                 item.Transaction_date.replaceAll("/", "-").replace(" ", "T") +
-                "Z"
+                  "Z"
               ),
             };
           return aggObj;
@@ -2966,7 +2938,7 @@ export const supamotoClaims3 = () =>
       type NetworkType = "mainnet" | "testnet";
 
       let networkToUse: NetworkType = "mainnet";
-      let collectionToUse: CollectionType = "uncollected" as any;
+      let collectionToUse: CollectionType = "Legacy" as any;
 
       const collectionToNetworkMapping = {
         Genesis: {
@@ -3015,16 +2987,15 @@ export const supamotoClaims3 = () =>
 
       let purchaseData: any[] = [];
       let duplicatesData: any[] = [];
-      const afterDate = new Date("2020-01-01T00:00:00Z")
+      const afterDate = new Date("2020-01-01T00:00:00Z");
       // loop over paths and add all transaction ids to previous purchases list
       for (let path of paths) {
         let data = await csvtojsonV2().fromFile(path);
         console.log({ path, purchaseData: data.length });
         data = data.reduce((aggObj, item) => {
           const timePaid = new Date(
-            item["Creation date"].replaceAll("/", "-").replace(" ", "T") +
-            "Z"
-          )
+            item["Creation date"].replaceAll("/", "-").replace(" ", "T") + "Z"
+          );
           // only handle payments with timePaid after 2024-06 (skip June 2024 and earlier)
           if (timePaid < afterDate) return aggObj;
           if (
@@ -3165,65 +3136,112 @@ export const supamotoClaims3 = () =>
       );
 
       // helper to stop flow if just want the above data
-      if (!!1) throw new Error("stop");
+      // if (!!1) throw new Error("stop");
 
-      // divide payments per device into 10 devices at a time
-      // ==============================================================
-      purchaseData = chunkArray<any[]>(Object.values(purchaseData), 3);
-      let stovePurchasesAll: any[] = [];
+      // Chunk by purchase count (constant size) rather than by stove, so that
+      // a single very-active stove (e.g. 283 purchases) can't blow past the
+      // IPFS rate-limit ceiling on the credentials worker.
+      //
+      // Determinism (so `if (index < N) continue;` resumes from the same
+      // batch on the next run):
+      //   - Object.values(purchaseData) iterates Device_IDs in insertion
+      //     order (V8 preserves this for string keys).
+      //   - Each device's purchases were sorted by time_paid earlier.
+      //   - chunkArray splits the flat list into BATCH_SIZE-sized chunks
+      //     in order, so chunks are stable across runs given the same CSV.
+      const BATCH_SIZE = 30;
+      const allPurchases: any[] = (
+        Object.values(purchaseData) as any[][]
+      ).flat();
+      const purchaseBatches = chunkArray<any>(allPurchases, BATCH_SIZE);
+
+      let purchasesAll: any[] = [];
       let index = -1;
 
       console.time("claims");
-      for (const stovePurchases of purchaseData) {
+      for (const purchaseBatch of purchaseBatches) {
         index++;
-        // if (index < 3) continue; // if want to only mint a certain amount of batches add number here
+        // if (index < 1950) continue; // resume from a specific batch index after a failure
 
         console.log(
           "starting batch " +
-          (index + 1) +
-          " of " +
-          purchaseData.length +
-          " with " +
-          stovePurchases.flat(1).length +
-          " purchases"
+            (index + 1) +
+            " of " +
+            purchaseBatches.length +
+            " with " +
+            purchaseBatch.length +
+            " purchases"
         );
         // add wait for ipfs rate limit
-        if (index) await timeout(1000 * 5);
+        if (index) await timeout(1000 * 7);
 
-        // create fuelPurchase claims for each purchase
-        const fpClaims = await axios.post(
-          EcsCredentialsWorkerUrl + "claims/create",
-          {
-            type: "fuelPurchase",
-            collectionId:
-              collectionToNetworkMapping[collectionToUse][networkToUse],
-            storage: "cellnode",
-            generate: {
-              type: "FuelPurchaseSupamotoZambia",
-              data: stovePurchases.flat(1).map((p: any) => ({
-                id: p.Transaction_ID, // transaction id
-                provider: p.telco || "", // transaction provider
-                currency: p.currency, // transaction currency
-                value: Number(p.amount), // transaction value
-                dateTime: p.time_paid, // transaction date time
-                amount: Number(p.Mass), // amount pellets that bought in kg
-                deviceId: p.Device_ID, // device id
-                protocolDid:
-                  // only legacy has special protocol, rest use Clean Cooking Protocol
-                  // @ts-ignore
-                  collectionToUse === "Legacy"
-                    ? dids.legacyCookingProtocol
-                    : null, // custom protocol
-                projectDid:
-                  // @ts-ignore
-                  // collectionToUse === "Legacy" ? dids.ecsProject : null, // custom project
-                  dids.ecsProject,
-              })),
-            },
-          },
-          { headers: { Authorization: process.env.ECS_CREDENTIAL_WORKER_AUTH } }
-        );
-        assertIsDeliverTxSuccess(fpClaims.data);
+        // Retry the credentials-worker call up to 3 times, waiting 90s
+        // between attempts. Only wraps the POST + tx-success assertion —
+        // once the tx is committed on-chain we must not retry, otherwise
+        // we'd mint duplicate claims for the same transactions.
+        const MAX_ATTEMPTS = 3;
+        let attempt = 0;
+        let fpClaims: any;
+        while (true) {
+          attempt++;
+          try {
+            fpClaims = await axios.post(
+              EcsCredentialsWorkerUrl + "claims/create",
+              {
+                type: "fuelPurchase",
+                collectionId:
+                  collectionToNetworkMapping[collectionToUse][networkToUse],
+                storage: "cellnode",
+                generate: {
+                  type: "FuelPurchaseSupamotoZambia",
+                  data: purchaseBatch.map((p: any) => ({
+                    id: p.Transaction_ID, // transaction id
+                    provider: p.telco || "", // transaction provider
+                    currency: p.currency, // transaction currency
+                    value: Number(p.amount), // transaction value
+                    dateTime: p.time_paid, // transaction date time
+                    amount: Number(p.Mass), // amount pellets that bought in kg
+                    deviceId: p.Device_ID, // device id
+                    protocolDid:
+                      // only legacy has special protocol, rest use Clean Cooking Protocol
+                      // @ts-ignore
+                      collectionToUse === "Legacy"
+                        ? dids.legacyCookingProtocol
+                        : null, // custom protocol
+                    projectDid:
+                      // @ts-ignore
+                      // collectionToUse === "Legacy" ? dids.ecsProject : null, // custom project
+                      dids.ecsProject,
+                  })),
+                },
+              },
+              {
+                headers: {
+                  Authorization: process.env.ECS_CREDENTIAL_WORKER_AUTH,
+                },
+              }
+            );
+            assertIsDeliverTxSuccess(fpClaims.data);
+            break; // success → continue past the retry loop
+          } catch (err: any) {
+            if (attempt >= MAX_ATTEMPTS) {
+              console.error(
+                `Batch ${
+                  index + 1
+                } failed after ${MAX_ATTEMPTS} attempts — stopping. Last error: ${
+                  err?.message || err
+                }`
+              );
+              throw err;
+            }
+            console.warn(
+              `Batch ${index + 1} attempt ${attempt}/${MAX_ATTEMPTS} failed (${
+                err?.message || err
+              }). Waiting 90s and retrying...`
+            );
+            await timeout(1000 * 90);
+          }
+        }
         const fpClaimIds: string[] = utils.common.getValuesFromEvents(
           fpClaims.data,
           "ixo.claims.v1beta1.ClaimSubmittedEvent",
@@ -3258,23 +3276,20 @@ export const supamotoClaims3 = () =>
         //   fpClaimIds.length + " FuelPurchase claims successfully evaluated"
         // );
 
-        // save fuelPurchase claim ids per purchase
-        stovePurchases.forEach((ps: any[], i) => {
-          ps.forEach((p: any, j) => {
-            stovePurchases[i][j].fuelPurchaseClaimId = fpClaimIds.shift();
-          });
+        // assign returned claim ids back to each purchase (same order as POST)
+        purchaseBatch.forEach((p: any, i: number) => {
+          p.fuelPurchaseClaimId = fpClaimIds[i];
         });
 
         console.timeLog("claims");
-        // add current stove purchases chunk to all stove purchases
-        stovePurchasesAll = stovePurchasesAll.concat(stovePurchases);
+        purchasesAll = purchasesAll.concat(purchaseBatch);
       }
       console.timeEnd("claims");
 
-      // save all stove purchases to file
+      // save all purchases (with claim ids) to file
       saveFileToPath(
         ["documents", "emerging", "fuelPurchases_made.json"],
-        JSON.stringify(stovePurchasesAll, null, 2)
+        JSON.stringify(purchasesAll, null, 2)
       );
 
       expect(true).toBeTruthy();
@@ -3456,9 +3471,9 @@ export const supamotoClaimsRedoRejected = () =>
           let endDate =
             period > 30
               ? addDays(
-                new Date(claimData.credentialSubject.claim.period.startDate),
-                30
-              ).toISOString()
+                  new Date(claimData.credentialSubject.claim.period.startDate),
+                  30
+                ).toISOString()
               : claimData.credentialSubject.claim.period.endDate;
 
           // fetch cooking sessions for the period of CER

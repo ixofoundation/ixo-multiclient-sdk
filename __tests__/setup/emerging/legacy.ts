@@ -260,6 +260,7 @@ export const legacyCookstovesFlow = () =>
             assetInstanceDids.push({ id: id, did: nftAssetDid });
             return "res" as any;
           } catch (error) {
+            index++;
             assetsFailed.push({ id });
             throw new Error(error);
           }
