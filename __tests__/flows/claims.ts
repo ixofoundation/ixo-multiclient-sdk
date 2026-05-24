@@ -532,8 +532,64 @@ export const claimsBasic = () =>
       );
       return res;
     });
+    // v7 claims chain (commit 1f2b56f5) added two enforcement gates that
+    // make the legacy claimsBasic dispute step a sequencing problem:
+    //
+    //   1. ErrAgentHasActiveDispute (claims/1905): once a dispute is OPEN
+    //      against a submitter, the chain blocks every subsequent submit /
+    //      evaluate on that collection until the dispute is adjudicated.
+    //   2. Adjudication itself requires the collection to have an
+    //      `adjudicators` whitelist (LookupAdjudicator at msg_server.go:1591).
+    //
+    // So to keep claimsBasic exercising MsgDisputeClaim AND still submit more
+    // claims afterwards, we now (a) configure an adjudicator on the
+    // collection up front, (b) file the dispute, (c) immediately dismiss it
+    // so the gate releases. Charlie is the test's adjudicator-of-record (his
+    // DID is already registered by registerIids); the reward percentage and
+    // zero penalty / deposit keep payment math trivial — we only need the
+    // adjudication path to clear, not exercise its economics.
+    testMsg(
+      "/ixo.entity.v1beta1.MsgGrantEntityAccountAuthz MsgUpdateCollectionDisputeConfig",
+      () =>
+        Entity.GrantEntityAccountAuthz(
+          protocol,
+          "admin",
+          WalletUsers.tester,
+          undefined,
+          "/ixo.claims.v1beta1.MsgUpdateCollectionDisputeConfig"
+        )
+    );
+    testMsg(
+      "/ixo.claims.v1beta1.MsgUpdateCollectionDisputeConfig (adjudicator setup)",
+      () => {
+        const charlieDid = getUser(WalletUsers.charlie).did;
+        return Claims.UpdateCollectionDisputeConfig(
+          collectionId,
+          adminAccount,
+          {
+            adjudicators: [
+              { did: charlieDid, rewardPercentage: "20000000000000000000" },
+            ],
+          }
+        );
+      }
+    );
+
     testMsg("/ixo.claims.v1beta1.MsgDisputeClaim", () =>
       Claims.DisputeClaim(claimId, "proof1")
+    );
+    testMsg(
+      "/ixo.claims.v1beta1.MsgAdjudicateDispute (DISMISSED — releases the gate)",
+      () => {
+        const charlieDid = getUser(WalletUsers.charlie).did;
+        return Claims.AdjudicateDispute(
+          claimId,
+          ixo.claims.v1beta1.DisputeTargetRole.DISPUTE_TARGET_ROLE_SUBMITTER,
+          charlieDid,
+          ixo.claims.v1beta1.DisputeStatus.DISPUTE_STATUS_DISMISSED,
+          "claimsBasic-dispute-dismissed"
+        );
+      }
     );
 
     // test claim and eval with no custom amount and cw20 payment
@@ -576,25 +632,14 @@ export const claimsBasic = () =>
       )
     );
 
-    // test claim and eval dispute
-    testMsg("/cosmos.authz.v1beta1.MsgExec agent submit", async () => {
-      claimId = "110004";
-      return Claims.MsgExecAgentSubmit(
-        claimId,
-        collectionId,
-        adminAccount,
-        WalletUsers.alice
-      );
-    });
-    testMsg("/cosmos.authz.v1beta1.MsgExec agent evaluate", () =>
-      Claims.MsgExecAgentEvaluate(
-        claimId,
-        collectionId,
-        adminAccount,
-        ixo.claims.v1beta1.EvaluationStatus.DISPUTED,
-        WalletUsers.tester
-      )
-    );
+    // v7 deprecated EvaluationStatus.DISPUTED as a fresh-tx evaluation
+    // outcome (commit 1f2b56f5 + msg_validation.go) — the dispute lifecycle
+    // lives on the Dispute record now (MsgDisputeClaim / MsgAdjudicateDispute,
+    // already exercised above). The previous test here filed an evaluate
+    // with status=DISPUTED, which now returns claims/1921. Coverage of the
+    // dispute path comes from the DisputeClaim + AdjudicateDispute pair
+    // above and the dedicated claimsDisputesBasic flow, so the legacy
+    // submit-then-evaluate-DISPUTED pair is removed.
 
     // Test Oracle payments split for APPROVAL payment
     testMsg(

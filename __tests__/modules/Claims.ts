@@ -378,7 +378,14 @@ export const UpdateCollectionPayments = async (
 export const DisputeClaim = async (
   subjectId: string,
   disputeProof: string, // must be unique
-  signer: WalletUsers = WalletUsers.tester
+  signer: WalletUsers = WalletUsers.tester,
+  // targetRole must be SUBMITTER or EVALUATOR. The v7 chain rejects
+  // target_unspecified with ErrDisputeTargetRoleInvalid (claims/1906) — the
+  // DisputeClaimV7 helper added in the same v7 batch makes this explicit, but
+  // the legacy DisputeClaim was left with an implicit UNSPECIFIED default
+  // until 2026-05-24 when claimsBasic started failing on the v7 chain.
+  // Default kept at SUBMITTER to match the most common pre-v7 dispute path.
+  targetRole: number = ixo.claims.v1beta1.DisputeTargetRole.DISPUTE_TARGET_ROLE_SUBMITTER
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -392,6 +399,7 @@ export const DisputeClaim = async (
       agentDid: agent.did,
       subjectId,
       disputeType: 1,
+      targetRole,
       data: ixo.claims.v1beta1.DisputeData.fromPartial({
         encrypted: false,
         proof: disputeProof,
