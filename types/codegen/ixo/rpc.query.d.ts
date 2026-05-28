@@ -262,6 +262,10 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
                 intentList(request?: import("./claims/v1beta1/query").QueryIntentListRequest): Promise<import("./claims/v1beta1/query").QueryIntentListResponse>;
                 collectionMember(request: import("./claims/v1beta1/query").QueryCollectionMemberRequest): Promise<import("./claims/v1beta1/query").QueryCollectionMemberResponse>;
                 collectionMemberList(request: import("./claims/v1beta1/query").QueryCollectionMemberListRequest): Promise<import("./claims/v1beta1/query").QueryCollectionMemberListResponse>;
+                disputeBySubject(request: import("./claims/v1beta1/query").QueryDisputeBySubjectRequest): Promise<import("./claims/v1beta1/query").QueryDisputeBySubjectResponse>;
+                disputeListForSubject(request: import("./claims/v1beta1/query").QueryDisputeListForSubjectRequest): Promise<import("./claims/v1beta1/query").QueryDisputeListForSubjectResponse>;
+                agentDepositBalance(request: import("./claims/v1beta1/query").QueryAgentDepositBalanceRequest): Promise<import("./claims/v1beta1/query").QueryAgentDepositBalanceResponse>;
+                agentDepositBalanceList(request: import("./claims/v1beta1/query").QueryAgentDepositBalanceListRequest): Promise<import("./claims/v1beta1/query").QueryAgentDepositBalanceListResponse>;
             };
         };
         entity: {

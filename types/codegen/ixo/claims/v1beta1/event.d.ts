@@ -1,4 +1,4 @@
-import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, CW1155IntentPayment, CW1155IntentPaymentSDKType, Intent, IntentSDKType, MemberBudget, MemberBudgetSDKType } from "./claims";
+import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, CW1155IntentPayment, CW1155IntentPaymentSDKType, Intent, IntentSDKType, MemberBudget, MemberBudgetSDKType, AgentDepositBalance, AgentDepositBalanceSDKType } from "./claims";
 import { WithdrawPaymentConstraints, WithdrawPaymentConstraintsSDKType } from "./authz";
 import * as _m0 from "protobufjs/minimal";
 /** CollectionCreatedEvent is an event triggered on a Collection creation */
@@ -190,6 +190,102 @@ export interface MemberBudgetRemovedEvent {
 export interface MemberBudgetRemovedEventSDKType {
     budget?: MemberBudgetSDKType;
 }
+/**
+ * AgentDepositBalanceCreatedEvent is emitted when an agent's
+ * performance-deposit balance is created for the first time (i.e. the first
+ * MsgAddPerformanceDeposit for a given (collection, agent) pair).
+ */
+export interface AgentDepositBalanceCreatedEvent {
+    /**
+     * AgentDepositBalanceCreatedEvent is emitted when an agent's
+     * performance-deposit balance is created for the first time (i.e. the first
+     * MsgAddPerformanceDeposit for a given (collection, agent) pair).
+     */
+    balance?: AgentDepositBalance;
+}
+/**
+ * AgentDepositBalanceCreatedEvent is emitted when an agent's
+ * performance-deposit balance is created for the first time (i.e. the first
+ * MsgAddPerformanceDeposit for a given (collection, agent) pair).
+ */
+export interface AgentDepositBalanceCreatedEventSDKType {
+    balance?: AgentDepositBalanceSDKType;
+}
+/**
+ * AgentDepositBalanceUpdatedEvent is emitted on any state change to an existing
+ * agent performance-deposit balance: subsequent top-up, partial withdrawal, or
+ * slashing on adjudicated dispute loss. Carries the post-state balance. The
+ * indexer can derive the delta by diffing against the previous on-record value;
+ * the reason can be inferred from the enclosing tx's Msg type
+ * (MsgAddPerformanceDeposit / MsgWithdrawPerformanceDeposit /
+ * MsgAdjudicateDispute).
+ */
+export interface AgentDepositBalanceUpdatedEvent {
+    /**
+     * AgentDepositBalanceUpdatedEvent is emitted on any state change to an existing
+     * agent performance-deposit balance: subsequent top-up, partial withdrawal, or
+     * slashing on adjudicated dispute loss. Carries the post-state balance. The
+     * indexer can derive the delta by diffing against the previous on-record value;
+     * the reason can be inferred from the enclosing tx's Msg type
+     * (MsgAddPerformanceDeposit / MsgWithdrawPerformanceDeposit /
+     * MsgAdjudicateDispute).
+     */
+    balance?: AgentDepositBalance;
+}
+/**
+ * AgentDepositBalanceUpdatedEvent is emitted on any state change to an existing
+ * agent performance-deposit balance: subsequent top-up, partial withdrawal, or
+ * slashing on adjudicated dispute loss. Carries the post-state balance. The
+ * indexer can derive the delta by diffing against the previous on-record value;
+ * the reason can be inferred from the enclosing tx's Msg type
+ * (MsgAddPerformanceDeposit / MsgWithdrawPerformanceDeposit /
+ * MsgAdjudicateDispute).
+ */
+export interface AgentDepositBalanceUpdatedEventSDKType {
+    balance?: AgentDepositBalanceSDKType;
+}
+/**
+ * AgentDepositBalanceRemovedEvent is emitted when the agent's balance is fully
+ * drained (full withdrawal or full slash brings amount to zero) and the KV
+ * entry is deleted. Carries the final balance state (with zero amount) so the
+ * indexer can archive the entry. Mirrors MemberBudgetRemovedEvent.
+ */
+export interface AgentDepositBalanceRemovedEvent {
+    /**
+     * AgentDepositBalanceRemovedEvent is emitted when the agent's balance is fully
+     * drained (full withdrawal or full slash brings amount to zero) and the KV
+     * entry is deleted. Carries the final balance state (with zero amount) so the
+     * indexer can archive the entry. Mirrors MemberBudgetRemovedEvent.
+     */
+    balance?: AgentDepositBalance;
+}
+/**
+ * AgentDepositBalanceRemovedEvent is emitted when the agent's balance is fully
+ * drained (full withdrawal or full slash brings amount to zero) and the KV
+ * entry is deleted. Carries the final balance state (with zero amount) so the
+ * indexer can archive the entry. Mirrors MemberBudgetRemovedEvent.
+ */
+export interface AgentDepositBalanceRemovedEventSDKType {
+    balance?: AgentDepositBalanceSDKType;
+}
+/**
+ * DisputeResolvedEvent is emitted when MsgAdjudicateDispute settles a
+ * dispute (AWARDED or DISMISSED).
+ */
+export interface DisputeResolvedEvent {
+    /**
+     * DisputeResolvedEvent is emitted when MsgAdjudicateDispute settles a
+     * dispute (AWARDED or DISMISSED).
+     */
+    dispute?: Dispute;
+}
+/**
+ * DisputeResolvedEvent is emitted when MsgAdjudicateDispute settles a
+ * dispute (AWARDED or DISMISSED).
+ */
+export interface DisputeResolvedEventSDKType {
+    dispute?: DisputeSDKType;
+}
 export declare const CollectionCreatedEvent: {
     encode(message: CollectionCreatedEvent, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): CollectionCreatedEvent;
@@ -287,4 +383,32 @@ export declare const MemberBudgetRemovedEvent: {
     fromJSON(object: any): MemberBudgetRemovedEvent;
     toJSON(message: MemberBudgetRemovedEvent): unknown;
     fromPartial(object: Partial<MemberBudgetRemovedEvent>): MemberBudgetRemovedEvent;
+};
+export declare const AgentDepositBalanceCreatedEvent: {
+    encode(message: AgentDepositBalanceCreatedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): AgentDepositBalanceCreatedEvent;
+    fromJSON(object: any): AgentDepositBalanceCreatedEvent;
+    toJSON(message: AgentDepositBalanceCreatedEvent): unknown;
+    fromPartial(object: Partial<AgentDepositBalanceCreatedEvent>): AgentDepositBalanceCreatedEvent;
+};
+export declare const AgentDepositBalanceUpdatedEvent: {
+    encode(message: AgentDepositBalanceUpdatedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): AgentDepositBalanceUpdatedEvent;
+    fromJSON(object: any): AgentDepositBalanceUpdatedEvent;
+    toJSON(message: AgentDepositBalanceUpdatedEvent): unknown;
+    fromPartial(object: Partial<AgentDepositBalanceUpdatedEvent>): AgentDepositBalanceUpdatedEvent;
+};
+export declare const AgentDepositBalanceRemovedEvent: {
+    encode(message: AgentDepositBalanceRemovedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): AgentDepositBalanceRemovedEvent;
+    fromJSON(object: any): AgentDepositBalanceRemovedEvent;
+    toJSON(message: AgentDepositBalanceRemovedEvent): unknown;
+    fromPartial(object: Partial<AgentDepositBalanceRemovedEvent>): AgentDepositBalanceRemovedEvent;
+};
+export declare const DisputeResolvedEvent: {
+    encode(message: DisputeResolvedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): DisputeResolvedEvent;
+    fromJSON(object: any): DisputeResolvedEvent;
+    toJSON(message: DisputeResolvedEvent): unknown;
+    fromPartial(object: Partial<DisputeResolvedEvent>): DisputeResolvedEvent;
 };

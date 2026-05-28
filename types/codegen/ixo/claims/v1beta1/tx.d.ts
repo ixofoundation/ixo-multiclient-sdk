@@ -1,9 +1,9 @@
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
-import { CollectionState, Payments, PaymentsSDKType, CollectionIntentOptions, CW20Payment, CW20PaymentSDKType, CW1155Payment, CW1155PaymentSDKType, EvaluationStatus, DisputeData, DisputeDataSDKType, PaymentType, Contract1155Payment, Contract1155PaymentSDKType } from "./claims";
+import { CollectionState, Payments, PaymentsSDKType, CollectionIntentOptions, AdjudicationDid, AdjudicationDidSDKType, CW20Payment, CW20PaymentSDKType, CW1155Payment, CW1155PaymentSDKType, EvaluationStatus, DisputeData, DisputeDataSDKType, DisputeTargetRole, PaymentType, Contract1155Payment, Contract1155PaymentSDKType, DisputeStatus } from "./claims";
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
 import { Input, InputSDKType, Output, OutputSDKType } from "../../../cosmos/bank/v1beta1/bank";
 import { CreateClaimAuthorizationType } from "./authz";
-import { Duration, DurationSDKType } from "../../../google/protobuf/duration";
 import { Long } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
 export interface MsgCreateCollection {
@@ -34,6 +34,26 @@ export interface MsgCreateCollection {
      * required)
      */
     intents: CollectionIntentOptions;
+    /**
+     * Optional dispute / performance-deposit config. All zero/empty means
+     * the collection has no deposit gates and no disputes can be adjudicated.
+     * If any deposit/penalty field is set, adjudicators must be non-empty.
+     */
+    serviceAgentDepositRequired: Coin[];
+    evaluatorDepositRequired: Coin[];
+    disputeDepositAmount: Coin[];
+    penaltyAmountPerDispute: Coin[];
+    /**
+     * min_deposit_period locks performance-deposit withdrawals for this
+     * duration after each top-up (see Collection.min_deposit_period). Zero
+     * disables the lock.
+     */
+    minDepositPeriod?: Duration;
+    /**
+     * adjudicators is the whitelist of approved adjudicators, each with their
+     * own reward_percentage (see Collection.adjudicators).
+     */
+    adjudicators: AdjudicationDid[];
 }
 export interface MsgCreateCollectionSDKType {
     entity: string;
@@ -45,6 +65,12 @@ export interface MsgCreateCollectionSDKType {
     state: CollectionState;
     payments?: PaymentsSDKType;
     intents: CollectionIntentOptions;
+    service_agent_deposit_required: CoinSDKType[];
+    evaluator_deposit_required: CoinSDKType[];
+    dispute_deposit_amount: CoinSDKType[];
+    penalty_amount_per_dispute: CoinSDKType[];
+    min_deposit_period?: DurationSDKType;
+    adjudicators: AdjudicationDidSDKType[];
 }
 export interface MsgCreateCollectionResponse {
 }
@@ -188,6 +214,13 @@ export interface MsgDisputeClaim {
     /** type is expressed as an integer, interpreted by the client */
     disputeType: number;
     data?: DisputeData;
+    /**
+     * target_role is the party being disputed (submitter or evaluator).
+     * Exactly one role per dispute. To dispute both parties of the same claim
+     * file two separate disputes. Must be SUBMITTER or EVALUATOR; UNSPECIFIED
+     * is rejected on new txs (only appears on legacy migrated disputes).
+     */
+    targetRole: DisputeTargetRole;
 }
 /**
  * Agent laying dispute must be admin for Collection, or controller on
@@ -199,6 +232,7 @@ export interface MsgDisputeClaimSDKType {
     agent_address: string;
     dispute_type: number;
     data?: DisputeDataSDKType;
+    target_role: DisputeTargetRole;
 }
 export interface MsgDisputeClaimResponse {
 }
@@ -335,6 +369,37 @@ export interface MsgUpdateCollectionIntentsSDKType {
 export interface MsgUpdateCollectionIntentsResponse {
 }
 export interface MsgUpdateCollectionIntentsResponseSDKType {
+}
+/**
+ * MsgUpdateCollectionQuota updates the maximum claim count for a collection.
+ * The new quota must be either zero (unlimited) or ≥ the collection's current
+ * `count` so already-submitted claims are not retroactively invalidated.
+ */
+export interface MsgUpdateCollectionQuota {
+    /** collection_id indicates which Collection to update */
+    collectionId: string;
+    /**
+     * quota is the new maximum number of claims that may be submitted. 0 means
+     * unlimited. Must be 0 or ≥ collection.count (cannot retroactively cap
+     * below already-submitted claims).
+     */
+    quota: Long;
+    /** admin address used to sign this message, validated against Collection Admin */
+    adminAddress: string;
+}
+/**
+ * MsgUpdateCollectionQuota updates the maximum claim count for a collection.
+ * The new quota must be either zero (unlimited) or ≥ the collection's current
+ * `count` so already-submitted claims are not retroactively invalidated.
+ */
+export interface MsgUpdateCollectionQuotaSDKType {
+    collection_id: string;
+    quota: Long;
+    admin_address: string;
+}
+export interface MsgUpdateCollectionQuotaResponse {
+}
+export interface MsgUpdateCollectionQuotaResponseSDKType {
 }
 export interface MsgClaimIntent {
     /** The service agent's DID (Decentralized Identifier). */
@@ -591,6 +656,221 @@ export interface MsgRemoveCollectionMembersResponse {
 }
 export interface MsgRemoveCollectionMembersResponseSDKType {
 }
+/**
+ * MsgUpdateCollectionDisputeConfig updates the dispute / performance-deposit
+ * configuration on a collection. All fields are replacements, not merges —
+ * the caller must send the full desired state. To "clear" a field, send it
+ * empty / zero. The handler enforces:
+ *   - if any deposit-required / penalty / disputer-stake field is non-empty,
+ *     adjudication_entity_dids must be non-empty;
+ *   - penalty_amount_per_dispute (if set) must be ≤ each non-empty
+ *     deposit-required field;
+ *   - adjudicator_reward_percentage in [0, 100].
+ * Changing config does NOT affect in-flight disputes (each dispute
+ * snapshots config it cares about at filing / adjudication time).
+ */
+export interface MsgUpdateCollectionDisputeConfig {
+    collectionId: string;
+    adminAddress: string;
+    serviceAgentDepositRequired: Coin[];
+    evaluatorDepositRequired: Coin[];
+    disputeDepositAmount: Coin[];
+    penaltyAmountPerDispute: Coin[];
+    minDepositPeriod?: Duration;
+    /**
+     * adjudicators is the whitelist of approved adjudicators (see
+     * Collection.adjudicators).
+     */
+    adjudicators: AdjudicationDid[];
+}
+/**
+ * MsgUpdateCollectionDisputeConfig updates the dispute / performance-deposit
+ * configuration on a collection. All fields are replacements, not merges —
+ * the caller must send the full desired state. To "clear" a field, send it
+ * empty / zero. The handler enforces:
+ *   - if any deposit-required / penalty / disputer-stake field is non-empty,
+ *     adjudication_entity_dids must be non-empty;
+ *   - penalty_amount_per_dispute (if set) must be ≤ each non-empty
+ *     deposit-required field;
+ *   - adjudicator_reward_percentage in [0, 100].
+ * Changing config does NOT affect in-flight disputes (each dispute
+ * snapshots config it cares about at filing / adjudication time).
+ */
+export interface MsgUpdateCollectionDisputeConfigSDKType {
+    collection_id: string;
+    admin_address: string;
+    service_agent_deposit_required: CoinSDKType[];
+    evaluator_deposit_required: CoinSDKType[];
+    dispute_deposit_amount: CoinSDKType[];
+    penalty_amount_per_dispute: CoinSDKType[];
+    min_deposit_period?: DurationSDKType;
+    adjudicators: AdjudicationDidSDKType[];
+}
+export interface MsgUpdateCollectionDisputeConfigResponse {
+}
+export interface MsgUpdateCollectionDisputeConfigResponseSDKType {
+}
+/**
+ * MsgAddPerformanceDeposit tops up an agent's performance-deposit balance on
+ * a collection. Funds move from agent_address → collection.escrow_account.
+ * Permitted regardless of whether the agent currently has active disputes —
+ * only withdrawals and new submissions are gated.
+ */
+export interface MsgAddPerformanceDeposit {
+    collectionId: string;
+    /**
+     * agent_address is the owner of the balance being topped up; also the
+     * payer. Anyone can fund their own balance on any collection (no authz
+     * grant required from the collection admin).
+     */
+    agentAddress: string;
+    amount: Coin[];
+}
+/**
+ * MsgAddPerformanceDeposit tops up an agent's performance-deposit balance on
+ * a collection. Funds move from agent_address → collection.escrow_account.
+ * Permitted regardless of whether the agent currently has active disputes —
+ * only withdrawals and new submissions are gated.
+ */
+export interface MsgAddPerformanceDepositSDKType {
+    collection_id: string;
+    agent_address: string;
+    amount: CoinSDKType[];
+}
+export interface MsgAddPerformanceDepositResponse {
+    /** new_balance is the agent's resulting balance after this top-up. */
+    newBalance: Coin[];
+}
+export interface MsgAddPerformanceDepositResponseSDKType {
+    new_balance: CoinSDKType[];
+}
+/**
+ * MsgWithdrawPerformanceDeposit pulls some / all of an agent's
+ * performance-deposit balance back to their wallet. Rejected if the agent
+ * has any OPEN dispute targeting them on this collection. Partial
+ * withdrawal supported.
+ */
+export interface MsgWithdrawPerformanceDeposit {
+    collectionId: string;
+    agentAddress: string;
+    /**
+     * amount to withdraw. Must be ≤ current balance. If empty, withdraws the
+     * full current balance.
+     */
+    amount: Coin[];
+}
+/**
+ * MsgWithdrawPerformanceDeposit pulls some / all of an agent's
+ * performance-deposit balance back to their wallet. Rejected if the agent
+ * has any OPEN dispute targeting them on this collection. Partial
+ * withdrawal supported.
+ */
+export interface MsgWithdrawPerformanceDepositSDKType {
+    collection_id: string;
+    agent_address: string;
+    amount: CoinSDKType[];
+}
+export interface MsgWithdrawPerformanceDepositResponse {
+    withdrawn: Coin[];
+    remainingBalance: Coin[];
+}
+export interface MsgWithdrawPerformanceDepositResponseSDKType {
+    withdrawn: CoinSDKType[];
+    remaining_balance: CoinSDKType[];
+}
+/**
+ * MsgAdjudicateDispute settles a dispute. Signed by adjudicator_address,
+ * which must be either an EntityAccount belonging to adjudicator_did, OR a
+ * key registered on the adjudicator_did DID document (capability invocation
+ * / authentication verification method). adjudicator_did must be in the
+ * collection's adjudication_entity_dids whitelist.
+ *
+ * AWARDED: loser is the targeted agent of the dispute. Penalty is debited
+ * from their AgentDepositBalance (capped at available). 80% (by default)
+ * goes to the disputer, 20% to the adjudicator payout address. The
+ * disputer's dispute_deposit is returned to them in full.
+ *
+ * DISMISSED: loser is the disputer. The disputer's dispute_deposit is the
+ * pot. 80% goes to the targeted agent (vindicated), 20% to the adjudicator
+ * payout address.
+ *
+ * The penalty amount may be left empty by the caller if the collection has
+ * penalty_amount_per_dispute set, in which case the collection value is
+ * used. Otherwise the caller must supply a penalty bounded by the loser's
+ * deposit-required (or dispute_deposit_amount for DISMISSED).
+ */
+export interface MsgAdjudicateDispute {
+    /** subject_id of the dispute being adjudicated. */
+    subjectId: string;
+    /**
+     * target_role of the dispute being adjudicated. Together with subject_id,
+     * identifies the dispute uniquely (one OPEN dispute per pair).
+     */
+    targetRole: DisputeTargetRole;
+    /** adjudicator_did must be in collection.adjudication_entity_dids. */
+    adjudicatorDid: string;
+    /**
+     * adjudicator_address is the signer. Must be authorized by adjudicator_did
+     * (entity account OR DID-registered key).
+     */
+    adjudicatorAddress: string;
+    /** outcome must be AWARDED or DISMISSED; OPEN is rejected. */
+    outcome: DisputeStatus;
+    /**
+     * data is the structured payload the adjudicator wants recorded on the
+     * resolution — symmetric with MsgDisputeClaim.data. The keeper stores
+     * this verbatim on DisputeResolution.data, so adjudicators can pin a
+     * signed opinion doc (IPFS/matrix uri + proof/cid), declare its MIME type,
+     * and flag encryption.
+     */
+    data?: DisputeData;
+    /**
+     * penalty_amount: if collection has a fixed penalty_amount_per_dispute,
+     * this field is ignored. Otherwise must be set and ≤ loser's role
+     * deposit-required (AWARDED) or ≤ dispute_deposit_amount (DISMISSED).
+     */
+    penaltyAmount: Coin[];
+}
+/**
+ * MsgAdjudicateDispute settles a dispute. Signed by adjudicator_address,
+ * which must be either an EntityAccount belonging to adjudicator_did, OR a
+ * key registered on the adjudicator_did DID document (capability invocation
+ * / authentication verification method). adjudicator_did must be in the
+ * collection's adjudication_entity_dids whitelist.
+ *
+ * AWARDED: loser is the targeted agent of the dispute. Penalty is debited
+ * from their AgentDepositBalance (capped at available). 80% (by default)
+ * goes to the disputer, 20% to the adjudicator payout address. The
+ * disputer's dispute_deposit is returned to them in full.
+ *
+ * DISMISSED: loser is the disputer. The disputer's dispute_deposit is the
+ * pot. 80% goes to the targeted agent (vindicated), 20% to the adjudicator
+ * payout address.
+ *
+ * The penalty amount may be left empty by the caller if the collection has
+ * penalty_amount_per_dispute set, in which case the collection value is
+ * used. Otherwise the caller must supply a penalty bounded by the loser's
+ * deposit-required (or dispute_deposit_amount for DISMISSED).
+ */
+export interface MsgAdjudicateDisputeSDKType {
+    subject_id: string;
+    target_role: DisputeTargetRole;
+    adjudicator_did: string;
+    adjudicator_address: string;
+    outcome: DisputeStatus;
+    data?: DisputeDataSDKType;
+    penalty_amount: CoinSDKType[];
+}
+export interface MsgAdjudicateDisputeResponse {
+    /**
+     * actual_penalty_paid is what was actually slashed; may be less than the
+     * intended penalty if the loser's balance was insufficient.
+     */
+    actualPenaltyPaid: Coin[];
+}
+export interface MsgAdjudicateDisputeResponseSDKType {
+    actual_penalty_paid: CoinSDKType[];
+}
 export declare const MsgCreateCollection: {
     encode(message: MsgCreateCollection, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateCollection;
@@ -717,6 +997,20 @@ export declare const MsgUpdateCollectionIntentsResponse: {
     toJSON(_: MsgUpdateCollectionIntentsResponse): unknown;
     fromPartial(_: Partial<MsgUpdateCollectionIntentsResponse>): MsgUpdateCollectionIntentsResponse;
 };
+export declare const MsgUpdateCollectionQuota: {
+    encode(message: MsgUpdateCollectionQuota, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionQuota;
+    fromJSON(object: any): MsgUpdateCollectionQuota;
+    toJSON(message: MsgUpdateCollectionQuota): unknown;
+    fromPartial(object: Partial<MsgUpdateCollectionQuota>): MsgUpdateCollectionQuota;
+};
+export declare const MsgUpdateCollectionQuotaResponse: {
+    encode(_: MsgUpdateCollectionQuotaResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionQuotaResponse;
+    fromJSON(_: any): MsgUpdateCollectionQuotaResponse;
+    toJSON(_: MsgUpdateCollectionQuotaResponse): unknown;
+    fromPartial(_: Partial<MsgUpdateCollectionQuotaResponse>): MsgUpdateCollectionQuotaResponse;
+};
 export declare const MsgClaimIntent: {
     encode(message: MsgClaimIntent, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): MsgClaimIntent;
@@ -779,4 +1073,60 @@ export declare const MsgRemoveCollectionMembersResponse: {
     fromJSON(_: any): MsgRemoveCollectionMembersResponse;
     toJSON(_: MsgRemoveCollectionMembersResponse): unknown;
     fromPartial(_: Partial<MsgRemoveCollectionMembersResponse>): MsgRemoveCollectionMembersResponse;
+};
+export declare const MsgUpdateCollectionDisputeConfig: {
+    encode(message: MsgUpdateCollectionDisputeConfig, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionDisputeConfig;
+    fromJSON(object: any): MsgUpdateCollectionDisputeConfig;
+    toJSON(message: MsgUpdateCollectionDisputeConfig): unknown;
+    fromPartial(object: Partial<MsgUpdateCollectionDisputeConfig>): MsgUpdateCollectionDisputeConfig;
+};
+export declare const MsgUpdateCollectionDisputeConfigResponse: {
+    encode(_: MsgUpdateCollectionDisputeConfigResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateCollectionDisputeConfigResponse;
+    fromJSON(_: any): MsgUpdateCollectionDisputeConfigResponse;
+    toJSON(_: MsgUpdateCollectionDisputeConfigResponse): unknown;
+    fromPartial(_: Partial<MsgUpdateCollectionDisputeConfigResponse>): MsgUpdateCollectionDisputeConfigResponse;
+};
+export declare const MsgAddPerformanceDeposit: {
+    encode(message: MsgAddPerformanceDeposit, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddPerformanceDeposit;
+    fromJSON(object: any): MsgAddPerformanceDeposit;
+    toJSON(message: MsgAddPerformanceDeposit): unknown;
+    fromPartial(object: Partial<MsgAddPerformanceDeposit>): MsgAddPerformanceDeposit;
+};
+export declare const MsgAddPerformanceDepositResponse: {
+    encode(message: MsgAddPerformanceDepositResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddPerformanceDepositResponse;
+    fromJSON(object: any): MsgAddPerformanceDepositResponse;
+    toJSON(message: MsgAddPerformanceDepositResponse): unknown;
+    fromPartial(object: Partial<MsgAddPerformanceDepositResponse>): MsgAddPerformanceDepositResponse;
+};
+export declare const MsgWithdrawPerformanceDeposit: {
+    encode(message: MsgWithdrawPerformanceDeposit, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgWithdrawPerformanceDeposit;
+    fromJSON(object: any): MsgWithdrawPerformanceDeposit;
+    toJSON(message: MsgWithdrawPerformanceDeposit): unknown;
+    fromPartial(object: Partial<MsgWithdrawPerformanceDeposit>): MsgWithdrawPerformanceDeposit;
+};
+export declare const MsgWithdrawPerformanceDepositResponse: {
+    encode(message: MsgWithdrawPerformanceDepositResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgWithdrawPerformanceDepositResponse;
+    fromJSON(object: any): MsgWithdrawPerformanceDepositResponse;
+    toJSON(message: MsgWithdrawPerformanceDepositResponse): unknown;
+    fromPartial(object: Partial<MsgWithdrawPerformanceDepositResponse>): MsgWithdrawPerformanceDepositResponse;
+};
+export declare const MsgAdjudicateDispute: {
+    encode(message: MsgAdjudicateDispute, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgAdjudicateDispute;
+    fromJSON(object: any): MsgAdjudicateDispute;
+    toJSON(message: MsgAdjudicateDispute): unknown;
+    fromPartial(object: Partial<MsgAdjudicateDispute>): MsgAdjudicateDispute;
+};
+export declare const MsgAdjudicateDisputeResponse: {
+    encode(message: MsgAdjudicateDisputeResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgAdjudicateDisputeResponse;
+    fromJSON(object: any): MsgAdjudicateDisputeResponse;
+    toJSON(message: MsgAdjudicateDisputeResponse): unknown;
+    fromPartial(object: Partial<MsgAdjudicateDisputeResponse>): MsgAdjudicateDisputeResponse;
 };

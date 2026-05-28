@@ -100,6 +100,46 @@ export declare enum PaymentStatus {
 export declare const PaymentStatusSDKType: typeof PaymentStatus;
 export declare function paymentStatusFromJSON(object: any): PaymentStatus;
 export declare function paymentStatusToJSON(object: PaymentStatus): string;
+/**
+ * DisputeTargetRole identifies which party of a claim a dispute is filed
+ * against. A dispute targets exactly one role; to dispute both the submitter
+ * and the evaluator of the same claim, file two separate disputes.
+ */
+export declare enum DisputeTargetRole {
+    DISPUTE_TARGET_ROLE_UNSPECIFIED = 0,
+    /** DISPUTE_TARGET_ROLE_SUBMITTER - Submitter: the service agent that submitted the claim */
+    DISPUTE_TARGET_ROLE_SUBMITTER = 1,
+    /** DISPUTE_TARGET_ROLE_EVALUATOR - Evaluator: the evaluation agent that evaluated the claim */
+    DISPUTE_TARGET_ROLE_EVALUATOR = 2,
+    UNRECOGNIZED = -1
+}
+export declare const DisputeTargetRoleSDKType: typeof DisputeTargetRole;
+export declare function disputeTargetRoleFromJSON(object: any): DisputeTargetRole;
+export declare function disputeTargetRoleToJSON(object: DisputeTargetRole): string;
+/** DisputeStatus is the lifecycle state of a dispute. */
+export declare enum DisputeStatus {
+    /**
+     * DISPUTE_STATUS_OPEN - Open: dispute has been filed and is awaiting adjudication. Targeted
+     * agent is blocked from submitting / withdrawing on this collection until
+     * resolved.
+     */
+    DISPUTE_STATUS_OPEN = 0,
+    /**
+     * DISPUTE_STATUS_AWARDED - Awarded: dispute upheld; the targeted party was found in the wrong.
+     * No further disputes against this (subject_id, target_role) are allowed.
+     */
+    DISPUTE_STATUS_AWARDED = 1,
+    /**
+     * DISPUTE_STATUS_DISMISSED - Dismissed: dispute rejected; targeted party was vindicated.
+     * Other parties may file new disputes against the same (subject_id,
+     * target_role) with new evidence.
+     */
+    DISPUTE_STATUS_DISMISSED = 2,
+    UNRECOGNIZED = -1
+}
+export declare const DisputeStatusSDKType: typeof DisputeStatus;
+export declare function disputeStatusFromJSON(object: any): DisputeStatus;
+export declare function disputeStatusToJSON(object: DisputeStatus): string;
 export interface Params {
     collectionSequence: Long;
     ixoAccount: string;
@@ -113,6 +153,39 @@ export interface ParamsSDKType {
     network_fee_percentage: string;
     node_fee_percentage: string;
     intent_sequence: Long;
+}
+/**
+ * AdjudicationDid represents a single adjudicator entry on a Collection's
+ * dispute whitelist. Each entry pairs a DID with its own reward percentage —
+ * adjudicators self-set their fee, turning adjudication into a competitive
+ * market (lower-fee adjudicators may attract more volume, higher-fee may
+ * trade on reputation). The chain does not enforce who adjudicates a given
+ * dispute; whichever whitelisted DID submits MsgAdjudicateDispute first wins.
+ */
+export interface AdjudicationDid {
+    /**
+     * did is the adjudicator's DID. Must appear in this list to be allowed
+     * to settle disputes on the collection.
+     */
+    did: string;
+    /**
+     * reward_percentage is the share (LegacyDec, range [0, 100]) of each
+     * actual penalty payout that goes to THIS adjudicator when they settle a
+     * dispute. The remainder goes to the dispute winner.
+     */
+    rewardPercentage: string;
+}
+/**
+ * AdjudicationDid represents a single adjudicator entry on a Collection's
+ * dispute whitelist. Each entry pairs a DID with its own reward percentage —
+ * adjudicators self-set their fee, turning adjudication into a competitive
+ * market (lower-fee adjudicators may attract more volume, higher-fee may
+ * trade on reputation). The chain does not enforce who adjudicates a given
+ * dispute; whichever whitelisted DID submits MsgAdjudicateDispute first wins.
+ */
+export interface AdjudicationDidSDKType {
+    did: string;
+    reward_percentage: string;
 }
 export interface Collection {
     /** collection id is the incremented internal id for the collection of claims */
@@ -194,6 +267,68 @@ export interface Collection {
      * transitions to a terminal evaluation status).
      */
     flaggedActive: Long;
+    /**
+     * service_agent_deposit_required is the minimum performance deposit balance
+     * a service agent must hold on this collection to submit claims. Empty /
+     * zero means no deposit gate for service agents.
+     */
+    serviceAgentDepositRequired: Coin[];
+    /**
+     * evaluator_deposit_required is the minimum performance deposit balance an
+     * evaluator must hold on this collection to submit evaluations. Empty /
+     * zero means no deposit gate for evaluators.
+     */
+    evaluatorDepositRequired: Coin[];
+    /**
+     * dispute_deposit_amount is the stake a disputer attaches to MsgDisputeClaim.
+     * Held with the dispute record; refunded on AWARDED; becomes the penalty
+     * pot on DISMISSED. Empty / zero means no disputer stake required.
+     */
+    disputeDepositAmount: Coin[];
+    /**
+     * penalty_amount_per_dispute is the fixed penalty applied on AWARDED. If
+     * empty / zero, the adjudicator sets the penalty per-resolution (bounded by
+     * the loser's deposit-required amount). At collection-validation time, if
+     * set, must be ≤ each non-empty deposit-required field.
+     */
+    penaltyAmountPerDispute: Coin[];
+    /**
+     * disputes_open is the number of currently-OPEN disputes against any
+     * claim in this collection (internally calculated).
+     */
+    disputesOpen: Long;
+    /**
+     * disputes_awarded is the cumulative number of disputes ever resolved as
+     * AWARDED on this collection (internally calculated, never decremented).
+     */
+    disputesAwarded: Long;
+    /**
+     * disputes_dismissed is the cumulative number of disputes ever resolved as
+     * DISMISSED on this collection (internally calculated, never decremented).
+     */
+    disputesDismissed: Long;
+    /**
+     * min_deposit_period is the minimum duration a performance deposit must
+     * remain locked after the most recent top-up before
+     * MsgWithdrawPerformanceDeposit can be issued. Closes the in-same-tx exploit
+     * where an agent could deposit, submit/evaluate, and withdraw atomically —
+     * leaving zero economic stake at dispute time. Set to zero duration to
+     * disable the lock. Each MsgAddPerformanceDeposit rolls
+     * AgentDepositBalance.withdrawable_at forward to max(current, now +
+     * min_deposit_period); the slash path is not gated by this lock.
+     */
+    minDepositPeriod?: Duration;
+    /**
+     * adjudicators is the whitelist of approved adjudicator DIDs paired with
+     * their reward percentages. Each entry carries its own reward_percentage,
+     * letting adjudicators self-set their fees (a competitive market). The
+     * chain does not enforce who adjudicates a given dispute — whichever
+     * whitelisted DID lands MsgAdjudicateDispute first wins; the percentage
+     * applied is that adjudicator's entry. Required to be non-empty if any
+     * deposit-required / dispute_deposit / penalty field is set; clearing
+     * it is blocked while disputes_open > 0.
+     */
+    adjudicators: AdjudicationDid[];
 }
 export interface CollectionSDKType {
     id: string;
@@ -216,6 +351,15 @@ export interface CollectionSDKType {
     intents: CollectionIntentOptions;
     flagged: Long;
     flagged_active: Long;
+    service_agent_deposit_required: CoinSDKType[];
+    evaluator_deposit_required: CoinSDKType[];
+    dispute_deposit_amount: CoinSDKType[];
+    penalty_amount_per_dispute: CoinSDKType[];
+    disputes_open: Long;
+    disputes_awarded: Long;
+    disputes_dismissed: Long;
+    min_deposit_period?: DurationSDKType;
+    adjudicators: AdjudicationDidSDKType[];
 }
 export interface Payments {
     submission?: Payment;
@@ -489,11 +633,46 @@ export interface Dispute {
     /** type is expressed as an integer, interpreted by the client */
     type: number;
     data?: DisputeData;
+    /**
+     * target_role is the party of the claim this dispute is filed against
+     * (submitter or evaluator). Exactly one role per dispute; to dispute both
+     * parties of the same claim, file two disputes. UNSPECIFIED only appears
+     * on legacy disputes migrated from pre-v7 state.
+     */
+    targetRole: DisputeTargetRole;
+    /**
+     * disputer_address is the account that filed the dispute and locked the
+     * dispute_deposit. Receives the deposit back on AWARDED, or 80% of the
+     * penalty (loser balance) on AWARDED; loses the deposit (split 80/20
+     * with adjudicator) on DISMISSED.
+     */
+    disputerAddress: string;
+    /** disputer_did is the DID of the disputer at filing time. */
+    disputerDid: string;
+    /**
+     * dispute_deposit is the amount the disputer locked at filing, equal to
+     * collection.dispute_deposit_amount at the time of filing. Held in the
+     * collection escrow account.
+     */
+    disputeDeposit: Coin[];
+    /** submitted_at is the block time the dispute was filed. */
+    submittedAt?: Timestamp;
+    /** status is the current lifecycle state. */
+    status: DisputeStatus;
+    /** resolution is populated on adjudication (AWARDED or DISMISSED). */
+    resolution?: DisputeResolution;
 }
 export interface DisputeSDKType {
     subject_id: string;
     type: number;
     data?: DisputeDataSDKType;
+    target_role: DisputeTargetRole;
+    disputer_address: string;
+    disputer_did: string;
+    dispute_deposit: CoinSDKType[];
+    submitted_at?: TimestampSDKType;
+    status: DisputeStatus;
+    resolution?: DisputeResolutionSDKType;
 }
 export interface DisputeData {
     /** dispute link ***.ipfs */
@@ -507,6 +686,123 @@ export interface DisputeDataSDKType {
     type: string;
     proof: string;
     encrypted: boolean;
+}
+/**
+ * DisputeResolution captures the outcome of MsgAdjudicateDispute. Records
+ * the intended penalty (what the adjudicator/collection prescribed) and the
+ * actual penalty paid (capped at the loser's available deposit balance —
+ * may be less than intended if a prior dispute already drained the balance).
+ */
+export interface DisputeResolution {
+    /**
+     * adjudicator_did is the DID that adjudicated; must be in the collection's
+     * adjudication_entity_dids whitelist.
+     */
+    adjudicatorDid: string;
+    /**
+     * adjudicator_address is the signer of MsgAdjudicateDispute. Either an
+     * entity account belonging to adjudicator_did, or a key registered on the
+     * adjudicator_did DID document.
+     */
+    adjudicatorAddress: string;
+    /**
+     * adjudicator_payout_address is where the 20% reward (or 100% if no
+     * winner share) was actually paid out — either the AdjudicatorRevenue
+     * entity account (auto-created) when the DID is an entity DID with module
+     * accounts, or adjudicator_address otherwise.
+     */
+    adjudicatorPayoutAddress: string;
+    resolvedAt?: Timestamp;
+    /**
+     * data is the structured payload the adjudicator attached to the
+     * resolution — same shape as the dispute filing's DisputeData. Lets the
+     * adjudicator pin an opinion document (IPFS/matrix uri + proof/cid), declare
+     * its MIME type, and flag encryption — mirroring how disputers attach
+     * evidence at filing time.
+     */
+    data?: DisputeData;
+    /**
+     * intended_penalty is the penalty the adjudicator selected (or the
+     * collection's penalty_amount_per_dispute if fixed). May exceed what was
+     * actually paid if the loser's balance was insufficient.
+     */
+    intendedPenalty: Coin[];
+    /**
+     * actual_penalty_paid is what was actually slashed from the loser's
+     * balance (or the dispute_deposit, on DISMISSED). Always ≤ intended.
+     */
+    actualPenaltyPaid: Coin[];
+    /**
+     * winner_amount is the portion of actual_penalty_paid that went to the
+     * dispute winner (disputer on AWARDED, target agent on DISMISSED).
+     */
+    winnerAmount: Coin[];
+    /**
+     * adjudicator_amount is the portion of actual_penalty_paid that went to
+     * the adjudicator (governed by collection.adjudicator_reward_percentage).
+     */
+    adjudicatorAmount: Coin[];
+    /** winner_address is the address that received the winner_amount. */
+    winnerAddress: string;
+    /** loser_address is the address whose balance / deposit was slashed. */
+    loserAddress: string;
+}
+/**
+ * DisputeResolution captures the outcome of MsgAdjudicateDispute. Records
+ * the intended penalty (what the adjudicator/collection prescribed) and the
+ * actual penalty paid (capped at the loser's available deposit balance —
+ * may be less than intended if a prior dispute already drained the balance).
+ */
+export interface DisputeResolutionSDKType {
+    adjudicator_did: string;
+    adjudicator_address: string;
+    adjudicator_payout_address: string;
+    resolved_at?: TimestampSDKType;
+    data?: DisputeDataSDKType;
+    intended_penalty: CoinSDKType[];
+    actual_penalty_paid: CoinSDKType[];
+    winner_amount: CoinSDKType[];
+    adjudicator_amount: CoinSDKType[];
+    winner_address: string;
+    loser_address: string;
+}
+/**
+ * AgentDepositBalance is an agent's rolling performance-deposit balance for
+ * a single collection. Held inside the collection's existing escrow account
+ * (no separate escrow). Topped up via MsgAddPerformanceDeposit, drained on
+ * adjudicated dispute losses, withdrawable when no active dispute targets
+ * this agent on this collection.
+ */
+export interface AgentDepositBalance {
+    /** collection_id this balance belongs to. */
+    collectionId: string;
+    /** agent_address is the account this balance is held for. */
+    agentAddress: string;
+    /** amount is the current balance in escrow on this agent's behalf. */
+    amount: Coin[];
+    /**
+     * withdrawable_at is the earliest block time at which
+     * MsgWithdrawPerformanceDeposit may be issued against this balance. Rolled
+     * forward to max(current, now + collection.min_deposit_period) on each
+     * top-up so an agent cannot deposit + submit + withdraw atomically and
+     * leave nothing at stake before a dispute can land. Zero on balances
+     * created under a collection with min_deposit_period == 0 (no lock).
+     * The slash path is not gated by this lock; only voluntary withdrawal is.
+     */
+    withdrawableAt?: Timestamp;
+}
+/**
+ * AgentDepositBalance is an agent's rolling performance-deposit balance for
+ * a single collection. Held inside the collection's existing escrow account
+ * (no separate escrow). Topped up via MsgAddPerformanceDeposit, drained on
+ * adjudicated dispute losses, withdrawable when no active dispute targets
+ * this agent on this collection.
+ */
+export interface AgentDepositBalanceSDKType {
+    collection_id: string;
+    agent_address: string;
+    amount: CoinSDKType[];
+    withdrawable_at?: TimestampSDKType;
 }
 /** Intent defines the structure for a service agent's claim intent. */
 export interface Intent {
@@ -621,6 +917,13 @@ export declare const Params: {
     toJSON(message: Params): unknown;
     fromPartial(object: Partial<Params>): Params;
 };
+export declare const AdjudicationDid: {
+    encode(message: AdjudicationDid, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): AdjudicationDid;
+    fromJSON(object: any): AdjudicationDid;
+    toJSON(message: AdjudicationDid): unknown;
+    fromPartial(object: Partial<AdjudicationDid>): AdjudicationDid;
+};
 export declare const Collection: {
     encode(message: Collection, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): Collection;
@@ -718,6 +1021,20 @@ export declare const DisputeData: {
     fromJSON(object: any): DisputeData;
     toJSON(message: DisputeData): unknown;
     fromPartial(object: Partial<DisputeData>): DisputeData;
+};
+export declare const DisputeResolution: {
+    encode(message: DisputeResolution, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): DisputeResolution;
+    fromJSON(object: any): DisputeResolution;
+    toJSON(message: DisputeResolution): unknown;
+    fromPartial(object: Partial<DisputeResolution>): DisputeResolution;
+};
+export declare const AgentDepositBalance: {
+    encode(message: AgentDepositBalance, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): AgentDepositBalance;
+    fromJSON(object: any): AgentDepositBalance;
+    toJSON(message: AgentDepositBalance): unknown;
+    fromPartial(object: Partial<AgentDepositBalance>): AgentDepositBalance;
 };
 export declare const Intent: {
     encode(message: Intent, writer?: _m0.Writer): _m0.Writer;

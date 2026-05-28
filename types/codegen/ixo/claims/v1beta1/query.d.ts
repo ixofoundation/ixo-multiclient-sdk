@@ -1,5 +1,5 @@
 import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType, MemberBudget, MemberBudgetSDKType } from "./claims";
+import { DisputeTargetRole, Params, ParamsSDKType, Collection, CollectionSDKType, Claim, ClaimSDKType, Dispute, DisputeSDKType, Intent, IntentSDKType, MemberBudget, MemberBudgetSDKType, AgentDepositBalance, AgentDepositBalanceSDKType } from "./claims";
 import * as _m0 from "protobufjs/minimal";
 export interface QueryParamsRequest {
 }
@@ -148,6 +148,62 @@ export interface QueryCollectionMemberListResponse {
 }
 export interface QueryCollectionMemberListResponseSDKType {
     member_budgets: MemberBudgetSDKType[];
+    pagination?: PageResponseSDKType;
+}
+export interface QueryDisputeBySubjectRequest {
+    subjectId: string;
+    targetRole: DisputeTargetRole;
+}
+export interface QueryDisputeBySubjectRequestSDKType {
+    subjectId: string;
+    targetRole: DisputeTargetRole;
+}
+export interface QueryDisputeBySubjectResponse {
+    dispute?: Dispute;
+}
+export interface QueryDisputeBySubjectResponseSDKType {
+    dispute?: DisputeSDKType;
+}
+export interface QueryDisputeListForSubjectRequest {
+    subjectId: string;
+}
+export interface QueryDisputeListForSubjectRequestSDKType {
+    subjectId: string;
+}
+export interface QueryDisputeListForSubjectResponse {
+    disputes: Dispute[];
+}
+export interface QueryDisputeListForSubjectResponseSDKType {
+    disputes: DisputeSDKType[];
+}
+export interface QueryAgentDepositBalanceRequest {
+    collectionId: string;
+    agentAddress: string;
+}
+export interface QueryAgentDepositBalanceRequestSDKType {
+    collectionId: string;
+    agentAddress: string;
+}
+export interface QueryAgentDepositBalanceResponse {
+    balance?: AgentDepositBalance;
+}
+export interface QueryAgentDepositBalanceResponseSDKType {
+    balance?: AgentDepositBalanceSDKType;
+}
+export interface QueryAgentDepositBalanceListRequest {
+    collectionId: string;
+    pagination?: PageRequest;
+}
+export interface QueryAgentDepositBalanceListRequestSDKType {
+    collectionId: string;
+    pagination?: PageRequestSDKType;
+}
+export interface QueryAgentDepositBalanceListResponse {
+    balances: AgentDepositBalance[];
+    pagination?: PageResponse;
+}
+export interface QueryAgentDepositBalanceListResponseSDKType {
+    balances: AgentDepositBalanceSDKType[];
     pagination?: PageResponseSDKType;
 }
 export declare const QueryParamsRequest: {
@@ -303,4 +359,60 @@ export declare const QueryCollectionMemberListResponse: {
     fromJSON(object: any): QueryCollectionMemberListResponse;
     toJSON(message: QueryCollectionMemberListResponse): unknown;
     fromPartial(object: Partial<QueryCollectionMemberListResponse>): QueryCollectionMemberListResponse;
+};
+export declare const QueryDisputeBySubjectRequest: {
+    encode(message: QueryDisputeBySubjectRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryDisputeBySubjectRequest;
+    fromJSON(object: any): QueryDisputeBySubjectRequest;
+    toJSON(message: QueryDisputeBySubjectRequest): unknown;
+    fromPartial(object: Partial<QueryDisputeBySubjectRequest>): QueryDisputeBySubjectRequest;
+};
+export declare const QueryDisputeBySubjectResponse: {
+    encode(message: QueryDisputeBySubjectResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryDisputeBySubjectResponse;
+    fromJSON(object: any): QueryDisputeBySubjectResponse;
+    toJSON(message: QueryDisputeBySubjectResponse): unknown;
+    fromPartial(object: Partial<QueryDisputeBySubjectResponse>): QueryDisputeBySubjectResponse;
+};
+export declare const QueryDisputeListForSubjectRequest: {
+    encode(message: QueryDisputeListForSubjectRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryDisputeListForSubjectRequest;
+    fromJSON(object: any): QueryDisputeListForSubjectRequest;
+    toJSON(message: QueryDisputeListForSubjectRequest): unknown;
+    fromPartial(object: Partial<QueryDisputeListForSubjectRequest>): QueryDisputeListForSubjectRequest;
+};
+export declare const QueryDisputeListForSubjectResponse: {
+    encode(message: QueryDisputeListForSubjectResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryDisputeListForSubjectResponse;
+    fromJSON(object: any): QueryDisputeListForSubjectResponse;
+    toJSON(message: QueryDisputeListForSubjectResponse): unknown;
+    fromPartial(object: Partial<QueryDisputeListForSubjectResponse>): QueryDisputeListForSubjectResponse;
+};
+export declare const QueryAgentDepositBalanceRequest: {
+    encode(message: QueryAgentDepositBalanceRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryAgentDepositBalanceRequest;
+    fromJSON(object: any): QueryAgentDepositBalanceRequest;
+    toJSON(message: QueryAgentDepositBalanceRequest): unknown;
+    fromPartial(object: Partial<QueryAgentDepositBalanceRequest>): QueryAgentDepositBalanceRequest;
+};
+export declare const QueryAgentDepositBalanceResponse: {
+    encode(message: QueryAgentDepositBalanceResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryAgentDepositBalanceResponse;
+    fromJSON(object: any): QueryAgentDepositBalanceResponse;
+    toJSON(message: QueryAgentDepositBalanceResponse): unknown;
+    fromPartial(object: Partial<QueryAgentDepositBalanceResponse>): QueryAgentDepositBalanceResponse;
+};
+export declare const QueryAgentDepositBalanceListRequest: {
+    encode(message: QueryAgentDepositBalanceListRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryAgentDepositBalanceListRequest;
+    fromJSON(object: any): QueryAgentDepositBalanceListRequest;
+    toJSON(message: QueryAgentDepositBalanceListRequest): unknown;
+    fromPartial(object: Partial<QueryAgentDepositBalanceListRequest>): QueryAgentDepositBalanceListRequest;
+};
+export declare const QueryAgentDepositBalanceListResponse: {
+    encode(message: QueryAgentDepositBalanceListResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryAgentDepositBalanceListResponse;
+    fromJSON(object: any): QueryAgentDepositBalanceListResponse;
+    toJSON(message: QueryAgentDepositBalanceListResponse): unknown;
+    fromPartial(object: Partial<QueryAgentDepositBalanceListResponse>): QueryAgentDepositBalanceListResponse;
 };

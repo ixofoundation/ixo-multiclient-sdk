@@ -1,5 +1,5 @@
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { ModuleParams, ModuleParamsSDKType, WhitelistedValidator, WhitelistedValidatorSDKType, WeightedAddress, WeightedAddressSDKType } from "./liquidstake";
+import { ModuleParams, ModuleParamsSDKType, WhitelistedValidator, WhitelistedValidatorSDKType, WeightedAddress, WeightedAddressSDKType, Params, ParamsSDKType } from "./liquidstake";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import * as _m0 from "protobufjs/minimal";
 /** MsgLiquidStake liquid-stakes native tokens into a specific pool. */
@@ -287,6 +287,28 @@ export interface MsgBurnResponse {
 }
 export interface MsgBurnResponseSDKType {
 }
+/**
+ * MsgUpdateParams (pre-v7) updated the single-pool global Params record.
+ * In v7 this is replaced by MsgUpdateModuleParams + MsgCreatePool /
+ * MsgUpdatePool, but historical pre-upgrade txs still contain this type.
+ */
+export interface MsgUpdateParams {
+    authority: string;
+    params?: Params;
+}
+/**
+ * MsgUpdateParams (pre-v7) updated the single-pool global Params record.
+ * In v7 this is replaced by MsgUpdateModuleParams + MsgCreatePool /
+ * MsgUpdatePool, but historical pre-upgrade txs still contain this type.
+ */
+export interface MsgUpdateParamsSDKType {
+    authority: string;
+    params?: ParamsSDKType;
+}
+export interface MsgUpdateParamsResponse {
+}
+export interface MsgUpdateParamsResponseSDKType {
+}
 export declare const MsgLiquidStake: {
     encode(message: MsgLiquidStake, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): MsgLiquidStake;
@@ -426,4 +448,18 @@ export declare const MsgBurnResponse: {
     fromJSON(_: any): MsgBurnResponse;
     toJSON(_: MsgBurnResponse): unknown;
     fromPartial(_: Partial<MsgBurnResponse>): MsgBurnResponse;
+};
+export declare const MsgUpdateParams: {
+    encode(message: MsgUpdateParams, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams;
+    fromJSON(object: any): MsgUpdateParams;
+    toJSON(message: MsgUpdateParams): unknown;
+    fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams;
+};
+export declare const MsgUpdateParamsResponse: {
+    encode(_: MsgUpdateParamsResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse;
+    fromJSON(_: any): MsgUpdateParamsResponse;
+    toJSON(_: MsgUpdateParamsResponse): unknown;
+    fromPartial(_: Partial<MsgUpdateParamsResponse>): MsgUpdateParamsResponse;
 };

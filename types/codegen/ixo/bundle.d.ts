@@ -621,6 +621,10 @@ export declare namespace ixo {
                 intentList(request?: _201.QueryIntentListRequest): Promise<_201.QueryIntentListResponse>;
                 collectionMember(request: _201.QueryCollectionMemberRequest): Promise<_201.QueryCollectionMemberResponse>;
                 collectionMemberList(request: _201.QueryCollectionMemberListRequest): Promise<_201.QueryCollectionMemberListResponse>;
+                disputeBySubject(request: _201.QueryDisputeBySubjectRequest): Promise<_201.QueryDisputeBySubjectResponse>;
+                disputeListForSubject(request: _201.QueryDisputeListForSubjectRequest): Promise<_201.QueryDisputeListForSubjectResponse>;
+                agentDepositBalance(request: _201.QueryAgentDepositBalanceRequest): Promise<_201.QueryAgentDepositBalanceResponse>;
+                agentDepositBalanceList(request: _201.QueryAgentDepositBalanceListRequest): Promise<_201.QueryAgentDepositBalanceListResponse>;
             };
             MsgCreateCollection: {
                 encode(message: _202.MsgCreateCollection, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
@@ -748,6 +752,20 @@ export declare namespace ixo {
                 toJSON(_: _202.MsgUpdateCollectionIntentsResponse): unknown;
                 fromPartial(_: Partial<_202.MsgUpdateCollectionIntentsResponse>): _202.MsgUpdateCollectionIntentsResponse;
             };
+            MsgUpdateCollectionQuota: {
+                encode(message: _202.MsgUpdateCollectionQuota, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _202.MsgUpdateCollectionQuota;
+                fromJSON(object: any): _202.MsgUpdateCollectionQuota;
+                toJSON(message: _202.MsgUpdateCollectionQuota): unknown;
+                fromPartial(object: Partial<_202.MsgUpdateCollectionQuota>): _202.MsgUpdateCollectionQuota;
+            };
+            MsgUpdateCollectionQuotaResponse: {
+                encode(_: _202.MsgUpdateCollectionQuotaResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _202.MsgUpdateCollectionQuotaResponse;
+                fromJSON(_: any): _202.MsgUpdateCollectionQuotaResponse;
+                toJSON(_: _202.MsgUpdateCollectionQuotaResponse): unknown;
+                fromPartial(_: Partial<_202.MsgUpdateCollectionQuotaResponse>): _202.MsgUpdateCollectionQuotaResponse;
+            };
             MsgClaimIntent: {
                 encode(message: _202.MsgClaimIntent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _202.MsgClaimIntent;
@@ -810,6 +828,62 @@ export declare namespace ixo {
                 fromJSON(_: any): _202.MsgRemoveCollectionMembersResponse;
                 toJSON(_: _202.MsgRemoveCollectionMembersResponse): unknown;
                 fromPartial(_: Partial<_202.MsgRemoveCollectionMembersResponse>): _202.MsgRemoveCollectionMembersResponse;
+            };
+            MsgUpdateCollectionDisputeConfig: {
+                encode(message: _202.MsgUpdateCollectionDisputeConfig, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _202.MsgUpdateCollectionDisputeConfig;
+                fromJSON(object: any): _202.MsgUpdateCollectionDisputeConfig;
+                toJSON(message: _202.MsgUpdateCollectionDisputeConfig): unknown;
+                fromPartial(object: Partial<_202.MsgUpdateCollectionDisputeConfig>): _202.MsgUpdateCollectionDisputeConfig;
+            };
+            MsgUpdateCollectionDisputeConfigResponse: {
+                encode(_: _202.MsgUpdateCollectionDisputeConfigResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _202.MsgUpdateCollectionDisputeConfigResponse;
+                fromJSON(_: any): _202.MsgUpdateCollectionDisputeConfigResponse;
+                toJSON(_: _202.MsgUpdateCollectionDisputeConfigResponse): unknown;
+                fromPartial(_: Partial<_202.MsgUpdateCollectionDisputeConfigResponse>): _202.MsgUpdateCollectionDisputeConfigResponse;
+            };
+            MsgAddPerformanceDeposit: {
+                encode(message: _202.MsgAddPerformanceDeposit, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _202.MsgAddPerformanceDeposit;
+                fromJSON(object: any): _202.MsgAddPerformanceDeposit;
+                toJSON(message: _202.MsgAddPerformanceDeposit): unknown;
+                fromPartial(object: Partial<_202.MsgAddPerformanceDeposit>): _202.MsgAddPerformanceDeposit;
+            };
+            MsgAddPerformanceDepositResponse: {
+                encode(message: _202.MsgAddPerformanceDepositResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _202.MsgAddPerformanceDepositResponse;
+                fromJSON(object: any): _202.MsgAddPerformanceDepositResponse;
+                toJSON(message: _202.MsgAddPerformanceDepositResponse): unknown;
+                fromPartial(object: Partial<_202.MsgAddPerformanceDepositResponse>): _202.MsgAddPerformanceDepositResponse;
+            };
+            MsgWithdrawPerformanceDeposit: {
+                encode(message: _202.MsgWithdrawPerformanceDeposit, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _202.MsgWithdrawPerformanceDeposit;
+                fromJSON(object: any): _202.MsgWithdrawPerformanceDeposit;
+                toJSON(message: _202.MsgWithdrawPerformanceDeposit): unknown;
+                fromPartial(object: Partial<_202.MsgWithdrawPerformanceDeposit>): _202.MsgWithdrawPerformanceDeposit;
+            };
+            MsgWithdrawPerformanceDepositResponse: {
+                encode(message: _202.MsgWithdrawPerformanceDepositResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _202.MsgWithdrawPerformanceDepositResponse;
+                fromJSON(object: any): _202.MsgWithdrawPerformanceDepositResponse;
+                toJSON(message: _202.MsgWithdrawPerformanceDepositResponse): unknown;
+                fromPartial(object: Partial<_202.MsgWithdrawPerformanceDepositResponse>): _202.MsgWithdrawPerformanceDepositResponse;
+            };
+            MsgAdjudicateDispute: {
+                encode(message: _202.MsgAdjudicateDispute, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _202.MsgAdjudicateDispute;
+                fromJSON(object: any): _202.MsgAdjudicateDispute;
+                toJSON(message: _202.MsgAdjudicateDispute): unknown;
+                fromPartial(object: Partial<_202.MsgAdjudicateDispute>): _202.MsgAdjudicateDispute;
+            };
+            MsgAdjudicateDisputeResponse: {
+                encode(message: _202.MsgAdjudicateDisputeResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _202.MsgAdjudicateDisputeResponse;
+                fromJSON(object: any): _202.MsgAdjudicateDisputeResponse;
+                toJSON(message: _202.MsgAdjudicateDisputeResponse): unknown;
+                fromPartial(object: Partial<_202.MsgAdjudicateDisputeResponse>): _202.MsgAdjudicateDisputeResponse;
             };
             QueryParamsRequest: {
                 encode(_: _201.QueryParamsRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
@@ -965,6 +1039,62 @@ export declare namespace ixo {
                 toJSON(message: _201.QueryCollectionMemberListResponse): unknown;
                 fromPartial(object: Partial<_201.QueryCollectionMemberListResponse>): _201.QueryCollectionMemberListResponse;
             };
+            QueryDisputeBySubjectRequest: {
+                encode(message: _201.QueryDisputeBySubjectRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _201.QueryDisputeBySubjectRequest;
+                fromJSON(object: any): _201.QueryDisputeBySubjectRequest;
+                toJSON(message: _201.QueryDisputeBySubjectRequest): unknown;
+                fromPartial(object: Partial<_201.QueryDisputeBySubjectRequest>): _201.QueryDisputeBySubjectRequest;
+            };
+            QueryDisputeBySubjectResponse: {
+                encode(message: _201.QueryDisputeBySubjectResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _201.QueryDisputeBySubjectResponse;
+                fromJSON(object: any): _201.QueryDisputeBySubjectResponse;
+                toJSON(message: _201.QueryDisputeBySubjectResponse): unknown;
+                fromPartial(object: Partial<_201.QueryDisputeBySubjectResponse>): _201.QueryDisputeBySubjectResponse;
+            };
+            QueryDisputeListForSubjectRequest: {
+                encode(message: _201.QueryDisputeListForSubjectRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _201.QueryDisputeListForSubjectRequest;
+                fromJSON(object: any): _201.QueryDisputeListForSubjectRequest;
+                toJSON(message: _201.QueryDisputeListForSubjectRequest): unknown;
+                fromPartial(object: Partial<_201.QueryDisputeListForSubjectRequest>): _201.QueryDisputeListForSubjectRequest;
+            };
+            QueryDisputeListForSubjectResponse: {
+                encode(message: _201.QueryDisputeListForSubjectResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _201.QueryDisputeListForSubjectResponse;
+                fromJSON(object: any): _201.QueryDisputeListForSubjectResponse;
+                toJSON(message: _201.QueryDisputeListForSubjectResponse): unknown;
+                fromPartial(object: Partial<_201.QueryDisputeListForSubjectResponse>): _201.QueryDisputeListForSubjectResponse;
+            };
+            QueryAgentDepositBalanceRequest: {
+                encode(message: _201.QueryAgentDepositBalanceRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _201.QueryAgentDepositBalanceRequest;
+                fromJSON(object: any): _201.QueryAgentDepositBalanceRequest;
+                toJSON(message: _201.QueryAgentDepositBalanceRequest): unknown;
+                fromPartial(object: Partial<_201.QueryAgentDepositBalanceRequest>): _201.QueryAgentDepositBalanceRequest;
+            };
+            QueryAgentDepositBalanceResponse: {
+                encode(message: _201.QueryAgentDepositBalanceResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _201.QueryAgentDepositBalanceResponse;
+                fromJSON(object: any): _201.QueryAgentDepositBalanceResponse;
+                toJSON(message: _201.QueryAgentDepositBalanceResponse): unknown;
+                fromPartial(object: Partial<_201.QueryAgentDepositBalanceResponse>): _201.QueryAgentDepositBalanceResponse;
+            };
+            QueryAgentDepositBalanceListRequest: {
+                encode(message: _201.QueryAgentDepositBalanceListRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _201.QueryAgentDepositBalanceListRequest;
+                fromJSON(object: any): _201.QueryAgentDepositBalanceListRequest;
+                toJSON(message: _201.QueryAgentDepositBalanceListRequest): unknown;
+                fromPartial(object: Partial<_201.QueryAgentDepositBalanceListRequest>): _201.QueryAgentDepositBalanceListRequest;
+            };
+            QueryAgentDepositBalanceListResponse: {
+                encode(message: _201.QueryAgentDepositBalanceListResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _201.QueryAgentDepositBalanceListResponse;
+                fromJSON(object: any): _201.QueryAgentDepositBalanceListResponse;
+                toJSON(message: _201.QueryAgentDepositBalanceListResponse): unknown;
+                fromPartial(object: Partial<_201.QueryAgentDepositBalanceListResponse>): _201.QueryAgentDepositBalanceListResponse;
+            };
             GenesisState: {
                 encode(message: _200.GenesisState, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _200.GenesisState;
@@ -1070,6 +1200,34 @@ export declare namespace ixo {
                 toJSON(message: _199.MemberBudgetRemovedEvent): unknown;
                 fromPartial(object: Partial<_199.MemberBudgetRemovedEvent>): _199.MemberBudgetRemovedEvent;
             };
+            AgentDepositBalanceCreatedEvent: {
+                encode(message: _199.AgentDepositBalanceCreatedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _199.AgentDepositBalanceCreatedEvent;
+                fromJSON(object: any): _199.AgentDepositBalanceCreatedEvent;
+                toJSON(message: _199.AgentDepositBalanceCreatedEvent): unknown;
+                fromPartial(object: Partial<_199.AgentDepositBalanceCreatedEvent>): _199.AgentDepositBalanceCreatedEvent;
+            };
+            AgentDepositBalanceUpdatedEvent: {
+                encode(message: _199.AgentDepositBalanceUpdatedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _199.AgentDepositBalanceUpdatedEvent;
+                fromJSON(object: any): _199.AgentDepositBalanceUpdatedEvent;
+                toJSON(message: _199.AgentDepositBalanceUpdatedEvent): unknown;
+                fromPartial(object: Partial<_199.AgentDepositBalanceUpdatedEvent>): _199.AgentDepositBalanceUpdatedEvent;
+            };
+            AgentDepositBalanceRemovedEvent: {
+                encode(message: _199.AgentDepositBalanceRemovedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _199.AgentDepositBalanceRemovedEvent;
+                fromJSON(object: any): _199.AgentDepositBalanceRemovedEvent;
+                toJSON(message: _199.AgentDepositBalanceRemovedEvent): unknown;
+                fromPartial(object: Partial<_199.AgentDepositBalanceRemovedEvent>): _199.AgentDepositBalanceRemovedEvent;
+            };
+            DisputeResolvedEvent: {
+                encode(message: _199.DisputeResolvedEvent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _199.DisputeResolvedEvent;
+                fromJSON(object: any): _199.DisputeResolvedEvent;
+                toJSON(message: _199.DisputeResolvedEvent): unknown;
+                fromPartial(object: Partial<_199.DisputeResolvedEvent>): _199.DisputeResolvedEvent;
+            };
             collectionStateFromJSON(object: any): _198.CollectionState;
             collectionStateToJSON(object: _198.CollectionState): string;
             collectionIntentOptionsFromJSON(object: any): _198.CollectionIntentOptions;
@@ -1082,6 +1240,10 @@ export declare namespace ixo {
             paymentTypeToJSON(object: _198.PaymentType): string;
             paymentStatusFromJSON(object: any): _198.PaymentStatus;
             paymentStatusToJSON(object: _198.PaymentStatus): string;
+            disputeTargetRoleFromJSON(object: any): _198.DisputeTargetRole;
+            disputeTargetRoleToJSON(object: _198.DisputeTargetRole): string;
+            disputeStatusFromJSON(object: any): _198.DisputeStatus;
+            disputeStatusToJSON(object: _198.DisputeStatus): string;
             CollectionState: typeof _198.CollectionState;
             CollectionStateSDKType: typeof _198.CollectionState;
             CollectionIntentOptions: typeof _198.CollectionIntentOptions;
@@ -1094,12 +1256,23 @@ export declare namespace ixo {
             PaymentTypeSDKType: typeof _198.PaymentType;
             PaymentStatus: typeof _198.PaymentStatus;
             PaymentStatusSDKType: typeof _198.PaymentStatus;
+            DisputeTargetRole: typeof _198.DisputeTargetRole;
+            DisputeTargetRoleSDKType: typeof _198.DisputeTargetRole;
+            DisputeStatus: typeof _198.DisputeStatus;
+            DisputeStatusSDKType: typeof _198.DisputeStatus;
             Params: {
                 encode(message: _198.Params, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
                 decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _198.Params;
                 fromJSON(object: any): _198.Params;
                 toJSON(message: _198.Params): unknown;
                 fromPartial(object: Partial<_198.Params>): _198.Params;
+            };
+            AdjudicationDid: {
+                encode(message: _198.AdjudicationDid, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _198.AdjudicationDid;
+                fromJSON(object: any): _198.AdjudicationDid;
+                toJSON(message: _198.AdjudicationDid): unknown;
+                fromPartial(object: Partial<_198.AdjudicationDid>): _198.AdjudicationDid;
             };
             Collection: {
                 encode(message: _198.Collection, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
@@ -1198,6 +1371,20 @@ export declare namespace ixo {
                 fromJSON(object: any): _198.DisputeData;
                 toJSON(message: _198.DisputeData): unknown;
                 fromPartial(object: Partial<_198.DisputeData>): _198.DisputeData;
+            };
+            DisputeResolution: {
+                encode(message: _198.DisputeResolution, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _198.DisputeResolution;
+                fromJSON(object: any): _198.DisputeResolution;
+                toJSON(message: _198.DisputeResolution): unknown;
+                fromPartial(object: Partial<_198.DisputeResolution>): _198.DisputeResolution;
+            };
+            AgentDepositBalance: {
+                encode(message: _198.AgentDepositBalance, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _198.AgentDepositBalance;
+                fromJSON(object: any): _198.AgentDepositBalance;
+                toJSON(message: _198.AgentDepositBalance): unknown;
+                fromPartial(object: Partial<_198.AgentDepositBalance>): _198.AgentDepositBalance;
             };
             Intent: {
                 encode(message: _198.Intent, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
@@ -2186,6 +2373,20 @@ export declare namespace ixo {
                 fromJSON(_: any): _223.MsgBurnResponse;
                 toJSON(_: _223.MsgBurnResponse): unknown;
                 fromPartial(_: Partial<_223.MsgBurnResponse>): _223.MsgBurnResponse;
+            };
+            MsgUpdateParams: {
+                encode(message: _223.MsgUpdateParams, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _223.MsgUpdateParams;
+                fromJSON(object: any): _223.MsgUpdateParams;
+                toJSON(message: _223.MsgUpdateParams): unknown;
+                fromPartial(object: Partial<_223.MsgUpdateParams>): _223.MsgUpdateParams;
+            };
+            MsgUpdateParamsResponse: {
+                encode(_: _223.MsgUpdateParamsResponse, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
+                decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _223.MsgUpdateParamsResponse;
+                fromJSON(_: any): _223.MsgUpdateParamsResponse;
+                toJSON(_: _223.MsgUpdateParamsResponse): unknown;
+                fromPartial(_: Partial<_223.MsgUpdateParamsResponse>): _223.MsgUpdateParamsResponse;
             };
             QueryModuleParamsRequest: {
                 encode(_: _222.QueryModuleParamsRequest, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
@@ -3580,6 +3781,10 @@ export declare namespace ixo {
                         intentList(request?: _201.QueryIntentListRequest): Promise<_201.QueryIntentListResponse>;
                         collectionMember(request: _201.QueryCollectionMemberRequest): Promise<_201.QueryCollectionMemberResponse>;
                         collectionMemberList(request: _201.QueryCollectionMemberListRequest): Promise<_201.QueryCollectionMemberListResponse>;
+                        disputeBySubject(request: _201.QueryDisputeBySubjectRequest): Promise<_201.QueryDisputeBySubjectResponse>;
+                        disputeListForSubject(request: _201.QueryDisputeListForSubjectRequest): Promise<_201.QueryDisputeListForSubjectResponse>;
+                        agentDepositBalance(request: _201.QueryAgentDepositBalanceRequest): Promise<_201.QueryAgentDepositBalanceResponse>;
+                        agentDepositBalanceList(request: _201.QueryAgentDepositBalanceListRequest): Promise<_201.QueryAgentDepositBalanceListResponse>;
                     };
                 };
                 entity: {
