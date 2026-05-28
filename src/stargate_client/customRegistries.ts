@@ -548,6 +548,10 @@ export const createRegistry = (): Registry => {
     ixo.claims.v1beta1.MsgUpdateCollectionIntents
   );
   myRegistry.register(
+    "/ixo.claims.v1beta1.MsgUpdateCollectionQuota",
+    ixo.claims.v1beta1.MsgUpdateCollectionQuota
+  );
+  myRegistry.register(
     "/ixo.claims.v1beta1.MsgClaimIntent",
     ixo.claims.v1beta1.MsgClaimIntent
   );
@@ -558,6 +562,31 @@ export const createRegistry = (): Registry => {
   myRegistry.register(
     "/ixo.claims.v1beta1.CreateClaimAuthorizationAuthorization",
     ixo.claims.v1beta1.CreateClaimAuthorizationAuthorization
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgSetCollectionMembers",
+    ixo.claims.v1beta1.MsgSetCollectionMembers
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgRemoveCollectionMembers",
+    ixo.claims.v1beta1.MsgRemoveCollectionMembers
+  );
+  // v7 dispute / performance-deposit messages
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgUpdateCollectionDisputeConfig",
+    ixo.claims.v1beta1.MsgUpdateCollectionDisputeConfig
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgAddPerformanceDeposit",
+    ixo.claims.v1beta1.MsgAddPerformanceDeposit
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgWithdrawPerformanceDeposit",
+    ixo.claims.v1beta1.MsgWithdrawPerformanceDeposit
+  );
+  myRegistry.register(
+    "/ixo.claims.v1beta1.MsgAdjudicateDispute",
+    ixo.claims.v1beta1.MsgAdjudicateDispute
   );
 
   // Ixo Smart Account module
@@ -579,7 +608,7 @@ export const createRegistry = (): Registry => {
     ixo.smartaccount.crypto.AuthnPubKey
   );
 
-  // Ixo Liquid Stake module
+  // Ixo Liquid Stake module (v7 multi-pool surface)
   // -----------------------------------------------------------------------------
   myRegistry.register(
     "/ixo.liquidstake.v1beta1.MsgLiquidStake",
@@ -590,8 +619,16 @@ export const createRegistry = (): Registry => {
     ixo.liquidstake.v1beta1.MsgLiquidUnstake
   );
   myRegistry.register(
-    "/ixo.liquidstake.v1beta1.MsgUpdateParams",
-    ixo.liquidstake.v1beta1.MsgUpdateParams
+    "/ixo.liquidstake.v1beta1.MsgCreatePool",
+    ixo.liquidstake.v1beta1.MsgCreatePool
+  );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgUpdateModuleParams",
+    ixo.liquidstake.v1beta1.MsgUpdateModuleParams
+  );
+  myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgUpdatePool",
+    ixo.liquidstake.v1beta1.MsgUpdatePool
   );
   myRegistry.register(
     "/ixo.liquidstake.v1beta1.MsgUpdateWhitelistedValidators",
@@ -602,12 +639,47 @@ export const createRegistry = (): Registry => {
     ixo.liquidstake.v1beta1.MsgUpdateWeightedRewardsReceivers
   );
   myRegistry.register(
+    "/ixo.liquidstake.v1beta1.MsgSetPoolPaused",
+    ixo.liquidstake.v1beta1.MsgSetPoolPaused
+  );
+  myRegistry.register(
     "/ixo.liquidstake.v1beta1.MsgSetModulePaused",
     ixo.liquidstake.v1beta1.MsgSetModulePaused
   );
   myRegistry.register(
     "/ixo.liquidstake.v1beta1.MsgBurn",
     ixo.liquidstake.v1beta1.MsgBurn
+  );
+
+  // Ixo Names module (chain-level name service, IXO-1123)
+  // -----------------------------------------------------------------------------
+  myRegistry.register(
+    "/ixo.names.v1beta1.MsgCreateNamespace",
+    ixo.names.v1beta1.MsgCreateNamespace
+  );
+  myRegistry.register(
+    "/ixo.names.v1beta1.MsgUpdateNamespace",
+    ixo.names.v1beta1.MsgUpdateNamespace
+  );
+  myRegistry.register(
+    "/ixo.names.v1beta1.MsgRegisterName",
+    ixo.names.v1beta1.MsgRegisterName
+  );
+  myRegistry.register(
+    "/ixo.names.v1beta1.MsgRegisterNameByRegistrar",
+    ixo.names.v1beta1.MsgRegisterNameByRegistrar
+  );
+  myRegistry.register(
+    "/ixo.names.v1beta1.MsgUpdateNameByRegistrar",
+    ixo.names.v1beta1.MsgUpdateNameByRegistrar
+  );
+  myRegistry.register(
+    "/ixo.names.v1beta1.MsgTransferName",
+    ixo.names.v1beta1.MsgTransferName
+  );
+  myRegistry.register(
+    "/ixo.names.v1beta1.MsgSetNameStatus",
+    ixo.names.v1beta1.MsgSetNameStatus
   );
 
   return myRegistry;

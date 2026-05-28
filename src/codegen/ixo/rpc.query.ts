@@ -104,6 +104,9 @@ export const createRPCQueryClient = async ({
       mint: {
         v1beta1: (await import("./mint/v1beta1/query.rpc.Query")).createRpcQueryExtension(client)
       },
+      names: {
+        v1beta1: (await import("./names/v1beta1/query.rpc.Query")).createRpcQueryExtension(client)
+      },
       smartaccount: {
         v1beta1: (await import("./smartaccount/v1beta1/query.rpc.Query")).createRpcQueryExtension(client)
       },

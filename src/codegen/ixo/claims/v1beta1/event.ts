@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, CW1155IntentPayment, CW1155IntentPaymentSDKType, Intent, IntentSDKType } from "./claims";
+import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, CW1155IntentPayment, CW1155IntentPaymentSDKType, Intent, IntentSDKType, MemberBudget, MemberBudgetSDKType, AgentDepositBalance, AgentDepositBalanceSDKType } from "./claims";
 import { WithdrawPaymentConstraints, WithdrawPaymentConstraintsSDKType } from "./authz";
 import * as _m0 from "protobufjs/minimal";
 import { isSet } from "../../../helpers";
@@ -125,6 +125,168 @@ export interface ClaimAuthorizationCreatedEventSDKType {
   admin: string;
   collection_id: string;
   auth_type: string;
+}
+/**
+ * MemberBudgetCreatedEvent is an event triggered when a team member budget is
+ * added to a collection for the first time.
+ */
+export interface MemberBudgetCreatedEvent {
+  /**
+   * MemberBudgetCreatedEvent is an event triggered when a team member budget is
+   * added to a collection for the first time.
+   */
+  budget?: MemberBudget;
+}
+/**
+ * MemberBudgetCreatedEvent is an event triggered when a team member budget is
+ * added to a collection for the first time.
+ */
+export interface MemberBudgetCreatedEventSDKType {
+  budget?: MemberBudgetSDKType;
+}
+/**
+ * MemberBudgetUpdatedEvent is an event triggered on any state change to an
+ * existing member budget — admin-driven update via MsgSetCollectionMembers,
+ * period_spent deduction during MsgClaimIntent, period_spent restoration on
+ * claim rejection / dispute / invalidation / intent expiration, or lazy period
+ * reset.
+ */
+export interface MemberBudgetUpdatedEvent {
+  /**
+   * MemberBudgetUpdatedEvent is an event triggered on any state change to an
+   * existing member budget — admin-driven update via MsgSetCollectionMembers,
+   * period_spent deduction during MsgClaimIntent, period_spent restoration on
+   * claim rejection / dispute / invalidation / intent expiration, or lazy period
+   * reset.
+   */
+  budget?: MemberBudget;
+}
+/**
+ * MemberBudgetUpdatedEvent is an event triggered on any state change to an
+ * existing member budget — admin-driven update via MsgSetCollectionMembers,
+ * period_spent deduction during MsgClaimIntent, period_spent restoration on
+ * claim rejection / dispute / invalidation / intent expiration, or lazy period
+ * reset.
+ */
+export interface MemberBudgetUpdatedEventSDKType {
+  budget?: MemberBudgetSDKType;
+}
+/**
+ * MemberBudgetRemovedEvent is an event triggered when a team member budget is
+ * removed from a collection. Includes the final budget state at the time of
+ * removal for indexer audit.
+ */
+export interface MemberBudgetRemovedEvent {
+  /**
+   * MemberBudgetRemovedEvent is an event triggered when a team member budget is
+   * removed from a collection. Includes the final budget state at the time of
+   * removal for indexer audit.
+   */
+  budget?: MemberBudget;
+}
+/**
+ * MemberBudgetRemovedEvent is an event triggered when a team member budget is
+ * removed from a collection. Includes the final budget state at the time of
+ * removal for indexer audit.
+ */
+export interface MemberBudgetRemovedEventSDKType {
+  budget?: MemberBudgetSDKType;
+}
+/**
+ * AgentDepositBalanceCreatedEvent is emitted when an agent's
+ * performance-deposit balance is created for the first time (i.e. the first
+ * MsgAddPerformanceDeposit for a given (collection, agent) pair).
+ */
+export interface AgentDepositBalanceCreatedEvent {
+  /**
+   * AgentDepositBalanceCreatedEvent is emitted when an agent's
+   * performance-deposit balance is created for the first time (i.e. the first
+   * MsgAddPerformanceDeposit for a given (collection, agent) pair).
+   */
+  balance?: AgentDepositBalance;
+}
+/**
+ * AgentDepositBalanceCreatedEvent is emitted when an agent's
+ * performance-deposit balance is created for the first time (i.e. the first
+ * MsgAddPerformanceDeposit for a given (collection, agent) pair).
+ */
+export interface AgentDepositBalanceCreatedEventSDKType {
+  balance?: AgentDepositBalanceSDKType;
+}
+/**
+ * AgentDepositBalanceUpdatedEvent is emitted on any state change to an existing
+ * agent performance-deposit balance: subsequent top-up, partial withdrawal, or
+ * slashing on adjudicated dispute loss. Carries the post-state balance. The
+ * indexer can derive the delta by diffing against the previous on-record value;
+ * the reason can be inferred from the enclosing tx's Msg type
+ * (MsgAddPerformanceDeposit / MsgWithdrawPerformanceDeposit /
+ * MsgAdjudicateDispute).
+ */
+export interface AgentDepositBalanceUpdatedEvent {
+  /**
+   * AgentDepositBalanceUpdatedEvent is emitted on any state change to an existing
+   * agent performance-deposit balance: subsequent top-up, partial withdrawal, or
+   * slashing on adjudicated dispute loss. Carries the post-state balance. The
+   * indexer can derive the delta by diffing against the previous on-record value;
+   * the reason can be inferred from the enclosing tx's Msg type
+   * (MsgAddPerformanceDeposit / MsgWithdrawPerformanceDeposit /
+   * MsgAdjudicateDispute).
+   */
+  balance?: AgentDepositBalance;
+}
+/**
+ * AgentDepositBalanceUpdatedEvent is emitted on any state change to an existing
+ * agent performance-deposit balance: subsequent top-up, partial withdrawal, or
+ * slashing on adjudicated dispute loss. Carries the post-state balance. The
+ * indexer can derive the delta by diffing against the previous on-record value;
+ * the reason can be inferred from the enclosing tx's Msg type
+ * (MsgAddPerformanceDeposit / MsgWithdrawPerformanceDeposit /
+ * MsgAdjudicateDispute).
+ */
+export interface AgentDepositBalanceUpdatedEventSDKType {
+  balance?: AgentDepositBalanceSDKType;
+}
+/**
+ * AgentDepositBalanceRemovedEvent is emitted when the agent's balance is fully
+ * drained (full withdrawal or full slash brings amount to zero) and the KV
+ * entry is deleted. Carries the final balance state (with zero amount) so the
+ * indexer can archive the entry. Mirrors MemberBudgetRemovedEvent.
+ */
+export interface AgentDepositBalanceRemovedEvent {
+  /**
+   * AgentDepositBalanceRemovedEvent is emitted when the agent's balance is fully
+   * drained (full withdrawal or full slash brings amount to zero) and the KV
+   * entry is deleted. Carries the final balance state (with zero amount) so the
+   * indexer can archive the entry. Mirrors MemberBudgetRemovedEvent.
+   */
+  balance?: AgentDepositBalance;
+}
+/**
+ * AgentDepositBalanceRemovedEvent is emitted when the agent's balance is fully
+ * drained (full withdrawal or full slash brings amount to zero) and the KV
+ * entry is deleted. Carries the final balance state (with zero amount) so the
+ * indexer can archive the entry. Mirrors MemberBudgetRemovedEvent.
+ */
+export interface AgentDepositBalanceRemovedEventSDKType {
+  balance?: AgentDepositBalanceSDKType;
+}
+/**
+ * DisputeResolvedEvent is emitted when MsgAdjudicateDispute settles a
+ * dispute (AWARDED or DISMISSED).
+ */
+export interface DisputeResolvedEvent {
+  /**
+   * DisputeResolvedEvent is emitted when MsgAdjudicateDispute settles a
+   * dispute (AWARDED or DISMISSED).
+   */
+  dispute?: Dispute;
+}
+/**
+ * DisputeResolvedEvent is emitted when MsgAdjudicateDispute settles a
+ * dispute (AWARDED or DISMISSED).
+ */
+export interface DisputeResolvedEventSDKType {
+  dispute?: DisputeSDKType;
 }
 function createBaseCollectionCreatedEvent(): CollectionCreatedEvent {
   return {
@@ -696,6 +858,321 @@ export const ClaimAuthorizationCreatedEvent = {
     message.admin = object.admin ?? "";
     message.collectionId = object.collectionId ?? "";
     message.authType = object.authType ?? "";
+    return message;
+  }
+};
+function createBaseMemberBudgetCreatedEvent(): MemberBudgetCreatedEvent {
+  return {
+    budget: undefined
+  };
+}
+export const MemberBudgetCreatedEvent = {
+  encode(message: MemberBudgetCreatedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.budget !== undefined) {
+      MemberBudget.encode(message.budget, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MemberBudgetCreatedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMemberBudgetCreatedEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.budget = MemberBudget.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MemberBudgetCreatedEvent {
+    return {
+      budget: isSet(object.budget) ? MemberBudget.fromJSON(object.budget) : undefined
+    };
+  },
+  toJSON(message: MemberBudgetCreatedEvent): unknown {
+    const obj: any = {};
+    message.budget !== undefined && (obj.budget = message.budget ? MemberBudget.toJSON(message.budget) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<MemberBudgetCreatedEvent>): MemberBudgetCreatedEvent {
+    const message = createBaseMemberBudgetCreatedEvent();
+    message.budget = object.budget !== undefined && object.budget !== null ? MemberBudget.fromPartial(object.budget) : undefined;
+    return message;
+  }
+};
+function createBaseMemberBudgetUpdatedEvent(): MemberBudgetUpdatedEvent {
+  return {
+    budget: undefined
+  };
+}
+export const MemberBudgetUpdatedEvent = {
+  encode(message: MemberBudgetUpdatedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.budget !== undefined) {
+      MemberBudget.encode(message.budget, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MemberBudgetUpdatedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMemberBudgetUpdatedEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.budget = MemberBudget.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MemberBudgetUpdatedEvent {
+    return {
+      budget: isSet(object.budget) ? MemberBudget.fromJSON(object.budget) : undefined
+    };
+  },
+  toJSON(message: MemberBudgetUpdatedEvent): unknown {
+    const obj: any = {};
+    message.budget !== undefined && (obj.budget = message.budget ? MemberBudget.toJSON(message.budget) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<MemberBudgetUpdatedEvent>): MemberBudgetUpdatedEvent {
+    const message = createBaseMemberBudgetUpdatedEvent();
+    message.budget = object.budget !== undefined && object.budget !== null ? MemberBudget.fromPartial(object.budget) : undefined;
+    return message;
+  }
+};
+function createBaseMemberBudgetRemovedEvent(): MemberBudgetRemovedEvent {
+  return {
+    budget: undefined
+  };
+}
+export const MemberBudgetRemovedEvent = {
+  encode(message: MemberBudgetRemovedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.budget !== undefined) {
+      MemberBudget.encode(message.budget, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MemberBudgetRemovedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMemberBudgetRemovedEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.budget = MemberBudget.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MemberBudgetRemovedEvent {
+    return {
+      budget: isSet(object.budget) ? MemberBudget.fromJSON(object.budget) : undefined
+    };
+  },
+  toJSON(message: MemberBudgetRemovedEvent): unknown {
+    const obj: any = {};
+    message.budget !== undefined && (obj.budget = message.budget ? MemberBudget.toJSON(message.budget) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<MemberBudgetRemovedEvent>): MemberBudgetRemovedEvent {
+    const message = createBaseMemberBudgetRemovedEvent();
+    message.budget = object.budget !== undefined && object.budget !== null ? MemberBudget.fromPartial(object.budget) : undefined;
+    return message;
+  }
+};
+function createBaseAgentDepositBalanceCreatedEvent(): AgentDepositBalanceCreatedEvent {
+  return {
+    balance: undefined
+  };
+}
+export const AgentDepositBalanceCreatedEvent = {
+  encode(message: AgentDepositBalanceCreatedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.balance !== undefined) {
+      AgentDepositBalance.encode(message.balance, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): AgentDepositBalanceCreatedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAgentDepositBalanceCreatedEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.balance = AgentDepositBalance.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): AgentDepositBalanceCreatedEvent {
+    return {
+      balance: isSet(object.balance) ? AgentDepositBalance.fromJSON(object.balance) : undefined
+    };
+  },
+  toJSON(message: AgentDepositBalanceCreatedEvent): unknown {
+    const obj: any = {};
+    message.balance !== undefined && (obj.balance = message.balance ? AgentDepositBalance.toJSON(message.balance) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<AgentDepositBalanceCreatedEvent>): AgentDepositBalanceCreatedEvent {
+    const message = createBaseAgentDepositBalanceCreatedEvent();
+    message.balance = object.balance !== undefined && object.balance !== null ? AgentDepositBalance.fromPartial(object.balance) : undefined;
+    return message;
+  }
+};
+function createBaseAgentDepositBalanceUpdatedEvent(): AgentDepositBalanceUpdatedEvent {
+  return {
+    balance: undefined
+  };
+}
+export const AgentDepositBalanceUpdatedEvent = {
+  encode(message: AgentDepositBalanceUpdatedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.balance !== undefined) {
+      AgentDepositBalance.encode(message.balance, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): AgentDepositBalanceUpdatedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAgentDepositBalanceUpdatedEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.balance = AgentDepositBalance.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): AgentDepositBalanceUpdatedEvent {
+    return {
+      balance: isSet(object.balance) ? AgentDepositBalance.fromJSON(object.balance) : undefined
+    };
+  },
+  toJSON(message: AgentDepositBalanceUpdatedEvent): unknown {
+    const obj: any = {};
+    message.balance !== undefined && (obj.balance = message.balance ? AgentDepositBalance.toJSON(message.balance) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<AgentDepositBalanceUpdatedEvent>): AgentDepositBalanceUpdatedEvent {
+    const message = createBaseAgentDepositBalanceUpdatedEvent();
+    message.balance = object.balance !== undefined && object.balance !== null ? AgentDepositBalance.fromPartial(object.balance) : undefined;
+    return message;
+  }
+};
+function createBaseAgentDepositBalanceRemovedEvent(): AgentDepositBalanceRemovedEvent {
+  return {
+    balance: undefined
+  };
+}
+export const AgentDepositBalanceRemovedEvent = {
+  encode(message: AgentDepositBalanceRemovedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.balance !== undefined) {
+      AgentDepositBalance.encode(message.balance, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): AgentDepositBalanceRemovedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAgentDepositBalanceRemovedEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.balance = AgentDepositBalance.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): AgentDepositBalanceRemovedEvent {
+    return {
+      balance: isSet(object.balance) ? AgentDepositBalance.fromJSON(object.balance) : undefined
+    };
+  },
+  toJSON(message: AgentDepositBalanceRemovedEvent): unknown {
+    const obj: any = {};
+    message.balance !== undefined && (obj.balance = message.balance ? AgentDepositBalance.toJSON(message.balance) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<AgentDepositBalanceRemovedEvent>): AgentDepositBalanceRemovedEvent {
+    const message = createBaseAgentDepositBalanceRemovedEvent();
+    message.balance = object.balance !== undefined && object.balance !== null ? AgentDepositBalance.fromPartial(object.balance) : undefined;
+    return message;
+  }
+};
+function createBaseDisputeResolvedEvent(): DisputeResolvedEvent {
+  return {
+    dispute: undefined
+  };
+}
+export const DisputeResolvedEvent = {
+  encode(message: DisputeResolvedEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.dispute !== undefined) {
+      Dispute.encode(message.dispute, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): DisputeResolvedEvent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDisputeResolvedEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.dispute = Dispute.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): DisputeResolvedEvent {
+    return {
+      dispute: isSet(object.dispute) ? Dispute.fromJSON(object.dispute) : undefined
+    };
+  },
+  toJSON(message: DisputeResolvedEvent): unknown {
+    const obj: any = {};
+    message.dispute !== undefined && (obj.dispute = message.dispute ? Dispute.toJSON(message.dispute) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<DisputeResolvedEvent>): DisputeResolvedEvent {
+    const message = createBaseDisputeResolvedEvent();
+    message.dispute = object.dispute !== undefined && object.dispute !== null ? Dispute.fromPartial(object.dispute) : undefined;
     return message;
   }
 };

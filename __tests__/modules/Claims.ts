@@ -131,7 +131,8 @@ export const UpdateCollectionState = async (
 export const UpdateCollectionIntents = async (
   collectionId: string,
   adminAddress: string,
-  signer: WalletUsers = WalletUsers.tester
+  signer: WalletUsers = WalletUsers.tester,
+  intents = ixo.claims.v1beta1.CollectionIntentOptions.ALLOW
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -148,7 +149,7 @@ export const UpdateCollectionIntents = async (
             ixo.claims.v1beta1.MsgUpdateCollectionIntents.fromPartial({
               collectionId,
               adminAddress: adminAddress,
-              intents: ixo.claims.v1beta1.CollectionIntentOptions.ALLOW,
+              intents,
             })
           ).finish(),
         },
@@ -158,6 +159,42 @@ export const UpdateCollectionIntents = async (
 
   const response = await client.signAndBroadcast(tester, [message], fee);
   return response;
+};
+
+/**
+ * Update a collection's quota (max-claim cap). Uses authz exec so the tester
+ * wallet can call it on behalf of the entity admin. Uses
+ * broadcastOrSynthesiseFailure so the helper can serve both positive and
+ * negative tests (the keeper rejects new_quota < current_count with
+ * ErrCollectionQuotaBelowCount).
+ */
+export const UpdateCollectionQuota = async (
+  collectionId: string,
+  adminAddress: string,
+  quota: number,
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createUncachedClient(getUser(signer));
+  const grantee = (await getUser(signer).getAccounts())[0].address;
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+      grantee,
+      msgs: [
+        {
+          typeUrl: "/ixo.claims.v1beta1.MsgUpdateCollectionQuota",
+          value: ixo.claims.v1beta1.MsgUpdateCollectionQuota.encode(
+            ixo.claims.v1beta1.MsgUpdateCollectionQuota.fromPartial({
+              collectionId,
+              adminAddress,
+              quota: Long.fromNumber(quota),
+            })
+          ).finish(),
+        },
+      ],
+    }),
+  };
+  return await broadcastOrSynthesiseFailure(client, grantee, [message], fee);
 };
 
 export const UpdateCollectionDates = async (
@@ -341,7 +378,14 @@ export const UpdateCollectionPayments = async (
 export const DisputeClaim = async (
   subjectId: string,
   disputeProof: string, // must be unique
-  signer: WalletUsers = WalletUsers.tester
+  signer: WalletUsers = WalletUsers.tester,
+  // targetRole must be SUBMITTER or EVALUATOR. The v7 chain rejects
+  // target_unspecified with ErrDisputeTargetRoleInvalid (claims/1906) — the
+  // DisputeClaimV7 helper added in the same v7 batch makes this explicit, but
+  // the legacy DisputeClaim was left with an implicit UNSPECIFIED default
+  // until 2026-05-24 when claimsBasic started failing on the v7 chain.
+  // Default kept at SUBMITTER to match the most common pre-v7 dispute path.
+  targetRole: number = ixo.claims.v1beta1.DisputeTargetRole.DISPUTE_TARGET_ROLE_SUBMITTER
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -355,6 +399,7 @@ export const DisputeClaim = async (
       agentDid: agent.did,
       subjectId,
       disputeType: 1,
+      targetRole,
       data: ixo.claims.v1beta1.DisputeData.fromPartial({
         encrypted: false,
         proof: disputeProof,
@@ -380,7 +425,9 @@ export const GrantEntityAccountClaimsSubmitAuthz = async (
   maxAmount: Coin[] = [],
   maxCw20Payment: CW20Payment[] = [],
   intentDurationSeconds = 0,
-  maxCw1155Payment: CW1155Payment[] = []
+  maxCw1155Payment: CW1155Payment[] = [],
+  // For team subscriptions: the member this constraint applies to.
+  memberAddress: string = ""
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -424,6 +471,7 @@ export const GrantEntityAccountClaimsSubmitAuthz = async (
                   intentDurationNs: utils.proto.toDuration(
                     (1000000000 * intentDurationSeconds).toString()
                   ),
+                  memberAddress,
                 }),
                 ...granteeCurrentAuthConstraints,
               ],
@@ -453,7 +501,11 @@ export const GrantEntityAccountCreateClaimAuthz = async (
   intentDurationSeconds = 0,
   allowedAuthTypes = ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT,
   maxAuthorizations = 2,
-  maxCw1155Payment: CW1155Payment[] = []
+  maxCw1155Payment: CW1155Payment[] = [],
+  // For team subscriptions: the member this CCAA constraint authorizes the
+  // grantee to create downstream authorizations for. Anti-spoofing — strict
+  // equality enforced in Accept().
+  memberAddress: string = ""
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -505,6 +557,7 @@ export const GrantEntityAccountCreateClaimAuthz = async (
                         maxCw1155Payment,
                         maxAuthorizations: Long.fromNumber(maxAuthorizations),
                         allowedAuthTypes,
+                        memberAddress,
                       }
                     ),
                     ...granteeCurrentAuthConstraints,
@@ -532,7 +585,11 @@ export const CreateClaimAuthorization = async (
   maxCw20Payment: CW20Payment[] = [],
   intentDurationSeconds = 0,
   authType = ixo.claims.v1beta1.CreateClaimAuthorizationType.SUBMIT,
-  maxCw1155Payment: CW1155Payment[] = []
+  maxCw1155Payment: CW1155Payment[] = [],
+  // For team subscriptions: the member this authorization is being created
+  // for. Must match the signer's CreateClaimAuthorizationConstraints
+  // memberAddress (strict equality — anti-spoofing).
+  memberAddress: string = ""
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -562,6 +619,7 @@ export const CreateClaimAuthorization = async (
               expiration: utils.proto.toTimestamp(addDays(new Date(), 365 * 3)),
               authType,
               beforeDate: utils.proto.toTimestamp(addDays(new Date(), 365)),
+              memberAddress,
             })
           ).finish(),
         },
@@ -578,7 +636,10 @@ export const MsgClaimIntent = async (
   amount: Coin[] = [],
   cw20Payment: CW20Payment[] = [],
   signer = WalletUsers.alice,
-  cw1155Payment: CW1155Payment[] = []
+  cw1155Payment: CW1155Payment[] = [],
+  // For team subscriptions: the member this intent is on behalf of. Required
+  // when the collection has member budgets, must be empty otherwise.
+  memberAddress: string = ""
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -594,13 +655,29 @@ export const MsgClaimIntent = async (
       amount,
       cw20Payment,
       cw1155Payment,
+      memberAddress,
     }),
   };
 
+  // Try to simulate for accurate gas; if simulation throws (e.g. chain
+  // rejects the tx for a validation reason like missing member_address),
+  // fall back to a fixed fee so the actual broadcast still happens and
+  // returns a DeliverTxResponse with the error. Tests using
+  // `testMsg(..., succeed: false)` rely on the failure being surfaced as
+  // a response rather than a thrown exception.
+  let txFee;
+  try {
+    txFee = getFee(
+      1,
+      await client.simulate(granteeAddress, [message], undefined)
+    );
+  } catch {
+    txFee = fee;
+  }
   const response = await client.signAndBroadcast(
     granteeAddress,
     [message],
-    getFee(1, await client.simulate(granteeAddress, [message], undefined))
+    txFee
   );
   return response;
 };
@@ -613,7 +690,12 @@ export const MsgExecAgentSubmit = async (
   useIntent = false,
   amount: Coin[] = [],
   cw20Payment: CW20Payment[] = [],
-  cw1155Payment: CW1155Payment[] = []
+  cw1155Payment: CW1155Payment[] = [],
+  // For team subscriptions: the member this claim is on behalf of. Must equal
+  // the originating intent's member_address (strict equality — both empty for
+  // individual subscriptions, or both equal for team). Must be empty when
+  // useIntent is false.
+  memberAddress: string = ""
 ) => {
   const client = await createClient(getUser(grantee));
 
@@ -638,6 +720,7 @@ export const MsgExecAgentSubmit = async (
               amount,
               cw20Payment,
               cw1155Payment,
+              memberAddress,
             })
           ).finish(),
         },
@@ -992,6 +1075,111 @@ export const CreateCollectionSupamotoGenesis = async (
   return response;
 };
 
+// -------------------------------------------
+// Team Member Budgets
+// -------------------------------------------
+
+export type CollectionMemberInputArgs = {
+  memberAddress: string;
+  // Period in seconds for budget reset (e.g., 240 = 4 min — chain minimum
+  // when set for testing; 30 days = 30 * 24 * 60 * 60).
+  periodSeconds: number;
+  periodSpendLimit?: Coin[];
+  periodCw20SpendLimit?: CW20Payment[];
+  resetPeriodSpent?: boolean;
+};
+
+/**
+ * SetCollectionMembers adds or updates one or more team member budgets on a
+ * collection. Each member entry needs at least one non-zero spend limit
+ * (native or CW20) — otherwise the chain rejects with ErrMemberBudgetZero.
+ * Periods shorter than MinMemberBudgetPeriod (24h in production, 4 min while
+ * testing) are rejected. Duplicate member addresses within a single message
+ * are rejected by ValidateBasic.
+ */
+export const SetCollectionMembers = async (
+  collectionId: string,
+  adminAddress: string,
+  members: CollectionMemberInputArgs[],
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
+  const tester = (await getUser(signer).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+      grantee: tester,
+      msgs: [
+        {
+          typeUrl: "/ixo.claims.v1beta1.MsgSetCollectionMembers",
+          value: ixo.claims.v1beta1.MsgSetCollectionMembers.encode(
+            ixo.claims.v1beta1.MsgSetCollectionMembers.fromPartial({
+              collectionId,
+              adminAddress,
+              members: members.map((m) =>
+                ixo.claims.v1beta1.CollectionMemberInput.fromPartial({
+                  memberAddress: m.memberAddress,
+                  period: utils.proto.toDuration(
+                    (1000000000 * m.periodSeconds).toString()
+                  ),
+                  periodSpendLimit: m.periodSpendLimit ?? [],
+                  periodCw20SpendLimit: m.periodCw20SpendLimit ?? [],
+                  resetPeriodSpent: m.resetPeriodSpent ?? false,
+                })
+              ),
+            })
+          ).finish(),
+        },
+      ],
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
+/**
+ * RemoveCollectionMembers removes one or more team member budgets from a
+ * collection in a single transaction. Fails atomically if any of the member
+ * addresses do not currently exist as members on the collection. Existing
+ * authorizations the removed members granted to oracles are NOT revoked —
+ * the admin must do that separately if needed. Pending intents from removed
+ * members continue to expire and refund escrow normally; budget restoration
+ * is silently skipped (member budget no longer exists).
+ */
+export const RemoveCollectionMembers = async (
+  collectionId: string,
+  adminAddress: string,
+  memberAddresses: string[],
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
+  const tester = (await getUser(signer).getAccounts())[0].address;
+
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+      grantee: tester,
+      msgs: [
+        {
+          typeUrl: "/ixo.claims.v1beta1.MsgRemoveCollectionMembers",
+          value: ixo.claims.v1beta1.MsgRemoveCollectionMembers.encode(
+            ixo.claims.v1beta1.MsgRemoveCollectionMembers.fromPartial({
+              collectionId,
+              adminAddress,
+              memberAddresses,
+            })
+          ).finish(),
+        },
+      ],
+    }),
+  };
+
+  const response = await client.signAndBroadcast(tester, [message], fee);
+  return response;
+};
+
 export const GrantEntityAccountClaimsEvaluateAuthzSupamoto = async (
   entityDid: string,
   name: string,
@@ -1053,4 +1241,244 @@ export const GrantEntityAccountClaimsEvaluateAuthzSupamoto = async (
 
   const response = await client.signAndBroadcast(tester, [message], fee);
   return response;
+};
+
+// ---------------------------------------------------------------------------
+// v7 disputes & performance deposits
+// ---------------------------------------------------------------------------
+//
+// Negative-test friendliness. Several of these messages are validated at
+// CheckTx time. When CheckTx rejects, cosmjs's signAndBroadcast throws — and
+// testMsg(succeed=false) cannot tell that apart from a positive failure.
+// broadcastOrSynthesiseFailure catches the throw and returns a synthetic
+// DeliverTxResponse with code !== 0 so testMsg sees a consistent shape.
+// createUncachedClient bypasses the local sequence cache so a long sequence
+// of rejected txs doesn't desync the counter. Mirrors LiquidStake.ts /
+// Names.ts.
+
+const broadcastOrSynthesiseFailure = async (
+  client: any,
+  signerAddress: string,
+  messages: any[],
+  txFee: any
+) => {
+  try {
+    return await client.signAndBroadcast(signerAddress, messages, txFee);
+  } catch (e) {
+    return {
+      code: 1,
+      transactionHash: "",
+      height: 0,
+      txIndex: 0,
+      events: [],
+      gasWanted: BigInt(0),
+      gasUsed: BigInt(0),
+      msgResponses: [],
+      rawLog: (e as Error).message ?? String(e),
+    } as any;
+  }
+};
+
+const { createSigningClient: __createSigningClient } = require("../../src");
+const { RPC_URL: __RPC_URL } = require("../helpers/constants");
+const { GasPrice: __GasPrice } = require("@cosmjs/stargate");
+
+export const createUncachedClient = async (signer: any) =>
+  await __createSigningClient(__RPC_URL, signer, false, {
+    gasPrice: __GasPrice.fromString("0.025uixo"),
+  });
+
+export const broadcastOrSynthesise = broadcastOrSynthesiseFailure;
+
+/**
+ * Direct top-up of an agent's performance-deposit balance on a collection.
+ * Signed by the agent themselves (not via authz). Funds move from the agent's
+ * wallet into the collection escrow. Permitted whether or not the agent has
+ * open disputes — only withdrawal is gated.
+ */
+export const AddPerformanceDeposit = async (
+  collectionId: string,
+  amount: Coin[],
+  signer: WalletUsers = WalletUsers.alice
+) => {
+  const client = await createUncachedClient(getUser(signer));
+  const agent = (await getUser(signer).getAccounts())[0].address;
+  const message = {
+    typeUrl: "/ixo.claims.v1beta1.MsgAddPerformanceDeposit",
+    value: ixo.claims.v1beta1.MsgAddPerformanceDeposit.fromPartial({
+      collectionId,
+      agentAddress: agent,
+      amount,
+    }),
+  };
+  return await broadcastOrSynthesiseFailure(client, agent, [message], fee);
+};
+
+/**
+ * Pull some or all of an agent's deposit balance back to their wallet.
+ * Pass empty `amount` to withdraw the full current balance. Rejected by
+ * keeper if any OPEN dispute targets this agent on this collection.
+ */
+export const WithdrawPerformanceDeposit = async (
+  collectionId: string,
+  amount: Coin[] = [],
+  signer: WalletUsers = WalletUsers.alice
+) => {
+  const client = await createUncachedClient(getUser(signer));
+  const agent = (await getUser(signer).getAccounts())[0].address;
+  const message = {
+    typeUrl: "/ixo.claims.v1beta1.MsgWithdrawPerformanceDeposit",
+    value: ixo.claims.v1beta1.MsgWithdrawPerformanceDeposit.fromPartial({
+      collectionId,
+      agentAddress: agent,
+      amount,
+    }),
+  };
+  return await broadcastOrSynthesiseFailure(client, agent, [message], fee);
+};
+
+/**
+ * Update a collection's dispute / performance-deposit config. Wraps in
+ * MsgExec because the signer is the collection admin (entity account).
+ */
+export const UpdateCollectionDisputeConfig = async (
+  collectionId: string,
+  adminAddress: string,
+  cfg: {
+    serviceAgentDepositRequired?: Coin[];
+    evaluatorDepositRequired?: Coin[];
+    disputeDepositAmount?: Coin[];
+    adjudicators?: { did: string; rewardPercentage: string }[];
+    penaltyAmountPerDispute?: Coin[];
+    minDepositPeriodSeconds?: number;
+  },
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createUncachedClient(getUser(signer));
+  const grantee = (await getUser(signer).getAccounts())[0].address;
+  const message = {
+    typeUrl: "/cosmos.authz.v1beta1.MsgExec",
+    value: cosmos.authz.v1beta1.MsgExec.fromPartial({
+      grantee,
+      msgs: [
+        {
+          typeUrl: "/ixo.claims.v1beta1.MsgUpdateCollectionDisputeConfig",
+          value: ixo.claims.v1beta1.MsgUpdateCollectionDisputeConfig.encode(
+            ixo.claims.v1beta1.MsgUpdateCollectionDisputeConfig.fromPartial({
+              collectionId,
+              adminAddress,
+              serviceAgentDepositRequired:
+                cfg.serviceAgentDepositRequired ?? [],
+              evaluatorDepositRequired: cfg.evaluatorDepositRequired ?? [],
+              disputeDepositAmount: cfg.disputeDepositAmount ?? [],
+              adjudicators: (cfg.adjudicators ?? []).map((a) =>
+                ixo.claims.v1beta1.AdjudicationDid.fromPartial({
+                  did: a.did,
+                  rewardPercentage: a.rewardPercentage,
+                })
+              ),
+              penaltyAmountPerDispute: cfg.penaltyAmountPerDispute ?? [],
+              minDepositPeriod: utils.proto.toDuration(
+                ((cfg.minDepositPeriodSeconds ?? 0) *
+                  1_000_000_000).toString()
+              ),
+            })
+          ).finish(),
+        },
+      ],
+    }),
+  };
+  return await broadcastOrSynthesiseFailure(client, grantee, [message], fee);
+};
+
+/**
+ * File a dispute against a specific role (SUBMITTER or EVALUATOR) of a claim.
+ * Disputer stakes the collection's `dispute_deposit_amount` inline. Signed
+ * directly by the disputer (no authz wrap).
+ */
+export const DisputeClaimV7 = async (
+  subjectId: string,
+  disputeProof: string,
+  targetRole: number, // ixo.claims.v1beta1.DisputeTargetRole
+  signer: WalletUsers = WalletUsers.bob
+) => {
+  const client = await createUncachedClient(getUser(signer));
+  const agent = getUser(signer);
+  const agentAddress = (await agent.getAccounts())[0].address;
+  const message = {
+    typeUrl: "/ixo.claims.v1beta1.MsgDisputeClaim",
+    value: ixo.claims.v1beta1.MsgDisputeClaim.fromPartial({
+      agentAddress,
+      agentDid: agent.did,
+      subjectId,
+      disputeType: 1,
+      targetRole,
+      data: ixo.claims.v1beta1.DisputeData.fromPartial({
+        encrypted: false,
+        proof: disputeProof,
+        type: "application/json",
+        uri: "https://ipfs.io/ipfs/" + disputeProof,
+      }),
+    }),
+  };
+  return await broadcastOrSynthesiseFailure(client, agentAddress, [message], fee);
+};
+
+/**
+ * Resolve an OPEN dispute as AWARDED or DISMISSED. Signed by the adjudicator
+ * directly (their address must be authorized for adjudicator_did via either
+ * an entity account or a key on the DID document — same dual-path rule the
+ * keeper enforces).
+ *
+ * `reasonLabel` is a free-form short label that the helper synthesises into
+ * a DisputeData payload (cid-shaped proof, ipfs uri, application/json
+ * content-type). The chain stores this verbatim on the resolution record so
+ * indexers can render the adjudicator's opinion alongside the outcome.
+ * Pass an empty string to send no `data` at all (allowed — the field is
+ * optional, just like the original free-form reason was).
+ *
+ * Pass empty `penaltyAmount` when the collection has a fixed
+ * `penalty_amount_per_dispute` configured; otherwise supply it explicitly.
+ */
+export const AdjudicateDispute = async (
+  subjectId: string,
+  targetRole: number,
+  adjudicatorDid: string,
+  outcome: number, // ixo.claims.v1beta1.DisputeStatus
+  reasonLabel: string,
+  penaltyAmount: Coin[] = [],
+  signer: WalletUsers = WalletUsers.charlie
+) => {
+  const client = await createUncachedClient(getUser(signer));
+  const adjudicatorAddress = (await getUser(signer).getAccounts())[0].address;
+  // Synthesise a DisputeData payload from the label so tests can stay terse
+  // ("rubber-stamped"), while still exercising the on-chain DisputeData
+  // path. The proof CID is deterministic per reason for log-grep-ability;
+  // the uri/type/encrypted fields mirror MsgDisputeClaim's defaults.
+  const data = reasonLabel
+    ? ixo.claims.v1beta1.DisputeData.fromPartial({
+        proof: utils.common.generateId(46),
+        uri: "https://ipfs.io/ipfs/" + reasonLabel.replace(/\s+/g, "-"),
+        type: "application/json",
+        encrypted: false,
+      })
+    : undefined;
+  const message = {
+    typeUrl: "/ixo.claims.v1beta1.MsgAdjudicateDispute",
+    value: ixo.claims.v1beta1.MsgAdjudicateDispute.fromPartial({
+      subjectId,
+      targetRole,
+      adjudicatorDid,
+      adjudicatorAddress,
+      outcome,
+      data,
+      penaltyAmount,
+    }),
+  };
+  return await broadcastOrSynthesiseFailure(
+    client,
+    adjudicatorAddress,
+    [message],
+    fee
+  );
 };

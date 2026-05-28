@@ -75,6 +75,9 @@ export const createRPCMsgClient = async ({
     liquidstake: {
       v1beta1: new (await import("./liquidstake/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
     },
+    names: {
+      v1beta1: new (await import("./names/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
+    },
     smartaccount: {
       v1beta1: new (await import("./smartaccount/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
     },
