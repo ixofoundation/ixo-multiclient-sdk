@@ -72,6 +72,9 @@ export declare const createRPCMsgClient: ({ rpc }: {
         liquidstake: {
             v1beta1: import("./liquidstake/v1beta1/tx.rpc.msg").MsgClientImpl;
         };
+        names: {
+            v1beta1: import("./names/v1beta1/tx.rpc.msg").MsgClientImpl;
+        };
         smartaccount: {
             v1beta1: import("./smartaccount/v1beta1/tx.rpc.msg").MsgClientImpl;
         };

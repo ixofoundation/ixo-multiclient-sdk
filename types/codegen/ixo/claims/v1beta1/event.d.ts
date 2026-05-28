@@ -1,4 +1,4 @@
-import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, CW1155IntentPayment, CW1155IntentPaymentSDKType, Intent, IntentSDKType } from "./claims";
+import { Collection, CollectionSDKType, Claim, ClaimSDKType, Evaluation, EvaluationSDKType, Dispute, DisputeSDKType, CW20Output, CW20OutputSDKType, CW1155IntentPayment, CW1155IntentPaymentSDKType, Intent, IntentSDKType, MemberBudget, MemberBudgetSDKType, AgentDepositBalance, AgentDepositBalanceSDKType } from "./claims";
 import { WithdrawPaymentConstraints, WithdrawPaymentConstraintsSDKType } from "./authz";
 import * as _m0 from "protobufjs/minimal";
 /** CollectionCreatedEvent is an event triggered on a Collection creation */
@@ -124,6 +124,168 @@ export interface ClaimAuthorizationCreatedEventSDKType {
     collection_id: string;
     auth_type: string;
 }
+/**
+ * MemberBudgetCreatedEvent is an event triggered when a team member budget is
+ * added to a collection for the first time.
+ */
+export interface MemberBudgetCreatedEvent {
+    /**
+     * MemberBudgetCreatedEvent is an event triggered when a team member budget is
+     * added to a collection for the first time.
+     */
+    budget?: MemberBudget;
+}
+/**
+ * MemberBudgetCreatedEvent is an event triggered when a team member budget is
+ * added to a collection for the first time.
+ */
+export interface MemberBudgetCreatedEventSDKType {
+    budget?: MemberBudgetSDKType;
+}
+/**
+ * MemberBudgetUpdatedEvent is an event triggered on any state change to an
+ * existing member budget — admin-driven update via MsgSetCollectionMembers,
+ * period_spent deduction during MsgClaimIntent, period_spent restoration on
+ * claim rejection / dispute / invalidation / intent expiration, or lazy period
+ * reset.
+ */
+export interface MemberBudgetUpdatedEvent {
+    /**
+     * MemberBudgetUpdatedEvent is an event triggered on any state change to an
+     * existing member budget — admin-driven update via MsgSetCollectionMembers,
+     * period_spent deduction during MsgClaimIntent, period_spent restoration on
+     * claim rejection / dispute / invalidation / intent expiration, or lazy period
+     * reset.
+     */
+    budget?: MemberBudget;
+}
+/**
+ * MemberBudgetUpdatedEvent is an event triggered on any state change to an
+ * existing member budget — admin-driven update via MsgSetCollectionMembers,
+ * period_spent deduction during MsgClaimIntent, period_spent restoration on
+ * claim rejection / dispute / invalidation / intent expiration, or lazy period
+ * reset.
+ */
+export interface MemberBudgetUpdatedEventSDKType {
+    budget?: MemberBudgetSDKType;
+}
+/**
+ * MemberBudgetRemovedEvent is an event triggered when a team member budget is
+ * removed from a collection. Includes the final budget state at the time of
+ * removal for indexer audit.
+ */
+export interface MemberBudgetRemovedEvent {
+    /**
+     * MemberBudgetRemovedEvent is an event triggered when a team member budget is
+     * removed from a collection. Includes the final budget state at the time of
+     * removal for indexer audit.
+     */
+    budget?: MemberBudget;
+}
+/**
+ * MemberBudgetRemovedEvent is an event triggered when a team member budget is
+ * removed from a collection. Includes the final budget state at the time of
+ * removal for indexer audit.
+ */
+export interface MemberBudgetRemovedEventSDKType {
+    budget?: MemberBudgetSDKType;
+}
+/**
+ * AgentDepositBalanceCreatedEvent is emitted when an agent's
+ * performance-deposit balance is created for the first time (i.e. the first
+ * MsgAddPerformanceDeposit for a given (collection, agent) pair).
+ */
+export interface AgentDepositBalanceCreatedEvent {
+    /**
+     * AgentDepositBalanceCreatedEvent is emitted when an agent's
+     * performance-deposit balance is created for the first time (i.e. the first
+     * MsgAddPerformanceDeposit for a given (collection, agent) pair).
+     */
+    balance?: AgentDepositBalance;
+}
+/**
+ * AgentDepositBalanceCreatedEvent is emitted when an agent's
+ * performance-deposit balance is created for the first time (i.e. the first
+ * MsgAddPerformanceDeposit for a given (collection, agent) pair).
+ */
+export interface AgentDepositBalanceCreatedEventSDKType {
+    balance?: AgentDepositBalanceSDKType;
+}
+/**
+ * AgentDepositBalanceUpdatedEvent is emitted on any state change to an existing
+ * agent performance-deposit balance: subsequent top-up, partial withdrawal, or
+ * slashing on adjudicated dispute loss. Carries the post-state balance. The
+ * indexer can derive the delta by diffing against the previous on-record value;
+ * the reason can be inferred from the enclosing tx's Msg type
+ * (MsgAddPerformanceDeposit / MsgWithdrawPerformanceDeposit /
+ * MsgAdjudicateDispute).
+ */
+export interface AgentDepositBalanceUpdatedEvent {
+    /**
+     * AgentDepositBalanceUpdatedEvent is emitted on any state change to an existing
+     * agent performance-deposit balance: subsequent top-up, partial withdrawal, or
+     * slashing on adjudicated dispute loss. Carries the post-state balance. The
+     * indexer can derive the delta by diffing against the previous on-record value;
+     * the reason can be inferred from the enclosing tx's Msg type
+     * (MsgAddPerformanceDeposit / MsgWithdrawPerformanceDeposit /
+     * MsgAdjudicateDispute).
+     */
+    balance?: AgentDepositBalance;
+}
+/**
+ * AgentDepositBalanceUpdatedEvent is emitted on any state change to an existing
+ * agent performance-deposit balance: subsequent top-up, partial withdrawal, or
+ * slashing on adjudicated dispute loss. Carries the post-state balance. The
+ * indexer can derive the delta by diffing against the previous on-record value;
+ * the reason can be inferred from the enclosing tx's Msg type
+ * (MsgAddPerformanceDeposit / MsgWithdrawPerformanceDeposit /
+ * MsgAdjudicateDispute).
+ */
+export interface AgentDepositBalanceUpdatedEventSDKType {
+    balance?: AgentDepositBalanceSDKType;
+}
+/**
+ * AgentDepositBalanceRemovedEvent is emitted when the agent's balance is fully
+ * drained (full withdrawal or full slash brings amount to zero) and the KV
+ * entry is deleted. Carries the final balance state (with zero amount) so the
+ * indexer can archive the entry. Mirrors MemberBudgetRemovedEvent.
+ */
+export interface AgentDepositBalanceRemovedEvent {
+    /**
+     * AgentDepositBalanceRemovedEvent is emitted when the agent's balance is fully
+     * drained (full withdrawal or full slash brings amount to zero) and the KV
+     * entry is deleted. Carries the final balance state (with zero amount) so the
+     * indexer can archive the entry. Mirrors MemberBudgetRemovedEvent.
+     */
+    balance?: AgentDepositBalance;
+}
+/**
+ * AgentDepositBalanceRemovedEvent is emitted when the agent's balance is fully
+ * drained (full withdrawal or full slash brings amount to zero) and the KV
+ * entry is deleted. Carries the final balance state (with zero amount) so the
+ * indexer can archive the entry. Mirrors MemberBudgetRemovedEvent.
+ */
+export interface AgentDepositBalanceRemovedEventSDKType {
+    balance?: AgentDepositBalanceSDKType;
+}
+/**
+ * DisputeResolvedEvent is emitted when MsgAdjudicateDispute settles a
+ * dispute (AWARDED or DISMISSED).
+ */
+export interface DisputeResolvedEvent {
+    /**
+     * DisputeResolvedEvent is emitted when MsgAdjudicateDispute settles a
+     * dispute (AWARDED or DISMISSED).
+     */
+    dispute?: Dispute;
+}
+/**
+ * DisputeResolvedEvent is emitted when MsgAdjudicateDispute settles a
+ * dispute (AWARDED or DISMISSED).
+ */
+export interface DisputeResolvedEventSDKType {
+    dispute?: DisputeSDKType;
+}
 export declare const CollectionCreatedEvent: {
     encode(message: CollectionCreatedEvent, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): CollectionCreatedEvent;
@@ -200,4 +362,53 @@ export declare const ClaimAuthorizationCreatedEvent: {
     fromJSON(object: any): ClaimAuthorizationCreatedEvent;
     toJSON(message: ClaimAuthorizationCreatedEvent): unknown;
     fromPartial(object: Partial<ClaimAuthorizationCreatedEvent>): ClaimAuthorizationCreatedEvent;
+};
+export declare const MemberBudgetCreatedEvent: {
+    encode(message: MemberBudgetCreatedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MemberBudgetCreatedEvent;
+    fromJSON(object: any): MemberBudgetCreatedEvent;
+    toJSON(message: MemberBudgetCreatedEvent): unknown;
+    fromPartial(object: Partial<MemberBudgetCreatedEvent>): MemberBudgetCreatedEvent;
+};
+export declare const MemberBudgetUpdatedEvent: {
+    encode(message: MemberBudgetUpdatedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MemberBudgetUpdatedEvent;
+    fromJSON(object: any): MemberBudgetUpdatedEvent;
+    toJSON(message: MemberBudgetUpdatedEvent): unknown;
+    fromPartial(object: Partial<MemberBudgetUpdatedEvent>): MemberBudgetUpdatedEvent;
+};
+export declare const MemberBudgetRemovedEvent: {
+    encode(message: MemberBudgetRemovedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): MemberBudgetRemovedEvent;
+    fromJSON(object: any): MemberBudgetRemovedEvent;
+    toJSON(message: MemberBudgetRemovedEvent): unknown;
+    fromPartial(object: Partial<MemberBudgetRemovedEvent>): MemberBudgetRemovedEvent;
+};
+export declare const AgentDepositBalanceCreatedEvent: {
+    encode(message: AgentDepositBalanceCreatedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): AgentDepositBalanceCreatedEvent;
+    fromJSON(object: any): AgentDepositBalanceCreatedEvent;
+    toJSON(message: AgentDepositBalanceCreatedEvent): unknown;
+    fromPartial(object: Partial<AgentDepositBalanceCreatedEvent>): AgentDepositBalanceCreatedEvent;
+};
+export declare const AgentDepositBalanceUpdatedEvent: {
+    encode(message: AgentDepositBalanceUpdatedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): AgentDepositBalanceUpdatedEvent;
+    fromJSON(object: any): AgentDepositBalanceUpdatedEvent;
+    toJSON(message: AgentDepositBalanceUpdatedEvent): unknown;
+    fromPartial(object: Partial<AgentDepositBalanceUpdatedEvent>): AgentDepositBalanceUpdatedEvent;
+};
+export declare const AgentDepositBalanceRemovedEvent: {
+    encode(message: AgentDepositBalanceRemovedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): AgentDepositBalanceRemovedEvent;
+    fromJSON(object: any): AgentDepositBalanceRemovedEvent;
+    toJSON(message: AgentDepositBalanceRemovedEvent): unknown;
+    fromPartial(object: Partial<AgentDepositBalanceRemovedEvent>): AgentDepositBalanceRemovedEvent;
+};
+export declare const DisputeResolvedEvent: {
+    encode(message: DisputeResolvedEvent, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): DisputeResolvedEvent;
+    fromJSON(object: any): DisputeResolvedEvent;
+    toJSON(message: DisputeResolvedEvent): unknown;
+    fromPartial(object: Partial<DisputeResolvedEvent>): DisputeResolvedEvent;
 };

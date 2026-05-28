@@ -260,6 +260,12 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
                 disputeList(request?: import("./claims/v1beta1/query").QueryDisputeListRequest): Promise<import("./claims/v1beta1/query").QueryDisputeListResponse>;
                 intent(request: import("./claims/v1beta1/query").QueryIntentRequest): Promise<import("./claims/v1beta1/query").QueryIntentResponse>;
                 intentList(request?: import("./claims/v1beta1/query").QueryIntentListRequest): Promise<import("./claims/v1beta1/query").QueryIntentListResponse>;
+                collectionMember(request: import("./claims/v1beta1/query").QueryCollectionMemberRequest): Promise<import("./claims/v1beta1/query").QueryCollectionMemberResponse>;
+                collectionMemberList(request: import("./claims/v1beta1/query").QueryCollectionMemberListRequest): Promise<import("./claims/v1beta1/query").QueryCollectionMemberListResponse>;
+                disputeBySubject(request: import("./claims/v1beta1/query").QueryDisputeBySubjectRequest): Promise<import("./claims/v1beta1/query").QueryDisputeBySubjectResponse>;
+                disputeListForSubject(request: import("./claims/v1beta1/query").QueryDisputeListForSubjectRequest): Promise<import("./claims/v1beta1/query").QueryDisputeListForSubjectResponse>;
+                agentDepositBalance(request: import("./claims/v1beta1/query").QueryAgentDepositBalanceRequest): Promise<import("./claims/v1beta1/query").QueryAgentDepositBalanceResponse>;
+                agentDepositBalanceList(request: import("./claims/v1beta1/query").QueryAgentDepositBalanceListRequest): Promise<import("./claims/v1beta1/query").QueryAgentDepositBalanceListResponse>;
             };
         };
         entity: {
@@ -286,15 +292,27 @@ export declare const createRPCQueryClient: ({ rpcEndpoint }: {
         };
         liquidstake: {
             v1beta1: {
-                params(request?: import("./liquidstake/v1beta1/query").QueryParamsRequest): Promise<import("./liquidstake/v1beta1/query").QueryParamsResponse>;
-                liquidValidators(request?: import("./liquidstake/v1beta1/query").QueryLiquidValidatorsRequest): Promise<import("./liquidstake/v1beta1/query").QueryLiquidValidatorsResponse>;
-                states(request?: import("./liquidstake/v1beta1/query").QueryStatesRequest): Promise<import("./liquidstake/v1beta1/query").QueryStatesResponse>;
+                moduleParams(request?: import("./liquidstake/v1beta1/query").QueryModuleParamsRequest): Promise<import("./liquidstake/v1beta1/query").QueryModuleParamsResponse>;
+                pool(request: import("./liquidstake/v1beta1/query").QueryPoolRequest): Promise<import("./liquidstake/v1beta1/query").QueryPoolResponse>;
+                pools(request?: import("./liquidstake/v1beta1/query").QueryPoolsRequest): Promise<import("./liquidstake/v1beta1/query").QueryPoolsResponse>;
+                liquidValidators(request: import("./liquidstake/v1beta1/query").QueryLiquidValidatorsRequest): Promise<import("./liquidstake/v1beta1/query").QueryLiquidValidatorsResponse>;
+                states(request: import("./liquidstake/v1beta1/query").QueryStatesRequest): Promise<import("./liquidstake/v1beta1/query").QueryStatesResponse>;
             };
         };
         mint: {
             v1beta1: {
                 params(request?: import("./mint/v1beta1/query").QueryParamsRequest): Promise<import("./mint/v1beta1/query").QueryParamsResponse>;
                 epochProvisions(request?: import("./mint/v1beta1/query").QueryEpochProvisionsRequest): Promise<import("./mint/v1beta1/query").QueryEpochProvisionsResponse>;
+            };
+        };
+        names: {
+            v1beta1: {
+                namespace(request: import("./names/v1beta1/query").QueryNamespaceRequest): Promise<import("./names/v1beta1/query").QueryNamespaceResponse>;
+                namespaces(request?: import("./names/v1beta1/query").QueryNamespacesRequest): Promise<import("./names/v1beta1/query").QueryNamespacesResponse>;
+                resolveName(request: import("./names/v1beta1/query").QueryResolveNameRequest): Promise<import("./names/v1beta1/query").QueryResolveNameResponse>;
+                getName(request: import("./names/v1beta1/query").QueryGetNameRequest): Promise<import("./names/v1beta1/query").QueryGetNameResponse>;
+                namesByNamespace(request: import("./names/v1beta1/query").QueryNamesByNamespaceRequest): Promise<import("./names/v1beta1/query").QueryNamesByNamespaceResponse>;
+                namesByOwner(request: import("./names/v1beta1/query").QueryNamesByOwnerRequest): Promise<import("./names/v1beta1/query").QueryNamesByOwnerResponse>;
             };
         };
         smartaccount: {

@@ -93,6 +93,14 @@ export enum EvaluationStatus {
   REJECTED = 2,
   DISPUTED = 3,
   INVALIDATED = 4,
+  /**
+   * FLAGGED - Flagged: non-terminal "I am declining to make a final call" outcome.
+   * Payment does not fire. The flagger or any other authorized evaluator
+   * can subsequently re-evaluate the claim to a terminal status (APPROVED
+   * / REJECTED / INVALIDATED) when more information is available. FLAGGED
+   * counts against AgentQuota the same as a terminal evaluation.
+   */
+  FLAGGED = 5,
   UNRECOGNIZED = -1,
 }
 export const EvaluationStatusSDKType = EvaluationStatus;
@@ -113,6 +121,9 @@ export function evaluationStatusFromJSON(object: any): EvaluationStatus {
     case 4:
     case "INVALIDATED":
       return EvaluationStatus.INVALIDATED;
+    case 5:
+    case "FLAGGED":
+      return EvaluationStatus.FLAGGED;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -131,6 +142,8 @@ export function evaluationStatusToJSON(object: EvaluationStatus): string {
       return "DISPUTED";
     case EvaluationStatus.INVALIDATED:
       return "INVALIDATED";
+    case EvaluationStatus.FLAGGED:
+      return "FLAGGED";
     case EvaluationStatus.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -296,6 +309,102 @@ export function paymentStatusToJSON(object: PaymentStatus): string {
       return "UNRECOGNIZED";
   }
 }
+/**
+ * DisputeTargetRole identifies which party of a claim a dispute is filed
+ * against. A dispute targets exactly one role; to dispute both the submitter
+ * and the evaluator of the same claim, file two separate disputes.
+ */
+export enum DisputeTargetRole {
+  DISPUTE_TARGET_ROLE_UNSPECIFIED = 0,
+  /** DISPUTE_TARGET_ROLE_SUBMITTER - Submitter: the service agent that submitted the claim */
+  DISPUTE_TARGET_ROLE_SUBMITTER = 1,
+  /** DISPUTE_TARGET_ROLE_EVALUATOR - Evaluator: the evaluation agent that evaluated the claim */
+  DISPUTE_TARGET_ROLE_EVALUATOR = 2,
+  UNRECOGNIZED = -1,
+}
+export const DisputeTargetRoleSDKType = DisputeTargetRole;
+export function disputeTargetRoleFromJSON(object: any): DisputeTargetRole {
+  switch (object) {
+    case 0:
+    case "DISPUTE_TARGET_ROLE_UNSPECIFIED":
+      return DisputeTargetRole.DISPUTE_TARGET_ROLE_UNSPECIFIED;
+    case 1:
+    case "DISPUTE_TARGET_ROLE_SUBMITTER":
+      return DisputeTargetRole.DISPUTE_TARGET_ROLE_SUBMITTER;
+    case 2:
+    case "DISPUTE_TARGET_ROLE_EVALUATOR":
+      return DisputeTargetRole.DISPUTE_TARGET_ROLE_EVALUATOR;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return DisputeTargetRole.UNRECOGNIZED;
+  }
+}
+export function disputeTargetRoleToJSON(object: DisputeTargetRole): string {
+  switch (object) {
+    case DisputeTargetRole.DISPUTE_TARGET_ROLE_UNSPECIFIED:
+      return "DISPUTE_TARGET_ROLE_UNSPECIFIED";
+    case DisputeTargetRole.DISPUTE_TARGET_ROLE_SUBMITTER:
+      return "DISPUTE_TARGET_ROLE_SUBMITTER";
+    case DisputeTargetRole.DISPUTE_TARGET_ROLE_EVALUATOR:
+      return "DISPUTE_TARGET_ROLE_EVALUATOR";
+    case DisputeTargetRole.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+/** DisputeStatus is the lifecycle state of a dispute. */
+export enum DisputeStatus {
+  /**
+   * DISPUTE_STATUS_OPEN - Open: dispute has been filed and is awaiting adjudication. Targeted
+   * agent is blocked from submitting / withdrawing on this collection until
+   * resolved.
+   */
+  DISPUTE_STATUS_OPEN = 0,
+  /**
+   * DISPUTE_STATUS_AWARDED - Awarded: dispute upheld; the targeted party was found in the wrong.
+   * No further disputes against this (subject_id, target_role) are allowed.
+   */
+  DISPUTE_STATUS_AWARDED = 1,
+  /**
+   * DISPUTE_STATUS_DISMISSED - Dismissed: dispute rejected; targeted party was vindicated.
+   * Other parties may file new disputes against the same (subject_id,
+   * target_role) with new evidence.
+   */
+  DISPUTE_STATUS_DISMISSED = 2,
+  UNRECOGNIZED = -1,
+}
+export const DisputeStatusSDKType = DisputeStatus;
+export function disputeStatusFromJSON(object: any): DisputeStatus {
+  switch (object) {
+    case 0:
+    case "DISPUTE_STATUS_OPEN":
+      return DisputeStatus.DISPUTE_STATUS_OPEN;
+    case 1:
+    case "DISPUTE_STATUS_AWARDED":
+      return DisputeStatus.DISPUTE_STATUS_AWARDED;
+    case 2:
+    case "DISPUTE_STATUS_DISMISSED":
+      return DisputeStatus.DISPUTE_STATUS_DISMISSED;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return DisputeStatus.UNRECOGNIZED;
+  }
+}
+export function disputeStatusToJSON(object: DisputeStatus): string {
+  switch (object) {
+    case DisputeStatus.DISPUTE_STATUS_OPEN:
+      return "DISPUTE_STATUS_OPEN";
+    case DisputeStatus.DISPUTE_STATUS_AWARDED:
+      return "DISPUTE_STATUS_AWARDED";
+    case DisputeStatus.DISPUTE_STATUS_DISMISSED:
+      return "DISPUTE_STATUS_DISMISSED";
+    case DisputeStatus.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
 export interface Params {
   collectionSequence: Long;
   ixoAccount: string;
@@ -309,6 +418,39 @@ export interface ParamsSDKType {
   network_fee_percentage: string;
   node_fee_percentage: string;
   intent_sequence: Long;
+}
+/**
+ * AdjudicationDid represents a single adjudicator entry on a Collection's
+ * dispute whitelist. Each entry pairs a DID with its own reward percentage —
+ * adjudicators self-set their fee, turning adjudication into a competitive
+ * market (lower-fee adjudicators may attract more volume, higher-fee may
+ * trade on reputation). The chain does not enforce who adjudicates a given
+ * dispute; whichever whitelisted DID submits MsgAdjudicateDispute first wins.
+ */
+export interface AdjudicationDid {
+  /**
+   * did is the adjudicator's DID. Must appear in this list to be allowed
+   * to settle disputes on the collection.
+   */
+  did: string;
+  /**
+   * reward_percentage is the share (LegacyDec, range [0, 100]) of each
+   * actual penalty payout that goes to THIS adjudicator when they settle a
+   * dispute. The remainder goes to the dispute winner.
+   */
+  rewardPercentage: string;
+}
+/**
+ * AdjudicationDid represents a single adjudicator entry on a Collection's
+ * dispute whitelist. Each entry pairs a DID with its own reward percentage —
+ * adjudicators self-set their fee, turning adjudication into a competitive
+ * market (lower-fee adjudicators may attract more volume, higher-fee may
+ * trade on reputation). The chain does not enforce who adjudicates a given
+ * dispute; whichever whitelisted DID submits MsgAdjudicateDispute first wins.
+ */
+export interface AdjudicationDidSDKType {
+  did: string;
+  reward_percentage: string;
 }
 export interface Collection {
   /** collection id is the incremented internal id for the collection of claims */
@@ -378,6 +520,80 @@ export interface Collection {
    * required)
    */
   intents: CollectionIntentOptions;
+  /**
+   * flagged is the cumulative number of times any claim in this collection
+   * has been flagged by an evaluator. Never decremented — it is an
+   * event-count metric, not a current-state count.
+   */
+  flagged: Long;
+  /**
+   * flagged_active is the number of claims currently in FLAGGED state
+   * (incremented when a claim becomes FLAGGED, decremented when it
+   * transitions to a terminal evaluation status).
+   */
+  flaggedActive: Long;
+  /**
+   * service_agent_deposit_required is the minimum performance deposit balance
+   * a service agent must hold on this collection to submit claims. Empty /
+   * zero means no deposit gate for service agents.
+   */
+  serviceAgentDepositRequired: Coin[];
+  /**
+   * evaluator_deposit_required is the minimum performance deposit balance an
+   * evaluator must hold on this collection to submit evaluations. Empty /
+   * zero means no deposit gate for evaluators.
+   */
+  evaluatorDepositRequired: Coin[];
+  /**
+   * dispute_deposit_amount is the stake a disputer attaches to MsgDisputeClaim.
+   * Held with the dispute record; refunded on AWARDED; becomes the penalty
+   * pot on DISMISSED. Empty / zero means no disputer stake required.
+   */
+  disputeDepositAmount: Coin[];
+  /**
+   * penalty_amount_per_dispute is the fixed penalty applied on AWARDED. If
+   * empty / zero, the adjudicator sets the penalty per-resolution (bounded by
+   * the loser's deposit-required amount). At collection-validation time, if
+   * set, must be ≤ each non-empty deposit-required field.
+   */
+  penaltyAmountPerDispute: Coin[];
+  /**
+   * disputes_open is the number of currently-OPEN disputes against any
+   * claim in this collection (internally calculated).
+   */
+  disputesOpen: Long;
+  /**
+   * disputes_awarded is the cumulative number of disputes ever resolved as
+   * AWARDED on this collection (internally calculated, never decremented).
+   */
+  disputesAwarded: Long;
+  /**
+   * disputes_dismissed is the cumulative number of disputes ever resolved as
+   * DISMISSED on this collection (internally calculated, never decremented).
+   */
+  disputesDismissed: Long;
+  /**
+   * min_deposit_period is the minimum duration a performance deposit must
+   * remain locked after the most recent top-up before
+   * MsgWithdrawPerformanceDeposit can be issued. Closes the in-same-tx exploit
+   * where an agent could deposit, submit/evaluate, and withdraw atomically —
+   * leaving zero economic stake at dispute time. Set to zero duration to
+   * disable the lock. Each MsgAddPerformanceDeposit rolls
+   * AgentDepositBalance.withdrawable_at forward to max(current, now +
+   * min_deposit_period); the slash path is not gated by this lock.
+   */
+  minDepositPeriod?: Duration;
+  /**
+   * adjudicators is the whitelist of approved adjudicator DIDs paired with
+   * their reward percentages. Each entry carries its own reward_percentage,
+   * letting adjudicators self-set their fees (a competitive market). The
+   * chain does not enforce who adjudicates a given dispute — whichever
+   * whitelisted DID lands MsgAdjudicateDispute first wins; the percentage
+   * applied is that adjudicator's entry. Required to be non-empty if any
+   * deposit-required / dispute_deposit / penalty field is set; clearing
+   * it is blocked while disputes_open > 0.
+   */
+  adjudicators: AdjudicationDid[];
 }
 export interface CollectionSDKType {
   id: string;
@@ -398,6 +614,17 @@ export interface CollectionSDKType {
   invalidated: Long;
   escrow_account: string;
   intents: CollectionIntentOptions;
+  flagged: Long;
+  flagged_active: Long;
+  service_agent_deposit_required: CoinSDKType[];
+  evaluator_deposit_required: CoinSDKType[];
+  dispute_deposit_amount: CoinSDKType[];
+  penalty_amount_per_dispute: CoinSDKType[];
+  disputes_open: Long;
+  disputes_awarded: Long;
+  disputes_dismissed: Long;
+  min_deposit_period?: DurationSDKType;
+  adjudicators: AdjudicationDidSDKType[];
 }
 export interface Payments {
   submission?: Payment;
@@ -550,6 +777,21 @@ export interface Claim {
    * per token_id to transfer the same tokens to and from the escrow account
    */
   cw1155IntentPayment: CW1155IntentPayment[];
+  /**
+   * member_address is the team member this claim is on behalf of, if any.
+   * Copied from intent when use_intent is true. Used for budget restoration
+   * on claim rejection/dispute/invalidation.
+   */
+  memberAddress: string;
+  /**
+   * evaluation_history holds prior evaluations for this claim in chronological
+   * order. The most recent evaluation always lives in `evaluation`; only
+   * superseded entries are appended here. Empty for claims that have been
+   * evaluated at most once. Populated when an evaluator FLAGS a claim and a
+   * subsequent evaluation (flag-then-flag chain or terminal finalisation)
+   * moves the prior evaluation into history.
+   */
+  evaluationHistory: Evaluation[];
 }
 export interface ClaimSDKType {
   collection_id: string;
@@ -564,6 +806,8 @@ export interface ClaimSDKType {
   cw20_payment: CW20PaymentSDKType[];
   cw1155_payment: CW1155PaymentSDKType[];
   cw1155_intent_payment: CW1155IntentPaymentSDKType[];
+  member_address: string;
+  evaluation_history: EvaluationSDKType[];
 }
 export interface ClaimPayments {
   submission: PaymentStatus;
@@ -654,11 +898,46 @@ export interface Dispute {
   /** type is expressed as an integer, interpreted by the client */
   type: number;
   data?: DisputeData;
+  /**
+   * target_role is the party of the claim this dispute is filed against
+   * (submitter or evaluator). Exactly one role per dispute; to dispute both
+   * parties of the same claim, file two disputes. UNSPECIFIED only appears
+   * on legacy disputes migrated from pre-v7 state.
+   */
+  targetRole: DisputeTargetRole;
+  /**
+   * disputer_address is the account that filed the dispute and locked the
+   * dispute_deposit. Receives the deposit back on AWARDED, or 80% of the
+   * penalty (loser balance) on AWARDED; loses the deposit (split 80/20
+   * with adjudicator) on DISMISSED.
+   */
+  disputerAddress: string;
+  /** disputer_did is the DID of the disputer at filing time. */
+  disputerDid: string;
+  /**
+   * dispute_deposit is the amount the disputer locked at filing, equal to
+   * collection.dispute_deposit_amount at the time of filing. Held in the
+   * collection escrow account.
+   */
+  disputeDeposit: Coin[];
+  /** submitted_at is the block time the dispute was filed. */
+  submittedAt?: Timestamp;
+  /** status is the current lifecycle state. */
+  status: DisputeStatus;
+  /** resolution is populated on adjudication (AWARDED or DISMISSED). */
+  resolution?: DisputeResolution;
 }
 export interface DisputeSDKType {
   subject_id: string;
   type: number;
   data?: DisputeDataSDKType;
+  target_role: DisputeTargetRole;
+  disputer_address: string;
+  disputer_did: string;
+  dispute_deposit: CoinSDKType[];
+  submitted_at?: TimestampSDKType;
+  status: DisputeStatus;
+  resolution?: DisputeResolutionSDKType;
 }
 export interface DisputeData {
   /** dispute link ***.ipfs */
@@ -672,6 +951,123 @@ export interface DisputeDataSDKType {
   type: string;
   proof: string;
   encrypted: boolean;
+}
+/**
+ * DisputeResolution captures the outcome of MsgAdjudicateDispute. Records
+ * the intended penalty (what the adjudicator/collection prescribed) and the
+ * actual penalty paid (capped at the loser's available deposit balance —
+ * may be less than intended if a prior dispute already drained the balance).
+ */
+export interface DisputeResolution {
+  /**
+   * adjudicator_did is the DID that adjudicated; must be in the collection's
+   * adjudication_entity_dids whitelist.
+   */
+  adjudicatorDid: string;
+  /**
+   * adjudicator_address is the signer of MsgAdjudicateDispute. Either an
+   * entity account belonging to adjudicator_did, or a key registered on the
+   * adjudicator_did DID document.
+   */
+  adjudicatorAddress: string;
+  /**
+   * adjudicator_payout_address is where the 20% reward (or 100% if no
+   * winner share) was actually paid out — either the AdjudicatorRevenue
+   * entity account (auto-created) when the DID is an entity DID with module
+   * accounts, or adjudicator_address otherwise.
+   */
+  adjudicatorPayoutAddress: string;
+  resolvedAt?: Timestamp;
+  /**
+   * data is the structured payload the adjudicator attached to the
+   * resolution — same shape as the dispute filing's DisputeData. Lets the
+   * adjudicator pin an opinion document (IPFS/matrix uri + proof/cid), declare
+   * its MIME type, and flag encryption — mirroring how disputers attach
+   * evidence at filing time.
+   */
+  data?: DisputeData;
+  /**
+   * intended_penalty is the penalty the adjudicator selected (or the
+   * collection's penalty_amount_per_dispute if fixed). May exceed what was
+   * actually paid if the loser's balance was insufficient.
+   */
+  intendedPenalty: Coin[];
+  /**
+   * actual_penalty_paid is what was actually slashed from the loser's
+   * balance (or the dispute_deposit, on DISMISSED). Always ≤ intended.
+   */
+  actualPenaltyPaid: Coin[];
+  /**
+   * winner_amount is the portion of actual_penalty_paid that went to the
+   * dispute winner (disputer on AWARDED, target agent on DISMISSED).
+   */
+  winnerAmount: Coin[];
+  /**
+   * adjudicator_amount is the portion of actual_penalty_paid that went to
+   * the adjudicator (governed by collection.adjudicator_reward_percentage).
+   */
+  adjudicatorAmount: Coin[];
+  /** winner_address is the address that received the winner_amount. */
+  winnerAddress: string;
+  /** loser_address is the address whose balance / deposit was slashed. */
+  loserAddress: string;
+}
+/**
+ * DisputeResolution captures the outcome of MsgAdjudicateDispute. Records
+ * the intended penalty (what the adjudicator/collection prescribed) and the
+ * actual penalty paid (capped at the loser's available deposit balance —
+ * may be less than intended if a prior dispute already drained the balance).
+ */
+export interface DisputeResolutionSDKType {
+  adjudicator_did: string;
+  adjudicator_address: string;
+  adjudicator_payout_address: string;
+  resolved_at?: TimestampSDKType;
+  data?: DisputeDataSDKType;
+  intended_penalty: CoinSDKType[];
+  actual_penalty_paid: CoinSDKType[];
+  winner_amount: CoinSDKType[];
+  adjudicator_amount: CoinSDKType[];
+  winner_address: string;
+  loser_address: string;
+}
+/**
+ * AgentDepositBalance is an agent's rolling performance-deposit balance for
+ * a single collection. Held inside the collection's existing escrow account
+ * (no separate escrow). Topped up via MsgAddPerformanceDeposit, drained on
+ * adjudicated dispute losses, withdrawable when no active dispute targets
+ * this agent on this collection.
+ */
+export interface AgentDepositBalance {
+  /** collection_id this balance belongs to. */
+  collectionId: string;
+  /** agent_address is the account this balance is held for. */
+  agentAddress: string;
+  /** amount is the current balance in escrow on this agent's behalf. */
+  amount: Coin[];
+  /**
+   * withdrawable_at is the earliest block time at which
+   * MsgWithdrawPerformanceDeposit may be issued against this balance. Rolled
+   * forward to max(current, now + collection.min_deposit_period) on each
+   * top-up so an agent cannot deposit + submit + withdraw atomically and
+   * leave nothing at stake before a dispute can land. Zero on balances
+   * created under a collection with min_deposit_period == 0 (no lock).
+   * The slash path is not gated by this lock; only voluntary withdrawal is.
+   */
+  withdrawableAt?: Timestamp;
+}
+/**
+ * AgentDepositBalance is an agent's rolling performance-deposit balance for
+ * a single collection. Held inside the collection's existing escrow account
+ * (no separate escrow). Topped up via MsgAddPerformanceDeposit, drained on
+ * adjudicated dispute losses, withdrawable when no active dispute targets
+ * this agent on this collection.
+ */
+export interface AgentDepositBalanceSDKType {
+  collection_id: string;
+  agent_address: string;
+  amount: CoinSDKType[];
+  withdrawable_at?: TimestampSDKType;
 }
 /** Intent defines the structure for a service agent's claim intent. */
 export interface Intent {
@@ -709,6 +1105,12 @@ export interface Intent {
    * the same tokens to and from the escrow account
    */
   cw1155IntentPayment: CW1155IntentPayment[];
+  /**
+   * member_address is the team member this intent is on behalf of, if any.
+   * Required if the collection has member budgets. Validated against the
+   * oracle's SubmitClaimConstraints.member_address.
+   */
+  memberAddress: string;
 }
 /** Intent defines the structure for a service agent's claim intent. */
 export interface IntentSDKType {
@@ -726,6 +1128,52 @@ export interface IntentSDKType {
   escrow_address: string;
   cw1155_payment: CW1155PaymentSDKType[];
   cw1155_intent_payment: CW1155IntentPaymentSDKType[];
+  member_address: string;
+}
+/**
+ * MemberBudget defines a team member's periodic spending budget for a
+ * collection. Stored as separate state keyed by collectionId/memberAddress
+ * for gas-efficient O(1) reads and writes independent of team size.
+ */
+export interface MemberBudget {
+  /** collection_id this budget belongs to */
+  collectionId: string;
+  /** member's blockchain address */
+  memberAddress: string;
+  /**
+   * period duration for budget reset (e.g., 30 days). Must be at least 24 hours
+   * (MinMemberBudgetPeriod). Periods shorter than 24 hours are rejected to
+   * prevent griefing via the lazy-reset loop in the intent handler.
+   */
+  period?: Duration;
+  /** maximum native coin spend allowed per period */
+  periodSpendLimit: Coin[];
+  /** native coins already spent (intented) in the current period */
+  periodSpent: Coin[];
+  /** maximum CW20 spend allowed per period */
+  periodCw20SpendLimit: CW20Payment[];
+  /** CW20 amount already spent in the current period */
+  periodCw20Spent: CW20Payment[];
+  /**
+   * timestamp when current period resets (lazy reset in intent handler,
+   * following the feegrant PeriodicAllowance pattern)
+   */
+  periodResetAt?: Timestamp;
+}
+/**
+ * MemberBudget defines a team member's periodic spending budget for a
+ * collection. Stored as separate state keyed by collectionId/memberAddress
+ * for gas-efficient O(1) reads and writes independent of team size.
+ */
+export interface MemberBudgetSDKType {
+  collection_id: string;
+  member_address: string;
+  period?: DurationSDKType;
+  period_spend_limit: CoinSDKType[];
+  period_spent: CoinSDKType[];
+  period_cw20_spend_limit: CW20PaymentSDKType[];
+  period_cw20_spent: CW20PaymentSDKType[];
+  period_reset_at?: TimestampSDKType;
 }
 function createBaseParams(): Params {
   return {
@@ -812,6 +1260,61 @@ export const Params = {
     return message;
   }
 };
+function createBaseAdjudicationDid(): AdjudicationDid {
+  return {
+    did: "",
+    rewardPercentage: ""
+  };
+}
+export const AdjudicationDid = {
+  encode(message: AdjudicationDid, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.did !== "") {
+      writer.uint32(10).string(message.did);
+    }
+    if (message.rewardPercentage !== "") {
+      writer.uint32(18).string(message.rewardPercentage);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): AdjudicationDid {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAdjudicationDid();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.did = reader.string();
+          break;
+        case 2:
+          message.rewardPercentage = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): AdjudicationDid {
+    return {
+      did: isSet(object.did) ? String(object.did) : "",
+      rewardPercentage: isSet(object.rewardPercentage) ? String(object.rewardPercentage) : ""
+    };
+  },
+  toJSON(message: AdjudicationDid): unknown {
+    const obj: any = {};
+    message.did !== undefined && (obj.did = message.did);
+    message.rewardPercentage !== undefined && (obj.rewardPercentage = message.rewardPercentage);
+    return obj;
+  },
+  fromPartial(object: Partial<AdjudicationDid>): AdjudicationDid {
+    const message = createBaseAdjudicationDid();
+    message.did = object.did ?? "";
+    message.rewardPercentage = object.rewardPercentage ?? "";
+    return message;
+  }
+};
 function createBaseCollection(): Collection {
   return {
     id: "",
@@ -831,7 +1334,18 @@ function createBaseCollection(): Collection {
     signer: "",
     invalidated: Long.UZERO,
     escrowAccount: "",
-    intents: 0
+    intents: 0,
+    flagged: Long.UZERO,
+    flaggedActive: Long.UZERO,
+    serviceAgentDepositRequired: [],
+    evaluatorDepositRequired: [],
+    disputeDepositAmount: [],
+    penaltyAmountPerDispute: [],
+    disputesOpen: Long.UZERO,
+    disputesAwarded: Long.UZERO,
+    disputesDismissed: Long.UZERO,
+    minDepositPeriod: undefined,
+    adjudicators: []
   };
 }
 export const Collection = {
@@ -889,6 +1403,39 @@ export const Collection = {
     }
     if (message.intents !== 0) {
       writer.uint32(144).int32(message.intents);
+    }
+    if (!message.flagged.isZero()) {
+      writer.uint32(152).uint64(message.flagged);
+    }
+    if (!message.flaggedActive.isZero()) {
+      writer.uint32(160).uint64(message.flaggedActive);
+    }
+    for (const v of message.serviceAgentDepositRequired) {
+      Coin.encode(v!, writer.uint32(170).fork()).ldelim();
+    }
+    for (const v of message.evaluatorDepositRequired) {
+      Coin.encode(v!, writer.uint32(178).fork()).ldelim();
+    }
+    for (const v of message.disputeDepositAmount) {
+      Coin.encode(v!, writer.uint32(186).fork()).ldelim();
+    }
+    for (const v of message.penaltyAmountPerDispute) {
+      Coin.encode(v!, writer.uint32(194).fork()).ldelim();
+    }
+    if (!message.disputesOpen.isZero()) {
+      writer.uint32(200).uint64(message.disputesOpen);
+    }
+    if (!message.disputesAwarded.isZero()) {
+      writer.uint32(208).uint64(message.disputesAwarded);
+    }
+    if (!message.disputesDismissed.isZero()) {
+      writer.uint32(216).uint64(message.disputesDismissed);
+    }
+    if (message.minDepositPeriod !== undefined) {
+      Duration.encode(message.minDepositPeriod, writer.uint32(226).fork()).ldelim();
+    }
+    for (const v of message.adjudicators) {
+      AdjudicationDid.encode(v!, writer.uint32(234).fork()).ldelim();
     }
     return writer;
   },
@@ -953,6 +1500,39 @@ export const Collection = {
         case 18:
           message.intents = (reader.int32() as any);
           break;
+        case 19:
+          message.flagged = (reader.uint64() as Long);
+          break;
+        case 20:
+          message.flaggedActive = (reader.uint64() as Long);
+          break;
+        case 21:
+          message.serviceAgentDepositRequired.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 22:
+          message.evaluatorDepositRequired.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 23:
+          message.disputeDepositAmount.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 24:
+          message.penaltyAmountPerDispute.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 25:
+          message.disputesOpen = (reader.uint64() as Long);
+          break;
+        case 26:
+          message.disputesAwarded = (reader.uint64() as Long);
+          break;
+        case 27:
+          message.disputesDismissed = (reader.uint64() as Long);
+          break;
+        case 28:
+          message.minDepositPeriod = Duration.decode(reader, reader.uint32());
+          break;
+        case 29:
+          message.adjudicators.push(AdjudicationDid.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -979,7 +1559,18 @@ export const Collection = {
       signer: isSet(object.signer) ? String(object.signer) : "",
       invalidated: isSet(object.invalidated) ? Long.fromValue(object.invalidated) : Long.UZERO,
       escrowAccount: isSet(object.escrowAccount) ? String(object.escrowAccount) : "",
-      intents: isSet(object.intents) ? collectionIntentOptionsFromJSON(object.intents) : 0
+      intents: isSet(object.intents) ? collectionIntentOptionsFromJSON(object.intents) : 0,
+      flagged: isSet(object.flagged) ? Long.fromValue(object.flagged) : Long.UZERO,
+      flaggedActive: isSet(object.flaggedActive) ? Long.fromValue(object.flaggedActive) : Long.UZERO,
+      serviceAgentDepositRequired: Array.isArray(object?.serviceAgentDepositRequired) ? object.serviceAgentDepositRequired.map((e: any) => Coin.fromJSON(e)) : [],
+      evaluatorDepositRequired: Array.isArray(object?.evaluatorDepositRequired) ? object.evaluatorDepositRequired.map((e: any) => Coin.fromJSON(e)) : [],
+      disputeDepositAmount: Array.isArray(object?.disputeDepositAmount) ? object.disputeDepositAmount.map((e: any) => Coin.fromJSON(e)) : [],
+      penaltyAmountPerDispute: Array.isArray(object?.penaltyAmountPerDispute) ? object.penaltyAmountPerDispute.map((e: any) => Coin.fromJSON(e)) : [],
+      disputesOpen: isSet(object.disputesOpen) ? Long.fromValue(object.disputesOpen) : Long.UZERO,
+      disputesAwarded: isSet(object.disputesAwarded) ? Long.fromValue(object.disputesAwarded) : Long.UZERO,
+      disputesDismissed: isSet(object.disputesDismissed) ? Long.fromValue(object.disputesDismissed) : Long.UZERO,
+      minDepositPeriod: isSet(object.minDepositPeriod) ? Duration.fromJSON(object.minDepositPeriod) : undefined,
+      adjudicators: Array.isArray(object?.adjudicators) ? object.adjudicators.map((e: any) => AdjudicationDid.fromJSON(e)) : []
     };
   },
   toJSON(message: Collection): unknown {
@@ -1002,6 +1593,37 @@ export const Collection = {
     message.invalidated !== undefined && (obj.invalidated = (message.invalidated || Long.UZERO).toString());
     message.escrowAccount !== undefined && (obj.escrowAccount = message.escrowAccount);
     message.intents !== undefined && (obj.intents = collectionIntentOptionsToJSON(message.intents));
+    message.flagged !== undefined && (obj.flagged = (message.flagged || Long.UZERO).toString());
+    message.flaggedActive !== undefined && (obj.flaggedActive = (message.flaggedActive || Long.UZERO).toString());
+    if (message.serviceAgentDepositRequired) {
+      obj.serviceAgentDepositRequired = message.serviceAgentDepositRequired.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.serviceAgentDepositRequired = [];
+    }
+    if (message.evaluatorDepositRequired) {
+      obj.evaluatorDepositRequired = message.evaluatorDepositRequired.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.evaluatorDepositRequired = [];
+    }
+    if (message.disputeDepositAmount) {
+      obj.disputeDepositAmount = message.disputeDepositAmount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.disputeDepositAmount = [];
+    }
+    if (message.penaltyAmountPerDispute) {
+      obj.penaltyAmountPerDispute = message.penaltyAmountPerDispute.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.penaltyAmountPerDispute = [];
+    }
+    message.disputesOpen !== undefined && (obj.disputesOpen = (message.disputesOpen || Long.UZERO).toString());
+    message.disputesAwarded !== undefined && (obj.disputesAwarded = (message.disputesAwarded || Long.UZERO).toString());
+    message.disputesDismissed !== undefined && (obj.disputesDismissed = (message.disputesDismissed || Long.UZERO).toString());
+    message.minDepositPeriod !== undefined && (obj.minDepositPeriod = message.minDepositPeriod ? Duration.toJSON(message.minDepositPeriod) : undefined);
+    if (message.adjudicators) {
+      obj.adjudicators = message.adjudicators.map(e => e ? AdjudicationDid.toJSON(e) : undefined);
+    } else {
+      obj.adjudicators = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<Collection>): Collection {
@@ -1024,6 +1646,17 @@ export const Collection = {
     message.invalidated = object.invalidated !== undefined && object.invalidated !== null ? Long.fromValue(object.invalidated) : Long.UZERO;
     message.escrowAccount = object.escrowAccount ?? "";
     message.intents = object.intents ?? 0;
+    message.flagged = object.flagged !== undefined && object.flagged !== null ? Long.fromValue(object.flagged) : Long.UZERO;
+    message.flaggedActive = object.flaggedActive !== undefined && object.flaggedActive !== null ? Long.fromValue(object.flaggedActive) : Long.UZERO;
+    message.serviceAgentDepositRequired = object.serviceAgentDepositRequired?.map(e => Coin.fromPartial(e)) || [];
+    message.evaluatorDepositRequired = object.evaluatorDepositRequired?.map(e => Coin.fromPartial(e)) || [];
+    message.disputeDepositAmount = object.disputeDepositAmount?.map(e => Coin.fromPartial(e)) || [];
+    message.penaltyAmountPerDispute = object.penaltyAmountPerDispute?.map(e => Coin.fromPartial(e)) || [];
+    message.disputesOpen = object.disputesOpen !== undefined && object.disputesOpen !== null ? Long.fromValue(object.disputesOpen) : Long.UZERO;
+    message.disputesAwarded = object.disputesAwarded !== undefined && object.disputesAwarded !== null ? Long.fromValue(object.disputesAwarded) : Long.UZERO;
+    message.disputesDismissed = object.disputesDismissed !== undefined && object.disputesDismissed !== null ? Long.fromValue(object.disputesDismissed) : Long.UZERO;
+    message.minDepositPeriod = object.minDepositPeriod !== undefined && object.minDepositPeriod !== null ? Duration.fromPartial(object.minDepositPeriod) : undefined;
+    message.adjudicators = object.adjudicators?.map(e => AdjudicationDid.fromPartial(e)) || [];
     return message;
   }
 };
@@ -1600,7 +2233,9 @@ function createBaseClaim(): Claim {
     amount: [],
     cw20Payment: [],
     cw1155Payment: [],
-    cw1155IntentPayment: []
+    cw1155IntentPayment: [],
+    memberAddress: "",
+    evaluationHistory: []
   };
 }
 export const Claim = {
@@ -1640,6 +2275,12 @@ export const Claim = {
     }
     for (const v of message.cw1155IntentPayment) {
       CW1155IntentPayment.encode(v!, writer.uint32(98).fork()).ldelim();
+    }
+    if (message.memberAddress !== "") {
+      writer.uint32(106).string(message.memberAddress);
+    }
+    for (const v of message.evaluationHistory) {
+      Evaluation.encode(v!, writer.uint32(114).fork()).ldelim();
     }
     return writer;
   },
@@ -1686,6 +2327,12 @@ export const Claim = {
         case 12:
           message.cw1155IntentPayment.push(CW1155IntentPayment.decode(reader, reader.uint32()));
           break;
+        case 13:
+          message.memberAddress = reader.string();
+          break;
+        case 14:
+          message.evaluationHistory.push(Evaluation.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1706,7 +2353,9 @@ export const Claim = {
       amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
       cw20Payment: Array.isArray(object?.cw20Payment) ? object.cw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
       cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : [],
-      cw1155IntentPayment: Array.isArray(object?.cw1155IntentPayment) ? object.cw1155IntentPayment.map((e: any) => CW1155IntentPayment.fromJSON(e)) : []
+      cw1155IntentPayment: Array.isArray(object?.cw1155IntentPayment) ? object.cw1155IntentPayment.map((e: any) => CW1155IntentPayment.fromJSON(e)) : [],
+      memberAddress: isSet(object.memberAddress) ? String(object.memberAddress) : "",
+      evaluationHistory: Array.isArray(object?.evaluationHistory) ? object.evaluationHistory.map((e: any) => Evaluation.fromJSON(e)) : []
     };
   },
   toJSON(message: Claim): unknown {
@@ -1739,6 +2388,12 @@ export const Claim = {
     } else {
       obj.cw1155IntentPayment = [];
     }
+    message.memberAddress !== undefined && (obj.memberAddress = message.memberAddress);
+    if (message.evaluationHistory) {
+      obj.evaluationHistory = message.evaluationHistory.map(e => e ? Evaluation.toJSON(e) : undefined);
+    } else {
+      obj.evaluationHistory = [];
+    }
     return obj;
   },
   fromPartial(object: Partial<Claim>): Claim {
@@ -1755,6 +2410,8 @@ export const Claim = {
     message.cw20Payment = object.cw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
     message.cw1155IntentPayment = object.cw1155IntentPayment?.map(e => CW1155IntentPayment.fromPartial(e)) || [];
+    message.memberAddress = object.memberAddress ?? "";
+    message.evaluationHistory = object.evaluationHistory?.map(e => Evaluation.fromPartial(e)) || [];
     return message;
   }
 };
@@ -2018,7 +2675,14 @@ function createBaseDispute(): Dispute {
   return {
     subjectId: "",
     type: 0,
-    data: undefined
+    data: undefined,
+    targetRole: 0,
+    disputerAddress: "",
+    disputerDid: "",
+    disputeDeposit: [],
+    submittedAt: undefined,
+    status: 0,
+    resolution: undefined
   };
 }
 export const Dispute = {
@@ -2031,6 +2695,27 @@ export const Dispute = {
     }
     if (message.data !== undefined) {
       DisputeData.encode(message.data, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.targetRole !== 0) {
+      writer.uint32(32).int32(message.targetRole);
+    }
+    if (message.disputerAddress !== "") {
+      writer.uint32(42).string(message.disputerAddress);
+    }
+    if (message.disputerDid !== "") {
+      writer.uint32(50).string(message.disputerDid);
+    }
+    for (const v of message.disputeDeposit) {
+      Coin.encode(v!, writer.uint32(58).fork()).ldelim();
+    }
+    if (message.submittedAt !== undefined) {
+      Timestamp.encode(message.submittedAt, writer.uint32(66).fork()).ldelim();
+    }
+    if (message.status !== 0) {
+      writer.uint32(72).int32(message.status);
+    }
+    if (message.resolution !== undefined) {
+      DisputeResolution.encode(message.resolution, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -2050,6 +2735,27 @@ export const Dispute = {
         case 3:
           message.data = DisputeData.decode(reader, reader.uint32());
           break;
+        case 4:
+          message.targetRole = (reader.int32() as any);
+          break;
+        case 5:
+          message.disputerAddress = reader.string();
+          break;
+        case 6:
+          message.disputerDid = reader.string();
+          break;
+        case 7:
+          message.disputeDeposit.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 8:
+          message.submittedAt = Timestamp.decode(reader, reader.uint32());
+          break;
+        case 9:
+          message.status = (reader.int32() as any);
+          break;
+        case 10:
+          message.resolution = DisputeResolution.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2061,7 +2767,14 @@ export const Dispute = {
     return {
       subjectId: isSet(object.subjectId) ? String(object.subjectId) : "",
       type: isSet(object.type) ? Number(object.type) : 0,
-      data: isSet(object.data) ? DisputeData.fromJSON(object.data) : undefined
+      data: isSet(object.data) ? DisputeData.fromJSON(object.data) : undefined,
+      targetRole: isSet(object.targetRole) ? disputeTargetRoleFromJSON(object.targetRole) : 0,
+      disputerAddress: isSet(object.disputerAddress) ? String(object.disputerAddress) : "",
+      disputerDid: isSet(object.disputerDid) ? String(object.disputerDid) : "",
+      disputeDeposit: Array.isArray(object?.disputeDeposit) ? object.disputeDeposit.map((e: any) => Coin.fromJSON(e)) : [],
+      submittedAt: isSet(object.submittedAt) ? fromJsonTimestamp(object.submittedAt) : undefined,
+      status: isSet(object.status) ? disputeStatusFromJSON(object.status) : 0,
+      resolution: isSet(object.resolution) ? DisputeResolution.fromJSON(object.resolution) : undefined
     };
   },
   toJSON(message: Dispute): unknown {
@@ -2069,6 +2782,17 @@ export const Dispute = {
     message.subjectId !== undefined && (obj.subjectId = message.subjectId);
     message.type !== undefined && (obj.type = Math.round(message.type));
     message.data !== undefined && (obj.data = message.data ? DisputeData.toJSON(message.data) : undefined);
+    message.targetRole !== undefined && (obj.targetRole = disputeTargetRoleToJSON(message.targetRole));
+    message.disputerAddress !== undefined && (obj.disputerAddress = message.disputerAddress);
+    message.disputerDid !== undefined && (obj.disputerDid = message.disputerDid);
+    if (message.disputeDeposit) {
+      obj.disputeDeposit = message.disputeDeposit.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.disputeDeposit = [];
+    }
+    message.submittedAt !== undefined && (obj.submittedAt = fromTimestamp(message.submittedAt).toISOString());
+    message.status !== undefined && (obj.status = disputeStatusToJSON(message.status));
+    message.resolution !== undefined && (obj.resolution = message.resolution ? DisputeResolution.toJSON(message.resolution) : undefined);
     return obj;
   },
   fromPartial(object: Partial<Dispute>): Dispute {
@@ -2076,6 +2800,13 @@ export const Dispute = {
     message.subjectId = object.subjectId ?? "";
     message.type = object.type ?? 0;
     message.data = object.data !== undefined && object.data !== null ? DisputeData.fromPartial(object.data) : undefined;
+    message.targetRole = object.targetRole ?? 0;
+    message.disputerAddress = object.disputerAddress ?? "";
+    message.disputerDid = object.disputerDid ?? "";
+    message.disputeDeposit = object.disputeDeposit?.map(e => Coin.fromPartial(e)) || [];
+    message.submittedAt = object.submittedAt !== undefined && object.submittedAt !== null ? Timestamp.fromPartial(object.submittedAt) : undefined;
+    message.status = object.status ?? 0;
+    message.resolution = object.resolution !== undefined && object.resolution !== null ? DisputeResolution.fromPartial(object.resolution) : undefined;
     return message;
   }
 };
@@ -2154,6 +2885,246 @@ export const DisputeData = {
     return message;
   }
 };
+function createBaseDisputeResolution(): DisputeResolution {
+  return {
+    adjudicatorDid: "",
+    adjudicatorAddress: "",
+    adjudicatorPayoutAddress: "",
+    resolvedAt: undefined,
+    data: undefined,
+    intendedPenalty: [],
+    actualPenaltyPaid: [],
+    winnerAmount: [],
+    adjudicatorAmount: [],
+    winnerAddress: "",
+    loserAddress: ""
+  };
+}
+export const DisputeResolution = {
+  encode(message: DisputeResolution, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.adjudicatorDid !== "") {
+      writer.uint32(10).string(message.adjudicatorDid);
+    }
+    if (message.adjudicatorAddress !== "") {
+      writer.uint32(18).string(message.adjudicatorAddress);
+    }
+    if (message.adjudicatorPayoutAddress !== "") {
+      writer.uint32(26).string(message.adjudicatorPayoutAddress);
+    }
+    if (message.resolvedAt !== undefined) {
+      Timestamp.encode(message.resolvedAt, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.data !== undefined) {
+      DisputeData.encode(message.data, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.intendedPenalty) {
+      Coin.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    for (const v of message.actualPenaltyPaid) {
+      Coin.encode(v!, writer.uint32(58).fork()).ldelim();
+    }
+    for (const v of message.winnerAmount) {
+      Coin.encode(v!, writer.uint32(66).fork()).ldelim();
+    }
+    for (const v of message.adjudicatorAmount) {
+      Coin.encode(v!, writer.uint32(74).fork()).ldelim();
+    }
+    if (message.winnerAddress !== "") {
+      writer.uint32(82).string(message.winnerAddress);
+    }
+    if (message.loserAddress !== "") {
+      writer.uint32(90).string(message.loserAddress);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): DisputeResolution {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDisputeResolution();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.adjudicatorDid = reader.string();
+          break;
+        case 2:
+          message.adjudicatorAddress = reader.string();
+          break;
+        case 3:
+          message.adjudicatorPayoutAddress = reader.string();
+          break;
+        case 4:
+          message.resolvedAt = Timestamp.decode(reader, reader.uint32());
+          break;
+        case 5:
+          message.data = DisputeData.decode(reader, reader.uint32());
+          break;
+        case 6:
+          message.intendedPenalty.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 7:
+          message.actualPenaltyPaid.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 8:
+          message.winnerAmount.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 9:
+          message.adjudicatorAmount.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 10:
+          message.winnerAddress = reader.string();
+          break;
+        case 11:
+          message.loserAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): DisputeResolution {
+    return {
+      adjudicatorDid: isSet(object.adjudicatorDid) ? String(object.adjudicatorDid) : "",
+      adjudicatorAddress: isSet(object.adjudicatorAddress) ? String(object.adjudicatorAddress) : "",
+      adjudicatorPayoutAddress: isSet(object.adjudicatorPayoutAddress) ? String(object.adjudicatorPayoutAddress) : "",
+      resolvedAt: isSet(object.resolvedAt) ? fromJsonTimestamp(object.resolvedAt) : undefined,
+      data: isSet(object.data) ? DisputeData.fromJSON(object.data) : undefined,
+      intendedPenalty: Array.isArray(object?.intendedPenalty) ? object.intendedPenalty.map((e: any) => Coin.fromJSON(e)) : [],
+      actualPenaltyPaid: Array.isArray(object?.actualPenaltyPaid) ? object.actualPenaltyPaid.map((e: any) => Coin.fromJSON(e)) : [],
+      winnerAmount: Array.isArray(object?.winnerAmount) ? object.winnerAmount.map((e: any) => Coin.fromJSON(e)) : [],
+      adjudicatorAmount: Array.isArray(object?.adjudicatorAmount) ? object.adjudicatorAmount.map((e: any) => Coin.fromJSON(e)) : [],
+      winnerAddress: isSet(object.winnerAddress) ? String(object.winnerAddress) : "",
+      loserAddress: isSet(object.loserAddress) ? String(object.loserAddress) : ""
+    };
+  },
+  toJSON(message: DisputeResolution): unknown {
+    const obj: any = {};
+    message.adjudicatorDid !== undefined && (obj.adjudicatorDid = message.adjudicatorDid);
+    message.adjudicatorAddress !== undefined && (obj.adjudicatorAddress = message.adjudicatorAddress);
+    message.adjudicatorPayoutAddress !== undefined && (obj.adjudicatorPayoutAddress = message.adjudicatorPayoutAddress);
+    message.resolvedAt !== undefined && (obj.resolvedAt = fromTimestamp(message.resolvedAt).toISOString());
+    message.data !== undefined && (obj.data = message.data ? DisputeData.toJSON(message.data) : undefined);
+    if (message.intendedPenalty) {
+      obj.intendedPenalty = message.intendedPenalty.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.intendedPenalty = [];
+    }
+    if (message.actualPenaltyPaid) {
+      obj.actualPenaltyPaid = message.actualPenaltyPaid.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.actualPenaltyPaid = [];
+    }
+    if (message.winnerAmount) {
+      obj.winnerAmount = message.winnerAmount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.winnerAmount = [];
+    }
+    if (message.adjudicatorAmount) {
+      obj.adjudicatorAmount = message.adjudicatorAmount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.adjudicatorAmount = [];
+    }
+    message.winnerAddress !== undefined && (obj.winnerAddress = message.winnerAddress);
+    message.loserAddress !== undefined && (obj.loserAddress = message.loserAddress);
+    return obj;
+  },
+  fromPartial(object: Partial<DisputeResolution>): DisputeResolution {
+    const message = createBaseDisputeResolution();
+    message.adjudicatorDid = object.adjudicatorDid ?? "";
+    message.adjudicatorAddress = object.adjudicatorAddress ?? "";
+    message.adjudicatorPayoutAddress = object.adjudicatorPayoutAddress ?? "";
+    message.resolvedAt = object.resolvedAt !== undefined && object.resolvedAt !== null ? Timestamp.fromPartial(object.resolvedAt) : undefined;
+    message.data = object.data !== undefined && object.data !== null ? DisputeData.fromPartial(object.data) : undefined;
+    message.intendedPenalty = object.intendedPenalty?.map(e => Coin.fromPartial(e)) || [];
+    message.actualPenaltyPaid = object.actualPenaltyPaid?.map(e => Coin.fromPartial(e)) || [];
+    message.winnerAmount = object.winnerAmount?.map(e => Coin.fromPartial(e)) || [];
+    message.adjudicatorAmount = object.adjudicatorAmount?.map(e => Coin.fromPartial(e)) || [];
+    message.winnerAddress = object.winnerAddress ?? "";
+    message.loserAddress = object.loserAddress ?? "";
+    return message;
+  }
+};
+function createBaseAgentDepositBalance(): AgentDepositBalance {
+  return {
+    collectionId: "",
+    agentAddress: "",
+    amount: [],
+    withdrawableAt: undefined
+  };
+}
+export const AgentDepositBalance = {
+  encode(message: AgentDepositBalance, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.collectionId !== "") {
+      writer.uint32(10).string(message.collectionId);
+    }
+    if (message.agentAddress !== "") {
+      writer.uint32(18).string(message.agentAddress);
+    }
+    for (const v of message.amount) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.withdrawableAt !== undefined) {
+      Timestamp.encode(message.withdrawableAt, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): AgentDepositBalance {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAgentDepositBalance();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.collectionId = reader.string();
+          break;
+        case 2:
+          message.agentAddress = reader.string();
+          break;
+        case 3:
+          message.amount.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 4:
+          message.withdrawableAt = Timestamp.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): AgentDepositBalance {
+    return {
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      agentAddress: isSet(object.agentAddress) ? String(object.agentAddress) : "",
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
+      withdrawableAt: isSet(object.withdrawableAt) ? fromJsonTimestamp(object.withdrawableAt) : undefined
+    };
+  },
+  toJSON(message: AgentDepositBalance): unknown {
+    const obj: any = {};
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.agentAddress !== undefined && (obj.agentAddress = message.agentAddress);
+    if (message.amount) {
+      obj.amount = message.amount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amount = [];
+    }
+    message.withdrawableAt !== undefined && (obj.withdrawableAt = fromTimestamp(message.withdrawableAt).toISOString());
+    return obj;
+  },
+  fromPartial(object: Partial<AgentDepositBalance>): AgentDepositBalance {
+    const message = createBaseAgentDepositBalance();
+    message.collectionId = object.collectionId ?? "";
+    message.agentAddress = object.agentAddress ?? "";
+    message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
+    message.withdrawableAt = object.withdrawableAt !== undefined && object.withdrawableAt !== null ? Timestamp.fromPartial(object.withdrawableAt) : undefined;
+    return message;
+  }
+};
 function createBaseIntent(): Intent {
   return {
     id: "",
@@ -2169,7 +3140,8 @@ function createBaseIntent(): Intent {
     fromAddress: "",
     escrowAddress: "",
     cw1155Payment: [],
-    cw1155IntentPayment: []
+    cw1155IntentPayment: [],
+    memberAddress: ""
   };
 }
 export const Intent = {
@@ -2215,6 +3187,9 @@ export const Intent = {
     }
     for (const v of message.cw1155IntentPayment) {
       CW1155IntentPayment.encode(v!, writer.uint32(114).fork()).ldelim();
+    }
+    if (message.memberAddress !== "") {
+      writer.uint32(122).string(message.memberAddress);
     }
     return writer;
   },
@@ -2267,6 +3242,9 @@ export const Intent = {
         case 14:
           message.cw1155IntentPayment.push(CW1155IntentPayment.decode(reader, reader.uint32()));
           break;
+        case 15:
+          message.memberAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2289,7 +3267,8 @@ export const Intent = {
       fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
       escrowAddress: isSet(object.escrowAddress) ? String(object.escrowAddress) : "",
       cw1155Payment: Array.isArray(object?.cw1155Payment) ? object.cw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : [],
-      cw1155IntentPayment: Array.isArray(object?.cw1155IntentPayment) ? object.cw1155IntentPayment.map((e: any) => CW1155IntentPayment.fromJSON(e)) : []
+      cw1155IntentPayment: Array.isArray(object?.cw1155IntentPayment) ? object.cw1155IntentPayment.map((e: any) => CW1155IntentPayment.fromJSON(e)) : [],
+      memberAddress: isSet(object.memberAddress) ? String(object.memberAddress) : ""
     };
   },
   toJSON(message: Intent): unknown {
@@ -2324,6 +3303,7 @@ export const Intent = {
     } else {
       obj.cw1155IntentPayment = [];
     }
+    message.memberAddress !== undefined && (obj.memberAddress = message.memberAddress);
     return obj;
   },
   fromPartial(object: Partial<Intent>): Intent {
@@ -2342,6 +3322,138 @@ export const Intent = {
     message.escrowAddress = object.escrowAddress ?? "";
     message.cw1155Payment = object.cw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
     message.cw1155IntentPayment = object.cw1155IntentPayment?.map(e => CW1155IntentPayment.fromPartial(e)) || [];
+    message.memberAddress = object.memberAddress ?? "";
+    return message;
+  }
+};
+function createBaseMemberBudget(): MemberBudget {
+  return {
+    collectionId: "",
+    memberAddress: "",
+    period: undefined,
+    periodSpendLimit: [],
+    periodSpent: [],
+    periodCw20SpendLimit: [],
+    periodCw20Spent: [],
+    periodResetAt: undefined
+  };
+}
+export const MemberBudget = {
+  encode(message: MemberBudget, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.collectionId !== "") {
+      writer.uint32(10).string(message.collectionId);
+    }
+    if (message.memberAddress !== "") {
+      writer.uint32(18).string(message.memberAddress);
+    }
+    if (message.period !== undefined) {
+      Duration.encode(message.period, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.periodSpendLimit) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    for (const v of message.periodSpent) {
+      Coin.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.periodCw20SpendLimit) {
+      CW20Payment.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    for (const v of message.periodCw20Spent) {
+      CW20Payment.encode(v!, writer.uint32(58).fork()).ldelim();
+    }
+    if (message.periodResetAt !== undefined) {
+      Timestamp.encode(message.periodResetAt, writer.uint32(66).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MemberBudget {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMemberBudget();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.collectionId = reader.string();
+          break;
+        case 2:
+          message.memberAddress = reader.string();
+          break;
+        case 3:
+          message.period = Duration.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.periodSpendLimit.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 5:
+          message.periodSpent.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 6:
+          message.periodCw20SpendLimit.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
+        case 7:
+          message.periodCw20Spent.push(CW20Payment.decode(reader, reader.uint32()));
+          break;
+        case 8:
+          message.periodResetAt = Timestamp.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MemberBudget {
+    return {
+      collectionId: isSet(object.collectionId) ? String(object.collectionId) : "",
+      memberAddress: isSet(object.memberAddress) ? String(object.memberAddress) : "",
+      period: isSet(object.period) ? Duration.fromJSON(object.period) : undefined,
+      periodSpendLimit: Array.isArray(object?.periodSpendLimit) ? object.periodSpendLimit.map((e: any) => Coin.fromJSON(e)) : [],
+      periodSpent: Array.isArray(object?.periodSpent) ? object.periodSpent.map((e: any) => Coin.fromJSON(e)) : [],
+      periodCw20SpendLimit: Array.isArray(object?.periodCw20SpendLimit) ? object.periodCw20SpendLimit.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      periodCw20Spent: Array.isArray(object?.periodCw20Spent) ? object.periodCw20Spent.map((e: any) => CW20Payment.fromJSON(e)) : [],
+      periodResetAt: isSet(object.periodResetAt) ? fromJsonTimestamp(object.periodResetAt) : undefined
+    };
+  },
+  toJSON(message: MemberBudget): unknown {
+    const obj: any = {};
+    message.collectionId !== undefined && (obj.collectionId = message.collectionId);
+    message.memberAddress !== undefined && (obj.memberAddress = message.memberAddress);
+    message.period !== undefined && (obj.period = message.period ? Duration.toJSON(message.period) : undefined);
+    if (message.periodSpendLimit) {
+      obj.periodSpendLimit = message.periodSpendLimit.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.periodSpendLimit = [];
+    }
+    if (message.periodSpent) {
+      obj.periodSpent = message.periodSpent.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.periodSpent = [];
+    }
+    if (message.periodCw20SpendLimit) {
+      obj.periodCw20SpendLimit = message.periodCw20SpendLimit.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.periodCw20SpendLimit = [];
+    }
+    if (message.periodCw20Spent) {
+      obj.periodCw20Spent = message.periodCw20Spent.map(e => e ? CW20Payment.toJSON(e) : undefined);
+    } else {
+      obj.periodCw20Spent = [];
+    }
+    message.periodResetAt !== undefined && (obj.periodResetAt = fromTimestamp(message.periodResetAt).toISOString());
+    return obj;
+  },
+  fromPartial(object: Partial<MemberBudget>): MemberBudget {
+    const message = createBaseMemberBudget();
+    message.collectionId = object.collectionId ?? "";
+    message.memberAddress = object.memberAddress ?? "";
+    message.period = object.period !== undefined && object.period !== null ? Duration.fromPartial(object.period) : undefined;
+    message.periodSpendLimit = object.periodSpendLimit?.map(e => Coin.fromPartial(e)) || [];
+    message.periodSpent = object.periodSpent?.map(e => Coin.fromPartial(e)) || [];
+    message.periodCw20SpendLimit = object.periodCw20SpendLimit?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.periodCw20Spent = object.periodCw20Spent?.map(e => CW20Payment.fromPartial(e)) || [];
+    message.periodResetAt = object.periodResetAt !== undefined && object.periodResetAt !== null ? Timestamp.fromPartial(object.periodResetAt) : undefined;
     return message;
   }
 };

@@ -1,174 +1,302 @@
 //@ts-nocheck
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { Params, ParamsSDKType, WhitelistedValidator, WhitelistedValidatorSDKType, WeightedAddress, WeightedAddressSDKType } from "./liquidstake";
+import { ModuleParams, ModuleParamsSDKType, WhitelistedValidator, WhitelistedValidatorSDKType, WeightedAddress, WeightedAddressSDKType, Params, ParamsSDKType } from "./liquidstake";
 import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import * as _m0 from "protobufjs/minimal";
 import { isSet, fromJsonTimestamp, fromTimestamp } from "../../../helpers";
-/**
- * MsgLiquidStake defines a SDK message for performing a liquid stake of coins
- * from a delegator to whitelisted validators.
- */
+/** MsgLiquidStake liquid-stakes native tokens into a specific pool. */
 export interface MsgLiquidStake {
+  /** delegator_address must equal the pool's whitelist_admin_address. */
   delegatorAddress: string;
+  /**
+   * pool_id selects which pool to stake into and therefore which LST denom
+   * is minted in return.
+   */
+  poolId: string;
+  /**
+   * amount is the native staking-token coin to liquid-stake. Its denom must
+   * match the chain's bond denom.
+   */
   amount?: Coin;
 }
-/**
- * MsgLiquidStake defines a SDK message for performing a liquid stake of coins
- * from a delegator to whitelisted validators.
- */
+/** MsgLiquidStake liquid-stakes native tokens into a specific pool. */
 export interface MsgLiquidStakeSDKType {
   delegator_address: string;
+  pool_id: string;
   amount?: CoinSDKType;
 }
-/** MsgLiquidStakeResponse defines the MsgLiquidStake response type. */
 export interface MsgLiquidStakeResponse {}
-/** MsgLiquidStakeResponse defines the MsgLiquidStake response type. */
 export interface MsgLiquidStakeResponseSDKType {}
-/**
- * MsgLiquidUnstake defines a SDK message for performing an undelegation of
- * liquid staking from a delegate.
- */
+/** MsgLiquidUnstake burns LST of a specific pool and initiates unbonding. */
 export interface MsgLiquidUnstake {
   delegatorAddress: string;
+  /**
+   * pool_id must correspond to amount.denom (the pool's liquid_bond_denom);
+   * both are required for explicitness and validated to match.
+   */
+  poolId: string;
+  /**
+   * amount is the LST coin to burn. Its denom must equal
+   * Pool(pool_id).liquid_bond_denom.
+   */
   amount?: Coin;
 }
-/**
- * MsgLiquidUnstake defines a SDK message for performing an undelegation of
- * liquid staking from a delegate.
- */
+/** MsgLiquidUnstake burns LST of a specific pool and initiates unbonding. */
 export interface MsgLiquidUnstakeSDKType {
   delegator_address: string;
+  pool_id: string;
   amount?: CoinSDKType;
 }
-/** MsgLiquidUnstakeResponse defines the MsgLiquidUnstake response type. */
 export interface MsgLiquidUnstakeResponse {
   completionTime?: Timestamp;
 }
-/** MsgLiquidUnstakeResponse defines the MsgLiquidUnstake response type. */
 export interface MsgLiquidUnstakeResponseSDKType {
   completion_time?: TimestampSDKType;
 }
-export interface MsgUpdateParams {
-  /**
-   * authority is the address that controls the module (defaults to x/gov unless
-   * overwritten).
-   */
+/**
+ * MsgCreatePool registers a new liquid staking pool. Governance only.
+ * 
+ * The proxy account is derived deterministically from pool_id; pool_id and
+ * liquid_bond_denom must both be globally unique. The newly created pool
+ * starts with an empty whitelisted_validators list, empty
+ * weighted_rewards_receivers, zero fee rates, and paused=false. Validators
+ * must be added with MsgUpdateWhitelistedValidators before staking is
+ * possible (the active-weight-quorum check requires sum >= 33.33%).
+ */
+export interface MsgCreatePool {
+  /** authority must be the governance module address. */
   authority: string;
   /**
-   * params defines the parameters to update.
-   * NOTE: denom and whitelisted_validators and weighted_rewards_receivers are
-   * not updated.
+   * pool_id is the immutable identifier for the new pool. Validated as
+   * lowercase alphanumeric plus '-', length 2..16, globally unique.
    */
-  params?: Params;
+  poolId: string;
+  /**
+   * liquid_bond_denom is the LST denom for the new pool. Must pass
+   * sdk.ValidateDenom and be globally unique across pools.
+   */
+  liquidBondDenom: string;
+  /** initial_admin_address becomes the pool's whitelist_admin_address. */
+  initialAdminAddress: string;
+  /** initial_fee_account_address becomes the pool's fee_account_address. */
+  initialFeeAccountAddress: string;
 }
-export interface MsgUpdateParamsSDKType {
+/**
+ * MsgCreatePool registers a new liquid staking pool. Governance only.
+ * 
+ * The proxy account is derived deterministically from pool_id; pool_id and
+ * liquid_bond_denom must both be globally unique. The newly created pool
+ * starts with an empty whitelisted_validators list, empty
+ * weighted_rewards_receivers, zero fee rates, and paused=false. Validators
+ * must be added with MsgUpdateWhitelistedValidators before staking is
+ * possible (the active-weight-quorum check requires sum >= 33.33%).
+ */
+export interface MsgCreatePoolSDKType {
   authority: string;
-  params?: ParamsSDKType;
+  pool_id: string;
+  liquid_bond_denom: string;
+  initial_admin_address: string;
+  initial_fee_account_address: string;
 }
-/** MsgUpdateParamsResponse defines the response structure for executing a */
-export interface MsgUpdateParamsResponse {}
-/** MsgUpdateParamsResponse defines the response structure for executing a */
-export interface MsgUpdateParamsResponseSDKType {}
+export interface MsgCreatePoolResponse {
+  /**
+   * proxy_account_address is the derived bech32 address that will hold this
+   * pool's delegations. Returned for client convenience.
+   */
+  proxyAccountAddress: string;
+}
+export interface MsgCreatePoolResponseSDKType {
+  proxy_account_address: string;
+}
+/** MsgUpdateModuleParams updates the global ModuleParams. Governance only. */
+export interface MsgUpdateModuleParams {
+  /** authority must be the governance module address. */
+  authority: string;
+  /** module_params replaces the current ModuleParams in full. */
+  moduleParams?: ModuleParams;
+}
+/** MsgUpdateModuleParams updates the global ModuleParams. Governance only. */
+export interface MsgUpdateModuleParamsSDKType {
+  authority: string;
+  module_params?: ModuleParamsSDKType;
+}
+export interface MsgUpdateModuleParamsResponse {}
+export interface MsgUpdateModuleParamsResponseSDKType {}
+/**
+ * MsgUpdatePool updates a pool's mutable scalar/address fields. Governance
+ * or the pool's current whitelist_admin_address may call this.
+ * 
+ * Whitelisted validators, weighted rewards receivers, and the paused flag
+ * each have their own dedicated update message and are NOT touched here.
+ * The pool_id, liquid_bond_denom, and proxy_account_address are immutable
+ * after creation and cannot be changed via this message.
+ */
+export interface MsgUpdatePool {
+  /** authority must be either governance or the pool's current admin. */
+  authority: string;
+  /** pool_id selects the pool to update. */
+  poolId: string;
+  /** unstake_fee_rate replaces the pool's current unstake fee rate. */
+  unstakeFeeRate: string;
+  /** fee_account_address replaces the pool's current fee account. */
+  feeAccountAddress: string;
+  /** autocompound_fee_rate replaces the pool's current autocompound fee rate. */
+  autocompoundFeeRate: string;
+  /** whitelist_admin_address replaces the pool's current admin address. */
+  whitelistAdminAddress: string;
+}
+/**
+ * MsgUpdatePool updates a pool's mutable scalar/address fields. Governance
+ * or the pool's current whitelist_admin_address may call this.
+ * 
+ * Whitelisted validators, weighted rewards receivers, and the paused flag
+ * each have their own dedicated update message and are NOT touched here.
+ * The pool_id, liquid_bond_denom, and proxy_account_address are immutable
+ * after creation and cannot be changed via this message.
+ */
+export interface MsgUpdatePoolSDKType {
+  authority: string;
+  pool_id: string;
+  unstake_fee_rate: string;
+  fee_account_address: string;
+  autocompound_fee_rate: string;
+  whitelist_admin_address: string;
+}
+export interface MsgUpdatePoolResponse {}
+export interface MsgUpdatePoolResponseSDKType {}
+/**
+ * MsgUpdateWhitelistedValidators replaces a pool's validator whitelist.
+ * Governance or the pool's current admin may call this. Target weights must
+ * sum to 10000.
+ */
 export interface MsgUpdateWhitelistedValidators {
-  /**
-   * Authority is the address that is allowed to update whitelisted validators,
-   * defined as admin address in params (WhitelistAdminAddress).
-   */
+  /** authority must be either governance or the pool's current admin. */
   authority: string;
-  /**
-   * WhitelistedValidators specifies the validators elected to become Active
-   * Liquid Validators.
-   */
+  /** pool_id selects the pool whose whitelist is being replaced. */
+  poolId: string;
+  /** whitelisted_validators replaces the pool's validator set. */
   whitelistedValidators: WhitelistedValidator[];
 }
+/**
+ * MsgUpdateWhitelistedValidators replaces a pool's validator whitelist.
+ * Governance or the pool's current admin may call this. Target weights must
+ * sum to 10000.
+ */
 export interface MsgUpdateWhitelistedValidatorsSDKType {
   authority: string;
+  pool_id: string;
   whitelisted_validators: WhitelistedValidatorSDKType[];
 }
-/**
- * MsgUpdateWhitelistedValidatorsResponse defines the response structure for
- * executing a
- */
 export interface MsgUpdateWhitelistedValidatorsResponse {}
-/**
- * MsgUpdateWhitelistedValidatorsResponse defines the response structure for
- * executing a
- */
 export interface MsgUpdateWhitelistedValidatorsResponseSDKType {}
+/**
+ * MsgUpdateWeightedRewardsReceivers replaces a pool's weighted rewards
+ * receivers list. Pool admin only (matches pre-v7 admin-only constraint).
+ */
 export interface MsgUpdateWeightedRewardsReceivers {
-  /**
-   * Authority is the address that is allowed to update wieghted rewards
-   * receivers, defined as admin address in params (WhitelistAdminAddress).
-   */
+  /** authority must equal the pool's whitelist_admin_address. */
   authority: string;
+  /** pool_id selects the pool whose receivers are being replaced. */
+  poolId: string;
   /**
-   * WhitelistedValidators specifies the validators elected to become Active
-   * Liquid Validators.
+   * weighted_rewards_receivers replaces the pool's receivers list. Sum of
+   * weights must not exceed 1.
    */
   weightedRewardsReceivers: WeightedAddress[];
 }
+/**
+ * MsgUpdateWeightedRewardsReceivers replaces a pool's weighted rewards
+ * receivers list. Pool admin only (matches pre-v7 admin-only constraint).
+ */
 export interface MsgUpdateWeightedRewardsReceiversSDKType {
   authority: string;
+  pool_id: string;
   weighted_rewards_receivers: WeightedAddressSDKType[];
 }
-/**
- * MsgUpdateWeightedRewardsReceiversResponse defines the response structure for
- * executing a
- */
 export interface MsgUpdateWeightedRewardsReceiversResponse {}
-/**
- * MsgUpdateWeightedRewardsReceiversResponse defines the response structure for
- * executing a
- */
 export interface MsgUpdateWeightedRewardsReceiversResponseSDKType {}
-export interface MsgSetModulePaused {
-  /**
-   * Authority is the address that is allowed to update module's paused state,
-   * defined as admin address in params (WhitelistAdminAddress).
-   */
+/**
+ * MsgSetPoolPaused toggles a single pool's per-pool paused flag.
+ * Governance or the pool's current admin may call this.
+ */
+export interface MsgSetPoolPaused {
+  /** authority must be either governance or the pool's current admin. */
   authority: string;
-  /** IsPaused represents the target state of the paused flag. */
+  /** pool_id selects the pool whose paused flag is being set. */
+  poolId: string;
+  /** is_paused is the target value of Pool.paused. */
   isPaused: boolean;
 }
+/**
+ * MsgSetPoolPaused toggles a single pool's per-pool paused flag.
+ * Governance or the pool's current admin may call this.
+ */
+export interface MsgSetPoolPausedSDKType {
+  authority: string;
+  pool_id: string;
+  is_paused: boolean;
+}
+export interface MsgSetPoolPausedResponse {}
+export interface MsgSetPoolPausedResponseSDKType {}
+/**
+ * MsgSetModulePaused toggles the global ModuleParams.module_paused kill
+ * switch. When true, every pool is halted regardless of its per-pool flag.
+ * Governance authority only.
+ */
+export interface MsgSetModulePaused {
+  /** authority must be the governance module address. */
+  authority: string;
+  /** is_paused is the target value of ModuleParams.module_paused. */
+  isPaused: boolean;
+}
+/**
+ * MsgSetModulePaused toggles the global ModuleParams.module_paused kill
+ * switch. When true, every pool is halted regardless of its per-pool flag.
+ * Governance authority only.
+ */
 export interface MsgSetModulePausedSDKType {
   authority: string;
   is_paused: boolean;
 }
-/**
- * MsgSetModulePausedResponse defines the response structure for
- * executing a
- */
 export interface MsgSetModulePausedResponse {}
-/**
- * MsgSetModulePausedResponse defines the response structure for
- * executing a
- */
 export interface MsgSetModulePausedResponseSDKType {}
-/**
- * MsgBurn defines a SDK message for performing a burn of coins.
- * NOTE: only ixo native token can be burned
- */
+/** MsgBurn burns the signer's native uixo tokens. Module-level operation. */
 export interface MsgBurn {
   burner: string;
-  /**
-   * amount is the amount of coins to burn
-   * NOTE: only ixo native token can be burned
-   */
+  /** amount must be denominated in uixo. */
   amount?: Coin;
 }
-/**
- * MsgBurn defines a SDK message for performing a burn of coins.
- * NOTE: only ixo native token can be burned
- */
+/** MsgBurn burns the signer's native uixo tokens. Module-level operation. */
 export interface MsgBurnSDKType {
   burner: string;
   amount?: CoinSDKType;
 }
 export interface MsgBurnResponse {}
 export interface MsgBurnResponseSDKType {}
+/**
+ * MsgUpdateParams (pre-v7) updated the single-pool global Params record.
+ * In v7 this is replaced by MsgUpdateModuleParams + MsgCreatePool /
+ * MsgUpdatePool, but historical pre-upgrade txs still contain this type.
+ */
+export interface MsgUpdateParams {
+  authority: string;
+  params?: Params;
+}
+/**
+ * MsgUpdateParams (pre-v7) updated the single-pool global Params record.
+ * In v7 this is replaced by MsgUpdateModuleParams + MsgCreatePool /
+ * MsgUpdatePool, but historical pre-upgrade txs still contain this type.
+ */
+export interface MsgUpdateParamsSDKType {
+  authority: string;
+  params?: ParamsSDKType;
+}
+export interface MsgUpdateParamsResponse {}
+export interface MsgUpdateParamsResponseSDKType {}
 function createBaseMsgLiquidStake(): MsgLiquidStake {
   return {
     delegatorAddress: "",
+    poolId: "",
     amount: undefined
   };
 }
@@ -177,8 +305,11 @@ export const MsgLiquidStake = {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
     }
+    if (message.poolId !== "") {
+      writer.uint32(18).string(message.poolId);
+    }
     if (message.amount !== undefined) {
-      Coin.encode(message.amount, writer.uint32(18).fork()).ldelim();
+      Coin.encode(message.amount, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -193,6 +324,9 @@ export const MsgLiquidStake = {
           message.delegatorAddress = reader.string();
           break;
         case 2:
+          message.poolId = reader.string();
+          break;
+        case 3:
           message.amount = Coin.decode(reader, reader.uint32());
           break;
         default:
@@ -205,18 +339,21 @@ export const MsgLiquidStake = {
   fromJSON(object: any): MsgLiquidStake {
     return {
       delegatorAddress: isSet(object.delegatorAddress) ? String(object.delegatorAddress) : "",
+      poolId: isSet(object.poolId) ? String(object.poolId) : "",
       amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined
     };
   },
   toJSON(message: MsgLiquidStake): unknown {
     const obj: any = {};
     message.delegatorAddress !== undefined && (obj.delegatorAddress = message.delegatorAddress);
+    message.poolId !== undefined && (obj.poolId = message.poolId);
     message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     return obj;
   },
   fromPartial(object: Partial<MsgLiquidStake>): MsgLiquidStake {
     const message = createBaseMsgLiquidStake();
     message.delegatorAddress = object.delegatorAddress ?? "";
+    message.poolId = object.poolId ?? "";
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     return message;
   }
@@ -257,6 +394,7 @@ export const MsgLiquidStakeResponse = {
 function createBaseMsgLiquidUnstake(): MsgLiquidUnstake {
   return {
     delegatorAddress: "",
+    poolId: "",
     amount: undefined
   };
 }
@@ -265,8 +403,11 @@ export const MsgLiquidUnstake = {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
     }
+    if (message.poolId !== "") {
+      writer.uint32(18).string(message.poolId);
+    }
     if (message.amount !== undefined) {
-      Coin.encode(message.amount, writer.uint32(18).fork()).ldelim();
+      Coin.encode(message.amount, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -281,6 +422,9 @@ export const MsgLiquidUnstake = {
           message.delegatorAddress = reader.string();
           break;
         case 2:
+          message.poolId = reader.string();
+          break;
+        case 3:
           message.amount = Coin.decode(reader, reader.uint32());
           break;
         default:
@@ -293,18 +437,21 @@ export const MsgLiquidUnstake = {
   fromJSON(object: any): MsgLiquidUnstake {
     return {
       delegatorAddress: isSet(object.delegatorAddress) ? String(object.delegatorAddress) : "",
+      poolId: isSet(object.poolId) ? String(object.poolId) : "",
       amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined
     };
   },
   toJSON(message: MsgLiquidUnstake): unknown {
     const obj: any = {};
     message.delegatorAddress !== undefined && (obj.delegatorAddress = message.delegatorAddress);
+    message.poolId !== undefined && (obj.poolId = message.poolId);
     message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     return obj;
   },
   fromPartial(object: Partial<MsgLiquidUnstake>): MsgLiquidUnstake {
     const message = createBaseMsgLiquidUnstake();
     message.delegatorAddress = object.delegatorAddress ?? "";
+    message.poolId = object.poolId ?? "";
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     return message;
   }
@@ -354,26 +501,38 @@ export const MsgLiquidUnstakeResponse = {
     return message;
   }
 };
-function createBaseMsgUpdateParams(): MsgUpdateParams {
+function createBaseMsgCreatePool(): MsgCreatePool {
   return {
     authority: "",
-    params: undefined
+    poolId: "",
+    liquidBondDenom: "",
+    initialAdminAddress: "",
+    initialFeeAccountAddress: ""
   };
 }
-export const MsgUpdateParams = {
-  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const MsgCreatePool = {
+  encode(message: MsgCreatePool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
-    if (message.params !== undefined) {
-      Params.encode(message.params, writer.uint32(18).fork()).ldelim();
+    if (message.poolId !== "") {
+      writer.uint32(18).string(message.poolId);
+    }
+    if (message.liquidBondDenom !== "") {
+      writer.uint32(26).string(message.liquidBondDenom);
+    }
+    if (message.initialAdminAddress !== "") {
+      writer.uint32(34).string(message.initialAdminAddress);
+    }
+    if (message.initialFeeAccountAddress !== "") {
+      writer.uint32(42).string(message.initialFeeAccountAddress);
     }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreatePool {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgUpdateParams();
+    const message = createBaseMsgCreatePool();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -381,7 +540,16 @@ export const MsgUpdateParams = {
           message.authority = reader.string();
           break;
         case 2:
-          message.params = Params.decode(reader, reader.uint32());
+          message.poolId = reader.string();
+          break;
+        case 3:
+          message.liquidBondDenom = reader.string();
+          break;
+        case 4:
+          message.initialAdminAddress = reader.string();
+          break;
+        case 5:
+          message.initialFeeAccountAddress = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -390,36 +558,145 @@ export const MsgUpdateParams = {
     }
     return message;
   },
-  fromJSON(object: any): MsgUpdateParams {
+  fromJSON(object: any): MsgCreatePool {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
-      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined
+      poolId: isSet(object.poolId) ? String(object.poolId) : "",
+      liquidBondDenom: isSet(object.liquidBondDenom) ? String(object.liquidBondDenom) : "",
+      initialAdminAddress: isSet(object.initialAdminAddress) ? String(object.initialAdminAddress) : "",
+      initialFeeAccountAddress: isSet(object.initialFeeAccountAddress) ? String(object.initialFeeAccountAddress) : ""
     };
   },
-  toJSON(message: MsgUpdateParams): unknown {
+  toJSON(message: MsgCreatePool): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
-    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    message.poolId !== undefined && (obj.poolId = message.poolId);
+    message.liquidBondDenom !== undefined && (obj.liquidBondDenom = message.liquidBondDenom);
+    message.initialAdminAddress !== undefined && (obj.initialAdminAddress = message.initialAdminAddress);
+    message.initialFeeAccountAddress !== undefined && (obj.initialFeeAccountAddress = message.initialFeeAccountAddress);
     return obj;
   },
-  fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams {
-    const message = createBaseMsgUpdateParams();
+  fromPartial(object: Partial<MsgCreatePool>): MsgCreatePool {
+    const message = createBaseMsgCreatePool();
     message.authority = object.authority ?? "";
-    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    message.poolId = object.poolId ?? "";
+    message.liquidBondDenom = object.liquidBondDenom ?? "";
+    message.initialAdminAddress = object.initialAdminAddress ?? "";
+    message.initialFeeAccountAddress = object.initialFeeAccountAddress ?? "";
     return message;
   }
 };
-function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
-  return {};
+function createBaseMsgCreatePoolResponse(): MsgCreatePoolResponse {
+  return {
+    proxyAccountAddress: ""
+  };
 }
-export const MsgUpdateParamsResponse = {
-  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const MsgCreatePoolResponse = {
+  encode(message: MsgCreatePoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.proxyAccountAddress !== "") {
+      writer.uint32(10).string(message.proxyAccountAddress);
+    }
     return writer;
   },
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreatePoolResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgUpdateParamsResponse();
+    const message = createBaseMsgCreatePoolResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.proxyAccountAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgCreatePoolResponse {
+    return {
+      proxyAccountAddress: isSet(object.proxyAccountAddress) ? String(object.proxyAccountAddress) : ""
+    };
+  },
+  toJSON(message: MsgCreatePoolResponse): unknown {
+    const obj: any = {};
+    message.proxyAccountAddress !== undefined && (obj.proxyAccountAddress = message.proxyAccountAddress);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgCreatePoolResponse>): MsgCreatePoolResponse {
+    const message = createBaseMsgCreatePoolResponse();
+    message.proxyAccountAddress = object.proxyAccountAddress ?? "";
+    return message;
+  }
+};
+function createBaseMsgUpdateModuleParams(): MsgUpdateModuleParams {
+  return {
+    authority: "",
+    moduleParams: undefined
+  };
+}
+export const MsgUpdateModuleParams = {
+  encode(message: MsgUpdateModuleParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.moduleParams !== undefined) {
+      ModuleParams.encode(message.moduleParams, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateModuleParams {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateModuleParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.moduleParams = ModuleParams.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUpdateModuleParams {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      moduleParams: isSet(object.moduleParams) ? ModuleParams.fromJSON(object.moduleParams) : undefined
+    };
+  },
+  toJSON(message: MsgUpdateModuleParams): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.moduleParams !== undefined && (obj.moduleParams = message.moduleParams ? ModuleParams.toJSON(message.moduleParams) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgUpdateModuleParams>): MsgUpdateModuleParams {
+    const message = createBaseMsgUpdateModuleParams();
+    message.authority = object.authority ?? "";
+    message.moduleParams = object.moduleParams !== undefined && object.moduleParams !== null ? ModuleParams.fromPartial(object.moduleParams) : undefined;
+    return message;
+  }
+};
+function createBaseMsgUpdateModuleParamsResponse(): MsgUpdateModuleParamsResponse {
+  return {};
+}
+export const MsgUpdateModuleParamsResponse = {
+  encode(_: MsgUpdateModuleParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateModuleParamsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateModuleParamsResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -430,21 +707,150 @@ export const MsgUpdateParamsResponse = {
     }
     return message;
   },
-  fromJSON(_: any): MsgUpdateParamsResponse {
+  fromJSON(_: any): MsgUpdateModuleParamsResponse {
     return {};
   },
-  toJSON(_: MsgUpdateParamsResponse): unknown {
+  toJSON(_: MsgUpdateModuleParamsResponse): unknown {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgUpdateParamsResponse>): MsgUpdateParamsResponse {
-    const message = createBaseMsgUpdateParamsResponse();
+  fromPartial(_: Partial<MsgUpdateModuleParamsResponse>): MsgUpdateModuleParamsResponse {
+    const message = createBaseMsgUpdateModuleParamsResponse();
+    return message;
+  }
+};
+function createBaseMsgUpdatePool(): MsgUpdatePool {
+  return {
+    authority: "",
+    poolId: "",
+    unstakeFeeRate: "",
+    feeAccountAddress: "",
+    autocompoundFeeRate: "",
+    whitelistAdminAddress: ""
+  };
+}
+export const MsgUpdatePool = {
+  encode(message: MsgUpdatePool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.poolId !== "") {
+      writer.uint32(18).string(message.poolId);
+    }
+    if (message.unstakeFeeRate !== "") {
+      writer.uint32(26).string(message.unstakeFeeRate);
+    }
+    if (message.feeAccountAddress !== "") {
+      writer.uint32(34).string(message.feeAccountAddress);
+    }
+    if (message.autocompoundFeeRate !== "") {
+      writer.uint32(42).string(message.autocompoundFeeRate);
+    }
+    if (message.whitelistAdminAddress !== "") {
+      writer.uint32(50).string(message.whitelistAdminAddress);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdatePool {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdatePool();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.poolId = reader.string();
+          break;
+        case 3:
+          message.unstakeFeeRate = reader.string();
+          break;
+        case 4:
+          message.feeAccountAddress = reader.string();
+          break;
+        case 5:
+          message.autocompoundFeeRate = reader.string();
+          break;
+        case 6:
+          message.whitelistAdminAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUpdatePool {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      poolId: isSet(object.poolId) ? String(object.poolId) : "",
+      unstakeFeeRate: isSet(object.unstakeFeeRate) ? String(object.unstakeFeeRate) : "",
+      feeAccountAddress: isSet(object.feeAccountAddress) ? String(object.feeAccountAddress) : "",
+      autocompoundFeeRate: isSet(object.autocompoundFeeRate) ? String(object.autocompoundFeeRate) : "",
+      whitelistAdminAddress: isSet(object.whitelistAdminAddress) ? String(object.whitelistAdminAddress) : ""
+    };
+  },
+  toJSON(message: MsgUpdatePool): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.poolId !== undefined && (obj.poolId = message.poolId);
+    message.unstakeFeeRate !== undefined && (obj.unstakeFeeRate = message.unstakeFeeRate);
+    message.feeAccountAddress !== undefined && (obj.feeAccountAddress = message.feeAccountAddress);
+    message.autocompoundFeeRate !== undefined && (obj.autocompoundFeeRate = message.autocompoundFeeRate);
+    message.whitelistAdminAddress !== undefined && (obj.whitelistAdminAddress = message.whitelistAdminAddress);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgUpdatePool>): MsgUpdatePool {
+    const message = createBaseMsgUpdatePool();
+    message.authority = object.authority ?? "";
+    message.poolId = object.poolId ?? "";
+    message.unstakeFeeRate = object.unstakeFeeRate ?? "";
+    message.feeAccountAddress = object.feeAccountAddress ?? "";
+    message.autocompoundFeeRate = object.autocompoundFeeRate ?? "";
+    message.whitelistAdminAddress = object.whitelistAdminAddress ?? "";
+    return message;
+  }
+};
+function createBaseMsgUpdatePoolResponse(): MsgUpdatePoolResponse {
+  return {};
+}
+export const MsgUpdatePoolResponse = {
+  encode(_: MsgUpdatePoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdatePoolResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdatePoolResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgUpdatePoolResponse {
+    return {};
+  },
+  toJSON(_: MsgUpdatePoolResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgUpdatePoolResponse>): MsgUpdatePoolResponse {
+    const message = createBaseMsgUpdatePoolResponse();
     return message;
   }
 };
 function createBaseMsgUpdateWhitelistedValidators(): MsgUpdateWhitelistedValidators {
   return {
     authority: "",
+    poolId: "",
     whitelistedValidators: []
   };
 }
@@ -453,8 +859,11 @@ export const MsgUpdateWhitelistedValidators = {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
+    if (message.poolId !== "") {
+      writer.uint32(18).string(message.poolId);
+    }
     for (const v of message.whitelistedValidators) {
-      WhitelistedValidator.encode(v!, writer.uint32(18).fork()).ldelim();
+      WhitelistedValidator.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -469,6 +878,9 @@ export const MsgUpdateWhitelistedValidators = {
           message.authority = reader.string();
           break;
         case 2:
+          message.poolId = reader.string();
+          break;
+        case 3:
           message.whitelistedValidators.push(WhitelistedValidator.decode(reader, reader.uint32()));
           break;
         default:
@@ -481,12 +893,14 @@ export const MsgUpdateWhitelistedValidators = {
   fromJSON(object: any): MsgUpdateWhitelistedValidators {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
+      poolId: isSet(object.poolId) ? String(object.poolId) : "",
       whitelistedValidators: Array.isArray(object?.whitelistedValidators) ? object.whitelistedValidators.map((e: any) => WhitelistedValidator.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgUpdateWhitelistedValidators): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
+    message.poolId !== undefined && (obj.poolId = message.poolId);
     if (message.whitelistedValidators) {
       obj.whitelistedValidators = message.whitelistedValidators.map(e => e ? WhitelistedValidator.toJSON(e) : undefined);
     } else {
@@ -497,6 +911,7 @@ export const MsgUpdateWhitelistedValidators = {
   fromPartial(object: Partial<MsgUpdateWhitelistedValidators>): MsgUpdateWhitelistedValidators {
     const message = createBaseMsgUpdateWhitelistedValidators();
     message.authority = object.authority ?? "";
+    message.poolId = object.poolId ?? "";
     message.whitelistedValidators = object.whitelistedValidators?.map(e => WhitelistedValidator.fromPartial(e)) || [];
     return message;
   }
@@ -537,6 +952,7 @@ export const MsgUpdateWhitelistedValidatorsResponse = {
 function createBaseMsgUpdateWeightedRewardsReceivers(): MsgUpdateWeightedRewardsReceivers {
   return {
     authority: "",
+    poolId: "",
     weightedRewardsReceivers: []
   };
 }
@@ -545,8 +961,11 @@ export const MsgUpdateWeightedRewardsReceivers = {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
+    if (message.poolId !== "") {
+      writer.uint32(18).string(message.poolId);
+    }
     for (const v of message.weightedRewardsReceivers) {
-      WeightedAddress.encode(v!, writer.uint32(18).fork()).ldelim();
+      WeightedAddress.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -561,6 +980,9 @@ export const MsgUpdateWeightedRewardsReceivers = {
           message.authority = reader.string();
           break;
         case 2:
+          message.poolId = reader.string();
+          break;
+        case 3:
           message.weightedRewardsReceivers.push(WeightedAddress.decode(reader, reader.uint32()));
           break;
         default:
@@ -573,12 +995,14 @@ export const MsgUpdateWeightedRewardsReceivers = {
   fromJSON(object: any): MsgUpdateWeightedRewardsReceivers {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
+      poolId: isSet(object.poolId) ? String(object.poolId) : "",
       weightedRewardsReceivers: Array.isArray(object?.weightedRewardsReceivers) ? object.weightedRewardsReceivers.map((e: any) => WeightedAddress.fromJSON(e)) : []
     };
   },
   toJSON(message: MsgUpdateWeightedRewardsReceivers): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
+    message.poolId !== undefined && (obj.poolId = message.poolId);
     if (message.weightedRewardsReceivers) {
       obj.weightedRewardsReceivers = message.weightedRewardsReceivers.map(e => e ? WeightedAddress.toJSON(e) : undefined);
     } else {
@@ -589,6 +1013,7 @@ export const MsgUpdateWeightedRewardsReceivers = {
   fromPartial(object: Partial<MsgUpdateWeightedRewardsReceivers>): MsgUpdateWeightedRewardsReceivers {
     const message = createBaseMsgUpdateWeightedRewardsReceivers();
     message.authority = object.authority ?? "";
+    message.poolId = object.poolId ?? "";
     message.weightedRewardsReceivers = object.weightedRewardsReceivers?.map(e => WeightedAddress.fromPartial(e)) || [];
     return message;
   }
@@ -623,6 +1048,104 @@ export const MsgUpdateWeightedRewardsReceiversResponse = {
   },
   fromPartial(_: Partial<MsgUpdateWeightedRewardsReceiversResponse>): MsgUpdateWeightedRewardsReceiversResponse {
     const message = createBaseMsgUpdateWeightedRewardsReceiversResponse();
+    return message;
+  }
+};
+function createBaseMsgSetPoolPaused(): MsgSetPoolPaused {
+  return {
+    authority: "",
+    poolId: "",
+    isPaused: false
+  };
+}
+export const MsgSetPoolPaused = {
+  encode(message: MsgSetPoolPaused, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.poolId !== "") {
+      writer.uint32(18).string(message.poolId);
+    }
+    if (message.isPaused === true) {
+      writer.uint32(24).bool(message.isPaused);
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetPoolPaused {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetPoolPaused();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.poolId = reader.string();
+          break;
+        case 3:
+          message.isPaused = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgSetPoolPaused {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      poolId: isSet(object.poolId) ? String(object.poolId) : "",
+      isPaused: isSet(object.isPaused) ? Boolean(object.isPaused) : false
+    };
+  },
+  toJSON(message: MsgSetPoolPaused): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.poolId !== undefined && (obj.poolId = message.poolId);
+    message.isPaused !== undefined && (obj.isPaused = message.isPaused);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgSetPoolPaused>): MsgSetPoolPaused {
+    const message = createBaseMsgSetPoolPaused();
+    message.authority = object.authority ?? "";
+    message.poolId = object.poolId ?? "";
+    message.isPaused = object.isPaused ?? false;
+    return message;
+  }
+};
+function createBaseMsgSetPoolPausedResponse(): MsgSetPoolPausedResponse {
+  return {};
+}
+export const MsgSetPoolPausedResponse = {
+  encode(_: MsgSetPoolPausedResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetPoolPausedResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetPoolPausedResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgSetPoolPausedResponse {
+    return {};
+  },
+  toJSON(_: MsgSetPoolPausedResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgSetPoolPausedResponse>): MsgSetPoolPausedResponse {
+    const message = createBaseMsgSetPoolPausedResponse();
     return message;
   }
 };
@@ -799,6 +1322,94 @@ export const MsgBurnResponse = {
   },
   fromPartial(_: Partial<MsgBurnResponse>): MsgBurnResponse {
     const message = createBaseMsgBurnResponse();
+    return message;
+  }
+};
+function createBaseMsgUpdateParams(): MsgUpdateParams {
+  return {
+    authority: "",
+    params: undefined
+  };
+}
+export const MsgUpdateParams = {
+  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.params = Params.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): MsgUpdateParams {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined
+    };
+  },
+  toJSON(message: MsgUpdateParams): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    return obj;
+  },
+  fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams {
+    const message = createBaseMsgUpdateParams();
+    message.authority = object.authority ?? "";
+    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    return message;
+  }
+};
+function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
+  return {};
+}
+export const MsgUpdateParamsResponse = {
+  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(_: any): MsgUpdateParamsResponse {
+    return {};
+  },
+  toJSON(_: MsgUpdateParamsResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: Partial<MsgUpdateParamsResponse>): MsgUpdateParamsResponse {
+    const message = createBaseMsgUpdateParamsResponse();
     return message;
   }
 };

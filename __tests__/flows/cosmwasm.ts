@@ -435,6 +435,16 @@ export const daoCoreCw4 = () =>
     testMsg(
       "/cosmwasm.wasm.v1.MsgExecuteContract dao proposal add member",
       async () => {
+        // The cw4 voting module records member weights against the block
+        // height at which it was instantiated. dao-pre-propose-single's
+        // membership check queries voting power at proposal-creation block.
+        // Without a wait, the propose can land in the SAME block as the
+        // module instantiation, returning 0 voting power and rejecting
+        // with "You must be a member of this DAO". 15 seconds = ~7 blocks
+        // at 2s block time, comfortable buffer.
+        console.log("Waiting 15 seconds for cw4 voting snapshot");
+        await timeout(15 * 1000);
+
         const tester = getUser(WalletUsers.alice);
         const account = (await tester.getAccounts())[0].address;
 

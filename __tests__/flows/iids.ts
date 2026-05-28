@@ -1,15 +1,18 @@
 import {
   chunkArray,
+  createClient,
+  customMessages,
   customQueries,
   generateNewWallet,
   getFileFromPath,
+  getUser,
   ixo,
   queryClient,
   sendFromFaucet,
   testMsg,
   testQry,
 } from "../helpers/common";
-import { WalletUsers } from "../helpers/constants";
+import { fee, WalletUsers } from "../helpers/constants";
 import * as Iid from "../modules/Iid";
 import * as Entity from "../modules/Entity";
 import { setAndLedgerUser } from "../setup/helpers";
@@ -341,6 +344,51 @@ export const iidsBasic = () =>
     );
     testMsg("/ixo.iid.v1beta1.MsgAddService", () => Iid.AddService());
     testMsg("/ixo.iid.v1beta1.MsgDeleteService", () => Iid.DeleteService());
+
+    // -----------------------------------------------------------------------
+    // Reserved-namespace guard: MsgCreateIidDocument must reject any DID
+    // under did:ixo:entity:..., because that prefix is minted deterministically
+    // by the entity module via IidKeeper.SetDidDocument. Without the guard a
+    // malicious user could squat a DID that the entity module's CreateSequence
+    // will later try to mint, deadlocking the module.
+    // -----------------------------------------------------------------------
+    testMsg(
+      "/ixo.iid.v1beta1.MsgCreateIidDocument rejected for did:ixo:entity: prefix",
+      async () => {
+        const signer = WalletUsers.tester;
+        const client = await createClient(getUser(signer));
+        const account = (await getUser(signer).getAccounts())[0];
+        const message = {
+          typeUrl: "/ixo.iid.v1beta1.MsgCreateIidDocument",
+          value: ixo.iid.v1beta1.MsgCreateIidDocument.fromPartial({
+            // A well-formed entity-prefixed DID. The chain must reject it
+            // before any other validation runs — ErrReservedDidNamespace.
+            id: "did:ixo:entity:deadbeefcafebabe00000000abcdef01",
+            verifications: [
+              ixo.iid.v1beta1.Verification.fromPartial({
+                relationships: ["authentication"],
+                method: ixo.iid.v1beta1.VerificationMethod.fromPartial({
+                  id: "did:ixo:entity:deadbeefcafebabe00000000abcdef01#key-1",
+                  type: "EcdsaSecp256k1VerificationKey2019",
+                  controller: "did:ixo:entity:deadbeefcafebabe00000000abcdef01",
+                  blockchainAccountID: "cosmos:ixo-1:" + account.address,
+                }),
+              }),
+            ],
+            signer: account.address,
+          }),
+        };
+        // signAndBroadcast throws on non-zero code; catch and synthesise a
+        // failure response so testMsg(false) handles it as expected-failure.
+        try {
+          return await client.signAndBroadcast(account.address, [message], fee);
+        } catch (e: any) {
+          return { code: 1, rawLog: String(e?.message ?? e) } as any;
+        }
+      },
+      false,
+      false
+    );
   });
 
 export const iidAddEdKeys = () =>
@@ -349,6 +397,87 @@ export const iidAddEdKeys = () =>
     // testMsg("/ixo.iid.v1beta1.MsgRevokeVerification", () =>
     //   Iid.RevokeVerification()
     // );
+  });
+
+// ----------------------------------------------------------------------
+// CONTROLLER-AS-DID-FRAGMENT TEST
+// Investigates two questions:
+//   1. Does the chain accept and persist a DID fragment (e.g.
+//      "did:ixo:<addr>#pod") in the controllers list, or is the fragment
+//      stripped on storage?
+//   2. Can a controller (with or without a fragment) actually act on the
+//      DID document if it does NOT also have a verification method?
+//
+// Flow: Alice creates her DID with verification methods for HERSELF only.
+//       The controllers list contains [aliceDid, bobFragmentDid] where
+//       bobFragmentDid = "did:ixo:<bobAddr>#pod". Bob then attempts to
+//       update Alice's DID doc (MsgAddIidContext) signed with his own
+//       account.
+// ----------------------------------------------------------------------
+export const controllerAsDidFragmentTest = () =>
+  describe("Controller-as-DID-fragment investigation", () => {
+    // Use fresh random wallets so the test is repeatable across runs.
+    beforeAll(() => generateNewWallet(WalletUsers.alice));
+    beforeAll(() => generateNewWallet(WalletUsers.bob));
+
+    sendFromFaucet(WalletUsers.alice);
+    sendFromFaucet(WalletUsers.bob);
+
+    let aliceDid: string;
+    let bobAddress: string;
+    let bobFragmentDid: string;
+
+    test("create alice's DID with bob (as fragment) listed as controller, no verification methods for bob", async () => {
+      const alice = getUser(WalletUsers.alice);
+      const aliceAccount = (await alice.getAccounts())[0];
+      aliceDid = alice.did;
+
+      const bob = getUser(WalletUsers.bob);
+      const bobAccount = (await bob.getAccounts())[0];
+      bobAddress = bobAccount.address;
+      bobFragmentDid = `did:ixo:${bobAddress}#pod`;
+
+      const verifications = customMessages.iid.createIidVerificationMethods({
+        did: aliceDid,
+        pubkey: aliceAccount.pubkey,
+        address: aliceAccount.address,
+        controller: aliceDid,
+        type: "secp",
+      });
+
+      const message = {
+        typeUrl: "/ixo.iid.v1beta1.MsgCreateIidDocument",
+        value: ixo.iid.v1beta1.MsgCreateIidDocument.fromPartial({
+          context: customMessages.iid.createAgentIidContext(),
+          id: aliceDid,
+          alsoKnownAs: "alice",
+          verifications,
+          signer: aliceAccount.address,
+          // bob is added with a DID fragment with NO verification methods for him.
+          controllers: [aliceDid, bobFragmentDid],
+        }),
+      };
+
+      const client = await createClient(alice);
+      const res = await client.signAndBroadcast(
+        aliceAccount.address,
+        [message],
+        fee
+      );
+      console.dir({ code: res.code, raw: res.rawLog, events: res.events }, { depth: null });
+      expect(res.code).toBe(0);
+    });
+
+    test("query confirms bob's fragment DID is persisted verbatim in controllers", async () => {
+      const res = await queryClient.ixo.iid.v1beta1.iidDocument({
+        id: aliceDid,
+      });
+      console.log("controllers on chain:", res.iidDocument?.controller);
+      const controllers = res.iidDocument?.controller || [];
+      // Q1 answer: the fragment is preserved verbatim (regex bug means it is
+      // not stripped, and AddControllers does no normalisation).
+      expect(controllers).toContain(bobFragmentDid);
+    });
   });
 
 export const generateBlockchainTestUsers = () => {

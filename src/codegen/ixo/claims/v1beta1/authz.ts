@@ -86,6 +86,14 @@ export interface SubmitClaimConstraints {
    * payments from Collection payments are used
    */
   maxCw1155Payment: CW1155Payment[];
+  /**
+   * member_address is the team member who created this constraint via
+   * MsgCreateClaimAuthorization. Empty for individual (non-team) subscriptions.
+   * Used by Accept() to match the correct member's constraint when multiple
+   * team members authorize the same oracle, and by the intent handler to
+   * validate the oracle was authorized by the claimed member.
+   */
+  memberAddress: string;
 }
 export interface SubmitClaimConstraintsSDKType {
   collection_id: string;
@@ -94,6 +102,7 @@ export interface SubmitClaimConstraintsSDKType {
   max_cw20_payment: CW20PaymentSDKType[];
   intent_duration_ns?: DurationSDKType;
   max_cw1155_payment: CW1155PaymentSDKType[];
+  member_address: string;
 }
 export interface EvaluateClaimAuthorization {
   /** address of admin (entity admin module account) */
@@ -261,6 +270,14 @@ export interface CreateClaimAuthorizationConstraints {
    * authorizations
    */
   maxCw1155Payment: CW1155Payment[];
+  /**
+   * member_address is the team member this constraint is for. Set by the team
+   * admin when granting CreateClaimAuthorizationAuthorization to a member.
+   * Enforced in Accept() to prevent a member from spoofing another member's
+   * address when creating oracle authorizations. Empty for individual
+   * (non-team) subscriptions.
+   */
+  memberAddress: string;
 }
 /**
  * CreateClaimAuthorizationConstraints defines the constraints for creating
@@ -276,6 +293,7 @@ export interface CreateClaimAuthorizationConstraintsSDKType {
   allowed_auth_types: CreateClaimAuthorizationType;
   max_intent_duration_ns?: DurationSDKType;
   max_cw1155_payment: CW1155PaymentSDKType[];
+  member_address: string;
 }
 function createBaseSubmitClaimAuthorization(): SubmitClaimAuthorization {
   return {
@@ -343,7 +361,8 @@ function createBaseSubmitClaimConstraints(): SubmitClaimConstraints {
     maxAmount: [],
     maxCw20Payment: [],
     intentDurationNs: undefined,
-    maxCw1155Payment: []
+    maxCw1155Payment: [],
+    memberAddress: ""
   };
 }
 export const SubmitClaimConstraints = {
@@ -365,6 +384,9 @@ export const SubmitClaimConstraints = {
     }
     for (const v of message.maxCw1155Payment) {
       CW1155Payment.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.memberAddress !== "") {
+      writer.uint32(58).string(message.memberAddress);
     }
     return writer;
   },
@@ -393,6 +415,9 @@ export const SubmitClaimConstraints = {
         case 6:
           message.maxCw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
           break;
+        case 7:
+          message.memberAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -407,7 +432,8 @@ export const SubmitClaimConstraints = {
       maxAmount: Array.isArray(object?.maxAmount) ? object.maxAmount.map((e: any) => Coin.fromJSON(e)) : [],
       maxCw20Payment: Array.isArray(object?.maxCw20Payment) ? object.maxCw20Payment.map((e: any) => CW20Payment.fromJSON(e)) : [],
       intentDurationNs: isSet(object.intentDurationNs) ? Duration.fromJSON(object.intentDurationNs) : undefined,
-      maxCw1155Payment: Array.isArray(object?.maxCw1155Payment) ? object.maxCw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : []
+      maxCw1155Payment: Array.isArray(object?.maxCw1155Payment) ? object.maxCw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : [],
+      memberAddress: isSet(object.memberAddress) ? String(object.memberAddress) : ""
     };
   },
   toJSON(message: SubmitClaimConstraints): unknown {
@@ -430,6 +456,7 @@ export const SubmitClaimConstraints = {
     } else {
       obj.maxCw1155Payment = [];
     }
+    message.memberAddress !== undefined && (obj.memberAddress = message.memberAddress);
     return obj;
   },
   fromPartial(object: Partial<SubmitClaimConstraints>): SubmitClaimConstraints {
@@ -440,6 +467,7 @@ export const SubmitClaimConstraints = {
     message.maxCw20Payment = object.maxCw20Payment?.map(e => CW20Payment.fromPartial(e)) || [];
     message.intentDurationNs = object.intentDurationNs !== undefined && object.intentDurationNs !== null ? Duration.fromPartial(object.intentDurationNs) : undefined;
     message.maxCw1155Payment = object.maxCw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
+    message.memberAddress = object.memberAddress ?? "";
     return message;
   }
 };
@@ -902,7 +930,8 @@ function createBaseCreateClaimAuthorizationConstraints(): CreateClaimAuthorizati
     collectionIds: [],
     allowedAuthTypes: 0,
     maxIntentDurationNs: undefined,
-    maxCw1155Payment: []
+    maxCw1155Payment: [],
+    memberAddress: ""
   };
 }
 export const CreateClaimAuthorizationConstraints = {
@@ -933,6 +962,9 @@ export const CreateClaimAuthorizationConstraints = {
     }
     for (const v of message.maxCw1155Payment) {
       CW1155Payment.encode(v!, writer.uint32(74).fork()).ldelim();
+    }
+    if (message.memberAddress !== "") {
+      writer.uint32(82).string(message.memberAddress);
     }
     return writer;
   },
@@ -970,6 +1002,9 @@ export const CreateClaimAuthorizationConstraints = {
         case 9:
           message.maxCw1155Payment.push(CW1155Payment.decode(reader, reader.uint32()));
           break;
+        case 10:
+          message.memberAddress = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -987,7 +1022,8 @@ export const CreateClaimAuthorizationConstraints = {
       collectionIds: Array.isArray(object?.collectionIds) ? object.collectionIds.map((e: any) => String(e)) : [],
       allowedAuthTypes: isSet(object.allowedAuthTypes) ? createClaimAuthorizationTypeFromJSON(object.allowedAuthTypes) : 0,
       maxIntentDurationNs: isSet(object.maxIntentDurationNs) ? Duration.fromJSON(object.maxIntentDurationNs) : undefined,
-      maxCw1155Payment: Array.isArray(object?.maxCw1155Payment) ? object.maxCw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : []
+      maxCw1155Payment: Array.isArray(object?.maxCw1155Payment) ? object.maxCw1155Payment.map((e: any) => CW1155Payment.fromJSON(e)) : [],
+      memberAddress: isSet(object.memberAddress) ? String(object.memberAddress) : ""
     };
   },
   toJSON(message: CreateClaimAuthorizationConstraints): unknown {
@@ -1017,6 +1053,7 @@ export const CreateClaimAuthorizationConstraints = {
     } else {
       obj.maxCw1155Payment = [];
     }
+    message.memberAddress !== undefined && (obj.memberAddress = message.memberAddress);
     return obj;
   },
   fromPartial(object: Partial<CreateClaimAuthorizationConstraints>): CreateClaimAuthorizationConstraints {
@@ -1030,6 +1067,7 @@ export const CreateClaimAuthorizationConstraints = {
     message.allowedAuthTypes = object.allowedAuthTypes ?? 0;
     message.maxIntentDurationNs = object.maxIntentDurationNs !== undefined && object.maxIntentDurationNs !== null ? Duration.fromPartial(object.maxIntentDurationNs) : undefined;
     message.maxCw1155Payment = object.maxCw1155Payment?.map(e => CW1155Payment.fromPartial(e)) || [];
+    message.memberAddress = object.memberAddress ?? "";
     return message;
   }
 };

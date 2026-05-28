@@ -33,8 +33,14 @@ export const createQueryClient = async (rpcEndpoint: string) => {
       iid: {
         v1beta1: new ixo.iid.v1beta1.QueryClientImpl(rpc),
       },
+      liquidstake: {
+        v1beta1: new ixo.liquidstake.v1beta1.QueryClientImpl(rpc),
+      },
       mint: {
         v1beta1: new ixo.mint.v1beta1.QueryClientImpl(rpc),
+      },
+      names: {
+        v1beta1: new ixo.names.v1beta1.QueryClientImpl(rpc),
       },
       smartaccount: {
         v1beta1: new ixo.smartaccount.v1beta1.QueryClientImpl(rpc),

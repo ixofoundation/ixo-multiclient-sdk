@@ -1,18 +1,47 @@
-import { Params, ParamsSDKType, LiquidValidatorState, LiquidValidatorStateSDKType, NetAmountState, NetAmountStateSDKType } from "./liquidstake";
+import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../../cosmos/base/query/v1beta1/pagination";
+import { ModuleParams, ModuleParamsSDKType, Pool, PoolSDKType, LiquidValidatorState, LiquidValidatorStateSDKType, NetAmountState, NetAmountStateSDKType } from "./liquidstake";
 import * as _m0 from "protobufjs/minimal";
-export interface QueryParamsRequest {
+export interface QueryModuleParamsRequest {
 }
-export interface QueryParamsRequestSDKType {
+export interface QueryModuleParamsRequestSDKType {
 }
-export interface QueryParamsResponse {
-    params?: Params;
+export interface QueryModuleParamsResponse {
+    moduleParams?: ModuleParams;
 }
-export interface QueryParamsResponseSDKType {
-    params?: ParamsSDKType;
+export interface QueryModuleParamsResponseSDKType {
+    module_params?: ModuleParamsSDKType;
+}
+export interface QueryPoolRequest {
+    poolId: string;
+}
+export interface QueryPoolRequestSDKType {
+    pool_id: string;
+}
+export interface QueryPoolResponse {
+    pool?: Pool;
+}
+export interface QueryPoolResponseSDKType {
+    pool?: PoolSDKType;
+}
+export interface QueryPoolsRequest {
+    pagination?: PageRequest;
+}
+export interface QueryPoolsRequestSDKType {
+    pagination?: PageRequestSDKType;
+}
+export interface QueryPoolsResponse {
+    pools: Pool[];
+    pagination?: PageResponse;
+}
+export interface QueryPoolsResponseSDKType {
+    pools: PoolSDKType[];
+    pagination?: PageResponseSDKType;
 }
 export interface QueryLiquidValidatorsRequest {
+    poolId: string;
 }
 export interface QueryLiquidValidatorsRequestSDKType {
+    pool_id: string;
 }
 export interface QueryLiquidValidatorsResponse {
     liquidValidators: LiquidValidatorState[];
@@ -21,8 +50,10 @@ export interface QueryLiquidValidatorsResponseSDKType {
     liquid_validators: LiquidValidatorStateSDKType[];
 }
 export interface QueryStatesRequest {
+    poolId: string;
 }
 export interface QueryStatesRequestSDKType {
+    pool_id: string;
 }
 export interface QueryStatesResponse {
     netAmountState?: NetAmountState;
@@ -30,26 +61,54 @@ export interface QueryStatesResponse {
 export interface QueryStatesResponseSDKType {
     net_amount_state?: NetAmountStateSDKType;
 }
-export declare const QueryParamsRequest: {
-    encode(_: QueryParamsRequest, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsRequest;
-    fromJSON(_: any): QueryParamsRequest;
-    toJSON(_: QueryParamsRequest): unknown;
-    fromPartial(_: Partial<QueryParamsRequest>): QueryParamsRequest;
+export declare const QueryModuleParamsRequest: {
+    encode(_: QueryModuleParamsRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryModuleParamsRequest;
+    fromJSON(_: any): QueryModuleParamsRequest;
+    toJSON(_: QueryModuleParamsRequest): unknown;
+    fromPartial(_: Partial<QueryModuleParamsRequest>): QueryModuleParamsRequest;
 };
-export declare const QueryParamsResponse: {
-    encode(message: QueryParamsResponse, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsResponse;
-    fromJSON(object: any): QueryParamsResponse;
-    toJSON(message: QueryParamsResponse): unknown;
-    fromPartial(object: Partial<QueryParamsResponse>): QueryParamsResponse;
+export declare const QueryModuleParamsResponse: {
+    encode(message: QueryModuleParamsResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryModuleParamsResponse;
+    fromJSON(object: any): QueryModuleParamsResponse;
+    toJSON(message: QueryModuleParamsResponse): unknown;
+    fromPartial(object: Partial<QueryModuleParamsResponse>): QueryModuleParamsResponse;
+};
+export declare const QueryPoolRequest: {
+    encode(message: QueryPoolRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryPoolRequest;
+    fromJSON(object: any): QueryPoolRequest;
+    toJSON(message: QueryPoolRequest): unknown;
+    fromPartial(object: Partial<QueryPoolRequest>): QueryPoolRequest;
+};
+export declare const QueryPoolResponse: {
+    encode(message: QueryPoolResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryPoolResponse;
+    fromJSON(object: any): QueryPoolResponse;
+    toJSON(message: QueryPoolResponse): unknown;
+    fromPartial(object: Partial<QueryPoolResponse>): QueryPoolResponse;
+};
+export declare const QueryPoolsRequest: {
+    encode(message: QueryPoolsRequest, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryPoolsRequest;
+    fromJSON(object: any): QueryPoolsRequest;
+    toJSON(message: QueryPoolsRequest): unknown;
+    fromPartial(object: Partial<QueryPoolsRequest>): QueryPoolsRequest;
+};
+export declare const QueryPoolsResponse: {
+    encode(message: QueryPoolsResponse, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): QueryPoolsResponse;
+    fromJSON(object: any): QueryPoolsResponse;
+    toJSON(message: QueryPoolsResponse): unknown;
+    fromPartial(object: Partial<QueryPoolsResponse>): QueryPoolsResponse;
 };
 export declare const QueryLiquidValidatorsRequest: {
-    encode(_: QueryLiquidValidatorsRequest, writer?: _m0.Writer): _m0.Writer;
+    encode(message: QueryLiquidValidatorsRequest, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): QueryLiquidValidatorsRequest;
-    fromJSON(_: any): QueryLiquidValidatorsRequest;
-    toJSON(_: QueryLiquidValidatorsRequest): unknown;
-    fromPartial(_: Partial<QueryLiquidValidatorsRequest>): QueryLiquidValidatorsRequest;
+    fromJSON(object: any): QueryLiquidValidatorsRequest;
+    toJSON(message: QueryLiquidValidatorsRequest): unknown;
+    fromPartial(object: Partial<QueryLiquidValidatorsRequest>): QueryLiquidValidatorsRequest;
 };
 export declare const QueryLiquidValidatorsResponse: {
     encode(message: QueryLiquidValidatorsResponse, writer?: _m0.Writer): _m0.Writer;
@@ -59,11 +118,11 @@ export declare const QueryLiquidValidatorsResponse: {
     fromPartial(object: Partial<QueryLiquidValidatorsResponse>): QueryLiquidValidatorsResponse;
 };
 export declare const QueryStatesRequest: {
-    encode(_: QueryStatesRequest, writer?: _m0.Writer): _m0.Writer;
+    encode(message: QueryStatesRequest, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): QueryStatesRequest;
-    fromJSON(_: any): QueryStatesRequest;
-    toJSON(_: QueryStatesRequest): unknown;
-    fromPartial(_: Partial<QueryStatesRequest>): QueryStatesRequest;
+    fromJSON(object: any): QueryStatesRequest;
+    toJSON(message: QueryStatesRequest): unknown;
+    fromPartial(object: Partial<QueryStatesRequest>): QueryStatesRequest;
 };
 export declare const QueryStatesResponse: {
     encode(message: QueryStatesResponse, writer?: _m0.Writer): _m0.Writer;

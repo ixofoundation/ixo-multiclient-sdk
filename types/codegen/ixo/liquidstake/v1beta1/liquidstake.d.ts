@@ -12,67 +12,33 @@ export declare enum ValidatorStatus {
 export declare const ValidatorStatusSDKType: typeof ValidatorStatus;
 export declare function validatorStatusFromJSON(object: any): ValidatorStatus;
 export declare function validatorStatusToJSON(object: ValidatorStatus): string;
-/** Params defines the set of params for the liquidstake module. */
+/**
+ * Params defines the legacy single-pool params layout.
+ *
+ * DEPRECATED: kept only so the v7 upgrade migration can unmarshal pre-upgrade
+ * state from the KV store. New code must use ModuleParams (global) and Pool
+ * (per-pool). Do not reference this from new application logic.
+ */
+/** @deprecated */
 export interface Params {
-    /**
-     * LiquidBondDenom specifies the denomination of the token receiving after
-     * liquid stake, The value is calculated through NetAmount.
-     */
     liquidBondDenom: string;
-    /**
-     * WhitelistedValidators specifies the validators elected to become Active
-     * Liquid Validators.
-     */
     whitelistedValidators: WhitelistedValidator[];
-    /**
-     * UnstakeFeeRate specifies the fee rate when liquid unstake is requested,
-     * unbonded by subtracting it from unbondingAmount
-     */
     unstakeFeeRate: string;
-    /**
-     * MinLiquidStakingAmount specifies the minimum number of coins to be staked
-     * to the active liquid validators on liquid staking to minimize decimal loss
-     * and consider gas efficiency.
-     */
     minLiquidStakeAmount: string;
-    /**
-     * FeeAccountAddress defines the bech32-encoded address of
-     * an account responsible for accumulating protocol fees.
-     */
     feeAccountAddress: string;
-    /**
-     * AutocompoundFeeRate specifies the fee rate for auto redelegating the stake
-     * rewards. The fee is taken in favour of the fee account (see
-     * FeeAccountAddress).
-     */
     autocompoundFeeRate: string;
-    /**
-     * WhitelistAdminAddress the bech32-encoded address of an admin authority
-     * that is allowed to update whitelisted validators or pause liquidstaking
-     * module entirely. It is also the only address that can update the
-     * weighted_rewards_receivers.
-     * The key is controlled by the ZERO dao.
-     * Pausing of the module can be required during important migrations or
-     * failures.
-     */
     whitelistAdminAddress: string;
-    /**
-     * ModulePaused is a safety toggle that allows to stop main module functions
-     * such as stake/unstake/stake-to-lp and the BeginBlocker logic.
-     */
     modulePaused: boolean;
-    /**
-     * weighted_rewards_receivers is the addresses to receive the staking
-     * rewards on autocompounding with weights assigned to each address.
-     * The total of weights in the list in not allowed to be greater than 1.
-     *
-     * Eg. if the list has 1 address with weight 0.2, then on autocompounding
-     * the staking rewards will be split between 0.2 for the weighted receiver
-     * and 0.8 gets auto-compounded to the proxy account.
-     */
     weightedRewardsReceivers: WeightedAddress[];
 }
-/** Params defines the set of params for the liquidstake module. */
+/**
+ * Params defines the legacy single-pool params layout.
+ *
+ * DEPRECATED: kept only so the v7 upgrade migration can unmarshal pre-upgrade
+ * state from the KV store. New code must use ModuleParams (global) and Pool
+ * (per-pool). Do not reference this from new application logic.
+ */
+/** @deprecated */
 export interface ParamsSDKType {
     liquid_bond_denom: string;
     whitelisted_validators: WhitelistedValidatorSDKType[];
@@ -82,6 +48,122 @@ export interface ParamsSDKType {
     autocompound_fee_rate: string;
     whitelist_admin_address: string;
     module_paused: boolean;
+    weighted_rewards_receivers: WeightedAddressSDKType[];
+}
+/**
+ * ModuleParams defines global, module-wide parameters that apply across every
+ * liquid staking pool.
+ */
+export interface ModuleParams {
+    /**
+     * min_liquid_stake_amount is the minimum amount of native tokens that can
+     * be liquid-staked into any pool, applied across the entire module to
+     * minimise decimal loss and gas waste from dust amounts.
+     */
+    minLiquidStakeAmount: string;
+    /**
+     * module_paused is a global emergency kill switch. When true, ALL pools
+     * are paused regardless of their per-pool paused flag: liquid_stake,
+     * liquid_unstake, autocompounding, rebalancing, and BeginBlocker logic
+     * are halted module-wide. Used for migrations or critical incidents.
+     */
+    modulePaused: boolean;
+}
+/**
+ * ModuleParams defines global, module-wide parameters that apply across every
+ * liquid staking pool.
+ */
+export interface ModuleParamsSDKType {
+    min_liquid_stake_amount: string;
+    module_paused: boolean;
+}
+/**
+ * Pool defines a single liquid staking instance with its own LST denom,
+ * validator whitelist, admin, and fee configuration. Each pool maintains an
+ * independent NetAmount/Supply ratio, so two pools' LST tokens are NOT
+ * fungible with each other and may diverge in IXO value over time.
+ */
+export interface Pool {
+    /**
+     * pool_id is the unique, immutable identifier for this pool (e.g. "zero",
+     * "qi"). Used in storage keys, message routing, and proxy account
+     * derivation. Set at pool creation; cannot be changed.
+     */
+    poolId: string;
+    /**
+     * liquid_bond_denom is the denomination of the LST minted by this pool
+     * (e.g. "uzero"). Must be globally unique across all pools. Immutable.
+     */
+    liquidBondDenom: string;
+    /**
+     * proxy_account_address is the bech32-encoded address of the per-pool
+     * delegation proxy account. All delegations, redelegations, unbondings,
+     * and reward withdrawals for this pool flow through this account.
+     * Derived deterministically from pool_id at creation; immutable.
+     * For the legacy "zero" pool migrated from pre-v7 state, this field
+     * holds the original LiquidStakeProxyAcc address so existing
+     * delegations are preserved without state migration.
+     */
+    proxyAccountAddress: string;
+    /**
+     * whitelisted_validators are the validators eligible for delegation from
+     * this pool's proxy account. Target weights must sum to 10000.
+     */
+    whitelistedValidators: WhitelistedValidator[];
+    /**
+     * unstake_fee_rate is deducted from the unbonding amount when an unstake
+     * is requested against this pool.
+     */
+    unstakeFeeRate: string;
+    /**
+     * fee_account_address is the bech32-encoded address that accumulates the
+     * autocompound fee for this pool.
+     */
+    feeAccountAddress: string;
+    /**
+     * autocompound_fee_rate is the fraction of accrued staking rewards taken
+     * by this pool as a protocol fee on each autocompound epoch and sent to
+     * fee_account_address.
+     */
+    autocompoundFeeRate: string;
+    /**
+     * whitelist_admin_address is the bech32-encoded address authorised to
+     * update this pool's whitelisted_validators, weighted_rewards_receivers,
+     * paused flag, and other mutable pool fields. Governance can also update
+     * these fields. The admin is also the only address allowed to call
+     * LiquidStake against this pool.
+     */
+    whitelistAdminAddress: string;
+    /**
+     * paused is a per-pool safety toggle. When true, this specific pool's
+     * stake/unstake, autocompounding, and rebalancing are halted; other
+     * pools are unaffected. The global ModuleParams.module_paused flag
+     * overrides this and pauses every pool regardless of its per-pool value.
+     */
+    paused: boolean;
+    /**
+     * weighted_rewards_receivers are the addresses that receive a weighted
+     * share of this pool's autocompound rewards. The sum of weights must
+     * not exceed 1; the remainder is restaked to validators.
+     */
+    weightedRewardsReceivers: WeightedAddress[];
+}
+/**
+ * Pool defines a single liquid staking instance with its own LST denom,
+ * validator whitelist, admin, and fee configuration. Each pool maintains an
+ * independent NetAmount/Supply ratio, so two pools' LST tokens are NOT
+ * fungible with each other and may diverge in IXO value over time.
+ */
+export interface PoolSDKType {
+    pool_id: string;
+    liquid_bond_denom: string;
+    proxy_account_address: string;
+    whitelisted_validators: WhitelistedValidatorSDKType[];
+    unstake_fee_rate: string;
+    fee_account_address: string;
+    autocompound_fee_rate: string;
+    whitelist_admin_address: string;
+    paused: boolean;
     weighted_rewards_receivers: WeightedAddressSDKType[];
 }
 /**
@@ -183,43 +265,61 @@ export interface LiquidValidatorStateSDKType {
     liquid_tokens: string;
 }
 /**
- * NetAmountState is type for net amount raw data and mint rate, This is a value
- * that depends on the several module state every time, so it is used only for
- * calculation and query and is not stored in kv.
+ * NetAmountState holds the raw amounts and exchange rates for a single pool.
+ * Computed on the fly from pool state every time (never persisted), and used
+ * for unstake-rate calculation and queries. Each pool has its own independent
+ * NetAmountState.
  */
 export interface NetAmountState {
-    /** stake_rate is the rate at which the liquid staking module mints stkIXO */
+    /**
+     * stake_rate is the mint rate when staking into this pool.
+     * Always 1.0: 1 native token mints 1 LST regardless of accrued rewards.
+     */
     stakeRate: string;
-    /** unstake_rate is the rate at which the liquid staking module burns stkIXO */
+    /**
+     * unstake_rate is the burn rate when unstaking from this pool, equal to
+     * net_amount / stkixo_total_supply. Diverges from 1.0 as rewards accrue
+     * or slashing occurs.
+     */
     unstakeRate: string;
-    /** btoken_total_supply returns the total supply of uzero (stkIXO denom) */
+    /** stkixo_total_supply is the total supply of this pool's LST denom. */
     stkixoTotalSupply: string;
-    /** net_amount is proxy account's total liquid tokens + total unbonding balance */
+    /**
+     * net_amount is this pool's total liquid tokens + total unbonding balance,
+     * measured at its own proxy account.
+     */
     netAmount: string;
-    /** total_del_shares define the delegation shares of all liquid validators */
+    /**
+     * total_del_shares is the sum of delegation shares held by this pool's
+     * proxy account across all of its liquid validators.
+     */
     totalDelShares: string;
     /**
-     * total_liquid_tokens define the token amount worth of delegation shares of
-     * all liquid validator (slashing applied amount)
+     * total_liquid_tokens is the token-equivalent of total_del_shares with
+     * slashing applied, summed across this pool's liquid validators.
      */
     totalLiquidTokens: string;
     /**
-     * total_remaining_rewards define the sum of remaining rewards of proxy
-     * account by all liquid validators
+     * total_remaining_rewards is the sum of unwithdrawn staking rewards owed
+     * to this pool's proxy account from all its liquid validators.
      */
     totalRemainingRewards: string;
     /**
-     * total_unbonding_balance define the unbonding balance of proxy account by
-     * all liquid validator (slashing applied amount)
+     * total_unbonding_balance is the sum of unbonding amounts (slashing
+     * applied) for this pool's proxy account.
      */
     totalUnbondingBalance: string;
-    /** proxy_acc_balance define the balance of proxy account for the native token */
+    /**
+     * proxy_acc_balance is the spendable native-token balance currently sitting
+     * in this pool's proxy account (rewards withdrawn but not yet redelegated).
+     */
     proxyAccBalance: string;
 }
 /**
- * NetAmountState is type for net amount raw data and mint rate, This is a value
- * that depends on the several module state every time, so it is used only for
- * calculation and query and is not stored in kv.
+ * NetAmountState holds the raw amounts and exchange rates for a single pool.
+ * Computed on the fly from pool state every time (never persisted), and used
+ * for unstake-rate calculation and queries. Each pool has its own independent
+ * NetAmountState.
  */
 export interface NetAmountStateSDKType {
     stake_rate: string;
@@ -238,6 +338,20 @@ export declare const Params: {
     fromJSON(object: any): Params;
     toJSON(message: Params): unknown;
     fromPartial(object: Partial<Params>): Params;
+};
+export declare const ModuleParams: {
+    encode(message: ModuleParams, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): ModuleParams;
+    fromJSON(object: any): ModuleParams;
+    toJSON(message: ModuleParams): unknown;
+    fromPartial(object: Partial<ModuleParams>): ModuleParams;
+};
+export declare const Pool: {
+    encode(message: Pool, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): Pool;
+    fromJSON(object: any): Pool;
+    toJSON(message: Pool): unknown;
+    fromPartial(object: Partial<Pool>): Pool;
 };
 export declare const WeightedAddress: {
     encode(message: WeightedAddress, writer?: _m0.Writer): _m0.Writer;

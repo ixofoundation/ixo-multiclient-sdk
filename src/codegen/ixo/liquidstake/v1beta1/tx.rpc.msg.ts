@@ -1,37 +1,60 @@
 //@ts-nocheck
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { MsgLiquidStake, MsgLiquidStakeResponse, MsgLiquidUnstake, MsgLiquidUnstakeResponse, MsgUpdateParams, MsgUpdateParamsResponse, MsgUpdateWhitelistedValidators, MsgUpdateWhitelistedValidatorsResponse, MsgUpdateWeightedRewardsReceivers, MsgUpdateWeightedRewardsReceiversResponse, MsgSetModulePaused, MsgSetModulePausedResponse, MsgBurn, MsgBurnResponse } from "./tx";
+import { MsgLiquidStake, MsgLiquidStakeResponse, MsgLiquidUnstake, MsgLiquidUnstakeResponse, MsgCreatePool, MsgCreatePoolResponse, MsgUpdateModuleParams, MsgUpdateModuleParamsResponse, MsgUpdatePool, MsgUpdatePoolResponse, MsgUpdateWhitelistedValidators, MsgUpdateWhitelistedValidatorsResponse, MsgUpdateWeightedRewardsReceivers, MsgUpdateWeightedRewardsReceiversResponse, MsgSetPoolPaused, MsgSetPoolPausedResponse, MsgSetModulePaused, MsgSetModulePausedResponse, MsgBurn, MsgBurnResponse } from "./tx";
 /** Msg defines the liquid staking Msg service. */
 export interface Msg {
   /**
-   * LiquidStake defines a method for performing a delegation of coins
-   * from a delegator to whitelisted validators.
+   * LiquidStake delegates native tokens through a pool's proxy account to its
+   * whitelisted validators and mints the pool's LST denom to the delegator.
    */
   liquidStake(request: MsgLiquidStake): Promise<MsgLiquidStakeResponse>;
   /**
-   * LiquidUnstake defines a method for performing an undelegation of liquid
-   * staking from a delegate.
+   * LiquidUnstake burns LST denom of a specific pool and initiates unbonding
+   * from that pool's whitelisted validators back to the delegator.
    */
   liquidUnstake(request: MsgLiquidUnstake): Promise<MsgLiquidUnstakeResponse>;
-  /** UpdateParams defines a method to update the module params. */
-  updateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
   /**
-   * UpdateWhitelistedValidators defines a method to update the whitelisted
-   * validators list.
+   * CreatePool registers a new liquid staking pool with its own LST denom,
+   * proxy account, admin, and fee configuration. Governance authority only.
+   */
+  createPool(request: MsgCreatePool): Promise<MsgCreatePoolResponse>;
+  /**
+   * UpdateModuleParams updates global, module-wide parameters (the minimum
+   * liquid stake amount and the global module-paused kill switch).
+   * Governance authority only.
+   */
+  updateModuleParams(request: MsgUpdateModuleParams): Promise<MsgUpdateModuleParamsResponse>;
+  /**
+   * UpdatePool updates the mutable scalar/address fields of a specific pool
+   * (fee rates, fee account, admin address). Governance or the pool's
+   * current admin may call this. Whitelisted validators, weighted rewards
+   * receivers, and the paused flag have their own dedicated update messages.
+   */
+  updatePool(request: MsgUpdatePool): Promise<MsgUpdatePoolResponse>;
+  /**
+   * UpdateWhitelistedValidators updates the validator whitelist of a specific
+   * pool. Governance or the pool's current admin may call this.
    */
   updateWhitelistedValidators(request: MsgUpdateWhitelistedValidators): Promise<MsgUpdateWhitelistedValidatorsResponse>;
   /**
-   * UpdateWhitelistedValidators defines a method to update the whitelisted
-   * validators list. Only the whitelist admin address can update this list.
+   * UpdateWeightedRewardsReceivers updates the weighted rewards receivers
+   * list of a specific pool. The pool's admin may call this.
    */
   updateWeightedRewardsReceivers(request: MsgUpdateWeightedRewardsReceivers): Promise<MsgUpdateWeightedRewardsReceiversResponse>;
   /**
-   * SetModulePaused  defines a method to update the module's pause status,
-   * setting value of the safety flag in params.
+   * SetPoolPaused toggles the per-pool paused flag for a specific pool.
+   * Governance or the pool's current admin may call this. Other pools are
+   * unaffected.
+   */
+  setPoolPaused(request: MsgSetPoolPaused): Promise<MsgSetPoolPausedResponse>;
+  /**
+   * SetModulePaused toggles the global module-paused flag in ModuleParams.
+   * When paused, ALL pools are halted regardless of their per-pool flag.
+   * Governance authority only.
    */
   setModulePaused(request: MsgSetModulePaused): Promise<MsgSetModulePausedResponse>;
-  /** Burn defines a method for burning coins. */
+  /** Burn burns native uixo tokens. Module-level operation, not pool-scoped. */
   burn(request: MsgBurn): Promise<MsgBurnResponse>;
 }
 export class MsgClientImpl implements Msg {
@@ -40,9 +63,12 @@ export class MsgClientImpl implements Msg {
     this.rpc = rpc;
     this.liquidStake = this.liquidStake.bind(this);
     this.liquidUnstake = this.liquidUnstake.bind(this);
-    this.updateParams = this.updateParams.bind(this);
+    this.createPool = this.createPool.bind(this);
+    this.updateModuleParams = this.updateModuleParams.bind(this);
+    this.updatePool = this.updatePool.bind(this);
     this.updateWhitelistedValidators = this.updateWhitelistedValidators.bind(this);
     this.updateWeightedRewardsReceivers = this.updateWeightedRewardsReceivers.bind(this);
+    this.setPoolPaused = this.setPoolPaused.bind(this);
     this.setModulePaused = this.setModulePaused.bind(this);
     this.burn = this.burn.bind(this);
   }
@@ -56,10 +82,20 @@ export class MsgClientImpl implements Msg {
     const promise = this.rpc.request("ixo.liquidstake.v1beta1.Msg", "LiquidUnstake", data);
     return promise.then(data => MsgLiquidUnstakeResponse.decode(new _m0.Reader(data)));
   }
-  updateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
-    const data = MsgUpdateParams.encode(request).finish();
-    const promise = this.rpc.request("ixo.liquidstake.v1beta1.Msg", "UpdateParams", data);
-    return promise.then(data => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
+  createPool(request: MsgCreatePool): Promise<MsgCreatePoolResponse> {
+    const data = MsgCreatePool.encode(request).finish();
+    const promise = this.rpc.request("ixo.liquidstake.v1beta1.Msg", "CreatePool", data);
+    return promise.then(data => MsgCreatePoolResponse.decode(new _m0.Reader(data)));
+  }
+  updateModuleParams(request: MsgUpdateModuleParams): Promise<MsgUpdateModuleParamsResponse> {
+    const data = MsgUpdateModuleParams.encode(request).finish();
+    const promise = this.rpc.request("ixo.liquidstake.v1beta1.Msg", "UpdateModuleParams", data);
+    return promise.then(data => MsgUpdateModuleParamsResponse.decode(new _m0.Reader(data)));
+  }
+  updatePool(request: MsgUpdatePool): Promise<MsgUpdatePoolResponse> {
+    const data = MsgUpdatePool.encode(request).finish();
+    const promise = this.rpc.request("ixo.liquidstake.v1beta1.Msg", "UpdatePool", data);
+    return promise.then(data => MsgUpdatePoolResponse.decode(new _m0.Reader(data)));
   }
   updateWhitelistedValidators(request: MsgUpdateWhitelistedValidators): Promise<MsgUpdateWhitelistedValidatorsResponse> {
     const data = MsgUpdateWhitelistedValidators.encode(request).finish();
@@ -70,6 +106,11 @@ export class MsgClientImpl implements Msg {
     const data = MsgUpdateWeightedRewardsReceivers.encode(request).finish();
     const promise = this.rpc.request("ixo.liquidstake.v1beta1.Msg", "UpdateWeightedRewardsReceivers", data);
     return promise.then(data => MsgUpdateWeightedRewardsReceiversResponse.decode(new _m0.Reader(data)));
+  }
+  setPoolPaused(request: MsgSetPoolPaused): Promise<MsgSetPoolPausedResponse> {
+    const data = MsgSetPoolPaused.encode(request).finish();
+    const promise = this.rpc.request("ixo.liquidstake.v1beta1.Msg", "SetPoolPaused", data);
+    return promise.then(data => MsgSetPoolPausedResponse.decode(new _m0.Reader(data)));
   }
   setModulePaused(request: MsgSetModulePaused): Promise<MsgSetModulePausedResponse> {
     const data = MsgSetModulePaused.encode(request).finish();
