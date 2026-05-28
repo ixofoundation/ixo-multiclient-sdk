@@ -981,10 +981,9 @@ export interface DisputeResolution {
   /**
    * data is the structured payload the adjudicator attached to the
    * resolution — same shape as the dispute filing's DisputeData. Lets the
-   * adjudicator pin an opinion document (IPFS uri + proof/cid), declare its
-   * MIME type, and flag encryption — mirroring how disputers attach evidence
-   * at filing time. Replaces the previous free-form `string reason` field
-   * (renumbered to 5 here; v7 is unshipped so no migration is required).
+   * adjudicator pin an opinion document (IPFS/matrix uri + proof/cid), declare
+   * its MIME type, and flag encryption — mirroring how disputers attach
+   * evidence at filing time.
    */
   data?: DisputeData;
   /**
