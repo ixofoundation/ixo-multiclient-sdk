@@ -1,9 +1,15 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { McpAgent } from "agents/mcp";
-import { Env, resolveConfig } from "./config";
+import { Env, isServerSigningEnabled, resolveConfig } from "./config";
 import { allTools } from "./tools";
+import { serverSigningTools } from "./tools/server";
 import { errorResult } from "./utils/format";
-import type { ToolContext } from "./utils/tool";
+import type { ToolContext, ToolDefinition } from "./utils/tool";
+
+// Re-exported so Cloudflare can bind the Durable Object used for atomic sequence
+// allocation in the optional server-signing mode. Imported from the /cloudflare
+// subpath to avoid loading crypto at module-eval time.
+export { SequenceManagerDO } from "@ixo/impactxclient-sdk/cloudflare";
 
 /**
  * IXO blockchain MCP server, deployed as a Cloudflare Worker (Durable Object per
@@ -17,9 +23,15 @@ export class IxoMcpAgent extends McpAgent<Env> {
   });
 
   async init() {
-    const ctx: ToolContext = { config: resolveConfig(this.env) };
+    const ctx: ToolContext = { config: resolveConfig(this.env), env: this.env };
 
-    for (const tool of allTools) {
+    // The optional custodial server-signing tools are only exposed when a
+    // mnemonic is configured; otherwise the server stays purely non-custodial.
+    const tools: ToolDefinition<any>[] = isServerSigningEnabled(this.env)
+      ? [...allTools, ...serverSigningTools]
+      : allTools;
+
+    for (const tool of tools) {
       this.server.registerTool(
         tool.name,
         {

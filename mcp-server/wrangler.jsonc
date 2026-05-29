@@ -10,13 +10,19 @@
       {
         "class_name": "IxoMcpAgent",
         "name": "MCP_OBJECT"
+      },
+      // Used only by the optional server-signing mode for atomic sequence
+      // allocation across concurrent broadcasts. Harmless when unused.
+      {
+        "class_name": "SequenceManagerDO",
+        "name": "SEQUENCE_MANAGER"
       }
     ]
   },
   "migrations": [
     {
       "tag": "v1",
-      "new_sqlite_classes": ["IxoMcpAgent"]
+      "new_sqlite_classes": ["IxoMcpAgent", "SequenceManagerDO"]
     }
   ],
   "observability": {
@@ -25,6 +31,10 @@
   // Network selection. Override per-deploy or via `wrangler secret`/dashboard.
   // IXO_NETWORK = mainnet | testnet | devnet (defaults to mainnet).
   // Optional overrides: IXO_RPC_URL, IXO_CHAIN_ID, IXO_GAS_PRICE.
+  //
+  // OPTIONAL custodial server-signing: set the IXO_MNEMONIC secret to enable the
+  // ixo_server_* tools (`wrangler secret put IXO_MNEMONIC`). Leave unset for the
+  // default non-custodial mode. Never commit a mnemonic to vars.
   "vars": {
     "IXO_NETWORK": "mainnet"
   }

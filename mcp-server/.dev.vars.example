@@ -8,3 +8,8 @@ IXO_NETWORK=mainnet
 # IXO_RPC_URL=https://impacthub.ixo.world/rpc/
 # IXO_CHAIN_ID=ixo-5
 # IXO_GAS_PRICE=0.025uixo
+
+# OPTIONAL custodial server-signing mode. When set, the ixo_server_* tools
+# become available and the SERVER signs with this wallet. Leave unset for the
+# default non-custodial flow. In production use `wrangler secret put IXO_MNEMONIC`.
+# IXO_MNEMONIC="word1 word2 ... word24"

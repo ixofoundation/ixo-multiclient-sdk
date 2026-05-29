@@ -13,9 +13,13 @@ and deployed as a **Cloudflare Worker** exposing remote MCP over **Streamable HT
 Inspired by [Base MCP](https://github.com/base/base-mcp): onchain tools for agents,
 **non-custodial by design**.
 
-## 🔑 Non-custodial signing model
+## 🔑 Signing modes
 
-**This server never holds private keys and never signs.** The agent signs with its own
+The server supports two modes. **The default is non-custodial** and is recommended.
+
+### 1. Non-custodial (default) — the agent signs
+
+**The server never holds private keys and never signs.** The agent signs with its own
 wallet. The flow is:
 
 ```
@@ -28,6 +32,25 @@ wallet. The flow is:
 
 Steps 1, 2, 4 run on the server (read-only chain access). Step 3 happens entirely on
 the agent side. No mnemonic or secret is configured on the Worker.
+
+### 2. Server-signing (optional, custodial) — the server signs
+
+Set the **`IXO_MNEMONIC`** secret (`wrangler secret put IXO_MNEMONIC`) to enable a
+custodial mode in which the **server** signs with its own wallet and broadcasts
+directly. This is useful when the server itself is the authorized actor — e.g. an
+oracle, relayer, or service agent operating its own account.
+
+When enabled, two extra tools appear:
+- `ixo_server_get_signer` — the server wallet's address / did / pubkey.
+- `ixo_server_sign_and_broadcast` — server signs the given messages and broadcasts
+  (`gas` defaults to `'auto'`, i.e. simulated).
+
+Concurrent broadcasts need monotonic sequence numbers. The server uses the SDK's
+`SequenceManagerDO` Durable Object (bound as `SEQUENCE_MANAGER`) to allocate
+sequences atomically; tune the stagger with `IXO_CLIENT_SEQUENCE_MIN_DELAY_MS`.
+
+> ⚠️ In server-signing mode the Worker custodies a key. Treat `IXO_MNEMONIC` as a
+> high-value secret, scope its funds, and prefer the non-custodial mode otherwise.
 
 ## Tools
 
@@ -50,14 +73,27 @@ the agent side. No mnemonic or secret is configured on the Worker.
 | `ixo_get_tx` | Transaction result by hash |
 
 ### Compose (build a message, JSON-safe)
-`ixo_compose_send`, `ixo_compose_delegate`, `ixo_compose_undelegate`,
+Cosmos: `ixo_compose_send`, `ixo_compose_delegate`, `ixo_compose_undelegate`,
 `ixo_compose_redelegate`, `ixo_compose_withdraw_rewards`, `ixo_compose_vote`,
-`ixo_compose_wasm_execute`, `ixo_compose_create_iid`, and `ixo_compose_message`
-(generic passthrough/validator for any registered Cosmos/IXO message type).
+`ixo_compose_wasm_execute`.
+
+IXO modules: `ixo_compose_create_iid`, `ixo_compose_create_entity`,
+`ixo_compose_transfer_entity`, `ixo_compose_create_claim_collection`,
+`ixo_compose_submit_claim`, `ixo_compose_evaluate_claim`,
+`ixo_compose_create_token`.
+
+Generic: `ixo_compose_message` (passthrough/validator for any registered
+Cosmos/IXO message type — use its `extra`-style raw value for modules without a
+dedicated tool). Compose tools that take complex messages accept an `extra`
+object that is merged into the message for advanced fields.
 
 ### Transaction
 `ixo_build_transaction` (→ SignDoc), `ixo_simulate_transaction` (→ gas estimate),
 `ixo_broadcast_transaction` (← your signed TxRaw).
+
+### Server-signing tools (optional, custodial — only when `IXO_MNEMONIC` is set)
+`ixo_server_get_signer`, `ixo_server_sign_and_broadcast`. See
+[Signing modes](#-signing-modes).
 
 ## Configuration
 
@@ -69,6 +105,8 @@ Set via `wrangler.jsonc` `vars` (or the dashboard / `wrangler secret`). All opti
 | `IXO_RPC_URL` | network preset | Override the RPC endpoint |
 | `IXO_CHAIN_ID` | network preset | Override the chain id |
 | `IXO_GAS_PRICE` | `0.025uixo` | Gas price used to compute fees |
+| `IXO_MNEMONIC` | _unset_ | **Secret.** Enables optional custodial server-signing (see [Signing modes](#-signing-modes)). Use `wrangler secret put`. |
+| `IXO_CLIENT_SEQUENCE_MIN_DELAY_MS` | `400` | Server-signing only: stagger between sequence allocations |
 
 ## Develop & deploy
 
@@ -110,19 +148,21 @@ src/
   config.ts       Resolve network/RPC/chain-id/gas from env bindings
   networks.ts     mainnet / testnet / devnet presets (verified vs chain-registry)
   clients.ts      Memoized query client + read-only Stargate client (broadcast)
+  signing.ts      optional server-signing: wallet + signing client (+ DO sequencing)
   tools/
     query.ts        read tools
     compose.ts      message builders -> { typeUrl, value }
-    transaction.ts  build SignDoc / simulate / broadcast
+    transaction.ts  build SignDoc / simulate / broadcast (non-custodial)
+    server.ts       server-signing tools (only registered when IXO_MNEMONIC set)
     index.ts        aggregated tool list
   utils/
-    tool.ts        defineTool() + tool context
+    tool.ts        defineTool() + tool context (config + env)
     format.ts      bigint/Uint8Array-safe JSON, uixo<->IXO display
     tx.ts          sign-doc / simulate / TxRaw encode helpers (no keys)
 ```
 
 Notes:
 - Requires the `nodejs_compat` compatibility flag (CosmJS uses Node built-ins).
-- The Durable Object (`IxoMcpAgent`) is the MCP session host required by the Agents SDK.
-- `@ixo/impactxclient-sdk` also ships a `SequenceManagerDO` (`/cloudflare` subpath) for
-  the *server-signs* model; this server does not use it because signing is client-side.
+- Two Durable Objects: `IxoMcpAgent` (the MCP session host required by the Agents SDK)
+  and `SequenceManagerDO` (re-exported from `@ixo/impactxclient-sdk/cloudflare`, used
+  only by the optional server-signing mode for atomic sequence allocation).

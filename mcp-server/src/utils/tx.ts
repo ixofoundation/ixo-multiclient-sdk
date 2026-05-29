@@ -42,6 +42,10 @@ export function normalizeMessage(msg: RawMessage): RawMessage {
       if (typeof value.wasmByteCode === "string")
         value.wasmByteCode = fromBase64(value.wasmByteCode);
       break;
+    case "/ixo.entity.v1beta1.MsgCreateEntity":
+    case "/ixo.entity.v1beta1.MsgUpdateEntity":
+      if (typeof value.data === "string") value.data = fromBase64(value.data);
+      break;
   }
   return { typeUrl: msg.typeUrl, value };
 }
