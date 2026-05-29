@@ -35,12 +35,20 @@ the agent side. No mnemonic or secret is configured on the Worker.
 
 ### 2. Server-signing (optional, custodial) — the server signs
 
-Set the **`IXO_MNEMONIC`** secret (`wrangler secret put IXO_MNEMONIC`) to enable a
-custodial mode in which the **server** signs with its own wallet and broadcasts
-directly. This is useful when the server itself is the authorized actor — e.g. an
-oracle, relayer, or service agent operating its own account.
+A custodial mode in which the **server** signs with its own wallet and broadcasts
+directly. Useful when the server itself is the authorized actor — e.g. an oracle,
+relayer, or service agent operating its own account. Enabling it requires **two**
+secrets:
 
-When enabled, two extra tools appear:
+- **`IXO_MCP_AUTH_TOKEN`** — gates the endpoint (see [Endpoint authentication](#endpoint-authentication)).
+- **`IXO_MNEMONIC`** — the server wallet.
+
+```bash
+wrangler secret put IXO_MCP_AUTH_TOKEN
+wrangler secret put IXO_MNEMONIC
+```
+
+When both are set, two extra tools appear:
 - `ixo_server_get_signer` — the server wallet's address / did / pubkey.
 - `ixo_server_sign_and_broadcast` — server signs the given messages and broadcasts
   (`gas` defaults to `'auto'`, i.e. simulated).
@@ -49,8 +57,20 @@ Concurrent broadcasts need monotonic sequence numbers. The server uses the SDK's
 `SequenceManagerDO` Durable Object (bound as `SEQUENCE_MANAGER`) to allocate
 sequences atomically; tune the stagger with `IXO_CLIENT_SEQUENCE_MIN_DELAY_MS`.
 
-> ⚠️ In server-signing mode the Worker custodies a key. Treat `IXO_MNEMONIC` as a
-> high-value secret, scope its funds, and prefer the non-custodial mode otherwise.
+> ⚠️ In server-signing mode the Worker custodies a key. The signing tools are
+> registered **only when `IXO_MCP_AUTH_TOKEN` is also set**, so the custodial wallet
+> is never reachable on an unauthenticated endpoint — if `IXO_MNEMONIC` is set
+> without a token, the tools stay disabled and a warning is logged. Treat both as
+> high-value secrets, scope the wallet's funds, and prefer the non-custodial mode
+> otherwise.
+
+### Endpoint authentication
+
+Set the **`IXO_MCP_AUTH_TOKEN`** secret to require a bearer token on `/mcp` and
+`/sse`. Every request must then send `Authorization: Bearer <token>` (or
+`X-API-Key: <token>`); the token is compared over SHA-256 digests. Without the
+secret the transport endpoints are open — appropriate for a public, read-only /
+non-custodial deployment, but **required** before enabling server-signing.
 
 ## Tools
 
@@ -105,7 +125,8 @@ Set via `wrangler.jsonc` `vars` (or the dashboard / `wrangler secret`). All opti
 | `IXO_RPC_URL` | network preset | Override the RPC endpoint |
 | `IXO_CHAIN_ID` | network preset | Override the chain id |
 | `IXO_GAS_PRICE` | `0.025uixo` | Gas price used to compute fees |
-| `IXO_MNEMONIC` | _unset_ | **Secret.** Enables optional custodial server-signing (see [Signing modes](#-signing-modes)). Use `wrangler secret put`. |
+| `IXO_MCP_AUTH_TOKEN` | _unset_ | **Secret.** Requires `Authorization: Bearer <token>` on `/mcp` + `/sse`. Required to enable server-signing. |
+| `IXO_MNEMONIC` | _unset_ | **Secret.** Enables optional custodial server-signing (also needs `IXO_MCP_AUTH_TOKEN`). See [Signing modes](#-signing-modes). |
 | `IXO_CLIENT_SEQUENCE_MIN_DELAY_MS` | `400` | Server-signing only: stagger between sequence allocations |
 
 ## Develop & deploy
@@ -135,6 +156,23 @@ Point a remote-MCP-capable client at `https://<your-worker>.workers.dev/mcp`
     "ixo": {
       "command": "npx",
       "args": ["mcp-remote", "https://<your-worker>.workers.dev/mcp"]
+    }
+  }
+}
+```
+
+If `IXO_MCP_AUTH_TOKEN` is set, pass the bearer token:
+
+```jsonc
+{
+  "mcpServers": {
+    "ixo": {
+      "command": "npx",
+      "args": [
+        "mcp-remote", "https://<your-worker>.workers.dev/mcp",
+        "--header", "Authorization: Bearer ${IXO_MCP_AUTH_TOKEN}"
+      ],
+      "env": { "IXO_MCP_AUTH_TOKEN": "your-token" }
     }
   }
 }

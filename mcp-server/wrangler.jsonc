@@ -32,9 +32,13 @@
   // IXO_NETWORK = mainnet | testnet | devnet (defaults to mainnet).
   // Optional overrides: IXO_RPC_URL, IXO_CHAIN_ID, IXO_GAS_PRICE.
   //
+  // OPTIONAL endpoint auth: set the IXO_MCP_AUTH_TOKEN secret to require a bearer
+  // token on /mcp and /sse (`wrangler secret put IXO_MCP_AUTH_TOKEN`).
+  //
   // OPTIONAL custodial server-signing: set the IXO_MNEMONIC secret to enable the
-  // ixo_server_* tools (`wrangler secret put IXO_MNEMONIC`). Leave unset for the
-  // default non-custodial mode. Never commit a mnemonic to vars.
+  // ixo_server_* tools (`wrangler secret put IXO_MNEMONIC`). This ALSO requires
+  // IXO_MCP_AUTH_TOKEN — without it the signing tools stay disabled so a custodial
+  // wallet is never exposed on an unauthenticated endpoint. Never commit secrets to vars.
   "vars": {
     "IXO_NETWORK": "mainnet"
   }

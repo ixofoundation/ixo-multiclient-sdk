@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { McpAgent } from "agents/mcp";
-import { Env, isServerSigningEnabled, resolveConfig } from "./config";
+import { canServerSign, Env, hasAuthToken, isServerSigningEnabled, resolveConfig } from "./config";
 import { allTools } from "./tools";
 import { serverSigningTools } from "./tools/server";
 import { errorResult } from "./utils/format";
@@ -25,9 +25,18 @@ export class IxoMcpAgent extends McpAgent<Env> {
   async init() {
     const ctx: ToolContext = { config: resolveConfig(this.env), env: this.env };
 
-    // The optional custodial server-signing tools are only exposed when a
-    // mnemonic is configured; otherwise the server stays purely non-custodial.
-    const tools: ToolDefinition<any>[] = isServerSigningEnabled(this.env)
+    // The optional custodial server-signing tools are only exposed when BOTH a
+    // mnemonic AND an endpoint auth token are configured, so a custodial wallet
+    // is never reachable on an unauthenticated public endpoint. The fetch
+    // handler additionally enforces the token on /mcp and /sse.
+    if (isServerSigningEnabled(this.env) && !hasAuthToken(this.env)) {
+      console.error(
+        "[ixo-mcp] IXO_MNEMONIC is set but IXO_MCP_AUTH_TOKEN is not. " +
+          "Server-signing tools are DISABLED to avoid exposing a custodial wallet " +
+          "on an unauthenticated endpoint. Set IXO_MCP_AUTH_TOKEN to enable them.",
+      );
+    }
+    const tools: ToolDefinition<any>[] = canServerSign(this.env)
       ? [...allTools, ...serverSigningTools]
       : allTools;
 
@@ -55,6 +64,42 @@ export class IxoMcpAgent extends McpAgent<Env> {
 const mcpHandler = IxoMcpAgent.serve("/mcp", { binding: "MCP_OBJECT" });
 const sseHandler = IxoMcpAgent.serveSSE("/sse", { binding: "MCP_OBJECT" });
 
+function extractBearer(request: Request): string | undefined {
+  const auth = request.headers.get("authorization");
+  if (auth && auth.toLowerCase().startsWith("bearer ")) return auth.slice(7).trim();
+  const apiKey = request.headers.get("x-api-key");
+  return apiKey ? apiKey.trim() : undefined;
+}
+
+/**
+ * Authorize a request to the MCP transport endpoints. When no auth token is
+ * configured the endpoint is open (public read-only / non-custodial use). When
+ * a token IS configured (required for server-signing), the request must present
+ * it. Compared over SHA-256 digests to avoid length/timing leaks.
+ */
+async function isAuthorized(request: Request, env: Env): Promise<boolean> {
+  if (!hasAuthToken(env)) return true;
+  const provided = extractBearer(request);
+  if (!provided) return false;
+  const enc = new TextEncoder();
+  const [a, b] = await Promise.all([
+    crypto.subtle.digest("SHA-256", enc.encode(provided)),
+    crypto.subtle.digest("SHA-256", enc.encode(env.IXO_MCP_AUTH_TOKEN!)),
+  ]);
+  const av = new Uint8Array(a);
+  const bv = new Uint8Array(b);
+  let diff = 0;
+  for (let i = 0; i < av.length; i++) diff |= av[i] ^ bv[i];
+  return diff === 0;
+}
+
+function unauthorized(): Response {
+  return new Response(JSON.stringify({ error: "unauthorized" }), {
+    status: 401,
+    headers: { "content-type": "application/json", "www-authenticate": "Bearer" },
+  });
+}
+
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
@@ -72,10 +117,12 @@ export default {
     }
 
     if (url.pathname === "/mcp") {
+      if (!(await isAuthorized(request, env))) return unauthorized();
       return mcpHandler.fetch(request, env, ctx);
     }
 
     if (url.pathname === "/sse" || url.pathname.startsWith("/sse/")) {
+      if (!(await isAuthorized(request, env))) return unauthorized();
       return sseHandler.fetch(request, env, ctx);
     }
 

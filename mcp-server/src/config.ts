@@ -16,6 +16,14 @@ export interface Env {
    * default non-custodial mode. Configure as a secret (`wrangler secret put`).
    */
   IXO_MNEMONIC?: string;
+  /**
+   * Bearer token gating the /mcp and /sse endpoints. REQUIRED to enable
+   * server-signing (custodial) tools — they will not be registered without it.
+   * When set, every /mcp and /sse request must send `Authorization: Bearer <token>`
+   * (or `X-API-Key: <token>`). Configure as a secret. Leave unset for a public,
+   * read-only/non-custodial deployment.
+   */
+  IXO_MCP_AUTH_TOKEN?: string;
   /** Durable Object binding backing the MCP agent (see wrangler.jsonc). */
   MCP_OBJECT: DurableObjectNamespace;
   /**
@@ -25,9 +33,25 @@ export interface Env {
   SEQUENCE_MANAGER?: DurableObjectNamespace;
 }
 
-/** Whether the optional custodial server-signing mode is enabled. */
+/** Whether a mnemonic is present (a prerequisite for custodial server-signing). */
 export function isServerSigningEnabled(env: Env): boolean {
   return typeof env.IXO_MNEMONIC === "string" && env.IXO_MNEMONIC.trim().length > 0;
+}
+
+/** Whether an endpoint auth token is configured. */
+export function hasAuthToken(env: Env): boolean {
+  return (
+    typeof env.IXO_MCP_AUTH_TOKEN === "string" && env.IXO_MCP_AUTH_TOKEN.trim().length > 0
+  );
+}
+
+/**
+ * Server-signing tools are only exposed when BOTH a mnemonic AND an auth token
+ * are configured. This guarantees a custodial wallet is never reachable on an
+ * unauthenticated public endpoint.
+ */
+export function canServerSign(env: Env): boolean {
+  return isServerSigningEnabled(env) && hasAuthToken(env);
 }
 
 export interface IxoConfig {

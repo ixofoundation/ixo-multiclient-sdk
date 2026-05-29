@@ -110,7 +110,10 @@ export function buildSimulationTx(
       {
         publicKey: pubkey,
         sequence: BigInt(sequence),
-        modeInfo: { single: { mode: SignMode.SIGN_MODE_UNSPECIFIED } },
+        // Match the sign mode of the real (DIRECT) sign doc: IXO ante handling
+        // validates the advertised sign mode during simulation, so using
+        // UNSPECIFIED here would make otherwise-valid txs fail to simulate.
+        modeInfo: { single: { mode: SignMode.SIGN_MODE_DIRECT } },
       },
     ],
     fee: Fee.fromPartial({}),
