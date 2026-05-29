@@ -28,7 +28,7 @@ async function simulateGasUsed(
   memo: string,
 ): Promise<number> {
   const qc = await getQueryClient(rpcUrl);
-  const tx = buildSimulationTx(messages, signerPubKey, sequence, memo);
+  const tx = await buildSimulationTx(messages, signerPubKey, sequence, memo);
   const sim = await qc.cosmos.tx.v1beta1.simulate({ tx } as any);
   return Number(sim.gasInfo?.gasUsed ?? 0n);
 }
@@ -82,8 +82,8 @@ export const transactionTools = [
           }
         }
 
-        const fee = resolveFee(gas, config.gasPrice);
-        const signDoc = buildDirectSignDoc({
+        const fee = await resolveFee(gas, config.gasPrice);
+        const signDoc = await buildDirectSignDoc({
           messages,
           signerPubKeyBase64: args.signerPubKey,
           sequence: account.sequence,
@@ -148,7 +148,7 @@ export const transactionTools = [
         return textResult({
           gasUsed,
           suggestedGas,
-          suggestedFee: resolveFee(suggestedGas, config.gasPrice),
+          suggestedFee: await resolveFee(suggestedGas, config.gasPrice),
         });
       } catch (err) {
         return errorResult(err);

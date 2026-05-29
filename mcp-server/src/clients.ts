@@ -1,5 +1,6 @@
-import { StargateClient } from "@cosmjs/stargate";
-import { createQueryClient, QueryClient } from "@ixo/impactxclient-sdk";
+import type { StargateClient } from "@cosmjs/stargate";
+import type { QueryClient } from "@ixo/impactxclient-sdk";
+import { loadSdk, loadStargate } from "./lazy";
 
 /**
  * Lazily-created, memoized chain clients keyed by RPC URL. Both are read-only
@@ -8,6 +9,9 @@ import { createQueryClient, QueryClient } from "@ixo/impactxclient-sdk";
  *  - the Stargate client serves account/balance reads and broadcasts the
  *    already-signed transactions the agent returns (`broadcastTx`).
  * The server never holds keys or signs.
+ *
+ * The underlying packages are imported dynamically (see lazy.ts) so the Worker
+ * can boot — a static import would initialize crypto in global scope and crash.
  */
 
 const queryClients = new Map<string, Promise<QueryClient>>();
@@ -16,7 +20,10 @@ const stargateClients = new Map<string, Promise<StargateClient>>();
 export function getQueryClient(rpcUrl: string): Promise<QueryClient> {
   let client = queryClients.get(rpcUrl);
   if (!client) {
-    client = createQueryClient(rpcUrl).catch((err) => {
+    client = (async () => {
+      const { createQueryClient } = await loadSdk();
+      return createQueryClient(rpcUrl);
+    })().catch((err) => {
       queryClients.delete(rpcUrl);
       throw err;
     });
@@ -28,7 +35,10 @@ export function getQueryClient(rpcUrl: string): Promise<QueryClient> {
 export function getStargateClient(rpcUrl: string): Promise<StargateClient> {
   let client = stargateClients.get(rpcUrl);
   if (!client) {
-    client = StargateClient.connect(rpcUrl).catch((err) => {
+    client = (async () => {
+      const { StargateClient } = await loadStargate();
+      return StargateClient.connect(rpcUrl);
+    })().catch((err) => {
       stargateClients.delete(rpcUrl);
       throw err;
     });

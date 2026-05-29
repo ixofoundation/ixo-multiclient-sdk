@@ -1,6 +1,6 @@
 import { toBase64 } from "@cosmjs/encoding";
-import { utils } from "@ixo/impactxclient-sdk";
 import { z } from "zod";
+import { loadSdk } from "../lazy";
 import { getServerSigningClient, getServerWallet } from "../signing";
 import { errorResult, textResult } from "../utils/format";
 import { defineTool } from "../utils/tool";
@@ -26,7 +26,10 @@ export const serverSigningTools = [
     handler: async (_args, ctx) => {
       const mnemonic = ctx.env.IXO_MNEMONIC;
       if (!mnemonic) return errorResult("Server-signing is not configured (no IXO_MNEMONIC).");
-      const wallet = await getServerWallet(mnemonic, ctx.config.prefix);
+      const [{ utils }, wallet] = await Promise.all([
+        loadSdk(),
+        getServerWallet(mnemonic, ctx.config.prefix),
+      ]);
       const [account] = await wallet.getAccounts();
       return textResult({
         address: account.address,
@@ -63,7 +66,7 @@ export const serverSigningTools = [
         const messages = (args.messages as RawMessage[]).map(normalizeMessage);
         const fee =
           args.gas && args.gas !== "auto"
-            ? resolveFee(args.gas, ctx.config.gasPrice)
+            ? await resolveFee(args.gas, ctx.config.gasPrice)
             : "auto";
 
         const res = await client.signAndBroadcast(

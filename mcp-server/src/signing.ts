@@ -1,11 +1,7 @@
-import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import { GasPrice } from "@cosmjs/stargate";
-import {
-  createDOStoreFunctions,
-  createSigningClient,
-  SigningStargateClient,
-} from "@ixo/impactxclient-sdk";
+import type { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import type { SigningStargateClient } from "@ixo/impactxclient-sdk";
 import { Env, IxoConfig } from "./config";
+import { loadProtoSigning, loadSdk, loadStargate } from "./lazy";
 
 /**
  * Helpers for the OPTIONAL custodial server-signing mode. The server builds a
@@ -13,8 +9,8 @@ import { Env, IxoConfig } from "./config";
  * `SEQUENCE_MANAGER` Durable Object is bound, sequence numbers are allocated
  * atomically (safe for concurrent broadcasts) via the SDK's Cloudflare helper.
  *
- * This is the counterpart to the default non-custodial flow; it is only active
- * when a mnemonic is configured.
+ * All crypto-touching packages are imported dynamically (see lazy.ts) so the
+ * Worker can boot without initializing crypto in global scope.
  */
 
 let walletCache: Promise<DirectSecp256k1HdWallet> | undefined;
@@ -27,7 +23,10 @@ export function getServerWallet(
   const key = `${prefix}:${mnemonic}`;
   if (!walletCache || walletCacheKey !== key) {
     walletCacheKey = key;
-    walletCache = DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix }).catch((err) => {
+    walletCache = (async () => {
+      const { DirectSecp256k1HdWallet } = await loadProtoSigning();
+      return DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix });
+    })().catch((err) => {
       walletCache = undefined;
       throw err;
     });
@@ -37,20 +36,24 @@ export function getServerWallet(
 
 const signingClients = new Map<string, Promise<SigningStargateClient>>();
 
-export async function getServerSigningClient(
+export function getServerSigningClient(
   config: IxoConfig,
   env: Env,
 ): Promise<SigningStargateClient> {
   const mnemonic = env.IXO_MNEMONIC;
   if (!mnemonic) {
-    throw new Error(
-      "Server-signing is not configured. Set the IXO_MNEMONIC secret to enable the ixo_server_* tools.",
+    return Promise.reject(
+      new Error(
+        "Server-signing is not configured. Set the IXO_MNEMONIC secret to enable the ixo_server_* tools.",
+      ),
     );
   }
   const cached = signingClients.get(config.rpcUrl);
   if (cached) return cached;
 
   const promise = (async () => {
+    const { createSigningClient, createDOStoreFunctions } = await loadSdk();
+    const { GasPrice } = await loadStargate();
     const wallet = await getServerWallet(mnemonic, config.prefix);
     let storeFunctions;
     if (env.SEQUENCE_MANAGER) {

@@ -1,16 +1,9 @@
-import { encodeSecp256k1Pubkey } from "@cosmjs/amino";
 import { fromBase64 } from "@cosmjs/encoding";
-import {
-  encodePubkey,
-  makeAuthInfoBytes,
-  makeSignDoc,
-  Registry,
-  type TxBodyEncodeObject,
-} from "@cosmjs/proto-signing";
-import { calculateFee, GasPrice, type StdFee } from "@cosmjs/stargate";
-import { createRegistry } from "@ixo/impactxclient-sdk";
+import type { Registry } from "@cosmjs/proto-signing";
+import type { StdFee } from "@cosmjs/stargate";
 import { SignMode } from "cosmjs-types/cosmos/tx/signing/v1beta1/signing";
 import { AuthInfo, Fee, Tx, TxBody, TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
+import { loadAmino, loadProtoSigning, loadSdk, loadStargate } from "../lazy";
 
 export interface RawMessage {
   typeUrl: string;
@@ -18,8 +11,11 @@ export interface RawMessage {
 }
 
 let registry: Registry | undefined;
-export function getRegistry(): Registry {
-  if (!registry) registry = createRegistry();
+export async function getRegistry(): Promise<Registry> {
+  if (!registry) {
+    const { createRegistry } = await loadSdk();
+    registry = createRegistry();
+  }
   return registry;
 }
 
@@ -50,16 +46,20 @@ export function normalizeMessage(msg: RawMessage): RawMessage {
   return { typeUrl: msg.typeUrl, value };
 }
 
-export function encodeTxBodyBytes(messages: RawMessage[], memo: string): Uint8Array {
-  const txBodyEncodeObject: TxBodyEncodeObject = {
+export async function encodeTxBodyBytes(
+  messages: RawMessage[],
+  memo: string,
+): Promise<Uint8Array> {
+  const reg = await getRegistry();
+  return reg.encode({
     typeUrl: "/cosmos.tx.v1beta1.TxBody",
     value: { messages: messages.map(normalizeMessage), memo },
-  };
-  return getRegistry().encode(txBodyEncodeObject);
+  });
 }
 
 /** Compute an StdFee from a gas limit and a "<price><denom>" gas price string. */
-export function resolveFee(gas: number, gasPrice: string): StdFee {
+export async function resolveFee(gas: number, gasPrice: string): Promise<StdFee> {
+  const { calculateFee, GasPrice } = await loadStargate();
   return calculateFee(Math.ceil(gas), GasPrice.fromString(gasPrice));
 }
 
@@ -74,16 +74,17 @@ export interface BuildSignDocParams {
 }
 
 /** Build a SIGN_MODE_DIRECT SignDoc for the agent to sign. No private key involved. */
-export function buildDirectSignDoc(params: BuildSignDocParams) {
+export async function buildDirectSignDoc(params: BuildSignDocParams) {
   const { messages, signerPubKeyBase64, sequence, accountNumber, chainId, fee, memo } =
     params;
+  const { encodePubkey, makeAuthInfoBytes, makeSignDoc } = await loadProtoSigning();
+  const { encodeSecp256k1Pubkey } = await loadAmino();
   const pubkey = encodePubkey(encodeSecp256k1Pubkey(fromBase64(signerPubKeyBase64)));
-  const txBodyBytes = encodeTxBodyBytes(messages, memo);
-  const gasLimit = Number(fee.gas);
+  const txBodyBytes = await encodeTxBodyBytes(messages, memo);
   const authInfoBytes = makeAuthInfoBytes(
     [{ pubkey, sequence }],
     fee.amount,
-    gasLimit,
+    Number(fee.gas),
     fee.granter,
     fee.payer,
     SignMode.SIGN_MODE_DIRECT,
@@ -93,15 +94,19 @@ export function buildDirectSignDoc(params: BuildSignDocParams) {
 
 /**
  * Build an unsigned Tx (single empty signature) for the chain's `Simulate`
- * gas-estimation endpoint. The IXO SimulateRequest takes a decoded `tx`.
+ * gas-estimation endpoint. The IXO SimulateRequest takes a decoded `tx`, and
+ * the signer info advertises SIGN_MODE_DIRECT to match the real sign doc (IXO
+ * ante validates the sign mode during simulation).
  */
-export function buildSimulationTx(
+export async function buildSimulationTx(
   messages: RawMessage[],
   signerPubKeyBase64: string,
   sequence: number,
   memo: string,
-): Tx {
-  const reg = getRegistry();
+): Promise<Tx> {
+  const { encodePubkey } = await loadProtoSigning();
+  const { encodeSecp256k1Pubkey } = await loadAmino();
+  const reg = await getRegistry();
   const pubkey = encodePubkey(encodeSecp256k1Pubkey(fromBase64(signerPubKeyBase64)));
   const anyMsgs = messages.map((m) => reg.encodeAsAny(normalizeMessage(m)));
   const body = TxBody.fromPartial({ messages: anyMsgs, memo });
@@ -110,9 +115,6 @@ export function buildSimulationTx(
       {
         publicKey: pubkey,
         sequence: BigInt(sequence),
-        // Match the sign mode of the real (DIRECT) sign doc: IXO ante handling
-        // validates the advertised sign mode during simulation, so using
-        // UNSPECIFIED here would make otherwise-valid txs fail to simulate.
         modeInfo: { single: { mode: SignMode.SIGN_MODE_DIRECT } },
       },
     ],
@@ -121,7 +123,7 @@ export function buildSimulationTx(
   return Tx.fromPartial({ body, authInfo, signatures: [new Uint8Array()] });
 }
 
-/** Assemble signed TxRaw bytes from its three base64 parts. */
+/** Assemble signed TxRaw bytes from its three base64 parts. (No crypto.) */
 export function assembleTxRawBytes(
   bodyBytesB64: string,
   authInfoBytesB64: string,

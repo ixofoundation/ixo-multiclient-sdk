@@ -1,6 +1,6 @@
 import { fromBase64, toBase64, toUtf8 } from "@cosmjs/encoding";
-import { customMessages, utils } from "@ixo/impactxclient-sdk";
 import { z } from "zod";
+import { loadSdk } from "../lazy";
 import { errorResult, textResult } from "../utils/format";
 import { defineTool } from "../utils/tool";
 import { getRegistry } from "../utils/tx";
@@ -136,7 +136,8 @@ export const composeTools = [
       did: z.string().optional().describe("Override did (default did:ixo:<address>)"),
       controller: z.string().optional().describe("Override controller did"),
     },
-    handler: ({ address, pubKey, did, controller }) => {
+    handler: async ({ address, pubKey, did, controller }) => {
+      const { utils, customMessages } = await loadSdk();
       const documentDid = did ?? utils.did.generateSecpDid(address);
       const controllerDid = controller ?? documentDid;
       const verifications = customMessages.iid.createIidVerificationMethods({
@@ -347,8 +348,8 @@ export const composeTools = [
       typeUrl: z.string().describe("Proto type URL, e.g. /cosmos.bank.v1beta1.MsgSend"),
       value: z.record(z.string(), z.any()).describe("Message fields (camelCase, JSON-safe)"),
     },
-    handler: ({ typeUrl, value }) => {
-      const known = getRegistry().lookupType(typeUrl);
+    handler: async ({ typeUrl, value }) => {
+      const known = (await getRegistry()).lookupType(typeUrl);
       if (!known) {
         return errorResult(
           `Unknown message typeUrl '${typeUrl}'. It is not in the IXO/Cosmos registry.`,

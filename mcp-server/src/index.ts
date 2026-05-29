@@ -116,13 +116,17 @@ export default {
       });
     }
 
+    // CORS preflight carries no credentials; let it through to the transport
+    // handler (which emits the CORS headers). Auth is enforced on the real request.
+    const isPreflight = request.method === "OPTIONS";
+
     if (url.pathname === "/mcp") {
-      if (!(await isAuthorized(request, env))) return unauthorized();
+      if (!isPreflight && !(await isAuthorized(request, env))) return unauthorized();
       return mcpHandler.fetch(request, env, ctx);
     }
 
     if (url.pathname === "/sse" || url.pathname.startsWith("/sse/")) {
-      if (!(await isAuthorized(request, env))) return unauthorized();
+      if (!isPreflight && !(await isAuthorized(request, env))) return unauthorized();
       return sseHandler.fetch(request, env, ctx);
     }
 
