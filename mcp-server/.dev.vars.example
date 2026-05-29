@@ -1,0 +1,10 @@
+# Local dev overrides for `wrangler dev`. Copy to `.dev.vars`.
+# No signing key is ever needed: this server is non-custodial.
+
+# Network: mainnet | testnet | devnet (default: mainnet)
+IXO_NETWORK=mainnet
+
+# Optional overrides (otherwise derived from the network preset)
+# IXO_RPC_URL=https://impacthub.ixo.world/rpc/
+# IXO_CHAIN_ID=ixo-5
+# IXO_GAS_PRICE=0.025uixo

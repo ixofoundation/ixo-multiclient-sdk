@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ixo-mcp-server",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-05-01",
+  // CosmJS + @ixo/impactxclient-sdk need Node built-ins (crypto, buffer, stream).
+  "compatibility_flags": ["nodejs_compat"],
+  "durable_objects": {
+    "bindings": [
+      {
+        "class_name": "IxoMcpAgent",
+        "name": "MCP_OBJECT"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["IxoMcpAgent"]
+    }
+  ],
+  "observability": {
+    "enabled": true
+  },
+  // Network selection. Override per-deploy or via `wrangler secret`/dashboard.
+  // IXO_NETWORK = mainnet | testnet | devnet (defaults to mainnet).
+  // Optional overrides: IXO_RPC_URL, IXO_CHAIN_ID, IXO_GAS_PRICE.
+  "vars": {
+    "IXO_NETWORK": "mainnet"
+  }
+}

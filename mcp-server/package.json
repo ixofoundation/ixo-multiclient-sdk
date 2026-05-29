@@ -1,0 +1,31 @@
+{
+  "name": "@ixo/mcp-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Model Context Protocol (MCP) server for the IXO blockchain, deployed as a Cloudflare Worker. Non-custodial: the agent signs, the server builds and broadcasts.",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "cf-typegen": "wrangler types"
+  },
+  "dependencies": {
+    "@cosmjs/amino": "^0.32.4",
+    "@cosmjs/encoding": "^0.32.4",
+    "@cosmjs/proto-signing": "^0.32.4",
+    "@cosmjs/stargate": "^0.32.4",
+    "@ixo/impactxclient-sdk": "^2.5.1",
+    "@modelcontextprotocol/sdk": "1.29.0",
+    "agents": "^0.13.3",
+    "cosmjs-types": "^0.9.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260528.1",
+    "typescript": "^5.6.0",
+    "wrangler": "^4.95.0"
+  }
+}
