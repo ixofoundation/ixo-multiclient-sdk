@@ -3,6 +3,7 @@ import type { Registry } from "@cosmjs/proto-signing";
 import type { StdFee } from "@cosmjs/stargate";
 import { SignMode } from "cosmjs-types/cosmos/tx/signing/v1beta1/signing";
 import { AuthInfo, Fee, Tx, TxBody, TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
+import { getQueryClient } from "../clients";
 import { loadAmino, loadProtoSigning, loadSdk, loadStargate } from "../lazy";
 
 export interface RawMessage {
@@ -121,6 +122,25 @@ export async function buildSimulationTx(
     fee: Fee.fromPartial({}),
   });
   return Tx.fromPartial({ body, authInfo, signatures: [new Uint8Array()] });
+}
+
+/**
+ * Estimate gas via the chain's Simulate endpoint using a DIRECT-mode unsigned
+ * tx. Used by both the non-custodial build path and server-signing, so neither
+ * relies on CosmJS's `fee: "auto"` (which simulates with SIGN_MODE_UNSPECIFIED
+ * and can be rejected by IXO ante sign-mode validation).
+ */
+export async function simulateGasUsed(
+  rpcUrl: string,
+  messages: RawMessage[],
+  signerPubKeyBase64: string,
+  sequence: number,
+  memo: string,
+): Promise<number> {
+  const qc = await getQueryClient(rpcUrl);
+  const tx = await buildSimulationTx(messages, signerPubKeyBase64, sequence, memo);
+  const sim = await qc.cosmos.tx.v1beta1.simulate({ tx } as any);
+  return Number(sim.gasInfo?.gasUsed ?? 0n);
 }
 
 /** Assemble signed TxRaw bytes from its three base64 parts. (No crypto.) */

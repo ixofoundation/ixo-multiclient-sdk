@@ -111,6 +111,13 @@ object that is merged into the message for advanced fields.
 `ixo_build_transaction` (→ SignDoc), `ixo_simulate_transaction` (→ gas estimate),
 `ixo_broadcast_transaction` (← your signed TxRaw).
 
+Broadcasting defaults to **sync** mode: the tool returns the tx hash once the tx
+passes `CheckTx` and enters the mempool, then you poll `ixo_get_tx` for the on-chain
+result. This avoids holding a Worker request open while waiting for a block. Pass
+`awaitInclusion: true` to wait for inclusion instead (bounded; may hit Worker time
+limits). Gas is estimated by simulating in `SIGN_MODE_DIRECT` (matching the real tx),
+never via CosmJS `fee:"auto"`.
+
 ### Server-signing tools (optional, custodial — only when `IXO_MNEMONIC` is set)
 `ixo_server_get_signer`, `ixo_server_sign_and_broadcast`. See
 [Signing modes](#-signing-modes).
@@ -121,7 +128,7 @@ Set via `wrangler.jsonc` `vars` (or the dashboard / `wrangler secret`). All opti
 
 | Var | Default | Notes |
 | --- | --- | --- |
-| `IXO_NETWORK` | `mainnet` | `mainnet` (`ixo-5`), `testnet` (`pandora-8`), `devnet` (`devnet-1`) |
+| `IXO_NETWORK` | `mainnet` | `mainnet` (`ixo-5`), `testnet` (`pandora-8`), `devnet` (`devnet-1`). An unset value defaults to mainnet; an **invalid** value is rejected (no silent fallback). |
 | `IXO_RPC_URL` | network preset | Override the RPC endpoint |
 | `IXO_CHAIN_ID` | network preset | Override the chain id |
 | `IXO_GAS_PRICE` | `0.025uixo` | Gas price used to compute fees |

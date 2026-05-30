@@ -1,14 +1,14 @@
 import { fromBase64, toBase64 } from "@cosmjs/encoding";
 import { z } from "zod";
-import { getQueryClient, getStargateClient } from "../clients";
+import { getStargateClient, invalidateClients } from "../clients";
 import { errorResult, textResult } from "../utils/format";
 import { defineTool } from "../utils/tool";
 import {
   assembleTxRawBytes,
   buildDirectSignDoc,
-  buildSimulationTx,
   RawMessage,
   resolveFee,
+  simulateGasUsed,
 } from "../utils/tx";
 
 const message = z.object({
@@ -19,19 +19,9 @@ const message = z.object({
 const DEFAULT_GAS_ADJUSTMENT = 1.3;
 /** Used only if gas is not supplied and on-chain simulation is unavailable. */
 const FALLBACK_GAS_PER_MESSAGE = 250_000;
-
-async function simulateGasUsed(
-  rpcUrl: string,
-  messages: RawMessage[],
-  signerPubKey: string,
-  sequence: number,
-  memo: string,
-): Promise<number> {
-  const qc = await getQueryClient(rpcUrl);
-  const tx = await buildSimulationTx(messages, signerPubKey, sequence, memo);
-  const sim = await qc.cosmos.tx.v1beta1.simulate({ tx } as any);
-  return Number(sim.gasInfo?.gasUsed ?? 0n);
-}
+/** Bounded wait when the caller opts into awaiting inclusion (Workers time limits). */
+const AWAIT_TIMEOUT_MS = 20_000;
+const AWAIT_POLL_MS = 2_500;
 
 export const transactionTools = [
   defineTool({
@@ -113,6 +103,7 @@ export const transactionTools = [
             "Sign the SignDoc (serialize the SignDoc proto and sign with your secp256k1 key, SIGN_MODE_DIRECT). Then call ixo_broadcast_transaction with either signedTxBytes (base64 TxRaw) or { bodyBytes, authInfoBytes, signature }.",
         });
       } catch (err) {
+        invalidateClients(config.rpcUrl);
         return errorResult(err);
       }
     },
@@ -151,6 +142,7 @@ export const transactionTools = [
           suggestedFee: await resolveFee(suggestedGas, config.gasPrice),
         });
       } catch (err) {
+        invalidateClients(config.rpcUrl);
         return errorResult(err);
       }
     },
@@ -159,7 +151,7 @@ export const transactionTools = [
   defineTool({
     name: "ixo_broadcast_transaction",
     description:
-      "Broadcast a transaction that YOU signed and waits for it to be included in a block. Provide either signedTxBytes (base64-encoded TxRaw) or the three parts { bodyBytes, authInfoBytes, signature } (all base64). The server holds no keys; it only relays your signed bytes to the chain.",
+      "Broadcast a transaction that YOU signed. Provide either signedTxBytes (base64-encoded TxRaw) or the three parts { bodyBytes, authInfoBytes, signature } (all base64). The server holds no keys; it only relays your signed bytes to the chain. By default it broadcasts in 'sync' mode (returns the hash once the tx passes CheckTx and enters the mempool) — then poll ixo_get_tx for the on-chain result. Set awaitInclusion=true to wait for a block instead (bounded; may hit Worker time limits).",
     inputSchema: {
       signedTxBytes: z
         .string()
@@ -171,34 +163,52 @@ export const transactionTools = [
         .optional()
         .describe("base64 AuthInfo bytes (from ixo_build_transaction)"),
       signature: z.string().optional().describe("base64 signature over the SignDoc"),
+      awaitInclusion: z
+        .boolean()
+        .optional()
+        .describe("Wait for block inclusion (default false → return hash after CheckTx)."),
     },
     handler: async (args, { config }) => {
+      let txBytes: Uint8Array;
+      if (args.signedTxBytes) {
+        txBytes = fromBase64(args.signedTxBytes);
+      } else if (args.bodyBytes && args.authInfoBytes && args.signature) {
+        txBytes = assembleTxRawBytes(args.bodyBytes, args.authInfoBytes, args.signature);
+      } else {
+        return errorResult(
+          "Provide either signedTxBytes, or all of bodyBytes + authInfoBytes + signature.",
+        );
+      }
+      const explorerFor = (hash: string) =>
+        config.explorer ? `${config.explorer}/transactions/${hash}` : undefined;
       try {
-        let txBytes: Uint8Array;
-        if (args.signedTxBytes) {
-          txBytes = fromBase64(args.signedTxBytes);
-        } else if (args.bodyBytes && args.authInfoBytes && args.signature) {
-          txBytes = assembleTxRawBytes(args.bodyBytes, args.authInfoBytes, args.signature);
-        } else {
-          return errorResult(
-            "Provide either signedTxBytes, or all of bodyBytes + authInfoBytes + signature.",
-          );
-        }
         const stargate = await getStargateClient(config.rpcUrl);
-        const res = await stargate.broadcastTx(txBytes);
+        if (args.awaitInclusion) {
+          const res = await stargate.broadcastTx(txBytes, AWAIT_TIMEOUT_MS, AWAIT_POLL_MS);
+          return textResult({
+            broadcast: "block",
+            success: res.code === 0,
+            transactionHash: res.transactionHash,
+            code: res.code,
+            height: res.height,
+            gasUsed: res.gasUsed,
+            gasWanted: res.gasWanted,
+            rawLog: res.rawLog,
+            explorer: explorerFor(res.transactionHash),
+          });
+        }
+        // sync: resolves with the hash once CheckTx passes; rejects (with code/log)
+        // if CheckTx fails (e.g. bad sequence, insufficient fee).
+        const hash = await stargate.broadcastTxSync(txBytes);
         return textResult({
-          success: res.code === 0,
-          transactionHash: res.transactionHash,
-          code: res.code,
-          height: res.height,
-          gasUsed: res.gasUsed,
-          gasWanted: res.gasWanted,
-          rawLog: res.rawLog,
-          explorer: config.explorer
-            ? `${config.explorer}/transactions/${res.transactionHash}`
-            : undefined,
+          broadcast: "sync",
+          accepted: true,
+          transactionHash: hash,
+          explorer: explorerFor(hash),
+          note: "Accepted into the mempool (CheckTx passed). Poll ixo_get_tx with this hash for the on-chain execution result.",
         });
       } catch (err) {
+        invalidateClients(config.rpcUrl);
         return errorResult(err);
       }
     },

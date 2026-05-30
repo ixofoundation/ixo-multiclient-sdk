@@ -46,3 +46,13 @@ export function getStargateClient(rpcUrl: string): Promise<StargateClient> {
   }
   return client;
 }
+
+/**
+ * Drop cached clients for an RPC URL so the next call reconnects. Call this when
+ * a request against a cached client fails, in case the cached connection went
+ * bad (the RPC transport is HTTP/fetch-based, so this is belt-and-suspenders).
+ */
+export function invalidateClients(rpcUrl: string): void {
+  queryClients.delete(rpcUrl);
+  stargateClients.delete(rpcUrl);
+}

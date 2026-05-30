@@ -65,8 +65,18 @@ export interface IxoConfig {
 }
 
 export function resolveConfig(env: Env): IxoConfig {
-  const requested = (env.IXO_NETWORK || "mainnet").toLowerCase();
-  const network: NetworkName = isNetworkName(requested) ? requested : "mainnet";
+  const raw = env.IXO_NETWORK?.trim();
+  let network: NetworkName;
+  if (!raw) {
+    network = "mainnet";
+  } else if (isNetworkName(raw.toLowerCase())) {
+    network = raw.toLowerCase() as NetworkName;
+  } else {
+    // Fail loudly rather than silently defaulting a typo to mainnet (real funds).
+    throw new Error(
+      `Invalid IXO_NETWORK "${env.IXO_NETWORK}". Use one of: mainnet | testnet | devnet.`,
+    );
+  }
   const preset = NETWORKS[network];
   return {
     network,

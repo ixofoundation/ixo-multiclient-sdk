@@ -105,15 +105,22 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === "/" || url.pathname === "/health") {
-      const config = resolveConfig(env);
-      return Response.json({
-        name: "ixo-mcp",
-        status: "ok",
-        network: config.network,
-        chainId: config.chainId,
-        rpcUrl: config.rpcUrl,
-        endpoints: { streamableHttp: "/mcp", sse: "/sse" },
-      });
+      try {
+        const config = resolveConfig(env);
+        return Response.json({
+          name: "ixo-mcp",
+          status: "ok",
+          network: config.network,
+          chainId: config.chainId,
+          rpcUrl: config.rpcUrl,
+          endpoints: { streamableHttp: "/mcp", sse: "/sse" },
+        });
+      } catch (err) {
+        return Response.json(
+          { name: "ixo-mcp", status: "misconfigured", error: (err as Error).message },
+          { status: 500 },
+        );
+      }
     }
 
     // CORS preflight carries no credentials; let it through to the transport
