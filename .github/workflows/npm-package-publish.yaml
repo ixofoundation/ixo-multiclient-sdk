@@ -3,6 +3,9 @@
 
 name: Node.js Package
 
+permissions:
+  id-token: write
+
 on:
   push:
     branches: [main]
@@ -48,5 +51,3 @@ jobs:
       - run: yarn build:ts
       - run: yarn build
       - run: yarn publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
