@@ -1,4 +1,5 @@
-import { SignerData } from "@cosmjs/stargate";
+// SDK SignerData (number-based accountNumber); cosmjs's moved to bigint in 0.39
+import { SignerData } from "../../src/stargate_client/storeTypes";
 import { getFee, WalletUsers } from "../helpers/constants";
 import {
   createClient,

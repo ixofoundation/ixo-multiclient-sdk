@@ -2,8 +2,8 @@ import { customQueries, testMsg, utils } from "../../helpers/common";
 import * as Iid from "../Iid";
 import * as Wasm from "../../modules/CosmWasm";
 import { createGroupMsg } from "../Groups";
+import { chainNetwork } from "../constants";
 import {
-  chainNetwork,
   LinkedResourcesUploaded,
   SetupGroupConstantKeys,
   setup_dao_constants,
@@ -13,7 +13,7 @@ import { setAndLedgerUser } from "../helpers";
 
 export const impactsFlow = () =>
   describe("Flow for creating a Entity (dao/protocol/oracle)", () => {
-    setAndLedgerUser();
+    setAndLedgerUser(process.env.ROOT_IMPACTS!);
 
     // ===============================================================
     // Create dao dao groups
@@ -125,8 +125,11 @@ export const impactsFlow = () =>
       console.log({ linkedResourcesUploaded });
 
       // Create the Entity
+      // NOTE: the constants' entity shape has drifted from CreateEntity's
+      // signature (no linkedEntity, extra verification/groupAddresses);
+      // this example flow predates that change
       const res = await Entity.CreateEntity(
-        daoConst.entity,
+        daoConst.entity as any,
         linkedResourcesUploaded
       );
       daoDid = utils.common.getValueFromEvents(res, "wasm", "token_id");

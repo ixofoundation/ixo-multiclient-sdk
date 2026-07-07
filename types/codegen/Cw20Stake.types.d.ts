@@ -3,7 +3,7 @@
 * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
-export declare type Duration = {
+export type Duration = {
     height: number;
 } | {
     time: number;
@@ -13,7 +13,7 @@ export interface InstantiateMsg {
     token_address: string;
     unstaking_duration?: Duration | null;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     receive: Cw20ReceiveMsg;
 } | {
     unstake: {
@@ -36,29 +36,29 @@ export declare type ExecuteMsg = {
 } | {
     update_ownership: Action;
 };
-export declare type Uint128 = string;
-export declare type Binary = string;
-export declare type Action = {
+export type Uint128 = string;
+export type Binary = string;
+export type Action = {
     transfer_ownership: {
         expiry?: Expiration | null;
         new_owner: string;
     };
 } | "accept_ownership" | "renounce_ownership";
-export declare type Expiration = {
+export type Expiration = {
     at_height: number;
 } | {
     at_time: Timestamp;
 } | {
     never: {};
 };
-export declare type Timestamp = Uint64;
-export declare type Uint64 = string;
+export type Timestamp = Uint64;
+export type Uint64 = string;
 export interface Cw20ReceiveMsg {
     amount: Uint128;
     msg: Binary;
     sender: string;
 }
-export declare type QueryMsg = {
+export type QueryMsg = {
     staked_balance_at_height: {
         address: string;
         height?: number | null;
@@ -89,7 +89,7 @@ export declare type QueryMsg = {
 } | {
     ownership: {};
 };
-export declare type MigrateMsg = {
+export type MigrateMsg = {
     from_v1: {};
 };
 export interface ClaimsResponse {
@@ -99,7 +99,7 @@ export interface Claim {
     amount: Uint128;
     release_at: Expiration;
 }
-export declare type Addr = string;
+export type Addr = string;
 export interface Config {
     token_address: Addr;
     unstaking_duration?: Duration | null;

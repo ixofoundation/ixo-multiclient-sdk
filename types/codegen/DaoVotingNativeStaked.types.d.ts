@@ -3,14 +3,14 @@
 * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
-export declare type Admin = {
+export type Admin = {
     address: {
         addr: string;
     };
 } | {
     core_module: {};
 };
-export declare type Duration = {
+export type Duration = {
     height: number;
 } | {
     time: number;
@@ -21,7 +21,7 @@ export interface InstantiateMsg {
     owner?: Admin | null;
     unstaking_duration?: Duration | null;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     stake: {};
 } | {
     unstake: {
@@ -36,8 +36,8 @@ export declare type ExecuteMsg = {
 } | {
     claim: {};
 };
-export declare type Uint128 = string;
-export declare type QueryMsg = {
+export type Uint128 = string;
+export type QueryMsg = {
     get_config: {};
 } | {
     claims: {
@@ -64,15 +64,15 @@ export declare type QueryMsg = {
 };
 export interface MigrateMsg {
 }
-export declare type Expiration = {
+export type Expiration = {
     at_height: number;
 } | {
     at_time: Timestamp;
 } | {
     never: {};
 };
-export declare type Timestamp = Uint64;
-export declare type Uint64 = string;
+export type Timestamp = Uint64;
+export type Uint64 = string;
 export interface ClaimsResponse {
     claims: Claim[];
 }
@@ -80,7 +80,7 @@ export interface Claim {
     amount: Uint128;
     release_at: Expiration;
 }
-export declare type Addr = string;
+export type Addr = string;
 export interface Config {
     denom: string;
     manager?: Addr | null;

@@ -26,6 +26,7 @@ The Impacts Client SDK provides support for both [ESM (ECMAScript Modules)](http
   - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
+  - [Import Strategies & Bundle Size](#import-strategies--bundle-size)
   - [Usage](#usage)
     - [Utility Functions](#utility-functions)
     - [RPC Client](#rpc-client)
@@ -38,6 +39,7 @@ The Impacts Client SDK provides support for both [ESM (ECMAScript Modules)](http
         - [Initializing the Stargate Client](#initializing-the-stargate-client)
         - [Creating Signers](#creating-signers)
       - [Broadcasting Messages](#broadcasting-messages)
+    - [Cloudflare Workers](#cloudflare-workers)
     - [Blockchain Modules](#blockchain-modules)
       - [IXO Modules](#ixo-modules)
         - [IIDs](#iids)
@@ -53,6 +55,7 @@ The Impacts Client SDK provides support for both [ESM (ECMAScript Modules)](http
     - [Notes](#notes)
       - [React Native](#react-native)
         - [BigInt React Native](#bigint-react-native)
+      - [Bundle size & tree-shaking](#bundle-size--tree-shaking)
       - [Attributions](#attributions)
   - [How to contribute to the Impacts Client SDK](#how-to-contribute-to-the-impacts-client-sdk)
     - [Set up your local environment](#set-up-your-local-environment)
@@ -69,10 +72,14 @@ The Impacts Client SDK provides support for both [ESM (ECMAScript Modules)](http
 - Support for smart contracts
 - Integrates interchain communications
 - Supports multiple Cosmos chains
+- Dual ESM + CommonJS build with `"sideEffects": false` for [tree-shakeable, small frontend/Worker bundles](#import-strategies--bundle-size)
+- First-class Cloudflare Workers support (atomic sequence management via a Durable Object)
 
 ## API
+- [Import Strategies & Bundle Size](#import-strategies--bundle-size)
 - [Query Client](#query-client)
 - [Signing Client](#signing-client)
+- [Cloudflare Workers](#cloudflare-workers)
 - [Blockchain Modules](#blockchain-modules)
 - [Smart Contracts](#smart-contracts)
 - [Inter-Blockchain Communication](#composing-ibc-messages)
@@ -81,16 +88,102 @@ The Impacts Client SDK provides support for both [ESM (ECMAScript Modules)](http
 ## Getting Started
 
 ### Prerequisites
-- [Node.js](https://nodejs.org/en) v18 or higher
-- [Yarn](https://yarnpkg.com/) package manager
+- [Node.js](https://nodejs.org/en) **v22 or higher** — the crypto stack (`@cosmjs` 0.39 → `@noble`/`@scure`) uses APIs that only ship in Node 22+.
+- [TypeScript](https://www.typescriptlang.org/) **5.7 or higher** if you consume the types (CosmJS binary types now carry `Uint8Array<ArrayBuffer>` generics).
+- `moduleResolution` set to `bundler`, `node16`, or `nodenext` in your `tsconfig.json` (the SDK ships an [`exports` map](https://nodejs.org/api/packages.html#exports); the legacy `node`/`node10` resolver cannot read it).
+- A package manager — [npm](https://www.npmjs.com/), [yarn](https://yarnpkg.com/), or [pnpm](https://pnpm.io/).
 
 ### Installation
 
 ```bash
-npm install @ixo/multiclient-sdk
-or
-yarn add @ixo/multiclient-sdk
+npm install @ixo/impactxclient-sdk
+# or
+yarn add @ixo/impactxclient-sdk
+# or
+pnpm add @ixo/impactxclient-sdk
 ```
+
+The package ships three artifacts, selected automatically by your toolchain via the `exports` map:
+
+| Format | Path | Used by |
+| --- | --- | --- |
+| **ESM** | `module/` | bundlers (Vite, webpack, esbuild, Rollup), modern `import` in Node |
+| **CJS** | `main/` | `require()`, Jest, older Node tooling |
+| **Types** | `types/` | TypeScript |
+
+`"sideEffects": false` is declared, so bundlers tree-shake unused modules. See [Import Strategies & Bundle Size](#import-strategies--bundle-size) for how to keep bundles small.
+
+## Import Strategies & Bundle Size
+
+This SDK wraps the full IXO + Cosmos + IBC + CosmWasm proto surface, so **how you import matters a lot** for frontend and Cloudflare Worker bundle sizes. There are three tiers, from smallest to largest.
+
+> All sizes below are esbuild, minified / gzipped, measured against a real bundle. Reproduce them yourself with the harness in [`treeshake-test/`](./treeshake-test).
+
+### 1. Granular subpaths — smallest, recommended for frontends & Workers
+
+Import a single generated module directly. The bundler pulls in only that message/query and its proto dependencies — nothing else.
+
+```ts
+// one message type — ~45 KB / 14 KB gzip, fully typed
+import { MsgCreateIidDocument } from "@ixo/impactxclient-sdk/codegen/ixo/iid/v1beta1/tx";
+
+const msg = MsgCreateIidDocument.fromPartial({ id: did, signer: address });
+```
+
+```ts
+// a slim, hand-composed query client — ~461 KB / 128 KB gzip
+// createRpc is stargate-free; add only the query modules you actually use
+import { createRpc } from "@ixo/impactxclient-sdk/queries";
+import { QueryClientImpl as IidQuery } from "@ixo/impactxclient-sdk/codegen/ixo/iid/v1beta1/query.rpc.Query";
+import { QueryClientImpl as BankQuery } from "@ixo/impactxclient-sdk/codegen/cosmos/bank/v1beta1/query.rpc.Query";
+
+const rpc = await createRpc(RPC_ENDPOINT);
+const iid = new IidQuery(rpc);
+const bank = new BankQuery(rpc);
+
+const doc = await iid.iidDocument({ id: did });
+const balance = await bank.balance({ address, denom: "uixo" });
+```
+
+Available subpaths (all typed): `@ixo/impactxclient-sdk/codegen/**`, `/utils`, `/queries`, `/messages`, `/custom_queries`, `/stargate_client`, `/cloudflare`.
+
+### 2. Namespace imports — convenient, medium/large
+
+The documented `ixo.` / `cosmos.` / `cosmwasm.` / `ibc.` namespaces are runtime objects that aggregate an entire proto tree, so touching one pulls in that whole tree. Fine for Node backends; heavy for browsers.
+
+```ts
+// convenient, but ~2,667 KB / 402 KB gzip because `ixo` aggregates all ixo modules
+import { ixo } from "@ixo/impactxclient-sdk";
+const msg = ixo.iid.v1beta1.MsgCreateIidDocument.fromPartial({ id: did });
+```
+
+Prefer strategy 1 in hot frontend/Worker paths; use namespaces freely in scripts and backends where bundle size is irrelevant.
+
+### 3. Full clients — largest, unavoidable when you need everything
+
+```ts
+import { createSigningClient } from "@ixo/impactxclient-sdk"; // ~1,836 KB / 303 KB gzip
+import { createQueryClient } from "@ixo/impactxclient-sdk";   // ~1,223 KB / 221 KB gzip
+```
+
+`createSigningClient` carries a registry of **every** chain message type (that is the point of it) plus `cosmjs-types`, so it is inherently large. `createQueryClient` instantiates every module's query client. Both are the right choice for a Node backend or a dApp that touches many modules; for a Worker or a focused frontend, prefer the slim composition in strategy 1.
+
+### Size cheat-sheet
+
+| What you import | min / gzip | Best for |
+| --- | --- | --- |
+| One msg via `/codegen/**` | 45 KB / 14 KB | frontends, Workers |
+| Slim query client (`createRpc` + subpaths) | 461 KB / 128 KB | query-only Workers/frontends |
+| `createQueryClient` (all modules) | 1,223 KB / 221 KB | backends, multi-module dApps |
+| `createSigningClient` | 1,836 KB / 303 KB | signing dApps/backends |
+| `ixo` namespace only | 2,667 KB / 402 KB | scripts, backends |
+| `/cloudflare` (SequenceManagerDO) | 2.8 KB / 1.2 KB | Cloudflare Workers |
+
+### Recommendations by environment
+
+- **Cloudflare Workers / edge**: import from granular subpaths only; use `createRpc` + the specific `QueryClientImpl`s you need. Re-export the Durable Object from `@ixo/impactxclient-sdk/cloudflare` (see [Cloudflare Workers](#cloudflare-workers)). Enable `nodejs_compat` in `wrangler.jsonc`.
+- **Frontend (React/Vue/Vite)**: granular subpaths for message/query types on hot paths; a single `createSigningClient` behind a lazy `import()` if you need signing, so it is not in your initial chunk.
+- **Node backend / scripts**: import whatever is convenient — namespaces and full clients are fine.
 
 ## Usage
 The [Query Client](#query-client) and [Signing Client](#signing-client) provide simple interfaces to abstract away the complexity of querying data on the IXO blockchain and signing messages for broadcasting to the IXO blockchain. These clients also work for other Cosmos appchains.
@@ -143,12 +236,23 @@ import { ixo, createQueryClient } from "@ixo/impactxclient-sdk";
 const queryClient = await createQueryClient(RPC_ENDPOINT);
 
 // Example of querying the Cosmos Bank module for the balances of an account on the IXO blockchain
-const balance = await client.cosmos.bank.v1beta1.allBalances({
+const balance = await queryClient.cosmos.bank.v1beta1.allBalances({
   address: "ixo1addresshere",
 });
 // Example of querying the IXO Entity module for all entities on the IXO blockchain
 const entities = await queryClient.ixo.entity.v1beta1.entityList();
 ```
+
+> **Bundle-size tip:** `createQueryClient` instantiates the query client for *every* module (~221 KB gzip). If you only query a few modules — especially in a Cloudflare Worker or frontend — compose a slim client with `createRpc` instead. See [Import Strategies & Bundle Size](#import-strategies--bundle-size).
+>
+> ```ts
+> import { createRpc } from "@ixo/impactxclient-sdk/queries";
+> import { QueryClientImpl } from "@ixo/impactxclient-sdk/codegen/ixo/entity/v1beta1/query.rpc.Query";
+>
+> const rpc = await createRpc(RPC_ENDPOINT);
+> const entity = new QueryClientImpl(rpc);
+> const entities = await entity.entityList();
+> ```
 
 #### Custom Queries
 
@@ -243,70 +347,58 @@ Here are the docs on [creating signers](https://github.com/cosmology-tech/cosmos
 
 ##### Initializing the Stargate Client
 
-IXO added a custom Stargate Signing Client that can be exported and is creatable under createSigningClient.
+IXO ships a custom Stargate signing client, created via `createSigningClient`. It comes pre-loaded with the full IXO + Cosmos + IBC + CosmWasm registry, so you do **not** need to register proto types manually.
 
 Note
-> It only supports Direct Proto signing through the RPC endpoint.
-> It already has all the proto defininitions in the registry for IXO blockchain modules.
+> Signing defaults to `SIGN_MODE_DIRECT` (proto). If the wallet you pass is an amino signer (e.g. Ledger via `Secp256k1HdWallet`), the client automatically falls back to `SIGN_MODE_LEGACY_AMINO_JSON` — provide `aminoTypes` in the options for any custom messages that need amino JSON.
 
-```js
+```ts
 import { createSigningClient } from "@ixo/impactxclient-sdk";
 
-const signingClient = await createSigningClient(RPC_URL, offlineWallet);
+// createSigningClient(rpcEndpoint, offlineWallet, ignoreGetSequence?, options?, localStoreFunctions?)
+const signingClient = await createSigningClient(RPC_ENDPOINT, offlineWallet);
 ```
 
-Note
-> The following, named `getSigningixoClient`, is an alternative to `createSigningClient`.
+With gas price and a local sequence store (recommended for apps sending back-to-back transactions):
 
-Use `getSigningixoClient` to get your `SigningStargateClient`, with the proto/amino messages full-loaded.
-There is no need to manually add amino types, just import and initialize the client:
+```ts
+import { createSigningClient } from "@ixo/impactxclient-sdk";
+import { GasPrice } from "@cosmjs/stargate";
+import store from "store"; // or any get/set-backed storage
 
-```js
-import { getSigningixoClient } from "@ixo/impactxclient-sdk";
-
-const stargateClient = await getSigningixoClient({
-  rpcEndpoint,
-  signer, // OfflineSigner
-});
+const signingClient = await createSigningClient(
+  RPC_ENDPOINT,
+  offlineWallet,
+  false,
+  { gasPrice: GasPrice.fromString("0.025uixo") },
+  {
+    getLocalData: (k) => store.get(k),
+    setLocalData: (k, d) => store.set(k, d),
+  }
+);
 ```
 
 ##### Creating Signers
 
-To broadcast messages, you can create signers with a variety of options:
+`createSigningClient` accepts any CosmJS `OfflineSigner`. Common ways to get one:
 
-* [cosmos-kit](https://github.com/cosmology-tech/cosmos-kit/tree/main/packages/react#signing-clients) (recommended)
-* [keplr](https://docs.keplr.app/api/cosmjs.html)
-* [cosmjs](https://gist.github.com/webmaster128/8444d42a7eceeda2544c8a59fbd7e1d9)
+* Browser wallets — [cosmos-kit](https://docs.cosmoskit.com/) (recommended), or [Keplr](https://docs.keplr.app/api/cosmjs.html) directly.
+* From a mnemonic — CosmJS `DirectSecp256k1HdWallet` (a direct dependency of this SDK, no extra install).
 
-**Proto Signer**
-```js
-import { getOfflineSignerProto as getOfflineSigner } from "cosmjs-utils";
-```
+WARNING
+> Never hard-code a *mnemonic* / *seed phrase* in plain text. The example below is illustration only and holds no balances. Use secure storage / encryption in production.
 
-**Amino Signer**
-Note
-> The SDK currently does not include amino types. Use the Proto Signer for now. 
-```js
-import { getOfflineSignerAmino as getOfflineSigner } from "cosmjs-utils";
-```
-
-Once the Signer type has been imported, the signer can be created.
-
-WARNING 
-> It is not recommended to write your *mnemonic*, also known as *seed phrase*, in plain text. The example below is only for illustration and has no balances.
-> Please take care of your security and use best practices such as AES encryption and/or methods from 12factor applications.
-
-```js
-import { chains } from "chain-registry";
+```ts
+import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 
 const mnemonic =
   "unfold client turtles either pilots stocks floors glow toward bullets cars science";
-const chain = chains.find(({ chain_name }) => chain_name === "ixo");
-const signer = await getOfflineSigner({
-  mnemonic,
-  chain,
+const offlineWallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
+  prefix: "ixo",
 });
 ```
+
+> For ed25519 keys and DID helpers, the SDK's own signer utilities under `@ixo/impactxclient-sdk/utils` (`utils.mnemonic`, `utils.did`) generate IXO-native addresses and DIDs. See [Utility Functions](#utility-functions).
 
 #### Broadcasting Messages
 
@@ -336,6 +428,44 @@ const fee: StdFee = {
 };
 const response = await stargateClient.signAndBroadcast(address, [msg], fee);
 ```
+
+### Cloudflare Workers
+
+The SDK runs on Cloudflare Workers. Enable `nodejs_compat` in `wrangler.jsonc` and import from granular subpaths to keep the Worker small (see [Import Strategies & Bundle Size](#import-strategies--bundle-size)).
+
+When multiple Workers sign transactions from the **same account** concurrently they race for the account sequence number. The SDK ships a Durable Object, `SequenceManagerDO`, that hands out sequence numbers atomically. Import it from the dedicated `/cloudflare` subpath (which avoids loading crypto at module-load time).
+
+1. Re-export the Durable Object from your Worker:
+
+```ts
+// Use the /cloudflare subpath — tiny (~1.2 KB gzip) and crypto-free at load time
+export { SequenceManagerDO } from "@ixo/impactxclient-sdk/cloudflare";
+```
+
+2. Bind it in `wrangler.jsonc`:
+
+```jsonc
+{
+  "durable_objects": {
+    "bindings": [{ "name": "SEQUENCE_MANAGER", "class_name": "SequenceManagerDO" }]
+  },
+  "migrations": [{ "tag": "v1", "new_classes": ["SequenceManagerDO"] }]
+}
+```
+
+3. Wire it into the signing client via `createDOStoreFunctions`:
+
+```ts
+import { createSigningClient, createDOStoreFunctions } from "@ixo/impactxclient-sdk";
+
+const doStub = env.SEQUENCE_MANAGER.get(env.SEQUENCE_MANAGER.idFromName("global"));
+const storageFunctions = createDOStoreFunctions(doStub);
+
+const client = await createSigningClient(rpc, wallet, false, options, storageFunctions);
+await client.signAndBroadcast(address, msgs, "auto", memo);
+```
+
+Tune the inter-transaction stagger with the `IXO_CLIENT_SEQUENCE_MIN_DELAY_MS` Worker var (default `400`).
 
 ### Blockchain Modules
 
@@ -371,6 +501,8 @@ The [Claims Module](https://github.com/ixofoundation/ixo-blockchain/tree/a161b2e
 The [Bonds Module](https://github.com/ixofoundation/ixo-blockchain/tree/a161b2ef40ca56dd066bc0b1eb21913174c65b89/x/bonds) provides universal token bonding curve functions to mint, burn or swap any token in a Cosmos blockchain.
 - `./codegen/ixo/bonds/v1beta1/query`
 - `./codegen/ixo/bonds/v1beta1/tx`
+
+> **⚠️ Disabled on IXO mainnet (v8):** as of the v8 upgrade the bonds module is intentionally disabled on-chain (emergency security measure). Bonds **queries** still work, but any state-changing bonds message (`MsgCreateBond`, `MsgBuy`, `MsgSell`, …) is rejected by the chain with `the bonds module is disabled` (this surfaces as a thrown `BroadcastTxError`, not a failed-tx response). The proto types remain in the SDK for decoding historical data and for chains where the module is enabled.
 
 #### Cosmos Modules
 Available at the [Cosmos SDK](https://github.com/cosmos/cosmos-sdk) repository.
@@ -526,10 +658,25 @@ yarn add @walletconnect/react-native-compat
 
 To ensure no issues with the React Native bigInt implementation, be sure to wrap your decimal gas amounts and others in a JS Double.
 
+#### Bundle size & tree-shaking
+
+The `treeshake-test/` folder is a self-contained harness that measures how the SDK bundles under esbuild and Rollup, verifies it loads under both Node ESM and CJS, and checks that every import style resolves types. Run it after any dependency or packaging change:
+
+```bash
+cd treeshake-test && npm install
+npm run build        # bundle sizes per import strategy
+npm run check:node   # Node ESM + CJS loadability
+npm run check:types  # every import style resolves types
+```
+
+See [Import Strategies & Bundle Size](#import-strategies--bundle-size) for the resulting numbers and recommendations.
+
 #### Attributions
 
 Types were generated from the `*.proto` files of the IXO appchain using the `@osmonauts/telescope@0.92.2` package.
 > See `@ixo/impactxclient-sdk/types/index.d.ts` for the complete list of types.
+>
+> The generated `src/codegen/` output carries a few required manual patches (cosmjs package renames, a local `createProtobufRpcClient`, tree-shaking fixes). These are wiped by `yarn codegen` and must be re-applied — see [CODEGEN_PATCHES.md](./CODEGEN_PATCHES.md).
 
 ## How to contribute to the Impacts Client SDK
 
@@ -561,6 +708,13 @@ Contract schemas live in `./contracts`, and protos in `./proto`. Look inside of 
 ```
 yarn codegen
 ```
+
+> **⚠️ IMPORTANT:** `yarn codegen` deletes and regenerates all of `src/codegen/`,
+> which wipes several required manual patches (cosmjs package renames, the
+> local `protobufRpcClient`, and other bundle-size/tree-shaking fixes).
+> After every regeneration, re-apply the patches and run the verification
+> checklist documented in **[CODEGEN_PATCHES.md](./CODEGEN_PATCHES.md)**
+> before publishing.
 
 ### Publishing
 

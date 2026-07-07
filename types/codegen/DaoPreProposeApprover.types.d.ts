@@ -6,7 +6,7 @@
 export interface InstantiateMsg {
     pre_propose_approval_contract: string;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     propose: {
         msg: ApproverProposeMessage;
     };
@@ -37,28 +37,28 @@ export declare type ExecuteMsg = {
         proposal_id: number;
     };
 };
-export declare type ApproverProposeMessage = {
+export type ApproverProposeMessage = {
     propose: {
         approval_id: number;
         description: string;
         title: string;
     };
 };
-export declare type Uint128 = string;
-export declare type DepositToken = {
+export type Uint128 = string;
+export type DepositToken = {
     token: {
         denom: UncheckedDenom;
     };
 } | {
     voting_module_token: {};
 };
-export declare type UncheckedDenom = {
+export type UncheckedDenom = {
     native: string;
 } | {
     cw20: string;
 };
-export declare type DepositRefundPolicy = "always" | "only_passed" | "never";
-export declare type Status = "open" | "rejected" | "passed" | "executed" | "closed" | "execution_failed";
+export type DepositRefundPolicy = "always" | "only_passed" | "never";
+export type Status = "open" | "rejected" | "passed" | "executed" | "closed" | "execution_failed";
 export interface UncheckedDepositInfo {
     amount: Uint128;
     denom: DepositToken;
@@ -67,7 +67,7 @@ export interface UncheckedDepositInfo {
 export interface Empty {
     [k: string]: unknown;
 }
-export declare type QueryMsg = {
+export type QueryMsg = {
     proposal_module: {};
 } | {
     dao: {};
@@ -84,15 +84,15 @@ export declare type QueryMsg = {
         msg: QueryExt;
     };
 };
-export declare type QueryExt = {
+export type QueryExt = {
     pre_propose_approval_contract: {};
 };
-export declare type CheckedDenom = {
+export type CheckedDenom = {
     native: string;
 } | {
     cw20: Addr;
 };
-export declare type Addr = string;
+export type Addr = string;
 export interface Config {
     deposit_info?: CheckedDepositInfo | null;
     open_proposal_submission: boolean;
@@ -109,4 +109,4 @@ export interface DepositInfoResponse {
 export interface HooksResponse {
     hooks: string[];
 }
-export declare type Binary = string;
+export type Binary = string;

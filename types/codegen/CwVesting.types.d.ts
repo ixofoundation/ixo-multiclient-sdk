@@ -3,13 +3,13 @@
 * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
-export declare type Uint128 = string;
-export declare type UncheckedDenom = {
+export type Uint128 = string;
+export type UncheckedDenom = {
     native: string;
 } | {
     cw20: string;
 };
-export declare type Curve = {
+export type Curve = {
     constant: {
         y: Uint128;
         [k: string]: unknown;
@@ -42,7 +42,7 @@ export interface PiecewiseLinear {
     steps: [number, Uint128][];
     [k: string]: unknown;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     receive: Cw20ReceiveMsg;
 } | {
     distribute: {};
@@ -75,41 +75,41 @@ export declare type ExecuteMsg = {
 } | {
     update_ownership: Action;
 };
-export declare type Binary = string;
-export declare type Action = {
+export type Binary = string;
+export type Action = {
     transfer_ownership: {
         expiry?: Expiration | null;
         new_owner: string;
     };
 } | "accept_ownership" | "renounce_ownership";
-export declare type Expiration = {
+export type Expiration = {
     at_height: number;
 } | {
     at_time: Timestamp;
 } | {
     never: {};
 };
-export declare type Timestamp = Uint64;
-export declare type Uint64 = string;
+export type Timestamp = Uint64;
+export type Uint64 = string;
 export interface Cw20ReceiveMsg {
     amount: Uint128;
     msg: Binary;
     sender: string;
 }
-export declare type QueryMsg = {
+export type QueryMsg = {
     info: {};
 } | {
     ownership: {};
 } | {
     vested_amount: {};
 };
-export declare type CheckedDenom = {
+export type CheckedDenom = {
     native: string;
 } | {
     cw20: Addr;
 };
-export declare type Addr = string;
-export declare type VestingPaymentStatus = "active" | "canceled" | "canceled_and_unbonding" | "fully_vested" | "unfunded";
+export type Addr = string;
+export type VestingPaymentStatus = "active" | "canceled" | "canceled_and_unbonding" | "fully_vested" | "unfunded";
 export interface VestingPayment {
     amount: Uint128;
     canceled_at_time?: number | null;

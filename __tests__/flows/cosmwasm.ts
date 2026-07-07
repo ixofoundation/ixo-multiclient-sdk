@@ -1,6 +1,5 @@
 import { DeliverTxResponse } from "@cosmjs/stargate";
 import { OfflineSigner } from "@cosmjs/proto-signing";
-import { BroadcastTxSyncResponse } from "@cosmjs/tendermint-rpc";
 import { toBase64, toHex } from "@cosmjs/encoding";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import {

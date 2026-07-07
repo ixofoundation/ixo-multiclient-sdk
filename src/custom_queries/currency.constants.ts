@@ -1,4 +1,4 @@
-export const coinCodexBaseUrl = "https://coincodex.com"
+export const coinCodexBaseUrl = "https://coincodex.com";
 
 export const keplrCurrencies = {
   ubld: {

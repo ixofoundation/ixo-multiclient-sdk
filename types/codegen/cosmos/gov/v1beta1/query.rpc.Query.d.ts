@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import { QueryClient } from "@cosmjs/stargate";
+import type { QueryClient } from "@cosmjs/stargate";
 import { QueryProposalRequest, QueryProposalResponse, QueryProposalsRequest, QueryProposalsResponse, QueryVoteRequest, QueryVoteResponse, QueryVotesRequest, QueryVotesResponse, QueryParamsRequest, QueryParamsResponse, QueryDepositRequest, QueryDepositResponse, QueryDepositsRequest, QueryDepositsResponse, QueryTallyResultRequest, QueryTallyResultResponse } from "./query";
 /** Query defines the gRPC querier service for gov module */
 export interface Query {

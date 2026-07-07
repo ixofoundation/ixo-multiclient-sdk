@@ -1,0 +1,24 @@
+{
+  "name": "treeshake-test",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Measures how well @ixo/impactxclient-sdk tree-shakes under esbuild (what wrangler/vite use) and rollup",
+  "scripts": {
+    "build": "node build.mjs",
+    "build:rollup": "node build-rollup.mjs",
+    "check:node": "node node-compat-check.mjs",
+    "check:types": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@ixo/impactxclient-sdk": "file:.."
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "28.0.3",
+    "@rollup/plugin-json": "6.1.0",
+    "@rollup/plugin-node-resolve": "16.0.1",
+    "esbuild": "0.25.5",
+    "rollup": "4.41.1",
+    "typescript": "^5.8.3"
+  }
+}

@@ -4,7 +4,7 @@
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
 
-import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm-stargate";
+import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm";
 import { Coin, StdFee } from "@cosmjs/amino";
 import { Admin, Duration, InstantiateMsg, ExecuteMsg, Uint128, QueryMsg, MigrateMsg, Expiration, Timestamp, Uint64, ClaimsResponse, Claim, Addr, Config, InfoResponse, ContractVersion, ListStakersResponse, StakerBalanceResponse, TotalPowerAtHeightResponse, VotingPowerAtHeightResponse } from "./DaoVotingNativeStaked.types";
 export interface DaoVotingNativeStakedReadOnlyInterface {

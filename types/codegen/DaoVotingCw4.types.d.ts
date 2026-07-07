@@ -11,7 +11,7 @@ export interface Member {
     addr: string;
     weight: number;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     member_changed_hook: {
         diffs: MemberDiff[];
     };
@@ -21,7 +21,7 @@ export interface MemberDiff {
     new?: number | null;
     old?: number | null;
 }
-export declare type QueryMsg = {
+export type QueryMsg = {
     group_contract: {};
 } | {
     voting_power_at_height: {
@@ -39,7 +39,7 @@ export declare type QueryMsg = {
 };
 export interface MigrateMsg {
 }
-export declare type Addr = string;
+export type Addr = string;
 export interface InfoResponse {
     info: ContractVersion;
 }
@@ -47,7 +47,7 @@ export interface ContractVersion {
     contract: string;
     version: string;
 }
-export declare type Uint128 = string;
+export type Uint128 = string;
 export interface TotalPowerAtHeightResponse {
     height: number;
     power: Uint128;

@@ -1,5 +1,5 @@
 import { Rpc } from "../../../../helpers";
-import { QueryClient } from "@cosmjs/stargate";
+import type { QueryClient } from "@cosmjs/stargate";
 import { ConfigRequest, ConfigResponse, StatusRequest, StatusResponse } from "./query";
 /** Service defines the gRPC querier service for node related queries. */
 export interface Service {

@@ -3,7 +3,7 @@
  * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
  * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
  */
-import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm-stargate";
+import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm";
 import { Coin, StdFee } from "@cosmjs/amino";
 import { Binary, Expiration, Empty, AllNftInfoResponseForEmpty, OwnerOfResponse, NftInfoResponseForEmpty, OperatorsResponse, TokensResponse, ApprovalResponse, ApprovalsResponse, ContractInfoResponse, Null, MinterResponse, NumTokensResponse, OperatorResponse, OwnershipForString } from "./Cw721Base.types";
 export interface Cw721BaseReadOnlyInterface {

@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import { QueryClient } from "@cosmjs/stargate";
+import type { QueryClient } from "@cosmjs/stargate";
 import { QueryConfigRequest, QueryConfigResponse } from "./query";
 /** Query is the app module query service. */
 export interface Query {

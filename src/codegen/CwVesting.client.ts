@@ -4,7 +4,7 @@
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
 
-import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm-stargate";
+import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm";
 import { Coin, StdFee } from "@cosmjs/amino";
 import { Uint128, UncheckedDenom, Curve, InstantiateMsg, UncheckedVestingParams, SaturatingLinear, PiecewiseLinear, ExecuteMsg, Binary, Action, Expiration, Timestamp, Uint64, Cw20ReceiveMsg, QueryMsg, CheckedDenom, Addr, VestingPaymentStatus, VestingPayment, OwnershipForAddr } from "./CwVesting.types";
 export interface CwVestingReadOnlyInterface {

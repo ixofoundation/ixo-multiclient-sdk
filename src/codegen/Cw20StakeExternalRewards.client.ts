@@ -4,7 +4,7 @@
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
 
-import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm-stargate";
+import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm";
 import { Coin, StdFee } from "@cosmjs/amino";
 import { Denom, Addr, InstantiateMsg, ExecuteMsg, StakeChangedHookMsg, Uint128, Binary, Action, Expiration, Timestamp, Uint64, Cw20ReceiveMsg, QueryMsg, MigrateMsg, PendingRewardsResponse, InfoResponse, Config, RewardConfig, OwnershipForAddr } from "./Cw20StakeExternalRewards.types";
 export interface Cw20StakeExternalRewardsReadOnlyInterface {

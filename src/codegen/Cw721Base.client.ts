@@ -9,7 +9,7 @@ import {
   CosmWasmClient,
   SigningCosmWasmClient,
   ExecuteResult,
-} from "@cosmjs/cosmwasm-stargate";
+} from "@cosmjs/cosmwasm";
 import { Coin, StdFee } from "@cosmjs/amino";
 import {
   InstantiateMsg,

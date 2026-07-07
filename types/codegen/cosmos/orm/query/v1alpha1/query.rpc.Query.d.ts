@@ -1,5 +1,5 @@
 import { Rpc } from "../../../../helpers";
-import { QueryClient } from "@cosmjs/stargate";
+import type { QueryClient } from "@cosmjs/stargate";
 import { GetRequest, GetResponse, ListRequest, ListResponse } from "./query";
 /** Query is a generic gRPC service for querying ORM data. */
 export interface Query {

@@ -1,14 +1,14 @@
 import { JsonRpcRequest } from "@cosmjs/json-rpc";
+/** params type of a JSON-RPC request (JsonCompatibleArray | JsonCompatibleDictionary,
+ * which @cosmjs/json-rpc does not export at the top level) */
+type JsonRpcParams = JsonRpcRequest["params"];
 /** Creates a JSON-RPC request with random ID */
-export declare const createJsonRpcRequest: (method: string, params?: {}) => JsonRpcRequest;
+export declare const createJsonRpcRequest: (method: string, params?: JsonRpcParams) => JsonRpcRequest;
 export declare function may<T, U>(transform: (val: T) => U, value: T | null | undefined): U | undefined;
 interface HeightParam {
     readonly height?: number;
 }
-interface RpcHeightParam {
-    readonly height?: string;
-}
-export declare const encodeHeightParam: (param: HeightParam) => RpcHeightParam;
+export declare const encodeHeightParam: (param: HeightParam) => JsonRpcParams;
 /**
  * Takes an integer in the safe integer range and returns
  * a string representation to be used in the Tendermint RPC API.

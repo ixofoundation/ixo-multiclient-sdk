@@ -8,7 +8,7 @@ export interface InstantiateMsg {
     name: string;
     symbol: string;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     transfer_nft: {
         recipient: string;
         token_id: string;
@@ -57,17 +57,17 @@ export declare type ExecuteMsg = {
 } | {
     update_ownership: Action;
 };
-export declare type Binary = string;
-export declare type Expiration = {
+export type Binary = string;
+export type Expiration = {
     at_height: number;
 } | {
     at_time: Timestamp;
 } | {
     never: {};
 };
-export declare type Timestamp = Uint64;
-export declare type Uint64 = string;
-export declare type Action = {
+export type Timestamp = Uint64;
+export type Uint64 = string;
+export type Action = {
     transfer_ownership: {
         expiry?: Expiration | null;
         new_owner: string;
@@ -76,7 +76,7 @@ export declare type Action = {
 export interface Empty {
     [k: string]: unknown;
 }
-export declare type QueryMsg = {
+export type QueryMsg = {
     owner_of: {
         include_expired?: boolean | null;
         token_id: string;
@@ -170,7 +170,7 @@ export interface ContractInfoResponse {
     name: string;
     symbol: string;
 }
-export declare type Null = null;
+export type Null = null;
 export interface MinterResponse {
     minter?: string | null;
 }

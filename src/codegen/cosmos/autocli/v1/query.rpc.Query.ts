@@ -1,7 +1,8 @@
 //@ts-nocheck
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
+import type { QueryClient } from "@cosmjs/stargate";
+import { createProtobufRpcClient } from "../../../protobufRpcClient";
 import { AppOptionsRequest, AppOptionsResponse } from "./query";
 /** RemoteInfoService provides clients with the information they need
  to build dynamically CLI clients for remote chains. */

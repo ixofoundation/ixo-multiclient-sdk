@@ -2,6 +2,10 @@ import { JsonRpcRequest } from "@cosmjs/json-rpc";
 import { Int53 } from "@cosmjs/math";
 import { fromBase64 } from "@cosmjs/encoding";
 
+/** params type of a JSON-RPC request (JsonCompatibleArray | JsonCompatibleDictionary,
+ * which @cosmjs/json-rpc does not export at the top level) */
+type JsonRpcParams = JsonRpcRequest["params"];
+
 const numbersWithoutZero = "123456789";
 
 /** generates a random numeric character  */
@@ -24,10 +28,9 @@ function randomId(): number {
 }
 
 /** Creates a JSON-RPC request with random ID */
-// eslint-disable-next-line @typescript-eslint/ban-types
 export const createJsonRpcRequest = (
   method: string,
-  params?: {}
+  params?: JsonRpcParams
 ): JsonRpcRequest => {
   const paramsCopy = params ? { ...params } : {};
   return {
@@ -49,13 +52,11 @@ export function may<T, U>(
 interface HeightParam {
   readonly height?: number;
 }
-interface RpcHeightParam {
-  readonly height?: string;
-}
-export const encodeHeightParam = (param: HeightParam): RpcHeightParam => {
-  return {
-    height: may(smallIntToApi, param.height),
-  };
+export const encodeHeightParam = (param: HeightParam): JsonRpcParams => {
+  const height = may(smallIntToApi, param.height);
+  // omit the key entirely when unset (JSON.stringify drops undefined anyway,
+  // so the wire format is unchanged)
+  return height === undefined ? {} : { height };
 };
 
 /**

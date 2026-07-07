@@ -3,15 +3,15 @@ import * as _6 from "./proto";
 export declare namespace utils {
     const conversions: {
         Uint8ArrayToJS(data: Uint8Array): string;
-        b64toUint8Array: (b64: string) => Uint8Array;
+        b64toUint8Array: (b64: string) => Uint8Array<ArrayBuffer>;
         b64toJson: (b64: string) => any;
         Uint8ArrayTob64: (u8: Uint8Array) => string;
-        JsonToArray: (json: string) => Uint8Array;
-        concatArrayBuffers: (...bufs: Uint8Array[]) => Uint8Array;
+        JsonToArray: (json: string) => Uint8Array<ArrayBuffer>;
+        concatArrayBuffers: (...bufs: Uint8Array[]) => Uint8Array<ArrayBuffer>;
         jsonStringToBase64: (jsonString: string) => string;
         jsonToBase64: (json: unknown) => string;
         encodeMbKey: (header: Uint8Array, key: Uint8Array) => string;
-        decodeMbKey: (header: Uint8Array, mbKey: string) => Uint8Array;
+        decodeMbKey: (header: Uint8Array, mbKey: string) => Uint8Array<ArrayBuffer>;
     };
     const did: {
         generateSecpDid(address: string): string;
@@ -22,10 +22,10 @@ export declare namespace utils {
     const mnemonic: {
         Bip39: typeof _3.Bip39;
         EnglishMnemonic: typeof _3.EnglishMnemonic;
-        generateMnemonic: (length?: 12 | 15 | 24 | 18 | 21) => string;
+        generateMnemonic: (length?: 12 | 15 | 18 | 21 | 24) => string;
     };
     const address: {
-        pubKeyToAddress: (type: "ed25519" | "secp256k1", pubKey: string | Uint8Array, prefix?: string) => string;
+        pubKeyToAddress: (type: "ed25519" | "secp256k1", pubKey: Uint8Array | string, prefix?: string) => string;
         didToAddress: (did: string, prefix?: string) => string;
         didToAddressDid: (did: string, prefix?: string) => string;
     };
@@ -43,9 +43,9 @@ export declare namespace utils {
     };
     const constants: {
         MULTIBASE_BASE58BTC_HEADER: "z";
-        MULTICODEC_ED25519_PUB_HEADER: Uint8Array;
-        MULTICODEC_ED25519_PRIV_HEADER: Uint8Array;
-        MULTICODEC_SECP256K1_PUB_HEADER: Uint8Array;
-        MULTICODEC_SECP256K1_PRIV_HEADER: Uint8Array;
+        MULTICODEC_ED25519_PUB_HEADER: Uint8Array<ArrayBuffer>;
+        MULTICODEC_ED25519_PRIV_HEADER: Uint8Array<ArrayBuffer>;
+        MULTICODEC_SECP256K1_PUB_HEADER: Uint8Array<ArrayBuffer>;
+        MULTICODEC_SECP256K1_PRIV_HEADER: Uint8Array<ArrayBuffer>;
     };
 }

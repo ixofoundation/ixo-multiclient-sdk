@@ -3,14 +3,14 @@
 * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
-export declare type Admin = {
+export type Admin = {
     address: {
         addr: string;
     };
 } | {
     core_module: {};
 };
-export declare type Binary = string;
+export type Binary = string;
 export interface InstantiateMsg {
     admin?: string | null;
     automatically_add_cw20s: boolean;
@@ -33,7 +33,7 @@ export interface ModuleInstantiateInfo {
     label: string;
     msg: Binary;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     execute_admin_msgs: {
         msgs: CosmosMsgForEmpty[];
     };
@@ -95,7 +95,7 @@ export declare type ExecuteMsg = {
         to_remove: string[];
     };
 };
-export declare type CosmosMsgForEmpty = {
+export type CosmosMsgForEmpty = {
     bank: BankMsg;
 } | {
     custom: Empty;
@@ -116,7 +116,7 @@ export declare type CosmosMsgForEmpty = {
 } | {
     gov: GovMsg;
 };
-export declare type BankMsg = {
+export type BankMsg = {
     send: {
         amount: Coin[];
         to_address: string;
@@ -128,8 +128,8 @@ export declare type BankMsg = {
         [k: string]: unknown;
     };
 };
-export declare type Uint128 = string;
-export declare type StakingMsg = {
+export type Uint128 = string;
+export type StakingMsg = {
     delegate: {
         amount: Coin;
         validator: string;
@@ -149,7 +149,7 @@ export declare type StakingMsg = {
         [k: string]: unknown;
     };
 };
-export declare type DistributionMsg = {
+export type DistributionMsg = {
     set_withdraw_address: {
         address: string;
         [k: string]: unknown;
@@ -160,7 +160,7 @@ export declare type DistributionMsg = {
         [k: string]: unknown;
     };
 };
-export declare type IbcMsg = {
+export type IbcMsg = {
     transfer: {
         amount: Coin;
         channel_id: string;
@@ -181,9 +181,9 @@ export declare type IbcMsg = {
         [k: string]: unknown;
     };
 };
-export declare type Timestamp = Uint64;
-export declare type Uint64 = string;
-export declare type WasmMsg = {
+export type Timestamp = Uint64;
+export type Uint64 = string;
+export type WasmMsg = {
     execute: {
         contract_addr: string;
         funds: Coin[];
@@ -218,15 +218,15 @@ export declare type WasmMsg = {
         [k: string]: unknown;
     };
 };
-export declare type GovMsg = {
+export type GovMsg = {
     vote: {
         proposal_id: number;
         vote: VoteOption;
         [k: string]: unknown;
     };
 };
-export declare type VoteOption = "yes" | "no" | "abstain" | "no_with_veto";
-export declare type Duration = {
+export type VoteOption = "yes" | "no" | "abstain" | "no_with_veto";
+export type Duration = {
     height: number;
 } | {
     time: number;
@@ -271,7 +271,7 @@ export interface SubDao {
     addr: string;
     charter?: string | null;
 }
-export declare type QueryMsg = {
+export type QueryMsg = {
     admin: {};
 } | {
     admin_nomination: {};
@@ -338,7 +338,7 @@ export declare type QueryMsg = {
         height?: number | null;
     };
 };
-export declare type MigrateMsg = {
+export type MigrateMsg = {
     from_v1: {
         dao_uri?: string | null;
         params?: MigrateParams | null;
@@ -346,7 +346,7 @@ export declare type MigrateMsg = {
 } | {
     from_compatible: {};
 };
-export declare type PreProposeInfo = {
+export type PreProposeInfo = {
     anyone_may_propose: {};
 } | {
     module_may_propose: {
@@ -380,9 +380,9 @@ export interface V2CodeIds {
     cw4_voting: number;
     proposal_single: number;
 }
-export declare type Addr = string;
-export declare type ProposalModuleStatus = "enabled" | "disabled";
-export declare type ArrayOfProposalModule = ProposalModule[];
+export type Addr = string;
+export type ProposalModuleStatus = "enabled" | "disabled";
+export type ArrayOfProposalModule = ProposalModule[];
 export interface ProposalModule {
     address: Addr;
     prefix: string;
@@ -395,18 +395,18 @@ export interface Cw20BalanceResponse {
     addr: Addr;
     balance: Uint128;
 }
-export declare type ArrayOfAddr = Addr[];
+export type ArrayOfAddr = Addr[];
 export interface DaoURIResponse {
     dao_uri?: string | null;
 }
-export declare type PauseInfoResponse = {
+export type PauseInfoResponse = {
     paused: {
         expiration: Expiration;
     };
 } | {
     unpaused: {};
 };
-export declare type Expiration = {
+export type Expiration = {
     at_height: number;
 } | {
     at_time: Timestamp;
@@ -433,8 +433,8 @@ export interface GetItemResponse {
 export interface InfoResponse {
     info: ContractVersion;
 }
-export declare type ArrayOfString = string[];
-export declare type ArrayOfSubDao = SubDao[];
+export type ArrayOfString = string[];
+export type ArrayOfSubDao = SubDao[];
 export interface ProposalModuleCountResponse {
     active_proposal_module_count: number;
     total_proposal_module_count: number;

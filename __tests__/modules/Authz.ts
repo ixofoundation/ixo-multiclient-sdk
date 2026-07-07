@@ -124,9 +124,8 @@ export const MsgExecSendIbc = async () => {
 
   const client = await createClient(getUser(grantee));
 
-  const granterrAddress =
-    "ixo1wc43xczdzlc623e9ssxkndpqnvgk2vq4hheyq2" ||
-    (await getUser(granter).getAccounts())[0].address;
+  // hardcoded override; fall back to (await getUser(granter).getAccounts())[0].address
+  const granterrAddress = "ixo1wc43xczdzlc623e9ssxkndpqnvgk2vq4hheyq2";
   const granteeAddress = (await getUser(grantee).getAccounts())[0].address;
 
   const nobleQueryClient = await createQueryClient(

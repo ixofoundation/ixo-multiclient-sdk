@@ -11,7 +11,7 @@ export interface Member {
     addr: string;
     weight: number;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     update_admin: {
         admin?: string | null;
     };
@@ -29,7 +29,7 @@ export declare type ExecuteMsg = {
         addr: string;
     };
 };
-export declare type QueryMsg = {
+export type QueryMsg = {
     admin: {};
 } | {
     total_weight: {

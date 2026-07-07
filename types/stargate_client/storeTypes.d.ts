@@ -3,12 +3,18 @@
  * This file has no dependencies on crypto libraries, making it safe to import
  * in Cloudflare Workers at module load time.
  */
-export declare type SignerData = {
+export type SignerData = {
     accountNumber: number;
     sequence: number;
     chainId: string;
 };
-export declare type LocalStoreFunctions = {
+/**
+ * Converts an account number from cosmjs (bigint since cosmjs 0.39, since
+ * Cosmos SDK 0.53+ can exceed 2^53-1) to the number used in SignerData and
+ * client-side JSON storage. Throws instead of silently losing precision.
+ */
+export declare function accountNumberToNumber(value: number | bigint): number;
+export type LocalStoreFunctions = {
     getLocalData: (key: string) => Promise<any>;
     setLocalData: (key: string, data: any) => void | Promise<void>;
     /**

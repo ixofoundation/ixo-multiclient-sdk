@@ -3,19 +3,19 @@
 * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
-export declare type Denom = {
+export type Denom = {
     native: string;
 } | {
     cw20: Addr;
 };
-export declare type Addr = string;
+export type Addr = string;
 export interface InstantiateMsg {
     owner?: string | null;
     reward_duration: number;
     reward_token: Denom;
     staking_contract: string;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     stake_change_hook: StakeChangedHookMsg;
 } | {
     claim: {};
@@ -30,7 +30,7 @@ export declare type ExecuteMsg = {
 } | {
     update_ownership: Action;
 };
-export declare type StakeChangedHookMsg = {
+export type StakeChangedHookMsg = {
     stake: {
         addr: Addr;
         amount: Uint128;
@@ -41,29 +41,29 @@ export declare type StakeChangedHookMsg = {
         amount: Uint128;
     };
 };
-export declare type Uint128 = string;
-export declare type Binary = string;
-export declare type Action = {
+export type Uint128 = string;
+export type Binary = string;
+export type Action = {
     transfer_ownership: {
         expiry?: Expiration | null;
         new_owner: string;
     };
 } | "accept_ownership" | "renounce_ownership";
-export declare type Expiration = {
+export type Expiration = {
     at_height: number;
 } | {
     at_time: Timestamp;
 } | {
     never: {};
 };
-export declare type Timestamp = Uint64;
-export declare type Uint64 = string;
+export type Timestamp = Uint64;
+export type Uint64 = string;
 export interface Cw20ReceiveMsg {
     amount: Uint128;
     msg: Binary;
     sender: string;
 }
-export declare type QueryMsg = {
+export type QueryMsg = {
     info: {};
 } | {
     get_pending_rewards: {
@@ -72,7 +72,7 @@ export declare type QueryMsg = {
 } | {
     ownership: {};
 };
-export declare type MigrateMsg = {
+export type MigrateMsg = {
     from_v1: {};
 };
 export interface PendingRewardsResponse {

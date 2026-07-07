@@ -4,7 +4,7 @@
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
 
-import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm-stargate";
+import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm";
 import { StdFee } from "@cosmjs/amino";
 import { Uint128, DepositToken, UncheckedDenom, DepositRefundPolicy, InstantiateMsg, UncheckedDepositInfo, Empty, ExecuteMsg, ProposeMessage, CosmosMsgForEmpty, BankMsg, StakingMsg, DistributionMsg, Binary, IbcMsg, Timestamp, Uint64, WasmMsg, GovMsg, VoteOption, Status, Coin, IbcTimeout, IbcTimeoutBlock, QueryMsg, CheckedDenom, Addr, Config, CheckedDepositInfo, DepositInfoResponse, HooksResponse } from "./DaoPreProposeSingle.types";
 export interface DaoPreProposeSingleReadOnlyInterface {

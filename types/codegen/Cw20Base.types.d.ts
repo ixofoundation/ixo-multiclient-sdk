@@ -3,18 +3,18 @@
 * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
-export declare type Uint128 = string;
-export declare type Logo = {
+export type Uint128 = string;
+export type Logo = {
     url: string;
 } | {
     embedded: EmbeddedLogo;
 };
-export declare type EmbeddedLogo = {
+export type EmbeddedLogo = {
     svg: Binary;
 } | {
     png: Binary;
 };
-export declare type Binary = string;
+export type Binary = string;
 export interface InstantiateMsg {
     decimals: number;
     initial_balances: Cw20Coin[];
@@ -37,7 +37,7 @@ export interface MinterResponse {
     cap?: Uint128 | null;
     minter: string;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     transfer: {
         amount: Uint128;
         recipient: string;
@@ -100,16 +100,16 @@ export declare type ExecuteMsg = {
 } | {
     upload_logo: Logo;
 };
-export declare type Expiration = {
+export type Expiration = {
     at_height: number;
 } | {
     at_time: Timestamp;
 } | {
     never: {};
 };
-export declare type Timestamp = Uint64;
-export declare type Uint64 = string;
-export declare type QueryMsg = {
+export type Timestamp = Uint64;
+export type Uint64 = string;
+export type QueryMsg = {
     balance: {
         address: string;
     };
@@ -178,10 +178,10 @@ export interface DownloadLogoResponse {
     data: Binary;
     mime_type: string;
 }
-export declare type LogoInfo = {
+export type LogoInfo = {
     url: string;
 } | "embedded";
-export declare type Addr = string;
+export type Addr = string;
 export interface MarketingInfoResponse {
     description?: string | null;
     logo?: LogoInfo | null;

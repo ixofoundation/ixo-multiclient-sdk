@@ -1,5 +1,5 @@
 import { Rpc } from "../../../../helpers";
-import { QueryClient } from "@cosmjs/stargate";
+import type { QueryClient } from "@cosmjs/stargate";
 import { QueryChecksumsRequest, QueryChecksumsResponse, QueryCodeRequest, QueryCodeResponse } from "./query";
 /** Query service for wasm module */
 export interface Query {

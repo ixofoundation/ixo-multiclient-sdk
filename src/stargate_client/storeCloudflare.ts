@@ -190,13 +190,14 @@ export class SequenceManagerDO {
       typeof envDelay === "string"
         ? parseInt(envDelay, 10)
         : typeof envDelay === "number"
-          ? envDelay
-          : SequenceManagerDO.DEFAULT_MIN_DELAY_MS;
+        ? envDelay
+        : SequenceManagerDO.DEFAULT_MIN_DELAY_MS;
 
     // Load persisted data before handling any requests
     this.state.blockConcurrencyWhile(async () => {
-      const stored =
-        await this.state.storage.get<SequenceData>("sequence-data");
+      const stored = await this.state.storage.get<SequenceData>(
+        "sequence-data"
+      );
       if (stored) {
         this.data = stored;
       }
@@ -327,7 +328,6 @@ export class SequenceManagerDO {
   }
 }
 
-
 /**
  * Type for objects that can be used as a Durable Object stub.
  * Any object with a fetch method that returns a Response works.
@@ -357,7 +357,7 @@ export function createDOStoreFunctions(doStub: DOStub): LocalStoreFunctions {
     // These are not used when getAndIncrementSequence is provided,
     // but we provide no-op implementations for interface completeness
     getLocalData: async () => ({}),
-    setLocalData: async () => { },
+    setLocalData: async () => {},
 
     getAndIncrementSequence: async (params) => {
       const response = await doStub.fetch(

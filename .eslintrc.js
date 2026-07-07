@@ -1,17 +1,13 @@
 module.exports = {
   plugins: ['prettier'],
   extends: ['eslint:recommended', 'prettier'],
-  parser: '@babel/eslint-parser',
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 11,
-    requireConfigFile: false,
-    sourceType: 'module',
-    ecmaFeatures: {
-      jsx: true
-    }
+    ecmaVersion: 2022,
+    sourceType: 'module'
   },
   env: {
-    es6: true,
+    es2022: true,
     browser: true,
     node: true,
     jest: true
@@ -23,13 +19,10 @@ module.exports = {
     'no-prototype-builtins': 0,
     'no-return-assign': ['error', 'except-parens'],
     'no-restricted-syntax': [2, 'ForInStatement', 'LabeledStatement', 'WithStatement'],
-    'no-unused-vars': [
-      0,
-      {
-        ignoreSiblings: true,
-        argsIgnorePattern: 'React|res|next|^_'
-      }
-    ],
+    // TypeScript itself checks undefined symbols and unused vars; the eslint
+    // core rules false-positive on types/interfaces/enums
+    'no-undef': 0,
+    'no-unused-vars': 0,
     'prefer-const': [
       'error',
       {
@@ -43,24 +36,10 @@ module.exports = {
       }
     ],
     'no-console': 1,
-    'comma-dangle': 2,
-    'jsx-quotes': [2, 'prefer-double'],
-    'linebreak-style': ['error', 'unix'],
-    quotes: [
-      2,
-      'single',
-      {
-        avoidEscape: true,
-        allowTemplateLiterals: true
-      }
-    ],
-    'prettier/prettier': [
-      'error',
-      {
-        trailingComma: 'none',
-        singleQuote: true,
-        printWidth: 220
-      }
-    ]
+    // formatting is owned by prettier; its defaults (double quotes, es5
+    // trailing commas, width 80) match the codebase's established style.
+    // Core formatting rules (quotes/comma-dangle/…) stay disabled via
+    // eslint-config-prettier — do not re-enable them here.
+    'prettier/prettier': 'error'
   }
 };
