@@ -3,24 +3,24 @@
 * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
-export declare type Duration = {
+export type Duration = {
     height: number;
 } | {
     time: number;
 };
-export declare type PercentageThreshold = {
+export type PercentageThreshold = {
     majority: {};
 } | {
     percent: Decimal;
 };
-export declare type Decimal = string;
+export type Decimal = string;
 export interface InstantiateMsg {
     close_proposals_on_execution_failure: boolean;
     min_voting_period?: Duration | null;
     quorum: PercentageThreshold;
     voting_period: Duration;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     propose: {
         choices: Choice[];
     };
@@ -40,7 +40,7 @@ export declare type ExecuteMsg = {
 } | {
     set_config: UncheckedConfig;
 };
-export declare type CosmosMsgForEmpty = {
+export type CosmosMsgForEmpty = {
     bank: BankMsg;
 } | {
     custom: Empty;
@@ -61,7 +61,7 @@ export declare type CosmosMsgForEmpty = {
 } | {
     gov: GovMsg;
 };
-export declare type BankMsg = {
+export type BankMsg = {
     send: {
         amount: Coin[];
         to_address: string;
@@ -73,8 +73,8 @@ export declare type BankMsg = {
         [k: string]: unknown;
     };
 };
-export declare type Uint128 = string;
-export declare type StakingMsg = {
+export type Uint128 = string;
+export type StakingMsg = {
     delegate: {
         amount: Coin;
         validator: string;
@@ -94,7 +94,7 @@ export declare type StakingMsg = {
         [k: string]: unknown;
     };
 };
-export declare type DistributionMsg = {
+export type DistributionMsg = {
     set_withdraw_address: {
         address: string;
         [k: string]: unknown;
@@ -105,8 +105,8 @@ export declare type DistributionMsg = {
         [k: string]: unknown;
     };
 };
-export declare type Binary = string;
-export declare type IbcMsg = {
+export type Binary = string;
+export type IbcMsg = {
     transfer: {
         amount: Coin;
         channel_id: string;
@@ -127,9 +127,9 @@ export declare type IbcMsg = {
         [k: string]: unknown;
     };
 };
-export declare type Timestamp = Uint64;
-export declare type Uint64 = string;
-export declare type WasmMsg = {
+export type Timestamp = Uint64;
+export type Uint64 = string;
+export type WasmMsg = {
     execute: {
         contract_addr: string;
         funds: Coin[];
@@ -164,14 +164,14 @@ export declare type WasmMsg = {
         [k: string]: unknown;
     };
 };
-export declare type GovMsg = {
+export type GovMsg = {
     vote: {
         proposal_id: number;
         vote: VoteOption;
         [k: string]: unknown;
     };
 };
-export declare type VoteOption = "yes" | "no" | "abstain" | "no_with_veto";
+export type VoteOption = "yes" | "no" | "abstain" | "no_with_veto";
 export interface Choice {
     msgs: CosmosMsgForEmpty[];
 }
@@ -199,7 +199,7 @@ export interface UncheckedConfig {
     quorum: PercentageThreshold;
     voting_period: Duration;
 }
-export declare type QueryMsg = {
+export type QueryMsg = {
     proposal: {
         id: number;
     };
@@ -218,7 +218,7 @@ export interface Config {
     quorum: PercentageThreshold;
     voting_period: Duration;
 }
-export declare type Addr = string;
+export type Addr = string;
 export interface InfoResponse {
     info: ContractVersion;
 }
@@ -226,24 +226,24 @@ export interface ContractVersion {
     contract: string;
     version: string;
 }
-export declare type Status = "open" | "rejected" | {
+export type Status = "open" | "rejected" | {
     passed: {
         winner: number;
     };
 } | "executed" | "closed" | "execution_failed";
-export declare type Expiration = {
+export type Expiration = {
     at_height: number;
 } | {
     at_time: Timestamp;
 } | {
     never: {};
 };
-export declare type Cell = "zero" | {
+export type Cell = "zero" | {
     positive: Uint128;
 } | {
     negative: Uint128;
 };
-export declare type Winner = ("never" | "none") | {
+export type Winner = ("never" | "none") | {
     some: number;
 } | {
     undisputed: number;

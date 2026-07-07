@@ -1,5 +1,5 @@
 import { DenomTrace } from "../codegen/ibc/applications/transfer/v1/transfer";
-export declare type TokenAsset = {
+export type TokenAsset = {
     coinDenom: string;
     coinMinimalDenom: string;
     coinDecimals: number;
@@ -14,14 +14,14 @@ export declare type TokenAsset = {
         high: number;
     };
 };
-export declare type Ibc = {
+export type Ibc = {
     hash: string;
 } & DenomTrace;
-export declare type IbcTokenAsset = {
+export type IbcTokenAsset = {
     ibc: Ibc;
     token?: TokenAsset;
 };
-export declare type TokenAssetInfo = {
+export type TokenAssetInfo = {
     symbol: string;
     coinName: string;
     shortname: string;
@@ -39,12 +39,12 @@ export declare type TokenAssetInfo = {
     lastUpdate: Date;
     social: Social;
 };
-export declare type TokenAssetHistory = {
+export type TokenAssetHistory = {
     timestamp: number;
     usdPrice: number;
     usdVolume24H: number;
 }[];
-export declare type CoinCodexCoinResponse = {
+export type CoinCodexCoinResponse = {
     symbol?: string;
     coin_name?: string;
     shortname?: string;
@@ -105,13 +105,13 @@ export declare type CoinCodexCoinResponse = {
     social?: Social;
     socials?: SocialDetail[];
 };
-export declare type CoinCodexHistoryResponse = {
+export type CoinCodexHistoryResponse = {
     [denom: string]: number[][];
 };
-export declare type Social = {
+export type Social = {
     [social: string]: string;
 };
-export declare type SocialDetail = {
+export type SocialDetail = {
     name?: string;
     id?: string;
     coincodex_coin_symbol?: string;

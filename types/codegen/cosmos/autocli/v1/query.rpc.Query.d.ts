@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import { QueryClient } from "@cosmjs/stargate";
+import type { QueryClient } from "@cosmjs/stargate";
 import { AppOptionsRequest, AppOptionsResponse } from "./query";
 /** RemoteInfoService provides clients with the information they need
  to build dynamically CLI clients for remote chains. */

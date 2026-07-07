@@ -1,7 +1,8 @@
 //@ts-nocheck
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
+import type { QueryClient } from "@cosmjs/stargate";
+import { createProtobufRpcClient } from "../../../protobufRpcClient";
 import { QueryAccountRequest, AccountResponse, QueryAccountsRequest, AccountsResponse, QueryDisabledListRequest, DisabledListResponse } from "./query";
 /** Query defines the circuit gRPC querier service. */
 export interface Query {

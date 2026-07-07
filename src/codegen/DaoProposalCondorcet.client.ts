@@ -4,7 +4,7 @@
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
 
-import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm-stargate";
+import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm";
 import { StdFee } from "@cosmjs/amino";
 import { Duration, PercentageThreshold, Decimal, InstantiateMsg, ExecuteMsg, CosmosMsgForEmpty, BankMsg, Uint128, StakingMsg, DistributionMsg, Binary, IbcMsg, Timestamp, Uint64, WasmMsg, GovMsg, VoteOption, Choice, Coin, Empty, IbcTimeout, IbcTimeoutBlock, UncheckedConfig, QueryMsg, Config, Addr, InfoResponse, ContractVersion, Status, Expiration, Cell, Winner, ProposalResponse, Proposal, Tally, M } from "./DaoProposalCondorcet.types";
 export interface DaoProposalCondorcetReadOnlyInterface {

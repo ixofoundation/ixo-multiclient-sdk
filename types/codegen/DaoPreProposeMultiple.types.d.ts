@@ -3,20 +3,20 @@
 * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
-export declare type Uint128 = string;
-export declare type DepositToken = {
+export type Uint128 = string;
+export type DepositToken = {
     token: {
         denom: UncheckedDenom;
     };
 } | {
     voting_module_token: {};
 };
-export declare type UncheckedDenom = {
+export type UncheckedDenom = {
     native: string;
 } | {
     cw20: string;
 };
-export declare type DepositRefundPolicy = "always" | "only_passed" | "never";
+export type DepositRefundPolicy = "always" | "only_passed" | "never";
 export interface InstantiateMsg {
     deposit_info?: UncheckedDepositInfo | null;
     extension: Empty;
@@ -30,7 +30,7 @@ export interface UncheckedDepositInfo {
 export interface Empty {
     [k: string]: unknown;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     propose: {
         msg: ProposeMessage;
     };
@@ -61,14 +61,14 @@ export declare type ExecuteMsg = {
         proposal_id: number;
     };
 };
-export declare type ProposeMessage = {
+export type ProposeMessage = {
     propose: {
         choices: MultipleChoiceOptions;
         description: string;
         title: string;
     };
 };
-export declare type CosmosMsgForEmpty = {
+export type CosmosMsgForEmpty = {
     bank: BankMsg;
 } | {
     custom: Empty;
@@ -89,7 +89,7 @@ export declare type CosmosMsgForEmpty = {
 } | {
     gov: GovMsg;
 };
-export declare type BankMsg = {
+export type BankMsg = {
     send: {
         amount: Coin[];
         to_address: string;
@@ -101,7 +101,7 @@ export declare type BankMsg = {
         [k: string]: unknown;
     };
 };
-export declare type StakingMsg = {
+export type StakingMsg = {
     delegate: {
         amount: Coin;
         validator: string;
@@ -121,7 +121,7 @@ export declare type StakingMsg = {
         [k: string]: unknown;
     };
 };
-export declare type DistributionMsg = {
+export type DistributionMsg = {
     set_withdraw_address: {
         address: string;
         [k: string]: unknown;
@@ -132,8 +132,8 @@ export declare type DistributionMsg = {
         [k: string]: unknown;
     };
 };
-export declare type Binary = string;
-export declare type IbcMsg = {
+export type Binary = string;
+export type IbcMsg = {
     transfer: {
         amount: Coin;
         channel_id: string;
@@ -154,9 +154,9 @@ export declare type IbcMsg = {
         [k: string]: unknown;
     };
 };
-export declare type Timestamp = Uint64;
-export declare type Uint64 = string;
-export declare type WasmMsg = {
+export type Timestamp = Uint64;
+export type Uint64 = string;
+export type WasmMsg = {
     execute: {
         contract_addr: string;
         funds: Coin[];
@@ -191,15 +191,15 @@ export declare type WasmMsg = {
         [k: string]: unknown;
     };
 };
-export declare type GovMsg = {
+export type GovMsg = {
     vote: {
         proposal_id: number;
         vote: VoteOption;
         [k: string]: unknown;
     };
 };
-export declare type VoteOption = "yes" | "no" | "abstain" | "no_with_veto";
-export declare type Status = "open" | "rejected" | "passed" | "executed" | "closed" | "execution_failed";
+export type VoteOption = "yes" | "no" | "abstain" | "no_with_veto";
+export type Status = "open" | "rejected" | "passed" | "executed" | "closed" | "execution_failed";
 export interface MultipleChoiceOptions {
     options: MultipleChoiceOption[];
 }
@@ -223,7 +223,7 @@ export interface IbcTimeoutBlock {
     revision: number;
     [k: string]: unknown;
 }
-export declare type QueryMsg = {
+export type QueryMsg = {
     proposal_module: {};
 } | {
     dao: {};
@@ -240,12 +240,12 @@ export declare type QueryMsg = {
         msg: Empty;
     };
 };
-export declare type CheckedDenom = {
+export type CheckedDenom = {
     native: string;
 } | {
     cw20: Addr;
 };
-export declare type Addr = string;
+export type Addr = string;
 export interface Config {
     deposit_info?: CheckedDepositInfo | null;
     open_proposal_submission: boolean;

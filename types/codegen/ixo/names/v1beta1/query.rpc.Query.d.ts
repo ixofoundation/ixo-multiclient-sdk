@@ -1,5 +1,5 @@
 import { Rpc } from "../../../helpers";
-import { QueryClient } from "@cosmjs/stargate";
+import type { QueryClient } from "@cosmjs/stargate";
 import { QueryNamespaceRequest, QueryNamespaceResponse, QueryNamespacesRequest, QueryNamespacesResponse, QueryResolveNameRequest, QueryResolveNameResponse, QueryGetNameRequest, QueryGetNameResponse, QueryNamesByNamespaceRequest, QueryNamesByNamespaceResponse, QueryNamesByOwnerRequest, QueryNamesByOwnerResponse } from "./query";
 /** Query defines the names module gRPC query service. */
 export interface Query {

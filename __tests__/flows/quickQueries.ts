@@ -10,7 +10,7 @@ import gqlQuery, {
 import { RPC_URL, WalletUsers } from "../helpers/constants";
 import { AuthInfo, TxBody } from "../../src/codegen/cosmos/tx/v1beta1/tx";
 import { fromHex } from "@cosmjs/encoding";
-import { connectComet, Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { connectComet } from "@cosmjs/tendermint-rpc";
 import {
   JsonToArray,
   Uint8ArrayToJS,

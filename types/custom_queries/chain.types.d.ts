@@ -1,1 +1,1 @@
-export declare type ChainNetwork = "mainnet" | "testnet" | "devnet";
+export type ChainNetwork = "mainnet" | "testnet" | "devnet";

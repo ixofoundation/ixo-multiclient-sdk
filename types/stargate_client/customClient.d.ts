@@ -1,9 +1,10 @@
 import { StdFee } from "@cosmjs/amino";
 import { EncodeObject, OfflineSigner, Registry } from "@cosmjs/proto-signing";
-import { AminoTypes, DeliverTxResponse, SignerData, GasPrice, StargateClient, StargateClientOptions } from "@cosmjs/stargate";
+import { AminoTypes, DeliverTxResponse, GasPrice, StargateClient, StargateClientOptions } from "@cosmjs/stargate";
 import { CometClient } from "@cosmjs/tendermint-rpc";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { LocalStoreFunctions } from "./store";
+import { SignerData } from "./storeTypes";
 export interface SigningStargateClientOptions extends StargateClientOptions {
     readonly registry?: Registry;
     readonly aminoTypes?: AminoTypes;

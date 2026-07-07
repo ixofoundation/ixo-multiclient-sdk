@@ -1,7 +1,8 @@
 //@ts-nocheck
 import { Rpc } from "../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
+import type { QueryClient } from "@cosmjs/stargate";
+import { createProtobufRpcClient } from "../../../protobufRpcClient";
 import { QueryBondsRequest, QueryBondsResponse, QueryBondsDetailedRequest, QueryBondsDetailedResponse, QueryParamsRequest, QueryParamsResponse, QueryBondRequest, QueryBondResponse, QueryBatchRequest, QueryBatchResponse, QueryLastBatchRequest, QueryLastBatchResponse, QueryCurrentPriceRequest, QueryCurrentPriceResponse, QueryCurrentReserveRequest, QueryCurrentReserveResponse, QueryAvailableReserveRequest, QueryAvailableReserveResponse, QueryCustomPriceRequest, QueryCustomPriceResponse, QueryBuyPriceRequest, QueryBuyPriceResponse, QuerySellReturnRequest, QuerySellReturnResponse, QuerySwapReturnRequest, QuerySwapReturnResponse, QueryAlphaMaximumsRequest, QueryAlphaMaximumsResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {

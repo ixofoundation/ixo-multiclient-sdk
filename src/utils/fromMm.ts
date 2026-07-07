@@ -1,5 +1,10 @@
-import * as bip39 from "bip39-light";
-import { fromHex, toHex } from "@cosmjs/encoding";
+import {
+  entropyToMnemonic,
+  mnemonicToEntropy,
+  mnemonicToSeed,
+  validateMnemonic,
+} from "@scure/bip39";
+import { wordlist } from "@scure/bip39/wordlists/english.js";
 import { Random } from "@cosmjs/crypto";
 
 export class Bip39 {
@@ -25,20 +30,18 @@ export class Bip39 {
       throw new Error("invalid input length");
     }
 
-    return new EnglishMnemonic(bip39.entropyToMnemonic(toHex(entropy)));
+    return new EnglishMnemonic(entropyToMnemonic(entropy, wordlist));
   }
 
   public static decode(mnemonic: EnglishMnemonic): Uint8Array {
-    return fromHex(bip39.mnemonicToEntropy(mnemonic.toString()));
+    return mnemonicToEntropy(mnemonic.toString(), wordlist);
   }
 
   public static async mnemonicToSeed(
     mnemonic: EnglishMnemonic,
     password?: string
   ): Promise<Uint8Array> {
-    return new Uint8Array(
-      await bip39.mnemonicToSeed(mnemonic.toString(), password)
-    );
+    return mnemonicToSeed(mnemonic.toString(), password);
   }
 }
 
@@ -61,12 +64,12 @@ export class EnglishMnemonic {
       );
     }
 
-    if (!bip39.validateMnemonic(mnemonic)) {
+    if (!validateMnemonic(mnemonic, wordlist)) {
       throw new Error("Mnemonic is invalid.");
     }
 
     // Throws with informative error message if mnemonic is not valid
-    bip39.mnemonicToEntropy(mnemonic);
+    mnemonicToEntropy(mnemonic, wordlist);
 
     this.data = mnemonic;
   }

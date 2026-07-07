@@ -3,7 +3,7 @@
 * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
-import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm-stargate";
+import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm";
 import { StdFee } from "@cosmjs/amino";
 import { Duration, PreProposeInfo, VotingStrategy, Uint64, MultipleChoiceOptions, Coin, MultipleChoiceVote, Addr, Config, VoteResponse, InfoResponse, ProposalListResponse, ProposalResponse, VoteListResponse, ProposalCreationPolicy, HooksResponse } from "./DaoProposalMultiple.types";
 export interface DaoProposalMultipleReadOnlyInterface {

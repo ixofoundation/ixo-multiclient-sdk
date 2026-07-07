@@ -4,7 +4,13 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "allowJs": true,
-    "lib": ["es2015", "dom"],
+    "target": "es2022",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    // keep pre-TS5 class-field semantics; the telescope-generated contract
+    // clients redeclare base-class fields and babel compiles them accordingly
+    "useDefineForClassFields": false,
+    "lib": ["es2022", "dom"],
     "jsx": "react-jsx",
     "skipLibCheck": true,
     "types": ["node", "jest"]

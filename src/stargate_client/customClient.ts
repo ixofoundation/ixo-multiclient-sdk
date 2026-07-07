@@ -18,7 +18,6 @@ import {
 import {
   AminoTypes,
   DeliverTxResponse,
-  SignerData,
   GasPrice,
   calculateFee,
   accountFromAny,
@@ -31,6 +30,9 @@ import { SignMode } from "cosmjs-types/cosmos/tx/signing/v1beta1/signing";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { createRegistry, defaultRegistryTypes } from "./customRegistries";
 import { getSignerData, LocalStoreFunctions } from "./store";
+// The SDK keeps its own number-based SignerData (see storeTypes) for public API
+// and JSON-storage compatibility; cosmjs's SignerData moved to bigint in 0.39
+import { accountNumberToNumber, SignerData } from "./storeTypes";
 
 export interface SigningStargateClientOptions extends StargateClientOptions {
   readonly registry?: Registry;
@@ -312,7 +314,7 @@ export class SigningStargateClient extends StargateClient {
         : await this.getSequence(signerAddress);
       const chainId = await this.getChainId();
       signerData = {
-        accountNumber: accountNumber,
+        accountNumber: accountNumberToNumber(accountNumber),
         sequence: sequence,
         chainId: chainId,
       };

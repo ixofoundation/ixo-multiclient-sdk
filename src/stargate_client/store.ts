@@ -1,12 +1,12 @@
 import { OfflineSigner } from "@cosmjs/proto-signing";
 import { createSigningClient } from "./customClient";
+import { accountNumberToNumber } from "./storeTypes";
 import type { SignerData, LocalStoreFunctions } from "./storeTypes";
 
 // Re-export types for backwards compatibility
 export type { SignerData, LocalStoreFunctions } from "./storeTypes";
 
 const SignerStoreKey = "ixo-signer-data";
-
 
 /**
  * Helper function to get the signer sequence from chain, and if it is same
@@ -27,7 +27,11 @@ export const getSignerData = async (
   const chainId = await signingClient.getChainId();
   const accounts = await wallet.getAccounts();
   const address = accounts[0].address;
-  const { accountNumber, sequence } = await signingClient.getSequence(address);
+  const { accountNumber: accountNumberBig, sequence } =
+    await signingClient.getSequence(address);
+  // cosmjs 0.39 returns accountNumber as bigint; SignerData and the JSON-based
+  // client storage keep using number (safe for any realistic account number)
+  const accountNumber = accountNumberToNumber(accountNumberBig);
 
   // If atomic getAndIncrementSequence is provided, use it for distributed coordination
   // This enables safe concurrent access across multiple workers/processes
@@ -46,7 +50,7 @@ export const getSignerData = async (
     );
   }
 
-  let data = (await storageFunctions.getLocalData(SignerStoreKey)) || {};
+  const data = (await storageFunctions.getLocalData(SignerStoreKey)) || {};
   const now = new Date();
 
   if (!data[chainId]) data[chainId] = {};

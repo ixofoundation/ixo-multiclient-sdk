@@ -231,7 +231,12 @@ export const runQry = (message: string, query: () => Promise<any>) => {
           "\n}\n]"
       );
     } else if (message.indexOf("AllAccounts") !== -1) {
-      console.log(utils.conversions.Uint8ArrayToJS(res.accounts.value));
+      // accounts is Any[]; log the first account's raw value
+      console.log(
+        res.accounts.length,
+        res.accounts[0]?.typeUrl,
+        utils.conversions.Uint8ArrayToJS(res.accounts[0]?.value ?? new Uint8Array())
+      );
     } else {
       console.log(res);
     }

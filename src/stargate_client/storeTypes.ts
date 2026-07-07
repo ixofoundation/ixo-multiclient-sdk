@@ -10,6 +10,21 @@ export type SignerData = {
   chainId: string;
 };
 
+/**
+ * Converts an account number from cosmjs (bigint since cosmjs 0.39, since
+ * Cosmos SDK 0.53+ can exceed 2^53-1) to the number used in SignerData and
+ * client-side JSON storage. Throws instead of silently losing precision.
+ */
+export function accountNumberToNumber(value: number | bigint): number {
+  const asNumber = Number(value);
+  if (!Number.isSafeInteger(asNumber)) {
+    throw new Error(
+      `Account number ${value} exceeds Number.MAX_SAFE_INTEGER and cannot be safely represented`
+    );
+  }
+  return asNumber;
+}
+
 export type LocalStoreFunctions = {
   getLocalData: (key: string) => Promise<any>;
   setLocalData: (key: string, data: any) => void | Promise<void>;

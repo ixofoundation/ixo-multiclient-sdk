@@ -3,7 +3,7 @@
 * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
-import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm-stargate";
+import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm";
 import { StdFee } from "@cosmjs/amino";
 import { Binary, ModuleInstantiateInfo, CosmosMsgForEmpty, Uint128, Duration, Coin, Config, SubDao, Addr, ArrayOfProposalModule, AdminNominationResponse, Cw20BalanceResponse, ArrayOfAddr, DaoURIResponse, PauseInfoResponse, DumpStateResponse, GetItemResponse, InfoResponse, ArrayOfString, ArrayOfSubDao, ProposalModuleCountResponse, TotalPowerAtHeightResponse, VotingPowerAtHeightResponse } from "./DaoCore.types";
 export interface DaoCoreReadOnlyInterface {

@@ -105,7 +105,6 @@ export const findIbcTokensFromHashes = async (
 //   }, {});
 // };
 
-
 export const findTokenInfoFromDenom = (() => {
   const cache: { [denom: string]: TokenAssetInfo } = {};
 
@@ -118,7 +117,10 @@ export const findTokenInfoFromDenom = (() => {
     const token = findTokenFromDenom(denom);
     if (cacheResult && (cache[denom] || cache[token?.coinCodexId]))
       return cache[denom] ?? cache[token?.coinCodexId];
-    let coinCodexTokenInfo = await fetchTokenInfo(token?.coinCodexId ?? denom, baseUrl);
+    const coinCodexTokenInfo = await fetchTokenInfo(
+      token?.coinCodexId ?? denom,
+      baseUrl
+    );
     if (!coinCodexTokenInfo) return;
     const result = {
       symbol: coinCodexTokenInfo.symbol,
@@ -158,7 +160,6 @@ export const findTokensInfoFromDenoms = async (
   return results;
 };
 
-
 export const findTokenHistoryFromDenom = (() => {
   const cache: { [denom: string]: TokenAssetHistory } = {};
 
@@ -174,7 +175,7 @@ export const findTokenHistoryFromDenom = (() => {
     const token = findTokenFromDenom(denom);
     if (cacheResult && (cache[denom] || cache[token?.coinCodexId]))
       return cache[denom] ?? cache[token?.coinCodexId];
-    let coinCodexTokenHistory = await fetchTokenHistory(
+    const coinCodexTokenHistory = await fetchTokenHistory(
       token?.coinCodexId ?? denom,
       startDate,
       endDate,

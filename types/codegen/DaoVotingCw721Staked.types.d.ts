@@ -3,14 +3,14 @@
 * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
-export declare type Admin = {
+export type Admin = {
     address: {
         addr: string;
     };
 } | {
     core_module: {};
 };
-export declare type Duration = {
+export type Duration = {
     height: number;
 } | {
     time: number;
@@ -20,7 +20,7 @@ export interface InstantiateMsg {
     owner?: Admin | null;
     unstaking_duration?: Duration | null;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     receive_nft: Cw721ReceiveMsg;
 } | {
     unstake: {
@@ -42,13 +42,13 @@ export declare type ExecuteMsg = {
         addr: string;
     };
 };
-export declare type Binary = string;
+export type Binary = string;
 export interface Cw721ReceiveMsg {
     msg: Binary;
     sender: string;
     token_id: string;
 }
-export declare type QueryMsg = {
+export type QueryMsg = {
     config: {};
 } | {
     nft_claims: {
@@ -76,7 +76,7 @@ export declare type QueryMsg = {
 } | {
     info: {};
 };
-export declare type Addr = string;
+export type Addr = string;
 export interface Config {
     nft_address: Addr;
     owner?: Addr | null;
@@ -92,15 +92,15 @@ export interface ContractVersion {
     contract: string;
     version: string;
 }
-export declare type Expiration = {
+export type Expiration = {
     at_height: number;
 } | {
     at_time: Timestamp;
 } | {
     never: {};
 };
-export declare type Timestamp = Uint64;
-export declare type Uint64 = string;
+export type Timestamp = Uint64;
+export type Uint64 = string;
 export interface NftClaimsResponse {
     nft_claims: NftClaim[];
 }
@@ -108,8 +108,8 @@ export interface NftClaim {
     release_at: Expiration;
     token_id: string;
 }
-export declare type ArrayOfString = string[];
-export declare type Uint128 = string;
+export type ArrayOfString = string[];
+export type Uint128 = string;
 export interface TotalPowerAtHeightResponse {
     height: number;
     power: Uint128;

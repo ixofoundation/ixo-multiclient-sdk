@@ -1,7 +1,8 @@
 //@ts-nocheck
 import { Rpc } from "../../../../helpers";
 import * as _m0 from "protobufjs/minimal";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
+import type { QueryClient } from "@cosmjs/stargate";
+import { createProtobufRpcClient } from "../../../../protobufRpcClient";
 import { QueryChecksumsRequest, QueryChecksumsResponse, QueryCodeRequest, QueryCodeResponse } from "./query";
 /** Query service for wasm module */
 export interface Query {

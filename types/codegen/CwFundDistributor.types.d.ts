@@ -3,7 +3,7 @@
 * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
-export declare type ActiveThreshold = {
+export type ActiveThreshold = {
     absolute_count: {
         count: Uint128;
     };
@@ -12,9 +12,9 @@ export declare type ActiveThreshold = {
         percent: Decimal;
     };
 };
-export declare type Uint128 = string;
-export declare type Decimal = string;
-export declare type TokenInfo = {
+export type Uint128 = string;
+export type Decimal = string;
+export type TokenInfo = {
     existing: {
         address: string;
         staking_contract: StakingInfo;
@@ -33,7 +33,7 @@ export declare type TokenInfo = {
         unstaking_duration?: Duration | null;
     };
 };
-export declare type StakingInfo = {
+export type StakingInfo = {
     existing: {
         staking_contract_address: string;
     };
@@ -43,22 +43,22 @@ export declare type StakingInfo = {
         unstaking_duration?: Duration | null;
     };
 };
-export declare type Duration = {
+export type Duration = {
     height: number;
 } | {
     time: number;
 };
-export declare type Logo = {
+export type Logo = {
     url: string;
 } | {
     embedded: EmbeddedLogo;
 };
-export declare type EmbeddedLogo = {
+export type EmbeddedLogo = {
     svg: Binary;
 } | {
     png: Binary;
 };
-export declare type Binary = string;
+export type Binary = string;
 export interface InstantiateMsg {
     active_threshold?: ActiveThreshold | null;
     token_info: TokenInfo;
@@ -73,12 +73,12 @@ export interface InstantiateMarketingInfo {
     marketing?: string | null;
     project?: string | null;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     update_active_threshold: {
         new_threshold?: ActiveThreshold | null;
     };
 };
-export declare type QueryMsg = {
+export type QueryMsg = {
     staking_contract: {};
 } | {
     active_threshold: {};
@@ -105,7 +105,7 @@ export interface MigrateMsg {
 export interface ActiveThresholdResponse {
     active_threshold?: ActiveThreshold | null;
 }
-export declare type Addr = string;
+export type Addr = string;
 export interface InfoResponse {
     info: ContractVersion;
 }
@@ -113,7 +113,7 @@ export interface ContractVersion {
     contract: string;
     version: string;
 }
-export declare type Boolean = boolean;
+export type Boolean = boolean;
 export interface TotalPowerAtHeightResponse {
     height: number;
     power: Uint128;

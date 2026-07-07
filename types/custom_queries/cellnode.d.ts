@@ -7,7 +7,7 @@ import { ChainNetwork } from "./chain.types";
         url: 'https://devnet-cellnode.ixo.earth/public/lt2nc8vwbsjlfwap84z'
       }
  */
-export declare type CellnodePublicResource = {
+export type CellnodePublicResource = {
     key: string;
     contentType: string;
     data: string;
@@ -21,7 +21,7 @@ export declare type CellnodePublicResource = {
         url: 'https://bafkreieevelc4vmpo6p2lsqu2zgiuc3xatxuzoquwtvqea6zabufbxmwiu.ipfs.w3s.link'
       }
  */
-export declare type CellnodeWeb3Resource = {
+export type CellnodeWeb3Resource = {
     cid: string;
     name: string;
     ipfs: string;
@@ -31,6 +31,8 @@ export declare const cellNodeChainMapping: {
     [network in ChainNetwork]: string;
 };
 export declare const getPublicDoc: (cid: string, cellnodeUrl?: string, chainNetwork?: ChainNetwork) => Promise<any>;
-export declare const uploadPublicDoc: (contentType: string, data: string, cellnodeUrl?: string, chainNetwork?: ChainNetwork) => Promise<CellnodePublicResource>;
+export declare const uploadPublicDoc: (contentType: string, // mimetype
+data: string, cellnodeUrl?: string, chainNetwork?: ChainNetwork) => Promise<CellnodePublicResource>;
 export declare const getWeb3Doc: (cid: string, cellnodeUrl?: string, chainNetwork?: ChainNetwork) => Promise<any>;
-export declare const uploadWeb3Doc: (name: string, contentType: string, data: string, cellnodeUrl?: string, chainNetwork?: ChainNetwork) => Promise<CellnodeWeb3Resource>;
+export declare const uploadWeb3Doc: (name: string, contentType: string, // mimetype
+data: string, cellnodeUrl?: string, chainNetwork?: ChainNetwork) => Promise<CellnodeWeb3Resource>;

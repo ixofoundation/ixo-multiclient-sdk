@@ -3,37 +3,37 @@
 * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
-export declare type Duration = {
+export type Duration = {
     height: number;
 } | {
     time: number;
 };
-export declare type PreProposeInfo = {
+export type PreProposeInfo = {
     anyone_may_propose: {};
 } | {
     module_may_propose: {
         info: ModuleInstantiateInfo;
     };
 };
-export declare type Admin = {
+export type Admin = {
     address: {
         addr: string;
     };
 } | {
     core_module: {};
 };
-export declare type Binary = string;
-export declare type VotingStrategy = {
+export type Binary = string;
+export type VotingStrategy = {
     single_choice: {
         quorum: PercentageThreshold;
     };
 };
-export declare type PercentageThreshold = {
+export type PercentageThreshold = {
     majority: {};
 } | {
     percent: Decimal;
 };
-export declare type Decimal = string;
+export type Decimal = string;
 export interface InstantiateMsg {
     allow_revoting: boolean;
     close_proposal_on_execution_failure: boolean;
@@ -49,7 +49,7 @@ export interface ModuleInstantiateInfo {
     label: string;
     msg: Binary;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     propose: {
         choices: MultipleChoiceOptions;
         description: string;
@@ -106,7 +106,7 @@ export declare type ExecuteMsg = {
         address: string;
     };
 };
-export declare type CosmosMsgForEmpty = {
+export type CosmosMsgForEmpty = {
     bank: BankMsg;
 } | {
     custom: Empty;
@@ -127,7 +127,7 @@ export declare type CosmosMsgForEmpty = {
 } | {
     gov: GovMsg;
 };
-export declare type BankMsg = {
+export type BankMsg = {
     send: {
         amount: Coin[];
         to_address: string;
@@ -139,8 +139,8 @@ export declare type BankMsg = {
         [k: string]: unknown;
     };
 };
-export declare type Uint128 = string;
-export declare type StakingMsg = {
+export type Uint128 = string;
+export type StakingMsg = {
     delegate: {
         amount: Coin;
         validator: string;
@@ -160,7 +160,7 @@ export declare type StakingMsg = {
         [k: string]: unknown;
     };
 };
-export declare type DistributionMsg = {
+export type DistributionMsg = {
     set_withdraw_address: {
         address: string;
         [k: string]: unknown;
@@ -171,7 +171,7 @@ export declare type DistributionMsg = {
         [k: string]: unknown;
     };
 };
-export declare type IbcMsg = {
+export type IbcMsg = {
     transfer: {
         amount: Coin;
         channel_id: string;
@@ -192,9 +192,9 @@ export declare type IbcMsg = {
         [k: string]: unknown;
     };
 };
-export declare type Timestamp = Uint64;
-export declare type Uint64 = string;
-export declare type WasmMsg = {
+export type Timestamp = Uint64;
+export type Uint64 = string;
+export type WasmMsg = {
     execute: {
         contract_addr: string;
         funds: Coin[];
@@ -229,14 +229,14 @@ export declare type WasmMsg = {
         [k: string]: unknown;
     };
 };
-export declare type GovMsg = {
+export type GovMsg = {
     vote: {
         proposal_id: number;
         vote: VoteOption;
         [k: string]: unknown;
     };
 };
-export declare type VoteOption = "yes" | "no" | "abstain" | "no_with_veto";
+export type VoteOption = "yes" | "no" | "abstain" | "no_with_veto";
 export interface MultipleChoiceOptions {
     options: MultipleChoiceOption[];
 }
@@ -266,7 +266,7 @@ export interface IbcTimeoutBlock {
 export interface MultipleChoiceVote {
     option_id: number;
 }
-export declare type QueryMsg = {
+export type QueryMsg = {
     config: {};
 } | {
     proposal: {
@@ -308,7 +308,7 @@ export declare type QueryMsg = {
 } | {
     next_proposal_id: {};
 };
-export declare type MigrateMsg = {
+export type MigrateMsg = {
     from_v1: {
         close_proposal_on_execution_failure: boolean;
         pre_propose_info: PreProposeInfo;
@@ -316,7 +316,7 @@ export declare type MigrateMsg = {
 } | {
     from_compatible: {};
 };
-export declare type Addr = string;
+export type Addr = string;
 export interface Config {
     allow_revoting: boolean;
     close_proposal_on_execution_failure: boolean;
@@ -342,15 +342,15 @@ export interface ContractVersion {
     contract: string;
     version: string;
 }
-export declare type MultipleChoiceOptionType = "standard" | "none";
-export declare type Expiration = {
+export type MultipleChoiceOptionType = "standard" | "none";
+export type Expiration = {
     at_height: number;
 } | {
     at_time: Timestamp;
 } | {
     never: {};
 };
-export declare type Status = "open" | "rejected" | "passed" | "executed" | "closed" | "execution_failed";
+export type Status = "open" | "rejected" | "passed" | "executed" | "closed" | "execution_failed";
 export interface ProposalListResponse {
     proposals: ProposalResponse[];
 }
@@ -386,7 +386,7 @@ export interface MultipleChoiceVotes {
 export interface VoteListResponse {
     votes: VoteInfo[];
 }
-export declare type ProposalCreationPolicy = {
+export type ProposalCreationPolicy = {
     anyone: {};
 } | {
     module: {

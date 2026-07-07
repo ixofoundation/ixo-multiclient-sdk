@@ -1,6 +1,9 @@
 import axios from "axios";
 
-import { CoinCodexCoinResponse, CoinCodexHistoryResponse } from "./currency.types";
+import {
+  CoinCodexCoinResponse,
+  CoinCodexHistoryResponse,
+} from "./currency.types";
 
 export const fetchTokenInfo = async (
   denom: string,

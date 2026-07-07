@@ -166,7 +166,7 @@ export declare class SequenceManagerDO {
  * Type for objects that can be used as a Durable Object stub.
  * Any object with a fetch method that returns a Response works.
  */
-export declare type DOStub = {
+export type DOStub = {
     fetch: (request: Request) => Promise<Response>;
 };
 /**

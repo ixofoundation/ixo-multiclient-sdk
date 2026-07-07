@@ -4,7 +4,7 @@
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
 
-import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm-stargate";
+import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm";
 import { StdFee } from "@cosmjs/amino";
 import { Duration, PreProposeInfo, Admin, Binary, VotingStrategy, PercentageThreshold, Decimal, InstantiateMsg, ModuleInstantiateInfo, ExecuteMsg, CosmosMsgForEmpty, BankMsg, Uint128, StakingMsg, DistributionMsg, IbcMsg, Timestamp, Uint64, WasmMsg, GovMsg, VoteOption, MultipleChoiceOptions, MultipleChoiceOption, Coin, Empty, IbcTimeout, IbcTimeoutBlock, MultipleChoiceVote, QueryMsg, MigrateMsg, Addr, Config, VoteResponse, VoteInfo, InfoResponse, ContractVersion, MultipleChoiceOptionType, Expiration, Status, ProposalListResponse, ProposalResponse, MultipleChoiceProposal, CheckedMultipleChoiceOption, MultipleChoiceVotes, VoteListResponse, ProposalCreationPolicy, HooksResponse } from "./DaoProposalMultiple.types";
 export interface DaoProposalMultipleReadOnlyInterface {

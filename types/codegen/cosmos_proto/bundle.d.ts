@@ -6,14 +6,14 @@ export declare const cosmos_proto: {
     ScalarTypeSDKType: typeof _2.ScalarType;
     InterfaceDescriptor: {
         encode(message: _2.InterfaceDescriptor, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-        decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _2.InterfaceDescriptor;
+        decode(input: import("protobufjs").Reader | Uint8Array, length?: number): _2.InterfaceDescriptor;
         fromJSON(object: any): _2.InterfaceDescriptor;
         toJSON(message: _2.InterfaceDescriptor): unknown;
         fromPartial(object: Partial<_2.InterfaceDescriptor>): _2.InterfaceDescriptor;
     };
     ScalarDescriptor: {
         encode(message: _2.ScalarDescriptor, writer?: import("protobufjs").Writer): import("protobufjs").Writer;
-        decode(input: Uint8Array | import("protobufjs").Reader, length?: number): _2.ScalarDescriptor;
+        decode(input: import("protobufjs").Reader | Uint8Array, length?: number): _2.ScalarDescriptor;
         fromJSON(object: any): _2.ScalarDescriptor;
         toJSON(message: _2.ScalarDescriptor): unknown;
         fromPartial(object: Partial<_2.ScalarDescriptor>): _2.ScalarDescriptor;

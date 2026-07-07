@@ -3,7 +3,7 @@
 * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
-export declare type TokenInfo = {
+export type TokenInfo = {
     native: {
         amount: Uint128;
         denom: string;
@@ -14,7 +14,7 @@ export declare type TokenInfo = {
         contract_addr: string;
     };
 };
-export declare type Uint128 = string;
+export type Uint128 = string;
 export interface InstantiateMsg {
     counterparty_one: Counterparty;
     counterparty_two: Counterparty;
@@ -23,26 +23,26 @@ export interface Counterparty {
     address: string;
     promise: TokenInfo;
 }
-export declare type ExecuteMsg = {
+export type ExecuteMsg = {
     receive: Cw20ReceiveMsg;
 } | {
     fund: {};
 } | {
     withdraw: {};
 };
-export declare type Binary = string;
+export type Binary = string;
 export interface Cw20ReceiveMsg {
     amount: Uint128;
     msg: Binary;
     sender: string;
 }
-export declare type QueryMsg = {
+export type QueryMsg = {
     status: {};
 };
 export interface MigrateMsg {
 }
-export declare type Addr = string;
-export declare type CheckedTokenInfo = {
+export type Addr = string;
+export type CheckedTokenInfo = {
     native: {
         amount: Uint128;
         denom: string;
