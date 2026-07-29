@@ -64,12 +64,16 @@ export const WasmInstantiateTrx = async (
     value: cosmwasm.wasm.v1.MsgInstantiateContract.fromPartial({
       admin: myAddress,
       codeId: Long.fromNumber(codeId),
-      funds: [
-        cosmos.base.v1beta1.Coin.fromPartial({
-          amount: String(funds),
-          denom: "uixo",
-        }),
-      ],
+      // funds <= 0 → no funds (some contracts reject instantiation funds)
+      funds:
+        funds > 0
+          ? [
+              cosmos.base.v1beta1.Coin.fromPartial({
+                amount: String(funds),
+                denom: "uixo",
+              }),
+            ]
+          : [],
       label: tester.did + "contract" + codeId,
       msg: utils.conversions.JsonToArray(msg),
       sender: myAddress,
@@ -183,6 +187,36 @@ export const WasmExecuteTrxThroughAuthz = async (
     value: cosmos.authz.v1beta1.MsgExec.fromPartial({
       grantee: myAddress,
       msgs: [authzMessage],
+    }),
+  };
+
+  const response = await client.signAndBroadcast(
+    myAddress,
+    [message],
+    getFee(1, await client.simulate(myAddress, [message], undefined))
+  );
+  return response;
+};
+
+export const WasmMigrateTrx = async (
+  contractAddress: string,
+  codeId: number,
+  msg: string,
+  signer: WalletUsers = WalletUsers.tester
+) => {
+  const client = await createClient(getUser(signer));
+
+  const tester = getUser(signer);
+  const account = (await tester.getAccounts())[0];
+  const myAddress = account.address;
+
+  const message = {
+    typeUrl: "/cosmwasm.wasm.v1.MsgMigrateContract",
+    value: cosmwasm.wasm.v1.MsgMigrateContract.fromPartial({
+      contract: contractAddress,
+      codeId: Long.fromNumber(codeId),
+      msg: utils.conversions.JsonToArray(msg),
+      sender: myAddress,
     }),
   };
 
