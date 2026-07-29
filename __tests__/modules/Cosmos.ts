@@ -125,7 +125,14 @@ export const MsgSubmitProposalStoreCW = async (
   pathList?: string[],
   signer = WalletUsers.tester,
   timeoutSeconds = 0,
-  instantiateAccessType = cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_EVERYBODY
+  instantiateAccessType = cosmwasm.wasm.v1.AccessType.ACCESS_TYPE_EVERYBODY,
+  gas = "100000000",
+  feeAmount = "3000000",
+  // governance metadata + deposit — defaults preserve historic behavior;
+  // mainnet needs real titles/summaries and a 10,000 IXO min deposit
+  title?: string,
+  summary?: string,
+  depositAmount = "10000000"
 ) => {
   const client = await createClient(getUser(signer));
 
@@ -148,13 +155,13 @@ export const MsgSubmitProposalStoreCW = async (
     value: cosmos.gov.v1.MsgSubmitProposal.fromPartial({
       initialDeposit: [
         cosmos.base.v1beta1.Coin.fromPartial({
-          amount: "10000000",
+          amount: depositAmount,
           denom: "uixo",
         }),
       ],
       proposer: myAddress,
-      title: `Upload ${contract} smart contract`,
-      summary: "A cosmwasm smart contract",
+      title: title ?? `Upload ${contract} smart contract`,
+      summary: summary ?? "A cosmwasm smart contract",
       expedited: false,
       messages: [
         {
@@ -189,10 +196,10 @@ export const MsgSubmitProposalStoreCW = async (
     amount: [
       {
         denom: "uixo",
-        amount: "3000000",
+        amount: feeAmount,
       },
     ],
-    gas: "100000000",
+    gas,
   });
   return response;
 };
